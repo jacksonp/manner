@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+require_once 'Section.php';
+require_once 'Text.php';
+
 if (empty($argv[1])) {
     exit('no file.');
 }
@@ -13,10 +16,19 @@ if (!is_file($filePath)) {
 
 $lines = file($filePath, FILE_IGNORE_NEW_LINES);
 
-$sections = [];
-$sectionHeading = null;
+$sections         = [];
+$sectionHeading   = null;
+$foundNameSection = false;
 
-foreach ($lines as $i => $line) {
+$numLines = count($lines);
+
+$dom = new DOMDocument();
+
+$manPageContainer = $dom->createElement('div');
+$manPageContainer = $dom->appendChild($manPageContainer);
+
+for ($i = 0; $i < $numLines; ++$i) {
+    $line = $lines[$i];
 
     // Skip comments
     if (preg_match('~^\.\\\\" ~', $line)) {
@@ -26,6 +38,11 @@ foreach ($lines as $i => $line) {
     // Handle the title details
     if (preg_match('~^\.TH (.*)$~', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
+        $manName      = $titleDetails[0];
+        $manNum       = $titleDetails[1];
+        $h1 = $dom->createElement('h1', $manName);
+        $manPageContainer->appendChild($h1);
+
 //        var_dump($titleDetails);
         continue;
     }
@@ -36,6 +53,26 @@ foreach ($lines as $i => $line) {
         if (empty($sectionHeading)) {
             exit($line . ' - empty section heading.');
         }
+
+        if (empty($sections)) {
+            if ($sectionHeading === 'NAME') {
+
+                $nameText = Text::massage($lines[++$i]); // get next line
+
+                $nameTextNode = $dom->createTextNode($nameText);
+                $manPageContainer->appendChild($nameTextNode);
+
+                // check line after that:
+                if (!preg_match('~^\.SH (.*)$~', $lines[$i + 1])) {
+                    exit($line . ' - expected section after one line of NAME section contents.');
+                }
+                $foundNameSection = true;
+                continue;
+            } elseif (!$foundNameSection) {
+                exit($line . ' - expected NAME section.');
+            }
+        }
+
         $sections[$sectionHeading] = [];
         continue;
     }
@@ -47,12 +84,10 @@ foreach ($lines as $i => $line) {
 
     $sections[$sectionHeading][] = $line;
 
-    // FAIL on unknown command
-//    if (preg_match('~^\.~', $line, $matches)) {
-//        exit($line . ' (' . $i . ')' . "\n");
-//    }
-
-//    echo $i, ' - ', $line, "\n";
 }
 
-var_dump($sections);
+foreach ($sections as $heading => $sectionLines) {
+    Section::handle($manPageContainer, 2, $heading, $sectionLines);
+}
+
+echo $dom->saveHTML();
