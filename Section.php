@@ -30,6 +30,8 @@ class Section
         $subsections       = [];
         $subsectionHeading = null;
 
+        $lastParagraph = null;
+
         foreach ($sectionLines as $line) {
 
             // Start a subsection
@@ -48,11 +50,30 @@ class Section
 
             // Not in a subsection, handle content:
 
+            if ($line[0] === '.') {
+                // It's a command
 
-            // FAIL on unknown command
+
+                // FAIL on unknown command
 //    if (preg_match('~^\.~', $line, $matches)) {
 //        exit($line . ' (' . $i . ')' . "\n");
 //    }
+
+            } else {
+                // It's some text
+
+
+//                if (is_null($lastParagraph)) {
+//                    $lastParagraph = $dom->createElement('p');
+//                    $lastParagraph = $sectionNode->appendChild($lastParagraph);
+//                }
+//
+//                $textNode = $dom->createTextNode(Text::massage($line));
+//                $textNode = $lastParagraph->appendChild($textNode);
+
+
+            }
+
 
         }
 

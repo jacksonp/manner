@@ -31,7 +31,7 @@ for ($i = 0; $i < $numLines; ++$i) {
     $line = $lines[$i];
 
     // Skip comments
-    if (preg_match('~^\.\\\\" ~', $line)) {
+    if (preg_match('~^\.\\\\"(\s|$)~', $line)) {
         continue;
     }
 
@@ -40,7 +40,7 @@ for ($i = 0; $i < $numLines; ++$i) {
         $titleDetails = str_getcsv($matches[1], ' ');
         $manName      = $titleDetails[0];
         $manNum       = $titleDetails[1];
-        $h1 = $dom->createElement('h1', $manName);
+        $h1           = $dom->createElement('h1', $manName);
         $manPageContainer->appendChild($h1);
 
 //        var_dump($titleDetails);
@@ -87,7 +87,36 @@ for ($i = 0; $i < $numLines; ++$i) {
 }
 
 foreach ($sections as $heading => $sectionLines) {
-    Section::handle($manPageContainer, 2, $heading, $sectionLines);
+//    Section::handle($manPageContainer, 2, $heading, $sectionLines);
+    $sections[$heading] = Text::mergeTextLines($sectionLines);
 }
 
-echo $dom->saveHTML();
+var_dump($sections); exit;
+
+$html = $dom->saveHTML();
+
+
+$tidy = tidy_parse_string($html, [
+  'hide-comments'       => true,
+  'tidy-mark'           => false,
+  'indent'              => true,
+  'indent-spaces'       => 2,
+  'hide-endtags'        => true,
+  'new-blocklevel-tags' => 'article,header,footer,section,nav',
+  'new-inline-tags'     => 'video,audio,canvas,ruby,rt,rp',
+  'new-empty-tags'      => 'source',
+  'doctype'             => '<!DOCTYPE HTML>',
+  'sort-attributes'     => 'alpha',
+  'vertical-space'      => false,
+  'output-xhtml'        => false,
+  'output-html'         => true,
+  'wrap'                => 160,
+  'wrap-attributes'     => false,
+  'break-before-br'     => false,
+  'quote-nbsp'          => false,
+  'anchor-as-name'      => false,
+  'show-body-only'      => true,
+], 'UTF8');
+
+$tidy->cleanRepair();
+echo $tidy;
