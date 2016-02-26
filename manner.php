@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-require_once 'Section.php';
-require_once 'Text.php';
+spl_autoload_register(function ($class) {
+    require_once str_replace('_', '/', $class) . '.php';
+});
 
 if (empty($argv[1])) {
     exit('no file.');
@@ -16,13 +17,14 @@ if (!is_file($filePath)) {
 
 $lines = file($filePath, FILE_IGNORE_NEW_LINES);
 
-$sections         = [];
-$sectionHeading   = null;
+/** @var HybridNode $lastSectionNode */
+$lastSectionNode  = null;
 $foundNameSection = false;
 
 $numLines = count($lines);
 
 $dom = new DOMDocument();
+$dom->registerNodeClass('DOMElement', 'HybridNode');
 
 $manPageContainer = $dom->createElement('div');
 $manPageContainer = $dom->appendChild($manPageContainer);
@@ -49,7 +51,7 @@ for ($i = 0; $i < $numLines; ++$i) {
 
     // Start a section
     if (preg_match('~^\.SH (.*)$~', $line, $matches)) {
-        $sectionHeading = $matches[1];
+        $sectionHeading = Text::massage($matches[1]);
         if (empty($sectionHeading)) {
             exit($line . ' - empty section heading.');
         }
@@ -73,55 +75,38 @@ for ($i = 0; $i < $numLines; ++$i) {
             }
         }
 
-        $sections[$sectionHeading] = [];
+        $lastSectionNode = $dom->createElement('div');
+        $lastSectionNode->setAttribute('class', 'section');
+        $headingNode = $dom->createElement('h2', $sectionHeading);
+        $headingNode = $lastSectionNode->appendChild($headingNode);
+        $sectionNode = $manPageContainer->appendChild($lastSectionNode);
+
         continue;
     }
 
     // FAIL Got something and we're not in a section
-    if (is_null($sectionHeading)) {
+    if (is_null($lastSectionNode)) {
         exit($line . ' - not in a section.');
     }
 
-    $sections[$sectionHeading][] = $line;
+    $lastSectionNode->addManLine($line);
 
 }
 
 
-foreach ($sections as $heading => $sectionLines) {
-    //$sections[$heading] = Text::toCommonMark($sectionLines);
-}
-
-foreach ($sections as $heading => $sectionLines) {
+//foreach ($sections as $heading => $sectionLines) {
+//    //$sections[$heading] = Text::toCommonMark($sectionLines);
+//}
+//
+//foreach ($sections as $heading => $sectionLines) {
 //    Section::handle($manPageContainer, 2, $heading, $sectionLines);
-    $sections[$heading] = Text::mergeTextLines($sectionLines);
-}
-
-var_dump($sections); exit;
+////    $sections[$heading] = Text::mergeTextLines($sectionLines);
+//}
+//
+//var_dump($sections);
+//exit;
 
 $html = $dom->saveHTML();
 
+Debug::echoTidy($html);
 
-$tidy = tidy_parse_string($html, [
-  'hide-comments'       => true,
-  'tidy-mark'           => false,
-  'indent'              => true,
-  'indent-spaces'       => 2,
-  'hide-endtags'        => true,
-  'new-blocklevel-tags' => 'article,header,footer,section,nav',
-  'new-inline-tags'     => 'video,audio,canvas,ruby,rt,rp',
-  'new-empty-tags'      => 'source',
-  'doctype'             => '<!DOCTYPE HTML>',
-  'sort-attributes'     => 'alpha',
-  'vertical-space'      => false,
-  'output-xhtml'        => false,
-  'output-html'         => true,
-  'wrap'                => 160,
-  'wrap-attributes'     => false,
-  'break-before-br'     => false,
-  'quote-nbsp'          => false,
-  'anchor-as-name'      => false,
-  'show-body-only'      => true,
-], 'UTF8');
-
-$tidy->cleanRepair();
-echo $tidy;
