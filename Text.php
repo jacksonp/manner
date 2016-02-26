@@ -35,8 +35,34 @@ class Text
                     }
                     $newLines[$i] .= ' ' . $lines[$j + 1];
                 }
-
             }
+
+        }
+
+        return $newLines;
+
+    }
+
+    static function toCommonMark ($lines)
+    {
+
+        $numLines = count($lines);
+
+        $newLines = [];
+
+        for ($i = 0; $i < $numLines; ++$i) {
+            $line = $lines[$i];
+
+            if (preg_match('~^\.I (.*)$~', $line, $matches)) {
+                $newLines[$i] = '*' . $matches[1] . '*';
+                continue;
+            } elseif (preg_match('~^\.B (.*)$~', $line, $matches)) {
+                $newLines[$i] = '**' . $matches[1] . '**';
+                continue;
+            }
+
+            $newLines[$i] = $line;
+
 
         }
 

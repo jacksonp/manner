@@ -86,6 +86,11 @@ for ($i = 0; $i < $numLines; ++$i) {
 
 }
 
+
+foreach ($sections as $heading => $sectionLines) {
+    //$sections[$heading] = Text::toCommonMark($sectionLines);
+}
+
 foreach ($sections as $heading => $sectionLines) {
 //    Section::handle($manPageContainer, 2, $heading, $sectionLines);
     $sections[$heading] = Text::mergeTextLines($sectionLines);
