@@ -64,6 +64,17 @@ for ($i = 0; $i < $numRawLines; ++$i) {
 }
 //</editor-fold>
 
+//<editor-fold desc="Handle NAME section, take it out of $lines">
+$nameHeadingLine = array_shift($lines);
+if ($nameHeadingLine !== '.SH NAME') {
+    exit($nameHeadingLine . ' - expected NAME section.');
+}
+
+$nameSectionText = Text::massage(array_shift($lines));
+$nameTextNode = $dom->createTextNode($nameSectionText);
+$manPageContainer->appendChild($nameTextNode);
+//</editor-fold>
+
 /** @var HybridNode[] $sectionNodes */
 $sectionNodes     = [];
 $foundNameSection = false;
@@ -71,6 +82,10 @@ $sectionNum       = 0;
 
 $numLines = count($lines);
 
+$manPageContainer->manLines = $lines;
+
+Section::handle($manPageContainer, 2);
+/*
 for ($i = 0; $i < $numLines; ++$i) {
     $line = $lines[$i];
 
@@ -79,25 +94,6 @@ for ($i = 0; $i < $numLines; ++$i) {
         $sectionHeading = Text::massage($matches[1]);
         if (empty($sectionHeading)) {
             exit($line . ' - empty section heading.');
-        }
-
-        if (empty($sectionNodes)) {
-            if ($sectionHeading === 'NAME') {
-
-                $nameText = Text::massage($lines[++$i]); // get next line
-
-                $nameTextNode = $dom->createTextNode($nameText);
-                $manPageContainer->appendChild($nameTextNode);
-
-                // check line after that:
-                if (!preg_match('~^\.SH (.*)$~', $lines[$i + 1])) {
-                    exit($line . ' - expected section after one line of NAME section contents.');
-                }
-                $foundNameSection = true;
-                continue;
-            } elseif (!$foundNameSection) {
-                exit($line . ' - expected NAME section.');
-            }
         }
 
         ++$sectionNum;
@@ -117,6 +113,7 @@ for ($i = 0; $i < $numLines; ++$i) {
     $sectionNodes[$sectionNum]->addManLine($line);
 
 }
+*/
 
 //foreach ($manPageContainer->childNodes as $node)
 //{

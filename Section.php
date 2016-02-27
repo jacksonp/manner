@@ -18,44 +18,50 @@ class Section
         $dom = $parentSectionNode->ownerDocument;
 
         //<editor-fold desc="Remove any subsections from manLines and handle them">
-        /** @var HybridNode[] $subsectionNodes */
-        $subsectionNodes = [];
-        $sectionNum      = 0;
+        /** @var HybridNode[] $sectionNodes */
+        $sectionNodes = [];
+        $sectionNum   = 0;
 
         foreach ($parentSectionNode->manLines as $key => $line) {
 
             // Start a subsection
-            if (preg_match('~^\.SS (.*)$~', $line, $matches)) {
-                $subsectionHeading = $matches[1];
-                if (empty($subsectionHeading)) {
-                    exit($line . ' - empty subsection heading.');
+            if (
+              ($level === 2 && preg_match('~^\.SH (.*)$~', $line, $matches))
+              || ($level > 2 && preg_match('~^\.SS (.*)$~', $line, $matches))
+            ) {
+                $sectionHeading = $matches[1];
+                if (empty($sectionHeading)) {
+                    exit($line . ' - empty section heading.');
                 }
 
                 unset($parentSectionNode->manLines[$key]); // made a subsection out of this!
 
                 ++$sectionNum;
-                $subsectionNodes[$sectionNum] = $dom->createElement('div');
-                $subsectionNodes[$sectionNum]->setAttribute('class', 'subsection');
-                $subsectionNodes[$sectionNum]->appendChild($dom->createElement('h' . $level, $subsectionHeading));
-                $subsectionNodes[$sectionNum] = $parentSectionNode->appendChild($subsectionNodes[$sectionNum]);
+                $sectionNodes[$sectionNum] = $dom->createElement('div');
+                $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
+                $sectionNodes[$sectionNum]->appendChild($dom->createElement('h' . $level, $sectionHeading));
+                $sectionNodes[$sectionNum] = $parentSectionNode->appendChild($sectionNodes[$sectionNum]);
                 continue;
             }
 
-            if (!empty($subsectionNodes)) {
-                $subsectionNodes[$sectionNum]->addManLine($line);
+            if ($level === 2 && empty($sectionNodes)) {
+                exit($line . ' - not in a section.');
+            }
+
+            if (!empty($sectionNodes)) {
+                $sectionNodes[$sectionNum]->addManLine($line);
                 unset($parentSectionNode->manLines[$key]); // moved to subsection!
             }
 
         }
 
-        foreach ($subsectionNodes as $section) {
+        foreach ($sectionNodes as $section) {
             Section::handle($section, $level + 1);
         }
         //</editor-fold>
 
         // Now we have no more sections in manLines, do definition lists because .TP is a bit special in that we need to keep the 1st line separate for the definition and not merge text as we would otherwise.
         foreach ($parentSectionNode->manLines as $key => $line) {
-
 
 
         }
