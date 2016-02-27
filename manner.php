@@ -20,9 +20,9 @@ if (!is_file($filePath)) {
 $lines = file($filePath, FILE_IGNORE_NEW_LINES);
 
 /** @var HybridNode[] $sectionNodes */
-$sectionNodes = [];
+$sectionNodes     = [];
 $foundNameSection = false;
-$sectionNum = 0;
+$sectionNum       = 0;
 
 $numLines = count($lines);
 
@@ -44,9 +44,12 @@ for ($i = 0; $i < $numLines; ++$i) {
     // Handle the title details
     if (preg_match('~^\.TH (.*)$~', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
-        $manName      = $titleDetails[0];
-        $manNum       = $titleDetails[1];
-        $h1           = $dom->createElement('h1', $manName);
+        if (count($titleDetails) < 2) {
+            exit($line . ' - missing title info');
+        }
+        $manName = $titleDetails[0];
+        $manNum  = $titleDetails[1];
+        $h1      = $dom->createElement('h1', $manName);
         $manPageContainer->appendChild($h1);
 
 //        var_dump($titleDetails);
@@ -107,17 +110,23 @@ for ($i = 0; $i < $numLines; ++$i) {
 //}
 
 
-//$divs = $dom->getElementsByTagName('div');
-//foreach ($divs as $div) {
-//    var_dump($div->manLines);
-//}
-
 foreach ($sectionNodes as $section) {
 //    var_dump($section->manLines);
     Section::handle($section, 3);
 //    Debug::echoTidy($dom->saveHTML($section));
 //    var_dump($section->manLines);
 }
+
+//$sections = $xpath->query('//div[@class="subsection"]');
+//foreach ($sections as $section) {
+//    var_dump($section->manLines);
+//}
+
+//$divs = $dom->getElementsByTagName('div');
+//foreach ($divs as $div) {
+//    var_dump($div->manLines);
+//}
+
 
 //exit;
 
