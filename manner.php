@@ -17,14 +17,9 @@ if (!is_file($filePath)) {
 }
 //</editor-fold>
 
-$lines = file($filePath, FILE_IGNORE_NEW_LINES);
+$rawLines = file($filePath, FILE_IGNORE_NEW_LINES);
 
-/** @var HybridNode[] $sectionNodes */
-$sectionNodes     = [];
-$foundNameSection = false;
-$sectionNum       = 0;
-
-$numLines = count($lines);
+$numRawLines = count($rawLines);
 
 $dom = new DOMDocument();
 $dom->registerNodeClass('DOMElement', 'HybridNode');
@@ -33,11 +28,19 @@ $xpath = new DOMXpath($dom);
 $manPageContainer = $dom->createElement('div');
 $manPageContainer = $dom->appendChild($manPageContainer);
 
-for ($i = 0; $i < $numLines; ++$i) {
-    $line = $lines[$i];
+$lines = [];
+
+//<editor-fold desc="Strip comments, handle title, stick rest in $lines">
+for ($i = 0; $i < $numRawLines; ++$i) {
+    $line = $rawLines[$i];
 
     // Skip comments
-    if (preg_match('~^\.\\\\"(\s|$)~', $line)) {
+    if (preg_match('~^[\'\.]\\\\"(\s|$)~', $line)) {
+        continue;
+    }
+
+    // Skip empty requests
+    if ($line === '.') {
         continue;
     }
 
@@ -55,6 +58,21 @@ for ($i = 0; $i < $numLines; ++$i) {
 //        var_dump($titleDetails);
         continue;
     }
+
+    $lines[] = $line;
+
+}
+//</editor-fold>
+
+/** @var HybridNode[] $sectionNodes */
+$sectionNodes     = [];
+$foundNameSection = false;
+$sectionNum       = 0;
+
+$numLines = count($lines);
+
+for ($i = 0; $i < $numLines; ++$i) {
+    $line = $lines[$i];
 
     // Start a section
     if (preg_match('~^\.SH (.*)$~', $line, $matches)) {

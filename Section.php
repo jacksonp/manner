@@ -17,6 +17,7 @@ class Section
 
         $dom = $parentSectionNode->ownerDocument;
 
+        //<editor-fold desc="Remove any subsections from manLines and handle them">
         /** @var HybridNode[] $subsectionNodes */
         $subsectionNodes = [];
         $sectionNum      = 0;
@@ -45,19 +46,33 @@ class Section
                 unset($parentSectionNode->manLines[$key]); // moved to subsection!
             }
 
-            // Not in a subsection, handle content:
+        }
+
+        foreach ($subsectionNodes as $section) {
+            Section::handle($section, $level + 1);
+        }
+        //</editor-fold>
+
+        // Now we have no more sections in manLines, do definition lists because .TP is a bit special in that we need to keep the 1st line separate for the definition and not merge text as we would otherwise.
+        foreach ($parentSectionNode->manLines as $key => $line) {
+
+
+
+        }
+
+        // Not in a subsection, handle content:
 
 //            if ($line[0] === '.') {
-            // It's a command
+        // It's a command
 
 
-            // FAIL on unknown command
+        // FAIL on unknown command
 //    if (preg_match('~^\.~', $line, $matches)) {
 //        exit($line . ' (' . $i . ')' . "\n");
 //    }
 
 //            } else {
-            // It's some text
+        // It's some text
 
 
 //                if (is_null($lastParagraph)) {
@@ -70,18 +85,6 @@ class Section
 
 
 //            }
-
-
-        }
-
-        foreach ($subsectionNodes as $section) {
-            Section::handle($section, $level + 1);
-        }
-
-//        $sections = $xpath->query('//div[@class="subsection"]');
-//        foreach ($sections as $section) {
-//            Section::handle($xpath, $section, $level + 1);
-//        }
 
     }
 
