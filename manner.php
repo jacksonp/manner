@@ -19,9 +19,10 @@ if (!is_file($filePath)) {
 
 $lines = file($filePath, FILE_IGNORE_NEW_LINES);
 
-/** @var HybridNode $lastSectionNode */
-$lastSectionNode  = null;
+/** @var HybridNode[] $sectionNodes */
+$sectionNodes = [];
 $foundNameSection = false;
+$sectionNum = 0;
 
 $numLines = count($lines);
 
@@ -59,7 +60,7 @@ for ($i = 0; $i < $numLines; ++$i) {
             exit($line . ' - empty section heading.');
         }
 
-        if (is_null($lastSectionNode)) {
+        if (empty($sectionNodes)) {
             if ($sectionHeading === 'NAME') {
 
                 $nameText = Text::massage($lines[++$i]); // get next line
@@ -78,33 +79,32 @@ for ($i = 0; $i < $numLines; ++$i) {
             }
         }
 
-        var_dump($lastSectionNode->manLines);
-
-        $lastSectionNode = $dom->createElement('div');
-        $lastSectionNode->setAttribute('class', 'section');
-        $lastSectionNode->appendChild($dom->createElement('h2', $sectionHeading));
-        $lastSectionNode = $manPageContainer->appendChild($lastSectionNode);
+        ++$sectionNum;
+        $sectionNodes[$sectionNum] = $dom->createElement('div');
+        $sectionNodes[$sectionNum]->setAttribute('class', 'section');
+        $sectionNodes[$sectionNum]->appendChild($dom->createElement('h2', $sectionHeading));
+        $sectionNodes[$sectionNum] = $manPageContainer->appendChild($sectionNodes[$sectionNum]);
 
         continue;
     }
 
     // FAIL Got something and we're not in a section
-    if (is_null($lastSectionNode)) {
+    if (empty($sectionNodes)) {
         exit($line . ' - not in a section.');
     }
 
-    $lastSectionNode->addManLine($line);
+    $sectionNodes[$sectionNum]->addManLine($line);
 
 }
 
-foreach ($manPageContainer->childNodes as $node)
-{
-    if ($node->nodeType !== XML_TEXT_NODE) {
+//foreach ($manPageContainer->childNodes as $node)
+//{
+//    if ($node->nodeType !== XML_TEXT_NODE) {
 //        Debug::echoTidy($dom->saveHTML($node));
 //        echo PHP_EOL;
 //        var_dump($node->manLines);
-    }
-}
+//    }
+//}
 
 
 //$divs = $dom->getElementsByTagName('div');
@@ -112,12 +112,12 @@ foreach ($manPageContainer->childNodes as $node)
 //    var_dump($div->manLines);
 //}
 
-//$sections = $xpath->query('//div[@class="section"]');
-//foreach ($sections as $section) {
+foreach ($sectionNodes as $section) {
 //    var_dump($section->manLines);
-//    Section::handle($xpath, $section, 3);
-////    Debug::echoTidy($dom->saveHTML($section));
-//}
+    Section::handle($section, 3);
+//    Debug::echoTidy($dom->saveHTML($section));
+//    var_dump($section->manLines);
+}
 
 //exit;
 

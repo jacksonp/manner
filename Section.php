@@ -8,7 +8,7 @@ class Section
     /**
      * Could be a section, a subsection...
      */
-    static function handle(DOMXpath $xpath, HybridNode $parentNode, int $level)
+    static function handle(HybridNode $parentNode, int $level)
     {
 
         if ($level > 6) {
@@ -17,8 +17,9 @@ class Section
 
         $dom = $parentNode->ownerDocument;
 
-        /** @var HybridNode $lastSubsectionNode */
-        $lastSubsectionNode = null;
+        /** @var HybridNode[] $sectionNodes */
+        $sectionNodes     = [];
+        $sectionNum       = 0;
 
         foreach ($parentNode->manLines as $key => $line) {
 
@@ -28,15 +29,19 @@ class Section
                 if (empty($subsectionHeading)) {
                     exit($line . ' - empty subsection heading.');
                 }
-                $lastSubsectionNode = $dom->createElement('div');
-                $lastSubsectionNode->setAttribute('class', 'subsection');
-                $lastSubsectionNode->appendChild($dom->createElement('h' . $level, $subsectionHeading));
-                $lastSubsectionNode = $parentNode->appendChild($lastSubsectionNode);
+
+                unset($parentNode->manLines[$key]); // made a subsection out of this!
+
+                ++$sectionNum;
+                $sectionNodes[$sectionNum] = $dom->createElement('div');
+                $sectionNodes[$sectionNum]->setAttribute('class', 'subsection');
+                $sectionNodes[$sectionNum]->appendChild($dom->createElement('h' . $level, $subsectionHeading));
+                $sectionNodes[$sectionNum] = $parentNode->appendChild($sectionNodes[$sectionNum]);
                 continue;
             }
 
-            if (!is_null($lastSubsectionNode)) {
-                $lastSubsectionNode->addManLine($line);
+            if (!empty($sectionNodes)) {
+                $sectionNodes[$sectionNum]->addManLine($line);
                 unset($parentNode->manLines[$key]); // moved to subsection!
             }
 
@@ -69,10 +74,14 @@ class Section
 
         }
 
-        $sections = $xpath->query('//div[@class="subsection"]');
-        foreach ($sections as $section) {
-            Section::handle($xpath, $section, $level + 1);
+        foreach ($sectionNodes as $section) {
+            Section::handle($section, $level + 1);
         }
+
+//        $sections = $xpath->query('//div[@class="subsection"]');
+//        foreach ($sections as $section) {
+//            Section::handle($xpath, $section, $level + 1);
+//        }
 
     }
 
