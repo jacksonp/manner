@@ -4,7 +4,7 @@
 class HybridNode extends DOMElement
 {
 
-    public $manLines;
+    public $manLines = [];
 
     function __construct($name, $value = null)
     {

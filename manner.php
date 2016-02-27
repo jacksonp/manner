@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+//<editor-fold desc="Setup">
 spl_autoload_register(function ($class) {
     require_once str_replace('_', '/', $class) . '.php';
 });
@@ -14,6 +15,7 @@ $filePath = $argv[1];
 if (!is_file($filePath)) {
     exit($filePath . ' is not a file.');
 }
+//</editor-fold>
 
 $lines = file($filePath, FILE_IGNORE_NEW_LINES);
 
@@ -25,6 +27,7 @@ $numLines = count($lines);
 
 $dom = new DOMDocument();
 $dom->registerNodeClass('DOMElement', 'HybridNode');
+$xpath = new DOMXpath($dom);
 
 $manPageContainer = $dom->createElement('div');
 $manPageContainer = $dom->appendChild($manPageContainer);
@@ -56,7 +59,7 @@ for ($i = 0; $i < $numLines; ++$i) {
             exit($line . ' - empty section heading.');
         }
 
-        if (empty($sections)) {
+        if (is_null($lastSectionNode)) {
             if ($sectionHeading === 'NAME') {
 
                 $nameText = Text::massage($lines[++$i]); // get next line
@@ -75,11 +78,12 @@ for ($i = 0; $i < $numLines; ++$i) {
             }
         }
 
+        var_dump($lastSectionNode->manLines);
+
         $lastSectionNode = $dom->createElement('div');
         $lastSectionNode->setAttribute('class', 'section');
-        $headingNode = $dom->createElement('h2', $sectionHeading);
-        $headingNode = $lastSectionNode->appendChild($headingNode);
-        $sectionNode = $manPageContainer->appendChild($lastSectionNode);
+        $lastSectionNode->appendChild($dom->createElement('h2', $sectionHeading));
+        $lastSectionNode = $manPageContainer->appendChild($lastSectionNode);
 
         continue;
     }
@@ -93,6 +97,29 @@ for ($i = 0; $i < $numLines; ++$i) {
 
 }
 
+foreach ($manPageContainer->childNodes as $node)
+{
+    if ($node->nodeType !== XML_TEXT_NODE) {
+//        Debug::echoTidy($dom->saveHTML($node));
+//        echo PHP_EOL;
+//        var_dump($node->manLines);
+    }
+}
+
+
+//$divs = $dom->getElementsByTagName('div');
+//foreach ($divs as $div) {
+//    var_dump($div->manLines);
+//}
+
+//$sections = $xpath->query('//div[@class="section"]');
+//foreach ($sections as $section) {
+//    var_dump($section->manLines);
+//    Section::handle($xpath, $section, 3);
+////    Debug::echoTidy($dom->saveHTML($section));
+//}
+
+//exit;
 
 //foreach ($sections as $heading => $sectionLines) {
 //    //$sections[$heading] = Text::toCommonMark($sectionLines);

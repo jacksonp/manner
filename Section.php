@@ -7,12 +7,8 @@ class Section
 
     /**
      * Could be a section, a subsection...
-     * @param DOMNode $parentNode
-     * @param int $level
-     * @param string $heading
-     * @param array $sectionLines
      */
-    static function handle(DOMNode $parentNode, int $level, string $heading, array $sectionLines)
+    static function handle(DOMXpath $xpath, HybridNode $parentNode, int $level)
     {
 
         if ($level > 6) {
@@ -21,18 +17,10 @@ class Section
 
         $dom = $parentNode->ownerDocument;
 
-        $sectionNode = $dom->createElement('div');
-        $headingNode = $dom->createElement('h' . $level, $heading);
-        $headingNode = $sectionNode->appendChild($headingNode);
+        /** @var HybridNode $lastSubsectionNode */
+        $lastSubsectionNode = null;
 
-        $sectionNode = $parentNode->appendChild($sectionNode);
-
-        $subsections       = [];
-        $subsectionHeading = null;
-
-        $lastParagraph = null;
-
-        foreach ($sectionLines as $line) {
+        foreach ($parentNode->manLines as $key => $line) {
 
             // Start a subsection
             if (preg_match('~^\.SS (.*)$~', $line, $matches)) {
@@ -40,12 +28,16 @@ class Section
                 if (empty($subsectionHeading)) {
                     exit($line . ' - empty subsection heading.');
                 }
-                $subsections[$subsectionHeading] = [];
+                $lastSubsectionNode = $dom->createElement('div');
+                $lastSubsectionNode->setAttribute('class', 'subsection');
+                $lastSubsectionNode->appendChild($dom->createElement('h' . $level, $subsectionHeading));
+                $lastSubsectionNode = $parentNode->appendChild($lastSubsectionNode);
                 continue;
             }
 
-            if (!is_null($subsectionHeading)) {
-                $subsections[$subsectionHeading][] = $line;
+            if (!is_null($lastSubsectionNode)) {
+                $lastSubsectionNode->addManLine($line);
+                unset($parentNode->manLines[$key]); // moved to subsection!
             }
 
             // Not in a subsection, handle content:
@@ -77,10 +69,10 @@ class Section
 
         }
 
-        foreach ($subsections as $heading => $subsectionLines) {
-            self::handle($sectionNode, $level + 1, $heading, $subsectionLines);
+        $sections = $xpath->query('//div[@class="subsection"]');
+        foreach ($sections as $section) {
+            Section::handle($xpath, $section, $level + 1);
         }
-
 
     }
 
