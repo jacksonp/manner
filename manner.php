@@ -25,6 +25,7 @@ $dom = new DOMDocument();
 $dom->registerNodeClass('DOMElement', 'HybridNode');
 $xpath = new DOMXpath($dom);
 
+/** @var HybridNode $manPageContainer */
 $manPageContainer = $dom->createElement('div');
 $manPageContainer = $dom->appendChild($manPageContainer);
 
@@ -71,65 +72,20 @@ if ($nameHeadingLine !== '.SH NAME') {
 }
 
 $nameSectionText = Text::massage(array_shift($lines));
-$nameTextNode = $dom->createTextNode($nameSectionText);
+$nameTextNode    = $dom->createTextNode($nameSectionText);
 $manPageContainer->appendChild($nameTextNode);
 //</editor-fold>
 
-/** @var HybridNode[] $sectionNodes */
-$sectionNodes     = [];
-$foundNameSection = false;
-$sectionNum       = 0;
-
-$numLines = count($lines);
-
 $manPageContainer->manLines = $lines;
 
-Section::handle($manPageContainer, 2);
-/*
-for ($i = 0; $i < $numLines; ++$i) {
-    $line = $lines[$i];
-
-    // Start a section
-    if (preg_match('~^\.SH (.*)$~', $line, $matches)) {
-        $sectionHeading = Text::massage($matches[1]);
-        if (empty($sectionHeading)) {
-            exit($line . ' - empty section heading.');
-        }
-
-        ++$sectionNum;
-        $sectionNodes[$sectionNum] = $dom->createElement('div');
-        $sectionNodes[$sectionNum]->setAttribute('class', 'section');
-        $sectionNodes[$sectionNum]->appendChild($dom->createElement('h2', $sectionHeading));
-        $sectionNodes[$sectionNum] = $manPageContainer->appendChild($sectionNodes[$sectionNum]);
-
-        continue;
-    }
-
-    // FAIL Got something and we're not in a section
-    if (empty($sectionNodes)) {
-        exit($line . ' - not in a section.');
-    }
-
-    $sectionNodes[$sectionNum]->addManLine($line);
-
-}
-*/
-
-//foreach ($manPageContainer->childNodes as $node)
-//{
-//    if ($node->nodeType !== XML_TEXT_NODE) {
-//        Debug::echoTidy($dom->saveHTML($node));
-//        echo PHP_EOL;
-//        var_dump($node->manLines);
-//    }
-//}
-
-
-foreach ($sectionNodes as $section) {
-//    var_dump($section->manLines);
-    Section::handle($section, 3);
-//    Debug::echoTidy($dom->saveHTML($section));
-//    var_dump($section->manLines);
+try {
+    Section::handle($manPageContainer, 2);
+} catch (Exception $e) {
+    echo 'Doc status:', PHP_EOL;
+    Debug::echoTidy($dom->saveHTML($manPageContainer));
+    echo PHP_EOL, PHP_EOL, $e->getMessage();
+    echo $e->getTraceAsString(), PHP_EOL;
+    exit;
 }
 
 //$sections = $xpath->query('//div[@class="subsection"]');

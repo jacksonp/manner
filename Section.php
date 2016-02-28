@@ -4,7 +4,6 @@
 class Section
 {
 
-
     /**
      * Could be a section, a subsection...
      */
@@ -40,7 +39,6 @@ class Section
                 $sectionNodes[$sectionNum] = $dom->createElement('div');
                 $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
                 $sectionNodes[$sectionNum]->appendChild($dom->createElement('h' . $level, $sectionHeading));
-                $sectionNodes[$sectionNum] = $parentSectionNode->appendChild($sectionNodes[$sectionNum]);
                 continue;
             }
 
@@ -60,10 +58,11 @@ class Section
         }
         //</editor-fold>
 
-        // Now we have no more sections in manLines, do definition lists because .TP is a bit special in that we need to keep the 1st line separate for the definition and not merge text as we would otherwise.
-        foreach ($parentSectionNode->manLines as $key => $line) {
+        BlockContents::handle($parentSectionNode);
 
-
+        // Sections come after any other content.
+        foreach ($sectionNodes as $section) {
+            $parentSectionNode->appendChild($section);
         }
 
         // Not in a subsection, handle content:
@@ -71,11 +70,6 @@ class Section
 //            if ($line[0] === '.') {
         // It's a command
 
-
-        // FAIL on unknown command
-//    if (preg_match('~^\.~', $line, $matches)) {
-//        exit($line . ' (' . $i . ')' . "\n");
-//    }
 
 //            } else {
         // It's some text
