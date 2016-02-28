@@ -66,7 +66,7 @@ class BlockContents
                 if (empty($blocks) || $blocks[$blockNum]->lastChild->tagName !== 'dd') {
                     throw new Exception($line . ' - unexpected .IP');
                 }
-                $blocks[$blockNum]->appendChild($dom->createElement('br', $line));
+                $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br', $line));
                 continue;
             }
 
@@ -91,7 +91,11 @@ class BlockContents
                 $blocks[$blockNum] = $dom->createElement('p');
             }
 
-            $blocks[$blockNum]->appendChild(new DOMText(' ' . $line));
+            if ($blocks[$blockNum]->tagName === 'dl') {
+                $blocks[$blockNum]->lastChild->appendChild(new DOMText("\n" . $line));
+            } else {
+                $blocks[$blockNum]->appendChild(new DOMText("\n" . $line));
+            }
 
 
         }
