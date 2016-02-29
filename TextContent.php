@@ -4,7 +4,7 @@
 class TextContent
 {
 
-    static function interpretAndAppend(HybridNode $parentNode, string $line)
+    static function interpretAndAppend(HybridNode $parentNode, string $line, $addSpacing = true)
     {
 
         $dom = $parentNode->ownerDocument;
@@ -12,8 +12,10 @@ class TextContent
         // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output."
         $line = preg_replace('~^\\\\&~u', '', $line);
 
-        // Do this after regex above
-        $line = ' ' . $line;
+        if ($addSpacing) {
+            // Do this after regex above
+            $line = ' ' . $line;
+        }
 
         $textSegments = preg_split('~(\\\\f[BRI])~u', $line, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 

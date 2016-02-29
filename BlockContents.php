@@ -31,7 +31,7 @@ class BlockContents
                 if (strlen($command) > 1) {
                     $bits = str_getcsv($matches[2], ' ');
                 } else {
-                    $bits = [$matches[2]];
+                    $bits = [trim($matches[2], '"')];
                 }
                 foreach ($bits as $bi => $bit) {
                     $commandCharIndex = $bi % 2;
@@ -40,13 +40,15 @@ class BlockContents
                     }
                     switch ($command[$commandCharIndex]) {
                         case 'R':
-                            $blocks[$blockNum]->appendChild(new DOMText($bit));
+                            TextContent::interpretAndAppend($blocks[$blockNum], $bit, false);
                             break;
                         case 'B':
-                            $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
+                            $strongNode = $blocks[$blockNum]->appendChild($dom->createElement('strong'));
+                            TextContent::interpretAndAppend($strongNode, $bit, false);
                             break;
                         case 'I':
-                            $blocks[$blockNum]->appendChild($dom->createElement('em', $bit));
+                            $emNode = $blocks[$blockNum]->appendChild($dom->createElement('em'));
+                            TextContent::interpretAndAppend($emNode, $bit, false);
                             break;
                         default:
                             throw new Exception($line . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
