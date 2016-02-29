@@ -94,7 +94,7 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f[BRI])~u', $line, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split('~(\\\\f[BRIP])~u', $line, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
@@ -109,6 +109,10 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $parentNode->appendChild($dom->createElement('em', $textSegments[++$i]));
                     }
+                    break;
+                case '\fP':
+                    // "Switch back to previous font." - groff(7)
+                    // Assume back to normal text for now, so do nothing so next line passes thru to default.
                     break;
                 case '\fR':
                     break;

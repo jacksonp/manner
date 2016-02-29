@@ -5,33 +5,33 @@
   <h1>UPDATEDB</h1>updatedb - update a file name database
   <div class="section">
     <h2>SYNOPSIS</h2>
-    <p><strong>updatedb [<em>options\fP]</em></strong>
+    <p><strong>updatedb [<em>options</em>]</strong>
   </div>
   <div class="section">
     <h2>DESCRIPTION</h2>
-    <p>This manual page documents the GNU version of <strong>updatedb</strong>, which updates file name databases used by GNU <strong>locate</strong>. The file name databases contain lists of files that were in particular directory trees when the databases were last updated. The file name of the default database is determined when <strong>locate\fP</strong> and <strong>updatedb\fP are configured and installed. The frequency with</strong> which the databases are updated and the directories for which they contain entries depend on how often <strong>updatedb\fP is run, and with</strong> which arguments.
-    <p>In networked environments, it often makes sense to build a database at the root of each filesystem, containing the entries for that filesystem. <strong>updatedb</strong> is then run for each filesystem on the fileserver where that filesystem is on a local disk, to prevent thrashing the network. Users can select which databases <strong>locate\fP searches using an</strong> environment variable or command line option; see <strong>locate\fP(1).</strong> Databases cannot be concatenated together.
+    <p>This manual page documents the GNU version of <strong>updatedb</strong>, which updates file name databases used by GNU <strong>locate</strong>. The file name databases contain lists of files that were in particular directory trees when the databases were last updated. The file name of the default database is determined when <strong>locate</strong> and <strong>updatedb</strong> are configured and installed. The frequency with which the databases are updated and the directories for which they contain entries depend on how often <strong>updatedb</strong> is run, and with which arguments.
+    <p>In networked environments, it often makes sense to build a database at the root of each filesystem, containing the entries for that filesystem. <strong>updatedb</strong> is then run for each filesystem on the fileserver where that filesystem is on a local disk, to prevent thrashing the network. Users can select which databases <strong>locate</strong> searches using an environment variable or command line option; see <strong>locate</strong>(1). Databases cannot be concatenated together.
     <p>The @samp{LOCATGE02} database format was introduced in GNU findutils version 4.0 in order to allow machines with different byte orderings to share the databases. GNU <strong>locate</strong> can read both the old and @samp{LOCATE02} database formats, though support for the old pre-4.0 database format will be removed shortly.
   </div>
   <div class="section">
     <h2>OPTIONS</h2>
     <dl>
-      <dt><strong>--findoptions='<em>-option1 -option2...\fP'</em></strong>
-      <dd>Global options to pass on to <strong>find\fP.</strong> The environment variable <strong>FINDOPTIONS\fP also sets this value.</strong> Default is none.
-      <dt><strong>--localpaths='<em>path1 path2...\fP'</em></strong>
+      <dt><strong>--findoptions='<em>-option1 -option2...</em>'</strong>
+      <dd>Global options to pass on to <strong>find</strong>. The environment variable <strong>FINDOPTIONS</strong> also sets this value. Default is none.
+      <dt><strong>--localpaths='<em>path1 path2...</em>'</strong>
       <dd>Non-network directories to put in the database. Default is /.
-      <dt><strong>--netpaths='<em>path1 path2...\fP'</em></strong>
-      <dd>Network (NFS, AFS, RFS, etc.) directories to put in the database. The environment variable <strong>NETPATHS\fP also sets this value.</strong> Default is none.
-      <dt><strong>--prunepaths='<em>path1 path2...\fP'</em></strong>
-      <dd>Directories to not put in the database, which would otherwise be. Remove any trailing slashes from the path names, otherwise <strong>updatedb</strong> won\'t recognise the paths you want to omit (because it uses them as regular expression patterns). The environment variable <strong>PRUNEPATHS\fP also sets this value.</strong> Default is /tmp /usr/tmp /var/tmp /afs.
-      <dt><strong>--prunefs='<em>path...\fP'</em></strong>
-      <dd>File systems to not put in the database, which would otherwise be. Note that files are pruned when a file system is reached; any file system mounted under an undesired file system will be ignored. The environment variable <strong>PRUNEFS\fP also sets this value.</strong> Default is <em>nfs NFS proc\fP.</em>
-      <dt><strong>--output=<em>dbfile\fP</em></strong>
+      <dt><strong>--netpaths='<em>path1 path2...</em>'</strong>
+      <dd>Network (NFS, AFS, RFS, etc.) directories to put in the database. The environment variable <strong>NETPATHS</strong> also sets this value. Default is none.
+      <dt><strong>--prunepaths='<em>path1 path2...</em>'</strong>
+      <dd>Directories to not put in the database, which would otherwise be. Remove any trailing slashes from the path names, otherwise <strong>updatedb</strong> won\'t recognise the paths you want to omit (because it uses them as regular expression patterns). The environment variable <strong>PRUNEPATHS</strong> also sets this value. Default is /tmp /usr/tmp /var/tmp /afs.
+      <dt><strong>--prunefs='<em>path...</em>'</strong>
+      <dd>File systems to not put in the database, which would otherwise be. Note that files are pruned when a file system is reached; any file system mounted under an undesired file system will be ignored. The environment variable <strong>PRUNEFS</strong> also sets this value. Default is <em>nfs NFS proc</em>.
+      <dt><strong>--output=<em>dbfile</em></strong>
       <dd>The database file to build. Default is system-dependent. In Debian GNU/Linux, the default is /var/cache/locate/locatedb.
-      <dt><strong>--localuser=<em>user\fP</em></strong>
-      <dd>The user to search non-network directories as, using <strong>su\fP(1).</strong> Default is to search the non-network directories as the current user. You can also use the environment variable <strong>LOCALUSER\fP to set this user.</strong>
-      <dt><strong>--netuser=<em>user\fP</em></strong>
-      <dd>The user to search network directories as, using <strong>su\fP(1).</strong> Default is <strong>daemon\fP.</strong> You can also use the environment variable <strong>NETUSER\fP to set this user.</strong>
+      <dt><strong>--localuser=<em>user</em></strong>
+      <dd>The user to search non-network directories as, using <strong>su</strong>(1). Default is to search the non-network directories as the current user. You can also use the environment variable <strong>LOCALUSER</strong> to set this user.
+      <dt><strong>--netuser=<em>user</em></strong>
+      <dd>The user to search network directories as, using <strong>su</strong>(1). Default is <strong>daemon</strong>. You can also use the environment variable <strong>NETUSER</strong> to set this user.
       <dt><strong>--dbformat=F</strong>
       <dd>Create the database in format F. The default format is called LOCATE02. Alternatively the <strong>slocate</strong> format is also supported. When the <strong>slocate</strong> format is in use, the database produced is marked as having security level 1. If you want to build a system-wide <strong>slocate</strong> database, you may want to run <strong>updatedb</strong> as root.
       <dt><strong>--version</strong>
@@ -42,12 +42,12 @@
   </div>
   <div class="section">
     <h2>SEE ALSO</h2>
-    <p><strong>find\fP(1),</strong> <strong>locate\fP(1),</strong> <strong>locatedb\fP(5),</strong> <strong>xargs\fP(1)</strong> The full documentation for <strong>updatedb</strong> is maintained as a Texinfo manual. If the <strong>info</strong> and <strong>updatedb</strong> programs are properly installed at your site, the command <strong>info updatedb</strong> should give you access to the complete manual.
+    <p><strong>find</strong>(1), <strong>locate</strong>(1), <strong>locatedb</strong>(5), <strong>xargs</strong>(1) The full documentation for <strong>updatedb</strong> is maintained as a Texinfo manual. If the <strong>info</strong> and <strong>updatedb</strong> programs are properly installed at your site, the command <strong>info updatedb</strong> should give you access to the complete manual.
   </div>
   <div class="section">
     <h2>BUGS</h2>
     <p>The <strong>updatedb</strong> program correctly handles filenames containing newlines, but only if the system's sort command has a working <em>-z</em> option. If you suspect that <strong>locate</strong> may need to return filenames containing newlines, consider using its <em>--null</em> option.
-    <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. Other comments about <strong>updatedb\fP(1) and about</strong> the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
+    <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. Other comments about <strong>updatedb</strong>(1) and about the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
   </div>
 </div>
 
