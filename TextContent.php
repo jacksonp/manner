@@ -83,8 +83,8 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output."
-        $line = preg_replace('~^\\\\&~u', '', $line);
+        // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
+        $line = preg_replace('~\\\\&~u', '', $line);
 
         if ($addSpacing) {
             // Do this after regex above
