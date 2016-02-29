@@ -16,27 +16,24 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (strlen($line) === 0) {
-            return; // Discard for now, maybe useful as a hint later on?
-        }
-
         if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br', $line));
 
             return;
         }
 
-        if (preg_match('~^\.([RBI][RBI]?) ?(.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.([RBI][RBI]?)(.*)$~u', $line, $matches)) {
 
             $command = $matches[1];
-            if (empty($matches[2])) {
+            $stringToFormat = trim($matches[2]);
+            if (empty($stringToFormat)) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
 
             if (strlen($command) > 1) {
-                $bits = str_getcsv($matches[2], ' ');
+                $bits = str_getcsv($stringToFormat, ' ');
             } else {
-                $bits = [trim($matches[2], '"')];
+                $bits = [trim($stringToFormat, '"')];
             }
             foreach ($bits as $bi => $bit) {
                 $commandCharIndex = $bi % 2;

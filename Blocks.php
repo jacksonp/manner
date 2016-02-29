@@ -18,9 +18,18 @@ class Blocks
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
+            // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.[LP]?P$~u', $line) || preg_match('~^\.sp$~u', $line)) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
+                continue;
+            }
+
+            if (strlen($line) === 0) {
+                if ($blockNum > 0 && $blocks[$blockNum]->tagName !== 'dl') {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('p');
+                }
                 continue;
             }
 
@@ -31,7 +40,7 @@ class Blocks
                     $blocks[$blockNum] = $dom->createElement('dl');
                 }
                 $dtLine = $parentSectionNode->manLines[++$i];
-                $dt = $dom->createElement('dt');
+                $dt     = $dom->createElement('dt');
                 TextContent::interpretAndAppendCommand($dt, $dtLine);
                 $blocks[$blockNum]->appendChild($dt);
                 continue;
@@ -42,7 +51,7 @@ class Blocks
                     throw new Exception($line . ' - unexpected .TQ not after <dt>');
                 }
                 $dtLine = $parentSectionNode->manLines[++$i];
-                $dt = $dom->createElement('dt');
+                $dt     = $dom->createElement('dt');
                 TextContent::interpretAndAppendCommand($dt, $dtLine);
                 $blocks[$blockNum]->appendChild($dt);
                 continue;
@@ -65,6 +74,15 @@ class Blocks
                     throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName);
                 }
                 continue;
+            }
+
+            if (preg_match('~^\.RS~u', $line)) {
+                // see cal.1 for maybe an easy start on supporting .RS/.RE
+                throw new Exception($line . ' - no support for .RS yet');
+            }
+
+            if (preg_match('~^\.RE~u', $line)) {
+                throw new Exception($line . ' - no support for .RE yet');
             }
 
             if ($blockNum === 0) {

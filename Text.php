@@ -72,6 +72,8 @@ class Text
 
     public static function preprocess($line)
     {
+        // See http://man7.org/linux/man-pages/man7/groff_char.7.html
+
         $replacements = [
             // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
           '\\/'  => '',
@@ -82,7 +84,7 @@ class Text
           '\\en'  => '\n',
           '\\e'  => '\\', // "\e represents the current escape character." - let's hope it's always a backslash
           '\(co' => '©',
-            // "Quotes" see http://man7.org/linux/man-pages/man7/groff_char.7.html
+            // Quotes
           '\(Bq' => '„',
           '\(bq' => '‚',
           '\(lq' => '“',
@@ -95,7 +97,14 @@ class Text
           '\(Fc' => '»',
           '\(fo' => '‹',
           '\(fc' => '›',
-            // Done "Quotes"
+            // Done quotes
+            // Punctuation
+          '\(r!' => '¡',
+          '\(r?' => '¿',
+          '\(em' => '—',
+          '\(en' => '–',
+          '\(hy' => '‐',
+            // Done punctuation
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $line);
