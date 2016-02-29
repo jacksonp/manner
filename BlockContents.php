@@ -18,69 +18,38 @@ class BlockContents
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
-            if (preg_match('~^\.B (.*)$~', $line, $matches)) {
+            if (preg_match('~^\.([RBI][RBI]?) (.*)$~', $line, $matches)) {
                 if (empty($blocks)) {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('p');
                     $parentSectionNode->appendChild($blocks[$blockNum]);
                 }
-                $textToBold = trim($matches[1], '"');
-                $b          = $dom->createElement('strong', $textToBold);
-                $blocks[$blockNum]->appendChild($b);
-                unset($parentSectionNode->manLines[$i]);
-                continue;
-            }
-
-            // TODO: change the following to switch on e.g. BR[$bi % 2] ?
-
-            if (preg_match('~^\.RB (.*)$~', $line, $matches)) {
-                if (empty($blocks)) {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
-                    $parentSectionNode->appendChild($blocks[$blockNum]);
+                $command = $matches[1];
+                if (empty($matches[2])) {
+                    throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
                 }
-                $bits = str_getcsv($matches[1], ' ');
+                if (strlen($command) > 1) {
+                    $bits = str_getcsv($matches[2], ' ');
+                } else {
+                    $bits = [$matches[2]];
+                }
                 foreach ($bits as $bi => $bit) {
-                    if ($bi % 2 === 0) {
-                        $blocks[$blockNum]->appendChild(new DOMText($bit));
-                    } else {
-                        $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
+                    $commandCharIndex = $bi % 2;
+                    if (!isset($command[$commandCharIndex])) {
+                        throw new Exception($line . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
                     }
-                }
-                unset($parentSectionNode->manLines[$i]);
-                continue;
-            }
-
-            if (preg_match('~^\.BR (.*)$~', $line, $matches)) {
-                if (empty($blocks)) {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
-                    $parentSectionNode->appendChild($blocks[$blockNum]);
-                }
-                $bits = str_getcsv($matches[1], ' ');
-                foreach ($bits as $bi => $bit) {
-                    if ($bi % 2 === 0) {
-                        $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
-                    } else {
-                        $blocks[$blockNum]->appendChild(new DOMText($bit));
-                    }
-                }
-                unset($parentSectionNode->manLines[$i]);
-                continue;
-            }
-
-            if (preg_match('~^\.RI (.*)$~', $line, $matches)) {
-                if (empty($blocks)) {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
-                    $parentSectionNode->appendChild($blocks[$blockNum]);
-                }
-                $bits = str_getcsv($matches[1], ' ');
-                foreach ($bits as $bi => $bit) {
-                    if ($bi % 2 === 0) {
-                        $blocks[$blockNum]->appendChild(new DOMText($bit));
-                    } else {
-                        $blocks[$blockNum]->appendChild($dom->createElement('em', $bit));
+                    switch ($command[$commandCharIndex]) {
+                        case 'R':
+                            $blocks[$blockNum]->appendChild(new DOMText($bit));
+                            break;
+                        case 'B':
+                            $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
+                            break;
+                        case 'I':
+                            $blocks[$blockNum]->appendChild($dom->createElement('em', $bit));
+                            break;
+                        default:
+                            throw new Exception($line . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
                     }
                 }
                 unset($parentSectionNode->manLines[$i]);
