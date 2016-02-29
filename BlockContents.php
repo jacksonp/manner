@@ -22,22 +22,83 @@ class BlockContents
                 if (empty($blocks)) {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('p');
+                    $parentSectionNode->appendChild($blocks[$blockNum]);
                 }
-                $b = $dom->createElement('strong', $matches[1]);
+                $textToBold = trim($matches[1], '"');
+                $b          = $dom->createElement('strong', $textToBold);
                 $blocks[$blockNum]->appendChild($b);
-                $parentSectionNode->appendChild($blocks[$blockNum]);
                 unset($parentSectionNode->manLines[$i]);
                 continue;
             }
 
-            if (preg_match('~^\.[LP]?P$~', $line, $matches)) {
+            // TODO: change the following to switch on e.g. BR[$bi % 2] ?
+
+            if (preg_match('~^\.RB (.*)$~', $line, $matches)) {
+                if (empty($blocks)) {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('p');
+                    $parentSectionNode->appendChild($blocks[$blockNum]);
+                }
+                $bits = str_getcsv($matches[1], ' ');
+                foreach ($bits as $bi => $bit) {
+                    if ($bi % 2 === 0) {
+                        $blocks[$blockNum]->appendChild(new DOMText($bit));
+                    } else {
+                        $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
+                    }
+                }
+                unset($parentSectionNode->manLines[$i]);
+                continue;
+            }
+
+            if (preg_match('~^\.BR (.*)$~', $line, $matches)) {
+                if (empty($blocks)) {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('p');
+                    $parentSectionNode->appendChild($blocks[$blockNum]);
+                }
+                $bits = str_getcsv($matches[1], ' ');
+                foreach ($bits as $bi => $bit) {
+                    if ($bi % 2 === 0) {
+                        $blocks[$blockNum]->appendChild($dom->createElement('strong', $bit));
+                    } else {
+                        $blocks[$blockNum]->appendChild(new DOMText($bit));
+                    }
+                }
+                unset($parentSectionNode->manLines[$i]);
+                continue;
+            }
+
+            if (preg_match('~^\.RI (.*)$~', $line, $matches)) {
+                if (empty($blocks)) {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('p');
+                    $parentSectionNode->appendChild($blocks[$blockNum]);
+                }
+                $bits = str_getcsv($matches[1], ' ');
+                foreach ($bits as $bi => $bit) {
+                    if ($bi % 2 === 0) {
+                        $blocks[$blockNum]->appendChild(new DOMText($bit));
+                    } else {
+                        $blocks[$blockNum]->appendChild($dom->createElement('em', $bit));
+                    }
+                }
+                unset($parentSectionNode->manLines[$i]);
+                continue;
+            }
+
+            if (
+              preg_match('~^\.[LP]?P$~', $line, $matches)
+              || preg_match('~^\.sp$~', $line, $matches)
+            ) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
                 unset($parentSectionNode->manLines[$i]);
                 continue;
             }
 
-            if (preg_match('~^\.TP$~', $line)) {
+            // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
+            if (preg_match('~^\.TP ?(.*)$~', $line)) {
                 if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('dl');
