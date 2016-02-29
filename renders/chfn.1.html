@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>CHFN</title>
+<div>
+  <h1>CHFN</h1>chfn - change your finger information
+  <div class="section">
+    <h2>SYNOPSIS</h2>
+    <p><strong>chfn</strong> [<strong>-f</strong> <em>full-name</em>] [<strong>-o</strong> <em>office</em>] [<strong>-p</strong> <em>office-phone</em>] [<strong>-h</strong> <em>home-phone</em>] [<strong>-u</strong>] [<strong>-v</strong>] [<em>username</em>]
+  </div>
+  <div class="section">
+    <h2>DESCRIPTION</h2>
+    <p><strong>chfn</strong> is used to change your finger information. This information is stored in the <em>/etc/passwd</em> file, and is displayed by the <strong>finger</strong> program. The Linux <strong>finger</strong> command will display four pieces of information that can be changed by <strong>chfn</strong>: your real name, your work room and phone, and your home phone.
+    <p>Any of the four pieces of information can be specified on the command line. If no information is given on the command line, <strong>chfn</strong> enters interactive mode.
+    <p>In interactive mode, <strong>chfn</strong> will prompt for each field. At a prompt, you can enter the new information, or just press return to leave the field unchanged. Enter the keyword "none" to make the field blank.
+    <p><strong>chfn</strong> supports non-local entries (kerberos, LDAP, etc.\&amp;) if linked with libuser, otherwise use <strong>ypchfn</strong>, <strong>lchfn</strong> or any other implementation for non-local entries.
+  </div>
+  <div class="section">
+    <h2>OPTIONS</h2>
+    <dl>
+      <dt><strong>-f</strong>, <strong>--full-name</strong> <em>full-name</em>
+      <dd>Specify your real name.
+      <dt><strong>-o</strong>, <strong>--office</strong> <em>office</em>
+      <dd>Specify your office room number.
+      <dt><strong>-p</strong>, <strong>--office-phone</strong> <em>office-phone</em>
+      <dd>Specify your office phone number.
+      <dt><strong>-h</strong>, <strong>--home-phone</strong> <em>home-phone</em>
+      <dd>Specify your home phone number.
+      <dt><strong>-u</strong>, <strong>--help</strong>
+      <dd>Display help text and exit.
+      <dt><strong>-v</strong>, <strong>--version</strong>
+      <dd>Display version information and exit.
+    </dl>
+  </div>
+  <div class="section">
+    <h2>CONFIG FILE ITEMS</h2>
+    <p><strong>chfn</strong> reads the <em>/etc\:/login.defs</em>(5) configuration file. Note that the configuration file could be distributed with another package (e.g. shadow-utils). The following configuration items are relevant for <strong>chfn</strong>(1):
+    <p><strong>CHFN_RESTRICT</strong> <em>string</em> S 4 Indicate which fields are changeable by <strong>chfn</strong>. The boolean setting <strong>"yes"</strong> means that only the Office, Office Phone and Home Phone fields are changeable, and boolean setting <strong>"no"</strong> means that also the Full Name is changeable. Another way to specify changeable fields is by abbreviations: f = Full Name, r = Office (room), w = Office (work) Phone, h = Home Phone. For example, <strong>CHFN_RESTRICT "wh"</strong> allows changing work and home phone numbers. If CHFN_RESTRICT is undefined, then all finger information is read-only. This is the default. E
+  </div>
+  <div class="section">
+    <h2>EXIT STATUS</h2>
+    <p>Returns 0 if operation was successful, 1 if operation failed or command syntax was not valid.
+  </div>
+  <div class="section">
+    <h2>SEE ALSO</h2>
+    <p><strong>finger</strong>(1), <strong>passwd</strong>(5)
+  </div>
+  <div class="section">
+    <h2>AUTHOR</h2>
+    <p>Salvatore Valente &lt;svalente@mit.edu&gt;
+  </div>
+  <div class="section">
+    <h2>AVAILABILITY</h2>
+    <p>The chfn command is part of the util-linux package and is available from ftp://ftp.kernel.org/pub/linux/utils/util-linux/.
+  </div>
+</div>
+

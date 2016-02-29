@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>dpkg-scansources</title>
+<div>
+  <h1>dpkg-scansources</h1>dpkg-scansources - create Sources index files
+  <div class="section">
+    <h2>SYNOPSIS</h2>
+    <p><strong>dpkg-scansources</strong> [<em>option</em>...] <em>binary-dir</em> [<em>override-file</em> [<em>path-prefix</em>]] <strong>&gt;</strong> <em>Sources</em>
+  </div>
+  <div class="section">
+    <h2>DESCRIPTION</h2>
+    <p><strong>dpkg-scansources</strong> scans the given <em>binary-dir</em> for <em>.dsc</em> files. These are used to create a Debian source index, which is output to stdout.
+    <p>The <em>override-file</em>, if given, is used to set priorities in the resulting index records and to override the maintainer field given in the <em>.dsc</em> files. The file can be compressed (since dpkg 1.15.5). See <strong>deb-override</strong>(5) for the format of this file. Note: Since the override file is indexed by binary, not source packages, there's a bit of a problem here. The current implementation uses the highest priority of all the binary packages produced by a <em>.dsc</em> file for the priority of the source package, and the override entry for the first binary package listed in the <em>.dsc</em> file to modify maintainer information. This might change.
+    <p>The <em>path-prefix</em>, if given, is prepended to the directory field in the generated source index. You generally use this to make the directory fields contain the path from the top of the Debian archive hierarchy.
+    <p><strong>Note:</strong> If you want to access the generated Sources file with <strong>apt</strong>(8) you will probably need to compress the file with <strong>gzip</strong>(1) (generating a Sources.gz file). apt ignores uncompressed Sources files except on local access (i.e. <strong>file://</strong> sources).
+  </div>
+  <div class="section">
+    <h2>OPTIONS</h2>
+    <p><em>P "<strong>-n</strong>, <strong>--no-sort</strong>" 4</em> Don't sort the index records. Normally they are sorted by source package name.
+    <dl>
+      <dt><em>P "<strong>-e</strong>, <strong>--extra-override</strong> <em>file\fP" 4</em></em>
+      <dd>Scan <em>file\fP to find supplementary overrides (since dpkg 1.15.4;</em> the file can be compressed since dpkg 1.15.5). See <strong>deb-extra-override</strong>(5) for more information on its format. <em>P "<strong>-s</strong>, <strong>--source-override</strong> <em>file</em>" 4</em> Use <em>file</em> as the source override file (the file can be compressed since dpkg 1.15.5). The default is the name of the override file you specified with <em>.src</em> appended.
+    </dl>
+    <p>The source override file is in a different format from the binary override file. It contains only two whitespace separated fields, the first is the source package name and the second is the section. Blank lines and comment lines are ignored in the normal manner. If a package appears in both files the source override takes precedence for setting the section. <em>P "<strong>--debug</strong>" 4</em> Turn debugging on. <em>P "<strong>--help</strong>" 4</em> Show the usage message and exit. <em>P "<strong>--version</strong>" 4</em> Show the version and exit.
+  </div>
+  <div class="section">
+    <h2>SEE ALSO</h2>
+    <p><strong>deb-override</strong>(5), <strong>deb-extra-override</strong>(5), <strong>dpkg-scanpackages</strong>(1).
+  </div>
+</div>
+

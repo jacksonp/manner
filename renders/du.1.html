@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>DU</title>
+<div>
+  <h1>DU</h1>du - estimate file space usage
+  <div class="section">
+    <h2>SYNOPSIS</h2>
+    <p><strong>du</strong> [<em>OPTION</em>]... [<em>FILE</em>]...<br>
+    <strong>du</strong> [<em>OPTION</em>]... <em>--files0-from=F</em>
+  </div>
+  <div class="section">
+    <h2>DESCRIPTION</h2>
+    <p>Summarize disk usage of the set of FILEs, recursively for directories.
+    <p>Mandatory arguments to long options are mandatory for short options too.
+    <dl>
+      <dt><strong>-0</strong>, <strong>--null</strong>
+      <dd>end each output line with NUL, not newline
+      <dt><strong>-a</strong>, <strong>--all</strong>
+      <dd>write counts for all files, not just directories
+      <dt><strong>--apparent-size</strong>
+      <dd>print apparent sizes, rather than disk usage; although the apparent size is usually smaller, it may be larger due to holes in ('sparse') files, internal fragmentation, indirect blocks, and the like
+      <dt><strong>-B</strong>, <strong>--block-size</strong>=<em>SIZE</em>
+      <dd>scale sizes by SIZE before printing them; e.g., '-BM' prints sizes in units of 1,048,576 bytes; see SIZE format below
+      <dt><strong>-b</strong>, <strong>--bytes</strong>
+      <dd>equivalent to '--apparent-size <strong>--block-size</strong>=<em>1</em>'
+      <dt><strong>-c</strong>, <strong>--total</strong>
+      <dd>produce a grand total
+      <dt><strong>-D</strong>, <strong>--dereference-args</strong>
+      <dd>dereference only symlinks that are listed on the command line
+      <dt><strong>-d</strong>, <strong>--max-depth</strong>=<em>N</em>
+      <dd>print the total for a directory (or file, with <strong>--all</strong>) only if it is N or fewer levels below the command line argument; <strong>--max-depth</strong>=<em>0</em> is the same as <strong>--summarize</strong>
+      <dt><strong>--files0-from</strong>=<em>F</em>
+      <dd>summarize disk usage of the NUL-terminated file names specified in file F; if F is -, then read names from standard input
+      <dt><strong>-H</strong>
+      <dd>equivalent to <strong>--dereference-args</strong> (<strong>-D</strong>)
+      <dt><strong>-h</strong>, <strong>--human-readable</strong>
+      <dd>print sizes in human readable format (e.g., 1K 234M 2G)
+      <dt><strong>--inodes</strong>
+      <dd>list inode usage information instead of block usage
+      <dt><strong>-k</strong>
+      <dd>like <strong>--block-size</strong>=<em>1K</em>
+      <dt><strong>-L</strong>, <strong>--dereference</strong>
+      <dd>dereference all symbolic links
+      <dt><strong>-l</strong>, <strong>--count-links</strong>
+      <dd>count sizes many times if hard linked
+      <dt><strong>-m</strong>
+      <dd>like <strong>--block-size</strong>=<em>1M</em>
+      <dt><strong>-P</strong>, <strong>--no-dereference</strong>
+      <dd>don't follow any symbolic links (this is the default)
+      <dt><strong>-S</strong>, <strong>--separate-dirs</strong>
+      <dd>for directories do not include size of subdirectories
+      <dt><strong>--si</strong>
+      <dd>like <strong>-h</strong>, but use powers of 1000 not 1024
+      <dt><strong>-s</strong>, <strong>--summarize</strong>
+      <dd>display only a total for each argument
+      <dt><strong>-t</strong>, <strong>--threshold</strong>=<em>SIZE</em>
+      <dd>exclude entries smaller than SIZE if positive, or entries greater than SIZE if negative
+      <dt><strong>--time</strong>
+      <dd>show time of the last modification of any file in the directory, or any of its subdirectories
+      <dt><strong>--time</strong>=<em>WORD</em>
+      <dd>show time as WORD instead of modification time: atime, access, use, ctime or status
+      <dt><strong>--time-style</strong>=<em>STYLE</em>
+      <dd>show times using STYLE, which can be: full-iso, long-iso, iso, or +FORMAT; FORMAT is interpreted like in 'date'
+      <dt><strong>-X</strong>, <strong>--exclude-from</strong>=<em>FILE</em>
+      <dd>exclude files that match any pattern in FILE
+      <dt><strong>--exclude</strong>=<em>PATTERN</em>
+      <dd>exclude files that match PATTERN
+      <dt><strong>-x</strong>, <strong>--one-file-system</strong>
+      <dd>skip directories on different file systems
+      <dt><strong>--help</strong>
+      <dd>display this help and exit
+      <dt><strong>--version</strong>
+      <dd>output version information and exit
+    </dl>
+    <p>Display values are in units of the first available SIZE from <strong>--block-size</strong>, and the DU_BLOCK_SIZE, BLOCK_SIZE and BLOCKSIZE environment variables. Otherwise, units default to 1024 bytes (or 512 if POSIXLY_CORRECT is set).
+    <p>The SIZE argument is an integer and optional unit (example: 10K is 10*1024). Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
+  </div>
+  <div class="section">
+    <h2>PATTERNS</h2>
+    <p>PATTERN is a shell pattern (not a regular expression). The pattern <strong>?</strong> matches any one character, whereas <strong>*</strong> matches any string (composed of zero, one or multiple characters). For example, <strong>*.o</strong> will match any files whose names end in <strong>.o</strong>. Therefore, the command
+    <blockquote>
+      <strong>du --exclude='*.o'</strong>
+    </blockquote>
+    <p>will skip all files and subdirectories ending in <strong>.o</strong> (including the file <strong>.o</strong> itself).
+  </div>
+  <div class="section">
+    <h2>AUTHOR</h2>
+    <p>Written by Torbjorn Granlund, David MacKenzie, Paul Eggert, and Jim Meyering.
+  </div>
+  <div class="section">
+    <h2>REPORTING BUGS</h2>
+    <p>GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;<br>
+    Report du translation bugs to &lt;http://translationproject.org/team/&gt;
+  </div>
+  <div class="section">
+    <h2>COPYRIGHT</h2>
+    <p>Copyright © 2016 Free Software Foundation, Inc. License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.<br>
+    This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+  </div>
+  <div class="section">
+    <h2>SEE ALSO</h2>
+    <p>Full documentation at: &lt;http://www.gnu.org/software/coreutils/du&gt;<br>
+    or available locally via: info '(coreutils) du invocation'
+  </div>
+</div>
+

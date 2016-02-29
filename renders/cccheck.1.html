@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Mono</title>
+<div>
+  <h1>Mono</h1>cccheck - Perform static code contracts verification for CLR assemblies.
+  <div class="section">
+    <h2>SYNOPSIS</h2>
+    <p><strong>cccheck --assembly=&lt;assembly&gt; [options]</strong>
+  </div>
+  <div class="section">
+    <h2>DESCRIPTION</h2>
+    <p>Perform static code contracts verification to find bugs and inconsistences between code and specification. This includes non-null, integer analyses.
+    <p>The assembly must have been built with the symbol CONTRACTS_FULL defined, otherwise the calls to the contract methods will have been removed by the compiler.
+    <p>Currently only Contract.Assume() and Contract.Assert() methods are supported. Only non-null analysis is supported, the consecutive analyses are in development. An error message will be shown if cccheck is unable to process all or some of the methods of specified assembly.
+  </div>
+  <div class="section">
+    <h2>CONFIGURATION OPTIONS</h2>
+    <dl>
+      <dt><em>--assembly &lt;assembly-name&gt;</em>
+      <dd>The assembly to perform static verification.
+      <dt><em>--debug</em>
+      <dd>Shows debug information about process of proving the assertions. It shows four layers of abstraction, raw layer, stack layer, heap layer, and substituted expression level.
+      <dt><em>--method=&lt;method-name-substring&gt;</em>
+      <dd>String for finding method. It filters all methods in assembly where method name has this parameter as a substring.
+      <dt><em>--help</em>
+      <dd>Show help for cccheck, listing configuration options.
+    </dl>
+  </div>
+  <div class="section">
+    <h2>EXAMPLES</h2>
+    <dl>
+      <dt>Suppose you have a method:
+      <dd>void Method() { object x = null; int y = 1; if (y % 2 == 1) x = new object(); else x = new string(); Contract.Assert(x != null); } After the verification the tool will have results in following format: "Assertion at : [Subroutine: &lt;id&gt; Block &lt;blockId&gt; PC &lt;id&gt;] : is (true|false|unproven|unreachable)". (PC is a program counter)
+    </dl>
+  </div>
+  <div class="section">
+    <h2>AUTHOR</h2>
+    <p>Written by Alexander Chebaturkin
+  </div>
+  <div class="section">
+    <h2>COPYRIGHT</h2>
+    <p>Copyright 2011 Alexander Chebaturkin. Released under MIT license.
+  </div>
+  <div class="section">
+    <h2>WEB SITE</h2>
+    <p>Visit http://www.mono-project.com for details
+  </div>
+</div>
+
