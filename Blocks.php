@@ -30,9 +30,18 @@ class Blocks
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('dl');
                 }
-
                 $dtLine = $parentSectionNode->manLines[++$i];
+                $dt = $dom->createElement('dt');
+                TextContent::interpretAndAppendCommand($dt, $dtLine);
+                $blocks[$blockNum]->appendChild($dt);
+                continue;
+            }
 
+            if (preg_match('~^\.TQ$~u', $line)) {
+                if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl' || $blocks[$blockNum]->lastChild->tagName !== 'dt') {
+                    throw new Exception($line . ' - unexpected .TQ not after <dt>');
+                }
+                $dtLine = $parentSectionNode->manLines[++$i];
                 $dt = $dom->createElement('dt');
                 TextContent::interpretAndAppendCommand($dt, $dtLine);
                 $blocks[$blockNum]->appendChild($dt);
