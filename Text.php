@@ -43,7 +43,7 @@ class Text
 
     }
 
-    static function toCommonMark ($lines)
+    static function toCommonMark($lines)
     {
 
         $numLines = count($lines);
@@ -68,6 +68,22 @@ class Text
 
         return $newLines;
 
+    }
+
+    public static function preprocess($line)
+    {
+        $replacements = [
+            // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
+          '\\/'  => '',
+            // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
+          '\\,'  => '',
+          '\\-'  => '-',
+          '\\en'  => '\n',
+          '\(aq' => '\'',
+          '\(co' => '©',
+        ];
+
+        return str_replace(array_keys($replacements), array_values($replacements), $line);
     }
 
 }

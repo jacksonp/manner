@@ -29,6 +29,7 @@ class Section
               || ($level > 2 && preg_match('~^\.SS (.*)$~', $line, $matches))
             ) {
                 $sectionHeading = $matches[1];
+                $sectionHeading = trim($sectionHeading, '"');
                 if (empty($sectionHeading)) {
                     exit($line . ' - empty section heading.');
                 }

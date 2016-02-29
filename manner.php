@@ -21,7 +21,7 @@ $rawLines = file($filePath, FILE_IGNORE_NEW_LINES);
 
 $numRawLines = count($rawLines);
 
-$dom = new DOMDocument();
+$dom = new DOMDocument('1.0', 'utf-8');
 $dom->registerNodeClass('DOMElement', 'HybridNode');
 $xpath = new DOMXpath($dom);
 
@@ -60,7 +60,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         continue;
     }
 
-    $lines[] = $line;
+    $lines[] = Text::preprocess($line);
 
 }
 //</editor-fold>
@@ -115,5 +115,7 @@ try {
 
 $html = $dom->saveHTML();
 
-Debug::echoTidy($html);
+echo $html;
+
+//Debug::echoTidy($html);
 

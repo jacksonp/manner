@@ -24,7 +24,7 @@ class Debug
           'break-before-br'     => false,
           'quote-nbsp'          => false,
           'anchor-as-name'      => false,
-          'show-body-only'      => true,
+//          'show-body-only'      => true,
         ], 'UTF8');
 
         $tidy->cleanRepair();

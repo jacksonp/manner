@@ -31,10 +31,8 @@ class BlockContents
             }
 
             if (preg_match('~^\.[LP]?P$~', $line, $matches)) {
-                if (empty($blocks)) {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
-                }
+                ++$blockNum;
+                $blocks[$blockNum] = $dom->createElement('p');
                 unset($parentSectionNode->manLines[$i]);
                 continue;
             }
@@ -53,15 +51,19 @@ class BlockContents
                 $ddLine = $parentSectionNode->manLines[++$i];
                 unset($parentSectionNode->manLines[$i]);
 
-                $dt = $dom->createElement('dt', $dtLine);
+                $dt = $dom->createElement('dt');
+                TextContent::interpretAndAppend($dt, $dtLine);
                 $blocks[$blockNum]->appendChild($dt);
 
-                $dd = $dom->createElement('dd', $ddLine);
+                $dd = $dom->createElement('dd');
+                TextContent::interpretAndAppend($dd, $ddLine);
                 $blocks[$blockNum]->appendChild($dd);
 
                 continue;
             }
 
+
+            // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             if (preg_match('~^\.IP$~', $line)) {
                 if (empty($blocks) || $blocks[$blockNum]->lastChild->tagName !== 'dd') {
                     throw new Exception($line . ' - unexpected .IP');
@@ -92,9 +94,9 @@ class BlockContents
             }
 
             if ($blocks[$blockNum]->tagName === 'dl') {
-                $blocks[$blockNum]->lastChild->appendChild(new DOMText("\n" . $line));
+                TextContent::interpretAndAppend($blocks[$blockNum]->lastChild, $line);
             } else {
-                $blocks[$blockNum]->appendChild(new DOMText("\n" . $line));
+                TextContent::interpretAndAppend($blocks[$blockNum], $line);
             }
 
 
