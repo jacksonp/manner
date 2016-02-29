@@ -53,10 +53,10 @@ class Text
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (preg_match('~^\.I (.*)$~', $line, $matches)) {
+            if (preg_match('~^\.I (.*)$~u', $line, $matches)) {
                 $newLines[$i] = '*' . $matches[1] . '*';
                 continue;
-            } elseif (preg_match('~^\.B (.*)$~', $line, $matches)) {
+            } elseif (preg_match('~^\.B (.*)$~u', $line, $matches)) {
                 $newLines[$i] = '**' . $matches[1] . '**';
                 continue;
             }

@@ -36,7 +36,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     $line = $rawLines[$i];
 
     // Skip comments
-    if (preg_match('~^[\'\.]\\\\"(\s|$)~', $line)) {
+    if (preg_match('~^[\'\.]\\\\"(\s|$)~u', $line)) {
         continue;
     }
 
@@ -46,7 +46,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     }
 
     // Handle the title details
-    if (preg_match('~^\.TH (.*)$~', $line, $matches)) {
+    if (preg_match('~^\.TH (.*)$~u', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
         if (count($titleDetails) < 2) {
             exit($line . ' - missing title info');

@@ -18,14 +18,14 @@ class Blocks
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
-            if (preg_match('~^\.[LP]?P$~', $line) || preg_match('~^\.sp$~', $line)) {
+            if (preg_match('~^\.[LP]?P$~u', $line) || preg_match('~^\.sp$~u', $line)) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
                 continue;
             }
 
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-            if (preg_match('~^\.TP ?(.*)$~', $line)) {
+            if (preg_match('~^\.TP ?(.*)$~u', $line)) {
                 if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('dl');
@@ -46,7 +46,7 @@ class Blocks
             }
 
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
-            if (preg_match('~^\.IP$~', $line)) {
+            if (preg_match('~^\.IP$~u', $line)) {
                 if (empty($blocks) || $blocks[$blockNum]->lastChild->tagName !== 'dd') {
                     throw new Exception($line . ' - unexpected .IP');
                 }

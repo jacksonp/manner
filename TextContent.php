@@ -20,13 +20,13 @@ class TextContent
             return; // Discard for now, maybe useful as a hint later on?
         }
 
-        if (preg_match('~^\.br~', $line)) {
+        if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br', $line));
 
             return;
         }
 
-        if (preg_match('~^\.([RBI][RBI]?) ?(.*)$~', $line, $matches)) {
+        if (preg_match('~^\.([RBI][RBI]?) ?(.*)$~u', $line, $matches)) {
 
             $command = $matches[1];
             if (empty($matches[2])) {
