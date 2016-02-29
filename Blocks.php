@@ -32,16 +32,10 @@ class Blocks
                 }
 
                 $dtLine = $parentSectionNode->manLines[++$i];
-                $ddLine = $parentSectionNode->manLines[++$i];
 
                 $dt = $dom->createElement('dt');
                 TextContent::interpretAndAppendCommand($dt, $dtLine);
                 $blocks[$blockNum]->appendChild($dt);
-
-                $dd = $dom->createElement('dd');
-                TextContent::interpretAndAppendCommand($dd, $ddLine);
-                $blocks[$blockNum]->appendChild($dd);
-
                 continue;
             }
 
@@ -70,7 +64,13 @@ class Blocks
             }
 
             if ($blocks[$blockNum]->tagName === 'dl') {
-                TextContent::interpretAndAppendCommand($blocks[$blockNum]->lastChild, $line);
+                if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
+                    $dd = $dom->createElement('dd');
+                    TextContent::interpretAndAppendCommand($dd, $line);
+                    $blocks[$blockNum]->appendChild($dd);
+                } else {
+                    TextContent::interpretAndAppendCommand($blocks[$blockNum]->lastChild, $line);
+                }
             } else {
                 TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
             }

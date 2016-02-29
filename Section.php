@@ -68,27 +68,6 @@ class Section
             $parentSectionNode->appendChild($section);
         }
 
-        // Not in a subsection, handle content:
-
-//            if ($line[0] === '.') {
-        // It's a command
-
-
-//            } else {
-        // It's some text
-
-
-//                if (is_null($lastParagraph)) {
-//                    $lastParagraph = $dom->createElement('p');
-//                    $lastParagraph = $sectionNode->appendChild($lastParagraph);
-//                }
-//
-//                $textNode = $dom->createTextNode(Text::massage($line));
-//                $textNode = $lastParagraph->appendChild($textNode);
-
-
-//            }
-
     }
 
 }

@@ -67,12 +67,12 @@ class TextContent
 
         // FAIL on unknown command
         if (in_array($line[0], ['.', "'"])) {
-            echo 'Blocks status:', PHP_EOL;
-            Debug::echoTidy($dom->saveHTML($parentNode));
+            echo 'Doc status:', PHP_EOL;
+            Debug::echoTidy($dom->saveHTML());
             echo PHP_EOL, PHP_EOL;
             var_dump($parentNode->manLines);
             echo PHP_EOL, PHP_EOL;
-            echo $line, ' - unknown command.', PHP_EOL;
+            echo $line, ' - unexpected command.', PHP_EOL;
             exit(1);
         }
 
