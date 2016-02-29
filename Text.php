@@ -80,6 +80,7 @@ class Text
           '\\-'  => '-',
           '\\.'  => '.',
           '\\en'  => '\n',
+          '\\e'  => '\\', // "\e represents the current escape character." - let's hope it's always a backslash
           '\(aq' => '\'',
           '\(co' => '©',
         ];
