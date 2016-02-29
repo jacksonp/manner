@@ -81,8 +81,21 @@ class Text
           '\\.'  => '.',
           '\\en'  => '\n',
           '\\e'  => '\\', // "\e represents the current escape character." - let's hope it's always a backslash
-          '\(aq' => '\'',
           '\(co' => '©',
+            // "Quotes" see http://man7.org/linux/man-pages/man7/groff_char.7.html
+          '\(Bq' => '„',
+          '\(bq' => '‚',
+          '\(lq' => '“',
+          '\(rq' => '”',
+          '\(oq' => '‘',
+          '\(cq' => '’',
+          '\(aq' => '\'',
+          '\(dq' => '"',
+          '\(Fo' => '«',
+          '\(Fc' => '»',
+          '\(fo' => '‹',
+          '\(fc' => '›',
+            // Done "Quotes"
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $line);
