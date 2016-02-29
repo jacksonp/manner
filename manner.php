@@ -33,7 +33,7 @@ $lines = [];
 
 //<editor-fold desc="Strip comments, handle title, stick rest in $lines">
 for ($i = 0; $i < $numRawLines; ++$i) {
-    $line = $rawLines[$i];
+    $line = Text::preprocess($rawLines[$i]);
 
     // Skip comments
     if (preg_match('~^[\'\.]\\\\"(\s|$)~u', $line)) {
@@ -60,15 +60,16 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         continue;
     }
 
-    $lines[] = Text::preprocess($line);
+    $lines[] = $line;
 
 }
 //</editor-fold>
 
 //<editor-fold desc="Handle NAME section, take it out of $lines">
 $nameHeadingLine = array_shift($lines);
-if ($nameHeadingLine !== '.SH NAME') {
-    exit($nameHeadingLine . ' - expected NAME section.');
+if (!preg_match('~\.SH "?NAME"?~', $nameHeadingLine)) {
+    echo($nameHeadingLine . ' - expected NAME section.');
+    exit(1);
 }
 
 $nameSectionText = Text::massage(array_shift($lines));
@@ -82,10 +83,10 @@ try {
     Section::handle($manPageContainer, 2);
 } catch (Exception $e) {
     echo 'Doc status:', PHP_EOL;
-    Debug::echoTidy($dom->saveHTML($manPageContainer));
-    echo PHP_EOL, PHP_EOL, $e->getMessage();
+    echo $dom->saveHTML($manPageContainer);
+    echo PHP_EOL, PHP_EOL, $e->getMessage(), PHP_EOL;
     echo $e->getTraceAsString(), PHP_EOL;
-    exit;
+    exit(1);
 }
 
 //$sections = $xpath->query('//div[@class="subsection"]');

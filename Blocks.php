@@ -47,10 +47,20 @@ class Blocks
 
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             if (preg_match('~^\.IP$~u', $line)) {
-                if (empty($blocks) || $blocks[$blockNum]->lastChild->tagName !== 'dd') {
-                    throw new Exception($line . ' - unexpected .IP');
+                if (empty($blocks)) {
+                    throw new Exception($line . ' - unexpected .IP outside of block');
+                } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
+                    $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br'));
+                } elseif ($blocks[$blockNum]->tagName === 'p') {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('blockquote');
+                } elseif ($blocks[$blockNum]->tagName === 'blockquote') {
+                    // Already in previous .IP,
+                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                } else {
+                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName);
                 }
-                $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br', $line));
                 continue;
             }
 

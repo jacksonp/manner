@@ -73,7 +73,7 @@ class TextContent
             var_dump($parentNode->manLines);
             echo PHP_EOL, PHP_EOL;
             echo $line, ' - unknown command.', PHP_EOL;
-            exit;
+            exit(1);
         }
 
         TextContent::interpretAndAppendText($parentNode, $line, true);

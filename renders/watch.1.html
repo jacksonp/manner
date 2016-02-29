@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>WATCH</title>
+<div>
+  <h1>WATCH</h1>watch - execute a program periodically, showing output fullscreen
+  <div class="section">
+    <h2>SYNOPSIS</h2>
+    <p><strong>watch</strong> <em>[-dhvt] [-n &lt;seconds&gt;] [--differences[=cumulative]] [--help] [--interval=&lt;seconds&gt;] [--no-title] [--version] &lt;command&gt;</em>
+  </div>
+  <div class="section">
+    <h2>DESCRIPTION</h2>
+    <p><strong>watch</strong> runs <em>command</em> repeatedly, displaying its output (the first screenfull). This allows you to watch the program output change over time. By default, the program is run every 2 seconds; use <em>-n</em> or <em>--interval</em> to specify a different interval.
+    <p>The <em>-d</em> or <em>--differences</em> flag will highlight the differences between successive updates. The <em>--cumulative</em> option makes highlighting "sticky", presenting a running display of all positions that have ever changed. The <em>-t</em> or <em>--no-title</em> option turns off the header showing the interval, command, and current time at the top of the display, as well as the following blank line.
+    <p><strong>watch</strong> will run until interrupted.
+  </div>
+  <div class="section">
+    <h2>NOTE</h2>
+    <p>Note that <em>command</em> is given to "sh -c" which means that you may need to use extra quoting to get the desired effect.
+    <p>Note that POSIX option processing is used (i.e., option processing stops at the first non-option argument). This means that flags after <em>command</em> don't get interpreted by <strong>watch</strong> itself.
+  </div>
+  <div class="section">
+    <h2>EXAMPLES</h2>
+    <p>To watch for mail, you might do
+    <blockquote>
+      watch -n 60 from
+    </blockquote>
+    <p>To watch the contents of a directory change, you could use
+    <blockquote>
+      watch -d ls -l
+    </blockquote>
+    <p>If you're only interested in files owned by user joe, you might use
+    <blockquote>
+      watch -d 'ls -l | fgrep joe'
+    </blockquote>
+    <p>To see the effects of quoting, try these out
+    <blockquote>
+      watch echo $$<br>
+      <br>
+      watch echo '$$'<br>
+      <br>
+      watch echo "'"'$$'"'"
+    </blockquote>
+    <p>You can watch for your administrator to install the latest kernel with
+    <blockquote>
+      watch uname -r
+    </blockquote>
+    <p>(Just kidding.)
+  </div>
+  <div class="section">
+    <h2>BUGS</h2>
+    <p>Upon terminal resize, the screen will not be correctly repainted until the next scheduled update. All <em>--differences</em> highlighting is lost on that update as well.
+    <p>Non-printing characters are stripped from program output. Use "cat -v" as part of the command pipeline if you want to see them.
+  </div>
+  <div class="section">
+    <h2>AUTHORS</h2>
+    <p>The original <strong>watch</strong> was written by Tony Rems &lt;rembo@unisoft.com&gt; in 1991, with mods and corrections by Francois Pinard. It was reworked and new features added by Mike Coleman &lt;mkc@acm.org&gt; in 1999.
+  </div>
+</div>
+

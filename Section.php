@@ -31,7 +31,8 @@ class Section
                 $sectionHeading = $matches[1];
                 $sectionHeading = trim($sectionHeading, '"');
                 if (empty($sectionHeading)) {
-                    exit($line . ' - empty section heading.');
+                    echo($line . ' - empty section heading.');
+                    exit(1);
                 }
 
                 unset($parentSectionNode->manLines[$key]); // made a subsection out of this!
@@ -44,7 +45,8 @@ class Section
             }
 
             if ($level === 2 && empty($sectionNodes)) {
-                exit($line . ' - not in a section.');
+                echo($line . ' - not in a section.');
+                exit(1);
             }
 
             if (!empty($sectionNodes)) {
