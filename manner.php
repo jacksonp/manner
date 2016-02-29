@@ -115,7 +115,10 @@ try {
 
 $html = $dom->saveHTML();
 
-echo $html;
+echo '<!DOCTYPE html>',
+'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
+'<title>', htmlspecialchars($manName), '</title>',
+$html;
 
 //Debug::echoTidy($html);
 

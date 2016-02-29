@@ -16,7 +16,7 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (empty($line)) {
+        if (strlen($line) === 0) {
             return; // Discard for now, maybe useful as a hint later on?
         }
 
@@ -26,7 +26,7 @@ class TextContent
             return;
         }
 
-        if (preg_match('~^\.([RBI][RBI]?) (.*)$~', $line, $matches)) {
+        if (preg_match('~^\.([RBI][RBI]?) ?(.*)$~', $line, $matches)) {
 
             $command = $matches[1];
             if (empty($matches[2])) {
@@ -117,20 +117,6 @@ class TextContent
             }
 
         }
-
-
-//        $fontHandler = function (HybridNode $nodeToAddTo, string $text) {
-
-
-//            $fontCommandPos = strpos($text, '\\f');
-//            if ($fontCommandPos === false) {
-//                $nodeToAddTo->appendChild(new DOMText(' ' . $text));
-//            }
-
-//        };
-
-//        $fontHandler($parentNode, $line);
-
 
     }
 

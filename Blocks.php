@@ -67,8 +67,6 @@ class Blocks
 
         }
 
-
-
         // Add the blocks
         foreach ($blocks as $block) {
             $parentSectionNode->appendChild($block);
