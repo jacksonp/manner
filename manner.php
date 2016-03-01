@@ -51,14 +51,43 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         if (count($titleDetails) < 2) {
             exit($line . ' - missing title info');
         }
-        $manName = $titleDetails[0];
-        $manNum  = $titleDetails[1];
-        $h1      = $dom->createElement('h1', $manName);
+        $manTitle   = $titleDetails[0];
+        $manSection = $titleDetails[1];
+        if (isset($titleDetails[2])) {
+            $manDate = $titleDetails[2];
+        }
+        if (isset($titleDetails[3])) {
+            $manPackage = $titleDetails[3];
+        }
+        if (isset($titleDetails[4])) {
+            $manSectionName = $titleDetails[4];
+        }
+        $h1 = $dom->createElement('h1', $manTitle);
         $manPageContainer->appendChild($h1);
-
-//        var_dump($titleDetails);
         continue;
     }
+
+    //<editor-fold desc="mdoc title macros">
+    if (preg_match('~^\.Dd (.*)$~u', $line, $matches)) {
+        $manDate = $line;
+        continue;
+    }
+
+    if (preg_match('~^\.Dt (.*)$~u', $line, $matches)) {
+        $titleDetails = str_getcsv($matches[1], ' ');
+        if (count($titleDetails) < 2) {
+            exit($line . ' - missing title info');
+        }
+        $manTitle   = $titleDetails[0];
+        $manSection = $titleDetails[1];
+        continue;
+    }
+
+    if (preg_match('~^\.Os$~u', $line)) {
+        // Do nothing, I don't think we care about this
+        continue;
+    }
+    //</editor-fold>
 
     $lines[] = $line;
 
@@ -67,7 +96,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
 
 //<editor-fold desc="Handle NAME section, take it out of $lines">
 $nameHeadingLine = array_shift($lines);
-if (!preg_match('~\.SH "?NAME"?~', $nameHeadingLine)) {
+if (!preg_match('~\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
     echo($nameHeadingLine . ' - expected NAME section.');
     exit(1);
 }
@@ -118,7 +147,8 @@ $html = $dom->saveHTML();
 
 echo '<!DOCTYPE html>',
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
-'<title>', htmlspecialchars($manName), '</title>',
+'<title>', htmlspecialchars($manTitle), '</title>',
+'<body>', // stop warning about implicit body in tidy
 $html;
 
 //Debug::echoTidy($html);

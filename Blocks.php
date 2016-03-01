@@ -25,6 +25,7 @@ class Blocks
                 continue;
             }
 
+            // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if (strlen($line) === 0) {
                 if ($blockNum > 0 && $blocks[$blockNum]->tagName !== 'dl') {
                     ++$blockNum;
