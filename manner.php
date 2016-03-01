@@ -37,6 +37,11 @@ $man = Man::instance();
 for ($i = 0; $i < $numRawLines; ++$i) {
     $line = Text::preprocess($rawLines[$i]);
 
+    if (preg_match('~^\.(if|ie|el)~u', $line, $matches)) {
+        echo $line . ' - no support for ' . $matches[1], PHP_EOL;
+        exit(1);
+    }
+
     // Skip comments
     if (preg_match('~^[\'\.]\\\\"(\s|$)~u', $line)) {
         continue;
