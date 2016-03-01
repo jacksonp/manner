@@ -25,8 +25,8 @@ class Section
 
             // Start a subsection
             if (
-              ($level === 2 && preg_match('~^\.SH (.*)$~u', $line, $matches))
-              || ($level > 2 && preg_match('~^\.SS (.*)$~u', $line, $matches))
+              ($level === 2 && preg_match('~^\.S[Hh] (.*)$~u', $line, $matches))
+              || ($level > 2 && preg_match('~^\.S[Ss] (.*)$~u', $line, $matches))
             ) {
                 $sectionHeading = $matches[1];
                 $sectionHeading = trim($sectionHeading, '"');

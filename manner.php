@@ -51,7 +51,8 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     if (preg_match('~^\.TH (.*)$~u', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
         if (count($titleDetails) < 2) {
-            exit($line . ' - missing title info');
+            echo $line . ' - missing title info';
+            exit(1);
         }
         $man->title   = $titleDetails[0];
         $man->section = $titleDetails[1];
@@ -64,8 +65,6 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         if (isset($titleDetails[4])) {
             $man->section_name = $titleDetails[4];
         }
-        $h1 = $dom->createElement('h1', $man->title);
-        $manPageContainer->appendChild($h1);
         continue;
     }
     //</editor-fold>
@@ -79,7 +78,8 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     if (preg_match('~^\.Dt (.*)$~u', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
         if (count($titleDetails) < 2) {
-            exit($line . ' - missing title info');
+            echo $line . ' - missing title info';
+            exit(1);
         }
         $man->title   = $titleDetails[0];
         $man->section = $titleDetails[1];
@@ -95,6 +95,15 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     $lines[] = $line;
 
 }
+
+if (isset($man->title)) {
+    $h1 = $dom->createElement('h1', $man->title);
+    $manPageContainer->appendChild($h1);
+} else {
+    echo 'No $man->title.';
+    exit(1);
+}
+
 //</editor-fold>
 
 //<editor-fold desc="Handle NAME section, take it out of $lines">

@@ -4,6 +4,36 @@
 class TextContent
 {
 
+    static function interpretAndAppendMDoc(HybridNode $parentNode, array $bits, $addSpace = false)
+    {
+        $dom = $parentNode->ownerDocument;
+
+        if ($addSpace) {
+            $parentNode->appendChild(new DOMText(' '));
+        }
+
+        while ($bit = array_shift($bits)) {
+            if ($bit === 'Brq') {
+                $parentNode->appendChild(new DOMText('{'));
+                self::interpretAndAppendMDoc($parentNode, $bits);
+                $parentNode->appendChild(new DOMText('}'));
+                return;
+            } elseif ($bit === 'Op') {
+                $parentNode->appendChild(new DOMText('['));
+                self::interpretAndAppendMDoc($parentNode, $bits);
+                $parentNode->appendChild(new DOMText(']'));
+                return;
+            } elseif ($bit === 'Ar') {
+                $em = $parentNode->appendChild($dom->createElement('em'));
+                self::interpretAndAppendMDoc($em, $bits);
+                return;
+            } else {
+                $parentNode->appendChild(new DOMText($bit . ($addSpace ? ' ' : '')));
+            }
+        }
+
+    }
+
     /**
      * Interpret a line inside a block - could be a macro or text.
      *
@@ -14,7 +44,18 @@ class TextContent
     static function interpretAndAppendCommand(HybridNode $parentNode, string $line)
     {
 
+        $man = Man::instance();
         $dom = $parentNode->ownerDocument;
+
+
+
+        if (preg_match('~^\.(Fl|Brq|Op|Ar)~u', $line)) {
+            $line = substr($line, 1); // Remove leading dot
+            $line = str_replace('Fl ', '-', $line);
+            $bits = explode(' ', $line);
+            self::interpretAndAppendMDoc($parentNode, $bits, true);
+            return;
+        }
 
         if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br', $line));
@@ -22,9 +63,19 @@ class TextContent
             return;
         }
 
+        if (preg_match('~^\.Nm$~u', $line)) {
+            if (!isset($man->macro_Nm)) {
+                throw new Exception($line . ' - found .Nm but $man->macro_Nm is not set');
+            }
+            // TODO: should only add br in synopsis, see https://www.mankier.com/7/groff_mdoc#Manual_Domain-Names
+            $parentNode->appendChild($dom->createElement('br', $line));
+            $parentNode->appendChild(new DOMText($man->macro_Nm));
+            return;
+        }
+
         if (preg_match('~^\.([RBI][RBI]?)(.*)$~u', $line, $matches)) {
 
-            $command = $matches[1];
+            $command        = $matches[1];
             $stringToFormat = trim($matches[2]);
             if (empty($stringToFormat)) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
