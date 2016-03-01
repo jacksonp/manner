@@ -47,7 +47,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         continue;
     }
 
-    // Handle the title details
+    //<editor-fold desc="Handle man title macro">
     if (preg_match('~^\.TH (.*)$~u', $line, $matches)) {
         $titleDetails = str_getcsv($matches[1], ' ');
         if (count($titleDetails) < 2) {
@@ -68,6 +68,7 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         $manPageContainer->appendChild($h1);
         continue;
     }
+    //</editor-fold>
 
     //<editor-fold desc="mdoc title macros">
     if (preg_match('~^\.Dd (.*)$~u', $line, $matches)) {
@@ -98,14 +99,25 @@ for ($i = 0; $i < $numRawLines; ++$i) {
 
 //<editor-fold desc="Handle NAME section, take it out of $lines">
 $nameHeadingLine = array_shift($lines);
-if (!preg_match('~\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
+if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
     echo($nameHeadingLine . ' - expected NAME section.');
     exit(1);
 }
 
 $nameSectionText = array_shift($lines);
-$nameTextNode    = $dom->createTextNode($nameSectionText);
-$manPageContainer->appendChild($nameTextNode);
+
+if (preg_match('~^\.Nm (.*)~', $nameSectionText, $matches)) {
+    $man->macro_Nm   = $matches[1];
+    $ndText = array_shift($lines);
+    if (preg_match('~^\.Nd (.*)~', $ndText, $matches)) {
+        $manPageContainer->appendChild($dom->createElement('p', $matches[1]));
+    } else {
+        echo($ndText . ' - expected .Nd.');
+        exit(1);
+    }
+} else {
+    $manPageContainer->appendChild($dom->createElement('p', $nameSectionText));
+}
 //</editor-fold>
 
 $manPageContainer->manLines = $lines;
