@@ -31,6 +31,8 @@ $manPageContainer = $dom->appendChild($manPageContainer);
 
 $lines = [];
 
+$man = Man::instance();
+
 //<editor-fold desc="Strip comments, handle title, stick rest in $lines">
 for ($i = 0; $i < $numRawLines; ++$i) {
     $line = Text::preprocess($rawLines[$i]);
@@ -51,18 +53,18 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         if (count($titleDetails) < 2) {
             exit($line . ' - missing title info');
         }
-        $manTitle   = $titleDetails[0];
-        $manSection = $titleDetails[1];
+        $man->title   = $titleDetails[0];
+        $man->section = $titleDetails[1];
         if (isset($titleDetails[2])) {
-            $manDate = $titleDetails[2];
+            $man->date = $titleDetails[2];
         }
         if (isset($titleDetails[3])) {
-            $manPackage = $titleDetails[3];
+            $man->package = $titleDetails[3];
         }
         if (isset($titleDetails[4])) {
-            $manSectionName = $titleDetails[4];
+            $man->section_name = $titleDetails[4];
         }
-        $h1 = $dom->createElement('h1', $manTitle);
+        $h1 = $dom->createElement('h1', $man->title);
         $manPageContainer->appendChild($h1);
         continue;
     }
@@ -78,8 +80,8 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         if (count($titleDetails) < 2) {
             exit($line . ' - missing title info');
         }
-        $manTitle   = $titleDetails[0];
-        $manSection = $titleDetails[1];
+        $man->title   = $titleDetails[0];
+        $man->section = $titleDetails[1];
         continue;
     }
 
@@ -101,7 +103,7 @@ if (!preg_match('~\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
     exit(1);
 }
 
-$nameSectionText = Text::massage(array_shift($lines));
+$nameSectionText = array_shift($lines);
 $nameTextNode    = $dom->createTextNode($nameSectionText);
 $manPageContainer->appendChild($nameTextNode);
 //</editor-fold>
@@ -147,7 +149,7 @@ $html = $dom->saveHTML();
 
 echo '<!DOCTYPE html>',
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
-'<title>', htmlspecialchars($manTitle), '</title>',
+'<title>', htmlspecialchars($man->title), '</title>',
 '<body>', // stop warning about implicit body in tidy
 $html;
 

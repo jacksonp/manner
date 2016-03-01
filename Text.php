@@ -4,11 +4,6 @@
 class Text
 {
 
-    static function massage($str)
-    {
-        return str_replace('\\-', '-', $str);
-    }
-
     static function isText($line)
     {
         return !empty($line) && $line[0] !== '.';
@@ -81,8 +76,9 @@ class Text
           '\\,'  => '',
           '\\-'  => '-',
           '\\.'  => '.',
-          '\\en'  => '\n',
-          '\\e'  => '\\', // "\e represents the current escape character." - let's hope it's always a backslash
+          '\\en' => '\n',
+            // "\e represents the current escape character." - let's hope it's always a backslash
+          '\\e'  => '\\',
           '\(co' => '©',
             // Quotes
           '\(Bq' => '„',
