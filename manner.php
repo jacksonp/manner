@@ -3,7 +3,7 @@
 
 //<editor-fold desc="Setup">
 spl_autoload_register(function ($class) {
-    require_once str_replace('_', '/', $class) . '.php';
+    require_once 'lib/' . str_replace('_', '/', $class) . '.php';
 });
 
 if (empty($argv[1])) {
