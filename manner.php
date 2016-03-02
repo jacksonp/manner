@@ -121,8 +121,8 @@ if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
 $nameSectionText = array_shift($lines);
 
 if (preg_match('~^\.Nm (.*)~', $nameSectionText, $matches)) {
-    $man->macro_Nm   = $matches[1];
-    $ndText = array_shift($lines);
+    $man->macro_Nm = $matches[1];
+    $ndText        = array_shift($lines);
     if (preg_match('~^\.Nd (.*)~', $ndText, $matches)) {
         $manPageContainer->appendChild($dom->createElement('p', $matches[1]));
     } else {

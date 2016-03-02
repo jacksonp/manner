@@ -4,36 +4,6 @@
 class TextContent
 {
 
-    static function interpretAndAppendMDoc(HybridNode $parentNode, array $bits, $addSpace = false)
-    {
-        $dom = $parentNode->ownerDocument;
-
-        if ($addSpace) {
-            $parentNode->appendChild(new DOMText(' '));
-        }
-
-        while ($bit = array_shift($bits)) {
-            if ($bit === 'Brq') {
-                $parentNode->appendChild(new DOMText('{'));
-                self::interpretAndAppendMDoc($parentNode, $bits);
-                $parentNode->appendChild(new DOMText('}'));
-                return;
-            } elseif ($bit === 'Op') {
-                $parentNode->appendChild(new DOMText('['));
-                self::interpretAndAppendMDoc($parentNode, $bits);
-                $parentNode->appendChild(new DOMText(']'));
-                return;
-            } elseif ($bit === 'Ar') {
-                $em = $parentNode->appendChild($dom->createElement('em'));
-                self::interpretAndAppendMDoc($em, $bits);
-                return;
-            } else {
-                $parentNode->appendChild(new DOMText($bit . ($addSpace ? ' ' : '')));
-            }
-        }
-
-    }
-
     /**
      * Interpret a line inside a block - could be a macro or text.
      *
@@ -46,16 +16,6 @@ class TextContent
 
         $man = Man::instance();
         $dom = $parentNode->ownerDocument;
-
-
-
-        if (preg_match('~^\.(Fl|Brq|Op|Ar)~u', $line)) {
-            $line = substr($line, 1); // Remove leading dot
-            $line = str_replace('Fl ', '-', $line);
-            $bits = explode(' ', $line);
-            self::interpretAndAppendMDoc($parentNode, $bits, true);
-            return;
-        }
 
         if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br', $line));
