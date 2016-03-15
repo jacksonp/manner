@@ -26,10 +26,27 @@ class Blocks
             }
 
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            if (strlen($line) === 0) {
-                if ($blockNum > 0 && $blocks[$blockNum]->tagName !== 'dl') {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
+            if (mb_strlen($line) === 0) {
+                if ($i < $numLines - 1 && mb_strlen($parentSectionNode->manLines[$i + 1]) === 0) {
+                    continue; // next line is also empty
+                }
+
+                if ($blockNum > 0) {
+                    if ($blocks[$blockNum]->tagName === 'dl') {
+                        $lastBlockChild = $blocks[$blockNum]->lastChild;
+                        // Not sure how to handle new paragraph blocks in dls yet, trying this for now:
+                        if ($lastBlockChild->tagName === 'dd') {
+                            if ($i < $numLines - 1
+                              && !in_array(substr($parentSectionNode->manLines[$i + 1], 0, 3), ['.TP', '.SH'])
+                            ) {
+                                $lastBlockChild->appendChild($dom->createElement('br'));
+                                $lastBlockChild->appendChild($dom->createElement('br'));
+                            }
+                        }
+                    } else {
+                        ++$blockNum;
+                        $blocks[$blockNum] = $dom->createElement('p');
+                    }
                 }
                 continue;
             }
