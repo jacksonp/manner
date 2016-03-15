@@ -36,6 +36,10 @@ class Blocks
 
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.TP ?(.*)$~u', $line)) {
+                // if this is the last line in a section, it's a bug in the man page, just ignore.
+                if ($i === $numLines - 1) {
+                    continue;
+                }
                 if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('dl');
