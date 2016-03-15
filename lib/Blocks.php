@@ -67,6 +67,8 @@ class Blocks
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
                 if (empty($blocks)) {
                     throw new Exception($line . ' - unexpected .IP outside of block');
+                } elseif (!empty($matches[1])) {
+                    throw new Exception($line . ' - cannot handle .IP with designator or indentation');
                 } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
                     $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br'));
                 } elseif ($blocks[$blockNum]->tagName === 'p') {
