@@ -133,12 +133,16 @@ class TextContent
             switch ($textSegments[$i]) {
                 case '\fB':
                     if ($i < $numTextSegments - 1) {
-                        $parentNode->appendChild($dom->createElement('strong', $textSegments[++$i]));
+                        $strong = $dom->createElement('strong');
+                        self::interpretAndAppendString($strong, $textSegments[++$i]);
+                        $parentNode->appendChild($strong);
                     }
                     break;
                 case '\fI':
                     if ($i < $numTextSegments - 1) {
-                        $parentNode->appendChild($dom->createElement('em', $textSegments[++$i]));
+                        $em = $dom->createElement('em');
+                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $parentNode->appendChild($em);
                     }
                     break;
                 case '\fP':
