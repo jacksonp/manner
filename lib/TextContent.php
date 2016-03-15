@@ -43,6 +43,7 @@ class TextContent
             }
 
             // Detect references to other man pages:
+            // TODO: maybe punt this to mankier? also get \fB \fR ones.
             if ($command === 'BR'
               && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u', $stringToFormat, $matches)
             ) {
