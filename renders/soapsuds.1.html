@@ -1,101 +1,99 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>soapsuds</title>
-<div>
-  <h1>soapsuds</h1>
-  <p>soapsuds - Mono's Remoting Proxy Generator
-  <div class="section">
-    <h2>SYNOPSIS</h2>
-    <p><strong>soapsuds</strong> [options] [inputs] [outputs]
-  </div>
-  <div class="section">
-    <h2>DESCRIPTION</h2>
-    <p><em>soapsuds</em> is a tool for generating WSDL documents and client proxies for remoting services. A WSDL document describes the methods that a service provides together with XML schemas of all referenced data structures. A client proxy is a class which offers the same methods as the service it represents, but provides no implementation, it just forwards calls to the remote service.
-    <p>Generated client proxies are not strictly necessary, since the runtime can automatically generate proxies from the original service types. However, it implies the need of distributing the service class to all clients. In some scenarios a better approach is to use soapsuds to generate a proxy class which has the same interface as the service, but without any implementation.
-    <p><em>soapsuds</em> can generate a WSDL document from a set of types specified with the option <em>-types</em> or can extract the types from an assembly specified with <em>-inputassemblyfile.</em> In this last case, soapsuds will include schemas for all serializable classes in the WSDL document.
-    <p>Taking as input a WSDL document (or anything from which such document can be generated) the tool can generate source code for the client proxy (using the <em>-gc</em> option) or it can directly generate an assembly that implements the proxy (with the <em>-outputassemblyfile</em> option). soapsuds will also generate fake serializable classes for all types defined in the schema. However, beware that those classes will lack the semantics of the original classes, since only data structure is generated.
-  </div>
-  <div class="section">
-    <h2>INPUT SOURCES</h2>
-    <p>The following sources are available (only one can be specified):
-    <dl>
-      <dt><em>-urltoschema:url" "-url:url</em>
-      <dd>Url from which to retrieve the WSDL document.
-      <dt><em>-types:type1,assembly[,serviceEndPoint][;type2,assembly[,serviceEndPoint]]...</em>
-      <dd>Specifies types for which to generate a schema or proxy. If no service endpoint is provided, the one provided with the <em>-serviceendpoint</em> option is used.
-      <dt><em>-inputassemblyfile:file", "-ia:file</em>
-      <dd>Assembly that contains the types to export.
-      <dt><em>-inputschemafile:schena", "-is:schema</em>
-      <dd>Schema from which to generate proxy classes.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>INPUT OPTIONS</h2>
-    <p>The following options are available:
-    <dl>
-      <dt><em>-inputdirectory:directory", "-id:directory</em>
-      <dd>Directory where DLLs are located.
-      <dt><em>-serviceendpoint:url", "-se:url</em>
-      <dd>Url of the service to be placed in the WSDL document.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>OUTPUTS</h2>
-    <p>The following output options are available (more than one can be specified):
-    <dl>
-      <dt><em>-outputassemblyfile:file", "-oa:file</em>
-      <dd>Generates the proxy code and compiles it into an assembly with the provided name.
-      <dt><em>-outputschemafile:file", "-os:file</em>
-      <dd>Generates a WSDL document that represents the provided types.
-      <dt><em>-generatecode", "-gc</em>
-      <dd>Generates proxy source code for the provided WSDL document or types.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>OUTPUT OPTIONS</h2>
-    <p>The following options are available:
-    <dl>
-      <dt><em>-outputdirectory:directory", "-od:directory</em>
-      <dd>Directory where generated files will be placed.
-      <dt><em>-proxynamespace:namespace", "-pn:namespace</em>
-      <dd>Namespace of the generated proxy.
-      <dt><em>-nowrappedproxy", "-nowp</em>
-      <dd>Do not generate a wrapped proxy.
-      <dt><em>-wrappedproxy", "-wp</em>
-      <dd>Generate a wrapped proxy.
-      <dt><em>-strongnamefile:file", "-sn:file</em>
-      <dd>Strong name file.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>GENERAL OPTIONS</h2>
-    <p>The following options are available:
-    <dl>
-      <dt><em>-nologo</em>
-      <dd>Supress the startup logo.
-      <dt><em>-u:username", "-user:username</em>
-      <dd>The user name to use when connecting to the server.
-      <dt><em>-p:password", "-password:password</em>
-      <dd>The password to use when connecting to the server.
-      <dt><em>-d:domain", "-domain:domain</em>
-      <dd>The domain to use when connecting to the server.
-      <dt><em>-httpproxyname:name", "-hpn:name</em>
-      <dd>Name of the http proxy.
-      <dt><em>-httpproxyport:port", "-hpp:port</em>
-      <dd>Port of the http proxy.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>AUTHORS</h2>
-    <p>Lluis Sanchez Gual (lluis@ximian.com)
-  </div>
-  <div class="section">
-    <h2>LICENSE</h2>
-    <p>wsdl is released under the terms of the GNU GPL.
-  </div>
-  <div class="section">
-    <h2>SEE ALSO</h2>
-    <p>wsdl(1), disco(1), mono(1), mcs(1)
-  </div>
+<h1>soapsuds</h1>
+<p>soapsuds - Mono's Remoting Proxy Generator
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>soapsuds</strong> [options] [inputs] [outputs]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><em>soapsuds</em> is a tool for generating WSDL documents and client proxies for remoting services. A WSDL document describes the methods that a service provides together with XML schemas of all referenced data structures. A client proxy is a class which offers the same methods as the service it represents, but provides no implementation, it just forwards calls to the remote service.
+  <p>Generated client proxies are not strictly necessary, since the runtime can automatically generate proxies from the original service types. However, it implies the need of distributing the service class to all clients. In some scenarios a better approach is to use soapsuds to generate a proxy class which has the same interface as the service, but without any implementation.
+  <p><em>soapsuds</em> can generate a WSDL document from a set of types specified with the option <em>-types</em> or can extract the types from an assembly specified with <em>-inputassemblyfile.</em> In this last case, soapsuds will include schemas for all serializable classes in the WSDL document.
+  <p>Taking as input a WSDL document (or anything from which such document can be generated) the tool can generate source code for the client proxy (using the <em>-gc</em> option) or it can directly generate an assembly that implements the proxy (with the <em>-outputassemblyfile</em> option). soapsuds will also generate fake serializable classes for all types defined in the schema. However, beware that those classes will lack the semantics of the original classes, since only data structure is generated.
+</div>
+<div class="section">
+  <h2>INPUT SOURCES</h2>
+  <p>The following sources are available (only one can be specified):
+  <dl>
+    <dt><em>-urltoschema:url" "-url:url</em>
+    <dd>Url from which to retrieve the WSDL document.
+    <dt><em>-types:type1,assembly[,serviceEndPoint][;type2,assembly[,serviceEndPoint]]...</em>
+    <dd>Specifies types for which to generate a schema or proxy. If no service endpoint is provided, the one provided with the <em>-serviceendpoint</em> option is used.
+    <dt><em>-inputassemblyfile:file", "-ia:file</em>
+    <dd>Assembly that contains the types to export.
+    <dt><em>-inputschemafile:schena", "-is:schema</em>
+    <dd>Schema from which to generate proxy classes.
+  </dl>
+</div>
+<div class="section">
+  <h2>INPUT OPTIONS</h2>
+  <p>The following options are available:
+  <dl>
+    <dt><em>-inputdirectory:directory", "-id:directory</em>
+    <dd>Directory where DLLs are located.
+    <dt><em>-serviceendpoint:url", "-se:url</em>
+    <dd>Url of the service to be placed in the WSDL document.
+  </dl>
+</div>
+<div class="section">
+  <h2>OUTPUTS</h2>
+  <p>The following output options are available (more than one can be specified):
+  <dl>
+    <dt><em>-outputassemblyfile:file", "-oa:file</em>
+    <dd>Generates the proxy code and compiles it into an assembly with the provided name.
+    <dt><em>-outputschemafile:file", "-os:file</em>
+    <dd>Generates a WSDL document that represents the provided types.
+    <dt><em>-generatecode", "-gc</em>
+    <dd>Generates proxy source code for the provided WSDL document or types.
+  </dl>
+</div>
+<div class="section">
+  <h2>OUTPUT OPTIONS</h2>
+  <p>The following options are available:
+  <dl>
+    <dt><em>-outputdirectory:directory", "-od:directory</em>
+    <dd>Directory where generated files will be placed.
+    <dt><em>-proxynamespace:namespace", "-pn:namespace</em>
+    <dd>Namespace of the generated proxy.
+    <dt><em>-nowrappedproxy", "-nowp</em>
+    <dd>Do not generate a wrapped proxy.
+    <dt><em>-wrappedproxy", "-wp</em>
+    <dd>Generate a wrapped proxy.
+    <dt><em>-strongnamefile:file", "-sn:file</em>
+    <dd>Strong name file.
+  </dl>
+</div>
+<div class="section">
+  <h2>GENERAL OPTIONS</h2>
+  <p>The following options are available:
+  <dl>
+    <dt><em>-nologo</em>
+    <dd>Supress the startup logo.
+    <dt><em>-u:username", "-user:username</em>
+    <dd>The user name to use when connecting to the server.
+    <dt><em>-p:password", "-password:password</em>
+    <dd>The password to use when connecting to the server.
+    <dt><em>-d:domain", "-domain:domain</em>
+    <dd>The domain to use when connecting to the server.
+    <dt><em>-httpproxyname:name", "-hpn:name</em>
+    <dd>Name of the http proxy.
+    <dt><em>-httpproxyport:port", "-hpp:port</em>
+    <dd>Port of the http proxy.
+  </dl>
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <p>Lluis Sanchez Gual (lluis@ximian.com)
+</div>
+<div class="section">
+  <h2>LICENSE</h2>
+  <p>wsdl is released under the terms of the GNU GPL.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>wsdl(1), disco(1), mono(1), mcs(1)
 </div>
 

@@ -1,89 +1,87 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>CHOWN</title>
-<div>
-  <h1>CHOWN</h1>
-  <p>chown - change file owner and group
-  <div class="section">
-    <h2>SYNOPSIS</h2>
-    <p><strong>chown</strong> [<em>OPTION</em>]... [<em>OWNER</em>][<em>:</em>[<em>GROUP</em>]] <em>FILE</em>...<br>
-    <strong>chown</strong> [<em>OPTION</em>]... <em>--reference=RFILE FILE</em>...
-  </div>
-  <div class="section">
-    <h2>DESCRIPTION</h2>
-    <p>This manual page documents the GNU version of <strong>chown</strong>. <strong>chown</strong> changes the user and/or group ownership of each given file. If only an owner (a user name or numeric user ID) is given, that user is made the owner of each given file, and the files' group is not changed. If the owner is followed by a colon and a group name (or numeric group ID), with no spaces between them, the group ownership of the files is changed as well. If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group. If the colon and group are given, but the owner is omitted, only the group of the files is changed; in this case, <strong>chown</strong> performs the same function as <strong>chgrp</strong>. If only a colon is given, or if the entire operand is empty, neither the owner nor the group is changed.
-  </div>
-  <div class="section">
-    <h2>OPTIONS</h2>
-    <p>Change the owner and/or group of each FILE to OWNER and/or GROUP. With <strong>--reference</strong>, change the owner and group of each FILE to those of RFILE.
-    <dl>
-      <dt><strong>-c</strong>, <strong>--changes</strong>
-      <dd>like verbose but report only when a change is made
-      <dt><strong>-f</strong>, <strong>--silent</strong>, <strong>--quiet</strong>
-      <dd>suppress most error messages
-      <dt><strong>-v</strong>, <strong>--verbose</strong>
-      <dd>output a diagnostic for every file processed
-      <dt><strong>--dereference</strong>
-      <dd>affect the referent of each symbolic link (this is the default), rather than the symbolic link itself
-      <dt><strong>-h</strong>, <strong>--no-dereference</strong>
-      <dd>affect symbolic links instead of any referenced file (useful only on systems that can change the ownership of a symlink)
-      <dt><strong>--from</strong>=<em>CURRENT_OWNER</em>:CURRENT_GROUP
-      <dd>change the owner and/or group of each file only if its current owner and/or group match those specified here. Either may be omitted, in which case a match is not required for the omitted attribute
-      <dt><strong>--no-preserve-root</strong>
-      <dd>do not treat '/' specially (the default)
-      <dt><strong>--preserve-root</strong>
-      <dd>fail to operate recursively on '/'
-      <dt><strong>--reference</strong>=<em>RFILE</em>
-      <dd>use RFILE's owner and group rather than specifying OWNER:GROUP values
-      <dt><strong>-R</strong>, <strong>--recursive</strong>
-      <dd>operate on files and directories recursively
-    </dl>
-    <p>The following options modify how a hierarchy is traversed when the <strong>-R</strong> option is also specified. If more than one is specified, only the final one takes effect.
-    <dl>
-      <dt><strong>-H</strong>
-      <dd>if a command line argument is a symbolic link to a directory, traverse it
-      <dt><strong>-L</strong>
-      <dd>traverse every symbolic link to a directory encountered
-      <dt><strong>-P</strong>
-      <dd>do not traverse any symbolic links (default)
-      <dt><strong>--help</strong>
-      <dd>display this help and exit
-      <dt><strong>--version</strong>
-      <dd>output version information and exit
-    </dl>
-    <p>Owner is unchanged if missing. Group is unchanged if missing, but changed to login group if implied by a ':' following a symbolic OWNER. OWNER and GROUP may be numeric as well as symbolic.
-  </div>
-  <div class="section">
-    <h2>EXAMPLES</h2>
-    <dl>
-      <dt>chown root /u
-      <dd>Change the owner of /u to "root".
-      <dt>chown root:staff /u
-      <dd>Likewise, but also change its group to "staff".
-      <dt>chown -hR root /u
-      <dd>Change the owner of /u and subfiles to "root".
-    </dl>
-  </div>
-  <div class="section">
-    <h2>AUTHOR</h2>
-    <p>Written by David MacKenzie and Jim Meyering.
-  </div>
-  <div class="section">
-    <h2>REPORTING BUGS</h2>
-    <p>GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;<br>
-    Report chown translation bugs to &lt;http://translationproject.org/team/&gt;
-  </div>
-  <div class="section">
-    <h2>COPYRIGHT</h2>
-    <p>Copyright © 2016 Free Software Foundation, Inc. License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.<br>
-    This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
-  </div>
-  <div class="section">
-    <h2>SEE ALSO</h2>
-    <p>chown(2)
-    <p><br>
-    Full documentation at: &lt;http://www.gnu.org/software/coreutils/chown&gt;<br>
-    or available locally via: info '(coreutils) chown invocation'
-  </div>
+<h1>CHOWN</h1>
+<p>chown - change file owner and group
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>chown</strong> [<em>OPTION</em>]... [<em>OWNER</em>][<em>:</em>[<em>GROUP</em>]] <em>FILE</em>...<br>
+  <strong>chown</strong> [<em>OPTION</em>]... <em>--reference=RFILE FILE</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>This manual page documents the GNU version of <strong>chown</strong>. <strong>chown</strong> changes the user and/or group ownership of each given file. If only an owner (a user name or numeric user ID) is given, that user is made the owner of each given file, and the files' group is not changed. If the owner is followed by a colon and a group name (or numeric group ID), with no spaces between them, the group ownership of the files is changed as well. If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group. If the colon and group are given, but the owner is omitted, only the group of the files is changed; in this case, <strong>chown</strong> performs the same function as <strong>chgrp</strong>. If only a colon is given, or if the entire operand is empty, neither the owner nor the group is changed.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <p>Change the owner and/or group of each FILE to OWNER and/or GROUP. With <strong>--reference</strong>, change the owner and group of each FILE to those of RFILE.
+  <dl>
+    <dt><strong>-c</strong>, <strong>--changes</strong>
+    <dd>like verbose but report only when a change is made
+    <dt><strong>-f</strong>, <strong>--silent</strong>, <strong>--quiet</strong>
+    <dd>suppress most error messages
+    <dt><strong>-v</strong>, <strong>--verbose</strong>
+    <dd>output a diagnostic for every file processed
+    <dt><strong>--dereference</strong>
+    <dd>affect the referent of each symbolic link (this is the default), rather than the symbolic link itself
+    <dt><strong>-h</strong>, <strong>--no-dereference</strong>
+    <dd>affect symbolic links instead of any referenced file (useful only on systems that can change the ownership of a symlink)
+    <dt><strong>--from</strong>=<em>CURRENT_OWNER</em>:CURRENT_GROUP
+    <dd>change the owner and/or group of each file only if its current owner and/or group match those specified here. Either may be omitted, in which case a match is not required for the omitted attribute
+    <dt><strong>--no-preserve-root</strong>
+    <dd>do not treat '/' specially (the default)
+    <dt><strong>--preserve-root</strong>
+    <dd>fail to operate recursively on '/'
+    <dt><strong>--reference</strong>=<em>RFILE</em>
+    <dd>use RFILE's owner and group rather than specifying OWNER:GROUP values
+    <dt><strong>-R</strong>, <strong>--recursive</strong>
+    <dd>operate on files and directories recursively
+  </dl>
+  <p>The following options modify how a hierarchy is traversed when the <strong>-R</strong> option is also specified. If more than one is specified, only the final one takes effect.
+  <dl>
+    <dt><strong>-H</strong>
+    <dd>if a command line argument is a symbolic link to a directory, traverse it
+    <dt><strong>-L</strong>
+    <dd>traverse every symbolic link to a directory encountered
+    <dt><strong>-P</strong>
+    <dd>do not traverse any symbolic links (default)
+    <dt><strong>--help</strong>
+    <dd>display this help and exit
+    <dt><strong>--version</strong>
+    <dd>output version information and exit
+  </dl>
+  <p>Owner is unchanged if missing. Group is unchanged if missing, but changed to login group if implied by a ':' following a symbolic OWNER. OWNER and GROUP may be numeric as well as symbolic.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <dl>
+    <dt>chown root /u
+    <dd>Change the owner of /u to "root".
+    <dt>chown root:staff /u
+    <dd>Likewise, but also change its group to "staff".
+    <dt>chown -hR root /u
+    <dd>Change the owner of /u and subfiles to "root".
+  </dl>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Written by David MacKenzie and Jim Meyering.
+</div>
+<div class="section">
+  <h2>REPORTING BUGS</h2>
+  <p>GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;<br>
+  Report chown translation bugs to &lt;http://translationproject.org/team/&gt;
+</div>
+<div class="section">
+  <h2>COPYRIGHT</h2>
+  <p>Copyright © 2016 Free Software Foundation, Inc. License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.<br>
+  This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>chown(2)
+  <p><br>
+  Full documentation at: &lt;http://www.gnu.org/software/coreutils/chown&gt;<br>
+  or available locally via: info '(coreutils) chown invocation'
 </div>
 

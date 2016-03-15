@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>dpkg-name</title>
-<div>
-  <h1>dpkg-name</h1>
-  <p>dpkg-name - rename Debian packages to full package names
-  <div class="section">
-    <h2>SYNOPSIS</h2>
-    <p><strong>dpkg-name</strong> [<em>option</em>...] [<strong>--</strong>] <em>file</em>...
-  </div>
-  <div class="section">
-    <h2>DESCRIPTION</h2>
-    <p>This manual page documents the <strong>dpkg-name</strong> program which provides an easy way to rename <strong>Debian</strong> packages into their full package names. A full package name consists of <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>architecture</em><strong>.</strong><em>package-type</em> as specified in the control file of the package. The <em>version</em> part of the filename consists of the upstream version information optionally followed by a hyphen and the revision information. The <em>package-type</em> part comes from that field if present or fallbacks to <strong>deb</strong>.
-  </div>
-  <div class="section">
-    <h2>OPTIONS</h2>
-    <dl>
-      <dt><strong>-a</strong>, <strong>--no-architecture</strong>
-      <dd>The destination filename will not have the architecture information.
-      <dt><strong>-k</strong>, <strong>--symlink</strong>
-      <dd>Create a symlink, instead of moving.
-      <dt><strong>-o</strong>, <strong>--overwrite</strong>
-      <dd>Existing files will be overwritten if they have the same name as the destination filename.
-      <dt><strong>-s</strong>, <strong>--subdir</strong> [<em>dir</em>]
-      <dd>Files will be moved into a subdirectory. If the directory given as argument exists the files will be moved into that directory otherwise the name of the target directory is extracted from the section field in the control part of the package. The target directory will be «unstable/binary-<em>architecture</em>/<em>section</em>». If the section is not found in the control, then <strong>no-section</strong> is assumed, and in this case, as well as for sections <strong>non-free</strong> and <strong>contrib</strong> the target directory is «<em>section</em>/binary-<em>architecture</em>». The section field is not required so a lot of packages will find their way to the <strong>no-section</strong> area. Use this option with care, it's messy.
-      <dt><strong>-c</strong>, <strong>--create-dir</strong>
-      <dd>This option can used together with the <strong>-s</strong> option. If a target directory isn't found it will be created automatically. <strong>Use this option with care.</strong>
-      <dt><strong>-?</strong>, <strong>--help</strong>
-      <dd>Show the usage message and exit.
-      <dt><strong>-v</strong>, <strong>--version</strong>
-      <dd>Show the version and exit.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>BUGS</h2>
-    <p>Some packages don't follow the name structure <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>architecture</em><strong>.deb.</strong> Packages renamed by <strong>dpkg-name</strong> will follow this structure. Generally this will have no impact on how packages are installed by <strong>dselect</strong>(1)/<strong>dpkg</strong>(1), but other installation tools might depend on this naming structure.
-  </div>
-  <div class="section">
-    <h2>EXAMPLES</h2>
-    <dl>
-      <dt><strong>dpkg-name bar-foo.deb</strong>
-      <dd>The file <strong>bar-foo.deb</strong> will be renamed to bar-foo_1.0-2_i386.deb or something similar (depending on whatever information is in the control part of <strong>bar-foo.deb</strong>).
-      <dt><strong>find /root/debian/ -name '*.deb' | xargs -n 1 dpkg-name -a</strong>
-      <dd>All files with the extension <strong>deb</strong> in the directory /root/debian and its subdirectory's will be renamed by <strong>dpkg-name</strong> if required into names with no architecture information.
-      <dt><strong>find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c</strong>
-      <dd><strong>Don't do this.</strong> Your archive will be messed up completely because a lot of packages don't come with section information. <strong>Don't do this.</strong>
-      <dt><strong>dpkg-deb --build debian-tmp &amp;& dpkg-name -o -s .. debian-tmp.deb</strong>
-      <dd>This can be used when building new packages.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>SEE ALSO</h2>
-    <p><strong>deb</strong>(5), <strong>deb-control</strong>(5), <strong>dpkg</strong>(1), <strong>dpkg-deb</strong>(1), <strong>find</strong>(1), <strong>xargs</strong>(1).
-  </div>
+<h1>dpkg-name</h1>
+<p>dpkg-name - rename Debian packages to full package names
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>dpkg-name</strong> [<em>option</em>...] [<strong>--</strong>] <em>file</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>This manual page documents the <strong>dpkg-name</strong> program which provides an easy way to rename <strong>Debian</strong> packages into their full package names. A full package name consists of <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>architecture</em><strong>.</strong><em>package-type</em> as specified in the control file of the package. The <em>version</em> part of the filename consists of the upstream version information optionally followed by a hyphen and the revision information. The <em>package-type</em> part comes from that field if present or fallbacks to <strong>deb</strong>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>, <strong>--no-architecture</strong>
+    <dd>The destination filename will not have the architecture information.
+    <dt><strong>-k</strong>, <strong>--symlink</strong>
+    <dd>Create a symlink, instead of moving.
+    <dt><strong>-o</strong>, <strong>--overwrite</strong>
+    <dd>Existing files will be overwritten if they have the same name as the destination filename.
+    <dt><strong>-s</strong>, <strong>--subdir</strong> [<em>dir</em>]
+    <dd>Files will be moved into a subdirectory. If the directory given as argument exists the files will be moved into that directory otherwise the name of the target directory is extracted from the section field in the control part of the package. The target directory will be «unstable/binary-<em>architecture</em>/<em>section</em>». If the section is not found in the control, then <strong>no-section</strong> is assumed, and in this case, as well as for sections <strong>non-free</strong> and <strong>contrib</strong> the target directory is «<em>section</em>/binary-<em>architecture</em>». The section field is not required so a lot of packages will find their way to the <strong>no-section</strong> area. Use this option with care, it's messy.
+    <dt><strong>-c</strong>, <strong>--create-dir</strong>
+    <dd>This option can used together with the <strong>-s</strong> option. If a target directory isn't found it will be created automatically. <strong>Use this option with care.</strong>
+    <dt><strong>-?</strong>, <strong>--help</strong>
+    <dd>Show the usage message and exit.
+    <dt><strong>-v</strong>, <strong>--version</strong>
+    <dd>Show the version and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>Some packages don't follow the name structure <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>architecture</em><strong>.deb.</strong> Packages renamed by <strong>dpkg-name</strong> will follow this structure. Generally this will have no impact on how packages are installed by <strong>dselect</strong>(1)/<strong>dpkg</strong>(1), but other installation tools might depend on this naming structure.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <dl>
+    <dt><strong>dpkg-name bar-foo.deb</strong>
+    <dd>The file <strong>bar-foo.deb</strong> will be renamed to bar-foo_1.0-2_i386.deb or something similar (depending on whatever information is in the control part of <strong>bar-foo.deb</strong>).
+    <dt><strong>find /root/debian/ -name '*.deb' | xargs -n 1 dpkg-name -a</strong>
+    <dd>All files with the extension <strong>deb</strong> in the directory /root/debian and its subdirectory's will be renamed by <strong>dpkg-name</strong> if required into names with no architecture information.
+    <dt><strong>find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c</strong>
+    <dd><strong>Don't do this.</strong> Your archive will be messed up completely because a lot of packages don't come with section information. <strong>Don't do this.</strong>
+    <dt><strong>dpkg-deb --build debian-tmp &amp;& dpkg-name -o -s .. debian-tmp.deb</strong>
+    <dd>This can be used when building new packages.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>deb</strong>(5), <strong>deb-control</strong>(5), <strong>dpkg</strong>(1), <strong>dpkg-deb</strong>(1), <strong>find</strong>(1), <strong>xargs</strong>(1).
 </div>
 

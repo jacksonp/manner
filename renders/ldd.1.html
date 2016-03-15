@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>LDD</title>
-<div>
-  <h1>LDD</h1>
-  <p>ldd - print shared object dependencies
-  <div class="section">
-    <h2>SYNOPSIS</h2>
-    <p><strong>ldd</strong> [<em>option</em>]... <em>file</em>...
+<h1>LDD</h1>
+<p>ldd - print shared object dependencies
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>ldd</strong> [<em>option</em>]... <em>file</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>ldd</strong> prints the shared objects (shared libraries) required by each program or shared object specified on the command line.
+  <div class="subsection">
+    <h3>Security</h3>
+    <p>In the usual case, <strong>ldd</strong> invokes the standard dynamic linker (see <strong>ld.so</strong>(8)) with the <strong>LD_TRACE_LOADED_OBJECTS</strong> environment variable set to 1, which causes the linker to display the library dependencies. Be aware, however, that in some circumstances, some versions of <strong>ldd</strong> may attempt to obtain the dependency information by directly executing the program. Thus, you should <em>never</em> employ <strong>ldd</strong> on an untrusted executable, since this may result in the execution of arbitrary code. A safer alternative when dealing with untrusted executables is:
+    <p>$ objdump -p /path/to/program | grep NEEDED
   </div>
-  <div class="section">
-    <h2>DESCRIPTION</h2>
-    <p><strong>ldd</strong> prints the shared objects (shared libraries) required by each program or shared object specified on the command line.
-    <div class="subsection">
-      <h3>Security</h3>
-      <p>In the usual case, <strong>ldd</strong> invokes the standard dynamic linker (see <strong>ld.so</strong>(8)) with the <strong>LD_TRACE_LOADED_OBJECTS</strong> environment variable set to 1, which causes the linker to display the library dependencies. Be aware, however, that in some circumstances, some versions of <strong>ldd</strong> may attempt to obtain the dependency information by directly executing the program. Thus, you should <em>never</em> employ <strong>ldd</strong> on an untrusted executable, since this may result in the execution of arbitrary code. A safer alternative when dealing with untrusted executables is:
-      <p>$ objdump -p /path/to/program | grep NEEDED
-    </div>
-  </div>
-  <div class="section">
-    <h2>OPTIONS</h2>
-    <dl>
-      <dt><strong>--version</strong>
-      <dd>Print the version number of <strong>ldd</strong>.
-      <dt><strong>-v</strong>, <strong>--verbose</strong>
-      <dd>Print all information, including, for example, symbol versioning information.
-      <dt><strong>-u</strong>, <strong>--unused</strong>
-      <dd>Print unused direct dependencies. (Since glibc 2.3.4.)
-      <dt><strong>-d</strong>, <strong>--data-relocs</strong>
-      <dd>Perform relocations and report any missing objects (ELF only).
-      <dt><strong>-r</strong>, <strong>--function-relocs</strong>
-      <dd>Perform relocations for both data objects and functions, and report any missing objects or functions (ELF only).
-      <dt><strong>--help</strong>
-      <dd>Usage information.
-    </dl>
-  </div>
-  <div class="section">
-    <h2>BUGS</h2>
-    <p><strong>ldd</strong> does not work on a.out shared libraries.
-    <p><strong>ldd</strong> does not work with some extremely old a.out programs which were built before <strong>ldd</strong> support was added to the compiler releases. If you use <strong>ldd</strong> on one of these programs, the program will attempt to run with <em>argc</em> = 0 and the results will be unpredictable.
-  </div>
-  <div class="section">
-    <h2>SEE ALSO</h2>
-    <p><strong>pldd</strong>(1), <strong>sprof</strong>(1), <strong>ld.so</strong>(8), <strong>ldconfig</strong>(8)
-  </div>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>--version</strong>
+    <dd>Print the version number of <strong>ldd</strong>.
+    <dt><strong>-v</strong>, <strong>--verbose</strong>
+    <dd>Print all information, including, for example, symbol versioning information.
+    <dt><strong>-u</strong>, <strong>--unused</strong>
+    <dd>Print unused direct dependencies. (Since glibc 2.3.4.)
+    <dt><strong>-d</strong>, <strong>--data-relocs</strong>
+    <dd>Perform relocations and report any missing objects (ELF only).
+    <dt><strong>-r</strong>, <strong>--function-relocs</strong>
+    <dd>Perform relocations for both data objects and functions, and report any missing objects or functions (ELF only).
+    <dt><strong>--help</strong>
+    <dd>Usage information.
+  </dl>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p><strong>ldd</strong> does not work on a.out shared libraries.
+  <p><strong>ldd</strong> does not work with some extremely old a.out programs which were built before <strong>ldd</strong> support was added to the compiler releases. If you use <strong>ldd</strong> on one of these programs, the program will attempt to run with <em>argc</em> = 0 and the results will be unpredictable.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>pldd</strong>(1), <strong>sprof</strong>(1), <strong>ld.so</strong>(8), <strong>ldconfig</strong>(8)
 </div>
 

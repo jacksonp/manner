@@ -26,7 +26,7 @@ $dom->registerNodeClass('DOMElement', 'HybridNode');
 $xpath = new DOMXpath($dom);
 
 /** @var HybridNode $manPageContainer */
-$manPageContainer = $dom->createElement('div');
+$manPageContainer = $dom->createElement('body');
 $manPageContainer = $dom->appendChild($manPageContainer);
 
 $lines = [];
@@ -176,7 +176,6 @@ $html = $dom->saveHTML();
 echo '<!DOCTYPE html>',
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
 '<title>', htmlspecialchars($man->title), '</title>',
-'<body>', // stop warning about implicit body in tidy
 $html;
 
 //Debug::echoTidy($html);
