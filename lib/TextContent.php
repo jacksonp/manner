@@ -45,7 +45,8 @@ class TextContent
             // Detect references to other man pages:
             // TODO: maybe punt this to mankier? also get \fB \fR ones.
             if ($command === 'BR'
-              && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u', $stringToFormat, $matches)
+              && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u',
+                $stringToFormat, $matches)
             ) {
                 $parentNode->appendChild(new DOMText(' '));
                 $anchor = $dom->createElement('a', $matches['name'] . '(' . $matches['num'] . ')');
@@ -124,7 +125,7 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f[BRIP])~u', $line, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split('~(\\\\f[BRIP])~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
@@ -147,10 +148,38 @@ class TextContent
                 case '\fR':
                     break;
                 default:
-                    $parentNode->appendChild(new DOMText($textSegments[$i]));
+                    self::interpretAndAppendString($parentNode, $textSegments[$i]);
             }
 
         }
+
+    }
+
+    static function interpretAndAppendString(HybridNode $parentNode, string $string)
+    {
+
+        $dom = $parentNode->ownerDocument;
+
+        if (preg_match(
+          '~^(?<start>.*?)<?(?<url>https?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',
+          $string, $matches)) {
+
+            if (!empty($matches['start'])) {
+                self::interpretAndAppendString($parentNode, $matches['start']);
+            }
+
+            $anchor = $dom->createElement('a', $matches['url']);
+            $anchor->setAttribute('href', $matches['url']);
+            $parentNode->appendChild($anchor);
+
+            if (!empty($matches['end'])) {
+                self::interpretAndAppendString($parentNode, $matches['end']);
+            }
+
+            return;
+        }
+
+        $parentNode->appendChild(new DOMText($string));
 
     }
 
