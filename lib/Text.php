@@ -79,6 +79,8 @@ class Text
           '\\en' => '\n',
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e'  => '\\',
+            // \\ "reduces to a single backslash"
+          '\\\\'  => '\\',
           '\(co' => '©',
             // Quotes
           '\(Bq' => '„',
