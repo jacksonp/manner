@@ -35,7 +35,7 @@ class Blocks
             }
 
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-            if (preg_match('~^\.TP ?(.*)$~u', $line)) {
+            if (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
                 // if this is the last line in a section, it's a bug in the man page, just ignore.
                 if ($i === $numLines - 1) {
                     continue;
@@ -63,7 +63,8 @@ class Blocks
             }
 
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
-            if (preg_match('~^\.IP$~u', $line)) {
+            // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
+            if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
                 if (empty($blocks)) {
                     throw new Exception($line . ' - unexpected .IP outside of block');
                 } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
