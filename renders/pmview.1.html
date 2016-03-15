@@ -10,10 +10,10 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p><strong>pmview</strong> is a generalized 3D performance metrics visualization tool for the Performance Co-Pilot (<strong>PCP</strong>(1)).
-  <p><strong>pmview</strong> is the base utility behind performance metrics visualization tools such as <strong>dkvis</strong>(1), <strong>mpvis</strong>(1), <strong>osvis</strong>(1) and <strong>nfsvis</strong>(1), It is also used by a range of related tools that are specific to optional Performance Domain Agents (PMDA) and/or PCP add-on products. <strong>pmview</strong> may also be used to construct customized 3D performance displays.
+  <p><strong>pmview</strong> is the base utility behind performance metrics visualization tools such as <a href="/1/dkvis">dkvis(1)</a> <a href="/1/mpvis">mpvis(1)</a> <a href="/1/osvis">osvis(1)</a> and <a href="/1/nfsvis">nfsvis(1)</a> It is also used by a range of related tools that are specific to optional Performance Domain Agents (PMDA) and/or PCP add-on products. <strong>pmview</strong> may also be used to construct customized 3D performance displays.
   <p><strong>pmview</strong> displays performance metrics as colored blocks and cylinders arranged on monochrome base planes. Each object may represent a single performance metric, or a stack of several performance metrics. Since the objects are modulated by the value of the metric they represent, only numerical metrics may be visualized. Objects representing a single metric may be modulated in terms of height, color, or height and color. Objects in a stack may only be height modulated, but the stack can be normalized to the maximum height. Labels may be added to the scene to help identify groups of metrics.
   <p>A configuration file (as specified by the <strong>-c</strong> option, or read from standard input) is used to specify the position, color, maximum value and labels of metrics and metric instances in the scene. The maximum value acts as a normalization factor and is used to scale the object height and/or color in proportion to the metric values. Metric values which exceed the associated maximum value are displayed as solid white objects. If a metric is unavailable, the object will have minimum height and will be colored grey.
-  <p>Normally, the tool operates in ``live'' mode where performance metrics are fetched in real-time. The user can view metrics from any host running <strong>pmcd</strong>(1). <strong>pmview</strong> can also replay archives of performance metrics (see <strong>pmlogger</strong>(1)) and allow the user to interactively control the current replay time and rate using the VCR paradigm. This is particularly useful for retrospective comparisons and for post-mortem analysis of performance problems where a remote system is not accessible or a performance analyst is not available on-site.
+  <p>Normally, the tool operates in ``live'' mode where performance metrics are fetched in real-time. The user can view metrics from any host running <a href="/1/pmcd">pmcd(1)</a> <strong>pmview</strong> can also replay archives of performance metrics (see <a href="/1/pmlogger">pmlogger(1)</a> and allow the user to interactively control the current replay time and rate using the VCR paradigm. This is particularly useful for retrospective comparisons and for post-mortem analysis of performance problems where a remote system is not accessible or a performance analyst is not available on-site.
   <p>All metrics in the Performance Metrics Name Space (PMNS) with numeric value semantics from any number of hosts or archives may be visualized. <strong>pmview</strong> examines the semantics of the metrics and where sensible, converts metric values to a rate before scaling.
 </div>
 <div class="section">
@@ -22,27 +22,35 @@
   <p>The other available options are:
   <dl>
     <dt>\f3-a\f1 \f2archive\f1[\f3,\f2archive\f3,\f1...]]
-    <dd>Specify an <em>archive</em> from which metrics can be obtained for a particular host. <em>archive</em> is the basename of an archive, or the name of a directory conytaining archives, previously created by <strong>pmlogger</strong>(1). Multiple sets of archives (separated by commas or in different \f3-a\f1 options) from different hosts may be given, but an error will occur if there is more than one set of archives from the same host. Any metrics that are not associated with a specific host or archive in the configuration file will use the first set of archives as their source.
+    <dd>
+      Specify an <em>archive</em> from which metrics can be obtained for a particular host. <em>archive</em> is the basename of an archive, or the name of a directory conytaining archives, previously created by <a href="/1/pmlogger">pmlogger(1)</a> Multiple sets of archives (separated by commas or in different \f3-a\f1 options) from different hosts may be given, but an error will occur if there is more than one set of archives from the same host. Any metrics that are not associated with a specific host or archive in the configuration file will use the first set of archives as their source.
     <dt><strong>-C</strong>
     <dd>Parse the configuration file and exit before displaying the <strong>pmview</strong> window. Any errors in the configuration file are displayed.
     <dt>\f3-c\f1 \f2configfile\f1
     <dd>Load the configuration from <em>configfile</em> rather than standard input.
     <dt>\f3-h\f1 \f2host\f1
-    <dd>Fetch performance metrics from <strong>pmcd</strong>(1) on <em>host</em>, rather than the default localhost. Implies that <strong>pmview</strong> will run in live mode, so no archives can be specified on the command line or in the configuration file. Only one <strong>-h</strong> option may be given.
+    <dd>
+      Fetch performance metrics from <a href="/1/pmcd">pmcd(1)</a> on <em>host</em>, rather than the default localhost. Implies that <strong>pmview</strong> will run in live mode, so no archives can be specified on the command line or in the configuration file. Only one <strong>-h</strong> option may be given.
     <dt>\f3-n\f1 \f2pmnsfile\f1
     <dd>Normally <strong>pmview</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile</em>.
     <dt>\f3-p\f1 \f2port\f1
-    <dd>Connect to the time controls (see <strong>pmtime</strong>(1)) on this <strong>port</strong>. Used when a tool launches another tool so that they can connect to the same time controls.
+    <dd>
+      Connect to the time controls (see <a href="/1/pmtime">pmtime(1)</a> on this <strong>port</strong>. Used when a tool launches another tool so that they can connect to the same time controls.
     <dt>\f3-R\f1 \f2logconfig\f1
-    <dd>Use <em>logconfig</em> as the <strong>pmlogger</strong>(1) config when recording.
+    <dd>
+      Use <em>logconfig</em> as the <a href="/1/pmlogger">pmlogger(1)</a> config when recording.
     <dt>\f3-r\f1 \f2addconfig\f1
-    <dd>Append <em>addconfig</em> onto the <strong>pmlogger</strong>(1) config generated by <strong>pmview</strong> when recording.
+    <dd>
+      Append <em>addconfig</em> onto the <a href="/1/pmlogger">pmlogger(1)</a> config generated by <strong>pmview</strong> when recording.
     <dt>\f3-t\f1 \f2interval\f1
-    <dd>The update <em>interval</em> used to fetch metrics from the live or archive sources. The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds). The default is 2.0 seconds.
+    <dd>
+      The update <em>interval</em> used to fetch metrics from the live or archive sources. The <em>interval</em> argument follows the syntax described in <a href="/1/PCPIntro">PCPIntro(1)</a> and in the simplest form may be an unsigned integer (the implied units in this case are seconds). The default is 2.0 seconds.
     <dt>\f3-x\f1 \f2version\f1
-    <dd>Use the specified <em>version</em> of the <strong>pmlaunch</strong>(5) specification. The versions currently supported are ``1.0'' and the default version ``2.0''.
+    <dd>
+      Use the specified <em>version</em> of the <a href="/5/pmlaunch">pmlaunch(5)</a> specification. The versions currently supported are ``1.0'' and the default version ``2.0''.
     <dt>\f3-Z\f1 \f2timezone\f1
-    <dd>By default, <strong>pmview</strong> reports the time of day according to the local timezone on the system where <strong>pmview</strong> is run. The <strong>-Z</strong> option changes the default timezone to <em>timezone</em> which should be in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
+    <dd>
+      By default, <strong>pmview</strong> reports the time of day according to the local timezone on the system where <strong>pmview</strong> is run. The <strong>-Z</strong> option changes the default timezone to <em>timezone</em> which should be in the format of the environment variable <strong>TZ</strong> as described in <a href="/7/environ">environ(7)</a>
     <dt>\f3-z\f1
     <dd>Change the reporting timezone to the local timezone at the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> option, or the first <strong>-a</strong> option.
   </dl>
@@ -52,12 +60,12 @@
   \f3-title\f1 \f2title\f1<br>
   \f3-xrm\f1 \f3"\f2resourceName: value\f3"\f1
   <blockquote>
-    Most standard <strong>X</strong>(1) command line arguments may be used.
+    Most standard <a href="/1/X">X(1)</a> command line arguments may be used.
   </blockquote>
 </div>
 <div class="section">
   <h2>WINDOW</h2>
-  <p>The <strong>pmview</strong> window is comprised of a menu bar, time and scale controls, metric and time values, and an ``examiner'' viewer (see <strong>ivview</strong>(1)), which displays the 3D scene.
+  <p>The <strong>pmview</strong> window is comprised of a menu bar, time and scale controls, metric and time values, and an ``examiner'' viewer (see <a href="/1/ivview">ivview(1)</a> which displays the 3D scene.
 </div>
 <div class="section">
   <h2>EXAMINER VIEWER</h2>
@@ -93,26 +101,33 @@
   <p>There are four menus in <strong>pmview</strong>'s user interface which allow scenes to be recorded, saved and printed (<strong>File</strong>), access to the time controls (<strong>Options</strong>), launching other tools (<strong>Launch</strong>) and online help (<strong>Help</strong>).
   <dl>
     <dt><strong>File/Record</strong>
-    <dd>When in ``live'' mode, this option will launch <strong>pmlogger</strong>(1) processes to record the current scene into an archive folio (see <strong>pmafm(1))</strong> so that it may be replayed at a later time. This option is not available in ``replay'' mode. When <strong>File/Record</strong> is selected, a file chooser dialog will prompt for the name of the new archive folio. If the directory to the folio does not exist, <strong>pmview</strong> will attempt to create it. It is usually convenient to keep each folio within its own directory as there will be several other files associated with the folio, including the generated archives. Once a valid folio has been created, <strong>pmview</strong> will launch a <strong>pmlogger</strong>(1) process for each host to collect the metrics required from that host in the current scene. The current selections do not affect the set of metrics that are recorded. While recording is in progress, a red dot will appear in the time controls button in the top left-hand corner of the <strong>pmview</strong> window. The <strong>File/Record</strong> option will also change to <strong>File/Stop Recording</strong> as only one recording session is possible at any one time. Selecting blocks or launching other tools will have no affect on the recording session. The record session may be terminated by selecting <strong>File/Stop Recording</strong>. This will display dialogs for each <strong>pmlogger</strong>(1) instance describing the size and location of the archive files before terminating each process. When all <strong>pmlogger</strong>(1) processes have been terminated, the red dot is removed from the time controls button, and the menu reverts back to <strong>File/Record</strong> to allow another recording session to take place. If the application exists while recording, a dialog will appear allowing you to terminate each <strong>pmlogger</strong>(1) process, or leave it running unattached. An archive folio may be replayed using the command: ``<strong>pmafm</strong> <em>folio</em> <strong>replay</strong>''. See <strong>pmafm</strong>(1) for more details. It is not uncommon for a front-end script which generates a <strong>pmview</strong> scene to use metrics that are not contained in the scene. For example, <strong>osvis</strong>(1) uses several <em>hinv</em> metrics to determine the size and layout of some objects. As these metrics are also needed when replaying the generated archive with the front-end script, a complete <strong>pmlogger</strong>(1) config can be specified (<strong>-R</strong>) that overrides the <strong>pmview</strong> generated config, or an additional config can be appended (<strong>-r</strong>) to the <strong>pmview</strong> generated config.
+    <dd>
+      When in ``live'' mode, this option will launch <a href="/1/pmlogger">pmlogger(1)</a> processes to record the current scene into an archive folio (see <strong>pmafm(1))</strong> so that it may be replayed at a later time. This option is not available in ``replay'' mode. When <strong>File/Record</strong> is selected, a file chooser dialog will prompt for the name of the new archive folio. If the directory to the folio does not exist, <strong>pmview</strong> will attempt to create it. It is usually convenient to keep each folio within its own directory as there will be several other files associated with the folio, including the generated archives. Once a valid folio has been created, <strong>pmview</strong> will launch a <a href="/1/pmlogger">pmlogger(1)</a> process for each host to collect the metrics required from that host in the current scene. The current selections do not affect the set of metrics that are recorded. While recording is in progress, a red dot will appear in the time controls button in the top left-hand corner of the <strong>pmview</strong> window. The <strong>File/Record</strong> option will also change to <strong>File/Stop Recording</strong> as only one recording session is possible at any one time. Selecting blocks or launching other tools will have no affect on the recording session. The record session may be terminated by selecting <strong>File/Stop Recording</strong>. This will display dialogs for each <a href="/1/pmlogger">pmlogger(1)</a> instance describing the size and location of the archive files before terminating each process. When all <a href="/1/pmlogger">pmlogger(1)</a> processes have been terminated, the red dot is removed from the time controls button, and the menu reverts back to <strong>File/Record</strong> to allow another recording session to take place. If the application exists while recording, a dialog will appear allowing you to terminate each <a href="/1/pmlogger">pmlogger(1)</a> process, or leave it running unattached. An archive folio may be replayed using the command: ``<strong>pmafm</strong> <em>folio</em> <strong>replay</strong>''. See <a href="/1/pmafm">pmafm(1)</a> for more details. It is not uncommon for a front-end script which generates a <strong>pmview</strong> scene to use metrics that are not contained in the scene. For example, <a href="/1/osvis">osvis(1)</a> uses several <em>hinv</em> metrics to determine the size and layout of some objects. As these metrics are also needed when replaying the generated archive with the front-end script, a complete <a href="/1/pmlogger">pmlogger(1)</a> config can be specified (<strong>-R</strong>) that overrides the <strong>pmview</strong> generated config, or an additional config can be appended (<strong>-r</strong>) to the <strong>pmview</strong> generated config.
     <dt><strong>File/Save</strong>
-    <dd>Saves the current scene to a human-readable Open Inventor file (see <strong>inventor</strong>(1)). A file dialog will prompt for the location of the file. The default file extension is ``.iv'' which is recognized by <strong>ivview</strong>(1) and some Web browsers.
+    <dd>
+      Saves the current scene to a human-readable Open Inventor file (see <a href="/1/inventor">inventor(1)</a> A file dialog will prompt for the location of the file. The default file extension is ``.iv'' which is recognized by <a href="/1/ivview">ivview(1)</a> and some Web browsers.
     <dt><strong>File/Print</strong>
     <dd>Outputs the current scene to a printer. A print dialog will be displayed allowing a specific printer to be selected.
     <dt><strong>File/Quit</strong>
-    <dd><strong>pmview</strong> immediately exits. If recording was active, dialogs will be displayed for each <strong>pmlogger</strong>(1) process so that they may be terminated.
+    <dd>
+      <strong>pmview</strong> immediately exits. If recording was active, dialogs will be displayed for each <a href="/1/pmlogger">pmlogger(1)</a> process so that they may be terminated.
     <dt><strong>Options/Show Time Control</strong>
-    <dd>Displays the time controls (see <strong>pmtime</strong>(1)) that are driving this instance of <strong>pmview</strong>. The time controls may be shared by other tools, including <strong>pmchart</strong>(1), that have been launched by other instances of <strong>pmview</strong> and <strong>oview</strong>(1). Therefore, this menu item may appear to have no affect if the time controls are already visible.
+    <dd>
+      Displays the time controls (see <a href="/1/pmtime">pmtime(1)</a> that are driving this instance of <strong>pmview</strong>. The time controls may be shared by other tools, including <a href="/1/pmchart">pmchart(1)</a> that have been launched by other instances of <strong>pmview</strong> and <a href="/1/oview">oview(1)</a> Therefore, this menu item may appear to have no affect if the time controls are already visible.
     <dt><strong>Options/New Time Control</strong>
-    <dd>Disconnect with the current time controls (which may be shared by other tools, see <strong>pmtime</strong>(1)) and use a new time control that is not connected to any other tools. The new time control will be immediately displayed.
+    <dd>
+      Disconnect with the current time controls (which may be shared by other tools, see <a href="/1/pmtime">pmtime(1)</a> and use a new time control that is not connected to any other tools. The new time control will be immediately displayed.
     <dt><strong>Launch</strong>
-    <dd>The launch menu is generated from a menu specification file (see <strong>pmlaunch</strong>(5)). The menu contains tools that may be launched based on the sources and names of the selected metrics in the scene. For example, if the selected metrics are from three different hosts, then three copies of a tool may be launched, one for each host. The behavior of a launch depends on the selected metrics and the tools being launched. On selection of a <strong>Launch</strong> menu item <strong>pmview</strong> generates state information in the <strong>pmlaunch</strong>(5) metrics specification format. This provides a description of the selected metrics (or if there are no selections, all the metrics) in the scene without any geometry information. Tools which can monitor multiple hosts and user specified metrics may be launched only once for those metrics (eg <strong>pmdumptext</strong>(1)). Other tools which have a fixed view for one host (eg <strong>mpvis</strong>(1)), may be launched multiple times, once for each host in the selected metric list. If the launched tools have time controls, they will share the time controls with the launching <strong>pmview</strong>. The set of launched tools is configurable, and may include IRIX and user applications. See <strong>pmlaunch</strong>(5) for more details.
+    <dd>
+      The launch menu is generated from a menu specification file (see <a href="/5/pmlaunch">pmlaunch(5)</a> The menu contains tools that may be launched based on the sources and names of the selected metrics in the scene. For example, if the selected metrics are from three different hosts, then three copies of a tool may be launched, one for each host. The behavior of a launch depends on the selected metrics and the tools being launched. On selection of a <strong>Launch</strong> menu item <strong>pmview</strong> generates state information in the <a href="/5/pmlaunch">pmlaunch(5)</a> metrics specification format. This provides a description of the selected metrics (or if there are no selections, all the metrics) in the scene without any geometry information. Tools which can monitor multiple hosts and user specified metrics may be launched only once for those metrics (eg <a href="/1/pmdumptext">pmdumptext(1)</a> Other tools which have a fixed view for one host (eg <a href="/1/mpvis">mpvis(1)</a> may be launched multiple times, once for each host in the selected metric list. If the launched tools have time controls, they will share the time controls with the launching <strong>pmview</strong>. The set of launched tools is configurable, and may include IRIX and user applications. See <a href="/5/pmlaunch">pmlaunch(5)</a> for more details.
     <dt><strong>Help/...</strong>
-    <dd>If <em>pcp.books.help</em> has been installed, then the <strong>insight</strong>(1) books for <strong>pmview</strong> are displayed.
-  </dl>
+    <dd>
+      If <em>pcp.books.help</em> has been installed, then the <a href="/1/insight">insight(1)</a> books for <strong>pmview</strong> are displayed.
+    </dl>
 </div>
 <div class="section">
   <h2>TIME CONTROLS</h2>
-  <p>In addition to the menu options for time controls, the current direction of the time controls (see <strong>pmtime</strong>(1)) is shown in a button in the top-left corner of the <strong>pmview</strong> window. Pressing this button will display the time control and is identical in behavior to <strong>Options/Show Time Control</strong>.
+  <p>In addition to the menu options for time controls, the current direction of the time controls (see <a href="/1/pmtime">pmtime(1)</a> is shown in a button in the top-left corner of the <strong>pmview</strong> window. Pressing this button will display the time control and is identical in behavior to <strong>Options/Show Time Control</strong>.
 </div>
 <div class="section">
   <h2>SCALE CONTROLS</h2>
@@ -120,7 +135,7 @@
 </div>
 <div class="section">
   <h2>TIME INFORMATION</h2>
-  <p>Beside the scale controls is another text box which displays the time of the fetched metrics. The time will change with the time controller (see <strong>pmtime</strong>(1)).
+  <p>Beside the scale controls is another text box which displays the time of the fetched metrics. The time will change with the time controller (see <a href="/1/pmtime">pmtime(1)</a>
 </div>
 <div class="section">
   <h2>ENVIRONMENT</h2>
@@ -147,11 +162,11 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf">pcp.conf(5)</a>
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><strong>dkvis</strong>(1), <strong>insight</strong>(1), <strong>inventor</strong>(1), <strong>ivview</strong>(1), <strong>mpvis</strong>(1), <strong>nfsvis</strong>(1), <strong>osvis</strong>(1), <strong>oview</strong>(1), <strong>pcp</strong>(1), <strong>PCPIntro</strong>(1), <strong>pmafm</strong>(1), <strong>pmcd</strong>(1), <strong>pmchart</strong>(1), <strong>pmdumptext</strong>(1), <strong>pmlogger</strong>(1), <strong>pmtime</strong>(1), <strong>pmview</strong>(1), <strong>X</strong>(1), <strong>xconfirm</strong>(1), <strong>xlv_vis</strong>(1), <strong>pcp.conf</strong>(5), <strong>pmview</strong>(5), <strong>environ</strong>(7) and <strong>pmlaunch</strong>(5).
+  <p><a href="/1/dkvis">dkvis(1)</a> <a href="/1/insight">insight(1)</a> <a href="/1/inventor">inventor(1)</a> <a href="/1/ivview">ivview(1)</a> <a href="/1/mpvis">mpvis(1)</a> <a href="/1/nfsvis">nfsvis(1)</a> <a href="/1/osvis">osvis(1)</a> <a href="/1/oview">oview(1)</a> <a href="/1/pcp">pcp(1)</a> <a href="/1/PCPIntro">PCPIntro(1)</a> <a href="/1/pmafm">pmafm(1)</a> <a href="/1/pmcd">pmcd(1)</a> <a href="/1/pmchart">pmchart(1)</a> <a href="/1/pmdumptext">pmdumptext(1)</a> <a href="/1/pmlogger">pmlogger(1)</a> <a href="/1/pmtime">pmtime(1)</a> <a href="/1/pmview">pmview(1)</a> <a href="/1/X">X(1)</a> <a href="/1/xconfirm">xconfirm(1)</a> <a href="/1/xlv_vis">xlv_vis(1)</a> <a href="/5/pcp.conf">pcp.conf(5)</a> <a href="/5/pmview">pmview(5)</a> <a href="/7/environ">environ(7)</a> and <a href="/5/pmlaunch">pmlaunch(5)</a>
   <p>Relevant information is also available from the on-line PCP Tutorial. Provided the <strong>pcp.man.tutorial</strong> subsystem from the PCP images has been installed, access the URL <strong>file:$PCP_DOC_DIR/Tutorial/pmview.html</strong> from your web browser.
 </div>
 <div class="section">

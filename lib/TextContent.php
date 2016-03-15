@@ -30,6 +30,7 @@ class TextContent
             // TODO: should only add br in synopsis, see https://www.mankier.com/7/groff_mdoc#Manual_Domain-Names
             $parentNode->appendChild($dom->createElement('br', $line));
             $parentNode->appendChild(new DOMText($man->macro_Nm));
+
             return;
         }
 
@@ -39,6 +40,17 @@ class TextContent
             $stringToFormat = trim($matches[2]);
             if (empty($stringToFormat)) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
+            }
+
+            // Detect references to other man pages:
+            if ($command === 'BR'
+              && preg_match('~(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)~u', $stringToFormat, $matches)
+            ) {
+                $parentNode->appendChild(new DOMText(' '));
+                $anchor = $dom->createElement('a', $matches['name'] . '(' . $matches['num'] . ')');
+                $anchor->setAttribute('href', '/' . $matches['num'] . '/' . $matches['name']);
+                $parentNode->appendChild($anchor);
+                return;
             }
 
             if (strlen($command) > 1) {
