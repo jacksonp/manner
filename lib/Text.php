@@ -80,7 +80,9 @@ class Text
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e'  => '\\',
             // \\ "reduces to a single backslash"
-          '\\\\'  => '\\',
+          '\\\\' => '\\',
+            // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
+          '\\|'  => '',
           '\(co' => '©',
             // Quotes
           '\(Bq' => '„',
