@@ -44,12 +44,21 @@ class TextContent
 
             // Detect references to other man pages:
             if ($command === 'BR'
-              && preg_match('~(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)~u', $stringToFormat, $matches)
+              && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u', $stringToFormat, $matches)
             ) {
                 $parentNode->appendChild(new DOMText(' '));
                 $anchor = $dom->createElement('a', $matches['name'] . '(' . $matches['num'] . ')');
                 $anchor->setAttribute('href', '/' . $matches['num'] . '/' . $matches['name']);
+                $anchor->setAttribute('class', 'link-man');
                 $parentNode->appendChild($anchor);
+                if (mb_strlen($matches['punc']) !== 0) {
+                    $parentNode->appendChild(new DOMText($matches['punc']));
+                }
+                if (mb_strlen($matches['rol']) !== 0) {
+                    // get the 2nd bit of e.g. ".BR getcap (8), setcap (8)"
+                    self::interpretAndAppendCommand($parentNode, '.BR' . $matches['rol']);
+                }
+
                 return;
             }
 
