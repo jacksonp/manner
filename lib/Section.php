@@ -40,7 +40,9 @@ class Section
                 ++$sectionNum;
                 $sectionNodes[$sectionNum] = $dom->createElement('div');
                 $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
-                $sectionNodes[$sectionNum]->appendChild($dom->createElement('h' . $level, $sectionHeading));
+                $h = $dom->createElement('h' . $level);
+                $h->appendChild(new DOMText($sectionHeading));
+                $sectionNodes[$sectionNum]->appendChild($h);
                 continue;
             }
 

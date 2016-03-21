@@ -79,12 +79,11 @@ class Text
           '\\en' => '\n',
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e'  => '\\',
-            // \\ "reduces to a single backslash"
-          '\\\\' => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
             // Unpaddable space size space glyph (no line break). Just use space for now:
           '\\ '  => ' ',
+
         ];
 
         $namedGlyphs = [
@@ -182,7 +181,10 @@ class Text
             $replacements['\[' . $name . ']'] = $val;
         }
 
-        return str_replace(array_keys($replacements), array_values($replacements), $line);
+        $line = str_replace(array_keys($replacements), array_values($replacements), $line);
+
+        // \\ "reduces to a single backslash" - Do this last so the new single backslashes don't get matched by any other pattern.
+        return str_replace('\\\\', '\\', $line);
     }
 
 }
