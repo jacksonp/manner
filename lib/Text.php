@@ -83,6 +83,8 @@ class Text
           '\\\\' => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
+            // Unpaddable space size space glyph (no line break). Just use space for now:
+          '\\ '  => ' ',
           '\(co' => '©',
             // Quotes
           '\(Bq' => '„',
