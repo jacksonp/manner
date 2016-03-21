@@ -71,48 +71,55 @@ class Text
 
         $replacements = [
             // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
-          '\\/'   => '',
+          '\\/'  => '',
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
-          '\\,'   => '',
-          '\\-'   => '-',
-          '\\.'   => '.',
-          '\\en'  => '\n',
+          '\\,'  => '',
+          '\\-'  => '-',
+          '\\.'  => '.',
+          '\\en' => '\n',
             // "\e represents the current escape character." - let's hope it's always a backslash
-          '\\e'   => '\\',
+          '\\e'  => '\\',
             // \\ "reduces to a single backslash"
-          '\\\\'  => '\\',
+          '\\\\' => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
-          '\\|'   => '',
+          '\\|'  => '',
             // Unpaddable space size space glyph (no line break). Just use space for now:
-          '\\ '   => ' ',
+          '\\ '  => ' ',
+        ];
+
+        $namedGlyphs = [
             // Legal Symbols
-          '\(co'  => '©',
-          '\[co]' => '©',
-          '\[rg]' => '™',
-          '\[tm]' => '™',
-          '\[bs]' => '☎',
+          'co' => '©',
+          'rg' => '™',
+          'tm' => '™',
+          'bs' => '☎',
             // Quotes
-          '\(Bq'  => '„',
-          '\(bq'  => '‚',
-          '\(lq'  => '“',
-          '\(rq'  => '”',
-          '\(oq'  => '‘',
-          '\(cq'  => '’',
-          '\(aq'  => '\'',
-          '\(dq'  => '"',
-          '\(Fo'  => '«',
-          '\(Fc'  => '»',
-          '\(fo'  => '‹',
-          '\(fc'  => '›',
+          'Bq' => '„',
+          'bq' => '‚',
+          'lq' => '“',
+          'rq' => '”',
+          'oq' => '‘',
+          'cq' => '’',
+          'aq' => '\'',
+          'dq' => '"',
+          'Fo' => '«',
+          'Fc' => '»',
+          'fo' => '‹',
+          'fc' => '›',
             // Done quotes
             // Punctuation
-          '\(r!'  => '¡',
-          '\(r?'  => '¿',
-          '\(em'  => '—',
-          '\(en'  => '–',
-          '\(hy'  => '‐',
+          'r!' => '¡',
+          'r?' => '¿',
+          'em' => '—',
+          'en' => '–',
+          'hy' => '‐',
             // Done punctuation
         ];
+
+        foreach ($namedGlyphs as $name => $val) {
+            $replacements['\(' . $name] = $val;
+            $replacements['\[' . $name . ']'] = $val;
+        }
 
         return str_replace(array_keys($replacements), array_values($replacements), $line);
     }
