@@ -81,9 +81,8 @@ class Text
           '\\e'  => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
-            // Unpaddable space size space glyph (no line break). Just use space for now:
-          '\\ '  => ' ',
-
+            // Unpaddable space size space glyph (no line break). See enigma.6:
+          '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
         ];
 
         $namedGlyphs = [

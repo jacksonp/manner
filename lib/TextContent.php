@@ -65,7 +65,7 @@ class TextContent
                 return;
             }
 
-            if (strlen($command) > 1) {
+            if (mb_strlen($command) > 1) {
                 $bits = str_getcsv($stringToFormat, ' ');
             } else {
                 $bits = [trim($stringToFormat, '"')];
