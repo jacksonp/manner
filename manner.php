@@ -59,17 +59,11 @@ for ($i = 0; $i < $numRawLines; ++$i) {
             echo $line . ' - missing title info';
             exit(1);
         }
-        $man->title   = $titleDetails[0];
-        $man->section = $titleDetails[1];
-        if (isset($titleDetails[2])) {
-            $man->date = $titleDetails[2];
-        }
-        if (isset($titleDetails[3])) {
-            $man->package = $titleDetails[3];
-        }
-        if (isset($titleDetails[4])) {
-            $man->section_name = $titleDetails[4];
-        }
+        $man->title        = $titleDetails[0];
+        $man->section      = $titleDetails[1];
+        $man->date         = @$titleDetails[2] ?: '';
+        $man->package      = @$titleDetails[3] ?: '';
+        $man->section_name = @$titleDetails[4] ?: '';
         continue;
     }
     //</editor-fold>
@@ -152,6 +146,7 @@ $html = $dom->saveHTML();
 
 echo '<!DOCTYPE html>',
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
+'<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
 '<title>', htmlspecialchars($man->title), '</title>',
 $html;
 
