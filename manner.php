@@ -92,22 +92,9 @@ if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
 
 $nameSectionText = array_shift($lines);
 
-if (preg_match('~^\.Nm (.*)~', $nameSectionText, $matches)) {
-    $man->macro_Nm = $matches[1];
-    $ndText        = array_shift($lines);
-    if (preg_match('~^\.Nd (.*)~', $ndText, $matches)) {
-        $p = $dom->createElement('p');
-        $p->appendChild($matches[1]);
-        $manPageContainer->appendChild($p);
-    } else {
-        echo($ndText . ' - expected .Nd.');
-        exit(1);
-    }
-} else {
-    $p = $dom->createElement('p');
-    $p->appendChild(new DOMText($nameSectionText));
-    $manPageContainer->appendChild($p);
-}
+$p = $dom->createElement('p');
+TextContent::interpretAndAppendCommand($p, $nameSectionText);
+$manPageContainer->appendChild($p);
 //</editor-fold>
 
 $manPageContainer->manLines = $lines;
