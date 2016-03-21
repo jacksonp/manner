@@ -74,29 +74,6 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     }
     //</editor-fold>
 
-    //<editor-fold desc="mdoc title macros">
-    if (preg_match('~^\.Dd (.*)$~u', $line, $matches)) {
-        $manDate = $line;
-        continue;
-    }
-
-    if (preg_match('~^\.Dt (.*)$~u', $line, $matches)) {
-        $titleDetails = str_getcsv($matches[1], ' ');
-        if (count($titleDetails) < 2) {
-            echo $line . ' - missing title info';
-            exit(1);
-        }
-        $man->title   = $titleDetails[0];
-        $man->section = $titleDetails[1];
-        continue;
-    }
-
-    if (preg_match('~^\.Os$~u', $line)) {
-        // Do nothing, I don't think we care about this
-        continue;
-    }
-    //</editor-fold>
-
     $lines[] = $line;
 
 }
