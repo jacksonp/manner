@@ -73,7 +73,8 @@ for ($i = 0; $i < $numRawLines; ++$i) {
 }
 
 if (isset($man->title)) {
-    $h1 = $dom->createElement('h1', $man->title);
+    $h1 = $dom->createElement('h1');
+    $h1->appendChild(new DOMText($man->title));
     $manPageContainer->appendChild($h1);
 } else {
     echo 'No $man->title.';
@@ -95,13 +96,17 @@ if (preg_match('~^\.Nm (.*)~', $nameSectionText, $matches)) {
     $man->macro_Nm = $matches[1];
     $ndText        = array_shift($lines);
     if (preg_match('~^\.Nd (.*)~', $ndText, $matches)) {
-        $manPageContainer->appendChild($dom->createElement('p', $matches[1]));
+        $p = $dom->createElement('p');
+        $p->appendChild($matches[1]);
+        $manPageContainer->appendChild($p);
     } else {
         echo($ndText . ' - expected .Nd.');
         exit(1);
     }
 } else {
-    $manPageContainer->appendChild($dom->createElement('p', $nameSectionText));
+    $p = $dom->createElement('p');
+    $p->appendChild(new DOMText($nameSectionText));
+    $manPageContainer->appendChild($p);
 }
 //</editor-fold>
 

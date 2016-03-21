@@ -18,7 +18,7 @@ class TextContent
         $dom = $parentNode->ownerDocument;
 
         if (preg_match('~^\.br~u', $line)) {
-            $parentNode->appendChild($dom->createElement('br', $line));
+            $parentNode->appendChild($dom->createElement('br'));
 
             return;
         }
@@ -28,7 +28,7 @@ class TextContent
                 throw new Exception($line . ' - found .Nm but $man->macro_Nm is not set');
             }
             // TODO: should only add br in synopsis, see https://www.mankier.com/7/groff_mdoc#Manual_Domain-Names
-            $parentNode->appendChild($dom->createElement('br', $line));
+            $parentNode->appendChild($dom->createElement('br'));
             $parentNode->appendChild(new DOMText($man->macro_Nm));
 
             return;
@@ -49,7 +49,8 @@ class TextContent
                 $stringToFormat, $matches)
             ) {
                 $parentNode->appendChild(new DOMText(' '));
-                $anchor = $dom->createElement('a', $matches['name'] . '(' . $matches['num'] . ')');
+                $anchor = $dom->createElement('a');
+                $anchor->appendChild(new DOMText($matches['name'] . '(' . $matches['num'] . ')'));
                 $anchor->setAttribute('href', '/' . $matches['num'] . '/' . $matches['name']);
                 $anchor->setAttribute('class', 'link-man');
                 $parentNode->appendChild($anchor);
@@ -175,7 +176,8 @@ class TextContent
                 self::interpretAndAppendString($parentNode, $matches['start']);
             }
 
-            $anchor = $dom->createElement('a', $matches['url']);
+            $anchor = $dom->createElement('a');
+            $anchor->appendChild(new DOMText($matches['url']));
             $anchor->setAttribute('href', $matches['url']);
             $parentNode->appendChild($anchor);
 
