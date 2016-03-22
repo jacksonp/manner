@@ -82,10 +82,12 @@ class Blocks
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-                if (empty($blocks)) {
-                    throw new Exception($line . ' - unexpected .IP outside of block');
-                } elseif (!empty($matches[1])) {
+                if (!empty($matches[1])) {
                     throw new Exception($line . ' - cannot handle .IP with designator or indentation');
+                } elseif (empty($blocks)) {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('p');
+                    continue;
                 } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
                     $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br'));
                 } elseif ($blocks[$blockNum]->tagName === 'p') {
