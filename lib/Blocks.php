@@ -83,7 +83,24 @@ class Blocks
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
                 if (!empty($matches[1])) {
-                    throw new Exception($line . ' - cannot handle .IP with designator or indentation');
+
+                    $bits = str_getcsv($matches[1], ' ');
+                    if (count($bits) > 1) {
+                        throw new Exception($line . ' - cannot handle .IP with indentation');
+                    }
+                    // Copied from .TP:
+                    if ($i === $numLines - 1) {
+                        continue;
+                    }
+                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
+                        ++$blockNum;
+                        $blocks[$blockNum] = $dom->createElement('dl');
+                    }
+                    $dt     = $dom->createElement('dt');
+                    TextContent::interpretAndAppendCommand($dt, $bits[0]);
+                    $blocks[$blockNum]->appendChild($dt);
+                    continue;
+
                 } elseif (empty($blocks)) {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('p');
