@@ -19,7 +19,7 @@ class Blocks
             $line = $parentSectionNode->manLines[$i];
 
             // empty lines cause a new para also, see sar.1
-            if (preg_match('~^\.[LP]?P$~u', $line) || preg_match('~^\.sp$~u', $line)) {
+            if (preg_match('~^\.[HLP]?P$~u', $line) || preg_match('~^\.sp$~u', $line)) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
                 continue;

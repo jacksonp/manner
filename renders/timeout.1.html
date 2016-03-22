@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="March 2016" data-package="GNU coreutils 8.25" data-section-name="User Commands">
+<title>TIMEOUT</title>
+<h1>TIMEOUT</h1>
+<p>timeout - run a command with a time limit
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>timeout</strong> [<em>OPTION</em>] <em>DURATION COMMAND</em> [<em>ARG</em>]...<br>
+  <strong>timeout</strong> [<em>OPTION</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>Start COMMAND, and kill it if still running after DURATION.
+  <p>Mandatory arguments to long options are mandatory for short options too.
+  <p><strong>--preserve-status</strong>
+  <blockquote>
+    exit with the same status as COMMAND, even when the<br>
+    <br>
+    command times out
+  </blockquote>
+  <p><strong>--foreground</strong>
+  <blockquote>
+    when not running timeout directly from a shell prompt,<br>
+    <br>
+    allow COMMAND to read from the TTY and get TTY signals; in this mode, children of COMMAND will not be timed out
+  </blockquote>
+  <p><strong>-k</strong>, <strong>--kill-after</strong>=<em>DURATION</em>
+  <blockquote>
+    also send a KILL signal if COMMAND is still running<br>
+    <br>
+    this long after the initial signal was sent
+  </blockquote>
+  <p><strong>-s</strong>, <strong>--signal</strong>=<em>SIGNAL</em>
+  <blockquote>
+    specify the signal to be sent on timeout;<br>
+    <br>
+    SIGNAL may be a name like 'HUP' or a number; see 'kill <strong>-l</strong>' for a list of signals
+  </blockquote>
+  <dl>
+    <dt><strong>--help</strong>
+    <dd>display this help and exit
+    <dt><strong>--version</strong>
+    <dd>output version information and exit
+  </dl>
+  <p>DURATION is a floating point number with an optional suffix: 's' for seconds (the default), 'm' for minutes, 'h' for hours or 'd' for days.
+  <p>If the command times out, and <strong>--preserve-status</strong> is not set, then exit with status 124. Otherwise, exit with the status of COMMAND. If no signal is specified, send the TERM signal upon timeout. The TERM signal kills any process that does not block or catch that signal. It may be necessary to use the KILL (9) signal, since this signal cannot be caught, in which case the exit status is 128+9 rather than 124.
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>Some platforms don't curently support timeouts beyond the year 2038.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Written by Padraig Brady.
+</div>
+<div class="section">
+  <h2>REPORTING BUGS</h2>
+  <p>GNU coreutils online help: <a href="http://www.gnu.org/software/coreutils/">http://www.gnu.org/software/coreutils/</a><br>
+  Report timeout translation bugs to <a href="http://translationproject.org/team/">http://translationproject.org/team/</a>
+</div>
+<div class="section">
+  <h2>COPYRIGHT</h2>
+  <p>Copyright © 2016 Free Software Foundation, Inc. License GPLv3+: GNU GPL version 3 or later <a href="http://gnu.org/licenses/gpl.html">http://gnu.org/licenses/gpl.html</a>.<br>
+  This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>kill(1)
+  <p><br>
+  Full documentation at: <a href="http://www.gnu.org/software/coreutils/timeout">http://www.gnu.org/software/coreutils/timeout</a><br>
+  or available locally via: info '(coreutils) timeout invocation'
+</div>
+
