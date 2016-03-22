@@ -15,6 +15,11 @@ $filePath = $argv[1];
 if (!is_file($filePath)) {
     exit($filePath . ' is not a file.');
 }
+
+$errorLog = '/tmp/mannerrors.log';
+if (!empty($arv[2])) {
+    $errorLog = $arv[2];
+}
 //</editor-fold>
 
 $rawLines = file($filePath, FILE_IGNORE_NEW_LINES);
@@ -104,6 +109,7 @@ $manPageContainer->manLines = $lines;
 try {
     Section::handle($manPageContainer, 2);
 } catch (Exception $e) {
+    file_put_contents($errorLog, $e->getMessage() . "\n", FILE_APPEND);
     echo 'Doc status:', PHP_EOL;
     echo $dom->saveHTML($manPageContainer);
     echo PHP_EOL, PHP_EOL, $e->getMessage(), PHP_EOL;
