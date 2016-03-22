@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="13 Sep 2003" data-package="Linux" data-section-name="Linux User's Manual">
+<title>SLABTOP</title>
+<h1>SLABTOP</h1>
+<p>slabtop - display kernel slab cache information in real time
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>slabtop [</strong> <em>options</em> <strong>]</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><a href="/1/slabtop" class="link-man">slabtop(1)</a> displays detailed kernel slab cache information in real time. It displays a listing of the top caches sorted by one of the listed sort criteria. It also displays a statistics header filled with slab layer information.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <p>Normal invocation of <a href="/1/slabtop" class="link-man">slabtop(1)</a> does not require any options. The behavior, however, can be fine-tuned by specifying one or more of the following flags:
+  <dl>
+    <dt><strong>-\^-delay=n, -d n</strong>
+    <dd>
+      Refresh the display every n seconds. By default, <a href="/1/slabtop" class="link-man">slabtop(1)</a> refreshes the display every three seconds. To exit the program, hit <strong>q.</strong>
+    <dt><strong>-\^-sort=S, -s S</strong>
+    <dd>Sort by S, where S is one of the sort criteria.
+    <dt><strong>-\^-once, -o</strong>
+    <dd>Display the output once and then exit.
+    <dt><strong>-\^-version, -V</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-\^-help</strong>
+    <dd>Display usage information and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>SORT CRITERIA</h2>
+  <p>The following are valid sort criteria used to sort the individual slab caches and thereby determine what are the "top" slab caches to display. The default sort criteria is to sort by the number of objects ("o").
+  <p>The sort criteria can also be changed while slabtop is running by pressing the associated character.
+  <dl>
+    <dt><strong>a:</strong>
+    <dd>sort by number of active objects
+    <dt><strong>b:</strong>
+    <dd>sort by objects per slab
+    <dt><strong>c:</strong>
+    <dd>sort by cache size
+    <dt><strong>l:</strong>
+    <dd>sort by number of slabs
+    <dt><strong>v</strong>
+    <dd>sort by number of active slabs
+    <dt><strong>n:</strong>
+    <dd>sort by name
+    <dt><strong>o:</strong>
+    <dd>sort by number of objects
+    <dt><strong>p:</strong>
+    <dd>sort by pages per slab
+    <dt><strong>s:</strong>
+    <dd>sort by object size
+    <dt><strong>u:</strong>
+    <dd>sort by cache utilization
+  </dl>
+</div>
+<div class="section">
+  <h2>COMMANDS</h2>
+  <p><a href="/1/slabtop" class="link-man">slabtop(1)</a> accepts keyboard commands from the user during use. The following are supported. In the case of letters, both cases are accepted.
+  <p>Each of the valid sort characters are also accepted, to change the sort routine. See the section <em>SORT CRITERIA</em>.
+  <dl>
+    <dt><strong>&lt;SPACEBAR&gt;</strong>
+    <dd>Refresh the screen.
+    <dt><strong>Q</strong>
+    <dd>Quit the program.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <p><em>/proc/slabinfo</em> -- slab information
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/free" class="link-man">free(1)</a>, <a href="/1/ps" class="link-man">ps(1)</a>, <a href="/1/top" class="link-man">top(1)</a>, <a href="/8/vmstat" class="link-man">vmstat(8)</a>
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p>Currently, <a href="/1/slabtop" class="link-man">slabtop(1)</a> requires a 2.4 or later kernel (specifically, a version 1.1 or later <em>/proc/slabinfo</em>). Kernel 2.2 should be supported in the future.
+  <p>The slabtop statistic header is tracking how many bytes of slabs are being used and it not a measure of physical memory. The 'Slab' field in the /proc/meminfo file is tracking information about used slab physical memory.
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <p>Written by Chris Rivera and Robert Love.
+  <p><a href="/1/slabtop" class="link-man">slabtop(1)</a> was inspired by Martin Bligh's perl script, <strong>vmtop</strong>. The procps package is maintained by Albert Cahalan &lt;albert@users.sf.net&gt;.
+  <p>Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;.
+</div>
+

@@ -14,22 +14,10 @@ class TextContent
     static function interpretAndAppendCommand(HybridNode $parentNode, string $line)
     {
 
-        $man = Man::instance();
         $dom = $parentNode->ownerDocument;
 
         if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br'));
-
-            return;
-        }
-
-        if (preg_match('~^\.Nm$~u', $line)) {
-            if (!isset($man->macro_Nm)) {
-                throw new Exception($line . ' - found .Nm but $man->macro_Nm is not set');
-            }
-            // TODO: should only add br in synopsis, see https://www.mankier.com/7/groff_mdoc#Manual_Domain-Names
-            $parentNode->appendChild($dom->createElement('br'));
-            $parentNode->appendChild(new DOMText($man->macro_Nm));
 
             return;
         }
@@ -95,7 +83,6 @@ class TextContent
 
             return;
         }
-
 
         // FAIL on unknown command
         if (in_array($line[0], ['.', "'"])) {

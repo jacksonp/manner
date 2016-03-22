@@ -74,6 +74,7 @@ class Text
           '\\/'  => '',
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
           '\\,'  => '',
+          '\\\'' => '´',
           '\\-'  => '-',
           '\\.'  => '.',
           '\\en' => '\n',

@@ -90,7 +90,9 @@ if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
     exit(1);
 }
 
-$nameSectionText = array_shift($lines);
+do {
+    $nameSectionText = array_shift($lines);
+} while (mb_strlen($nameSectionText) === 0);
 
 $p = $dom->createElement('p');
 TextContent::interpretAndAppendCommand($p, $nameSectionText);

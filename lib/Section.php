@@ -47,8 +47,12 @@ class Section
             }
 
             if ($level === 2 && empty($sectionNodes)) {
-                echo($line . ' - not in a section.');
-                exit(1);
+                if (mb_strlen($line) === 0) {
+                    continue;
+                } else {
+                    echo($line . ' - not in a section.');
+                    exit(1);
+                }
             }
 
             if (!empty($sectionNodes)) {
