@@ -137,10 +137,6 @@ class Blocks
                 throw new Exception($line . ' - no support for .EE yet');
             }
 
-            if (preg_match('~^\.HP~u', $line)) {
-                throw new Exception($line . ' - no support for .HP yet');
-            }
-
             if ($blockNum === 0) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
