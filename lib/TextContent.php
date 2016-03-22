@@ -185,7 +185,7 @@ class TextContent
         $dom = $parentNode->ownerDocument;
 
         if (preg_match(
-          '~^(?<start>.*?)<?(?<url>https?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',
+          '~^(?<start>.*?)<?(?<url>(ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',
           $string, $matches)) {
 
             if (!empty($matches['start'])) {
