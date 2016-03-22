@@ -137,6 +137,10 @@ class Blocks
                 throw new Exception($line . ' - no support for .EE yet');
             }
 
+            if (preg_match('~^\.[BI]$~u', $line)) {
+                $line .= ' ' . $parentSectionNode->manLines[++$i];
+            }
+
             if ($blockNum === 0) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
