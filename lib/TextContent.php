@@ -117,7 +117,7 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f[123BRIP])~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split('~(\\\\f(?:[123BRIP]|\(CW[IB]?))~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
@@ -145,6 +145,31 @@ class TextContent
                     break;
                 case '\fR':
                 case '\f1':
+                    break;
+                case '\f(CW':
+                    if ($i < $numTextSegments - 1) {
+                        $code = $dom->createElement('code');
+                        self::interpretAndAppendString($code, $textSegments[++$i]);
+                        $parentNode->appendChild($code);
+                    }
+                    break;
+                case '\f(CWI':
+                    if ($i < $numTextSegments - 1) {
+                        $code = $dom->createElement('code');
+                        $em = $dom->createElement('em');
+                        $code->appendChild($em);
+                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $parentNode->appendChild($code);
+                    }
+                    break;
+                case '\f(CWB':
+                    if ($i < $numTextSegments - 1) {
+                        $code = $dom->createElement('code');
+                        $strong = $dom->createElement('strong');
+                        $code->appendChild($strong);
+                        self::interpretAndAppendString($strong, $textSegments[++$i]);
+                        $parentNode->appendChild($code);
+                    }
                     break;
                 default:
                     self::interpretAndAppendString($parentNode, $textSegments[$i]);
