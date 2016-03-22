@@ -16,6 +16,10 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
+        if (mb_strlen($line) === 0) {
+            return;
+        }
+
         if (preg_match('~^\.br~u', $line)) {
             $parentNode->appendChild($dom->createElement('br'));
 
