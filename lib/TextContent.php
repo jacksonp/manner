@@ -30,7 +30,7 @@ class TextContent
 
             $command        = $matches[1];
             $stringToFormat = trim($matches[2]);
-            if (empty($stringToFormat)) {
+            if (mb_strlen($stringToFormat) === 0) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
 
