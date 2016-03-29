@@ -120,13 +120,18 @@ class Blocks
             // see cal.1 for maybe an easy start on supporting .RS/.RE
             if (preg_match('~^\.RS ?(.*)$~u', $line)) {
                 $rsLevel = 1;
-                ++$blockNum;
-                $blocks[$blockNum] = $dom->createElement('div');
-                $className         = 'indent';
-                if (!empty($matches[1])) {
-                    $className .= '-' . trim($matches[1]);
+                if ($blocks[$blockNum]->tagName === 'dl') {
+                    $rsBlock = $blocks[$blockNum]->lastChild;
+                } else {
+                    ++$blockNum;
+                    $blocks[$blockNum] = $dom->createElement('div');
+                    $className         = 'indent';
+                    if (!empty($matches[1])) {
+                        $className .= '-' . trim($matches[1]);
+                    }
+                    $blocks[$blockNum]->setAttribute('class', $className);
+                    $rsBlock = $blocks[$blockNum];
                 }
-                $blocks[$blockNum]->setAttribute('class', $className);
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.RS~u', $line)) {
@@ -134,11 +139,11 @@ class Blocks
                     } elseif (preg_match('~^\.RE~u', $line)) {
                         --$rsLevel;
                     } else {
-                        $blocks[$blockNum]->addManLine($line);
+                        $rsBlock->addManLine($line);
                     }
 
                     if ($rsLevel === 0) {
-                        self::handle($blocks[$blockNum]);
+                        self::handle($rsBlock);
                         continue 2; //End of block
                     }
                 }
