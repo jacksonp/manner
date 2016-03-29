@@ -122,6 +122,7 @@ class Blocks
                 $rsLevel = 1;
                 if ($blocks[$blockNum]->tagName === 'dl') {
                     $rsBlock = $blocks[$blockNum]->lastChild;
+                    $rsBlock->appendChild($dom->createElement('br'));
                 } else {
                     ++$blockNum;
                     $blocks[$blockNum] = $dom->createElement('div');
@@ -138,14 +139,12 @@ class Blocks
                         ++$rsLevel;
                     } elseif (preg_match('~^\.RE~u', $line)) {
                         --$rsLevel;
-                    } else {
-                        $rsBlock->addManLine($line);
+                        if ($rsLevel === 0) {
+                            self::handle($rsBlock);
+                            continue 2; //End of block
+                        }
                     }
-
-                    if ($rsLevel === 0) {
-                        self::handle($rsBlock);
-                        continue 2; //End of block
-                    }
+                    $rsBlock->addManLine($line);
                 }
                 throw new Exception($line . '.RS without corresponding .RE');
             }
