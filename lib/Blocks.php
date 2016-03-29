@@ -93,7 +93,7 @@ class Blocks
                         ++$blockNum;
                         $blocks[$blockNum] = $dom->createElement('dl');
                     }
-                    $dt     = $dom->createElement('dt');
+                    $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $bits[0]);
                     $blocks[$blockNum]->appendChild($dt);
                     continue;
@@ -117,13 +117,35 @@ class Blocks
                 continue;
             }
 
-            if (preg_match('~^\.RS~u', $line)) {
-                // see cal.1 for maybe an easy start on supporting .RS/.RE
-                throw new Exception($line . ' - no support for .RS yet');
+            // see cal.1 for maybe an easy start on supporting .RS/.RE
+            if (preg_match('~^\.RS ?(.*)$~u', $line)) {
+                if (!empty($matches[1])) {
+                    throw new Exception($line . ' - cannot handle .RS with indentation');
+                }
+                $rsLevel = 1;
+                ++$blockNum;
+                $blocks[$blockNum] = $dom->createElement('div');
+                $blocks[$blockNum]->setAttribute('class', 'indented');
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $parentSectionNode->manLines[$i];
+                    if (preg_match('~^\.RS~u', $line)) {
+                        ++$rsLevel;
+                    } elseif (preg_match('~^\.RE~u', $line)) {
+                        --$rsLevel;
+                    } else {
+                        $blocks[$blockNum]->addManLine($line);
+                    }
+
+                    if ($rsLevel === 0) {
+                        self::handle($blocks[$blockNum]);
+                        continue 2; //End of block
+                    }
+                }
+                throw new Exception($line . '.RS without corresponding .RE');
             }
 
             if (preg_match('~^\.RE~u', $line)) {
-                throw new Exception($line . ' - no support for .RE yet');
+                throw new Exception($line . ' - unexpected .RE');
             }
 
             if (preg_match('~^\.EX~u', $line)) {
@@ -142,7 +164,7 @@ class Blocks
                 $line .= ' ' . $parentSectionNode->manLines[++$i];
             }
 
-            if ($blockNum === 0) {
+            if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div') {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
             }
