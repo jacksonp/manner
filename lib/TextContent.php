@@ -21,7 +21,10 @@ class TextContent
         }
 
         if (preg_match('~^\.br~u', $line)) {
-            $parentNode->appendChild($dom->createElement('br'));
+            if ($parentNode->hasChildNodes()) {
+                // Only bother if this isn't the first node.
+                $parentNode->appendChild($dom->createElement('br'));
+            }
 
             return;
         }
