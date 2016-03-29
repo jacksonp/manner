@@ -82,6 +82,8 @@ class Text
           '\\e'  => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
+            // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
+          '\\^'  => '',
             // Unpaddable space size space glyph (no line break). See enigma.6:
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
         ];
@@ -296,7 +298,13 @@ class Text
             $replacements['\[' . $name . ']'] = $val;
         }
 
+
+        // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.
+        // Just the cases we come across:
+        $replacements['\\='] = '=';
+
         $line = str_replace(array_keys($replacements), array_values($replacements), $line);
+
 
         // \\ "reduces to a single backslash" - Do this last so the new single backslashes don't get matched by any other pattern.
         return str_replace('\\\\', '\\', $line);
