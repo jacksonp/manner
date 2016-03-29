@@ -154,11 +154,15 @@ class Blocks
             }
 
             if (preg_match('~^\.EX~u', $line)) {
-                throw new Exception($line . ' - no support for .EX yet');
-            }
-
-            if (preg_match('~^\.EE~u', $line)) {
-                throw new Exception($line . ' - no support for .EE yet');
+                ++$blockNum;
+                $blocks[$blockNum] = $dom->createElement('code');
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    if (preg_match('~^\.EE~u', $line)) {
+                        continue 2; // End of example
+                    }
+                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $parentSectionNode->manLines[$i]);
+                }
+                throw new Exception($line . '.EX without corresponding .EE');
             }
 
             if (preg_match('~^\.IX~u', $line)) {
@@ -169,7 +173,7 @@ class Blocks
                 $line .= ' ' . $parentSectionNode->manLines[++$i];
             }
 
-            if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div') {
+            if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div' || $blocks[$blockNum]->tagName === 'code') {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
             }
