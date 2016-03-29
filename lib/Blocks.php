@@ -89,9 +89,6 @@ class Blocks
                         throw new Exception($line . ' - cannot handle .IP with indentation');
                     }
                     // Copied from .TP:
-                    if ($i === $numLines - 1) {
-                        continue;
-                    }
                     if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                         ++$blockNum;
                         $blocks[$blockNum] = $dom->createElement('dl');
