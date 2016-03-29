@@ -119,13 +119,14 @@ class Blocks
 
             // see cal.1 for maybe an easy start on supporting .RS/.RE
             if (preg_match('~^\.RS ?(.*)$~u', $line)) {
-                if (!empty($matches[1])) {
-                    throw new Exception($line . ' - cannot handle .RS with indentation');
-                }
                 $rsLevel = 1;
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('div');
-                $blocks[$blockNum]->setAttribute('class', 'indented');
+                $className         = 'indent';
+                if (!empty($matches[1])) {
+                    $className .= '-' . trim($matches[1]);
+                }
+                $blocks[$blockNum]->setAttribute('class', $className);
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.RS~u', $line)) {
