@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>COLLECTL2PCP</title>
+<h1>COLLECTL2PCP</h1>
+<p><strong>collectl2pcp</strong> - import collectl data to a PCP archive
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>collectl2pcp</strong> [<strong>-F</strong>] [<strong>-v</strong>] [<strong>-?</strong>] <em>file</em> [<em>file</em> ...] <em>archive</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>collectl2pcp</strong> reads raw <a href="/1/collectl" class="link-man">collectl(1)</a> data from each <em>file</em> and creates a new PCP archive with basename <em>archive</em>. Each input <em>file</em> may be gzipped (with <strong>.gz</strong> suffix). The PCP <em>archive</em> and at least one input <em>file</em> are required arguments.
+  <p>The options to <strong>collectl2pcp</strong> are as follows.
+  <dl>
+    <dt><strong>-F</strong>
+    <dd>Overwrite <em>archive</em> (and the index and meta files) if it already exists.
+    <dt><strong>-v</strong>
+    <dd>
+      Report progress and errors verbosely. This also reports a count of unsupported metric data in the <a href="/1/collectl" class="link-man">collectl(1)</a> input file(s), which is normally silently skipped.
+    <dt><em>file</em> [<em>file</em> ...]
+    <dd>
+      These are the <a href="/1/collectl" class="link-man">collectl(1)</a> input files. If more than one is given, they must contain data for the same host and be given in time-stamp chronological order on the command line. Note that when <a href="/1/collectl" class="link-man">collectl(1)</a> is run as a service, it normally creates files with date based names that will sort chronologically (e.g. <strong>/var/log/collectl/*.gz</strong> will be sorted correctly).
+    </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/collectl" class="link-man">collectl(1)</a>, <a href="/1/pmcollectl" class="link-man">pmcollectl(1)</a>, <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/3/LOGIMPORT" class="link-man">LOGIMPORT(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>, <a href="/5/pcp.env" class="link-man">pcp.env(5)</a> and <a href="/5/pmns" class="link-man">pmns(5)</a>.
+</div>
+

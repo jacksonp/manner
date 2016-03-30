@@ -48,9 +48,12 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     }
 
     // Skip comments
-    if (preg_match('~^[\'\.]\\\\"(\s|$)~u', $line)) {
+    if (preg_match('~^[\'\.]\\\\"~u', $line)) {
         continue;
     }
+
+    // \" is start of a comment. Everything up to the end of the line is ignored.
+    $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
 
     // Skip empty requests
     if ($line === '.') {

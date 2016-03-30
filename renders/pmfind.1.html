@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMFIND</title>
+<h1>PMFIND</h1>
+<p><strong>pmfind</strong> - find PCP services on the network
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmfind</strong> [<strong>-q</strong>] [<strong>-m</strong> <em>mechanism</em>] [<strong>-s</strong> <em>service</em>] [<strong>-r</strong>] [<strong>-t</strong> <em>timeout</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmfind</strong> searches for instances of the specified PCP service being advertised on the network and prints a list of URLs corresponding to the services discovered.
+  <p>By default <strong>pmfind</strong> will search for all supported PCP services, however a specific PCP <em>service</em> to discover can be specified using the <strong>-s</strong> option. Supported services are <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/1/pmproxy" class="link-man">pmproxy(1)</a> and <a href="/1/pmwebd" class="link-man">pmwebd(1)</a> <strong>.</strong>
+  <p>The <strong>-m</strong> option sets the <em>mechanism</em> that <strong>pmfind</strong> uses when performing service discovery. By default, or if the keyword "all" is specified, every available mechanism will be used (iteratively). Supported mechanisms are:
+  <dl>
+    <dt><strong>avahi</strong>
+    <dd>Searches for services which are broadcasting using mDNS via <strong>avahi-daemon(8).</strong> An optional suffix <strong>",timeout=N"</strong> may be added to limit the amount of time waiting for the avahi-daemon. N is a floating point number specifying the number of seconds to wait. The default is 0.5 seconds. This timeout may also be specified by setting the environment variable <strong>AVAHI_DISCOVERY_TIMEOUT</strong> to the desired number of seconds. If both are specified, then the value specified in the environment variable takes precedence.
+    <dt><strong>probe=&lt;net-address&gt;/&lt;mask-bits&gt;</strong>
+    <dd>Actively probes the given subnet for the requested PCP service(s). &lt;net-address&gt; is an inet or ipv6 network address and &lt;mask-bits&gt; is the number of bits used to define the subnet. For example, 192.168.1.0/24 defines an 8 bit subnet consisting of the addresses 192.168.1.0 through 192.168.1.255. An optional suffix <strong>",maxThreads=N"</strong> may be added to limit the number of threads used while probing. The default is the value of FD_SETSIZE or the number of addresses in the subnet, whichever is less. An optional suffix <strong>",timeout=N"</strong> may be added to limit the amount of time waiting for each connection attempt. N is a floating point number specifying the number of seconds to wait. The default is 20ms.
+  </dl>
+  <p>The <strong>-r</strong> option requests that DNS name resolution be attempted for the addresses of any discovered services. The default is to display the network addresses of any discovered services.
+  <p>The <strong>-t</strong> option sets the maximum amount of time that <strong>pmfind</strong> will take before interrupting the service discovery. The argument is a floating point number representing the number of seconds before timing out. The default is to take as much time as is needed to complete the process.
+  <p>The <strong>-q</strong> option suppresses all output on the standard output stream.
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>The value of the exit status from the command is zero when services were successfully located, one if no services were found, and two if an error occurred.
+  <p>In the event of an error, a message will be generated on standard error that is intended to be self-explanatory.
+</div>
+<div class="section">
+  <h2>SIGNALS</h2>
+  <p><strong>pmfind</strong> will interrupt the service discovery process when one of the following signals is received: SIGHUP, SIGPIPE, SIGINT, SIGTERM, SIGXFSZ, SIGXCPU. <strong>pmfind</strong> will report any results which were discovered up to point of the interruption.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/1/pmproxy" class="link-man">pmproxy(1)</a>, <a href="/1/pmwebd" class="link-man">pmwebd(1)</a>, <a href="/3/PMAPI" class="link-man">PMAPI(3)</a>, <a href="/3/pmDiscoverServices" class="link-man">pmDiscoverServices(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+</div>
+
