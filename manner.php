@@ -91,25 +91,25 @@ if (isset($man->title)) {
 
 //</editor-fold>
 
-//<editor-fold desc="Handle NAME section, take it out of $lines">
-$nameHeadingLine = array_shift($lines);
-if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
-    echo($nameHeadingLine . ' - expected NAME section.');
-    exit(1);
-}
-
-do {
-    $nameSectionText = array_shift($lines);
-} while (mb_strlen($nameSectionText) === 0);
-
-$p = $dom->createElement('p');
-TextContent::interpretAndAppendCommand($p, $nameSectionText);
-$manPageContainer->appendChild($p);
-//</editor-fold>
-
-$manPageContainer->manLines = $lines;
-
 try {
+    //<editor-fold desc="Handle NAME section, take it out of $lines">
+    $nameHeadingLine = array_shift($lines);
+    if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
+        echo($nameHeadingLine . ' - expected NAME section.');
+        exit(1);
+    }
+
+    do {
+        $nameSectionText = array_shift($lines);
+    } while (mb_strlen($nameSectionText) === 0);
+
+    $p = $dom->createElement('p');
+    TextContent::interpretAndAppendCommand($p, $nameSectionText);
+    $manPageContainer->appendChild($p);
+    //</editor-fold>
+
+    $manPageContainer->manLines = $lines;
+
     Section::handle($manPageContainer, 2);
 } catch (Exception $e) {
     file_put_contents($errorLog, $e->getMessage() . "\n", FILE_APPEND);
