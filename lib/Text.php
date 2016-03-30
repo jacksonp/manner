@@ -70,6 +70,8 @@ class Text
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
 
         $replacements = [
+            // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
+          '\\\\' => '\\',
             // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
           '\\/'  => '',
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
@@ -78,6 +80,7 @@ class Text
           '\\-'  => '-',
           '\\.'  => '.',
           '\\en' => '\n',
+          '\\t'  => "\t",
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
@@ -304,13 +307,10 @@ class Text
         // Just the cases we come across:
         $replacements['\\='] = '=';
 
-        $line = str_replace(array_keys($replacements), array_values($replacements), $line);
+        $line = strtr($line, $replacements);
 
         // Don't worry about changes in point size for now:
-        $line = preg_replace('~\\\\s-?\d(.*?)\\\\s-?\d~', '$1', $line);
-
-        // \\ "reduces to a single backslash" - Do this late so the new single backslashes don't get matched by any other pattern.
-        return str_replace('\\\\', '\\', $line);
+        return preg_replace('~\\\\s-?\d(.*?)\\\\s-?\d~', '$1', $line);
 
     }
 
