@@ -120,7 +120,7 @@ class Blocks
             // see cal.1 for maybe an easy start on supporting .RS/.RE
             if (preg_match('~^\.RS ?(.*)$~u', $line)) {
                 $rsLevel = 1;
-                if ($blocks[$blockNum]->tagName === 'dl') {
+                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
                     $rsBlock = $blocks[$blockNum]->lastChild;
                     $rsBlock->appendChild($dom->createElement('br'));
                 } else {
