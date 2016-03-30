@@ -134,6 +134,10 @@ class Blocks
                 throw new Exception($line . ' - no support for .EE yet');
             }
 
+            if (preg_match('~^\.IX~u', $line)) {
+                throw new Exception($line . ' - no support for .IX yet');
+            }
+
             if (preg_match('~^\.[BI]$~u', $line)) {
                 $line .= ' ' . $parentSectionNode->manLines[++$i];
             }
