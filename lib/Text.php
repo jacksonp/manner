@@ -292,6 +292,7 @@ class Text
         foreach ($namedGlyphs as $name => $val) {
             if (mb_strlen($name) === 2) {
                 $replacements['\(' . $name] = $val;
+                $replacements['\*(' . $name] = $val;
             }
             $replacements['\[' . $name . ']'] = $val;
         }
