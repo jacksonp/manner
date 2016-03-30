@@ -309,6 +309,10 @@ class Text
 
         $line = strtr($line, $replacements);
 
+        $line = preg_replace_callback('~\\\\\[char(\d+)\]~u', function ($matches) {
+            return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
+        }, $line);
+
         // Don't worry about changes in point size for now:
         return preg_replace('~\\\\s-?\d(.*?)\\\\s-?\d~', '$1', $line);
 
