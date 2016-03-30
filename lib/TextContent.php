@@ -120,7 +120,7 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f(?:[123BRIP]|\(CW[IB]?))~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?))~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
@@ -149,6 +149,7 @@ class TextContent
                 case '\fR':
                 case '\f1':
                     break;
+                case '\fC':
                 case '\f(CW':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
