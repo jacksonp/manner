@@ -78,8 +78,6 @@ class Text
           '\\-'  => '-',
           '\\.'  => '.',
           '\\en' => '\n',
-            // "\e represents the current escape character." - let's hope it's always a backslash
-          '\\e'  => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
@@ -305,9 +303,9 @@ class Text
 
         $line = str_replace(array_keys($replacements), array_values($replacements), $line);
 
-
-        // \\ "reduces to a single backslash" - Do this last so the new single backslashes don't get matched by any other pattern.
+        // \\ "reduces to a single backslash" - Do this late so the new single backslashes don't get matched by any other pattern.
         return str_replace('\\\\', '\\', $line);
+
     }
 
 }

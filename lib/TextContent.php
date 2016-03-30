@@ -4,6 +4,10 @@
 class TextContent
 {
 
+    private static $continuation = false;
+
+    private static $canAddWhitespace = true;
+
     /**
      * Interpret a line inside a block - could be a macro or text.
      *
@@ -19,6 +23,11 @@ class TextContent
         if (mb_strlen($line) === 0) {
             return;
         }
+
+        self::$canAddWhitespace = !self::$continuation;
+        // See e.g. imgtool.1
+        $line = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
+        self::$continuation = $replacements > 0;
 
         if (preg_match('~^\.br~u', $line)) {
             if ($parentNode->hasChildNodes()) {
@@ -92,7 +101,7 @@ class TextContent
         }
 
         // FAIL on unknown command
-        if (in_array($line[0], ['.', "'"])) {
+        if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
             echo 'Doc status:', PHP_EOL;
             Debug::echoTidy($dom->saveHTML());
             echo PHP_EOL, PHP_EOL;
@@ -115,7 +124,10 @@ class TextContent
         // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
         $line = preg_replace('~\\\\&~u', '', $line);
 
-        if ($addSpacing) {
+        // "\e represents the current escape character." - let's hope it's always a backslash
+        $line = str_replace('\\e', '\\', $line);
+
+        if (self::$canAddWhitespace && $addSpacing) {
             // Do this after regex above
             $line = ' ' . $line;
         }
