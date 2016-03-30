@@ -279,7 +279,9 @@ class Text
           'Fc'        => '»',
           'fo'        => '‹',
           'fc'        => '›',
-            // Done quotes
+            // Non-standard quotes
+          'L"'        => '“',
+          'R"'        => '”',
             // Punctuation
           'r!'        => '¡',
           'r?'        => '¿',
@@ -291,7 +293,7 @@ class Text
 
         foreach ($namedGlyphs as $name => $val) {
             if (mb_strlen($name) === 2) {
-                $replacements['\(' . $name] = $val;
+                $replacements['\(' . $name]  = $val;
                 $replacements['\*(' . $name] = $val;
             }
             $replacements['\[' . $name . ']'] = $val;
@@ -303,6 +305,9 @@ class Text
         $replacements['\\='] = '=';
 
         $line = str_replace(array_keys($replacements), array_values($replacements), $line);
+
+        // Don't worry about changes in point size for now:
+        $line = preg_replace('~\\\\s-?\d(.*?)\\\\s-?\d~', '$1', $line);
 
         // \\ "reduces to a single backslash" - Do this late so the new single backslashes don't get matched by any other pattern.
         return str_replace('\\\\', '\\', $line);
