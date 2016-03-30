@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="August 2014" data-package="util-linux" data-section-name="User Commands">
+<title>TASKSET</title>
+<h1>TASKSET</h1>
+<p>taskset - set or retrieve a process's CPU affinity
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>taskset</strong> [options] <em>mask&nbsp;command&nbsp;</em>[<em>argument</em>...]<br>
+  <strong>taskset</strong> [options] <strong>-p</strong> [<em>mask</em>]&nbsp;<em>pid</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>taskset</strong> is used to set or retrieve the CPU affinity of a running process given its <em>pid</em>, or to launch a new <em>command</em> with a given CPU affinity. CPU affinity is a scheduler property that "bonds" a process to a given set of CPUs on the system. The Linux scheduler will honor the given CPU affinity and the process will not run on any other CPUs. Note that the Linux scheduler also supports natural CPU affinity: the scheduler attempts to keep processes on the same CPU as long as practical for performance reasons. Therefore, forcing a specific CPU affinity is useful only in certain applications.
+  <p>The CPU affinity is represented as a bitmask, with the lowest order bit corresponding to the first logical CPU and the highest order bit corresponding to the last logical CPU. Not all CPUs may exist on a given system but a mask may specify more CPUs than are present. A retrieved mask will reflect only the bits that correspond to CPUs physically on the system. If an invalid mask is given (i.e., one that corresponds to no valid CPUs on the current system) an error is returned. The masks are typically given in hexadecimal. For example,
+  <div class="indent">
+    <dl>
+      <dt><strong>0x00000001</strong>
+      <dd>is processor #0,
+      <dt><strong>0x00000003</strong>
+      <dd>is processors #0 and #1,
+      <dt><strong>0xFFFFFFFF</strong>
+      <dd>is all processors (#0 through #31).
+    </dl>
+  </div>
+  <p>When <strong>taskset</strong> returns, it is guaranteed that the given program has been scheduled to a legal CPU.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>,&nbsp;<strong>--all-tasks</strong>
+    <dd>Set or retrieve the CPU affinity of all the tasks (threads) for a given PID.
+    <dt><strong>-c</strong>,&nbsp;<strong>--cpu-list</strong>
+    <dd>Interpret <em>mask</em> as numerical list of processors instead of a bitmask. Numbers are separated by commas and may include ranges. For example: <strong>0,5,8-11</strong>.
+    <dt><strong>-p</strong>,&nbsp;<strong>--pid</strong>
+    <dd>Operate on an existing PID and do not launch a new task.
+    <dt><strong>-V</strong>,&nbsp;<strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>,&nbsp;<strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>USAGE</h2>
+  <dl>
+    <dt>The default behavior is to run a new command with a given affinity mask:
+    <dd><strong>taskset</strong> <em>mask</em> <em>command&nbsp;</em>[<em>arguments</em>]
+    <dt>You can also retrieve the CPU affinity of an existing task:
+    <dd><strong>taskset -p</strong> <em>pid</em>
+    <dt>Or set it:
+    <dd><strong>taskset -p</strong> <em>mask pid</em>
+  </dl>
+</div>
+<div class="section">
+  <h2>PERMISSIONS</h2>
+  <p>A user can change the CPU affinity of a process belonging to the same user. A user must possess <strong>CAP_SYS_NICE</strong> to change the CPU affinity of a process belonging to another user. A user can retrieve the affinity mask of any process.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/chrt" class="link-man">chrt(1)</a>, <a href="/1/nice" class="link-man">nice(1)</a>, <a href="/1/renice" class="link-man">renice(1)</a>, <a href="/2/sched_setaffinity" class="link-man">sched_setaffinity(2)</a>, <a href="/2/sched_getaffinity" class="link-man">sched_getaffinity(2)</a>
+  <p>See <a href="/2/sched_setscheduler" class="link-man">sched_setscheduler(2)</a> for a description of the Linux scheduling scheme.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Written by Robert M. Love.
+</div>
+<div class="section">
+  <h2>COPYRIGHT</h2>
+  <p>Copyright © 2004 Robert M. Love. This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The taskset command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">ftp://ftp.kernel.org/pub/linux/utils/util-linux/</a>.
+</div>
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2015-04-19" data-package="Linux" data-section-name="User Commands">
+<title>GETENT</title>
+<h1>GETENT</h1>
+<p>getent - get entries from Name Service Switch libraries
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>getent&nbsp;[<em>option</em>]...&nbsp;<em>database</em>&nbsp;<em>key</em>...</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>getent</strong> command displays entries from databases supported by the Name Service Switch libraries, which are configured in <em>/etc/nsswitch.conf</em>. If one or more <em>key</em> arguments are provided, then only the entries that match the supplied keys will be displayed. Otherwise, if no <em>key</em> is provided, all entries will be displayed (unless the database does not support enumeration).
+  <p>The <em>database</em> may be any of those supported by the GNU C Library, listed below:
+  <div class="indent">
+    <dl>
+      <dt><strong>ahosts</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/sethostent" class="link-man">sethostent(3)</a>, <a href="/3/gethostent" class="link-man">gethostent(3)</a>, and <a href="/3/endhostent" class="link-man">endhostent(3)</a> to enumerate the hosts database. This is identical to using <strong>hosts</strong>. When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/getaddrinfo" class="link-man">getaddrinfo(3)</a> with the address family <strong>AF_UNSPEC</strong>, enumerating each socket address structure returned.
+      <dt><strong>ahostsv4</strong>
+      <dd>Same as <strong>ahosts</strong>, but use the address family <strong>AF_INET</strong>.
+      <dt><strong>ahostsv6</strong>
+      <dd>
+        Same as <strong>ahosts</strong>, but use the address family <strong>AF_INET6</strong>. The call to <a href="/3/getaddrinfo" class="link-man">getaddrinfo(3)</a> in this case includes the <strong>AI_V4MAPPED</strong> flag.
+      <dt><strong>aliases</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setaliasent" class="link-man">setaliasent(3)</a>, <a href="/3/getaliasent" class="link-man">getaliasent(3)</a>, and <a href="/3/endaliasent" class="link-man">endaliasent(3)</a> to enumerate the aliases database. When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/getaliasbyname" class="link-man">getaliasbyname(3)</a> and display the result.
+      <dt><strong>ethers</strong>
+      <dd>
+        When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/ether_aton" class="link-man">ether_aton(3)</a> and <a href="/3/ether_hostton" class="link-man">ether_hostton(3)</a> until a result is obtained, and display the result. Enumeration is not supported on <strong>ethers</strong>, so a <em>key</em> must be provided.
+      <dt><strong>group</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setgrent" class="link-man">setgrent(3)</a>, <a href="/3/getgrent" class="link-man">getgrent(3)</a>, and <a href="/3/endgrent" class="link-man">endgrent(3)</a> to enumerate the group database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getgrgid" class="link-man">getgrgid(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getgrnam" class="link-man">getgrnam(3)</a> and display the result.
+      <dt><strong>gshadow</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setsgent" class="link-man">setsgent(3)</a>, <a href="/3/getsgent" class="link-man">getsgent(3)</a>, and <a href="/3/endsgent" class="link-man">endsgent(3)</a> to enumerate the gshadow database. When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/getsgnam" class="link-man">getsgnam(3)</a> and display the result.
+      <dt><strong>hosts</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/sethostent" class="link-man">sethostent(3)</a>, <a href="/3/gethostent" class="link-man">gethostent(3)</a>, and <a href="/3/endhostent" class="link-man">endhostent(3)</a> to enumerate the hosts database. When one or more <em>key</em> arguments are provided, pass each <em>key</em> to <a href="/3/gethostbyaddr" class="link-man">gethostbyaddr(3)</a> or <a href="/3/gethostbyname2" class="link-man">gethostbyname2(3)</a>, depending on whether a call to <a href="/3/inet_pton" class="link-man">inet_pton(3)</a> indicates that the <em>key</em> is an IPv6 or IPv4 address or not, and display the result.
+      <dt><strong>initgroups</strong>
+      <dd>
+        When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/getgrouplist" class="link-man">getgrouplist(3)</a> and display the result. Enumeration is not supported on <strong>initgroups</strong>, so a <em>key</em> must be provided.
+      <dt><strong>netgroup</strong>
+      <dd>
+        When one <em>key</em> is provided, pass the <em>key</em> to <a href="/3/setnetgrent" class="link-man">setnetgrent(3)</a> and, using <a href="/3/getnetgrent" class="link-man">getnetgrent(3)</a> display the resulting string triple (<em>hostname</em>, <em>username</em>, <em>domainname</em>). Alternatively, three <em>keys</em> may be provided, which are interpreted as the <em>hostname</em>, <em>username</em> and <em>domainname</em> to match to a netgroup name via <a href="/3/innetgr" class="link-man">innetgr(3)</a>. Enumeration is not supported on <strong>netgroup</strong>, so either one or three <em>keys</em> must be provided.
+      <dt><strong>networks</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setnetent" class="link-man">setnetent(3)</a>, <a href="/3/getnetent" class="link-man">getnetent(3)</a>, and <a href="/3/endnetent" class="link-man">endnetent(3)</a> to enumerate the networks database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getnetbyaddr" class="link-man">getnetbyaddr(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getnetbyname" class="link-man">getnetbyname(3)</a> and display the result.
+      <dt><strong>passwd</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setpwent" class="link-man">setpwent(3)</a>, <a href="/3/getpwent" class="link-man">getpwent(3)</a>, and <a href="/3/endpwent" class="link-man">endpwent(3)</a> to enumerate the passwd database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getpwuid" class="link-man">getpwuid(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getpwnam" class="link-man">getpwnam(3)</a> and display the result.
+      <dt><strong>protocols</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setprotoent" class="link-man">setprotoent(3)</a>, <a href="/3/getprotoent" class="link-man">getprotoent(3)</a>, and <a href="/3/endprotoent" class="link-man">endprotoent(3)</a> to enumerate the protocols database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getprotobynumber" class="link-man">getprotobynumber(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getprotobyname" class="link-man">getprotobyname(3)</a> and display the result.
+      <dt><strong>rpc</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setrpcent" class="link-man">setrpcent(3)</a>, <a href="/3/getrpcent" class="link-man">getrpcent(3)</a>, and <a href="/3/endrpcent" class="link-man">endrpcent(3)</a> to enumerate the rpc database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getrpcbynumber" class="link-man">getrpcbynumber(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getrpcbyname" class="link-man">getrpcbyname(3)</a> and display the result.
+      <dt><strong>services</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setservent" class="link-man">setservent(3)</a>, <a href="/3/getservent" class="link-man">getservent(3)</a>, and <a href="/3/endservent" class="link-man">endservent(3)</a> to enumerate the services database. When one or more <em>key</em> arguments are provided, pass each numeric <em>key</em> to <a href="/3/getservbynumber" class="link-man">getservbynumber(3)</a> and each nonnumeric <em>key</em> to <a href="/3/getservbyname" class="link-man">getservbyname(3)</a> and display the result.
+      <dt><strong>shadow</strong>
+      <dd>
+        When no <em>key</em> is provided, use <a href="/3/setspent" class="link-man">setspent(3)</a>, <a href="/3/getspent" class="link-man">getspent(3)</a>, and <a href="/3/endspent" class="link-man">endspent(3)</a> to enumerate the shadow database. When one or more <em>key</em> arguments are provided, pass each <em>key</em> in succession to <a href="/3/getspnam" class="link-man">getspnam(3)</a> and display the result.
+      </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-s&nbsp;<em>service</em></strong>, <strong>--service&nbsp;<em>service</em></strong>
+    <dd>Override all databases with the specified service. (Since glibc 2.2.5.)
+    <dt><strong>-s&nbsp;<em>database</em>:<em>service</em></strong>, \
+    <dd>--service&nbsp;<em>database</em>:<em>service</em> Override only specified databases with the specified service. The option may be used multiple times, but only the last service for each database will be used. (Since glibc 2.4.)
+    <dt><strong>-i</strong>, <strong>--no-idn</strong>
+    <dd>Disables IDN encoding in lookups for <strong>ahosts</strong>/<strong>getaddrinfo</strong>(3) (Since glibc-2.13.)
+    <dt><strong>-?</strong>, <strong>--help</strong>
+    <dd>Print a usage summary and exit.
+    <dt><strong>--usage</strong>
+    <dd>Print a short usage summary and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Print the version number, license, and disclaimer of warranty for <strong>getent</strong>.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXIT STATUS</h2>
+  <p>One of the following exit values can be returned by <strong>getent</strong>:
+  <div class="indent">
+    <dl>
+      <dt><strong>0</strong>
+      <dd>Command completed successfully.
+      <dt><strong>1</strong>
+      <dd>Missing arguments, or <em>database</em> unknown.
+      <dt><strong>2</strong>
+      <dd>One or more supplied <em>key</em> could not be found in the <em>database</em>.
+      <dt><strong>3</strong>
+      <dd>Enumeration not supported on this <em>database</em>.
+    </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/5/nsswitch.conf" class="link-man">nsswitch.conf(5)</a>
+</div>
+

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="August 2015" data-package="rustc 1.2.0" data-section-name="User Commands">
+<title>RUSTC</title>
+<h1>RUSTC</h1>
+<p>rustc - The Rust compiler
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>rustc</strong> [<em>OPTIONS</em>] <em>INPUT</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>This program is a compiler for the Rust language, available at <a href="https://www.rust-lang.org">https://www.rust-lang.org</a>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Display the help message.
+    <dt><strong>--cfg</strong> <em>SPEC</em>
+    <dd>Configure the compilation environment.
+    <dt><strong>-L</strong> [<em>KIND</em>=]<em>PATH</em>
+    <dd>
+      Add a directory to the library search path. The optional <em>KIND</em> can be one of:<br>
+      <dl>
+        <dt><strong>dependency</strong>
+        <dd>only lookup transitive dependencies here
+        <dt><strong>crate</strong>
+        <dd>only lookup local `extern crate` directives here
+        <dt><strong>native</strong>
+        <dd>only lookup native libraries here
+        <dt><strong>framework</strong>
+        <dd>only look for OSX frameworks here
+        <dt><strong>all</strong>
+        <dd>look for anything here (the default)
+      </dl>
+    <dt><strong>-l</strong> [<em>KIND</em>=]<em>NAME</em>
+    <dd>Link the generated crate(s) to the specified library <em>NAME</em>. The optional <em>KIND</em> can be one of <em>static</em>, <em>dylib</em>, or <em>framework</em>. If omitted, <em>dylib</em> is assumed.
+    <dt><strong>--crate-type</strong> [bin|lib|rlib|dylib|staticlib]
+    <dd>Comma separated list of types of crates for the compiler to emit.
+    <dt><strong>--crate-name</strong> <em>NAME</em>
+    <dd>Specify the name of the crate being built.
+    <dt><strong>--emit</strong> [asm|llvm-bc|llvm-ir|obj|link|dep-info][=<em>PATH</em>]
+    <dd>Configure the output that <strong>rustc</strong> will produce. Each emission may also have an optional explicit output <em>PATH</em> specified for that particular emission kind. This path takes precedence over the <strong>-o</strong> option.
+    <dt><strong>--print</strong> [crate-name|file-names|sysroot]
+    <dd>Comma separated list of compiler information to print on stdout.
+    <dt><strong>-g</strong>
+    <dd>Equivalent to <em>-C&nbsp;debuginfo=2</em>.
+    <dt><strong>-O</strong>
+    <dd>Equivalent to <em>-C&nbsp;opt-level=2</em>.
+    <dt><strong>-o</strong> <em>FILENAME</em>
+    <dd>Write output to <em>FILENAME</em>. Ignored if multiple <em>--emit</em> outputs are specified which don't have an explicit path otherwise.
+    <dt><strong>--out-dir</strong> <em>DIR</em>
+    <dd>Write output to compiler‐chosen filename in <em>DIR</em>. Ignored if <em>-o</em> is specified. Defaults to the current directory.
+    <dt><strong>--explain</strong> <em>OPT</em>
+    <dd>Provide a detailed explanation of an error message.
+    <dt><strong>--test</strong>
+    <dd>Build a test harness.
+    <dt><strong>--target</strong> <em>TARGET</em>
+    <dd>
+      Target triple for which the code is compiled. This option defaults to the host’s target triple. The target triple has the general format &lt;arch&gt;&lt;sub&gt;-&lt;vendor&gt;-&lt;sys&gt;-&lt;abi&gt;, where:<br>
+      <dl>
+        <dt><strong>&lt;arch&gt;</strong>
+        <dd>x86, arm, thumb, mips, etc.
+        <dt><strong>&lt;sub&gt;</strong>
+        <dd>for example on ARM: v5, v6m, v7a, v7m, etc.
+        <dt><strong>&lt;vendor&gt;</strong>
+        <dd>pc, apple, nvidia, ibm, etc.
+        <dt><strong>&lt;sys&gt;</strong>
+        <dd>none, linux, win32, darwin, cuda, etc.
+        <dt><strong>&lt;abi&gt;</strong>
+        <dd>eabi, gnu, android, macho, elf, etc.
+      </dl>
+    <dt><strong>-W help</strong>
+    <dd>Print 'lint' options and default settings.
+    <dt><strong>-W</strong> <em>OPT</em>, <strong>--warn</strong> <em>OPT</em>
+    <dd>Set lint warnings.
+    <dt><strong>-A</strong> <em>OPT</em>, <strong>--allow</strong> <em>OPT</em>
+    <dd>Set lint allowed.
+    <dt><strong>-D</strong> <em>OPT</em>, <strong>--deny</strong> <em>OPT</em>
+    <dd>Set lint denied.
+    <dt><strong>-F</strong> <em>OPT</em>, <strong>--forbid</strong> <em>OPT</em>
+    <dd>Set lint forbidden.
+    <dt><strong>-C</strong> <em>FLAG</em>[=<em>VAL</em>], <strong>--codegen</strong> <em>FLAG</em>[=<em>VAL</em>]
+    <dd>Set a codegen‐related flag to the value specified. Use <em>-C help</em> to print available flags. See CODEGEN OPTIONS below.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Print version info and exit.
+    <dt><strong>-v</strong>, <strong>--verbose</strong>
+    <dd>Use verbose output.
+    <dt><strong>--extern</strong> <em>NAME</em>=<em>PATH</em>
+    <dd>Specify where an external rust library is located. These should match <em>extern</em> declarations in the crate's source code.
+    <dt><strong>--sysroot</strong> <em>PATH</em>
+    <dd>Override the system root.
+    <dt><strong>-Z</strong> <em>FLAG</em>
+    <dd>Set internal debugging options. Use <em>-Z help</em> to print available options.
+    <dt><strong>--color</strong> auto|always|never
+    <dd>
+      Configure coloring of output:<br>
+      <dl>
+        <dt><strong>auto</strong>
+        <dd>colorize, if output goes to a tty (default);
+        <dt><strong>always</strong>
+        <dd>always colorize output;
+        <dt><strong>never</strong>
+        <dd>never colorize output.
+      </dl>
+    </dl>
+</div>
+<div class="section">
+  <h2>CODEGEN OPTIONS</h2>
+  <dl>
+    <dt><strong>ar</strong>=<em>/path/to/ar</em>
+    <dd>Path to the archive utility to use when assembling archives.
+    <dt><strong>linker</strong>=<em>/path/to/cc</em>
+    <dd>Path to the linker utility to use when linking libraries, executables, and objects.
+    <dt><strong>link-args</strong>='<em>-flag1 -flag2</em>'
+    <dd>A space‐separated list of extra arguments to pass to the linker when the linker is invoked.
+    <dt><strong>lto</strong>
+    <dd>Perform LLVM link‐time optimizations.
+    <dt><strong>target-cpu</strong>=<em>help</em>
+    <dd>Selects a target processor. If the value is 'help', then a list of available CPUs is printed.
+    <dt><strong>target-feature</strong>='<em>+feature1</em>,<em>-feature2</em>'
+    <dd>A comma‐separated list of features to enable or disable for the target. A preceding '+' enables a feature while a preceding '-' disables it. Available features can be discovered through <em>llc -mcpu=help</em>.
+    <dt><strong>passes</strong>=<em>val</em>
+    <dd>A space‐separated list of extra LLVM passes to run. A value of 'list' will cause <strong>rustc</strong> to print all known passes and exit. The passes specified are appended at the end of the normal pass manager.
+    <dt><strong>llvm-args</strong>='<em>-arg1</em> <em>-arg2</em>'
+    <dd>A space‐separated list of arguments to pass through to LLVM.
+    <dt><strong>save-temps</strong>
+    <dd>If specified, the compiler will save more files (.bc, .o, .no-opt.bc) generated throughout compilation in the output directory.
+    <dt><strong>rpath</strong>
+    <dd>If specified, then the rpath value for dynamic libraries will be set in either dynamic library or executable outputs.
+    <dt><strong>no-prepopulate-passes</strong>
+    <dd>Suppresses pre‐population of the LLVM pass manager that is run over the module.
+    <dt><strong>no-vectorize-loops</strong>
+    <dd>Suppresses running the loop vectorization LLVM pass, regardless of optimization level.
+    <dt><strong>no-vectorize-slp</strong>
+    <dd>Suppresses running the LLVM SLP vectorization pass, regardless of optimization level.
+    <dt><strong>soft-float</strong>
+    <dd>Generates software floating point library calls instead of hardware instructions.
+    <dt><strong>prefer-dynamic</strong>
+    <dd>Prefers dynamic linking to static linking.
+    <dt><strong>no-integrated-as</strong>
+    <dd>Force usage of an external assembler rather than LLVM's integrated one.
+    <dt><strong>no-redzone</strong>
+    <dd>Disable the use of the redzone.
+    <dt><strong>relocation-model</strong>=[pic,static,dynamic-no-pic]
+    <dd>The relocation model to use. (Default: <em>pic</em>)
+    <dt><strong>code-model</strong>=[small,kernel,medium,large]
+    <dd>Choose the code model to use.
+    <dt><strong>metadata</strong>=<em>val</em>
+    <dd>Metadata to mangle symbol names with.
+    <dt><strong>extra-filename</strong>=<em>val</em>
+    <dd>Extra data to put in each output filename.
+    <dt><strong>codegen-units</strong>=<em>n</em>
+    <dd>Divide crate into <em>n</em> units to optimize in parallel.
+    <dt><strong>remark</strong>=<em>val</em>
+    <dd>Print remarks for these optimization passes (space separated, or "all").
+    <dt><strong>no-stack-check</strong>
+    <dd>Disable checks for stack exhaustion (a memory‐safety hazard!).
+    <dt><strong>debuginfo</strong>=<em>val</em>
+    <dd>
+      Debug info emission level:<br>
+      <dl>
+        <dt><strong>0</strong>
+        <dd>no debug info;
+        <dt><strong>1</strong>
+        <dd>line‐tables only (for stacktraces and breakpoints);
+        <dt><strong>2</strong>
+        <dd>full debug info with variable and type information.
+      </dl>
+    <dt><strong>opt-level</strong>=<em>VAL</em>
+    <dd>Optimize with possible levels 0–3
+  </dl>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>Some of these affect the output of the compiler, while others affect programs which link to the standard library.
+  <dl>
+    <dt><strong>RUST_TEST_THREADS</strong>
+    <dd>The test framework Rust provides executes tests in parallel. This variable sets the maximum number of threads used for this purpose.
+    <dt><strong>RUST_TEST_NOCAPTURE</strong>
+    <dd>A synonym for the --nocapture flag.
+    <dt><strong>RUST_MIN_STACK</strong>
+    <dd>Sets the minimum stack size for new threads.
+    <dt><strong>RUST_BACKTRACE</strong>
+    <dd>If set, produces a backtrace in the output of a program which panics.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>To build an executable from a source file with a main function: $ rustc -o hello hello.rs
+  <p>To build a library from a source file: $ rustc --crate-type=lib hello-lib.rs
+  <p>To build either with a crate (.rs) file: $ rustc hello.rs
+  <p>To build an executable with debug info: $ rustc -g -o hello hello.rs
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/rustdoc" class="link-man">rustdoc(1)</a>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>See <a href="https://github.com/rust-lang/rust/issues">https://github.com/rust-lang/rust/issues</a> for issues.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>See <em>AUTHORS.txt</em> in the Rust source distribution.
+</div>
+<div class="section">
+  <h2>COPYRIGHT</h2>
+  <p>This work is dual‐licensed under Apache&nbsp;2.0 and MIT terms. See <em>COPYRIGHT</em> file in the rust source distribution.
+</div>
+
