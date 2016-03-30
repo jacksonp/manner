@@ -41,7 +41,7 @@ class Section
                 $sectionNodes[$sectionNum] = $dom->createElement('div');
                 $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
                 $h = $dom->createElement('h' . $level);
-                $h->appendChild(new DOMText($sectionHeading));
+                TextContent::interpretAndAppendText($h, $sectionHeading);
                 $sectionNodes[$sectionNum]->appendChild($h);
                 continue;
             }
