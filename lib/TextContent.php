@@ -69,11 +69,11 @@ class TextContent
                 return;
             }
 
-            if (mb_strlen($command) > 1) {
-                $bits = str_getcsv($stringToFormat, ' ');
-            } else {
-                $bits = [trim($stringToFormat, '"')];
+            $bits = str_getcsv($stringToFormat, ' ');
+            if (mb_strlen($command) === 1) {
+                $bits = [implode(' ', $bits)];
             }
+
             foreach ($bits as $bi => $bit) {
                 $commandCharIndex = $bi % 2;
                 if (!isset($command[$commandCharIndex])) {
