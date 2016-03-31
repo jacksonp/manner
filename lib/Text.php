@@ -100,6 +100,29 @@ class Text
         ];
 
         $namedGlyphs = [
+          '-D'        => 'Ð',
+          'Sd'        => 'ð',
+          'TP'        => 'Þ',
+          'Tp'        => 'þ',
+          'ss'        => 'ß',
+            // Ligatures and Other Latin Glyph
+          'ff'        => 'ff',
+          'fi'        => 'fi',
+          'fl'        => 'fl',
+          'Fi'        => 'ffi',
+          'Fl'        => 'ffl',
+          '/L'        => 'Ł',
+          '/l'        => 'ł',
+          '/O'        => 'Ø',
+          '/o'        => 'ø',
+          'AE'        => 'Æ',
+          'ae'        => 'æ',
+          'OE'        => 'Œ',
+          'oe'        => 'œ',
+          'IJ'        => 'Ĳ',
+          'ij'        => 'ĳ',
+          '.i'        => 'ı',
+          '.j'        => 'ȷ',
             // Accented Characters
           '\'A'       => 'Á',
           '\'C'       => 'Ć',
@@ -335,6 +358,10 @@ class Text
         $replacements['\\' . "\t"] = ' ';
 
         $line = strtr($line, $replacements);
+
+        $line = preg_replace_callback('~\\\\\[u(\d{4})\]~u', function ($matches) {
+            return html_entity_decode('&#x' . intval($matches[1]) . ';', ENT_COMPAT, 'UTF-8');
+        }, $line);
 
         $line = preg_replace_callback('~\\\\\[char(\d+)\]~u', function ($matches) {
             return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
