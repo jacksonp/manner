@@ -40,7 +40,16 @@ $man = Man::instance();
 
 //<editor-fold desc="Strip comments, handle title, stick rest in $lines">
 for ($i = 0; $i < $numRawLines; ++$i) {
-    $line = Text::preprocess($rawLines[$i]);
+
+    $line = $rawLines[$i];
+
+    // Continuations
+    while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
+      && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
+        $line = mb_substr($line, 0, -1) . $rawLines[++$i];
+    }
+
+    $line = Text::preprocess($line);
 
     if (preg_match('~^\.(if|ie|el)~u', $line, $matches)) {
         echo $line . ' - no support for ' . $matches[1], PHP_EOL;
