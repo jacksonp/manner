@@ -355,12 +355,13 @@ class Text
         // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.
         // Just the cases we come across:
         $replacements['\\=']       = '=';
+        $replacements['\\+']       = '+';
         $replacements['\\' . "\t"] = ' ';
 
         $line = strtr($line, $replacements);
 
-        $line = preg_replace_callback('~\\\\\[u(\d{4})\]~u', function ($matches) {
-            return html_entity_decode('&#x' . intval($matches[1]) . ';', ENT_COMPAT, 'UTF-8');
+        $line = preg_replace_callback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
+            return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
         }, $line);
 
         $line = preg_replace_callback('~\\\\\[char(\d+)\]~u', function ($matches) {
