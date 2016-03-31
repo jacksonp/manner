@@ -97,6 +97,8 @@ class Text
           '\\^'  => '',
             // Unpaddable space size space glyph (no line break). See enigma.6:
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
+            // Unbreakable space that stretches like a normal inter-word space when a line is adjusted
+          '\\~'  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
         ];
 
         $namedGlyphs = [
@@ -356,6 +358,7 @@ class Text
         // Just the cases we come across:
         $replacements['\\=']       = '=';
         $replacements['\\+']       = '+';
+        $replacements['\\]']       = ']';
         $replacements['\\' . "\t"] = ' ';
 
         $line = strtr($line, $replacements);
@@ -369,7 +372,7 @@ class Text
         }, $line);
 
         // Don't worry about changes in point size for now:
-        return preg_replace('~\\\\s-?\d(.*?)\\\\s-?\d~', '$1', $line);
+        return preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~', '$1', $line);
 
     }
 
