@@ -85,13 +85,13 @@ class Blocks
                 if (!empty($matches[1])) {
 
                     $bits = str_getcsv($matches[1], ' ');
-                    if (count($bits) > 1) {
-                        throw new Exception($line . ' - cannot handle .IP with indentation');
-                    }
                     // Copied from .TP:
                     if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                         ++$blockNum;
                         $blocks[$blockNum] = $dom->createElement('dl');
+                        if (count($bits) > 1) {
+                            $blocks[$blockNum]->setAttribute('class', 'indent-' . $bits[1]);
+                        }
                     }
                     $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $bits[0]);

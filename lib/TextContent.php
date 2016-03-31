@@ -24,6 +24,10 @@ class TextContent
             return;
         }
 
+        if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
+            throw new Exception($line . ' - Unexpected .IP in interpretAndAppendCommand()');
+        }
+
         self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
         $line = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
