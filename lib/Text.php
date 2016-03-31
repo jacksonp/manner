@@ -77,6 +77,10 @@ class Text
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
           '\\,'  => '',
           '\\\'' => '´',
+            // The acute accent ´; same as \(aa.
+          '\\´'  => '´',
+            // The grave accent `; same as \(ga.
+          '\\`'  => '`',
           '\\-'  => '-',
             // The same as \(ul, the underline character.
           '\\_'  => '_',
@@ -271,6 +275,22 @@ class Text
           'pd'        => '∂',
           '-h'        => 'ℏ',
           'hbar'      => 'ℏ',
+            // Accents
+          'a"'        => '˝',
+          'a-'        => '¯',
+          'a.'        => '˙',
+          'a^'        => '^',
+          'aa'        => '´',
+          'ga'        => '`',
+          'ab'        => '˘',
+          'ac'        => '¸',
+          'ad'        => '¨',
+          'ah'        => 'ˇ',
+          'ao'        => '˚',
+          'a~'        => '~',
+          'ho'        => '˛',
+          'ha'        => '^',
+          'ti'        => '~',
             // Quotes
           'Bq'        => '„',
           'bq'        => '‚',
