@@ -78,6 +78,8 @@ class Text
           '\\,'  => '',
           '\\\'' => '´',
           '\\-'  => '-',
+            // The same as \(ul, the underline character.
+          '\\_'  => '_',
           '\\.'  => '.',
           '\\en' => '\n',
           '\\t'  => "\t",
