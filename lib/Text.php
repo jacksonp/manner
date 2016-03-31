@@ -87,6 +87,10 @@ class Text
           '\\.'  => '.',
           '\\en' => '\n',
           '\\t'  => "\t",
+            // Default optional hyphenation character. Just remove for now.
+          '\\%'  => '',
+            // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
+          '\\:'  => '',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
