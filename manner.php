@@ -130,31 +130,6 @@ try {
     exit(1);
 }
 
-//$sections = $xpath->query('//div[@class="subsection"]');
-//foreach ($sections as $section) {
-//    var_dump($section->manLines);
-//}
-
-//$divs = $dom->getElementsByTagName('div');
-//foreach ($divs as $div) {
-//    var_dump($div->manLines);
-//}
-
-
-//exit;
-
-//foreach ($sections as $heading => $sectionLines) {
-//    //$sections[$heading] = Text::toCommonMark($sectionLines);
-//}
-//
-//foreach ($sections as $heading => $sectionLines) {
-//    Section::handle($manPageContainer, 2, $heading, $sectionLines);
-////    $sections[$heading] = Text::mergeTextLines($sectionLines);
-//}
-//
-//var_dump($sections);
-//exit;
-
 $html = $dom->saveHTML();
 
 echo '<!DOCTYPE html>',

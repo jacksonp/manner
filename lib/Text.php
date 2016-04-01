@@ -4,67 +4,6 @@
 class Text
 {
 
-    static function isText($line)
-    {
-        return !empty($line) && $line[0] !== '.';
-    }
-
-    static function mergeTextLines($lines)
-    {
-
-        $numLines = count($lines);
-
-        $newLines = [];
-
-        for ($i = 0; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-
-            $newLines[$i] = $line;
-
-            // If this line is text, merge in any following lines of text.
-            if (self::isText($line)) {
-                for ($j = $i; $j < $numLines; ++$j) {
-                    if (!self::isText($lines[$j + 1])) {
-                        $i = $j;
-                        break;
-                    }
-                    $newLines[$i] .= ' ' . $lines[$j + 1];
-                }
-            }
-
-        }
-
-        return $newLines;
-
-    }
-
-    static function toCommonMark($lines)
-    {
-
-        $numLines = count($lines);
-
-        $newLines = [];
-
-        for ($i = 0; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-
-            if (preg_match('~^\.I (.*)$~u', $line, $matches)) {
-                $newLines[$i] = '*' . $matches[1] . '*';
-                continue;
-            } elseif (preg_match('~^\.B (.*)$~u', $line, $matches)) {
-                $newLines[$i] = '**' . $matches[1] . '**';
-                continue;
-            }
-
-            $newLines[$i] = $line;
-
-
-        }
-
-        return $newLines;
-
-    }
-
     public static function preprocess($line)
     {
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
