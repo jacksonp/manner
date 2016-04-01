@@ -57,6 +57,11 @@ for ($i = 0; $i < $numRawLines; ++$i) {
     // \" is start of a comment. Everything up to the end of the line is ignored.
     $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
 
+    // Skip index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
+    if (preg_match('~^\.IX~u', $line)) {
+        continue;
+    }
+
 
     $line = Text::preprocess($line);
 

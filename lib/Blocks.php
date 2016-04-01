@@ -165,10 +165,6 @@ class Blocks
                 throw new Exception($line . '.EX without corresponding .EE');
             }
 
-            if (preg_match('~^\.IX~u', $line)) {
-                throw new Exception($line . ' - no support for .IX yet');
-            }
-
             if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
                 $nextLine = $parentSectionNode->manLines[++$i];
                 if ($nextLine[0] === '.') {
