@@ -49,20 +49,21 @@ for ($i = 0; $i < $numRawLines; ++$i) {
         $line = mb_substr($line, 0, -1) . $rawLines[++$i];
     }
 
+    // Skip comments
+    if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
+        continue;
+    }
+
+    // \" is start of a comment. Everything up to the end of the line is ignored.
+    $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
+
+
     $line = Text::preprocess($line);
 
     if (preg_match('~^\.(if|ie|el)~u', $line, $matches)) {
         echo $line . ' - no support for ' . $matches[1], PHP_EOL;
         exit(1);
     }
-
-    // Skip comments
-    if (preg_match('~^[\'\.]\\\\"~u', $line)) {
-        continue;
-    }
-
-    // \" is start of a comment. Everything up to the end of the line is ignored.
-    $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
 
     // Skip empty requests
     if ($line === '.') {
