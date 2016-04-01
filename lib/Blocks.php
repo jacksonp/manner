@@ -170,7 +170,12 @@ class Blocks
             }
 
             if (preg_match('~^\.[BI]$~u', $line)) {
-                $line .= ' ' . $parentSectionNode->manLines[++$i];
+                $nextLine = $parentSectionNode->manLines[++$i];
+                if ($nextLine[0] === '.') {
+                    throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
+                } else {
+                    $line .= ' ' . $nextLine;
+                }
             }
 
             if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div' || $blocks[$blockNum]->tagName === 'code') {
