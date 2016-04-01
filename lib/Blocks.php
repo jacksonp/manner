@@ -169,7 +169,7 @@ class Blocks
                 throw new Exception($line . ' - no support for .IX yet');
             }
 
-            if (preg_match('~^\.[BI]$~u', $line)) {
+            if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
                 $nextLine = $parentSectionNode->manLines[++$i];
                 if ($nextLine[0] === '.') {
                     throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
