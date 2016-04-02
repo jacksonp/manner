@@ -31,7 +31,9 @@ class Text
             }
 
             // \" is start of a comment. Everything up to the end of the line is ignored.
-            $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
+            // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
+            // but this behaviour is consistent with what the man command renders:
+            $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
 
             // Skip stuff we don't care about:
             // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
