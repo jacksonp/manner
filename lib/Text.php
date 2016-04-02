@@ -4,7 +4,77 @@
 class Text
 {
 
-    public static function preprocess($line)
+    /**
+     * Strip comments, handle title, stick rest in $lines
+     */
+    static function preprocessLines($rawLines)
+    {
+
+        $numRawLines = count($rawLines);
+        $lines       = [];
+
+        $man = Man::instance();
+
+        for ($i = 0; $i < $numRawLines; ++$i) {
+
+            $line = $rawLines[$i];
+
+            // Continuations
+            while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
+              && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
+                $line = mb_substr($line, 0, -1) . $rawLines[++$i];
+            }
+
+            // Skip comments
+            if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
+                continue;
+            }
+
+            // \" is start of a comment. Everything up to the end of the line is ignored.
+            $line = preg_replace('~^(.*)\s+\\\\"\s+.*$~', '$1', $line);
+
+            // Skip stuff we don't care about:
+            // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
+            // .nh: No hyphenation
+            if (preg_match('~^\.(IX|nh)~u', $line)) {
+                continue;
+            }
+
+            $line = Text::preprocess($line);
+
+            if (preg_match('~^\.(if|ie|el)~u', $line, $matches)) {
+                throw new Exception($line . ' - no support for ' . $matches[1]);
+            }
+
+            // Skip empty requests
+            if ($line === '.') {
+                continue;
+            }
+
+            //<editor-fold desc="Handle man title macro">
+            if (preg_match('~^\.TH (.*)$~u', $line, $matches)) {
+                $titleDetails = str_getcsv($matches[1], ' ');
+                if (count($titleDetails) < 2) {
+                    throw new Exception($line . ' - missing title info');
+                }
+                $man->title        = $titleDetails[0];
+                $man->section      = $titleDetails[1];
+                $man->date         = @$titleDetails[2] ?: '';
+                $man->package      = @$titleDetails[3] ?: '';
+                $man->section_name = @$titleDetails[4] ?: '';
+                continue;
+            }
+            //</editor-fold>
+
+            $lines[] = $line;
+
+        }
+
+        return $lines;
+
+    }
+
+    private static function preprocess($line)
     {
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
 

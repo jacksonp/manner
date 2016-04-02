@@ -11,7 +11,7 @@ class Section
     {
 
         if ($level > 6) {
-            exit('Passed max heading level: ' . $level);
+            throw new Exception('Passed max heading level: ' . $level);
         }
 
         $dom = $parentSectionNode->ownerDocument;
@@ -31,8 +31,7 @@ class Section
                 $sectionHeading = $matches[1];
                 $sectionHeading = trim($sectionHeading, '"');
                 if (empty($sectionHeading)) {
-                    echo($line . ' - empty section heading.');
-                    exit(1);
+                    throw new Exception($line . ' - empty section heading.');
                 }
 
                 unset($parentSectionNode->manLines[$key]); // made a subsection out of this!
@@ -50,8 +49,7 @@ class Section
                 if (mb_strlen($line) === 0) {
                     continue;
                 } else {
-                    echo($line . ' - not in a section.');
-                    exit(1);
+                    throw new Exception($line . ' - not in a section.');
                 }
             }
 
