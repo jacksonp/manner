@@ -165,31 +165,50 @@ class Blocks
                 throw new Exception($line . '.EX without corresponding .EE');
             }
 
-            if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
-                $nextLine = $parentSectionNode->manLines[++$i];
-                if ($nextLine[0] === '.') {
-                    throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
-                } else {
-                    $line .= ' ' . $nextLine;
-                }
-            }
 
             if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div' || $blocks[$blockNum]->tagName === 'code') {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
             }
 
+            $parentForLine = null;
+
             if ($blocks[$blockNum]->tagName === 'dl') {
                 if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
-                    $dd = $dom->createElement('dd');
-                    TextContent::interpretAndAppendCommand($dd, $line);
+                    $dd            = $dom->createElement('dd');
+                    $parentForLine = $dd;
                     $blocks[$blockNum]->appendChild($dd);
                 } else {
-                    TextContent::interpretAndAppendCommand($blocks[$blockNum]->lastChild, $line);
+                    $parentForLine = $blocks[$blockNum]->lastChild;
                 }
             } else {
-                TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
+                $parentForLine = $blocks[$blockNum];
             }
+
+
+            if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
+                $nextLine = $parentSectionNode->manLines[++$i];
+                if ($nextLine[0] === '.') {
+                    throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
+                } else {
+                    if ($line === '.B') {
+                        $strongNode    = $parentForLine->appendChild($dom->createElement('strong'));
+                        $parentForLine = $strongNode;
+                        $line          = $nextLine;
+                    } elseif ($line === '.I') {
+                        $emNode        = $parentForLine->appendChild($dom->createElement('em'));
+                        $parentForLine = $emNode;
+                        $line          = $nextLine;
+                    } else {
+                        $line .= ' ' . $nextLine;
+                    }
+                }
+            }
+
+            if (is_null($parentForLine)) {
+                throw new Exception($line - ' $parentForLine is null.');
+            }
+            TextContent::interpretAndAppendCommand($parentForLine, $line);
 
         }
 

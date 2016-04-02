@@ -30,7 +30,7 @@ class TextContent
 
         self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
-        $line = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
+        $line               = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
         if (preg_match('~^\.br~u', $line)) {
@@ -176,7 +176,7 @@ class TextContent
                 case '\f(CWI':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
-                        $em = $dom->createElement('em');
+                        $em   = $dom->createElement('em');
                         $code->appendChild($em);
                         self::interpretAndAppendString($em, $textSegments[++$i]);
                         $parentNode->appendChild($code);
@@ -184,7 +184,7 @@ class TextContent
                     break;
                 case '\f(CWB':
                     if ($i < $numTextSegments - 1) {
-                        $code = $dom->createElement('code');
+                        $code   = $dom->createElement('code');
                         $strong = $dom->createElement('strong');
                         $code->appendChild($strong);
                         self::interpretAndAppendString($strong, $textSegments[++$i]);
