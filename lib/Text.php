@@ -38,7 +38,8 @@ class Text
             // Skip stuff we don't care about:
             // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
             // .nh: No hyphenation
-            if (preg_match('~^\.(IX|nh)~u', $line)) {
+            // .ad: "line adjustment"
+            if (preg_match('~^\.(IX|nh|ad)~u', $line)) {
                 continue;
             }
 
