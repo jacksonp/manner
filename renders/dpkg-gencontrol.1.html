@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-09-06" data-package="Debian Project" data-section-name="dpkg utilities">
+<title>dpkg-gencontrol</title>
+<h1>dpkg-gencontrol</h1>
+<p>dpkg-gencontrol - generate Debian control files
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>dpkg-gencontrol</strong> [<em>option</em>...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>dpkg-gencontrol</strong> reads information from an unpacked Debian source tree and generates a binary package control file (which defaults to debian/tmp/DEBIAN/control); during this process it will simplify the relation fields.
+  <p>Thus <strong>Pre-Depends</strong>, <strong>Depends</strong>, <strong>Recommends</strong> and <strong>Suggests</strong> are simplified in this order by removing dependencies which are known to be true according to the stronger dependencies already parsed. It will also remove any self-dependency (in fact it will remove any dependency which evaluates to true given the current version of the package as installed). Logically it keeps the intersection of multiple dependencies on the same package. The order of dependencies is preserved as best as possible: if any dependency must be discarded due to another dependency appearing further in the field, the superseding dependency will take the place of the discarded one.
+  <p>The other relation fields (<strong>Enhances</strong>, <strong>Conflicts</strong>, <strong>Breaks</strong>, <strong>Replaces</strong> and <strong>Provides</strong>) are also simplified individually by computing the union of the various dependencies when a package is listed multiple times in the field.
+  <p><strong>dpkg-gencontrol</strong> also adds an entry for the binary package to <strong>debian/files</strong>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-v</strong><em>version</em>
+    <dd>Sets the version number of the binary package which will be generated.
+    <dt><strong>-V</strong><em>name</em><strong>=</strong><em>value</em>
+    <dd>Set an output substitution variable. See <strong>deb-substvars</strong>(5) for discussion of output substitution.
+    <dt><strong>-T</strong><em>substvars-file</em>
+    <dd>Read substitution variables in <em>substvars-file</em>; the default is <strong>debian/substvars</strong>. This option can be used multiple times to read substitution variables from multiple files (since dpkg 1.15.6).
+    <dt><strong>-D</strong><em>field</em><strong>=</strong><em>value</em>
+    <dd>Override or add an output control file field.
+    <dt><strong>-U</strong><em>field</em>
+    <dd>Remove an output control file field.
+    <dt><strong>-c</strong><em>control-file</em>
+    <dd>Specifies the main source control file to read information from. The default is <strong>debian/control</strong>.
+    <dt><strong>-l</strong><em>changelog-file</em>
+    <dd>Specifies the changelog file to read information from. The default is <strong>debian/changelog</strong>.
+    <dt><strong>-f</strong><em>files-list-file</em>
+    <dd>Read or write the list of files to be uploaded here, rather than using <strong>debian/files</strong>.
+    <dt><strong>-F</strong><em>changelog-format</em>
+    <dd>Specifies the format of the changelog. See <strong>dpkg-parsechangelog</strong>(1) for information about alternative formats.
+    <dt><strong>-p</strong><em>package</em>
+    <dd>Generate information for the binary package <em>package</em>. If the source control file lists only one binary package then this option may be omitted; otherwise it is essential to select which binary package's information to generate.
+    <dt><strong>-n</strong><em>filename</em>
+    <dd>Assume the filename of the package will be <em>filename</em> instead of the normal package_version_arch.deb filename.
+    <dt><strong>-is</strong>, <strong>-ip</strong>, <strong>-isp</strong>
+    <dd>These options are ignored for compatibility with older versions of the dpkg build scripts but are now deprecated. Previously they were used to tell <strong>dpkg-gencontrol</strong> to include the Section and Priority fields in the control file. This is now the default behaviour. If you want to get the old behaviour you can use the <strong>-U</strong> option to delete the fields from the control file.
+    <dt><strong>-P</strong><em>package-build-dir</em>
+    <dd>Tells <strong>dpkg-source</strong> that the package is being built in <em>package-build-dir</em> instead of <strong>debian/tmp</strong>. This value is used to find the default value of the <strong>Installed-Size</strong> substitution variable and control file field (using <strong>du</strong>), and for the default location of the output file.
+    <dt><strong>-O</strong>[<em>filename</em>]
+    <dd>Print the control file to standard output (or <em>filename</em> if specified, since dpkg 1.17.2), rather than to <strong>debian/tmp/DEBIAN/control</strong> (or <em>package-build-dir</em><strong>/DEBIAN/control</strong> if <strong>-P</strong> was used).
+    <dt><strong>-?</strong>, <strong>--help</strong>
+    <dd>Show the usage message and exit.
+    <dt><strong>--version</strong>
+    <dd>Show the version and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>debian/control</strong>
+    <dd>The main source control information file, giving version-independent information about the source package and the binary packages it can produce.
+    <dt><strong>debian/files</strong>
+    <dd>The list of generated files which are part of the upload being prepared. <strong>dpkg-gencontrol</strong> adds the presumed filenames of binary packages whose control files it generates here.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/5/deb-substvars" class="link-man">deb-substvars(5)</a>, <a href="/5/deb-src-control" class="link-man">deb-src-control(5)</a>, <a href="/5/deb-changelog" class="link-man">deb-changelog(5)</a>, <a href="/5/deb-control" class="link-man">deb-control(5)</a>.
+</div>
+
