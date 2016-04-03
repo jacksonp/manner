@@ -42,6 +42,16 @@ class TextContent
             return;
         }
 
+        if (preg_match('~^\.sp~u', $line)) {
+            if ($parentNode->hasChildNodes()) {
+                // Only bother if this isn't the first node.
+                $parentNode->appendChild($dom->createElement('br'));
+                $parentNode->appendChild($dom->createElement('br'));
+            }
+
+            return;
+        }
+
         if (preg_match('~^\.([RBI][RBI]?)(.*)$~u', $line, $matches)) {
 
             $command        = $matches[1];
