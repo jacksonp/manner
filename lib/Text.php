@@ -47,10 +47,6 @@ class Text
 
             $line = Text::preprocess($line);
 
-            if (preg_match('~^\.(if|ie|el)~u', $line, $matches)) {
-                throw new Exception($line . ' - no support for ' . $matches[1]);
-            }
-
             // Skip empty requests
             if ($line === '.') {
                 continue;

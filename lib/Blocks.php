@@ -120,19 +120,7 @@ class Blocks
             // see cal.1 for maybe an easy start on supporting .RS/.RE
             if (preg_match('~^\.RS ?(.*)$~u', $line)) {
                 $rsLevel = 1;
-                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
-                    $rsBlock = $blocks[$blockNum]->lastChild;
-                    $rsBlock->appendChild($dom->createElement('br'));
-                } else {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('div');
-                    $className         = 'indent';
-                    if (!empty($matches[1])) {
-                        $className .= '-' . trim($matches[1]);
-                    }
-                    $blocks[$blockNum]->setAttribute('class', $className);
-                    $rsBlock = $blocks[$blockNum];
-                }
+                $rsLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.RS~u', $line)) {
@@ -140,11 +128,31 @@ class Blocks
                     } elseif (preg_match('~^\.RE~u', $line)) {
                         --$rsLevel;
                         if ($rsLevel === 0) {
+
+                            if (trim(implode('', $rsLines)) === '') {
+                                // Skip empty .RS blocks
+                                continue 2;
+                            }
+
+                            if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
+                                $rsBlock = $blocks[$blockNum]->lastChild;
+                                $rsBlock->appendChild($dom->createElement('br'));
+                            } else {
+                                ++$blockNum;
+                                $blocks[$blockNum] = $dom->createElement('div');
+                                $className         = 'indent';
+                                if (!empty($matches[1])) {
+                                    $className .= '-' . trim($matches[1]);
+                                }
+                                $blocks[$blockNum]->setAttribute('class', $className);
+                                $rsBlock = $blocks[$blockNum];
+                            }
+                            $rsBlock->manLines = $rsLines;
                             self::handle($rsBlock);
                             continue 2; //End of block
                         }
                     }
-                    $rsBlock->addManLine($line);
+                    $rsLines[] = $line;
                 }
                 throw new Exception($line . '.RS without corresponding .RE');
             }
