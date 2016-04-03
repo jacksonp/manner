@@ -50,10 +50,9 @@ try {
     while (empty($nameHeadingLine) && count($lines) > 0) {
         $nameHeadingLine = array_shift($lines);
     }
-    if (!preg_match('~^\.S[Hh] "?NAME"?~', $nameHeadingLine)) {
+    if (!preg_match('~^\.S[Hh] "?N(AME|ame)"?~u', $nameHeadingLine)) {
         throw new Exception($nameHeadingLine . ' - expected NAME section.');
     }
-
     do {
         $nameSectionText = array_shift($lines);
     } while (mb_strlen($nameSectionText) === 0);
