@@ -40,7 +40,8 @@ class Text
             // .nh: No hyphenation
             // .ad: "line adjustment"
             // .na: "No output-line adjusting."
-            if (preg_match('~^\.(IX|nh|ad|na)~u', $line)) {
+            // .hy: "Switch to hyphenation mode N."
+            if (preg_match('~^\.(IX|nh|ad|na|hy)~u', $line)) {
                 continue;
             }
 
