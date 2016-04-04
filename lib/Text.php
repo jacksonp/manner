@@ -74,7 +74,8 @@ class Text
             }
             //</editor-fold>
 
-            if (count($lines) > 0 || mb_strlen($line) > 0) { // Exclude leading blank lines
+            if (count($lines) > 0 ||
+              (mb_strlen($line) > 0 && $line !== '.PP')) { // Exclude leading blank lines, and .PP
                 $lines[] = $line;
             }
 
