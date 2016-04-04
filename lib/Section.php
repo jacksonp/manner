@@ -72,6 +72,10 @@ class Section
             $parentSectionNode->appendChild($section);
         }
 
+        if ($level === 2 && count($sectionNodes) === 0) {
+            throw new Exception('No sections.');
+        }
+
     }
 
 }
