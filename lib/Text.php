@@ -12,6 +12,7 @@ class Text
 
         $numRawLines      = count($rawLines);
         $lines            = [];
+        $foundTitle       = false;
         $foundNameSection = false;
 
         $man = Man::instance();
@@ -37,7 +38,8 @@ class Text
             // .ad: "line adjustment"
             // .na: "No output-line adjusting."
             // .hy: "Switch to hyphenation mode N."
-            if (preg_match('~^\.(IX|nh|ad|na|hy)~u', $line)) {
+            // .UN: " .UN u Creates a named hypertext location named u; do not include a corresponding UE command. When generating HTML this should translate into the HTML command <ANAME=\"u\"id=\"u\">&nbsp;</A> (the &nbsp; is optional if support for Mosaic is unneeded).
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN)~u', $line)) {
                 continue;
             }
 
@@ -49,7 +51,8 @@ class Text
             }
 
             //<editor-fold desc="Handle man title macro">
-            if (preg_match('~^\.TH (.*)$~u', $line, $matches)) {
+            if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
+                $foundTitle = true;
                 $titleDetails = str_getcsv($matches[1], ' ');
                 if (count($titleDetails) < 2) {
                     throw new Exception($line . ' - missing title info');
@@ -75,7 +78,8 @@ class Text
             //</editor-fold>
 
             if (count($lines) > 0 ||
-              (mb_strlen($line) > 0 && $line !== '.PP')) { // Exclude leading blank lines, and .PP
+              (mb_strlen($line) > 0 && $line !== '.PP')
+            ) { // Exclude leading blank lines, and .PP
                 $lines[] = $line;
             }
 
