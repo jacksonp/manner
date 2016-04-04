@@ -153,6 +153,15 @@ class Blocks
                         }
                     }
                     $rsLines[] = $line;
+                    if ($rsLevel === 1
+                      && mb_strlen($line) > 1 && mb_substr($line, 0, 1) !== '.'
+                      && $i < $numLines - 1
+                      && mb_strlen($parentSectionNode->manLines[$i + 1]) > 1
+                      && mb_substr($parentSectionNode->manLines[$i + 1], 0, 1) !== '.'
+                    ) {
+                        $rsLines[] = '.br';
+                    }
+
                 }
                 throw new Exception($line . '.RS without corresponding .RE');
             }
