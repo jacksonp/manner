@@ -146,13 +146,14 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?))~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?|\[[ICB]?\]))~u', $line, null, PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
         for ($i = 0; $i < count($textSegments); ++$i) {
             switch ($textSegments[$i]) {
                 case '\fB':
+                case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
@@ -161,6 +162,7 @@ class TextContent
                     }
                     break;
                 case '\fI':
+                case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
                         $em = $dom->createElement('em');
@@ -173,6 +175,7 @@ class TextContent
                     // Assume back to normal text for now, so do nothing so next line passes thru to default.
                     break;
                 case '\fR':
+                case '\f[]':
                 case '\f1':
                     break;
                 case '\fC':
@@ -184,6 +187,7 @@ class TextContent
                     }
                     break;
                 case '\f(CWI':
+                case '\f[C]':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
                         $em   = $dom->createElement('em');
