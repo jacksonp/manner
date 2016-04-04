@@ -67,7 +67,9 @@ class Text
             }
             //</editor-fold>
 
-            $lines[] = trim($line);
+            if (count($lines) > 0 || mb_strlen($line) > 0) { // Exclude leading blank lines
+                $lines[] = $line;
+            }
 
         }
 
@@ -382,7 +384,9 @@ class Text
         }, $line);
 
         // Don't worry about changes in point size for now:
-        return preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~', '$1', $line);
+        $line = preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~', '$1', $line);
+
+        return trim($line);
 
     }
 

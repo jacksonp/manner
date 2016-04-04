@@ -47,9 +47,7 @@ try {
     }
 
     //<editor-fold desc="Handle NAME section, take it out of $lines">
-    while (empty($nameHeadingLine) && count($lines) > 0) {
-        $nameHeadingLine = array_shift($lines);
-    }
+    $nameHeadingLine = array_shift($lines);
     if (!preg_match('~^\.S[Hh] "?[Nn](AME|ame)"?$~u', $nameHeadingLine)) {
         throw new Exception($nameHeadingLine . ' - expected NAME section.');
     }
