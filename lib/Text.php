@@ -67,7 +67,7 @@ class Text
             }
             //</editor-fold>
 
-            $lines[] = $line;
+            $lines[] = trim($line);
 
         }
 
