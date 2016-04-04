@@ -66,17 +66,6 @@ class Text
             }
             //</editor-fold>
 
-            //<editor-fold desc="Handle NAME section, take it out of $lines">
-            if (!$foundNameSection && preg_match('~^\.S[Hh] "?[Nn](AME|ame)"?$~u', $line)) {
-                $foundNameSection = true;
-                do {
-                    $nameSectionText = Text::preprocess($rawLines[++$i]);
-                } while (mb_strlen($nameSectionText) === 0 && $i < $numRawLines - 1);
-                $man->name_section_text = $nameSectionText;
-                continue;
-            }
-            //</editor-fold>
-
             if (count($lines) > 0 ||
               (mb_strlen($line) > 0 && $line !== '.PP')
             ) { // Exclude leading blank lines, and .PP

@@ -46,14 +46,6 @@ try {
         throw new Exception('No $man->title.');
     }
 
-    if (!empty($man->name_section_text)) {
-        $p = $dom->createElement('p');
-        TextContent::interpretAndAppendCommand($p, $man->name_section_text);
-        $manPageContainer->appendChild($p);
-    } else {
-        throw new Exception('No $man->name_section_text.');
-    }
-
     $manPageContainer->manLines = $lines;
 
     Section::handle($manPageContainer, 2);

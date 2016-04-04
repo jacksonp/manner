@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-08-29" data-package="net-tools" data-section-name="Linux System Administrator's Manual">
+<title>HOSTNAME</title>
+<h1>HOSTNAME</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>hostname - show or set the system's host name<br>
+  dnsdomainname - show the system's DNS domain name<br>
+  domainname - show or set the system's NIS/YP domain name<br>
+  nisdomainname - show or set system's NIS/YP domain name<br>
+  nodename - show or set the system's DECnet node name<br>
+  ypdomainname - show or set the system's NIS/YP domain name
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>hostname</strong> [<strong>-v</strong>] [<strong>-s</strong>|<strong>--short</strong>]
+  <p><strong>hostname</strong> [<strong>-v</strong>] [<strong>-a</strong>|<strong>--alias</strong>] [<strong>-d</strong>|<strong>--domain</strong>] [<strong>-f</strong>|<strong>--fqdn</strong>|<strong>--long</strong>] [<strong>-i</strong>|<strong>--ip-address</strong>]
+  <p><strong>hostname</strong> [<strong>-v</strong>] [<strong>-y</strong>|<strong>--yp</strong>|<strong>--nis</strong>] [<strong>-n</strong>|<strong>--node</strong>]
+  <p><strong>hostname</strong> [<strong>-v</strong>] [<strong>-F&nbsp;filename</strong>|<strong>--file&nbsp;filename</strong>] [<em>newname</em>]
+  <p><strong>domainname</strong> [<strong>-v</strong>] [<strong>-F&nbsp;filename</strong>|<strong>--file&nbsp;filename</strong>] [<em>newname</em>]
+  <p><strong>nodename</strong> [<strong>-v</strong>] [<strong>-F&nbsp;filename</strong>|<strong>--file&nbsp;filename</strong>] [<em>newname</em>]
+  <p><strong>hostname</strong> [<strong>-v</strong>|<strong>--verbose</strong>] [<strong>-h</strong>|<strong>--help</strong>] [<strong>-V</strong>|<strong>--version</strong>]
+  <p><strong>dnsdomainname</strong> [<strong>-v</strong>]<br>
+  <strong>nisdomainname</strong> [<strong>-v</strong>]<br>
+  <strong>ypdomainname</strong> [<strong>-v</strong>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>Hostname</strong> is the program that is used to either set or display the current host, domain or node name of the system. These names are used by many of the networking programs to identify the machine. The domain name is also used by NIS/YP.
+  <div class="subsection">
+    <h3>GET NAME</h3>
+    <p>When called without any arguments, the program displays the current names:
+    <p><strong>hostname</strong> will print the name of the system as returned by the <a href="/2/gethostname" class="link-man">gethostname(2)</a> function.
+    <p><strong>domainname, nisdomainname, ypdomainname</strong> will print the name of the system as returned by the <a href="/2/getdomainname" class="link-man">getdomainname(2)</a> function. This is also known as the YP/NIS domain name of the system.
+    <p><strong>nodename</strong> will print the DECnet node name of the system as returned by the <a href="/2/getnodename" class="link-man">getnodename(2)</a> function.
+    <p><strong>dnsdomainname</strong> will print the domain part of the FQDN (Fully Qualified Domain Name). The complete FQDN of the system is returned with <strong>hostname --fqdn</strong>.
+  </div>
+  <div class="subsection">
+    <h3>SET NAME</h3>
+    <p>When called with one argument or with the <strong>--file</strong> option, the commands set the host name, the NIS/YP domain name or the node name.
+    <p>Note, that only the super-user can change the names.
+    <p>It is not possible to set the FQDN or the DNS domain name with the <strong>dnsdomainname</strong> command (see <strong>THE FQDN</strong> below).
+    <p>The host name is usually set once at system startup by reading the contents of a file which contains the host name, e.g. <em>/etc/hostname</em>).
+  </div>
+  <div class="subsection">
+    <h3>THE FQDN</h3>
+    <p>You can't change the FQDN (as returned by <strong>hostname --fqdn</strong>) or the DNS domain name (as returned by <strong>dnsdomainname</strong>) with this command. The FQDN of the system is the name that the <a href="/3/resolver" class="link-man">resolver(3)</a> returns for the host name.
+    <p>Technically: The FQDN is the canonical name returned by <a href="/2/gethostbyname2" class="link-man">gethostbyname2(2)</a> when resolving the result of the <a href="/2/gethostname" class="link-man">gethostname(2)</a> name. The DNS domain name is the part after the first dot.
+    <p>Therefore it depends on the configuration (usually in <em>/etc/host.conf</em>) how you can change it. If <strong>hosts</strong> is the first lookup method, you can change the FQDN in <em>/etc/hosts</em>.
+  </div>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><em>-a, --alias</em>
+    <dd>Display the alias name of the host (if used).
+    <dt><em>-d, --domain</em>
+    <dd>Display the name of the DNS domain (this is the FQDN without the segment up to the first dot). This is equivalent to using the <strong>dnsdomainname</strong> command.
+    <dt><em>-F, --file filename</em>
+    <dd>Read the new host name from the specified file. Comments (lines starting with a `#') are ignored.
+    <dt><em>-f, --fqdn, --long</em>
+    <dd>Display the FQDN (Fully Qualified Domain Name). A FQDN consists of name including the DNS domain.
+    <dt><em>-h, --help</em>
+    <dd>Print a usage message and exit.
+    <dt><em>-i, --ip-address</em>
+    <dd>Display the IP address(es) of the host.
+    <dt><em>-n, --node</em>
+    <dd>Display the DECnet node name. If a parameter is given (or <strong>--file name</strong> ) the root can also set a new node name.
+    <dt><em>-s, --short</em>
+    <dd>Display the short host name. This is the host name cut at the first dot.
+    <dt><em>-V, --version</em>
+    <dd>Print version information on standard output and exit successfully.
+    <dt><em>-v, --verbose</em>
+    <dd>Be verbose and tell what's going on.
+    <dt><em>-y, --yp, --nis</em>
+    <dd>Display the NIS domain name. If a parameter is given (or <strong>--file name</strong> ) then root can also set a new NIS domain.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <p><strong>/etc/hostname</strong> <strong>/etc/hosts</strong> <strong>/etc/host.conf</strong>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Peter Tobias, &lt;tobias@et-inf.fho-emden.de&gt;<br>
+  Bernd Eckenfels, &lt;net-tools@lina.inka.de&gt; (NIS and manpage).<br>
+  Steve Whitehouse, &lt;SteveW@ACM.org&gt; (DECnet support and manpage).
+</div>
+
