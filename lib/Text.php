@@ -10,8 +10,9 @@ class Text
     static function preprocessLines($rawLines)
     {
 
-        $numRawLines = count($rawLines);
-        $lines       = [];
+        $numRawLines      = count($rawLines);
+        $lines            = [];
+        $foundNameSection = false;
 
         $man = Man::instance();
 
@@ -25,15 +26,10 @@ class Text
                 $line = mb_substr($line, 0, -1) . $rawLines[++$i];
             }
 
-            // Skip comments
+            // Skip full-line comments
             if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
                 continue;
             }
-
-            // \" is start of a comment. Everything up to the end of the line is ignored.
-            // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
-            // but this behaviour is consistent with what the man command renders:
-            $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
 
             // Skip stuff we don't care about:
             // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
@@ -67,6 +63,17 @@ class Text
             }
             //</editor-fold>
 
+            //<editor-fold desc="Handle NAME section, take it out of $lines">
+            if (!$foundNameSection && preg_match('~^\.S[Hh] "?[Nn](AME|ame)"?$~u', $line)) {
+                $foundNameSection = true;
+                do {
+                    $nameSectionText = Text::preprocess($rawLines[++$i]);
+                } while (mb_strlen($nameSectionText) === 0 && $i < $numRawLines - 1);
+                $man->name_section_text = $nameSectionText;
+                continue;
+            }
+            //</editor-fold>
+
             if (count($lines) > 0 || mb_strlen($line) > 0) { // Exclude leading blank lines
                 $lines[] = $line;
             }
@@ -79,6 +86,13 @@ class Text
 
     private static function preprocess($line)
     {
+
+
+        // \" is start of a comment. Everything up to the end of the line is ignored.
+        // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
+        // but this behaviour is consistent with what the man command renders:
+        $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
+
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
 
         $replacements = [

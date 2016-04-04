@@ -46,19 +46,13 @@ try {
         throw new Exception('No $man->title.');
     }
 
-    //<editor-fold desc="Handle NAME section, take it out of $lines">
-    $nameHeadingLine = array_shift($lines);
-    if (!preg_match('~^\.S[Hh] "?[Nn](AME|ame)"?$~u', $nameHeadingLine)) {
-        throw new Exception($nameHeadingLine . ' - expected NAME section.');
+    if (!empty($man->name_section_text)) {
+        $p = $dom->createElement('p');
+        TextContent::interpretAndAppendCommand($p, $man->name_section_text);
+        $manPageContainer->appendChild($p);
+    } else {
+        throw new Exception('No $man->name_section_text.');
     }
-    do {
-        $nameSectionText = array_shift($lines);
-    } while (mb_strlen($nameSectionText) === 0);
-
-    $p = $dom->createElement('p');
-    TextContent::interpretAndAppendCommand($p, $nameSectionText);
-    $manPageContainer->appendChild($p);
-    //</editor-fold>
 
     $manPageContainer->manLines = $lines;
 
@@ -79,6 +73,3 @@ echo '<!DOCTYPE html>',
 '<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
 '<title>', htmlspecialchars($man->title), '</title>',
 $html;
-
-//Debug::echoTidy($html);
-
