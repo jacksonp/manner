@@ -394,6 +394,9 @@ class Text
         // Don't worry about changes in point size for now:
         $line = preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~', '$1', $line);
 
+        // Don't worry about this: "Local horizontal motion; move right N (left if negative)."
+        $line = preg_replace('~\\\\h\'[-+]?\d+\'~', ' ', $line);
+
         // construct for "hiding text from po4a", we don't need:
         $line = preg_replace('~^\.if !\'po4a\'hide\' ~', '', $line);
 
