@@ -10,10 +10,10 @@ class Text
     static function preprocessLines($rawLines)
     {
 
-        $numRawLines      = count($rawLines);
-        $lines            = [];
-        $foundTitle       = false;
-        $foundNameSection = false;
+        $numRawLines = count($rawLines);
+        $lines       = [];
+        $macroReplacements = [];
+        $foundTitle  = false;
 
         $man = Man::instance();
 
@@ -43,7 +43,18 @@ class Text
                 continue;
             }
 
-            $line = Text::preprocess($line);
+            // Handle stuff like:
+            // .ie \n(.g .ds Aq \(aq
+            // .el       .ds Aq '
+            if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) \\\\\((..)$~u', $line, $matches)) {
+                if (!preg_match('~^\.el~u', $rawLines[++$i])) {
+                    throw new Exception('.ie not followed by .el');
+                }
+                $macroReplacements[$matches[1]] = $matches[2];
+                continue;
+            }
+
+            $line = Text::preprocess($line, $macroReplacements);
 
             // Skip empty requests
             if ($line === '.') {
@@ -79,9 +90,8 @@ class Text
 
     }
 
-    private static function preprocess($line)
+    private static function preprocess($line, $macroReplacements)
     {
-
 
         // \" is start of a comment. Everything up to the end of the line is ignored.
         // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
@@ -367,6 +377,14 @@ class Text
         ];
 
         foreach ($namedGlyphs as $name => $val) {
+            if (mb_strlen($name) === 2) {
+                $replacements['\(' . $name]  = $val;
+                $replacements['\*(' . $name] = $val;
+            }
+            $replacements['\[' . $name . ']'] = $val;
+        }
+
+        foreach ($macroReplacements as $name => $val) {
             if (mb_strlen($name) === 2) {
                 $replacements['\(' . $name]  = $val;
                 $replacements['\*(' . $name] = $val;
