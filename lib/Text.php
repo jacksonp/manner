@@ -393,13 +393,16 @@ class Text
         }, $line);
 
         // Don't worry about changes in point size for now:
-        $line = preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~', '$1', $line);
+        $line = preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~u', '$1', $line);
 
         // Don't worry about this: "Local horizontal motion; move right N (left if negative)."
-        $line = preg_replace('~\\\\h\'[-+]?\d+\'~', ' ', $line);
+        $line = preg_replace('~\\\\h\'[-+]?\d+\'~u', ' ', $line);
+
+        // Don't worry colour changes:
+        $line = preg_replace('~\\\\m(\(..|\[.*?\])~u', '', $line);
 
         // construct for "hiding text from po4a", we don't need:
-        $line = preg_replace('~^\.if !\'po4a\'hide\' ~', '', $line);
+        $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
 
         return trim($line);
 
