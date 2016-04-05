@@ -45,7 +45,8 @@ class Text
             // .TA: something like Title Adjust?
             // .IN "sets the indent relative to subheads."
             // .LL "sets the line length, which includes the value of IN."
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL)~u', $line)) {
+            // .PU: ?
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU)~u', $line)) {
                 continue;
             }
 
