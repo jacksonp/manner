@@ -10,10 +10,10 @@ class Text
     static function preprocessLines($rawLines)
     {
 
-        $numRawLines = count($rawLines);
-        $lines       = [];
+        $numRawLines       = count($rawLines);
+        $lines             = [];
         $macroReplacements = [];
-        $foundTitle  = false;
+        $foundTitle        = false;
 
         $man = Man::instance();
 
@@ -57,7 +57,24 @@ class Text
                 if (!preg_match('~^\.el~u', $rawLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
-                $macroReplacements[$matches[1]] = $matches[2];
+                if (mb_strlen($matches[1]) === 2) {
+                    $macroReplacements['\(' . $matches[1]]  = $matches[2];
+                    $macroReplacements['\*(' . $matches[1]] = $matches[2];
+                }
+                $macroReplacements['\[' . $matches[1] . ']'] = $matches[2];
+
+                continue;
+            }
+
+            if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
+                if (
+                  !$rawLines[++$i] === '.if t .sp .5v'
+                  || !$rawLines[++$i] === '.if n .sp'
+                  || !$rawLines[++$i] === '..'
+                ) {
+                    throw new Exception($line . ' - not followed by expected pattern.');
+                }
+                $macroReplacements['.Sp'] = '.sp';
                 continue;
             }
 
@@ -105,16 +122,8 @@ class Text
         // but this behaviour is consistent with what the man command renders:
         $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
 
-        $replacements = [];
-        foreach ($macroReplacements as $name => $val) {
-            if (mb_strlen($name) === 2) {
-                $replacements['\(' . $name]  = $val;
-                $replacements['\*(' . $name] = $val;
-            }
-            $replacements['\[' . $name . ']'] = $val;
-        }
-        if (count($replacements) > 0) {
-            $line = strtr($line, $replacements);
+        if (count($macroReplacements) > 0) {
+            $line = strtr($line, $macroReplacements);
         }
 
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
