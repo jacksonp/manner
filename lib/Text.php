@@ -42,7 +42,10 @@ class Text
             // .UC: "Alter the footer for use with BSD man pages. This command exists only for compatibility; don't use it. See the groff info manual for more."
             // .DT: "Set tabs every 0.5 inches. Since this macro is always called during a TH macro, it makes sense to call it only if the tab positions have been changed. Use of this presentation-level macro is deprecated. It translates poorly to HTML, under which exact whitespace control and tabbing are not readily available. Thus, information or distinctions that you use .DT to express are likely to be lost. If you feel tempted to use it, you should probably be composing a table using tbl(1) markup instead."
             // .lf: "Set input line number to N."
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf)~u', $line)) {
+            // .TA: something like Title Adjust?
+            // .IN "sets the indent relative to subheads."
+            // .LL "sets the line length, which includes the value of IN."
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL)~u', $line)) {
                 continue;
             }
 
