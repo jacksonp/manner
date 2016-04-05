@@ -46,7 +46,7 @@ class Text
             // Handle stuff like:
             // .ie \n(.g .ds Aq \(aq
             // .el       .ds Aq '
-            if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) \\\\\((..)$~u', $line, $matches)) {
+            if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) (.+)$~u', $line, $matches)) {
                 if (!preg_match('~^\.el~u', $rawLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
@@ -97,6 +97,18 @@ class Text
         // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
         // but this behaviour is consistent with what the man command renders:
         $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
+
+        $replacements = [];
+        foreach ($macroReplacements as $name => $val) {
+            if (mb_strlen($name) === 2) {
+                $replacements['\(' . $name]  = $val;
+                $replacements['\*(' . $name] = $val;
+            }
+            $replacements['\[' . $name . ']'] = $val;
+        }
+        if (count($replacements) > 0) {
+            $line = strtr($line, $replacements);
+        }
 
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
 
@@ -383,15 +395,6 @@ class Text
             }
             $replacements['\[' . $name . ']'] = $val;
         }
-
-        foreach ($macroReplacements as $name => $val) {
-            if (mb_strlen($name) === 2) {
-                $replacements['\(' . $name]  = $val;
-                $replacements['\*(' . $name] = $val;
-            }
-            $replacements['\[' . $name . ']'] = $val;
-        }
-
 
         // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.
         // Just the cases we come across:
