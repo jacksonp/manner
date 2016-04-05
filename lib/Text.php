@@ -58,7 +58,7 @@ class Text
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.
-                $man->title        = preg_replace('~\\\\f[BR]~', '', $titleDetails[0]);
+                $man->title        = preg_replace('~\\\\F[BR]~', '', $titleDetails[0]);
                 $man->section      = $titleDetails[1];
                 $man->date         = @$titleDetails[2] ?: '';
                 $man->package      = @$titleDetails[3] ?: '';
