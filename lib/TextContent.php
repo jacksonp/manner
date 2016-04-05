@@ -138,30 +138,27 @@ class TextContent
         // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
         $line = preg_replace('~\\\\&~u', '', $line);
 
-        $replacements = [
-            // "\e represents the current escape character." - let's hope it's always a backslash
-          '\\e'   => '\\',
-            // Do double quotes here: if we do them earlier it messes up cases like in aide.1: .IP "--before=\(dq\fBconfigparameters\fR\(dq , -B \(dq\fBconfigparameters\fR\(dq"
-          '\(dq'  => '"',
-          '\*(dq' => '"',
-          '\[dq]' => '"',
-        ];
-
-
-        $line = strtr($line, $replacements);
-
         if (self::$canAddWhitespace && $addSpacing) {
             // Do this after regex above
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?|\[[ICB]?\]))~u', $line, null,
+        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?|\[[ICB]?\])|\\\\[ud])~u', $line, null,
           PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
         for ($i = 0; $i < count($textSegments); ++$i) {
             switch ($textSegments[$i]) {
+                case '\u':
+                    if ($i < $numTextSegments - 1) {
+                        $sup = $dom->createElement('sup');
+                        self::interpretAndAppendString($sup, $textSegments[++$i]);
+                        $parentNode->appendChild($sup);
+                    }
+                    break;
+                case '\d':
+                    break;
                 case '\fB':
                 case '\f[B]':
                 case '\f3':
@@ -227,6 +224,16 @@ class TextContent
     {
 
         $dom = $parentNode->ownerDocument;
+
+        $replacements = [
+            // "\e represents the current escape character." - let's hope it's always a backslash
+          '\\e'   => '\\',
+            // Do double quotes here: if we do them earlier it messes up cases like in aide.1: .IP "--before=\(dq\fBconfigparameters\fR\(dq , -B \(dq\fBconfigparameters\fR\(dq"
+          '\(dq'  => '"',
+          '\*(dq' => '"',
+          '\[dq]' => '"',
+        ];
+        $string = strtr($string, $replacements);
 
         if (preg_match(
           '~^(?<start>.*?)<?(?<url>(ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',

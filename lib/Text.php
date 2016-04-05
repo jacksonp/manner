@@ -92,7 +92,7 @@ class Text
 
         $replacements = [
             // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
-          '\\\\' => '\\',
+          '\\\\' => '\\e',
             // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
           '\\/'  => '',
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
@@ -349,7 +349,7 @@ class Text
           'oq'        => '‘',
           'cq'        => '’',
           'aq'        => '\'',
-            // NB: we do 'dq' in  interpretAndAppendText()
+            // NB: we do 'dq' in  interpretAndAppendString()
           'Fo'        => '«',
           'Fc'        => '»',
           'fo'        => '‹',
