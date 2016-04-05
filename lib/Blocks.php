@@ -18,6 +18,8 @@ class Blocks
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
+            $canAppendNextText = true;
+
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
                 ++$blockNum;
@@ -224,12 +226,25 @@ class Blocks
                     } else {
                         $line .= ' ' . $nextLine;
                     }
+                    $canAppendNextText = false;
                 }
             }
 
             if (is_null($parentForLine)) {
                 throw new Exception($line - ' $parentForLine is null.');
             }
+
+            if ($canAppendNextText && mb_substr($line, 0, 1) !== '.' && !preg_match('~\\\\c$~', $line)) {
+                while ($i < $numLines - 1) {
+                    $nextLine = $parentSectionNode->manLines[$i + 1];
+                    if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.') {
+                        break;
+                    }
+                    $line .= ' ' . $nextLine;
+                    ++$i;
+                }
+            }
+
             TextContent::interpretAndAppendCommand($parentForLine, $line);
 
         }
