@@ -206,7 +206,7 @@ class Blocks
 
 
             if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
-                if ($i === $numLines - 1) {
+                if ($i === $numLines - 1 || $parentSectionNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
                     continue;
                 }
                 $nextLine = $parentSectionNode->manLines[++$i];
