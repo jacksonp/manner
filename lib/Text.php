@@ -416,6 +416,8 @@ class Text
         // Just the cases we come across:
         $replacements['\\=']       = '=';
         $replacements['\\+']       = '+';
+        $replacements['\\<']       = '<';
+        $replacements['\\>']       = '>';
         $replacements['\\]']       = ']';
         $replacements['\\' . "\t"] = ' ';
 
