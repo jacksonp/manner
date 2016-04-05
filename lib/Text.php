@@ -52,7 +52,7 @@ class Text
 
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
-                $foundTitle = true;
+                $foundTitle   = true;
                 $titleDetails = str_getcsv($matches[1], ' ');
                 if (count($titleDetails) < 2) {
                     throw new Exception($line . ' - missing title info');
@@ -348,7 +348,7 @@ class Text
           'oq'        => '‘',
           'cq'        => '’',
           'aq'        => '\'',
-          'dq'        => '"',
+            // NB: we do 'dq' in  interpretAndAppendText()
           'Fo'        => '«',
           'Fc'        => '»',
           'fo'        => '‹',
