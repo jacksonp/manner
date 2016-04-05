@@ -204,8 +204,13 @@ class Blocks
 
 
             if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
                 $nextLine = $parentSectionNode->manLines[++$i];
-                if ($nextLine[0] === '.') {
+                if (mb_strlen($nextLine) === 0) {
+                    continue;
+                } else if ($nextLine[0] === '.') {
                     throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                 } else {
                     if ($line === '.B') {
