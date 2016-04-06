@@ -192,7 +192,10 @@ class Blocks
                         continue 2; // End of no-fill
                     }
                     TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
-                    $blocks[$blockNum]->appendChild(new DOMText("\n"));
+                    if (!preg_match('~^indent~', $parentSectionNode->getAttribute('class'))) {
+                        // .RS, aka .indent adds .br...
+                        $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                    }
                 }
                 throw new Exception($line . '.nf without corresponding .fi');
             }

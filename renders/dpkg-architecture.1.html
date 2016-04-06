@@ -191,37 +191,16 @@
     <p>The environment variables set by <strong>dpkg-architecture</strong> are passed to <em>debian/rules</em> as make variables (see make documentation). However, you should not rely on them, as this breaks manual invocation of the script. Instead, you should always initialize them using <strong>dpkg-architecture</strong> with the <strong>-q</strong> option. Here are some examples, which also show how you can improve the cross compilation support in your package:
     <p>Retrieving the GNU system type and forwarding it to ./configure:
     <div class="indent">
-      <pre> DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-<br> DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-<br> [...]
-<br> ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
-<br> confflags += --build=$(DEB_HOST_GNU_TYPE)
-<br> else
-<br> confflags += --build=$(DEB_BUILD_GNU_TYPE) \
-<br> --host=$(DEB_HOST_GNU_TYPE)
-<br> endif
-<br> [...]
-<br> ./configure $(confflags)
-</pre>
+      <pre> DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)<br> DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)<br> [...]<br> ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))<br> confflags += --build=$(DEB_HOST_GNU_TYPE)<br> else<br> confflags += --build=$(DEB_BUILD_GNU_TYPE) \<br> --host=$(DEB_HOST_GNU_TYPE)<br> endif<br> [...]<br> ./configure $(confflags)</pre>
     </div>
     <p>Doing something only for a specific architecture:
     <div class="indent">
-      <pre> DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
-
- ifeq ($(DEB_HOST_ARCH),alpha)
-<br> [...]
-<br> endif
-</pre>
+      <pre> DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH) ifeq ($(DEB_HOST_ARCH),alpha)<br> [...]<br> endif</pre>
     </div>
     <p>or if you only need to check the CPU or OS type, use the <strong>DEB_HOST_ARCH_CPU</strong> or <strong>DEB_HOST_ARCH_OS</strong> variables.
     <p>Note that you can also rely on an external Makefile snippet to properly set all the variables that <strong>dpkg-architecture</strong> can provide:
     <div class="indent">
-      <pre> include /usr/share/dpkg/architecture.mk
-
- ifeq ($(DEB_HOST_ARCH),alpha)
-<br> [...]
-<br> endif
-</pre>
+      <pre> include /usr/share/dpkg/architecture.mk ifeq ($(DEB_HOST_ARCH),alpha)<br> [...]<br> endif</pre>
     </div>
     <p>In any case, you should never use <strong>dpkg --print-architecture</strong> to get architecture information during a package build.
   </div>
