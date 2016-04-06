@@ -57,12 +57,17 @@
 <div class="section">
   <h2>EXAMPLES</h2>
   <p>A minimum ACL:
-  <pre> <strong>chacl u::rwx,g::r-x,o::r-- file</strong></pre>
+  <pre> <strong>chacl u::rwx,g::r-x,o::r-- file</strong>
+</pre>
   <p>The file ACL is set so that the file's owner has "rwx", the file's group has read and execute, and others have read only access to the file.
   <p>An ACL that is not a minimum ACL, that is, one that specifies a user or group other than the file's owner or owner's group, must contain a mask entry:
-  <pre> \f4chacl u::rwx,g::r-x,o::r--,u:bob:r--,m::r-x file1 file2</pre>
+  <pre> \f4chacl u::rwx,g::r-x,o::r--,u:bob:r--,m::r-x file1 file2
+</pre>
   <p>To set the default and access ACLs on \f4newdir to be the same as on \f4olddir, you could type:
-  <pre> \f4chacl -b `chacl -l olddir | \ sed -e 's/.*\[//' -e 's#/# #' -e 's/]$//'` newdir </pre>
+  <pre> \f4chacl -b `chacl -l olddir | \
+ sed -e 's/.*\[//' -e 's#/# #' -e 's/]$//'` newdir
+ 
+</pre>
 </div>
 <div class="section">
   <h2>CAUTIONS</h2>

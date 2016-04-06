@@ -173,13 +173,13 @@ class Blocks
             }
 
             if (preg_match('~^\.EX~u', $line)) {
-                ++$blockNum;
-                $blocks[$blockNum] = $dom->createElement('code');
+                $blocks[++$blockNum] = $dom->createElement('code');
                 for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.EE~u', $line)) {
                         continue 2; // End of example
                     }
-                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $parentSectionNode->manLines[$i]);
+                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
                 }
                 throw new Exception($line . '.EX without corresponding .EE');
             }
@@ -192,6 +192,7 @@ class Blocks
                         continue 2; // End of no-fill
                     }
                     TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
+                    $blocks[$blockNum]->appendChild(new DOMText("\n"));
                 }
                 throw new Exception($line . '.nf without corresponding .fi');
             }
