@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-03-28" data-package="Debian Project" data-section-name="dpkg utilities">
+<title>dpkg-architecture</title>
+<h1>dpkg-architecture</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>dpkg-architecture - set and determine the architecture for package building
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>dpkg-architecture</strong> [<em>option</em>...] [<em>command</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>dpkg-architecture</strong> provides a facility to determine and set the build and host architecture for package building.
+  <p>The build architecture is always determined by an external call to <strong>dpkg</strong>(1), and can not be set at the command line.
+  <p>You can specify the host architecture by providing one or both of the options <strong>--host-arch</strong> and <strong>--host-type</strong>. The default is determined by an external call to <a href="/1/gcc" class="link-man">gcc(1)</a>, or the same as the build architecture if <strong>CC</strong> or gcc are both not available. One out of <strong>--host-arch</strong> and <strong>--host-type</strong> is sufficient, the value of the other will be set to a usable default. Indeed, it is often better to only specify one, because <strong>dpkg-architecture</strong> will warn you if your choice does not match the default.
+</div>
+<div class="section">
+  <h2>COMMANDS</h2>
+  <dl>
+    <dt><strong>-l</strong>, <strong>--list</strong>
+    <dd>Print the environment variables, one each line, in the format <em>VARIABLE=value</em>. This is the default action.
+    <dt><strong>-e</strong>, <strong>--equal</strong> <em>architecture</em>
+    <dd>Check for equality of architecture (since dpkg 1.13.13). It compares the current or specified Debian host architecture against <em>architecture</em>, to check if they are equal. This action will not expand the architecture wildcards. Command finishes with an exit status of 0 if matched, 1 if not matched.
+    <dt><strong>-i</strong>, <strong>--is</strong> <em>architecture-wildcard</em>
+    <dd>Check for identity of architecture (since dpkg 1.13.13). It compares the current or specified Debian host architecture against <em>architecture-wildcard</em> after having expanded it as an architecture wildcard, to check if they match. Command finishes with an exit status of 0 if matched, 1 if not matched.
+    <dt><strong>-q</strong>, <strong>--query</strong> <em>variable-name</em>
+    <dd>Print the value of a single variable.
+    <dt><strong>-s</strong>, <strong>--print-set</strong>
+    <dd>Print an export command. This can be used to set the environment variables using eval.
+    <dt><strong>-u</strong>, <strong>--print-unset</strong>
+    <dd>Print a similar command to <strong>--print-unset</strong> but to unset all variables.
+    <dt><strong>-c</strong>, <strong>--command</strong> <em>command</em>
+    <dd>Execute a <em>command</em> in an environment which has all variables set to the determined value.
+    <dt><strong>-L</strong>, <strong>--list-known</strong>
+    <dd>Print a list of valid architecture names. Possibly restricted by one or more of the matching options <strong>--match-wildcard</strong>, <strong>--match-bits</strong> or <strong>--match-endian</strong> (since dpkg 1.17.14).
+    <dt><strong>-?</strong>, <strong>--help</strong>
+    <dd>Show the usage message and exit.
+    <dt><strong>--version</strong>
+    <dd>Show the version and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>, <strong>--host-arch</strong> <em>architecture</em>
+    <dd>Set the host Debian architecture.
+    <dt><strong>-t</strong>, <strong>--host-type</strong> <em>gnu-system-type</em>
+    <dd>Set the host GNU system type.
+    <dt><strong>-A</strong>, <strong>--target-arch</strong> <em>architecture</em>
+    <dd>Set the target Debian architecture (since dpkg 1.17.14).
+    <dt><strong>-T</strong>, <strong>--target-type</strong> <em>gnu-system-type</em>
+    <dd>Set the target GNU system type (since dpkg 1.17.14).
+    <dt><strong>-W</strong>, <strong>--match-wildcard</strong> <em>architecture-wildcard</em>
+    <dd>Restrict the architectures listed by <strong>--list-known</strong> to ones matching the specified architecture wildcard (since dpkg 1.17.14).
+    <dt><strong>-B</strong>, <strong>--match-bits</strong> <em>architecture-bits</em>
+    <dd>Restrict the architectures listed by <strong>--list-known</strong> to ones with the specified CPU bits (since dpkg 1.17.14). Either <strong>32</strong> or <strong>64</strong>.
+    <dt><strong>-E</strong>, <strong>--match-endian</strong> <em>architecture-endianness</em>
+    <dd>Restrict the architectures listed by <strong>--list-known</strong> to ones with the specified endianness (since dpkg 1.17.14). Either <strong>little</strong> or <strong>big</strong>.
+    <dt><strong>-f</strong>, <strong>--force</strong>
+    <dd>Values set by existing environment variables with the same name as used by the scripts are honored (i.e. used by <strong>dpkg-architecture</strong>), except if this force flag is present. This allows the user to override a value even when the call to <strong>dpkg-architecture</strong> is buried in some other script (for example <strong>dpkg-buildpackage</strong>(1)).
+  </dl>
+</div>
+<div class="section">
+  <h2>TERMS</h2>
+  <dl class="indent-4">
+    <dt>build machine
+    <dd>The machine the package is built on.
+    <dt>host machine
+    <dd>The machine the package is built for.
+    <dt>target machine
+    <dd>The machine the compiler is building for. This is only needed when building a cross-toolchain, one that will be built on the build architecture, to be run on the host architecture, and to build code for the target architecture.
+    <dt>Debian architecture
+    <dd>The Debian architecture string, which specifies the binary tree in the FTP archive. Examples: i386, sparc, hurd-i386.
+    <dt>Debian architecture wildcard
+    <dd>A Debian architecture wildcard is a special architecture string that will match any real architecture being part of it. The general form is &lt;kernel&gt;-&lt;cpu&gt;. Examples: linux-any, any-i386, hurd-any.
+    <dt>GNU system type
+    <dd>An architecture specification string consisting of two parts separated by a hyphen: cpu and system. Examples: i586-linux-gnu, sparc-linux-gnu, i686-gnu, x86_64-netbsd.
+    <dt>multiarch triplet
+    <dd>The clarified GNU system type, used for filesystem paths. This triplet does not change even when the baseline ISA gets bumped, so that the resulting paths are stable over time. The only current difference with the GNU system type is that the CPU part for i386 based systems is always i386. Examples: i386-linux-gnu, x86_64-linux-gnu. Example paths: /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
+  </dl>
+</div>
+<div class="section">
+  <h2>VARIABLES</h2>
+  <p>The following variables are set by <strong>dpkg-architecture</strong>:
+  <dl class="indent-4">
+    <dt><strong>DEB_BUILD_ARCH</strong>
+    <dd>The Debian architecture of the build machine.
+    <dt><strong>DEB_BUILD_ARCH_OS</strong>
+    <dd>The Debian system name of the build machine (since dpkg 1.13.2).
+    <dt><strong>DEB_BUILD_ARCH_CPU</strong>
+    <dd>The Debian cpu name of the build machine (since dpkg 1.13.2).
+    <dt><strong>DEB_BUILD_ARCH_BITS</strong>
+    <dd>The pointer size of the build machine (in bits; since dpkg 1.15.4).
+    <dt><strong>DEB_BUILD_ARCH_ENDIAN</strong>
+    <dd>The endianness of the build machine (little / big; since dpkg 1.15.4).
+    <dt><strong>DEB_BUILD_GNU_CPU</strong>
+    <dd>The CPU part of <strong>DEB_BUILD_GNU_TYPE</strong>.
+    <dt><strong>DEB_BUILD_GNU_SYSTEM</strong>
+    <dd>The System part of <strong>DEB_BUILD_GNU_TYPE</strong>.
+    <dt><strong>DEB_BUILD_GNU_TYPE</strong>
+    <dd>The GNU system type of the build machine.
+    <dt><strong>DEB_BUILD_MULTIARCH</strong>
+    <dd>The clarified GNU system type of the build machine, used for filesystem paths (since dpkg 1.16.0).
+    <dt><strong>DEB_HOST_ARCH</strong>
+    <dd>The Debian architecture of the host machine.
+    <dt><strong>DEB_HOST_ARCH_OS</strong>
+    <dd>The Debian system name of the host machine (since dpkg 1.13.2).
+    <dt><strong>DEB_HOST_ARCH_CPU</strong>
+    <dd>The Debian cpu name of the host machine (since dpkg 1.13.2).
+    <dt><strong>DEB_HOST_ARCH_BITS</strong>
+    <dd>The pointer size of the host machine (in bits; since dpkg 1.15.4).
+    <dt><strong>DEB_HOST_ARCH_ENDIAN</strong>
+    <dd>The endianness of the host machine (little / big; since dpkg 1.15.4).
+    <dt><strong>DEB_HOST_GNU_CPU</strong>
+    <dd>The CPU part of <strong>DEB_HOST_GNU_TYPE</strong>.
+    <dt><strong>DEB_HOST_GNU_SYSTEM</strong>
+    <dd>The System part of <strong>DEB_HOST_GNU_TYPE</strong>.
+    <dt><strong>DEB_HOST_GNU_TYPE</strong>
+    <dd>The GNU system type of the host machine.
+    <dt><strong>DEB_HOST_MULTIARCH</strong>
+    <dd>The clarified GNU system type of the host machine, used for filesystem paths (since dpkg 1.16.0).
+    <dt><strong>DEB_TARGET_ARCH</strong>
+    <dd>The Debian architecture of the target machine (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_ARCH_OS</strong>
+    <dd>The Debian system name of the target machine (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_ARCH_CPU</strong>
+    <dd>The Debian cpu name of the target machine (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_ARCH_BITS</strong>
+    <dd>The pointer size of the target machine (in bits; since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_ARCH_ENDIAN</strong>
+    <dd>The endianness of the target machine (little / big; since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_GNU_CPU</strong>
+    <dd>The CPU part of <strong>DEB_TARGET_GNU_TYPE</strong> (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_GNU_SYSTEM</strong>
+    <dd>The System part of <strong>DEB_TARGET_GNU_TYPE</strong> (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_GNU_TYPE</strong>
+    <dd>The GNU system type of the target machine (since dpkg 1.17.14).
+    <dt><strong>DEB_TARGET_MULTIARCH</strong>
+    <dd>The clarified GNU system type of the target machine, used for filesystem paths (since dpkg 1.17.14).
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <div class="subsection">
+    <h3>Architecture tables</h3>
+    <p>All these files have to be present for <strong>dpkg-architecture</strong> to work. Their location can be overridden at runtime with the environment variable <strong>DPKG_DATADIR</strong>.
+    <dl>
+      <dt><em>/usr/share/dpkg/cputable</em>
+      <dd>Table of known CPU names and mapping to their GNU name.
+      <dt><em>/usr/share/dpkg/ostable</em>
+      <dd>Table of known operating system names and mapping to their GNU name.
+      <dt><em>/usr/share/dpkg/triplettable</em>
+      <dd>Mapping between Debian architecture triplets and Debian architecture names.
+      <dt><em>/usr/share/dpkg/abitable</em>
+      <dd>Table of Debian architecture ABI attribute overrides.
+    </dl>
+  </div>
+  <div class="subsection">
+    <h3>Packaging support</h3>
+    <dl>
+      <dt><em>/usr/share/dpkg/architecture.mk</em>
+      <dd>Makefile snippet that properly sets and exports all the variables that <strong>dpkg-architecture</strong> outputs (since dpkg 1.16.1).
+    </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p><strong>dpkg-buildpackage</strong> accepts the <strong>-a</strong> option and passes it to <strong>dpkg-architecture</strong>. Other examples:
+  <blockquote>
+    CC=i386-gnu-gcc dpkg-architecture -c debian/rules build<br>
+    <br>
+    eval `dpkg-architecture -u`
+  </blockquote>
+  <p>Check if the current or specified host architecture is equal to an architecture:
+  <blockquote>
+    dpkg-architecture -elinux-alpha<br>
+    <br>
+    dpkg-architecture -amips -elinux-mips
+  </blockquote>
+  <p>Check if the current or specified host architecture is a Linux system:
+  <blockquote>
+    dpkg-architecture -ilinux-any<br>
+    <br>
+    dpkg-architecture -ai386 -ilinux-any
+  </blockquote>
+  <div class="subsection">
+    <h3>Usage in debian/rules</h3>
+    <p>The environment variables set by <strong>dpkg-architecture</strong> are passed to <em>debian/rules</em> as make variables (see make documentation). However, you should not rely on them, as this breaks manual invocation of the script. Instead, you should always initialize them using <strong>dpkg-architecture</strong> with the <strong>-q</strong> option. Here are some examples, which also show how you can improve the cross compilation support in your package:
+    <p>Retrieving the GNU system type and forwarding it to ./configure:
+    <div class="indent">
+      <pre> DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)<br> DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)<br> [...]<br> ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))<br> confflags += --build=$(DEB_HOST_GNU_TYPE)<br> else<br> confflags += --build=$(DEB_BUILD_GNU_TYPE) \<br> --host=$(DEB_HOST_GNU_TYPE)<br> endif<br> [...]<br> ./configure $(confflags)</pre>
+    </div>
+    <p>Doing something only for a specific architecture:
+    <div class="indent">
+      <pre> DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH) ifeq ($(DEB_HOST_ARCH),alpha)<br> [...]<br> endif</pre>
+    </div>
+    <p>or if you only need to check the CPU or OS type, use the <strong>DEB_HOST_ARCH_CPU</strong> or <strong>DEB_HOST_ARCH_OS</strong> variables.
+    <p>Note that you can also rely on an external Makefile snippet to properly set all the variables that <strong>dpkg-architecture</strong> can provide:
+    <div class="indent">
+      <pre> include /usr/share/dpkg/architecture.mk ifeq ($(DEB_HOST_ARCH),alpha)<br> [...]<br> endif</pre>
+    </div>
+    <p>In any case, you should never use <strong>dpkg --print-architecture</strong> to get architecture information during a package build.
+  </div>
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p>All long command and option names available only since dpkg 1.17.17.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/dpkg-buildpackage" class="link-man">dpkg-buildpackage(1)</a>, <a href="/1/dpkg-cross" class="link-man">dpkg-cross(1)</a>.
+</div>
+

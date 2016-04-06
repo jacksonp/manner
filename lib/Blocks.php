@@ -184,8 +184,20 @@ class Blocks
                 throw new Exception($line . '.EX without corresponding .EE');
             }
 
+            if (preg_match('~^\.nf~u', $line)) {
+                $blocks[++$blockNum] = $dom->createElement('pre');
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $parentSectionNode->manLines[$i];
+                    if (preg_match('~^\.fi~u', $line)) {
+                        continue 2; // End of no-fill
+                    }
+                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
+                }
+                throw new Exception($line . '.nf without corresponding .fi');
+            }
 
-            if ($blockNum === 0 || $blocks[$blockNum]->tagName === 'div' || $blocks[$blockNum]->tagName === 'code') {
+
+            if ($blockNum === 0 || in_array($blocks[$blockNum]->tagName, ['div', 'code', 'pre'])) {
                 ++$blockNum;
                 $blocks[$blockNum] = $dom->createElement('p');
             }
@@ -212,21 +224,23 @@ class Blocks
                 $nextLine = $parentSectionNode->manLines[++$i];
                 if (mb_strlen($nextLine) === 0) {
                     continue;
-                } else if ($nextLine[0] === '.') {
-                    throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                 } else {
-                    if ($line === '.B') {
-                        $strongNode    = $parentForLine->appendChild($dom->createElement('strong'));
-                        $parentForLine = $strongNode;
-                        $line          = $nextLine;
-                    } elseif ($line === '.I') {
-                        $emNode        = $parentForLine->appendChild($dom->createElement('em'));
-                        $parentForLine = $emNode;
-                        $line          = $nextLine;
+                    if ($nextLine[0] === '.') {
+                        throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                     } else {
-                        $line .= ' ' . $nextLine;
+                        if ($line === '.B') {
+                            $strongNode    = $parentForLine->appendChild($dom->createElement('strong'));
+                            $parentForLine = $strongNode;
+                            $line          = $nextLine;
+                        } elseif ($line === '.I') {
+                            $emNode        = $parentForLine->appendChild($dom->createElement('em'));
+                            $parentForLine = $emNode;
+                            $line          = $nextLine;
+                        } else {
+                            $line .= ' ' . $nextLine;
+                        }
+                        $canAppendNextText = false;
                     }
-                    $canAppendNextText = false;
                 }
             }
 

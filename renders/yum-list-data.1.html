@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="04 February 2008" data-package="James Antill" data-section-name="">
+<title>yum-list-data</title>
+<h1>yum-list-data</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>yum list data plugin
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>yum</strong> [options] [command] [package ...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>This plugin extends <strong>yum</strong> for some commands that give aggregate package data based on lists of packages
+  <p>added yum <em>command</em>s are:<br>
+  <em>* list-vendors</em><br>
+  <em>* info-vendors</em><br>
+  <em>* list-rpm-groups</em><br>
+  <em>* info-rpm-groups</em><br>
+  <em>* list-packagers</em><br>
+  <em>* info-packagers</em><br>
+  <em>* list-licenses</em><br>
+  <em>* info-licenses</em><br>
+  <em>* list-arches</em><br>
+  <em>* info-arches</em><br>
+  <em>* list-committers</em><br>
+  <em>* info-committers</em><br>
+  <em>* list-buildhosts</em><br>
+  <em>* info-buildhosts</em><br>
+  <em>* list-baseurls</em><br>
+  <em>* info-baseurls</em><br>
+  <em>* list-package-sizes</em><br>
+  <em>* info-package-sizes</em><br>
+  <em>* list-archive-sizes</em><br>
+  <em>* info-archive-sizes</em><br>
+  <em>* list-installed-sizes</em><br>
+  <em>* info-installed-sizes</em><br>
+  <em>* list-groups</em><br>
+  <em>* info-groups</em><br>
+  <p>all of which take the same arguments as the list and info yum commands. The difference between the list and info varieties is that the info versions lists all the packages under each aggregation.
+  <dl>
+    <dt><strong>list-vendors</strong>, <strong>info-vendors</strong>
+    <dd>Is used to list the aggregate of the vendor attribute on the packages, examples are "Fedora Project" and "Red Hat, Inc.".<br>
+    <dt><strong>list-rpm-groups</strong>, <strong>info-rpm-groups</strong>
+    <dd>Is used to list the aggregate of the group attribute on the packages, examples are "Applications/System", "Development/Tools" and "System Environment/Base"<br>
+    <dt><strong>list-packagers</strong>, <strong>info-packagers</strong>
+    <dd>Is used to list the aggregate of the packager attribute on the packages, examples are "Fedora Project" and "Red Hat, Inc.".<br>
+    <dt><strong>list-licenses</strong>, <strong>info-licenses</strong>
+    <dd>Is used to list the aggregate of the license attribute on the packages, examples are "GPL" and "MIT"<br>
+    <dt><strong>list-arches</strong>, <strong>info-arches</strong>
+    <dd>Is used to list the aggregate of the arch attribute on the packages, examples are "i386" and "x86_64"<br>
+    <dt><strong>list-committers</strong>, <strong>info-committers</strong>
+    <dd>Is used to list the aggregate of the committer attribute on the packages, this is taken from the most recent changelog entry of the package.<br>
+    <dt><strong>list-buildhosts</strong>, <strong>info-buildhosts</strong>
+    <dd>Is used to list the aggregate of the buildhost attribute on the packages, examples are "mybuilder.example.com" and "xenbuilder1.fedora.redhat.com"<br>
+    <dt><strong>list-baseurls</strong>, <strong>info-baseurls</strong>
+    <dd>
+      Is used to list the aggregate of the url attribute on the packages after discarding the path of the URL, examples are "<a href="http://yum.baseurl.org/">http://yum.baseurl.org/</a>" and "<a href="http://www.and.org/">http://www.and.org/</a>"<br>
+    <dt><strong>list-package-sizes</strong>, <strong>info-package-sizes</strong>
+    <dd>Is used to list the aggregate of specified ranges the packagesize attribute on the packages, examples are "[ 1B - 10KB ]" and "[ 750KB - 1MB ]".<br>
+    <dt><strong>list-archive-sizes</strong>, <strong>info-archive-sizes</strong>
+    <dd>Is used to list the aggregate of specified ranges the archivesize attribute on the packages, examples are "[ 1B - 10KB ]" and "[ 750KB - 1MB ]".<br>
+    <dt><strong>list-installed-sizes</strong>, <strong>info-installed-sizes</strong>
+    <dd>Is used to list the aggregate of specified ranges the installedsize attribute on the packages, examples are "[ 1B - 10KB ]" and "[ 750KB - 1MB ]".<br>
+    <dt><strong>list-groups</strong>, <strong>info-groups</strong>
+    <dd>Is used to list the aggregate of the yum groups that the packages are in, examples are in "yum grouplist". Note that in yum groups a package can be in more than one group at a time.<br>
+  </dl>
+  <p>It is worth noting that some of the above data can be "unknown", to yum, at which point a separate aggregation called "-- Unknown --" is listed.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>To list all the groups that have an update, along with the number of packages in each group, use:
+  <blockquote>
+    yum list-rpm-groups updates
+  </blockquote>
+  <p>To list all the committers to packages that have yum in their name, use:
+  <blockquote>
+    yum list-committers 'yum*'
+  </blockquote>
+  <p>To list ranges of the sizes of packages installed or available, use:
+  <blockquote>
+    yum list-package-sizes
+  </blockquote>
+  <p>To list yum groups that have an update, use:
+  <blockquote>
+    yum list-groups
+  </blockquote>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <pre><em> yum-filter-data (1)</em><em> yum (8)</em><em> yum.conf (5)</em></pre>
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <pre> James Antill &lt;james.antill@redhat.com&gt;.</pre>
+</div>
+

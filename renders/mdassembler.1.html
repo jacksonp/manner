@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="" data-package="" data-section-name="">
+<title>mdassembler</title>
+<h1>mdassembler</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>mdassembler - Compile documentation for use in monodoc browser
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>mdassembler</strong> OPTIONS* DIRS+
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><em>mdassembler</em> has been obsoleted by <strong>mdoc</strong>(1). See the <strong>mdoc-assemble</strong>(1) man page.
+  <p><em>mdassembler</em> is a program that creates <em>.tree</em> and <em>.zip</em> files for use in the <strong>monodoc</strong> documentation browser.
+  <p>The <em>.tree</em> and <em>.zip</em> files are copied into monodoc's <em>sources</em> directory, and reside with a <em>.source</em> file which is used by <strong>monodoc</strong> to specify where the documentation should be displayed. The <em>.source</em> file's <em>/monodoc/source/@basefile</em> attribute specifies the filename prefix for the documentation files. This must be the same prefix as used with the <strong>--out</strong> parameter.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><em>--ecma</em>
+    <dd>The documentation found within <em>DIRS</em> is in the Mono ECMA documentation format. See the <strong>Mono ECMA Documentation Format</strong> section below.
+    <dt><em>--ecmaspec</em>
+    <dd>The documentation found within <em>DIRS</em> is in the ECMA Specification documentation format. See the <strong>Mono ECMA Specification Documentation Format</strong> section below.
+    <dt><em>--error</em>
+    <dd>The documentation found within <em>DIRS</em> is in "error" format. See the <strong>Error Documentation Format</strong> section below.
+    <dt><em>--help</em>
+    <dd>Show program argument information.
+    <dt><em>--man</em>
+    <dd>The documentation found within <em>DIRS</em> is in man page format. See the <strong>Man Page Documentation Format</strong> section below.
+    <dt><em>-o, --out PREFIX</em>
+    <dd>Specify the output file prefix. <strong>mdassembler</strong> creates the files <em>PREFIX.zip</em> and <em>PREFIX.tree</em> .
+    <dt><em>--simple</em>
+    <dd>The documentation found within <em>DIRS</em> is in "simple" format. See the <strong>Simple Documentation Format</strong> section below.
+    <dt><em>--xhtml, --hb</em>
+    <dd>The documentation found within <em>DIRS</em> is in XHTML format. See the <strong>XHTML Documentation Format</strong> section below.
+  </dl>
+</div>
+<div class="section">
+  <h2>FORMATS</h2>
+  <p>The following documentation formats are supported:
+  <div class="subsection">
+    <h3>Mono ECMA Documentation Format</h3>
+    <p>An XML documentation format with one file per type.
+    <p>See the <strong>mdoc</strong>(5) man page for more information.
+  </div>
+  <div class="subsection">
+    <h3>Mono ECMA Specification Documentation Format</h3>
+    <p>This is not the format you're looking for.
+    <p>This is the format used to represent the ECMA-334 (C#) standard within <strong>monodoc</strong>. It is not used to display class library documentation; for class library documentation, use the <strong>--ecma</strong> format.
+  </div>
+  <div class="subsection">
+    <h3>Error Documentation Format</h3>
+    <p>Used to present detailed error messages, and is used in <strong>monodoc</strong>'s "C# Compiler Error Reference" tree. <em>DIRS</em> is not a directory, but is instead a configuration file, containing the XML:
+    <pre> &lt;ErrorProviderConfig&gt; &lt;FilesPath&gt;../../mcs/errors&lt;/FilesPath&gt; &lt;Match&gt;cs????*.cs&lt;/Match&gt; &lt;ErrorNumSubstringStart&gt;2&lt;/ErrorNumSubstringStart&gt; &lt;ErrorNumSubstringLength&gt;4&lt;/ErrorNumSubstringLength&gt; &lt;FriendlyFormatString&gt;CS{0:0###}&lt;/FriendlyFormatString&gt; &lt;/ErrorProviderConfig&gt;</pre>
+    <p><em>/ErrorProviderConfig/FilesPath</em> specifies where to look for files, <em>/ErrorProviderConfig/Match</em> specifies the filename pattern to look for within <em>/ErrorProviderConfig/FilesPath</em>, <em>/ErrorProviderConfig/ErrorNumSubstringStart</em> and <em>/ErrorProviderConfig/ErrorNumSubstringLength</em> control which portion of the filename is used as the error number, and <em>/ErrorProviderConfig/FriendlyFormatString</em> controls how the formatting/display of the node in the <strong>monodoc</strong> tree.
+    <p>For each file found, it is converted to HTML with C# syntax coloring applied.
+  </div>
+  <div class="subsection">
+    <h3>Simple Documentation Format</h3>
+    <p>Converts text files into HTML by translating each newline into an HTML <em>&lt;br&gt;</em> element.
+  </div>
+  <div class="subsection">
+    <h3>Man Page Documentation Format</h3>
+    <p>Converts man pages into HTML for display.
+  </div>
+  <div class="subsection">
+    <h3>XHTML Documentation Format</h3>
+    <p>Copies the XHTML file as-is.
+  </div>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>To install your documenation for use with monodoc:
+  <dl>
+    <dt><em>Create a PREFIX.source file</em>
+    <dd>with the contents:
+  </dl>
+  <pre> &lt;?xml version="1.0"?&gt; &lt;monodoc&gt; &lt;source provider="FORMAT" basefile="PREFIX" path="PATH"/&gt; &lt;/monodoc&gt; where FORMAT is the documentation format contained within the<em> PREFIX.tree</em> file, e.g. <em>ecma</em>, or <em>simple</em>.<em> PREFIX is the basename of the</em><em> .tree</em> and<em> .zip</em> files that<strong> mdassembler</strong> creates.<em> PATH</em> is the "path" in the monodoc tree that should contain the documentation. See the<em> @prefix@/lib/monodoc/monodoc.xml</em> file for a list of PATH values (the<em> //node/@name</em> values).<br><br> See also: <a href="http://www.mono-project.com/docs/tools+libraries/tools/monodoc/generating-documentation/">http://www.mono-project.com/docs/tools+libraries/tools/monodoc/generating-documentation/</a></pre>
+  <dl>
+    <dt><em>Create your documentation</em>
+    <dd>
+      See also the <a href="/1/monodocer" class="link-man">monodocer(1)</a> man page, e.g.
+    </dl>
+  <pre> monodocer -assembly:foo.dll -path:foo/en</pre>
+  <dl>
+    <dt><em>Assemble the documentation</em>
+  </dl>
+  <pre> mdassembler --ecma foo/en PREFIX Make sure that you use the same<em> PREFIX</em> here as you did above.</pre>
+  <dl>
+    <dt><em>Install the documentation by using the command</em>
+  </dl>
+  <pre> cp PREFIX.source PREFIX.tree PREFIX.zip \ `pkg-config monodoc --variable=sourcesdir` (Note the backticks used in the<strong> pkg-config</strong> command!) This copies the<em> .source</em> ,<em> .tree</em> , and<em> .zip</em> files into the<strong> monodoc</strong><em> sources</em> directory, which will allow<strong> monodoc</strong> to display the documentation.</pre>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>mdcs2ecma</strong>(1), <strong>mdnormalizer</strong>(1), <strong>mdoc</strong>(1), <strong>mdoc-assemble</strong>(1), <strong>mdvalidator</strong>(1), <strong>monodocer</strong>(1), <strong>monodocs2html</strong>(1)
+</div>
+<div class="section">
+  <h2>MAILING LISTS</h2>
+  <dl>
+    <dt>
+      Visit <a href="http://lists.ximian.com/mailman/listinfo/mono-docs-list">http://lists.ximian.com/mailman/listinfo/mono-docs-list</a> for details.
+    </dl>
+</div>
+<div class="section">
+  <h2>WEB SITE</h2>
+  <p>See also: <a href="http://www.mono-project.com">http://www.mono-project.com</a> and <a href="http://www.mono-project.com/docs/tools+libraries/tools/mdassembler/">http://www.mono-project.com/docs/tools+libraries/tools/mdassembler/</a>
+</div>
+

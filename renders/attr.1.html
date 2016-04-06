@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="Extended Attributes" data-package="Dec 2001" data-section-name="XFS Compatibility API">
+<title>ATTR</title>
+<h1>ATTR</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>attr - extended attributes on XFS filesystem objects
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <pre> <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-s attrname</strong> [ <strong>-V attrvalue</strong> ] <strong>pathname</strong><br><br> <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-g attrname pathname</strong><br><br> <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-r attrname pathname</strong><br><br> <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-l pathname</strong><br><br></pre>
+</div>
+<div class="section">
+  <h2>OVERVIEW</h2>
+  <p>Extended attributes implement the ability for a user to attach name:value pairs to objects within the XFS filesystem.
+  <p>This document describes the <em>attr</em> command, which is mostly compatible with the IRIX command of the same name. It is thus aimed specifically at users of the XFS filesystem - for filesystem independent extended attribute manipulation, consult the <em>getfattr</em>(1) and <em>setfattr</em>(1) documentation.
+  <p>Extended attributes can be used to store meta-information about the file. For example "character-set=kanji" could tell a document browser to use the Kanji character set when displaying that document and "thumbnail=..." could provide a reduced resolution overview of a high resolution graphic image.
+  <p>In the XFS filesystem, the <em>names</em> can be up to 256 bytes in length, terminated by the first 0 byte. The intent is that they be printable ASCII (or other character set) names for the attribute. The <em>values</em> can be up to 64KB of arbitrary binary data.
+  <p>Attributes can be attached to all types of XFS inodes: regular files, directories, symbolic links, device nodes, etc.
+  <p>XFS uses 2 disjoint attribute name spaces associated with every filesystem object. They are the <strong>root</strong> and <strong>user</strong> address spaces. The <strong>root</strong> address space is accessible only to the superuser, and then only by specifying a flag argument to the function call. Other users will not see or be able to modify attributes in the <strong>root</strong> address space. The <strong>user</strong> address space is protected by the normal file permissions mechanism, so the owner of the file can decide who is able to see and/or modify the value of attributes on any particular file.
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <em>attr</em> utility allows the manipulation of extended attributes associated with filesystem objects from within shell scripts.
+  <p>There are four main operations that <em>attr</em> can perform:
+  <dl>
+    <dt><strong>GET</strong>
+    <dd>The <strong>-g attrname</strong> option tells <em>attr</em> to search the named object and print (to \f4stdout) the value associated with that attribute name. With the <strong>-q</strong> flag, \f4stdout will be exactly and only the value of the attribute, suitable for storage directly into a file or processing via a piped command.
+    <dt><strong>LIST</strong>
+    <dd>The <strong>-l</strong> option tells <em>attr</em> to list the names of all the attributes that are associated with the object, and the number of bytes in the value of each of those attributes. With the <strong>-q</strong> flag, \f4stdout will be a simple list of only the attribute names, one per line, suitable for input into a script.
+    <dt><strong>REMOVE</strong>
+    <dd>The <strong>-r attrname</strong> option tells <em>attr</em> to remove an attribute with the given name from the object if the attribute exists. There is no output on successful completion.
+    <dt><strong>SET/CREATE</strong>
+    <dd>The <strong>-s attrname</strong> option tells <em>attr</em> to set the named attribute of the object to the value read from \f4stdin. If an attribute with that name already exists, its value will be replaced with this one. If an attribute with that name does not already exist, one will be created with this value. With the <strong>-V attrvalue</strong> flag, the attribute will be set to have a value of <strong>attrvalue</strong> and \f4stdin will not be read. With the <strong>-q</strong> flag, \f4stdout will not be used. Without the <strong>-q</strong> flag, a message showing the attribute name and the entire value will be printed.
+  </dl>
+  <p>When the <strong>-L</strong> option is given and the named object is a symbolic link, operate on the attributes of the object referenced by the symbolic link. Without this option, operate on the attributes of the symbolic link itself.
+  <p>When the <strong>-R</strong> option is given and the process has appropriate privileges, operate in the <em>root</em> attribute namespace rather that the <em>USER</em> attribute namespace.
+  <p>The <strong>-S</strong> option is similar, except it specifies use of the <em>security</em> attribute namespace.
+  <p>When the <strong>-q</strong> option is given <em>attr</em> will try to keep quiet. It will output error messages (to \f4stderr) but will not print status messages (to \f4stdout).
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p>The standard file interchange/archive programs <em>tar</em>(1), and <em>cpio</em>(1) will not archive or restore extended attributes, while the <em>xfsdump</em>(8) program will.
+</div>
+<div class="section">
+  <h2>CAVEATS</h2>
+  <p>The list option present in the IRIX version of this command is not supported. <em>getfattr</em> provides a mechanism to retrieve all of the attribute names.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>getfattr(1), setfattr(1), attr_get(3), attr_set(3), attr_multi(3), attr_remove(3), attr(5), and xfsdump(8).
+</div>
+
