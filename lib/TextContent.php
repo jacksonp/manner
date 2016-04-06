@@ -235,6 +235,9 @@ class TextContent
         ];
         $string = strtr($string, $replacements);
 
+        // Prettier double quotes:
+        $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
+
         if (preg_match(
           '~^(?<start>.*?)<?(?<url>(ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',
           $string, $matches)) {
