@@ -180,7 +180,7 @@ class TextContent
                 case '\f4':
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
-                        $em = $dom->createElement('em');
+                        $em     = $dom->createElement('em');
                         self::interpretAndAppendString($em, $textSegments[++$i]);
                         $strong->appendChild($em);
                         $parentNode->appendChild($strong);
@@ -242,29 +242,33 @@ class TextContent
           '\*(dq' => '"',
           '\[dq]' => '"',
         ];
-        $string = strtr($string, $replacements);
+        $string       = strtr($string, $replacements);
 
         // Prettier double quotes:
         $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
 
         if (preg_match(
-          '~^(?<start>.*?)<?(?<url>(ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~',
+          '~^(?<start>.*?)<?(?<url>(ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))>?(?<end>.*)$~u',
           $string, $matches)) {
 
-            if (!empty($matches['start'])) {
-                self::interpretAndAppendString($parentNode, $matches['start']);
+            $urlParts = parse_url($matches['url']);
+            if ($urlParts !== false && !preg_match('~(^|\.)example.(org|com)$~u', $urlParts['host'])) {
+
+                if (!empty($matches['start'])) {
+                    self::interpretAndAppendString($parentNode, $matches['start']);
+                }
+
+                $anchor = $dom->createElement('a');
+                $anchor->appendChild(new DOMText($matches['url']));
+                $anchor->setAttribute('href', $matches['url']);
+                $parentNode->appendChild($anchor);
+
+                if (!empty($matches['end'])) {
+                    self::interpretAndAppendString($parentNode, $matches['end']);
+                }
+
+                return;
             }
-
-            $anchor = $dom->createElement('a');
-            $anchor->appendChild(new DOMText($matches['url']));
-            $anchor->setAttribute('href', $matches['url']);
-            $parentNode->appendChild($anchor);
-
-            if (!empty($matches['end'])) {
-                self::interpretAndAppendString($parentNode, $matches['end']);
-            }
-
-            return;
         }
 
         $parentNode->appendChild(new DOMText($string));
