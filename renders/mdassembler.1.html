@@ -54,7 +54,7 @@
   <div class="subsection">
     <h3>Error Documentation Format</h3>
     <p>Used to present detailed error messages, and is used in <strong>monodoc</strong>'s "C# Compiler Error Reference" tree. <em>DIRS</em> is not a directory, but is instead a configuration file, containing the XML:
-    <pre> &lt;ErrorProviderConfig&gt;<br> &lt;FilesPath&gt;../../mcs/errors&lt;/FilesPath&gt;<br> &lt;Match&gt;cs????*.cs&lt;/Match&gt;<br> &lt;ErrorNumSubstringStart&gt;2&lt;/ErrorNumSubstringStart&gt;<br> &lt;ErrorNumSubstringLength&gt;4&lt;/ErrorNumSubstringLength&gt;<br> &lt;FriendlyFormatString&gt;CS{0:0###}&lt;/FriendlyFormatString&gt;<br> &lt;/ErrorProviderConfig&gt;<br></pre>
+    <pre>     &lt;ErrorProviderConfig&gt;<br>         &lt;FilesPath&gt;../../mcs/errors&lt;/FilesPath&gt;<br>         &lt;Match&gt;cs????*.cs&lt;/Match&gt;<br>         &lt;ErrorNumSubstringStart&gt;2&lt;/ErrorNumSubstringStart&gt;<br>         &lt;ErrorNumSubstringLength&gt;4&lt;/ErrorNumSubstringLength&gt;<br>         &lt;FriendlyFormatString&gt;CS{0:0###}&lt;/FriendlyFormatString&gt;<br>     &lt;/ErrorProviderConfig&gt;<br></pre>
     <p><em>/ErrorProviderConfig/FilesPath</em> specifies where to look for files, <em>/ErrorProviderConfig/Match</em> specifies the filename pattern to look for within <em>/ErrorProviderConfig/FilesPath</em>, <em>/ErrorProviderConfig/ErrorNumSubstringStart</em> and <em>/ErrorProviderConfig/ErrorNumSubstringLength</em> control which portion of the filename is used as the error number, and <em>/ErrorProviderConfig/FriendlyFormatString</em> controls how the formatting/display of the node in the <strong>monodoc</strong> tree.
     <p>For each file found, it is converted to HTML with C# syntax coloring applied.
   </div>
@@ -78,7 +78,7 @@
     <dt><em>Create a PREFIX.source file</em>
     <dd>with the contents:
   </dl>
-  <pre><br> &lt;?xml version="1.0"?&gt;<br> &lt;monodoc&gt;<br> &lt;source provider="FORMAT" basefile="PREFIX" path="PATH"/&gt;<br> &lt;/monodoc&gt;<br><br></pre>
+  <pre><br> &lt;?xml version="1.0"?&gt;<br> &lt;monodoc&gt;<br>   &lt;source provider="FORMAT" basefile="PREFIX" path="PATH"/&gt;<br> &lt;/monodoc&gt;<br><br></pre>
   <p>where FORMAT is the documentation format contained within the <em>PREFIX.tree</em> file, e.g. <em>ecma</em>, or <em>simple</em>. <em>PREFIX is the basename of the</em> <em>.tree</em> and <em>.zip</em> files that <strong>mdassembler</strong> creates. <em>PATH</em> is the "path" in the monodoc tree that should contain the documentation. See the <em>@prefix@/lib/monodoc/monodoc.xml</em> file for a list of PATH values (the <em>//node/@name</em> values).<br>
   <br>
   See also: <a href="http://www.mono-project.com/docs/tools+libraries/tools/monodoc/generating-documentation/">http://www.mono-project.com/docs/tools+libraries/tools/monodoc/generating-documentation/</a>
@@ -87,16 +87,16 @@
     <dd>
       See also the <a href="/1/monodocer" class="link-man">monodocer(1)</a> man page, e.g.
     </dl>
-  <pre><br> monodocer -assembly:foo.dll -path:foo/en<br><br></pre>
+  <pre><br>       monodocer -assembly:foo.dll -path:foo/en<br><br></pre>
   <dl>
     <dt><em>Assemble the documentation</em>
   </dl>
-  <pre><br> mdassembler --ecma foo/en PREFIX<br><br></pre>
+  <pre><br>   mdassembler --ecma foo/en PREFIX<br><br></pre>
   <p>Make sure that you use the same <em>PREFIX</em> here as you did above.
   <dl>
     <dt><em>Install the documentation by using the command</em>
   </dl>
-  <pre><br> cp PREFIX.source PREFIX.tree PREFIX.zip \<br> `pkg-config monodoc --variable=sourcesdir`<br><br></pre>
+  <pre><br>         cp PREFIX.source PREFIX.tree PREFIX.zip \<br>   `pkg-config monodoc --variable=sourcesdir`<br><br></pre>
   <p>(Note the backticks used in the <strong>pkg-config</strong> command!) This copies the <em>.source</em> , <em>.tree</em> , and <em>.zip</em> files into the <strong>monodoc</strong> <em>sources</em> directory, which will allow <strong>monodoc</strong> to display the documentation.
 </div>
 <div class="section">

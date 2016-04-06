@@ -443,7 +443,7 @@ class Text
         // construct for "hiding text from po4a", we don't need:
         $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
 
-        return trim($line);
+        return rtrim($line);
 
     }
 

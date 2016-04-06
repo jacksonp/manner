@@ -143,7 +143,7 @@ class TextContent
             $line = ' ' . $line;
         }
 
-        $textSegments = preg_split('~(\\\\f(?:[123BRIPC]|\(CW[IB]?|\[[ICB]?\])|\\\\[ud])~u', $line, null,
+        $textSegments = preg_split('~(\\\\f(?:[1-4BRIPC]|\(CW[IB]?|\[[ICB]?\])|\\\\[ud])~u', $line, null,
           PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
@@ -175,6 +175,15 @@ class TextContent
                         $em = $dom->createElement('em');
                         self::interpretAndAppendString($em, $textSegments[++$i]);
                         $parentNode->appendChild($em);
+                    }
+                    break;
+                case '\f4':
+                    if ($i < $numTextSegments - 1) {
+                        $strong = $dom->createElement('strong');
+                        $em = $dom->createElement('em');
+                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $strong->appendChild($em);
+                        $parentNode->appendChild($strong);
                     }
                     break;
                 case '\fP':
