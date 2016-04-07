@@ -67,7 +67,8 @@ class Text
             // .IN "sets the indent relative to subheads."
             // .LL "sets the line length, which includes the value of IN."
             // .PU: ?
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU)~u', $line)) {
+            // .LO 1: ?
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1)~u', $line)) {
                 continue;
             }
 
