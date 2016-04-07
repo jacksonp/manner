@@ -18,7 +18,9 @@
   <p>The <em>gsharp</em> command is a GUI version of the C# interpreter that uses Gtk# and provides an area to attach widgets as well. This version can be attached to other Gtk# applications in a safe way as it injects itself into the main loop of a Gtk# application, avoiding any problems arising from the multi-threaded nature of injecting itself into a target process.
   <p>Files specified in the command line will be loaded and executed as scripts.
   <p>Starting with Mono 2.10, the <em>csharp</em> command can be used as an interpreter executed by executables flagged with the Unix execute attribute. To do this, make the first line of your C# source code look like this:
-  <pre> "#!/usr/bin/csharp"<br> Console.WriteLine ("Hello, World");<br></pre>
+  <pre> "#!/usr/bin/csharp"
+ Console.WriteLine ("Hello, World");
+</pre>
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -33,29 +35,100 @@
 <div class="section">
   <h2>OPERATION</h2>
   <p>Once you launch the csharp command, you will be greeted with the interactive prompt:
-  <pre> $ csharp<br> Mono C# Shell, type "help;" for help<br><br> Enter statements below.<br> csharp&gt;<br></pre>
+  <pre> $ csharp
+ Mono C# Shell, type "help;" for help
+
+ Enter statements below.
+ csharp&gt;
+</pre>
   <p>A number of namespaces are pre-defined with C# these include System, System.Linq, System.Collections and System.Collections.Generic. Unlike the compiled mode, it is possible to add new using statements as you type code, for example:
-  <pre> csharp&gt; new XmlDocument ();<br> &lt;interactive&gt;(1,6): error CS0246: The type or namespace name `XmlDocument' could not be found. Are you missing a using directive or an assembly reference?<br> csharp&gt; using System.Xml;<br> csharp&gt; new XmlDocument ();<br> System.Xml.XmlDocument<br></pre>
+  <pre> csharp&gt; new XmlDocument ();
+ &lt;interactive&gt;(1,6): error CS0246: The type or namespace name `XmlDocument' could not be found. Are you missing a using directive or an assembly reference?
+ csharp&gt; using System.Xml;
+ csharp&gt; new XmlDocument ();
+ System.Xml.XmlDocument
+</pre>
   <p>Every time a command is typed, the scope of that command is one of a class that derives from the class Mono.CSharp.InteractiveBase. This class defines a number of static properties and methods. To display a list of available commands access the `help' property:
-  <pre> csharp&gt; help;<br> "Static methods:<br>   LoadPackage (pkg); - Loads the given Package (like -pkg:FILE)<br>   [...]<br>   ShowVars ();       - Shows defined local variables.<br>   ShowUsing ();      - Show active using decltions.<br>   help;<br> "<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; help;
+ "Static methods:
+   LoadPackage (pkg); - Loads the given Package (like -pkg:FILE)
+   [...]
+   ShowVars ();       - Shows defined local variables.
+   ShowUsing ();      - Show active using decltions.
+   help;
+ "
+ csharp&gt;
+</pre>
   <p>When expressions are entered, the C# shell will display the result of executing the expression:
-  <pre> csharp&gt; Math.Sin (Math.PI/4);<br> 0.707106781186547<br> csharp&gt; 1+1;<br> 2<br> csharp&gt; "Hello, world".IndexOf (',');<br> 5<br></pre>
+  <pre> csharp&gt; Math.Sin (Math.PI/4);
+ 0.707106781186547
+ csharp&gt; 1+1;
+ 2
+ csharp&gt; "Hello, world".IndexOf (',');
+ 5
+</pre>
   <p>The C# shell uses the ToString() method on the returned object to display the object, this sometimes can be limiting since objects that do not override the ToString() method will get the default behavior from System.Object which is merely to display their type name:
-  <pre> csharp&gt; var a = new XmlDocument ();<br> csharp&gt; a;<br> System.Xml.Document<br> csharp&gt; csharp&gt; a.Name;<br> "#document"<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; var a = new XmlDocument ();
+ csharp&gt; a;
+ System.Xml.Document
+ csharp&gt; csharp&gt; a.Name;
+ "#document"
+ csharp&gt;
+</pre>
   <p>A few datatypes are handled specially by the C# interactive shell like arrays, System.Collections.Hashtable, objects that implement System.Collections.IEnumerable and IDictionary and are rendered specially instead of just using ToString ():
-  <pre> csharp&gt; var pages = new Hashtable () {<br>       &gt;  { "Mono",    "<a href="http://www.mono-project.com/">http://www.mono-project.com/</a>" },<br>       &gt;  { "Linux",   "<a href="http://kernel.org">http://kernel.org</a>" } };<br> csharp&gt; pages;<br> {{ "Mono", "<a href="http://www.mono-project.com/">http://www.mono-project.com/</a>" }, { "Linux", "<a href="http://kernel.org">http://kernel.org</a>" }}<br></pre>
+  <pre> csharp&gt; var pages = new Hashtable () {
+       &gt;  { "Mono",    "<a href="http://www.mono-project.com/">http://www.mono-project.com/</a>" },
+       &gt;  { "Linux",   "<a href="http://kernel.org">http://kernel.org</a>" } };
+ csharp&gt; pages;
+ {{ "Mono", "<a href="http://www.mono-project.com/">http://www.mono-project.com/</a>" }, { "Linux", "<a href="http://kernel.org">http://kernel.org</a>" }}
+</pre>
   <p>It is possible to use LINQ directly in the C# interactive shell since the System.Linq namespace has been imported at startup. The following sample gets a list of all the files that have not been accessed in a week from /tmp:
-  <pre> csharp&gt; using System.IO;<br> csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);<br> csharp&gt; var old_files = from f in Directory.GetFiles ("/tmp")<br>       &gt;   let fi = new FileInfo (f)<br>       &gt;   where fi.LastAccessTime &lt; LastWeek select f;<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; using System.IO;
+ csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);
+ csharp&gt; var old_files = from f in Directory.GetFiles ("/tmp")
+       &gt;   let fi = new FileInfo (f)
+       &gt;   where fi.LastAccessTime &lt; LastWeek select f;
+ csharp&gt;
+</pre>
   <p>You can of course print the results in a single statement as well:
-  <pre> csharp&gt; using System.IO;<br> csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);<br> csharp&gt; from f in Directory.GetFiles ("/tmp")<br>       &gt;   let fi = new FileInfo (f)<br>       &gt;   where fi.LastAccessTime &lt; last_week select f;<br> [...]<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; using System.IO;
+ csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);
+ csharp&gt; from f in Directory.GetFiles ("/tmp")
+       &gt;   let fi = new FileInfo (f)
+       &gt;   where fi.LastAccessTime &lt; last_week select f;
+ [...]
+ csharp&gt;
+</pre>
   <p>LINQ and its functional foundation produce on-demand code for IEnumerable return values. For instance, the return value from a using `from' is an IEnumerable that is evaluated on demand. The automatic rendering of IEnumerables on the command line will trigger the IEnumerable pipeline to execute at that point instead of having its execution delayed until a later point.
   <p>If you want to avoid having the IEnumerable rendered at this point, simply assign the value to a variable.
   <p>Unlike compiled C#, the type of a variable can be changed if a new declaration is entered, for example:
-  <pre> csharp&gt; var a = 1;<br> csharp&gt; a.GetType ();<br> System.Int32<br> csharp&gt; var a = "Hello";<br> csharp&gt; a.GetType ();<br> System.String<br> csharp&gt; ShowVars ();<br> string a = "Hello"<br></pre>
+  <pre> csharp&gt; var a = 1;
+ csharp&gt; a.GetType ();
+ System.Int32
+ csharp&gt; var a = "Hello";
+ csharp&gt; a.GetType ();
+ System.String
+ csharp&gt; ShowVars ();
+ string a = "Hello"
+</pre>
   <p>In the case that an expression or a statement is not completed in a single line, a continuation prompt is displayed, for example:
-  <pre> csharp&gt; var protocols = new string [] {<br>       &gt;    "ftp",<br>       &gt;    "http",<br>       &gt;    "gopher"<br>       &gt; };<br> csharp&gt; protocols;<br> { "ftp", "http", "gopher" }<br></pre>
+  <pre> csharp&gt; var protocols = new string [] {
+       &gt;    "ftp",
+       &gt;    "http",
+       &gt;    "gopher"
+       &gt; };
+ csharp&gt; protocols;
+ { "ftp", "http", "gopher" }
+</pre>
   <p>Long running computations can be interrupted by using the Control-C sequence:
-  <pre> csharp&gt; var done = false;<br> csharp&gt; while (!done) { }<br> Interrupted!<br> System.Threading.ThreadAbortException: Thread was being aborted<br>   at Class1.Host (System.Object& $retval) [0x00000]<br>   at Mono.CSharp.InteractiveShell.ExecuteBlock (Mono.CSharp.Class host, Mono.CSharp.Undo undo) [0x00000]<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; var done = false;
+ csharp&gt; while (!done) { }
+ Interrupted!
+ System.Threading.ThreadAbortException: Thread was being aborted
+   at Class1.Host (System.Object& $retval) [0x00000]
+   at Mono.CSharp.InteractiveShell.ExecuteBlock (Mono.CSharp.Class host, Mono.CSharp.Undo undo) [0x00000]
+ csharp&gt;
+</pre>
 </div>
 <div class="section">
   <h2>INTERACTIVE EDITING</h2>
@@ -108,7 +181,15 @@
     <dt><em>void ShowVars()</em>
     <dd>Displays all the variables that have been defined so far and their types. In the csharp shell declaring new variables will shadow previous variable declarations, this is different than C# when compiled. <em>void ShowUsing()</em> Displays all the using statements in effect. <em>TimeSpan Time (Action a)</em> Handy routine to time the time that some code takes to execute. The parameter is an Action delegate, and the return value is a TimeSpan. For example:
   </dl>
-  <pre> csharp&gt; Time (() =&gt; { for (int i = 0; i &lt; 5; i++) Console.WriteLine (i);});<br> 0<br> 1<br> 2<br> 3<br> 4<br> 00:00:00.0043230<br> csharp&gt;<br></pre>
+  <pre> csharp&gt; Time (() =&gt; { for (int i = 0; i &lt; 5; i++) Console.WriteLine (i);});
+ 0
+ 1
+ 2
+ 3
+ 4
+ 00:00:00.0043230
+ csharp&gt;
+</pre>
   <p>The return value is a TimeSpan, that you can store in a variable for benchmarking purposes.
 </div>
 <div class="section">

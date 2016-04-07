@@ -155,7 +155,7 @@ class Blocks
                         }
                     }
                     $rsLines[] = $line;
-                    if ($rsLevel === 1
+/*                    if ($rsLevel === 1
                       && mb_strlen($line) > 1 && mb_substr($line, 0, 1) !== '.'
                       && $i < $numLines - 1
                       && mb_strlen($parentSectionNode->manLines[$i + 1]) > 1
@@ -163,7 +163,7 @@ class Blocks
                     ) {
                         $rsLines[] = '.br';
                     }
-
+*/
                 }
                 throw new Exception($line . '.RS without corresponding .RE');
             }
@@ -192,10 +192,11 @@ class Blocks
                         continue 2; // End of no-fill
                     }
                     TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
-                    if (!preg_match('~^indent~', $parentSectionNode->getAttribute('class'))) {
+//                    if (!preg_match('~^indent~', $parentSectionNode->getAttribute('class'))) {
                         // .RS, aka .indent adds .br...
-                        $blocks[$blockNum]->appendChild($dom->createElement('br'));
-                    }
+//                        $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                        $blocks[$blockNum]->appendChild(new DOMText("\n"));
+//                    }
                 }
                 throw new Exception($line . '.nf without corresponding .fi');
             }
