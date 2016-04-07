@@ -13,6 +13,7 @@ class Text
         $numRawLines       = count($rawLines);
         $lines             = [];
         $macroReplacements = [];
+        $aliases           = [];
         $foundTitle        = false;
 
         $man = Man::instance();
@@ -30,6 +31,17 @@ class Text
             // Skip full-line comments
             if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
                 continue;
+            }
+
+            if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
+                $aliases[$matches['new']] = $matches['old'];
+                continue;
+            }
+
+            if (count($aliases) > 0) {
+                foreach ($aliases as $new => $old) {
+                    $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
+                }
             }
 
             // Skip stuff we don't care about:
