@@ -42,7 +42,9 @@
     <h3>Using symbol tags</h3>
     <p>Symbol tagging is useful for marking symbols that are special in some way. Any symbol can have an arbitrary number of tags associated with it. While all tags are parsed and stored, only some of them are understood by <strong>dpkg-gensymbols</strong> and trigger special handling of the symbols. See subsection <strong>Standard symbol tags</strong> for reference of these tags.
     <p>Tag specification comes right before the symbol name (no whitespace is allowed in between). It always starts with an opening bracket <strong>(</strong>, ends with a closing bracket <strong>)</strong> and must contain at least one tag. Multiple tags are separated by the <strong>|</strong> character. Each tag can optionally have a value which is separated form the tag name by the <strong>=</strong> character. Tag names and values can be arbitrary strings except they cannot contain any of the special <strong>)</strong> <strong>|</strong> <strong>=</strong> characters. Symbol names following a tag specification can optionally be quoted with either <strong>'</strong> or <strong>"</strong> characters to allow whitespaces in them. However, if there are no tags specified for the symbol, quotes are treated as part of the symbol name which continues up until the first space.
-    <p>(tag1=i am marked|tag name with space)"tagged quoted symbol"@Base 1.0 (optional)tagged_unquoted_symbol@Base 1.0 1 untagged_symbol@Base 1.0
+    <p>(tag1=i am marked|tag name with space)"tagged quoted symbol"@Base 1.0<br>
+    (optional)tagged_unquoted_symbol@Base 1.0 1<br>
+    untagged_symbol@Base 1.0
     <p>The first symbol in the example is named <em>tagged quoted symbol</em> and has two tags: <em>tag1</em> with value <em>i am marked</em> and <em>tag name with space</em> that has no value. The second symbol named <em>tagged_unquoted_symbol</em> is only tagged with the tag named <em>optional</em>. The last symbol is an example of the normal untagged symbol.
     <p>Since symbol tags are an extension of the <strong>deb-symbols</strong>(5) format, they can only be part of the symbols files used in source packages (those files should then be seen as templates used to build the symbols files that are embedded in binary packages). When <strong>dpkg-gensymbols</strong> is called without the <strong>-t</strong> option, it will output symbols files compatible to the <strong>deb-symbols</strong>(5) format: it fully processes symbols according to the requirements of their standard tags and strips all tags from the output. On the contrary, in template mode (<strong>-t</strong>) all symbols and their tags (both standard and unknown ones) are kept in the output and are written in their original form as they were loaded.
   </div>
@@ -62,15 +64,19 @@
       <br>
       The format of <em>architecture-list</em> is the same as the one used in the <strong>Build-Depends</strong> field of <em>debian/control</em> (except the enclosing square brackets []). For example, the first symbol from the list below will be considered only on alpha, any-amd64 and ia64 architectures, the second only on linux architectures, while the third one anywhere except on armel.<br>
       <br>
-      (arch=alpha any-amd64 ia64)a_64bit_specific_symbol@Base 1.0 (arch=linux-any)linux_specific_symbol@Base 1.0 (arch=!armel)symbol_armel_does_not_have@Base 1.0<br>
+      (arch=alpha any-amd64 ia64)a_64bit_specific_symbol@Base 1.0<br>
+      (arch=linux-any)linux_specific_symbol@Base 1.0<br>
+      (arch=!armel)symbol_armel_does_not_have@Base 1.0<br>
       <br>
       The <em>architecture-bits</em> is either <strong>32</strong> or <strong>64</strong>.<br>
       <br>
-      (arch-bits=32)a_32bit_specific_symbol@Base 1.0 (arch-bits=64)a_64bit_specific_symbol@Base 1.0<br>
+      (arch-bits=32)a_32bit_specific_symbol@Base 1.0<br>
+      (arch-bits=64)a_64bit_specific_symbol@Base 1.0<br>
       <br>
       The <em>architecture-endianness</em> is either <strong>little</strong> or <strong>big</strong>.<br>
       <br>
-      (arch-endian=little)a_little_endian_specific_symbol@Base 1.0 (arch-endian=big)a_big_endian_specific_symbol@Base 1.0<br>
+      (arch-endian=little)a_little_endian_specific_symbol@Base 1.0<br>
+      (arch-endian=big)a_big_endian_specific_symbol@Base 1.0<br>
       <br>
       Multiple restrictions can be chained.<br>
       <br>
@@ -112,7 +118,8 @@
         <p>Symbols like "mystack_new@Base", "mystack_push@Base", "mystack_pop@Base" etc. will be matched by the first pattern while e.g. "ng_mystack_new@Base" won't. The second pattern will match all symbols having the string "private" in their names and matches will inherit <em>optional</em> tag from the pattern.
       </dl>
     <p>Basic patterns listed above can be combined where it makes sense. In that case, they are processed in the order in which the tags are specified. For example, both
-    <p>(c++|regex)"^NSA::ClassA::Private::privmethod\d\(int\)@Base" 1.0 (regex|c++)N3NSA6ClassA7Private11privmethod\dEi@Base 1.0
+    <p>(c++|regex)"^NSA::ClassA::Private::privmethod\d\(int\)@Base" 1.0<br>
+    (regex|c++)N3NSA6ClassA7Private11privmethod\dEi@Base 1.0
     <p>will match symbols "_ZN3NSA6ClassA7Private11privmethod1Ei@Base" and "_ZN3NSA6ClassA7Private11privmethod2Ei@Base". When matching the first pattern, the raw symbol is first demangled as C++ symbol, then the demangled name is matched against the regular expression. On the other hand, when matching the second pattern, regular expression is matched against the raw symbol name, then the symbol is tested if it is C++ one by attempting to demangle it. A failure of any basic pattern will result in the failure of the whole pattern. Therefore, for example, "__N3NSA6ClassA7Private11privmethod\dEi@Base" will not match either of the patterns because it is not a valid C++ symbol.
     <p>In general, all patterns are divided into two groups: aliases (basic <em>c++</em> and <em>symver</em>) and generic patterns (<em>regex</em>, all combinations of multiple basic patterns). Matching of basic alias-based patterns is fast (O(1)) while generic patterns are O(N) (N - generic pattern count) for each symbol. Therefore, it is recommended not to overuse generic patterns.
     <p>When multiple patterns match the same real symbol, aliases (first <em>c++</em>, then <em>symver</em>) are preferred over generic patterns. Generic patterns are matched in the order they are found in the symbol file template until the first success. Please note, however, that manual reordering of template file entries is not recommended because <strong>dpkg-gensymbols</strong> generates diffs based on the alphanumerical order of their names.
@@ -132,7 +139,10 @@
       <br>
       As a result, all symbols included from <em>file-to-include</em> will be considered to be tagged with <em>tag</em> ... <em>tagN</em> by default. You can use this feature to create a common <em>package</em>.symbols file which includes architecture specific symbol files:<br>
       <br>
-      common_symbol1@Base 1.0 (arch=amd64 ia64 alpha)#include "package.symbols.64bit" (arch=!amd64 !ia64 !alpha)#include "package.symbols.32bit" common_symbol2@Base 1.0
+      common_symbol1@Base 1.0<br>
+      (arch=amd64 ia64 alpha)#include "package.symbols.64bit"<br>
+      (arch=!amd64 !ia64 !alpha)#include "package.symbols.32bit"<br>
+      common_symbol2@Base 1.0
     </dl>
     <p>The symbols files are read line by line, and include directives are processed as soon as they are encountered. This means that the content of the included file can override any content that appeared before the include directive and that any content after the directive can override anything contained in the included file. Any symbol (or even another #include directive) in the included file can specify additional tags or override values of the inherited tags in its tag specification. However, there is no way for the symbol to remove any of the inherited tags.
     <p>An included file can repeat the header line containing the SONAME of the library. In that case, it overrides any header line previously read. However, in general it's best to avoid duplicating header lines. One way to do it is the following:

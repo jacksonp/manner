@@ -253,7 +253,7 @@ class Blocks
                 throw new Exception($line - ' $parentForLine is null.');
             }
 
-            if ($canAppendNextText && mb_substr($line, 0, 1) !== '.' && !preg_match('~\\\\c$~', $line)) {
+            if ($canAppendNextText && !in_array(mb_substr($line, 0, 1), ['.', ' ']) && !preg_match('~\\\\c$~', $line)) {
                 while ($i < $numLines - 1) {
                     $nextLine = $parentSectionNode->manLines[$i + 1];
                     if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.') {
