@@ -38,6 +38,15 @@ class Text
                 continue;
             }
 
+            if ($line === '.ig') {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    if ($rawLines[$i] === '..') {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.ig with no corresponding ..');
+            }
+
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
                     $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
