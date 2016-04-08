@@ -33,6 +33,11 @@ class Text
                 continue;
             }
 
+            if ($line === '\\&') {
+                // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText().
+                continue;
+            }
+
             if ($line === '.so man.macros') {
                 continue;
             }
@@ -49,6 +54,15 @@ class Text
                     }
                 }
                 throw new Exception('.ig with no corresponding ..');
+            }
+
+            if (preg_match('~^\.UR( |$)~', $line)) {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    if ($rawLines[$i] === '.UE') {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.UR with no corresponding .UE');
             }
 
             if (count($aliases) > 0) {
