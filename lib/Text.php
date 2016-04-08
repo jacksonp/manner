@@ -33,6 +33,10 @@ class Text
                 continue;
             }
 
+            if ($line === '.so man.macros') {
+                continue;
+            }
+
             if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
                 $aliases[$matches['new']] = $matches['old'];
                 continue;

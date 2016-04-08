@@ -189,7 +189,8 @@ class Blocks
                     TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
                     $blocks[$blockNum]->appendChild(new DOMText("\n"));
                 }
-                throw new Exception($line . '.nf without corresponding .fi');
+                // If we get here: no-fill terminated by end of block.
+                continue;
             }
 
 
