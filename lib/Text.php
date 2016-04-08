@@ -86,7 +86,8 @@ class Text
             // .LL "sets the line length, which includes the value of IN."
             // .PU: ?
             // .LO 1: ?
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1)~u', $line)) {
+            // .pl: "Set the page length"
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl)~u', $line)) {
                 continue;
             }
 
