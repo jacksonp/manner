@@ -87,7 +87,9 @@ class Text
             // .PU: ?
             // .LO 1: ?
             // .pl: "Set the page length"
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl)~u', $line)) {
+            // .pc: "Change the page number character"
+            // .PD: "Adjust the empty space before a new paragraph or section."
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD)~u', $line)) {
                 continue;
             }
 
