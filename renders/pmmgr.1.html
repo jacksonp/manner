@@ -39,7 +39,7 @@
       <br>
       However, it may be desirable for a host-id to also be <em>persistent</em>, so that if the target host goes offline and later returns, the new host-id matches the previous one, because then old and new histories can be joined. This argues against using metrics whose values vary from boot to boot.<br>
       <br>
-      Some candidate metrics to consider: <em>network.interface.hw_addr</em>, <em>network.interface.inet_addr["eth0"]</em>, <em>network.interface.ipv6_addr</em>, <em>kernel.uname.nodename</em>
+      Some candidate metrics to consider: <em>network.interface.hw_addr</em>, <em>network.interface.inet_addr[“eth0”]</em>, <em>network.interface.ipv6_addr</em>, <em>kernel.uname.nodename</em>
       <dt>log-directory
       <dd>This file contains the path of a directory beneath which the per-host-id subdirectories are to be created by pmmgr. If it is not a full path, it is implicitly relative to the configuration directory itself. The default is <strong>$PCP_LOG_DIR/pmmgr/</strong>.
       <dt>target-host
@@ -77,11 +77,11 @@
       <dt>pmlogmerge-rewrite
       <dd>If this file exists, pmmgr will run <strong>pmlogrewrite -i</strong> (plus any other options listed in this file) on each input archive before merging it. This will naturally require more disk I/O. The default is <strong>no rewriting</strong>.
       <dt>pmlogmerge-retain
-      <dd>pmmgr reduces/deletes any original-resolution archives after a time period specified by this file, as measured by the file mtime. The period will also be passed to pmlogextract as a negative parameter to -S. The default is <strong>14days</strong>. To store archives indefinitely, set this to a large quantity like "99999weeks".
+      <dd>pmmgr reduces/deletes any original-resolution archives after a time period specified by this file, as measured by the file mtime. The period will also be passed to pmlogextract as a negative parameter to -S. The default is <strong>14days</strong>. To store archives indefinitely, set this to a large quantity like “99999weeks”.
       <dt>pmlogreduce
       <dd>If this file exists, then prior to removing archives that expire past the <em>pmlogmerge-retain</em> period, they are processed with <em>pmlogreduce</em> to create reduced archives (named <strong>reduced-*</strong>). If the file contains space-separated options, they are passed onto pmlogreduce. (By default, pmlogreduce downsamples to a 600-second interval.)
       <dt>pmlogreduce-retain
-      <dd>If this file exists, then reduced archives (identified by the <strong>reduced-*</strong> pattern) are deleted after a time period specified by this file, as measured from the file mtime. Since this time is likely that of the pmlogreduce run, the total retention time will be approximately the pmlogmerge-retain time <strong>plus</strong> the pmlogreduce-retain time. The default is <strong>90days</strong>. To store reduced archives indefinitely, set this to a large quantity like "99999weeks".
+      <dd>If this file exists, then reduced archives (identified by the <strong>reduced-*</strong> pattern) are deleted after a time period specified by this file, as measured from the file mtime. Since this time is likely that of the pmlogreduce run, the total retention time will be approximately the pmlogmerge-retain time <strong>plus</strong> the pmlogreduce-retain time. The default is <strong>90days</strong>. To store reduced archives indefinitely, set this to a large quantity like “99999weeks”.
     </dl>
   </div>
   <div class="subsection">

@@ -14,7 +14,7 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>Digitally sign, verify or compare CLR assemblies using strongnames.
-  <p>You can use the sn command to create "snk files" using the -k option described below.
+  <p>You can use the sn command to create “snk files” using the -k option described below.
 </div>
 <div class="section">
   <h2>CONFIGURATION OPTIONS</h2>
@@ -101,12 +101,12 @@
 <div class="section">
   <h2>CONFIGURATION FILE</h2>
   <dl>
-    <dt>Strongnames configuration is kept in "machine.config" file. Currently two
+    <dt>Strongnames configuration is kept in “machine.config” file. Currently two
     <dd>features can be configured.
     <dt><em>/configuration/strongNames/pubTokenMapping</em>
-    <dd>This mechanism lets Mono remap a public key token, like the ECMA token, to another public key for verification. This is useful in two scenarios. First, assemblies signed with the "ECMA key" need to be verified by the "runtime" key (as the ECMA key isn't a public key). Second, many assemblies are signed with private keys that Mono can't use (e.g. System.Security.dll assembly). A new key cannot be used because it should change the strongname (a new key pair would have a new public key which would produce a new token). Public key token remapping is the solution for both problems. Each token must be configured in a "map" entry similar to this one: &lt;map Token="b77a5c561934e089" PublicKey="00..." /&gt;
+    <dd>This mechanism lets Mono remap a public key token, like the ECMA token, to another public key for verification. This is useful in two scenarios. First, assemblies signed with the “ECMA key” need to be verified by the “runtime” key (as the ECMA key isn't a public key). Second, many assemblies are signed with private keys that Mono can't use (e.g. System.Security.dll assembly). A new key cannot be used because it should change the strongname (a new key pair would have a new public key which would produce a new token). Public key token remapping is the solution for both problems. Each token must be configured in a “map” entry similar to this one: &lt;map Token=“b77a5c561934e089” PublicKey=“00...” /&gt;
     <dt><em>/configuration/strongNames/verificationSettings</em>
-    <dd>It is often useful during development to use delay signed assemblies. Normally* the runtime wouldn't allow delay-signed assemblies to be loaded. This feature allows some delay-signed assemblies (based on their public key token, optionally assembly name and user name) to be used like they were fully signed assemblies. [*] Note that Mono 1.0 "runtime" doesn't validate strongname signatures so this option shouldn't be required in most scenarios.
+    <dd>It is often useful during development to use delay signed assemblies. Normally* the runtime wouldn't allow delay-signed assemblies to be loaded. This feature allows some delay-signed assemblies (based on their public key token, optionally assembly name and user name) to be used like they were fully signed assemblies. [*] Note that Mono 1.0 “runtime” doesn't validate strongname signatures so this option shouldn't be required in most scenarios.
   </dl>
 </div>
 <div class="section">

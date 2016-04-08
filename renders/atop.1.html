@@ -18,7 +18,7 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>The program <em>atop</em> is an interactive monitor to view the load on a Linux system. It shows the occupation of the most critical hardware resources (from a performance point of view) on system level, i.e. cpu, memory, disk and network.<br>
-  It also shows which processes are responsible for the indicated load with respect to cpu and memory load on process level. Disk load is shown per process if "storage accounting" is active in the kernel. Network load is shown per process if the kernel module `netatop' has been installed.
+  It also shows which processes are responsible for the indicated load with respect to cpu and memory load on process level. Disk load is shown per process if “storage accounting” is active in the kernel. Network load is shown per process if the kernel module `netatop' has been installed.
   <p>Every <em>interval</em> (default: 10 seconds) information is shown about the resource occupation on system level (cpu, memory, disks and network layers), followed by a list of processes which have been active during the last interval (note that all processes that were unchanged during the last interval are not shown, unless the key 'a' has been pressed). If the list of active processes does not entirely fit on the screen, only the top of the list is shown (sorted in order of activity).<br>
   The intervals are repeated till the number of <em>samples</em> (specified as command argument) is reached, or till the key 'q' is pressed in interactive mode.
   <p>When <em>atop</em> is started, it checks whether the standard output channel is connected to a screen, or to a file/pipe. In the first case it produces screen control codes (via the ncurses library) and behaves interactively; in the second case it produces flat ASCII-output.
@@ -98,7 +98,7 @@
     Per process the following fields are shown in case of a window-width of 80 positions: process-id, cpu consumption during the last interval in system and user mode, the virtual and resident memory growth of the process.<br>
     <br>
     The subsequent columns depend on the used kernel:<br>
-    When the kernel supports "storage accounting" (&gt;= 2.6.20), the data transfer for read/write on disk, the status and exit code are shown for each process. When the kernel does not support "storage accounting", the username, number of threads in the thread group, the status and exit code are shown.<br>
+    When the kernel supports “storage accounting” (&gt;= 2.6.20), the data transfer for read/write on disk, the status and exit code are shown for each process. When the kernel does not support “storage accounting”, the username, number of threads in the thread group, the status and exit code are shown.<br>
     When the kernel module 'netatop' is loaded, the data transfer for send/receive of network packets is shown for each process.<br>
     The last columns contain the state, the occupation percentage for the chosen resource (default: cpu) and the process name.<br>
     <br>
@@ -116,7 +116,7 @@
     <dt><strong>d</strong>
     <dd>Show disk-related output.<br>
     <br>
-    When "storage accounting" is active in the kernel, the following fields are shown: process-id, amount of data read from disk, amount of data written to disk, amount of data that was written but has been withdrawn again (WCANCL), disk occupation percentage and process name.
+    When “storage accounting” is active in the kernel, the following fields are shown: process-id, amount of data read from disk, amount of data written to disk, amount of data that was written but has been withdrawn again (WCANCL), disk occupation percentage and process name.
   </dl>
   <dl>
     <dt><strong>n</strong>
@@ -169,7 +169,7 @@
     <dd>Show the process activity accumulated per user.<br>
     <br>
     Per user the following fields are shown: number of processes active or terminated during last interval (or in total if combined with command `a'), accumulated cpu consumption during last interval in system and user mode, the current virtual and resident memory space consumed by active processes (or all processes of the user if combined with command `a').<br>
-    When "storage accounting" is active in the kernel, the accumulated read and write throughput on disk is shown. When the kernel module `netatop' has been installed, the number of received and sent network packets are shown.<br>
+    When “storage accounting” is active in the kernel, the accumulated read and write throughput on disk is shown. When the kernel module `netatop' has been installed, the number of received and sent network packets are shown.<br>
     The last columns contain the accumulated occupation percentage for the chosen resource (default: cpu) and the user name.
   </dl>
   <dl>
@@ -177,7 +177,7 @@
     <dd>Show the process activity accumulated per program (i.e. process name).<br>
     <br>
     Per program the following fields are shown: number of processes active or terminated during last interval (or in total if combined with command `a'), accumulated cpu consumption during last interval in system and user mode, the current virtual and resident memory space consumed by active processes (or all processes of the user if combined with command `a').<br>
-    When "storage accounting" is active in the kernel, the accumulated read and write throughput on disk is shown. When the kernel module `netatop' has been installed, the number of received and sent network packets are shown.<br>
+    When “storage accounting” is active in the kernel, the accumulated read and write throughput on disk is shown. When the kernel module `netatop' has been installed, the number of received and sent network packets are shown.<br>
     The last columns contain the accumulated occupation percentage for the chosen resource (default: cpu) and the program name.
   </dl>
   <dl>
@@ -200,7 +200,7 @@
     <dt><strong>A</strong>
     <dd>Sort the current list automatically in the order of the most busy system resource during this interval. The one-but-last column shows either “ACPU”, “AMEM”, “ADSK” or “ANET” (the preceding 'A' indicates automatic sorting-order). The most busy resource is determined by comparing the weighted busy-percentages of the system resources, as described earlier in the section COLORS.<br>
     This option remains valid until another sorting-order is explicitly selected again.<br>
-    A sorting-order for disk is only possible when "storage accounting" is active. A sorting-order for network is only possible when the kernel module `netatop' is loaded.
+    A sorting-order for disk is only possible when “storage accounting” is active. A sorting-order for network is only possible when the kernel module `netatop' is loaded.
   </dl>
   <p>Miscellaneous interactive commands:
   <dl>
@@ -476,7 +476,7 @@
   </dl>
   <dl>
     <dt><strong>CMD</strong>
-    <dd>The name of the process. This name can be surrounded by "less/greater than" signs (`&lt;name&gt;') which means that the process has finished during the last interval.<br>
+    <dd>The name of the process. This name can be surrounded by “less/greater than” signs (`&lt;name&gt;') which means that the process has finished during the last interval.<br>
     Behind the abbreviation `CMD' in the header line, the current page number and the total number of pages of the process/thread list are shown.
   </dl>
   <dl>
@@ -499,7 +499,7 @@
   <dl>
     <dt><strong>DSK</strong>
     <dd>The occupation percentage of this process related to the total load that is produced by all processes (i.e. total disk accesses by all processes during the last interval).<br>
-    This information is shown when per process "storage accounting" is active in the kernel.
+    This information is shown when per process “storage accounting” is active in the kernel.
   </dl>
   <dl>
     <dt><strong>EGID</strong>
@@ -758,11 +758,11 @@
 </div>
 <div class="section">
   <h2>PARSEABLE OUTPUT</h2>
-  <p>With the flag <strong>-P</strong> followed by a list of one or more labels (comma-separated), parseable output is produced for each sample. The labels that can be specified for system-level statistics correspond to the labels (first verb of each line) that can be found in the interactive output: "CPU", "cpu" "CPL" "MEM", "SWP", "PAG", "LVM", "MDD", "DSK", "NFM", "NFC", "NFS" and "NET".<br>
-  For process-level statistics special labels are introduced: "PRG" (general), "PRC" (cpu), "PRM" (memory), "PRD" (disk, only if "storage accounting" is active) and "PRN" (network, only if the kernel module 'netatop' has been installed).<br>
-  With the label "ALL", all system and process level statistics are shown.
-  <p>For every interval all requested lines are shown whereafter <strong>atop</strong> shows a line just containing the label "SEP" as a separator before the lines for the next sample are generated.<br>
-  When a sample contains the values since boot, <strong>atop</strong> shows a line just containing the label "RESET" before the lines for this sample are generated.
+  <p>With the flag <strong>-P</strong> followed by a list of one or more labels (comma-separated), parseable output is produced for each sample. The labels that can be specified for system-level statistics correspond to the labels (first verb of each line) that can be found in the interactive output: “CPU”, “cpu” “CPL” “MEM”, “SWP”, “PAG”, “LVM”, “MDD”, “DSK”, “NFM”, “NFC”, “NFS” and “NET”.<br>
+  For process-level statistics special labels are introduced: “PRG” (general), “PRC” (cpu), “PRM” (memory), “PRD” (disk, only if “storage accounting” is active) and “PRN” (network, only if the kernel module 'netatop' has been installed).<br>
+  With the label “ALL”, all system and process level statistics are shown.
+  <p>For every interval all requested lines are shown whereafter <strong>atop</strong> shows a line just containing the label “SEP” as a separator before the lines for the next sample are generated.<br>
+  When a sample contains the values since boot, <strong>atop</strong> shows a line just containing the label “RESET” before the lines for this sample are generated.
   <p>The first part of each output-line consists of the following six fields: <strong>label</strong> (the name of the label), <strong>host</strong> (the name of this machine), <strong>epoch</strong> (the time of this interval as number of seconds since 1-1-1970), <strong>date</strong> (date of this interval in format YYYY/MM/DD), <strong>time</strong> (time of this interval in format HH:MM:SS), and <strong>interval</strong> (number of seconds elapsed for this interval).
   <p>The subsequent fields of each output-line depend on the label:
   <dl>
@@ -789,7 +789,7 @@
     <dd>Subsequent fields: number of handled RPCs, number of received read RPCs, number of received write RPCs, number of bytes read by clients, number of bytes written by clients, number of RPCs with bad format, number of RPCs with bad authorization, number of RPCs from bad client, total number of handled network requests, number of handled network requests via TCP, number of handled network requests via UDP, number of handled TCP connections, number of hits on reply cache, number of misses on reply cache, and number of uncached requests.
     <dt><strong>NET</strong>
     <dd>First one line is produced for the upper layers of the TCP/IP stack.<br>
-    Subsequent fields: the verb "upper", number of packets received by TCP, number of packets transmitted by TCP, number of packets received by UDP, number of packets transmitted by UDP, number of packets received by IP, number of packets transmitted by IP, number of packets delivered to higher layers by IP, and number of packets forwarded by IP.<br>
+    Subsequent fields: the verb “upper”, number of packets received by TCP, number of packets transmitted by TCP, number of packets received by UDP, number of packets transmitted by UDP, number of packets received by IP, number of packets transmitted by IP, number of packets delivered to higher layers by IP, and number of packets forwarded by IP.<br>
     <br>
     Next one line is shown for every interface.<br>
     Subsequent fields: name of the interface, number of packets received by the interface, number of bytes received by the interface, number of packets transmitted by the interface, number of bytes transmitted by the interface, interface speed, and duplex mode (0=half, 1=full).

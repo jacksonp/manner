@@ -256,7 +256,15 @@ class TextContent
 
         // Prettier double quotes:
         $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
-//        $string = preg_replace('~"(.*?)"~', '“$1”', $string);
+        if (!in_array($parentNode->tagName, ['pre', 'code'])) {
+            $string = preg_replace('~"(.*?)"~', '“$1”', $string);
+        }
+
+        // Get rid of <> around URLs - these get translater to &lt; and &gt; and then cause problems with finding out what we can make into links.
+        $string = preg_replace(
+          '~<(?<url>(?:ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|(?:[^[:punct:]\s]|/)))>~u',
+          '$1',
+          $string);
 
         $parentNode->appendChild(new DOMText($string));
 

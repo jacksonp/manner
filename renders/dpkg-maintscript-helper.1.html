@@ -48,7 +48,7 @@
     <p>If a conffile is completely removed, it should be removed from disk, unless the user has modified it. If there are local modifications, they should be preserved. If the package upgrades aborts, the newly obsolete conffile should not disappear.
     <p>All of this is implemented by putting the following shell snippet in the <strong>preinst</strong>, <strong>postinst</strong> and <strong>postrm</strong> maintainer scripts:
     <p>dpkg-maintscript-helper rm_conffile \<br>
-    <em>conffile</em> <em>prior-version</em> <em>package</em> -- "$@"
+    <em>conffile</em> <em>prior-version</em> <em>package</em> -- “$@”
     <p><em>conffile</em> is the filename of the conffile to remove.
     <p>Current implementation: in the <strong>preinst</strong>, it checks if the conffile was modified and renames it either to <em>conffile</em><strong>.dpkg-remove</strong> (if not modified) or to <em>conffile</em><strong>.dpkg-backup</strong> (if modified). In the <strong>postinst</strong>, the latter file is renamed to <em>conffile</em><strong>.dpkg-bak</strong> and kept for reference as it contains user modifications but the former will be removed. If the package upgrade aborts, the <strong>postrm</strong> reinstalls the original conffile. During purge, the <strong>postrm</strong> will also delete the <strong>.dpkg-bak</strong> file kept up to now.
   </div>
@@ -57,7 +57,7 @@
     <p>If a conffile is moved from one location to another, you need to make sure you move across any changes the user has made. This may seem a simple change to the <strong>preinst</strong> script at first, however that will result in the user being prompted by <strong>dpkg</strong> to approve the conffile edits even though they are not responsible of them.
     <p>Graceful renaming can be implemented by putting the following shell snippet in the <strong>preinst</strong>, <strong>postinst</strong> and <strong>postrm</strong> maintainer scripts:
     <p>dpkg-maintscript-helper mv_conffile \<br>
-    <em>old-conffile</em> <em>new-conffile</em> <em>prior-version</em> <em>package</em> -- "$@"
+    <em>old-conffile</em> <em>new-conffile</em> <em>prior-version</em> <em>package</em> -- “$@”
     <p><em>old-conffile</em> and <em>new-conffile</em> are the old and new name of the conffile to rename.
     <p>Current implementation: the <strong>preinst</strong> checks if the conffile has been modified, if yes it's left on place otherwise it's renamed to <em>old-conffile</em><strong>.dpkg-remove</strong>. On configuration, the <strong>postinst</strong> removes <em>old-conffile</em><strong>.dpkg-remove</strong> and renames <em>old-conffile</em> to <em>new-conffile</em> if <em>old-conffile</em> is still available. On abort-upgrade/abort-install, the <strong>postrm</strong> renames <em>old-conffile</em><strong>.dpkg-remove</strong> back to <em>old-conffile</em> if required.
   </div>
@@ -70,7 +70,7 @@
     <p>If a symlink is switched to a real directory, you need to make sure before unpacking that the symlink is removed. This may seem a simple change to the <strong>preinst</strong> script at first, however that will result in some problems in case of admin local customization of the symlink or when downgrading the package.
     <p>Graceful renaming can be implemented by putting the following shell snippet in the <strong>preinst</strong>, <strong>postinst</strong> and <strong>postrm</strong> maintainer scripts:
     <p>dpkg-maintscript-helper symlink_to_dir \<br>
-    <em>pathname</em> <em>old-target</em> <em>prior-version</em> <em>package</em> -- "$@"
+    <em>pathname</em> <em>old-target</em> <em>prior-version</em> <em>package</em> -- “$@”
     <p><em>pathname</em> is the absolute name of the old symlink (the path will be a directory at the end of the installation) and <em>old-target</em> is the target name of the former symlink at <em>pathname</em>. It can either be absolute or relative to the directory containing <em>pathname</em>.
     <p>Current implementation: the <strong>preinst</strong> checks if the symlink exists and points to <em>old-target</em>, if not then it's left in place, otherwise it's renamed to <em>pathname</em><strong>.dpkg-backup</strong>. On configuration, the <strong>postinst</strong> removes <em>pathname</em><strong>.dpkg-backup</strong> if <em>pathname</em><strong>.dpkg-backup</strong> is still a symlink. On abort-upgrade/abort-install, the <strong>postrm</strong> renames <em>pathname</em><strong>.dpkg-backup</strong> back to <em>pathname</em> if required.
   </div>
@@ -79,7 +79,7 @@
     <p>If a real directory is switched to a symlink, you need to make sure before unpacking that the directory is removed. This may seem a simple change to the <strong>preinst</strong> script at first, however that will result in some problems in case the directory contains conffiles, pathnames owned by other packages, locally created pathnames, or when downgrading the package.
     <p>Graceful switching can be implemented by putting the following shell snippet in the <strong>preinst</strong>, <strong>postinst</strong> and <strong>postrm</strong> maintainer scripts:
     <p>dpkg-maintscript-helper dir_to_symlink \<br>
-    <em>pathname</em> <em>new-target</em> <em>prior-version</em> <em>package</em> -- "$@"
+    <em>pathname</em> <em>new-target</em> <em>prior-version</em> <em>package</em> -- “$@”
     <p><em>pathname</em> is the absolute name of the old directory (the path will be a symlink at the end of the installation) and <em>new-target</em> is the target of the new symlink at <em>pathname</em>. It can either be absolute or relative to the directory containing <em>pathname</em>.
     <p>Current implementation: the <strong>preinst</strong> checks if the directory exists, does not contain conffiles, pathnames owned by other packages, or locally created pathnames, if not then it's left in place, otherwise it's renamed to <em>pathname</em><strong>.dpkg-backup</strong>, and an empty staging directory named <em>pathname</em> is created, marked with a file so that dpkg can track it. On configuration, the <strong>postinst</strong> finishes the switch if <em>pathname</em><strong>.dpkg-backup</strong> is still a directory and <em>pathname</em> is the staging directory; it removes the staging directory mark file, moves the newly created files inside the staging directory to the symlink target <em>new-target</em>/, replaces the now empty staging directory <em>pathname</em> with a symlink to <em>new-target</em>, and removes <em>pathname</em><strong>.dpkg-backup</strong>. On abort-upgrade/abort-install, the <strong>postrm</strong> renames <em>pathname</em><strong>.dpkg-backup</strong> back to <em>pathname</em> if required.
   </div>
