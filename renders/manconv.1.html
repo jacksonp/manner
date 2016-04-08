@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-06-27" data-package="2.6.5" data-section-name="Manual pager utils">
+<title>MANCONV</title>
+<h1>MANCONV</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>manconv - convert manual page from one encoding to another
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>manconv</strong> <strong>-f</strong> <em>from-code</em>[:<em>from-code</em>...] <strong>-t</strong> <em>to-code</em> [<strong>-dqhV</strong>] [<em>filename</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>manconv</strong> converts a manual page from one encoding to another, like <strong>iconv</strong>. Unlike <strong>iconv</strong>, it can try multiple possible input encodings in sequence. This is useful for manual pages installed in directories without an explicit encoding declaration, since they may be in UTF-8 or in a legacy character set.
+  <p>If an encoding declaration is found on the first line of the manual page, that declaration overrides any input encodings specified on <strong>manconv</strong>'s command line. Encoding declarations have the following form:
+  <div class="indent">
+    <pre> '\" -*- coding: UTF-8 -*-
+</pre>
+  </div>
+  <p>or (if manual page preprocessors are also to be declared):
+  <div class="indent">
+    <pre> '\" t -*- coding: ISO-8859-1 -*-
+</pre>
+  </div>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-f</strong> <em>encodings</em>, <strong>--from-code</strong> <em>encodings</em>
+    <dd>Try each of <em>encodings</em> (a colon-separated list) in sequence as the input encoding.
+    <dt><strong>-t</strong> <em>encoding</em>, <strong>--to-code</strong> <em>encoding</em>
+    <dd>Convert the manual page to <em>encoding</em>.
+    <dt><strong>-q</strong>, <strong>--quiet</strong>
+    <dd>Do not issue error messages when the page cannot be converted.
+    <dt><strong>-d</strong>, <strong>--debug</strong>
+    <dd>Print debugging information.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Print a help message and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><em>iconv</em>(1), <em>man</em>(1)
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <pre> Colin Watson (cjwatson@debian.org).
+</pre>
+</div>
+

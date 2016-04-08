@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="July 2014" data-package="util-linux" data-section-name="User Commands">
+<title>IPCRM</title>
+<h1>IPCRM</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>ipcrm - remove certain IPC resources
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>ipcrm</strong> [options]<br>
+  <br>
+  <strong>ipcrm</strong> {<strong>shm</strong>|<strong>msg</strong>|<strong>sem</strong>} <em>id</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>ipcrm</strong> removes System V interprocess communication (IPC) objects and associated data structures from the system. In order to delete such objects, you must be superuser, or the creator or owner of the object.
+  <p>System V IPC objects are of three types: shared memory, message queues, and semaphores. Deletion of a message queue or semaphore object is immediate (regardless of whether any process still holds an IPC identifier for the object). A shared memory object is only removed after all currently attached processes have detached (<strong>shmdt</strong>(2)) the object from their virtual address space.
+  <p>Two syntax styles are supported. The old Linux historical syntax specifies a three-letter keyword indicating which class of object is to be deleted, followed by one or more IPC identifiers for objects of this type.
+  <p>The SUS-compliant syntax allows the specification of zero or more objects of all three types in a single command line, with objects specified either by key or by identifier (see below). Both keys and identifiers may be specified in decimal, hexadecimal (specified with an initial '0x' or '0X'), or octal (specified with an initial '0').
+  <p>The details of the removes are described in <a href="/2/shmctl" class="link-man">shmctl(2)</a>, <a href="/2/msgctl" class="link-man">msgctl(2)</a>, and <a href="/2/semctl" class="link-man">semctl(2)</a>. The identifiers and keys can be found by using <a href="/1/ipcs" class="link-man">ipcs(1)</a>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>, <strong>--all</strong> [<strong>shm</strong>] [<strong>msg</strong>] [<strong>sem</strong>]
+    <dd>Remove all resources. When an option argument is provided, the removal is performed only for the specified resource types. <em>Warning!</em> Do not use <strong>-a</strong> if you are unsure how the software using the resources might react to missing objects. Some programs create these resources at startup and may not have any code to deal with an unexpected disappearance.
+    <dt><strong>-M</strong>, <strong>--shmem-key</strong> <em>shmkey</em>
+    <dd>Remove the shared memory segment created with <em>shmkey</em> after the last detach is performed.
+    <dt><strong>-m</strong>, <strong>--shmem-id</strong> <em>shmid</em>
+    <dd>Remove the shared memory segment identified by <em>shmid</em> after the last detach is performed.
+    <dt><strong>-Q</strong>, <strong>--queue-key</strong> <em>msgkey</em>
+    <dd>Remove the message queue created with <em>msgkey</em>.
+    <dt><strong>-q</strong>, <strong>--queue-id</strong> <em>msgid</em>
+    <dd>Remove the message queue identified by <em>msgid</em>.
+    <dt><strong>-S</strong>, <strong>--semaphore-key</strong> <em>semkey</em>
+    <dd>Remove the semaphore created with <em>semkey</em>.
+    <dt><strong>-s</strong>, <strong>--semaphore-id</strong> <em>semid</em>
+    <dd>Remove the semaphore identified by <em>semid</em>.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p>In its first Linux implementation, <strong>ipcrm</strong> used the deprecated syntax shown in the second line of the <strong>SYNOPSIS</strong>. Functionality present in other *nix implementations of <strong>ipcrm</strong> has since been added, namely the ability to delete resources by key (not just identifier), and to respect the same command-line syntax. For backward compatibility the previous syntax is still supported.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/ipcs" class="link-man">ipcs(1)</a>, <a href="/1/ipcmk" class="link-man">ipcmk(1)</a>, <a href="/2/msgctl" class="link-man">msgctl(2)</a>, <a href="/2/msgget" class="link-man">msgget(2)</a>, <a href="/2/semctl" class="link-man">semctl(2)</a>, <a href="/2/semget" class="link-man">semget(2)</a>, <a href="/2/shmctl" class="link-man">shmctl(2)</a>, <a href="/2/shmdt" class="link-man">shmdt(2)</a>, <a href="/2/shmget" class="link-man">shmget(2)</a>, <a href="/3/ftok" class="link-man">ftok(3)</a>
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The ipcrm command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-06-27" data-package="2.6.5" data-section-name="Manual pager utils">
+<title>ZSOELIM</title>
+<h1>ZSOELIM</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>zsoelim - satisfy .so requests in roff input
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>zsoelim</strong> [<strong>-CVh</strong>] [<em>file</em> ...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>zsoelim</strong> parses <em>file</em> arguments, or if none are specified, its standard input for lines of the form:
+  <p><strong>.so</strong> &lt;<em>filename</em>&gt;
+  <p>These requests are replaced by the contents of the <em>filename</em> specified. If the request cannot be met, <strong>zsoelim</strong> looks for <em>filename.ext</em> where <em>.ext</em> can be one of <strong>.gz</strong>, <strong>.Z</strong> or <strong>.z</strong>. Other extension types may be supported depending upon compile time options. If the request can be met by a compressed file, this file is decompressed using an appropriate decompressor and its output is used to satisfy the request.
+  <p>Traditionally, <strong>soelim</strong> programs were used to allow roff preprocessors to be able to preprocess the files referred to by the requests. This particular version was written to circumvent problems created by support for compressed manual pages.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-C</strong>, <strong>--compatible</strong>
+    <dd>This flag is available for compatibility with other <strong>soelim</strong> programs. Its use is to enable .so requests followed by something other than whitespace. As this is already the default behaviour, it is ignored.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Print a help message and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/groff" class="link-man">groff(1)</a>, <a href="/1/man" class="link-man">man(1)</a>, <a href="/1/nroff" class="link-man">nroff(1)</a>, <a href="/1/troff" class="link-man">troff(1)</a>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <pre> Wilf. (G.Wilford@ee.surrey.ac.uk).
+ Fabrizio Polacco (fpolacco@debian.org).
+ Colin Watson (cjwatson@debian.org).
+</pre>
+</div>
+

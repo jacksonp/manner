@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="January 2016" data-package="util-linux" data-section-name="User Commands">
+<title>CHRT</title>
+<h1>CHRT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>chrt - manipulate the real-time attributes of a process
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>chrt</strong> [options] <em>priority&nbsp;command&nbsp;</em>[<em>argument</em>...]<br>
+  <strong>chrt</strong> [options] <strong>-p</strong> [<em>priority</em>]&nbsp;<em>pid</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>chrt</strong> sets or retrieves the real-time scheduling attributes of an existing <em>pid</em>, or runs <em>command</em> with the given attributes.
+</div>
+<div class="section">
+  <h2>POLICIES</h2>
+  <dl>
+    <dt><strong>-o</strong>, <strong>--other</strong>
+    <dd>Set scheduling policy to <strong>SCHED_OTHER</strong>. This is the default Linux scheduling policy.
+    <dt><strong>-f</strong>, <strong>--fifo</strong>
+    <dd>Set scheduling policy to <strong>SCHED_FIFO</strong>.
+    <dt><strong>-r</strong>, <strong>--rr</strong>
+    <dd>Set scheduling policy to <strong>SCHED_RR</strong>. When no policy is defined, the <strong>SCHED_RR</strong> is used as the default.
+    <dt><strong>-b</strong>, <strong>--batch</strong>
+    <dd>Set scheduling policy to <strong>SCHED_BATCH</strong> (Linux-specific, supported since 2.6.16). The priority argument has to be set to zero.
+    <dt><strong>-i</strong>, <strong>--idle</strong>
+    <dd>Set scheduling policy to <strong>SCHED_IDLE</strong> (Linux-specific, supported since 2.6.23). The priority argument has to be set to zero.
+    <dt><strong>-d</strong>,&nbsp;<strong>--deadline</strong>
+    <dd>
+      Set scheduling policy to <strong>SCHED_DEADLINE</strong> (Linux-specific, supported since 3.14). The priority argument has to be set to zero. See also <strong>--sched-runtime</strong>, <strong>--sched-deadline</strong> and <strong>--sched-period</strong>. The relation between the options required by the kernel is runtime &lt;= deadline &lt;= period. <strong>chrt</strong> copies <em>period</em> to <em>deadline</em> if <strong>--sched-deadline</strong> is not specified and <em>deadline</em> to <em>runtime</em> if <strong>--sched-runtime</strong> is not specified. It means that at least <strong>--sched-period</strong> has to be specified. See <a href="/7/sched" class="link-man">sched(7)</a> for more details.
+    </dl>
+</div>
+<div class="section">
+  <h2>SCHEDULING OPTIONS</h2>
+  <dl>
+    <dt><strong>-T</strong>, <strong>--sched-runtime</strong> <em>nanoseconds</em>
+    <dd>Specifies runtime parameter for SCHED_DEADLINE policy (Linux-specific).
+    <dt><strong>-P</strong>, <strong>--sched-period</strong> <em>nanoseconds</em>
+    <dd>Specifies period parameter for SCHED_DEADLINE policy (Linux-specific).
+    <dt><strong>-D</strong>, <strong>--sched-deadline</strong> <em>nanoseconds</em>
+    <dd>Specifies deadline parameter for SCHED_DEADLINE policy (Linux-specific).
+    <dt><strong>-R</strong>, <strong>--reset-on-fork</strong>
+    <dd>Add <strong>SCHED_RESET_ON_FORK</strong> flag to the <strong>SCHED_FIFO</strong> or <strong>SCHED_RR</strong> scheduling policy (Linux-specific, supported since 2.6.31).
+  </dl>
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>,&nbsp;<strong>--all-tasks</strong>
+    <dd>Set or retrieve the scheduling attributes of all the tasks (threads) for a given PID.
+    <dt><strong>-m</strong>,&nbsp;<strong>--max</strong>
+    <dd>Show minimum and maximum valid priorities, then exit.
+    <dt><strong>-p</strong>,&nbsp;<strong>--pid</strong>
+    <dd>Operate on an existing PID and do not launch a new task.
+    <dt><strong>-v</strong>,&nbsp;<strong>--verbose</strong>
+    <dd>Show status information.
+    <dt><strong>-V</strong>,&nbsp;<strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>,&nbsp;<strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>USAGE</h2>
+  <dl>
+    <dt>The default behavior is to run a new command:
+    <dd><strong>chrt</strong> <em>priority</em> <em>command&nbsp;</em>[<em>arguments</em>]
+    <dt>You can also retrieve the real-time attributes of an existing task:
+    <dd><strong>chrt -p</strong> <em>pid</em>
+    <dt>Or set them:
+    <dd><strong>chrt -r -p</strong> <em>priority pid</em>
+  </dl>
+</div>
+<div class="section">
+  <h2>PERMISSIONS</h2>
+  <p>A user must possess <strong>CAP_SYS_NICE</strong> to change the scheduling attributes of a process. Any user can retrieve the scheduling information.
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p>Only <strong>SCHED_FIFO</strong>, <strong>SCHED_OTHER</strong> and <strong>SCHED_RR</strong> are part of POSIX 1003.1b Process Scheduling. The other scheduling attributes may be ignored on some systems.
+  <p>Linux' default scheduling policy is <strong>SCHED_OTHER</strong>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/taskset" class="link-man">taskset(1)</a>, <a href="/1/nice" class="link-man">nice(1)</a>, <a href="/1/renice" class="link-man">renice(1)</a>, <a href="/7/sched" class="link-man">sched(7)</a><br>
+  <br>
+  See <a href="/2/sched_setscheduler" class="link-man">sched_setscheduler(2)</a> for a description of the Linux scheduling scheme.
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <p>Robert Love<br>
+  Karel Zak
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The chrt command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">ftp://ftp.kernel.org/pub/linux/utils/util-linux/</a>.
+</div>
+

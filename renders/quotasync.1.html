@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="" data-package="" data-section-name="">
+<title>QUOTASYNC</title>
+<h1>QUOTASYNC</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>quotasync - synchronize in-kernel file system usage and limits to disk format
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>quotasync</strong> [ <strong>-ugP</strong> ] <em>mount-point</em>...<br>
+  <strong>quotasync</strong> [ <strong>-ugP</strong> ] <strong>-a</strong><br>
+  <strong>quotasync</strong> <strong>-h</strong> | <strong>-V</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>quotasync</strong> flushes file system usage and limits from kernel memory to quota files stored in the file system. By default only the user quotas are synchronized.
+  <p>This tool can be useful if you want to display accurate quotas by tools that parse quota files, like <a href="/8/repquota" class="link-man">repquota(8)</a>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-u, --user</strong>
+    <dd>Synchronize user usage and limits.
+    <dt><strong>-g, --group</strong>
+    <dd>Synchronize group usage and limits.
+    <dt><strong>-P, --project</strong>
+    <dd>Synchronize project usage and limits.
+    <dt><strong>-a, --all</strong>
+    <dd>Synchronize usage and limits on all file systems. You have to specify this option or to specify desired file systems.
+    <dt><strong>-V, --version</strong>
+    <dd>Show program version information and exit.
+    <dt><strong>-h, --help</strong>
+    <dd>Show program usage and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>If requested synchronization fails, or invalid option is given, <strong>quotasync</strong> will terminate with non-zero exit code. Otherwise it will return zero.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>aquota.user or aquota.group</strong>
+    <dd>Quota file at the file system root (version 2 quota, non-XFS/GFS2 file systems).
+    <dt><strong>quota.user or quota.group</strong>
+    <dd>Quota file at the file system root (version 1 quota, non-XFS/GFS2 file systems).
+    <dt><strong>/etc/mtab</strong>
+    <dd>List of mounted file systems maintained by user space.
+    <dt><strong>/proc/mounts</strong>
+    <dd>List of mounted file systems maintained by kernel.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/quota" class="link-man">quota(1)</a>, <a href="/2/quotactl" class="link-man">quotactl(2)</a>, <a href="/8/mount" class="link-man">mount(8)</a>, <a href="/8/quotacheck" class="link-man">quotacheck(8)</a>, <a href="/8/quotaon" class="link-man">quotaon(8)</a>, <a href="/8/repquota" class="link-man">repquota(8)</a>, <a href="/8/warnquota" class="link-man">warnquota(8)</a>.
+</div>
+

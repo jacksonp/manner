@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-06-27" data-package="2.6.5" data-section-name="Manual pager utils">
+<title>MANPATH</title>
+<h1>MANPATH</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>manpath - determine search path for manual pages
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>manpath</strong> [<strong>-qgdchV</strong>] [<strong>-m</strong> <em>system</em>[,...]] [<strong>-C</strong> <em>file</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>If $<strong>MANPATH</strong> is set, <strong>manpath</strong> will simply display its contents and issue a warning. If not, <strong>manpath</strong> will determine a suitable manual page hierarchy search path and display the results.
+  <p>The colon-delimited path is determined using information gained from the man-db configuration file - (<em>/usr/local/etc/man_db.conf</em>) and the user's environment.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-q</strong>, <strong>--quiet</strong>
+    <dd>Do not issue warnings.
+    <dt><strong>-d</strong>, <strong>--debug</strong>
+    <dd>Print debugging information.
+    <dt><strong>-c</strong>, <strong>--catpath</strong>
+    <dd>Produce a catpath as opposed to a manpath. Once the manpath is determined, each path element is converted to its relative catpath.
+    <dt><strong>-g</strong>, <strong>--global</strong>
+    <dd>Produce a manpath consisting of all paths named as `global' within the man-db configuration file.
+  </dl>
+  <p><strong>-m</strong> <em>system</em>[,...], <strong>--systems=</strong><em>system</em>[,...]
+  <div class="indent">
+    <p>If this system has access to other operating system's manual hierarchies, this option can be used to include them in the output of <strong>manpath</strong>. To include NewOS's manual page hierarchies use the option <strong>-m</strong> <strong>NewOS</strong>.
+    <p>The <em>system</em> specified can be a combination of comma delimited operating system names. To include the native operating system's manual page hierarchies, the system name <strong>man</strong> must be included in the argument string. This option will override the $<strong>SYSTEM</strong> environment variable.
+  </div>
+  <dl>
+    <dt><strong>-C&nbsp;</strong><em>file</em><strong>,&nbsp;</strong>--config-file=<em>file</em>
+    <dd>Use this user configuration file rather than the default of <em>~/.manpath</em>.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Print a help message and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information.
+  </dl>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <dl>
+    <dt><strong>MANPATH</strong>
+    <dd>If $<strong>MANPATH</strong> is set, <strong>manpath</strong> displays its value rather than determining it on the fly. If $<strong>MANPATH</strong> is prefixed by a colon, then the value of the variable is appended to the list determined from the content of the configuration files. If the colon comes at the end of the value in the variable, then the determined list is appended to the content of the variable. If the value of the variable contains a double colon (<strong>::</strong>), then the determined list is inserted in the middle of the value, between the two colons.
+    <dt><strong>SYSTEM</strong>
+    <dd>If $<strong>SYSTEM</strong> is set, it will have the same effect as if it had been specified as the argument to the <strong>-m</strong> option.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><em>/usr/local/etc/man_db.conf</em>
+    <dd>man-db configuration file.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/apropos" class="link-man">apropos(1)</a>, <a href="/1/man" class="link-man">man(1)</a>, <a href="/1/whatis" class="link-man">whatis(1)</a>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <pre> Wilf. (G.Wilford@ee.surrey.ac.uk).
+ Fabrizio Polacco (fpolacco@debian.org).
+ Colin Watson (cjwatson@debian.org).
+</pre>
+</div>
+

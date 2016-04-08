@@ -175,6 +175,20 @@ class Blocks
                 throw new Exception($line . '.EX without corresponding .EE');
             }
 
+            if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
+                $anchor = $dom->createElement('a');
+                $anchor->setAttribute('href', trim($matches[1]));
+                $blocks[$blockNum]->appendChild($anchor);
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $parentSectionNode->manLines[$i];
+                    if (preg_match('~^\.UE~u', $line)) {
+                        continue 2;
+                    }
+                    TextContent::interpretAndAppendCommand($anchor, $line);
+                }
+                throw new Exception('.UR with no corresponding .UE');
+            }
+
             if (preg_match('~^\.nf~u', $line)) {
                 $blocks[++$blockNum] = $dom->createElement('pre');
                 for ($i = $i + 1; $i < $numLines; ++$i) {

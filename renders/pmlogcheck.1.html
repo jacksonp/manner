@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMLOGCHECK</title>
+<h1>PMLOGCHECK</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmlogcheck</strong> - checks for invalid data in a PCP archive
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmlogcheck</strong> [<strong>-lz</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-S</strong> <em>start</em>] [<strong>-T</strong> <em>finish</em>] [<strong>-Z</strong> <em>timezone</em>] <em>archive</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmlogcheck</strong> prints information about the nature of any invalid data which it detects in the files of a PCP archive.
+  <p>The archive has the base name <em>archive</em> and must have been previously created using <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>.
+  <p>Normally <strong>pmlogcheck</strong> operates on the default Performance Metrics Name Space ( <a href="/5/pmns" class="link-man">pmns(5)</a>), however if the <strong>-n</strong> option is specified an alternative namespace is loaded from the file <em>pmnsfile</em>.
+  <p>The command line options <strong>-S</strong> and <strong>-T</strong> can be used to specify a time window over which metrics should be checked in Pass 3 (see below). These options are common to many Performance Co-Pilot tools and are fully described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>.
+  <p>The <strong>-l</strong> option prints the archive label, showing the log format version, the time and date for the start and (current) end of the archive, and the host from which the performance metrics values were collected.
+  <p>By default, <strong>pmlogcheck</strong> reports the time of day according to the local timezone on the system where <strong>pmlogcheck</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <a href="/7/environ" class="link-man">environ(7)</a>. The <strong>-z</strong> option changes the timezone to the local timezone at the host that is the source of the performance metrics, as specified in the label record of the archive log.
+  <p>The checking proceeds in a number of passes, each designed to validate progressively more complex semantic relationships between the information in a PCP archive.
+</div>
+<div class="section">
+  <h2>Pass 0</h2>
+  <p>Each physical file of the PCP archive is processed to ensure the label records are valid and consistent, and that each file contains an integral number of physical records with correct header and trailer fields.
+  <p>Any errors at this stage are usually fatal. The PCP archive is probably damaged beyond repair, and no more passes of <strong>pmlogcheck</strong> are attempted.
+</div>
+<div class="section">
+  <h2>Pass 1</h2>
+  <p>Validates the integrity of the temporal index, usually <em>archive</em><strong>.index</strong>.
+  <p>As the temporal index is (strictly speaking) optional, errors at this stage are handled by marking the index as bad and ignoring it for the remainder of the <strong>pmlogcheck</strong> passes.
+  <p>Permanent repair can be achieved by removing the temporal index file and then making a copy of the PCP archive using <a href="/1/pmlogrewrite" class="link-man">pmlogrewrite(1)</a> or <a href="/1/pmlogextract" class="link-man">pmlogextract(1)</a>. This will create a new temporal index for the copied archive as a side-effect.
+</div>
+<div class="section">
+  <h2>Pass 2</h2>
+  <p>Validates the integrity of the metadata file, usually <em>archive</em><strong>.meta</strong>.
+</div>
+<div class="section">
+  <h2>Pass 3</h2>
+  <p>Validates the integrity of each of the log volumes of the PCP archive, usually <em>archive</em><strong>.0</strong>, <em>archive</em><strong>.1</strong>, etc.
+  <p>There is some basic integrity checks to ensure the encoding of values for each metric remains consistent and the values are well formed across all the observations in the archive.
+  <p>Also the timestamps for the observations are expected to be monotonically increasing as the archive is tranversed.
+  <p>Additional attention is given to counter metrics (<em>type</em> from <a href="/3/pmLookupDesc" class="link-man">pmLookupDesc(3)</a> is <strong>PM_SEM_COUNTER</strong>) which are expected to have monotonically increasing values. If the values are not monotonic increasing this may suggest a counter wrap has happened or there has been some interruption or reset to the underlying source of the performance data that is no captured in the archive.
+  <p>For each counter metric which has been detected as having wrapped at some point in the archive, <strong>pmlogcheck</strong> produces output describing the metric name (with instance identifiers where appropriate), the internal storage type for the metric, the value of the metric before the counter wrap (with its associated timestamp), and the value of the metric after the wrap (also with a timestamp).
+  <p><strong>pmlogcheck</strong> produces two different timestamp formats, depending on the interval over which it is run. For an interval greater than 24 hours, the date is displayed in addition to the time at which the counter wrap occurred. If the extent of the data being checked is less than 24 hours, a more precise format is used (time is displayed with millisecond precision, but without the date).
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
+    <dd>default PMNS specification files
+    <dt><strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em>
+    <dd>default directory for PCP archives containing performance data collected from the host <em>hostname</em>.
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmdumplog" class="link-man">pmdumplog(1)</a>, <a href="/1/pmlogextract" class="link-man">pmlogextract(1)</a>, <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>, <a href="/1/pmlogrewrite" class="link-man">pmlogrewrite(1)</a>, <a href="/1/pmlogsummary" class="link-man">pmlogsummary(1)</a>, <a href="/1/pmval" class="link-man">pmval(1)</a>, <a href="/3/pmLookupDesc" class="link-man">pmLookupDesc(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>, <a href="/5/pcp.env" class="link-man">pcp.env(5)</a> and <a href="/5/pmns" class="link-man">pmns(5)</a>.
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>All are generated on standard error and are intended to be self- explanatory.
+</div>
+

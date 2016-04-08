@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="July 2014" data-package="util-linux" data-section-name="User Commands">
+<title>UTMPDUMP</title>
+<h1>UTMPDUMP</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>utmpdump - dump UTMP and WTMP files in raw format
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>utmpdump</strong> [options] [<em>filename</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>utmpdump</strong> is a simple program to dump UTMP and WTMP files in raw format, so they can be examined. <strong>utmpdump</strong> reads from stdin unless a <em>filename</em> is passed.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-f</strong>, <strong>--follow</strong>
+    <dd>Output appended data as the file grows.
+    <dt><strong>-o</strong>, <strong>--output</strong> <em>file</em>
+    <dd>Write command output to <em>file</em> instead of standard output.
+    <dt><strong>-r</strong>, <strong>--reverse</strong>
+    <dd>Undump, write back edited login information into the utmp or wtmp files.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p><strong>utmpdump</strong> can be useful in cases of corrupted utmp or wtmp entries. It can dump out utmp/wtmp to an ASCII file, which can then be edited to remove bogus entries, and reintegrated using:
+  <div class="indent">
+    <p><strong>utmpdump -r &lt; ascii_file &gt; wtmp</strong>
+  </div>
+  <p>But be warned, <strong>utmpdump</strong> was written for debugging purposes only.
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>You may <strong>not</strong> use the <strong>-r</strong> option, as the format for the utmp/wtmp files strongly depends on the input format. This tool was <strong>not</strong> written for normal use, but for debugging only.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Michael Krapp
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/last" class="link-man">last(1)</a>, <a href="/1/w" class="link-man">w(1)</a>, <a href="/1/who" class="link-man">who(1)</a>, <a href="/5/utmp" class="link-man">utmp(5)</a>
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The utmpdump command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+

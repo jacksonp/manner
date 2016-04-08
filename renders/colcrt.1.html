@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="September 2011" data-package="util-linux" data-section-name="User Commands">
+<title>COLCRT</title>
+<h1>COLCRT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>colcrt - filter nroff output for CRT previewing
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>colcrt</strong> [options] [<em>file</em>...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>colcrt</strong> provides virtual half-line and reverse line feed sequences for terminals without such capability, and on which overstriking is destructive. Half-line characters and underlining (changed to dashing `-') are placed on new lines in between the normal output lines.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-</strong>, <strong>--no-underlining</strong>
+    <dd>
+      Suppress all underlining. This option is especially useful for previewing <em>allboxed</em> tables from <a href="/1/tbl" class="link-man">tbl(1)</a>.
+    <dt><strong>-2</strong>, <strong>--half-lines</strong>
+    <dd>Causes all half-lines to be printed, effectively double spacing the output. Normally, a minimal space output format is used which will suppress empty lines. The program never suppresses two consecutive empty lines, however. The <strong>-2</strong> option is useful for sending output to the line printer when the output contains superscripts and subscripts which would otherwise be invisible.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>A typical use of <strong>colcrt</strong> would be:
+  <div class="indent">
+    <p><strong>tbl exum2.n | nroff -ms | colcrt - | more</strong>
+  </div>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/nroff" class="link-man">nroff(1)</a>, <a href="/1/troff" class="link-man">troff(1)</a>, <a href="/1/col" class="link-man">col(1)</a>, <a href="/1/more" class="link-man">more(1)</a>, <a href="/1/ul" class="link-man">ul(1)</a>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>Should fold underlines onto blanks even with the <strong>'-'</strong> option so that a true underline character would show.
+  <p>Can't back up more than 102 lines.
+  <p>General overstriking is lost; as a special case '|' overstruck with '-' or underline becomes '+'.
+  <p>Lines are trimmed to 132 characters.
+  <p>Some provision should be made for processing superscripts and subscripts in documents which are already double-spaced.
+</div>
+<div class="section">
+  <h2>HISTORY</h2>
+  <p>The <strong>colcrt</strong> command appeared in 3.0BSD.
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The colcrt command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+

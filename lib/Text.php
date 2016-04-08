@@ -56,7 +56,8 @@ class Text
                 throw new Exception('.ig with no corresponding ..');
             }
 
-            if (preg_match('~^\.UR( |$)~', $line)) {
+            // Don't care about .UR without an argument
+            if (preg_match('~^\.UR\s*$~', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     if ($rawLines[$i] === '.UE') {
                         continue 2;
@@ -201,6 +202,7 @@ class Text
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
             // Unbreakable space that stretches like a normal inter-word space when a line is adjusted
           '\\~'  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
+          '\\*R' => '®',
         ];
 
         $namedGlyphs = [

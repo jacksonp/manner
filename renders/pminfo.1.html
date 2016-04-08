@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMINFO</title>
+<h1>PMINFO</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pminfo</strong> - display information about performance metrics
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pminfo</strong> [<strong>-dfFLmMtTvxz</strong>] [<strong>-a</strong> <em>archive</em>] [<strong>-b</strong> <em>batchsize</em>] [<strong>-c</strong> <em>dmfile</em>] [<strong>-h</strong> <em>hostname</em>] [<strong>-K</strong> <em>spec</em>] [<strong>-</strong>[<strong>n</strong>|<strong>N</strong>] <em>pmnsfile</em>] [<strong>-O</strong> <em>time</em>] [<strong>-Z</strong> <em>timezone</em>] [<em>metricname</em> ...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pminfo</strong> displays various types of information about performance metrics available through the facilities of the Performance Co-Pilot (PCP).
+  <p>Normally <strong>pminfo</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile.</em> The <strong>-N</strong> option supports the same function as <strong>-n</strong>, except for the handling of duplicate names for the same Performance Metric Identifier (PMID) in <em>pmnsfile</em> - duplicate names are allowed with <strong>-n</strong> they are not allowed with <strong>-N</strong>.
+  <p>The metrics of interest are named in the <em>metricname</em> arguments. If <em>metricname</em> is a non-leaf node in the PMNS, then <strong>pminfo</strong> will recursively descend the PMNS and report on all leaf nodes. If no <em>metricname</em> argument is given, the root of the PMNS is used.
+  <p>Unless directed to another host by the <strong>-h</strong> option, by default <strong>pminfo</strong> will contact the Performance Metrics Collector Daemon (PMCD) on the local host. The connection to a PMCD is only required if <strong>pminfo</strong> requires distributed PMNS information, and/or meta-data describing metrics, and/or metric values, and/or help text.
+  <p>The <strong>-a</strong> option causes <strong>pminfo</strong> to use the specified set of archives rather than connecting to a PMCD. The argument to <strong>-a</strong> is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. The <strong>-a , -h</strong> and <strong>-L</strong> options are mutually exclusive.
+  <p>The <strong>-L</strong> option causes <strong>pminfo</strong> to use a local context to collect metrics from PMDAs on the local host without PMCD. Only some metrics are available in this mode. The <strong>-a</strong>,<strong>-h</strong> and <strong>-L</strong> options are mutually exclusive.
+  <p>The <strong>-b</strong> option may be used to define the maximum size of the group of metrics to be fetched in a single request for the <strong>-f</strong> and <strong>-v</strong> options. The default value for <em>batchsize</em> is 20.
+  <p>Other options control the specific information to be reported.
+  <dl>
+    <dt><strong>-c</strong>
+    <dd>
+      The <em>dmfile</em> argument specifies a file that contains derived metric definitions in the format described for <a href="/3/pmLoadDerivedConfig" class="link-man">pmLoadDerivedConfig(3)</a>. The <strong>-c</strong> option provides a way to load derived metric definitions that is an alternative to the more generic use of the <strong>PCP_DERIVED_CONFIG</strong> environment variable as described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>. Using the <strong>-c</strong> option and the <strong>PCP_DERIVED_CONFIG</strong> environment variable to specify the <strong>same</strong> configuration is a bad idea, so choose one or the other method.
+    <dt><strong>-d</strong>
+    <dd>Metric descriptions detailing the PMID, data type, data semantics, units, scale and associated instance domain.
+    <dt><strong>-f</strong>
+    <dd>
+      Fetch and print values for all instances. When fetching from a set if archives, only those instances present in the first archive record for a metric will be displayed; see also the <strong>-O</strong> option, else use <a href="/1/pmdumplog" class="link-man">pmdumplog(1)</a> which may be a better tool for examining archives.
+    <dt><strong>-F</strong>
+    <dd>Same as <strong>-f</strong> but try harder to fetch instances for metrics which have non-enumerable instance domains (e.g. metrics in the “proc” subtree of the default PMNS).
+    <dt><strong>-K</strong>
+    <dd>
+      When using the <strong>-L</strong> option to fetch metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <a href="/3/__pmSpecLocalPMDA" class="link-man">__pmSpecLocalPMDA(3)</a>. More than one <strong>-K</strong> option may be used.
+    <dt><strong>-m</strong>
+    <dd>Print the PMID in terse mode.
+    <dt><strong>-M</strong>
+    <dd>Print the PMID in verbose mode.
+    <dt><strong>-O</strong>
+    <dd>
+      When used in conjunction with an archive source of metrics and the options <strong>-f</strong> or <strong>-F</strong>, the <em>time</em> argument defines a time origin at which the metrics should be fetched from the set of archives. Refer to <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a> for a complete description of this option, and the syntax for the <em>time</em> argument.
+    <dt><strong>-t</strong>
+    <dd>Print the “one line” help summary, if available.
+    <dt><strong>-T</strong>
+    <dd>Print the help text, if available.
+    <dt><strong>-v</strong>
+    <dd>Verify mode in which descriptions and values are retrieved, but only error conditions are reported. This option silently disables any output from the options <strong>-f</strong>, <strong>-M</strong>, <strong>-m</strong>, <strong>-t</strong> and <strong>-T</strong>.
+    <dt><strong>-x</strong>
+    <dd>Like the <strong>-f</strong> option, but with the additional functionality that if a value is processed that is of type PM_TYPE_EVENT, then the event records will be unpacked and the details of each event record reported.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
+    <dd>default local PMNS specification files
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/1/pmchart" class="link-man">pmchart(1)</a>, <a href="/1/pmdumplog" class="link-man">pmdumplog(1)</a>, <a href="/1/pmdumptext" class="link-man">pmdumptext(1)</a>, <a href="/1/pmprobe" class="link-man">pmprobe(1)</a>, <a href="/1/pmrep" class="link-man">pmrep(1)</a>, <a href="/1/pmval" class="link-man">pmval(1)</a>, <a href="/3/PMAPI" class="link-man">PMAPI(3)</a>, <a href="/3/pmLoadDerivedConfig" class="link-man">pmLoadDerivedConfig(3)</a>, <a href="/3/__pmSpecLocalPMDA" class="link-man">__pmSpecLocalPMDA(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>, <a href="/5/pcp.env" class="link-man">pcp.env(5)</a> and <a href="/5/pmns" class="link-man">pmns(5)</a>.
+</div>
+
