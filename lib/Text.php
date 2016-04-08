@@ -42,7 +42,7 @@ class Text
                 continue;
             }
 
-            if ($line === '.ig') {
+            if (preg_match('~^\.ig( |$)~', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     if ($rawLines[$i] === '..') {
                         continue 2;
