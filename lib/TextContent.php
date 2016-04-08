@@ -256,32 +256,9 @@ class TextContent
 
         // Prettier double quotes:
         $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
+//        $string = preg_replace('~"(.*?)"~', '“$1”', $string);
 
-        $textSegments = preg_split('~<?((?:ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|(?:[^[:punct:]\s]|/)))>?~u',
-          $string, null, PREG_SPLIT_DELIM_CAPTURE);
-
-        $numTextSegments = count($textSegments);
-
-        for ($i = 0; $i < $numTextSegments; ++$i) {
-            if ($i % 2 === 0) {
-                $parentNode->appendChild(new DOMText($textSegments[$i]));
-            } else {
-                $url      = $textSegments[$i];
-                $urlParts = parse_url($url);
-                if ($urlParts === false
-                  || in_array($urlParts['host'], ['localhost', '127.0.0.1'])
-                  || preg_match('~(^|\.)example\.(org|com)$~u', $urlParts['host'])
-                ) {
-                    $parentNode->appendChild(new DOMText($url));
-                } else {
-                    $anchor = $dom->createElement('a');
-                    $anchor->appendChild(new DOMText($url));
-                    $anchor->setAttribute('href', $url);
-                    $parentNode->appendChild($anchor);
-                }
-            }
-
-        }
+        $parentNode->appendChild(new DOMText($string));
 
     }
 
