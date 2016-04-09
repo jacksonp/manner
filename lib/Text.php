@@ -11,10 +11,12 @@ class Text
     {
 
         $numRawLines       = count($rawLines);
-        $lines             = [];
+        $firstPassLines = [];
         $macroReplacements = [];
         $aliases           = [];
         $foundTitle        = false;
+
+
 
         $man = Man::instance();
 
@@ -33,43 +35,16 @@ class Text
                 continue;
             }
 
-            if ($line === '\\&') {
-                // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText().
+            $skipLines = [
+                // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
+              '\\&',
+                // Skip empty requests:
+              '.',
+              '.so man.macros',
+            ];
+
+            if (in_array($line, $skipLines)) {
                 continue;
-            }
-
-            if ($line === '.so man.macros') {
-                continue;
-            }
-
-            if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
-                $aliases[$matches['new']] = $matches['old'];
-                continue;
-            }
-
-            if (preg_match('~^\.ig( |$)~', $line)) {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    if ($rawLines[$i] === '..') {
-                        continue 2;
-                    }
-                }
-                throw new Exception('.ig with no corresponding ..');
-            }
-
-            // Don't care about .UR without an argument
-            if (preg_match('~^\.UR\s*$~', $line)) {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    if ($rawLines[$i] === '.UE') {
-                        continue 2;
-                    }
-                }
-                throw new Exception('.UR with no corresponding .UE');
-            }
-
-            if (count($aliases) > 0) {
-                foreach ($aliases as $new => $old) {
-                    $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
-                }
             }
 
             // Skip stuff we don't care about:
@@ -94,11 +69,52 @@ class Text
                 continue;
             }
 
+            if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
+                $aliases[$matches['new']] = $matches['old'];
+                continue;
+            }
+
+            if (preg_match('~^\.ig( |$)~', $line)) {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    if ($rawLines[$i] === '..') {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.ig with no corresponding ..');
+            }
+
+            $firstPassLines[] = $line;
+
+        }
+
+        $numFirstPassLines = count($firstPassLines);
+        $lines             = [];
+
+        for ($i = 0; $i < $numFirstPassLines; ++$i) {
+
+            $line = $firstPassLines[$i];
+
+            // Don't care about .UR without an argument
+            if (preg_match('~^\.UR\s*$~', $line)) {
+                for ($i = $i + 1; $i < $firstPassLines; ++$i) {
+                    if ($numFirstPassLines[$i] === '.UE') {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.UR with no corresponding .UE');
+            }
+
+            if (count($aliases) > 0) {
+                foreach ($aliases as $new => $old) {
+                    $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
+                }
+            }
+
             // Handle stuff like:
             // .ie \n(.g .ds Aq \(aq
             // .el       .ds Aq '
             if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) (.+)$~u', $line, $matches)) {
-                if (!preg_match('~^\.el~u', $rawLines[++$i])) {
+                if (!preg_match('~^\.el~u', $numFirstPassLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
                 if (mb_strlen($matches[1]) === 2) {
@@ -112,9 +128,9 @@ class Text
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
                 if (
-                  $rawLines[++$i] !== '.if t .sp .5v'
-                  || !$rawLines[++$i] !== '.if n .sp'
-                  || !$rawLines[++$i] !== '..'
+                  $numFirstPassLines[++$i] !== '.if t .sp .5v'
+                  || !$numFirstPassLines[++$i] !== '.if n .sp'
+                  || !$numFirstPassLines[++$i] !== '..'
                 ) {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }
@@ -123,11 +139,6 @@ class Text
             }
 
             $line = Text::preprocess($line, $macroReplacements);
-
-            // Skip empty requests
-            if ($line === '.') {
-                continue;
-            }
 
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
