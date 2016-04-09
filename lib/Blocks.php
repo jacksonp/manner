@@ -177,7 +177,7 @@ class Blocks
 
             if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
-                $url = trim($matches[1]);
+                $url    = trim($matches[1]);
                 if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
                     $url = 'mailto:' . $url;
                 }
@@ -266,10 +266,15 @@ class Blocks
                 throw new Exception($line - ' $parentForLine is null.');
             }
 
-            if ($canAppendNextText && !in_array(mb_substr($line, 0, 1), ['.', ' ']) && !preg_match('~\\\\c$~', $line)) {
+            if ($canAppendNextText
+              && !in_array(mb_substr($line, 0, 1), ['.', ' '])
+              && (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.')
+              && !preg_match('~\\\\c$~', $line)) {
                 while ($i < $numLines - 1) {
                     $nextLine = $parentSectionNode->manLines[$i + 1];
-                    if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.') {
+                    if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.'
+                      || (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
+                    ) {
                         break;
                     }
                     $line .= ' ' . $nextLine;

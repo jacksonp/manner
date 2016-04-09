@@ -130,7 +130,7 @@ class Text
             // .ie \n(.g .ds Aq \(aq
             // .el       .ds Aq '
             if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) (.+)$~u', $line, $matches)) {
-                if (!preg_match('~^\.el~u', $numFirstPassLines[++$i])) {
+                if (!preg_match('~^\.el~u', $firstPassLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
                 if (mb_strlen($matches[1]) === 2) {
@@ -227,7 +227,6 @@ class Text
           '\\-'  => '-',
             // The same as \(ul, the underline character.
           '\\_'  => '_',
-          '\\.'  => '.',
           '\\en' => '\n',
           '\\t'  => "\t",
             // Default optional hyphenation character. Just remove for now.
@@ -425,7 +424,7 @@ class Text
           'ru'             => '_',
           'bb'             => '¦',
           'sl'             => '/',
-          'rs'             => '\\',
+            // Note we don't do "rs" line until interpretAndAppendString() to avoid problems with adding backslashes
             // Text Markers
           'ci'             => '○',
           'bu'             => '·',

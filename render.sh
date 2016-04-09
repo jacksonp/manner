@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+rm renders/*
+
 for f in ../manlib/man/man1/*
 do
   echo ${f}

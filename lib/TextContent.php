@@ -42,7 +42,7 @@ class TextContent
             $parentNode->appendChild($dom->createElement('br'));
         }
 
-        if (preg_match('~^\.br~u', $line)) {
+        if (preg_match('~^\\\\?\.br~u', $line)) {
             if ($parentNode->hasChildNodes()) {
                 // Only bother if this isn't the first node.
                 $parentNode->appendChild($dom->createElement('br'));
@@ -242,11 +242,12 @@ class TextContent
     static function interpretAndAppendString(HybridNode $parentNode, string $string)
     {
 
-        $dom = $parentNode->ownerDocument;
-
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e'   => '\\',
+          'rs'    => '\\',
+            // If we do this earlier and it's on a line on its own, it would then erroneously be detected as a commaner:
+          '\\.'   => '.',
             // Do double quotes here: if we do them earlier it messes up cases like in aide.1: .IP "--before=\(dq\fBconfigparameters\fR\(dq , -B \(dq\fBconfigparameters\fR\(dq"
           '\(dq'  => '"',
           '\*(dq' => '"',
