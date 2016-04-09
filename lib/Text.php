@@ -177,11 +177,11 @@ class Text
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.
-                $man->title        = preg_replace('~\\\\F[BR]~', '', $titleDetails[0]);
-                $man->section      = $titleDetails[1];
-                $man->date         = @$titleDetails[2] ?: '';
-                $man->package      = @$titleDetails[3] ?: '';
-                $man->section_name = @$titleDetails[4] ?: '';
+                $man->title        = TextContent::interpretString(preg_replace('~\\\\F[BR]~', '', $titleDetails[0]));
+                $man->section      = TextContent::interpretString($titleDetails[1]);
+                $man->date         = TextContent::interpretString(@$titleDetails[2] ?: '');
+                $man->package      = TextContent::interpretString(@$titleDetails[3] ?: '');
+                $man->section_name = TextContent::interpretString(@$titleDetails[4] ?: '');
                 continue;
             }
             //</editor-fold>
@@ -353,7 +353,7 @@ class Text
           'oq'             => '‘',
           'cq'             => '’',
           'aq'             => '\'',
-            // NB: we do 'dq' in  interpretAndAppendString()
+            // NB: we do 'dq' in  interpretString()
           'Fo'             => '«',
           'Fc'             => '»',
           'fo'             => '‹',
@@ -424,7 +424,7 @@ class Text
           'ru'             => '_',
           'bb'             => '¦',
           'sl'             => '/',
-            // Note we don't do "rs" line until interpretAndAppendString() to avoid problems with adding backslashes
+            // Note we don't do "rs" line until interpretString() to avoid problems with adding backslashes
             // Text Markers
           'ci'             => '○',
           'bu'             => '·',

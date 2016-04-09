@@ -162,7 +162,7 @@ class TextContent
                 case '\u':
                     if ($i < $numTextSegments - 1) {
                         $sup = $dom->createElement('sup');
-                        self::interpretAndAppendString($sup, $textSegments[++$i]);
+                        $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         $parentNode->appendChild($sup);
                     }
                     break;
@@ -173,7 +173,7 @@ class TextContent
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
-                        self::interpretAndAppendString($strong, $textSegments[++$i]);
+                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         $parentNode->appendChild($strong);
                     }
                     break;
@@ -182,7 +182,7 @@ class TextContent
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
                         $em = $dom->createElement('em');
-                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         $parentNode->appendChild($em);
                     }
                     break;
@@ -190,7 +190,7 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
                         $em     = $dom->createElement('em');
-                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         $strong->appendChild($em);
                         $parentNode->appendChild($strong);
                     }
@@ -208,7 +208,7 @@ class TextContent
                 case '\f(CW':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
-                        self::interpretAndAppendString($code, $textSegments[++$i]);
+                        $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
                         $parentNode->appendChild($code);
                     }
                     break;
@@ -218,7 +218,7 @@ class TextContent
                         $code = $dom->createElement('code');
                         $em   = $dom->createElement('em');
                         $code->appendChild($em);
-                        self::interpretAndAppendString($em, $textSegments[++$i]);
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
                         $parentNode->appendChild($code);
                     }
                     break;
@@ -227,26 +227,29 @@ class TextContent
                         $code   = $dom->createElement('code');
                         $strong = $dom->createElement('strong');
                         $code->appendChild($strong);
-                        self::interpretAndAppendString($strong, $textSegments[++$i]);
+                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
                         $parentNode->appendChild($code);
                     }
                     break;
                 default:
-                    self::interpretAndAppendString($parentNode, $textSegments[$i]);
+                    $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i],
+                      !in_array($parentNode->tagName, ['pre', 'code']))));
             }
 
         }
 
     }
 
-    static function interpretAndAppendString(HybridNode $parentNode, string $string)
+    static function interpretString(string $string, $replaceDoubleQuotes = true):string
     {
 
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e'   => '\\',
-          'rs'    => '\\',
-            // If we do this earlier and it's on a line on its own, it would then erroneously be detected as a commaner:
+          '\(rs'  => '\\',
+          '\*(rs' => '\\',
+          '\[rs]' => '\\',
+            // If we do this earlier and it's on a line on its own, it would then erroneously be detected as a command:
           '\\.'   => '.',
             // Do double quotes here: if we do them earlier it messes up cases like in aide.1: .IP "--before=\(dq\fBconfigparameters\fR\(dq , -B \(dq\fBconfigparameters\fR\(dq"
           '\(dq'  => '"',
@@ -257,7 +260,7 @@ class TextContent
 
         // Prettier double quotes:
         $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
-        if (!in_array($parentNode->tagName, ['pre', 'code'])) {
+        if ($replaceDoubleQuotes) {
             $string = preg_replace('~"(.*?)"~', '“$1”', $string);
         }
 
@@ -267,7 +270,7 @@ class TextContent
           '$1',
           $string);
 
-        $parentNode->appendChild(new DOMText($string));
+        return $string;
 
     }
 
