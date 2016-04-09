@@ -11,11 +11,10 @@ class Text
     {
 
         $numRawLines       = count($rawLines);
-        $firstPassLines = [];
+        $firstPassLines    = [];
         $macroReplacements = [];
         $aliases           = [];
         $foundTitle        = false;
-
 
 
         $man = Man::instance();
@@ -95,19 +94,30 @@ class Text
             $line = $firstPassLines[$i];
 
             // Don't care about .UR without an argument or with an invalid URL
-            if (preg_match('~^\.UR\s*(?<url>.*)$~', $line, $matches)) {
-                if (
-                  empty($matches['url'])
-                  || $urlBits = parse_url($matches['url']) === false
-                    || empty($urlBits['scheme'])
-                ) {
-                    $line = $rawLines[++$i];
-                    if ($rawLines[++$i] !== '.UE') {
-                        throw new Exception('.UR with no corresponding .UE');
-
+            if (preg_match('~^\.UR\s*(?<url>.*)$~', $line, $matchesUR)) {
+                $lineAfterUR = $firstPassLines[$i + 1];
+                if (preg_match('~^\.UE ?(.*)$~', $lineAfterUR, $matchesUE)) {
+                    $line = $matchesUR['url'] . $matchesUE[1];
+                    ++$i;
+                } else {
+                    if (empty($matchesUR['url'])) {
+                        $line = $lineAfterUR;
+                        if (preg_match('~^\.UE ?(.*)$~', $firstPassLines[$i + 2], $matches)) {
+                            $line .= $matches[1];
+                        } else {
+                            throw new Exception('.UR (empty) with no corresponding .UE');
+                        }
                     }
-                }
+                    /*
+                    elseif ($urlBits = parse_url($matchesUR['url']) === false
+                      || empty($urlBits['scheme'])
+                    ) {
+                        $line = $lineAfterUR;
+                    }
+                    */
 
+
+                }
             }
 
             if (count($aliases) > 0) {
@@ -147,9 +157,9 @@ class Text
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
                 if (
-                  $numFirstPassLines[++$i] !== '.if t .sp .5v'
-                  || !$numFirstPassLines[++$i] !== '.if n .sp'
-                  || !$numFirstPassLines[++$i] !== '..'
+                  $firstPassLines[++$i] !== '.if t .sp .5v'
+                  || $firstPassLines[++$i] !== '.if n .sp'
+                  || $firstPassLines[++$i] !== '..'
                 ) {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }

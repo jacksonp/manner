@@ -177,7 +177,11 @@ class Blocks
 
             if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
-                $anchor->setAttribute('href', trim($matches[1]));
+                $url = trim($matches[1]);
+                if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+                    $url = 'mailto:' . $url;
+                }
+                $anchor->setAttribute('href', $url);
                 if ($blockNum === 0) {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
