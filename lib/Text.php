@@ -39,6 +39,7 @@ class Text
               '\\&',
                 // Skip empty requests:
               '.',
+              '\\.',
               '.so man.macros',
             ];
 
