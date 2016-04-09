@@ -94,14 +94,20 @@ class Text
 
             $line = $firstPassLines[$i];
 
-            // Don't care about .UR without an argument
-            if (preg_match('~^\.UR\s*$~', $line)) {
-                for ($i = $i + 1; $i < $firstPassLines; ++$i) {
-                    if ($numFirstPassLines[$i] === '.UE') {
-                        continue 2;
+            // Don't care about .UR without an argument or with an invalid URL
+            if (preg_match('~^\.UR\s*(?<url>.*)$~', $line, $matches)) {
+                if (
+                  empty($matches['url'])
+                  || $urlBits = parse_url($matches['url']) === false
+                    || empty($urlBits['scheme'])
+                ) {
+                    $line = $rawLines[++$i];
+                    if ($rawLines[++$i] !== '.UE') {
+                        throw new Exception('.UR with no corresponding .UE');
+
                     }
                 }
-                throw new Exception('.UR with no corresponding .UE');
+
             }
 
             if (count($aliases) > 0) {
@@ -125,6 +131,19 @@ class Text
 
                 continue;
             }
+
+            // Handle stuff like:
+            //            .ie n \{\
+            //            \h'-04'\(bu\h'+03'\c
+            //            .\}
+            //            .el \{\
+            //            .sp -1
+            //            .IP \(bu 2.3
+            //            .\}
+//            if ($line === '.ie n \\{\\') {
+//                $line = $rawLines[++$i];
+//                if ()
+//            }
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
                 if (

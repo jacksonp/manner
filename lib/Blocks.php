@@ -178,6 +178,9 @@ class Blocks
             if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
                 $anchor->setAttribute('href', trim($matches[1]));
+                if ($blockNum === 0) {
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                }
                 $blocks[$blockNum]->appendChild($anchor);
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
