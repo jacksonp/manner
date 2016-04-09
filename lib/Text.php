@@ -112,9 +112,9 @@ class Text
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
                 if (
-                  !$rawLines[++$i] === '.if t .sp .5v'
-                  || !$rawLines[++$i] === '.if n .sp'
-                  || !$rawLines[++$i] === '..'
+                  $rawLines[++$i] !== '.if t .sp .5v'
+                  || !$rawLines[++$i] !== '.if n .sp'
+                  || !$rawLines[++$i] !== '..'
                 ) {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }
