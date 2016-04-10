@@ -144,9 +144,6 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
-        $line = preg_replace('~\\\\&~u', '', $line);
-
         if (self::$canAddWhitespace && $addSpacing) {
             // Do this after regex above
             $line = ' ' . $line;
@@ -242,6 +239,9 @@ class TextContent
 
     static function interpretString(string $string, $replaceDoubleQuotes = true):string
     {
+
+        // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
+        $string = preg_replace('~\\\\&~u', '', $string);
 
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
