@@ -255,6 +255,10 @@ class TextContent
           '\(dq'  => '"',
           '\*(dq' => '"',
           '\[dq]' => '"',
+            // Do single quotes here: otherwise we hit problems earlier on if they are the first character on the line.
+          '\(aq'  => '\'',
+          '\*(aq' => '\'',
+          '\[aq]' => '\'',
         ];
         $string       = strtr($string, $replacements);
 

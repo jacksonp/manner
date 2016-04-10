@@ -23,6 +23,35 @@ class Text
 
             $line = $rawLines[$i];
 
+            // Handle stuff like the following before continuations because of trailing slashes:
+            //            .ie n \{\
+            //            \h'-04'\(bu\h'+03'\c
+            //            .\}
+            //            .el \{\
+            //            .sp -1
+            //            .IP \(bu 2.3
+            //            .\}
+            if ($line === '.ie n \\{\\') {
+                $line = $rawLines[++$i];
+                if (
+                  $rawLines[++$i] !== '.\\}'
+                  || $rawLines[++$i] !== '.el \\{\\'
+                  || $rawLines[++$i] !== '.sp -1'
+                  || $rawLines[++$i] !== '.IP \(bu 2.3'
+                  || $rawLines[++$i] !== '.\\}'
+                ) {
+                    throw new Exception($rawLines[$i - 2] . ' - not followed by expected pattern.');
+                }
+            }
+
+            if ($line === '.if n \\{\\') {
+                $line = $rawLines[++$i];
+                if ($rawLines[++$i] !== '.\\}') {
+                    throw new Exception($rawLines[$i - 2] . ' - not followed by expected pattern.');
+                }
+
+            }
+
             // Continuations
             while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
               && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
@@ -109,15 +138,6 @@ class Text
                             throw new Exception('.UR (empty) with no corresponding .UE');
                         }
                     }
-                    /*
-                    elseif ($urlBits = parse_url($matchesUR['url']) === false
-                      || empty($urlBits['scheme'])
-                    ) {
-                        $line = $lineAfterUR;
-                    }
-                    */
-
-
                 }
             }
 
@@ -142,19 +162,6 @@ class Text
 
                 continue;
             }
-
-            // Handle stuff like:
-            //            .ie n \{\
-            //            \h'-04'\(bu\h'+03'\c
-            //            .\}
-            //            .el \{\
-            //            .sp -1
-            //            .IP \(bu 2.3
-            //            .\}
-//            if ($line === '.ie n \\{\\') {
-//                $line = $rawLines[++$i];
-//                if ()
-//            }
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
                 if (
@@ -353,8 +360,7 @@ class Text
           'rq'             => '”',
           'oq'             => '‘',
           'cq'             => '’',
-          'aq'             => '\'',
-            // NB: we do 'dq' in  interpretString()
+            // NB: we do 'aq' and 'dq' in  interpretString()
           'Fo'             => '«',
           'Fc'             => '»',
           'fo'             => '‹',
