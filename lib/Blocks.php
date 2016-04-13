@@ -22,7 +22,10 @@ class Blocks
 
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                if ($i !== $numLines - 1) {
+                // If this is last line, or the next line is .RS, this would be an empty paragraph: don't bother.
+                if ($i !== $numLines - 1
+                  && !preg_match('~^\.RS ?(.*)$~u', $parentSectionNode->manLines[$i + 1])
+                ) {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
                 continue;
@@ -120,7 +123,6 @@ class Blocks
                 continue;
             }
 
-            // see cal.1 for maybe an easy start on supporting .RS/.RE
             if (preg_match('~^\.RS ?(.*)$~u', $line)) {
                 $rsLevel = 1;
                 $rsLines = [];
@@ -270,7 +272,8 @@ class Blocks
             if ($canAppendNextText
               && !in_array(mb_substr($line, 0, 1), ['.', ' '])
               && (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.')
-              && !preg_match('~\\\\c$~', $line)) {
+              && !preg_match('~\\\\c$~', $line)
+            ) {
                 while ($i < $numLines - 1) {
                     $nextLine = $parentSectionNode->manLines[$i + 1];
                     if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.'
