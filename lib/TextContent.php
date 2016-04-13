@@ -102,6 +102,10 @@ class TextContent
                 if (!isset($command[$commandCharIndex])) {
                     throw new Exception($line . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
                 }
+                if (trim($bit) === '') {
+                    TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
+                    continue;
+                }
                 switch ($command[$commandCharIndex]) {
                     case 'R':
                         TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
@@ -169,7 +173,7 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->tagName === 'strong') {
+                        if ($parentNode->tagName === 'strong' || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         } else {
                             $strong = $dom->createElement('strong');
@@ -182,7 +186,7 @@ class TextContent
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->tagName === 'em') {
+                        if ($parentNode->tagName === 'em' || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         } else {
                             $em = $dom->createElement('em');
