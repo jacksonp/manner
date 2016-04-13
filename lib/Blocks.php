@@ -33,8 +33,11 @@ class Blocks
 
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if (mb_strlen($line) === 0) {
-                if ($i < $numLines - 1 && mb_strlen($parentSectionNode->manLines[$i + 1]) === 0) {
-                    continue; // next line is also empty
+                if ($i === $numLines - 1) {
+                    continue; // don't care about last line in block being blank.
+                }
+                if (mb_strlen($parentSectionNode->manLines[$i + 1]) === 0) {
+                    continue; // next line is also empty.
                 }
 
                 if ($blockNum > 0) {
