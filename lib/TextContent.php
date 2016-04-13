@@ -169,18 +169,26 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        $strong = $dom->createElement('strong');
-                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
-                        $parentNode->appendChild($strong);
+                        if ($parentNode->tagName === 'strong') {
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        } else {
+                            $strong = $dom->createElement('strong');
+                            $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $parentNode->appendChild($strong);
+                        }
                     }
                     break;
                 case '\fI':
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        $em = $dom->createElement('em');
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
-                        $parentNode->appendChild($em);
+                        if ($parentNode->tagName === 'em') {
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        } else {
+                            $em = $dom->createElement('em');
+                            $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $parentNode->appendChild($em);
+                        }
                     }
                     break;
                 case '\f4':
