@@ -22,8 +22,9 @@ class Blocks
 
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                ++$blockNum;
-                $blocks[$blockNum] = $dom->createElement('p');
+                if ($i !== $numLines - 1) {
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                }
                 continue;
             }
 
