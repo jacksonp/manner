@@ -215,14 +215,18 @@ class TextContent
                 case '\fC':
                 case '\fV':
                 case '\f(CW':
+                case '\f[C]':
                     if ($i < $numTextSegments - 1) {
-                        $code = $dom->createElement('code');
-                        $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
-                        $parentNode->appendChild($code);
+                        if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        } else {
+                            $code = $dom->createElement('code');
+                            $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                            $parentNode->appendChild($code);
+                        }
                     }
                     break;
                 case '\f(CWI':
-                case '\f[C]':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
                         $em   = $dom->createElement('em');
