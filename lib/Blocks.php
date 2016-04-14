@@ -92,27 +92,21 @@ class Blocks
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
 
-                $ipArgString = trim($matches[1]);
+                $ipArgs = Macro::parseArgString($matches[1]);
 
-                if (mb_strlen($ipArgString) > 0) {
-
-                    $ipArgs = str_getcsv($ipArgString, ' ');
-
-                    if (mb_strlen($ipArgs[0]) > 0) {
-                        // If there's a "designator" - otherwise preg_match hit empty double quotes.
-                        // Copied from .TP:
-                        if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                            $blocks[++$blockNum] = $dom->createElement('dl');
-                            if (count($ipArgs) > 1) {
-                                $blocks[$blockNum]->setAttribute('class', 'indent-' . $ipArgs[1]);
-                            }
+                // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
+                if (!is_null($ipArgs) && mb_strlen($ipArgs[0]) > 0) {
+                    // Copied from .TP:
+                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
+                        $blocks[++$blockNum] = $dom->createElement('dl');
+                        if (count($ipArgs) > 1) {
+                            $blocks[$blockNum]->setAttribute('class', 'indent-' . $ipArgs[1]);
                         }
-                        $dt = $dom->createElement('dt');
-                        TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
-                        $blocks[$blockNum]->appendChild($dt);
-                        continue;
                     }
-
+                    $dt = $dom->createElement('dt');
+                    TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
+                    $blocks[$blockNum]->appendChild($dt);
+                    continue;
                 }
 
                 if (empty($blocks) || $blocks[$blockNum]->tagName === 'pre') {

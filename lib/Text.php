@@ -180,9 +180,8 @@ class Text
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
                 $foundTitle   = true;
-                $thArgString = trim(preg_replace('~\s+~', ' ', $matches[1])); // sometimes get double spaces, see e.g. samba_selinux.8
-                $titleDetails = str_getcsv($thArgString, ' ');
-                if (count($titleDetails) < 2) {
+                $titleDetails = Macro::parseArgString($matches[1]);
+                if (is_null($titleDetails) || count($titleDetails) < 2) {
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.

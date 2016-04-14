@@ -63,9 +63,10 @@ class TextContent
 
         if (preg_match('~^\.([RBI][RBI]?)(.*)$~u', $line, $matches)) {
 
-            $command        = $matches[1];
-            $stringToFormat = trim($matches[2]);
-            if (mb_strlen($stringToFormat) === 0) {
+            $command = $matches[1];
+
+            $bits = Macro::parseArgString($matches[2]);
+            if (is_null($bits)) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
 
@@ -73,7 +74,7 @@ class TextContent
             // TODO: maybe punt this to mankier? also get \fB \fR ones.
             if ($command === 'BR'
               && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u',
-                $stringToFormat, $matches)
+                trim($matches[2]), $matches)
             ) {
                 $parentNode->appendChild(new DOMText(' '));
                 $anchor = $dom->createElement('a');
@@ -92,7 +93,6 @@ class TextContent
                 return;
             }
 
-            $bits = str_getcsv($stringToFormat, ' ');
             if (mb_strlen($command) === 1) {
                 $bits = [implode(' ', $bits)];
             }
