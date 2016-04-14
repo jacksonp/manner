@@ -111,12 +111,18 @@ class TextContent
                         TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
                         break;
                     case 'B':
-                        $strongNode = $parentNode->appendChild($dom->createElement('strong'));
+                        $strongNode = $dom->createElement('strong');
                         TextContent::interpretAndAppendText($strongNode, $bit, $bi === 0);
+                        if ($strongNode->childNodes->length > 1 || $strongNode->firstChild->nodeValue !== '') {
+                            $parentNode->appendChild($strongNode);
+                        }
                         break;
                     case 'I':
-                        $emNode = $parentNode->appendChild($dom->createElement('em'));
+                        $emNode = $dom->createElement('em');
                         TextContent::interpretAndAppendText($emNode, $bit, $bi === 0);
+                        if ($emNode->childNodes->length > 1 || $emNode->firstChild->nodeValue !== '') {
+                            $parentNode->appendChild($emNode);
+                        }
                         break;
                     default:
                         throw new Exception($line . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
