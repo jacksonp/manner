@@ -6,6 +6,9 @@ class Section
 
     /**
      * Could be a section, a subsection...
+     * @param HybridNode $parentSectionNode
+     * @param int $level
+     * @throws Exception
      */
     static function handle(HybridNode $parentSectionNode, int $level)
     {
@@ -21,7 +24,15 @@ class Section
         $sectionNodes = [];
         $sectionNum   = 0;
 
-        foreach ($parentSectionNode->manLines as $key => $line) {
+        $numLines = count($parentSectionNode->manLines);
+
+        for ($i = 0; $i < $numLines; ++$i) {
+            $line = $parentSectionNode->manLines[$i];
+
+            if (mb_strlen($line) === 0 && $i === $numLines - 1) {
+                unset($parentSectionNode->manLines[$i]); // trim trailing empty lines.
+                continue;
+            }
 
             // Start a subsection
             if (
@@ -34,10 +45,9 @@ class Section
                     throw new Exception($line . ' - empty section heading.');
                 }
 
-                unset($parentSectionNode->manLines[$key]); // made a subsection out of this!
+                unset($parentSectionNode->manLines[$i]); // made a subsection out of this!
 
-                ++$sectionNum;
-                $sectionNodes[$sectionNum] = $dom->createElement('div');
+                $sectionNodes[++$sectionNum] = $dom->createElement('div');
                 $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
                 $h = $dom->createElement('h' . $level);
                 TextContent::interpretAndAppendText($h, $sectionHeading);
@@ -55,7 +65,7 @@ class Section
 
             if (!empty($sectionNodes)) {
                 $sectionNodes[$sectionNum]->addManLine($line);
-                unset($parentSectionNode->manLines[$key]); // moved to subsection!
+                unset($parentSectionNode->manLines[$i]); // moved to subsection!
             }
 
         }

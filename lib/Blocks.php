@@ -13,7 +13,6 @@ class Blocks
         $blocks   = [];
         $blockNum = 0;
 
-        // Now we have no more sections in manLines, do definition lists because .TP is a bit special in that we need to keep the 1st line separate for the definition and not merge text as we would otherwise.
         $numLines = count($parentSectionNode->manLines);
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
@@ -67,8 +66,7 @@ class Blocks
                     continue;
                 }
                 if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('dl');
+                    $blocks[++$blockNum] = $dom->createElement('dl');
                 }
                 $dtLine = $parentSectionNode->manLines[++$i];
                 $dt     = $dom->createElement('dt');
