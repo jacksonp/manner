@@ -180,7 +180,8 @@ class Text
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
                 $foundTitle   = true;
-                $titleDetails = str_getcsv($matches[1], ' ');
+                $thArgString = trim(preg_replace('~\s+~', ' ', $matches[1])); // sometimes get double spaces, see e.g. samba_selinux.8
+                $titleDetails = str_getcsv($thArgString, ' ');
                 if (count($titleDetails) < 2) {
                     throw new Exception($line . ' - missing title info');
                 }
