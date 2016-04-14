@@ -91,31 +91,37 @@ class Blocks
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-                if (!empty($matches[1])) {
 
-                    $bits = str_getcsv($matches[1], ' ');
-                    // Copied from .TP:
-                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                        ++$blockNum;
-                        $blocks[$blockNum] = $dom->createElement('dl');
-                        if (count($bits) > 1) {
-                            $blocks[$blockNum]->setAttribute('class', 'indent-' . $bits[1]);
+                $ipArgString = trim($matches[1]);
+
+                if (mb_strlen($ipArgString) > 0) {
+
+                    $ipArgs = str_getcsv($ipArgString, ' ');
+
+                    if (mb_strlen($ipArgs[0]) > 0) {
+                        // If there's a "designator" - otherwise preg_match hit empty double quotes.
+                        // Copied from .TP:
+                        if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
+                            $blocks[++$blockNum] = $dom->createElement('dl');
+                            if (count($ipArgs) > 1) {
+                                $blocks[$blockNum]->setAttribute('class', 'indent-' . $ipArgs[1]);
+                            }
                         }
+                        $dt = $dom->createElement('dt');
+                        TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
+                        $blocks[$blockNum]->appendChild($dt);
+                        continue;
                     }
-                    $dt = $dom->createElement('dt');
-                    TextContent::interpretAndAppendCommand($dt, $bits[0]);
-                    $blocks[$blockNum]->appendChild($dt);
-                    continue;
 
-                } elseif (empty($blocks)) {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('p');
+                }
+
+                if (empty($blocks) || $blocks[$blockNum]->tagName === 'pre') {
+                    $blocks[++$blockNum] = $dom->createElement('p');
                     continue;
                 } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
                     $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br'));
                 } elseif ($blocks[$blockNum]->tagName === 'p') {
-                    ++$blockNum;
-                    $blocks[$blockNum] = $dom->createElement('blockquote');
+                    $blocks[++$blockNum] = $dom->createElement('blockquote');
                 } elseif ($blocks[$blockNum]->tagName === 'blockquote') {
                     // Already in previous .IP,
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));
