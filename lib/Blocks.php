@@ -294,7 +294,9 @@ class Blocks
         // Add the blocks
         foreach ($blocks as $block) {
             if ($block->hasChildNodes()) {
-                $parentSectionNode->appendChild($block);
+                if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+                    $parentSectionNode->appendChild($block);
+                }
             }
         }
 
