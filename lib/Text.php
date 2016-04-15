@@ -132,10 +132,11 @@ class Text
                     $line = $matchesUR['url'] . $matchesUE[1];
                     ++$i;
                 } else {
-                    if (empty($matchesUR['url'])) {
+                    if (empty($matchesUR['url']) || mb_substr($matchesUR['url'], 0, 1) === '#') {
                         $line = $lineAfterUR;
                         if (preg_match('~^\.UE ?(.*)$~', $firstPassLines[$i + 2], $matches)) {
                             $line .= $matches[1];
+                            $i += 2;
                         } else {
                             throw new Exception('.UR (empty) with no corresponding .UE');
                         }
