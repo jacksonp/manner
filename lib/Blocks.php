@@ -127,6 +127,15 @@ class Blocks
                 continue;
             }
 
+            /* HMM think more about .ti = temporary indent
+            if (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
+                $line = $parentSectionNode->manLines[++$i];
+                if ($blockNum === 0) {
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                }
+            }
+            */
+
             if (preg_match('~^\.RS ?(.*)$~u', $line, $matches)) {
                 $rsLevel = 1;
                 $rsLines = [];
