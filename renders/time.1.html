@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2015-02-21" data-package="" data-section-name="Linux User's Manual">
+<title>TIME</title>
+<h1>TIME</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>time - time a simple command or give resource usage
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>time [</strong><em>options</em><strong>]</strong> <em>command</em> <strong>[</strong><em>arguments...</em><strong>]</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>time</strong> command runs the specified program <em>command</em> with the given arguments. When <em>command</em> finishes, <strong>time</strong> writes a message to standard error giving timing statistics about this program run. These statistics consist of (i) the elapsed real time between invocation and termination, (ii) the user CPU time (the sum of the <em>tms_utime</em> and <em>tms_cutime</em> values in a <em>struct tms</em> as returned by <a href="/2/times" class="link-man">times(2)</a>), and (iii) the system CPU time (the sum of the <em>tms_stime</em> and <em>tms_cstime</em> values in a <em>struct tms</em> as returned by <a href="/2/times" class="link-man">times(2)</a>).
+  <p>Note: some shells (e.g., <a href="/1/bash" class="link-man">bash(1)</a>) have a built-in <strong>time</strong> command that provides similar information on the usage of time and possibly other resources. To access the real command, you may need to specify its pathname (something like <em>/usr/bin/time</em>).
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-p</strong>
+    <dd>When in the POSIX locale, use the precise traditional format<br>
+    “real %f\nuser %f\nsys %f\n”<br>
+    (with numbers in seconds) where the number of decimals in the output for %f is unspecified but is sufficient to express the clock tick accuracy, and at least one.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXIT STATUS</h2>
+  <p>If <em>command</em> was invoked, the exit status is that of <em>command</em>. Otherwise, it is 127 if <em>command</em> could not be found, 126 if it could be found but could not be invoked, and some other nonzero value (1-125) if something else went wrong.
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>The variables <strong>LANG</strong>, <strong>LC_ALL</strong>, <strong>LC_CTYPE</strong>, <strong>LC_MESSAGES</strong>, <strong>LC_NUMERIC</strong>, <strong>NLSPATH</strong>, and <strong>PATH</strong> are used. The last one to search for <em>command</em>. The remaining ones for the text and formatting of the output.
+</div>
+<div class="section">
+  <h2>GNU VERSION</h2>
+  <p>Below a description of the GNU 1.7 version of <strong>time</strong>. Disregarding the name of the utility, GNU makes it output lots of useful information, not only about time used, but also on other resources like memory, I/O and IPC calls (where available). The output is formatted using a format string that can be specified using the <em>-f</em> option or the <strong>TIME</strong> environment variable.
+  <p>The default format string is:
+  <p>%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k<br>
+  %Iinputs+%Ooutputs (%Fmajor+%Rminor)pagefaults %Wswaps<br>
+  <p>When the <em>-p</em> option is given the (portable) output format
+  <p>real %e<br>
+  user %U<br>
+  sys %S<br>
+  <p>is used.
+  <div class="subsection">
+    <h3>The format string</h3>
+    <p>The format is interpreted in the usual printf-like way. Ordinary characters are directly copied, tab, newline and backslash are escaped using \t, \n and \\, a percent sign is represented by %%, and otherwise % indicates a conversion. The program <strong>time</strong> will always add a trailing newline itself. The conversions follow. All of those used by <a href="/1/tcsh" class="link-man">tcsh(1)</a> are supported.
+    <p><strong>Time</strong>
+    <dl>
+      <dt><strong>%E</strong>
+      <dd>Elapsed real time (in [hours:]minutes:seconds).
+      <dt><strong>%e</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Elapsed real time (in seconds).
+      <dt><strong>%S</strong>
+      <dd>Total number of CPU-seconds that the process spent in kernel mode.
+      <dt><strong>%U</strong>
+      <dd>Total number of CPU-seconds that the process spent in user mode.
+      <dt><strong>%P</strong>
+      <dd>Percentage of the CPU that this job got, computed as (%U + %S) / %E.
+    </dl>
+    <p><strong>Memory</strong>
+    <dl>
+      <dt><strong>%M</strong>
+      <dd>Maximum resident set size of the process during its lifetime, in Kbytes.
+      <dt><strong>%t</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Average resident set size of the process, in Kbytes.
+      <dt><strong>%K</strong>
+      <dd>Average total (data+stack+text) memory use of the process, in Kbytes.
+      <dt><strong>%D</strong>
+      <dd>Average size of the process's unshared data area, in Kbytes.
+      <dt><strong>%p</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Average size of the process's unshared stack space, in Kbytes.
+      <dt><strong>%X</strong>
+      <dd>Average size of the process's shared text space, in Kbytes.
+      <dt><strong>%Z</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) System's page size, in bytes. This is a per-system constant, but varies between systems.
+      <dt><strong>%F</strong>
+      <dd>Number of major page faults that occurred while the process was running. These are faults where the page has to be read in from disk.
+      <dt><strong>%R</strong>
+      <dd>Number of minor, or recoverable, page faults. These are faults for pages that are not valid but which have not yet been claimed by other virtual pages. Thus the data in the page is still valid but the system tables must be updated.
+      <dt><strong>%W</strong>
+      <dd>Number of times the process was swapped out of main memory.
+      <dt><strong>%c</strong>
+      <dd>Number of times the process was context-switched involuntarily (because the time slice expired).
+      <dt><strong>%w</strong>
+      <dd>Number of waits: times that the program was context-switched voluntarily, for instance while waiting for an I/O operation to complete.
+    </dl>
+    <p><strong>I/O</strong>
+    <dl>
+      <dt><strong>%I</strong>
+      <dd>Number of filesystem inputs by the process.
+      <dt><strong>%O</strong>
+      <dd>Number of filesystem outputs by the process.
+      <dt><strong>%r</strong>
+      <dd>Number of socket messages received by the process.
+      <dt><strong>%s</strong>
+      <dd>Number of socket messages sent by the process.
+      <dt><strong>%k</strong>
+      <dd>Number of signals delivered to the process.
+      <dt><strong>%C</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Name and command-line arguments of the command being timed.
+      <dt><strong>%x</strong>
+      <dd>
+        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Exit status of the command.
+      </dl>
+  </div>
+  <div class="subsection">
+    <h3>GNU options</h3>
+    <dl>
+      <dt><strong>-f</strong> <em>format</em><strong>, --format=</strong><em>format</em>
+      <dd>Specify output format, possibly overriding the format specified in the environment variable TIME.
+      <dt><strong>-p, --portability</strong>
+      <dd>Use the portable output format.
+      <dt><strong>-o</strong> <em>file</em><strong>, --output=</strong><em>file</em>
+      <dd>Do not send the results to <em>stderr</em>, but overwrite the specified file.
+      <dt><strong>-a, --append</strong>
+      <dd>(Used together with -o.) Do not overwrite but append.
+      <dt><strong>-v, --verbose</strong>
+      <dd>Give very verbose output about all the program knows about.
+    </dl>
+  </div>
+  <div class="subsection">
+    <h3>GNU standard options</h3>
+    <dl>
+      <dt><strong>--help</strong>
+      <dd>Print a usage message on standard output and exit successfully.
+      <dt><strong>-V, --version</strong>
+      <dd>Print version information on standard output, then exit successfully.
+      <dt><strong>--</strong>
+      <dd>Terminate option list.
+    </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>Not all resources are measured by all versions of UNIX, so some of the values might be reported as zero. The present selection was mostly inspired by the data provided by 4.2 or 4.3BSD.
+  <p>GNU time version 1.7 is not yet localized. Thus, it does not implement the POSIX requirements.
+  <p>The environment variable <strong>TIME</strong> was badly chosen. It is not unusual for systems like <a href="/1/autoconf" class="link-man">autoconf(1)</a> or <a href="/1/make" class="link-man">make(1)</a> to use environment variables with the name of a utility to override the utility to be used. Uses like MORE or TIME for options to programs (instead of program pathnames) tend to lead to difficulties.
+  <p>It seems unfortunate that <em>-o</em> overwrites instead of appends. (That is, the <em>-a</em> option should be the default.)
+  <p>Mail suggestions and bug reports for GNU <strong>time</strong> to<br>
+  <em>bug-utils@prep.ai.mit.edu</em><br>
+  Please include the version of <strong>time</strong>, which you can get by running<br>
+  <em>time --version</em><br>
+  and the operating system and C compiler you used.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>bash(1),</strong> <a href="/1/tcsh" class="link-man">tcsh(1)</a>, <a href="/2/times" class="link-man">times(2)</a>, <a href="/2/wait3" class="link-man">wait3(2)</a>
+</div>
+

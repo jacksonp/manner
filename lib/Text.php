@@ -95,7 +95,8 @@ class Text
             // .pc: "Change the page number character"
             // .PD: "Adjust the empty space before a new paragraph or section."
             // .RP: "Specifies the report format for your document. The report format creates a separate cover page."
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP)~u', $line)) {
+            // .po, .in, .ll: "dimensions which gtroff uses for placing a line of output onto the page." see http://apollo.ubishops.ca/~ajaja/TROFF/groff.html
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll)~u', $line)) {
                 continue;
             }
 

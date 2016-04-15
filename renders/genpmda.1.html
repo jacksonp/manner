@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>GENPMDA</title>
+<h1>GENPMDA</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>genpmda</strong> - Performance Co-Pilot PMDA Generator
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>genpmda</strong> [<strong>-d</strong>] [<strong>-D</strong> <em>domain</em>] [<strong>-s</strong> <em>stdpmid</em>] [<strong>-t</strong> <em>topdir</em>] [<strong>-n</strong> <em>pmns</em>] [<strong>-o</strong> <em>dir</em>] [<strong>-v</strong>] <strong>-i</strong> <em>IAM</em> <strong>-c</strong> <em>config</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>Genpmda</strong> is a rapid application development tool for creating new Performance Metrics Domain Agents, see <a href="/3/PMDA" class="link-man">PMDA(3)</a>. It provides a very easy and efficient way to extend the Performance Co-pilot (PCP) with new performance metrics without needing to understand the low level details of how PMDAs are constructed.
+  <p><strong>Genpmda</strong> reads a config file containing an augmented Performance Metrics Name Space, see <a href="/5/pmns" class="link-man">pmns(5)</a>, and automatically generates virtually all of the source code to implement a fully functional PMDA, including the Makefile, name space, support scripts for configuring the new PMDA, and the metrics help text. Fairly simple PMDAs can be automatically generated from the config file without writing any additional code. More complicated PMDAs, e.g. containing multiple instance domains, require only the refresh methods for the instance domains to be written manually.
+  <p>An example of the config file format accepted by <strong>genpmda</strong> is given below.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>Required options:</strong>
+    <dt><strong>-c</strong> <em>config</em>
+    <dd>input <em>config</em> file, see example below
+    <dt><strong>-i</strong> <em>IAM</em>
+    <dd>pmda name <em>IAM</em>, should appear in <em>stdpmid</em> or the <strong>-D</strong> option must be used to specify a <em>domain</em>.
+    <dt><strong>Other options:</strong>
+    <dt><strong>-d</strong>
+    <dd>generate an Install script for a daemon PMDA (default is DSO)
+    <dt><strong>-t</strong> <em>topdir</em>
+    <dd>use <em>topdir</em> in generated GNUmakefile, default <strong>../../..</strong>
+    <dt><strong>-n</strong> <em>pmns</em>
+    <dd>use <em>pmns</em> as root of the namespace (default matches <strong>-i</strong> flag)
+    <dt><strong>-D</strong> <em>domain</em>
+    <dd>use <em>domain</em> number in the generated <strong>pmns</strong> and <strong>domain.h</strong> (if <strong>-s</strong> is not given)
+    <dt><strong>-s</strong> <em>stdpmid</em>
+    <dd>path to <em>stdpmid</em> (default <strong>../../pmns/stdpmid</strong>)
+    <dt><strong>-o</strong> <em>dir</em>
+    <dd>use <em>dir</em> for generated source code, default <strong>./generated</strong>
+    <dt><strong>-v</strong>
+    <dd>print verbose messages about what <strong>genpmda</strong> is doing.
+  </dl>
+  <p>Example: Generate an “example” pmda using domain 99:<br>
+  <strong>genpmda -D 99 -v -i EXAMPLE -c example.conf</strong>
+  <p>Here is <em>example.conf</em> config file (for the required <strong>-c</strong> option):<br>
+  <br>
+  <br>
+  <pre> example {
+     metric
+ }
+
+ example.metric {
+     ##  metric            string
+     ##  pmid              EXAMPLE:CLUSTER:0
+     ##  indom             PM_INDOM_NULL
+     ##  type              PM_TYPE_STRING
+     ##  units             PMDA_PMUNITS(0,0,0,0,0,0)
+     ##  semantics         PM_SEM_DISCRETE
+     ##  briefhelptext     one line help text for example.metric.string
+     ##  helptext          long help text for example.metric.string
+     ##  helptext          This is the second line of the long help text
+     ##  helptext          and this is the third line.
+     ##  fetch             function example_string_fetch_callback
+     ##  code              atom-&gt;cp = "hello world";
+     ##  code              return 1;
+     ##  endmetric
+ }
+</pre>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/3/PMDA" class="link-man">PMDA(3)</a>, <a href="/5/pmns" class="link-man">pmns(5)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>Many, but all are intended to be easily understood.
+</div>
+

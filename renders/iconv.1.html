@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2014-07-08" data-package="GNU" data-section-name="Linux User Manual">
+<title>ICONV</title>
+<h1>ICONV</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>iconv - convert text from one character encoding to another
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>iconv</strong> [<em>options</em>] [-f <em>from-encoding</em>] [-t <em>to-encoding</em>] [<em>inputfile</em>]...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>iconv</strong> program reads in text in one encoding and outputs the text in another encoding. If no input files are given, or if it is given as a dash (-), <strong>iconv</strong> reads from standard input. If no output file is given, <strong>iconv</strong> writes to standard output.
+  <p>If no <em>from-encoding</em> is given, the default is derived from the current locale's character encoding. If no <em>to-encoding</em> is given, the default is derived from the current locale's character encoding.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-f</strong> <em>from-encoding</em><strong>, --from-code=</strong><em>from-encoding</em>
+    <dd>Use <em>from-encoding</em> for input characters.
+    <dt><strong>-t</strong> <em>to-encoding</em><strong>, --to-code=</strong><em>to-encoding</em>
+    <dd>Use <em>to-encoding</em> for output characters.<br>
+    <br>
+    If the string <strong>//IGNORE</strong> is appended to <em>to-encoding</em>, characters that cannot be converted are discarded and an error is printed after conversion.<br>
+    <br>
+    If the string <strong>//TRANSLIT</strong> is appended to <em>to-encoding</em>, characters being converted are transliterated when needed and possible. This means that when a character cannot be represented in the target character set, it can be approximated through one or several similar looking characters. Characters that are outside of the target character set and cannot be transliterated are replaced with a question mark (?) in the output.
+    <dt><strong>-l</strong>, <strong>--list</strong>
+    <dd>List all known character set encodings.
+    <dt><strong>-c</strong>
+    <dd>Silently discard characters that cannot be converted instead of terminating when encountering such characters.
+    <dt><strong>-o</strong> <em>outputfile</em><strong>, --output=</strong><em>outputfile</em>
+    <dd>Use <em>outputfile</em> for output.
+    <dt><strong>-s</strong>, <strong>--silent</strong>
+    <dd>This option is ignored; it is provided only for compatibility.
+    <dt><strong>--verbose</strong>
+    <dd>Print progress information on standard error when processing multiple files.
+    <dt><strong>-?</strong>, <strong>--help</strong>
+    <dd>Print a usage summary and exit.
+    <dt><strong>--usage</strong>
+    <dd>Print a short usage summary and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Print the version number, license, and disclaimer of warranty for <strong>iconv</strong>.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXIT STATUS</h2>
+  <p>Zero on success, non-zero on errors.
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>Internally, the <strong>iconv</strong> program uses the <a href="/3/iconv" class="link-man">iconv(3)</a> function which in turn uses <em>gconv</em> modules (dynamically loaded shared libraries) to convert to and from a character set. Before calling <a href="/3/iconv" class="link-man">iconv(3)</a>, the <strong>iconv</strong> program must first allocate a conversion descriptor using <a href="/3/iconv_open" class="link-man">iconv_open(3)</a>. The operation of the latter function is influenced by the setting of the <strong>GCONV_PATH</strong> environment variable:
+  <dl class="indent-3">
+    <dt>*
+    <dd>
+      If <strong>GCONV_PATH</strong> is not set, <a href="/3/iconv_open" class="link-man">iconv_open(3)</a> loads the system gconv module configuration cache file created by <a href="/8/iconvconfig" class="link-man">iconvconfig(8)</a> and then, based on the configuration, loads the gconv modules needed to perform the conversion. If the system gconv module configuration cache file is not available then the system gconv module configuration file is used.
+    <dt>*
+    <dd>
+      If <strong>GCONV_PATH</strong> is defined (as a colon-separated list of pathnames), the system gconv module configuration cache is not used. Instead, <a href="/3/iconv_open" class="link-man">iconv_open(3)</a> first tries to load the configuration files by searching the directories in <strong>GCONV_PATH</strong> in order, followed by the system default gconv module configuration file. If a directory does not contain a gconv module configuration file, any gconv modules that it may contain are ignored. If a directory contains a gconv module configuration file and it is determined that a module needed for this conversion is available in the directory, then the needed module is loaded from that directory, the order being such that the first suitable module found in <strong>GCONV_PATH</strong> is used. This allows users to use custom modules and even replace system-provided modules by providing such modules in <strong>GCONV_PATH</strong> directories.
+    </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><em>/usr/lib/gconv</em>
+    <dd>Usual default gconv module path.
+    <dt><em>/usr/lib/gconv/gconv-modules</em>
+    <dd>Usual system default gconv module configuration file.
+    <dt><em>/usr/lib/gconv/gconv-modules.cache</em>
+    <dd>Usual system gconv module configuration cache.
+  </dl>
+</div>
+<div class="section">
+  <h2>CONFORMING TO</h2>
+  <p>POSIX.1-2001.
+</div>
+<div class="section">
+  <h2>EXAMPLE</h2>
+  <p>Convert text from the ISO 8859-15 character encoding to UTF-8:
+  <pre> $ <strong>iconv -f ISO-8859-15 -t UTF-8 &lt; input.txt &gt; output.txt</strong>
+</pre>
+  <p>The next example converts from UTF-8 to ASCII, transliterating when possible:
+  <pre> $ <strong>echo abc ß α € àḃç | iconv -f UTF-8 -t ASCII//TRANSLIT</strong>
+ abc ss ? EUR abc
+</pre>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/locale" class="link-man">locale(1)</a>, <a href="/3/iconv" class="link-man">iconv(3)</a>, <a href="/3/nl_langinfo" class="link-man">nl_langinfo(3)</a>, <a href="/7/charsets" class="link-man">charsets(7)</a>, <a href="/8/iconvconfig" class="link-man">iconvconfig(8)</a>
+</div>
+
