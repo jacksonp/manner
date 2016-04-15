@@ -238,12 +238,30 @@ class Blocks
                     }
                 }
 
+                $pre = $dom->createElement('pre');
+
+                if (count($preLines) === 0) {
+                    continue;
+                }
+
+                if (preg_match('~^\.RS ?(.*)$~u', $preLines[0], $matches)) {
+                    if (!preg_match('~^\.RE~u', array_pop($preLines))) {
+                        throw new Exception('.nf block contains initial .RS but not final .RE');
+                    }
+                    array_shift($preLines);
+                    $className = 'indent';
+                    if (!empty($matches[1])) {
+                        $className .= '-' . trim($matches[1]);
+                    }
+                    $pre->setAttribute('class', $className);
+                }
+
                 // Skip empty block
                 if (trim(implode('', $preLines)) === '') {
                     continue;
                 }
 
-                $blocks[++$blockNum]         = $dom->createElement('pre');
+                $blocks[++$blockNum]         = $pre;
                 $blocks[$blockNum]->manLines = $preLines;
                 self::handle($blocks[$blockNum], true);
                 continue; //End of block
