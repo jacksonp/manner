@@ -185,15 +185,25 @@ class Blocks
             }
 
             if (preg_match('~^\.EX~u', $line)) {
-                $blocks[++$blockNum] = $dom->createElement('code');
+                $blockLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.EE~u', $line)) {
-                        continue 2; // End of example
+                        break;
+                    } else {
+                        $blockLines[] = $line;
                     }
-                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
                 }
-                throw new Exception($line . '.EX without corresponding .EE');
+
+                // Skip empty block
+                if (trim(implode('', $blockLines)) === '') {
+                    continue;
+                }
+
+                $blocks[++$blockNum]         = $dom->createElement('code');
+                $blocks[$blockNum]->manLines = $blockLines;
+                self::handle($blocks[$blockNum], true);
+                continue; //End of block
             }
 
             if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
