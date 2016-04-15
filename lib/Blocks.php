@@ -127,7 +127,7 @@ class Blocks
                 continue;
             }
 
-            if (preg_match('~^\.RS ?(.*)$~u', $line)) {
+            if (preg_match('~^\.RS ?(.*)$~u', $line, $matches)) {
                 $rsLevel = 1;
                 $rsLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
@@ -224,7 +224,7 @@ class Blocks
                     continue;
                 }
 
-                $blocks[++$blockNum] = $dom->createElement('pre');
+                $blocks[++$blockNum]         = $dom->createElement('pre');
                 $blocks[$blockNum]->manLines = $preLines;
                 self::handle($blocks[$blockNum], true);
                 continue; //End of block

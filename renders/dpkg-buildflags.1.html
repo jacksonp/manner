@@ -239,19 +239,19 @@
 <div class="section">
   <h2>EXAMPLES</h2>
   <p>To pass build flags to a build command in a makefile:
-  <div class="indent">
+  <div class="indent-4">
     <pre> $(MAKE) $(shell dpkg-buildflags --export=cmdline)
 
  ./configure $(shell dpkg-buildflags --export=cmdline)
 </pre>
   </div>
   <p>To set build flags in a shell script or shell fragment, <strong>eval</strong> can be used to interpret the output and to export the flags in the environment:
-  <div class="indent">
+  <div class="indent-4">
     <pre> eval "$(dpkg-buildflags --export=sh)" &amp;& make
 </pre>
   </div>
   <p>or to set the positional parameters to pass to a command:
-  <div class="indent">
+  <div class="indent-4">
     <pre> eval "set -- $(dpkg-buildflags --export=cmdline)"
  for dir in a b c; do (cd $dir &amp;& ./configure "$@" &amp;& make); done
 </pre>
@@ -262,19 +262,19 @@
     <p>For packages with autoconf-like build systems, you can pass the relevant options to configure or <strong>make</strong>(1) directly, as shown above.
     <p>For other build systems, or when you need more fine-grained control about which flags are passed where, you can use <strong>--get</strong>. Or you can include <strong>buildflags.mk</strong> instead, which takes care of calling <strong>dpkg-buildflags</strong> and storing the build flags in make variables.
     <p>If you want to export all buildflags into the environment (where they can be picked up by your build system):
-    <div class="indent">
+    <div class="indent-4">
       <pre> DPKG_EXPORT_BUILDFLAGS = 1
  include /usr/share/dpkg/buildflags.mk
 </pre>
     </div>
     <p>For some extra control over what is exported, you can manually export the variables (as none are exported by default):
-    <div class="indent">
+    <div class="indent-4">
       <pre> include /usr/share/dpkg/buildflags.mk
  export CPPFLAGS CFLAGS LDFLAGS
 </pre>
     </div>
     <p>And you can of course pass the flags to commands manually:
-    <div class="indent">
+    <div class="indent-4">
       <pre> include /usr/share/dpkg/buildflags.mk
  build-arch:
         $(CC) -o hello hello.c $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
