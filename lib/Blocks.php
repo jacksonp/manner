@@ -221,8 +221,7 @@ class Blocks
 
 
             if ($blockNum === 0 || in_array($blocks[$blockNum]->tagName, ['div', 'code', 'pre'])) {
-                ++$blockNum;
-                $blocks[$blockNum] = $dom->createElement('p');
+                $blocks[++$blockNum] = $dom->createElement('p');
             }
 
             $parentForLine = null;

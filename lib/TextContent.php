@@ -35,7 +35,7 @@ class TextContent
 
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         if (mb_substr($line, 0, 1) === ' '
-          && $parentNode->tagName !== 'pre'
+          && !$parentNode->isOrInTag('pre')
           && $parentNode->hasChildNodes()
           && ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
         ) {
@@ -61,7 +61,7 @@ class TextContent
             return;
         }
 
-        if (preg_match('~^\.([RBI][RBI]?)(.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.([RBI][RBI]?) (.*)$~u', $line, $matches)) {
 
             $command = $matches[1];
 
@@ -113,14 +113,14 @@ class TextContent
                     case 'B':
                         $strongNode = $dom->createElement('strong');
                         TextContent::interpretAndAppendText($strongNode, $bit, $bi === 0);
-                        if ($strongNode->childNodes->length > 1 || $strongNode->firstChild->nodeValue !== '') {
+                        if ($strongNode->hasContent()) {
                             $parentNode->appendChild($strongNode);
                         }
                         break;
                     case 'I':
                         $emNode = $dom->createElement('em');
                         TextContent::interpretAndAppendText($emNode, $bit, $bi === 0);
-                        if ($emNode->childNodes->length > 1 || $emNode->firstChild->nodeValue !== '') {
+                        if ($emNode->hasContent()) {
                             $parentNode->appendChild($emNode);
                         }
                         break;
@@ -135,13 +135,7 @@ class TextContent
 
         // FAIL on unknown command
         if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
-            echo 'Doc status:', PHP_EOL;
-            Debug::echoTidy($dom->saveHTML());
-            echo PHP_EOL, PHP_EOL;
-            var_dump($parentNode->manLines);
-            echo PHP_EOL, PHP_EOL;
-            echo $line, ' - unexpected command.', PHP_EOL;
-            exit(1);
+            throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
         }
 
         TextContent::interpretAndAppendText($parentNode, $line, true);
@@ -179,7 +173,7 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->tagName === 'strong' || trim($textSegments[$i + 1]) === '') {
+                        if ($parentNode->isOrInTag('strong') || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         } else {
                             $strong = $dom->createElement('strong');
@@ -192,7 +186,7 @@ class TextContent
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->tagName === 'em' || trim($textSegments[$i + 1]) === '') {
+                        if ($parentNode->isOrInTag('em') || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                         } else {
                             $em = $dom->createElement('em');
@@ -211,9 +205,8 @@ class TextContent
                     }
                     break;
                 case '\fP':
-                    // "Switch back to previous font." - groff(7)
+                    // \fP: "Switch back to previous font." - groff(7)
                     // Assume back to normal text for now, so do nothing so next line passes thru to default.
-                    break;
                 case '\fR':
                 case '\f[]':
                 case '\f1':
@@ -252,7 +245,7 @@ class TextContent
                     break;
                 default:
                     $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i],
-                      !in_array($parentNode->tagName, ['pre', 'code']))));
+                      !$parentNode->isOrInTag(['pre', 'code']))));
             }
 
         }
