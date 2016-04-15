@@ -44,16 +44,13 @@ class Blocks
                         $lastBlockChild = $blocks[$blockNum]->lastChild;
                         // Not sure how to handle new paragraph blocks in dls yet, trying this for now:
                         if ($lastBlockChild->tagName === 'dd') {
-                            if ($i < $numLines - 1
-                              && !in_array(substr($parentSectionNode->manLines[$i + 1], 0, 3), ['.TP', '.SH'])
-                            ) {
+                            if (!in_array(substr($parentSectionNode->manLines[$i + 1], 0, 3), ['.TP', '.SH'])) {
                                 $lastBlockChild->appendChild($dom->createElement('br'));
                                 $lastBlockChild->appendChild($dom->createElement('br'));
                             }
                         }
                     } else {
-                        ++$blockNum;
-                        $blocks[$blockNum] = $dom->createElement('p');
+                        $blocks[++$blockNum] = $dom->createElement('p');
                     }
                 }
                 continue;
@@ -141,12 +138,16 @@ class Blocks
                             }
 
                             if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
-                                $rsBlock = $blocks[$blockNum]->lastChild;
-                                $rsBlock->appendChild($dom->createElement('br'));
+                                if ($blocks[$blockNum]->lastChild->tagName === 'dd') {
+                                    $rsBlock = $blocks[$blockNum]->lastChild;
+                                    $rsBlock->appendChild($dom->createElement('br'));
+                                } else {
+                                    $rsBlock = $dom->createElement('dd');
+                                    $rsBlock = $blocks[$blockNum]->appendChild($rsBlock);
+                                }
                             } else {
-                                ++$blockNum;
-                                $blocks[$blockNum] = $dom->createElement('div');
-                                $className         = 'indent';
+                                $blocks[++$blockNum] = $dom->createElement('div');
+                                $className           = 'indent';
                                 if (!empty($matches[1])) {
                                     $className .= '-' . trim($matches[1]);
                                 }
