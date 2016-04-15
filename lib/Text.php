@@ -94,7 +94,8 @@ class Text
             // .pl: "Set the page length"
             // .pc: "Change the page number character"
             // .PD: "Adjust the empty space before a new paragraph or section."
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD)~u', $line)) {
+            // .RP: "Specifies the report format for your document. The report format creates a separate cover page."
+            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP)~u', $line)) {
                 continue;
             }
 
@@ -241,6 +242,8 @@ class Text
           '\\%'  => '',
             // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
           '\\:'  => '',
+            // Digit-width space.
+          '\\0'  => ' ',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
           '\\|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.

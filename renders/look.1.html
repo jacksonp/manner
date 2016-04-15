@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="June 2011" data-package="util-linux" data-section-name="User Commands">
+<title>LOOK</title>
+<h1>LOOK</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>look - display lines beginning with a given string
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>look</strong> [options] <em>string</em> [<em>file</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>look</strong> utility displays any lines in <em>file</em> which contain <em>string</em>. As <strong>look</strong> performs a binary search, the lines in <em>file</em> must be sorted (where <a href="/1/sort" class="link-man">sort(1)</a> was given the same options <strong>-d</strong> and/or <strong>-f</strong> that <strong>look</strong> is invoked with).
+  <p>If <em>file</em> is not specified, the file <em>/usr/share/dict/words</em> is used, only alphanumeric characters are compared and the case of alphabetic characters is ignored.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>, <strong>--alternative</strong>
+    <dd>Use the alternative dictionary file.
+    <dt><strong>-d</strong>, <strong>--alphanum</strong>
+    <dd>Use normal dictionary character set and order, i.e. only blanks and alphanumeric characters are compared. This is on by default if no file is specified.<br>
+    <br>
+    Note that blanks have been added to dictionary character set for compatibility with <strong>sort -d</strong> command since version 2.28.
+    <dt><strong>-f</strong>, <strong>--ignore-case</strong>
+    <dd>Ignore the case of alphabetic characters. This is on by default if no file is specified.
+    <dt><strong>-t</strong>, <strong>--terminate</strong> <em>character</em>
+    <dd>Specify a string termination character, i.e. only the characters in <em>string</em> up to and including the first occurrence of <em>character</em> are compared.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>Display version information and exit.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>Display help text and exit.
+  </dl>
+  <p>The <strong>look</strong> utility exits 0 if one or more lines were found and displayed, 1 if no lines were found, and &gt;1 if an error occurred.
+</div>
+<div class="section">
+  <h2>EXAMPLE</h2>
+  <div class="indent">
+    <pre> sort -d /etc/passwd -o /tmp/look.dict
+ look -t: root:foobar /tmp/look.dict
+</pre>
+  </div>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl class="indent-4">
+    <dt><strong>/usr/share/dict/words</strong>
+    <dd>the dictionary
+    <dt><strong>/usr/share/dict/web2</strong>
+    <dd>the alternative dictionary
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/grep" class="link-man">grep(1)</a>, <a href="/1/sort" class="link-man">sort(1)</a>
+</div>
+<div class="section">
+  <h2>HISTORY</h2>
+  <p>The <strong>look</strong> utility appeared in Version 7 AT&amp;T Unix.
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The look command is part of the util-linux package and is available from ftp://ftp.kernel.org/pub/linux/utils/util-linux/.
+</div>
+

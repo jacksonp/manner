@@ -4,7 +4,7 @@
 class Blocks
 {
 
-    static function handle(HybridNode $parentSectionNode)
+    static function handle(HybridNode $parentSectionNode, $preformatted = false)
     {
 
         $dom = $parentSectionNode->ownerDocument;
@@ -17,7 +17,7 @@ class Blocks
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
-            $canAppendNextText = true;
+            $canAppendNextText = !$preformatted;
 
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
@@ -35,6 +35,12 @@ class Blocks
                 if ($i === $numLines - 1) {
                     continue; // don't care about last line in block being blank.
                 }
+
+                if ($preformatted) {
+                    $parentSectionNode->appendChild(new DOMText("\n"));
+                    continue;
+                }
+
                 if (mb_strlen($parentSectionNode->manLines[$i + 1]) === 0) {
                     continue; // next line is also empty.
                 }
@@ -155,7 +161,7 @@ class Blocks
                                 $rsBlock = $blocks[$blockNum];
                             }
                             $rsBlock->manLines = $rsLines;
-                            self::handle($rsBlock);
+                            self::handle($rsBlock, $preformatted);
                             continue 2; //End of block
                         }
                     }
@@ -165,7 +171,8 @@ class Blocks
             }
 
             if (preg_match('~^\.RE~u', $line)) {
-                throw new Exception($line . ' - unexpected .RE');
+                // Ignore .RE macros without corresponding .RS
+                continue;
             }
 
             if (preg_match('~^\.EX~u', $line)) {
@@ -202,42 +209,53 @@ class Blocks
             }
 
             if (preg_match('~^\.nf~u', $line)) {
-                $blocks[++$blockNum] = $dom->createElement('pre');
+                $preLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
-                    if (preg_match('~^\.S[SH]~u', $line)) {
-                        --$i; // Don't swallow this line
-                        continue 2;
-                    }
                     if (preg_match('~^\.fi~u', $line)) {
-                        continue 2; // End of no-fill
+                        break;
+                    } else {
+                        $preLines[] = $line;
                     }
-                    TextContent::interpretAndAppendCommand($blocks[$blockNum], $line);
-                    $blocks[$blockNum]->appendChild(new DOMText("\n"));
                 }
-                // If we get here: no-fill terminated by end of block.
-                continue;
-            }
 
+                // Skip empty block
+                if (trim(implode('', $preLines)) === '') {
+                    continue;
+                }
 
-            if ($blockNum === 0 || in_array($blocks[$blockNum]->tagName, ['div', 'code', 'pre'])) {
-                $blocks[++$blockNum] = $dom->createElement('p');
+                $blocks[++$blockNum] = $dom->createElement('pre');
+                $blocks[$blockNum]->manLines = $preLines;
+                self::handle($blocks[$blockNum], true);
+                continue; //End of block
             }
 
             $parentForLine = null;
 
-            if ($blocks[$blockNum]->tagName === 'dl') {
-                if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
-                    $dd            = $dom->createElement('dd');
-                    $parentForLine = $dd;
-                    $blocks[$blockNum]->appendChild($dd);
+            if ($blockNum === 0) {
+                if ($preformatted) {
+                    $parentForLine = $parentSectionNode;
                 } else {
-                    $parentForLine = $blocks[$blockNum]->lastChild;
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                    $parentForLine       = $blocks[$blockNum];
                 }
             } else {
-                $parentForLine = $blocks[$blockNum];
+                if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code'])) {
+                    // Start a new paragraph after certain blocks
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                }
+                if ($blocks[$blockNum]->tagName === 'dl') {
+                    if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
+                        $dd            = $dom->createElement('dd');
+                        $parentForLine = $dd;
+                        $blocks[$blockNum]->appendChild($dd);
+                    } else {
+                        $parentForLine = $blocks[$blockNum]->lastChild;
+                    }
+                } else {
+                    $parentForLine = $blocks[$blockNum];
+                }
             }
-
 
             if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
                 if ($i === $numLines - 1 || $parentSectionNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
@@ -288,6 +306,10 @@ class Blocks
             }
 
             TextContent::interpretAndAppendCommand($parentForLine, $line);
+
+            if ($preformatted) {
+                $parentForLine->appendChild(new DOMText("\n"));
+            }
 
         }
 

@@ -20,7 +20,8 @@ class HybridNode extends DOMElement
     {
         $tagNames = (array)$tagNames;
         $parentNode = $this;
-        while ($parentNode) {
+
+        while ($parentNode instanceof DOMElement) {
             if (in_array($parentNode->tagName, $tagNames)) {
                 return true;
             }

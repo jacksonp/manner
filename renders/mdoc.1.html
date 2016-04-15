@@ -29,7 +29,6 @@
   <p>Documentation can be generated using the <strong>mdoc update</strong> command:
   <pre>
      mdoc update -o docs/en ProjectName.dll
-
 </pre>
   <p>Once the documentation stubs have been generated (and hopefully later filled in with actual documentation), there are three ways to view the documentation:
   <dl>
@@ -38,7 +37,6 @@
   </dl>
   <pre>
      mdoc export-html -o /srv/www/htdocs/ProjectName docs/en
-
 </pre>
   <dl>
     <dt><strong>*</strong>
@@ -49,7 +47,6 @@
   <pre>
      cd engine
      make web
-
 </pre>
   <p>This will use <strong>xsp</strong>(1) to serve the ASP.NET webapp; Visit <em>http://localhost:8080/</em> to view the documentation.
   <dl>
@@ -58,7 +55,6 @@
   </dl>
   <pre>
      mdoc assemble -o ProjectName docs/en
-
 </pre>
   <p>The above command creates the files <em>ProjectName.tree</em> and <em>ProjectName.zip</em>. An additional <em>ProjectName.sources</em> file must be provided which describes where in the help system the documentation should be hooked up; it is a very simple XML file, like this:
   <pre>
@@ -67,7 +63,6 @@
        &lt;source provider="ecma" basefile="ProjectName"
          path="various" /&gt;
      &lt;/monodoc&gt;
-
 </pre>
   <p>The above configuration file describes that the documentation is in ECMA format, that the base file name is <em>ProjectName</em> and that it should be hooked up in the <em>“various”</em> part of the documentation tree. If you want to look at the various nodes defined in the documentation, you can look at the <em>monodoc.xml</em> file which is typically installed in <em>/usr/lib/monodoc/monodoc.xml</em>.<br>
   <br>
@@ -75,7 +70,6 @@
   <pre>
      cp ProjectName.tree ProjectName.zip ProjectName.source \
        `pkg-config monodoc --variable sourcesdir`
-
 </pre>
   <p>The above will copy the files into the directory that Monodoc has registered; you might need root permissions to do this. The actual directory is returned by the <em>pkg-config</em> invocation.
 </div>

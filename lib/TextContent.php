@@ -61,7 +61,7 @@ class TextContent
             return;
         }
 
-        if (preg_match('~^\.([RBI][RBI]?) (.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.([RBI][RBI]?)\s(.*)$~u', $line, $matches)) {
 
             $command = $matches[1];
 
@@ -148,22 +148,20 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (self::$canAddWhitespace && $addSpacing) {
-            // Do this after regex above
-            $line = ' ' . $line;
-        }
-
         $textSegments = preg_split('~(\\\\f(?:[1-4BRIPCV]|\(CW[IB]?|\[[ICB]?\])|\\\\[ud])~u', $line, null,
           PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
 
         for ($i = 0; $i < $numTextSegments; ++$i) {
+            if ($addSpacing) {
+                $addSpacing = $i === 0;
+            }
             switch ($textSegments[$i]) {
                 case '\u':
                     if ($i < $numTextSegments - 1) {
                         $sup = $dom->createElement('sup');
-                        $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                         $parentNode->appendChild($sup);
                     }
                     break;
@@ -174,10 +172,11 @@ class TextContent
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->isOrInTag('strong') || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
+                              $addSpacing)));
                         } else {
                             $strong = $dom->createElement('strong');
-                            $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                             $parentNode->appendChild($strong);
                         }
                     }
@@ -187,10 +186,11 @@ class TextContent
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->isOrInTag('em') || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
+                              $addSpacing)));
                         } else {
                             $em = $dom->createElement('em');
-                            $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                             $parentNode->appendChild($em);
                         }
                     }
@@ -199,7 +199,7 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
                         $em     = $dom->createElement('em');
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                         $strong->appendChild($em);
                         $parentNode->appendChild($strong);
                     }
@@ -217,10 +217,12 @@ class TextContent
                 case '\f[C]':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
+                              $addSpacing)));
                         } else {
                             $code = $dom->createElement('code');
-                            $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                            $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing,
+                              false)));
                             $parentNode->appendChild($code);
                         }
                     }
@@ -230,7 +232,7 @@ class TextContent
                         $code = $dom->createElement('code');
                         $em   = $dom->createElement('em');
                         $code->appendChild($em);
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing, false)));
                         $parentNode->appendChild($code);
                     }
                     break;
@@ -239,12 +241,13 @@ class TextContent
                         $code   = $dom->createElement('code');
                         $strong = $dom->createElement('strong');
                         $code->appendChild($strong);
-                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing,
+                          false)));
                         $parentNode->appendChild($code);
                     }
                     break;
                 default:
-                    $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i],
+                    $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i], $addSpacing,
                       !$parentNode->isOrInTag(['pre', 'code']))));
             }
 
@@ -252,11 +255,16 @@ class TextContent
 
     }
 
-    static function interpretString(string $string, $replaceDoubleQuotes = true):string
+    static function interpretString(string $string, bool $addSpacing = false, bool $replaceDoubleQuotes = true):string
     {
 
         // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
         $string = preg_replace('~\\\\&~u', '', $string);
+
+        if (self::$canAddWhitespace && $addSpacing) {
+            // Do this after regex above
+            $string = ' ' . $string;
+        }
 
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
