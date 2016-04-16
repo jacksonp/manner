@@ -20,7 +20,7 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (mb_strlen($line) === 0) {
+        if (mb_strlen($line) === 0 || preg_match('~^\.ad~u', $line)) {
             return;
         }
 

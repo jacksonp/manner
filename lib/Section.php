@@ -56,7 +56,7 @@ class Section
             }
 
             if ($level === 2 && empty($sectionNodes)) {
-                if (mb_strlen($line) === 0) {
+                if (mb_strlen($line) === 0 || preg_match('~^\.ad~u', $line)) {
                     continue;
                 } else {
                     throw new Exception($line . ' - not in a section.');

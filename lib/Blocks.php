@@ -296,7 +296,7 @@ class Blocks
                 $preLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $parentSectionNode->manLines[$i];
-                    if (preg_match('~^\.fi~u', $line)) {
+                    if (preg_match('~^\.(fi|ad [nb])~u', $line)) {
                         break;
                     } else {
                         $preLines[] = $line;

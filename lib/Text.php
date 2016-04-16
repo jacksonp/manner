@@ -81,7 +81,6 @@ class Text
             // Skip stuff we don't care about:
             // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
             // .nh: No hyphenation
-            // .ad: "line adjustment"
             // .na: "No output-line adjusting."
             // .hy: "Switch to hyphenation mode N."
             // .UN: " .UN u Creates a named hypertext location named u; do not include a corresponding UE command. When generating HTML this should translate into the HTML command <ANAME=\"u\"id=\"u\">&nbsp;</A> (the &nbsp; is optional if support for Mosaic is unneeded).
@@ -98,7 +97,7 @@ class Text
             // .PD: "Adjust the empty space before a new paragraph or section."
             // .RP: "Specifies the report format for your document. The report format creates a separate cover page."
             // .po, .in, .ll: "dimensions which gtroff uses for placing a line of output onto the page." see http://apollo.ubishops.ca/~ajaja/TROFF/groff.html
-            if (preg_match('~^\.(IX|nh|ad|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll)~u', $line)) {
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll)~u', $line)) {
                 continue;
             }
 
