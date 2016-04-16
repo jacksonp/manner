@@ -206,6 +206,14 @@ class Blocks
                 continue; //End of block
             }
 
+            if ($line === '.EE') {
+                // Strays
+                if ($blockNum > 0) {
+                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                }
+                continue;
+            }
+
             if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
                 $url    = trim($matches[1]);
