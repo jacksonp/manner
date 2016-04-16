@@ -7,6 +7,8 @@ class Blocks
     static function handlePreformatted(HybridNode $parentNode)
     {
 
+        $dom = $parentNode->ownerDocument;
+
         $addIndent  = 0;
         $nextIndent = 0;
         $numLines   = count($parentNode->manLines);
@@ -17,6 +19,8 @@ class Blocks
                 $addIndent  = $nextIndent;
                 $nextIndent = 0;
             }
+
+            $parentForLine = $parentNode;
 
             if (mb_strlen($line) === 0 || preg_match('~^\.([LP]?P$|HP|br|sp)~u', $line)) {
                 if ($i > 0) {
@@ -43,18 +47,40 @@ class Blocks
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $line       = $parentNode->manLines[++$i];
+                $line      = $parentNode->manLines[++$i];
                 $addIndent = 4;
             } elseif ($line === '.nf') {
                 // Skip trailing command to work-around bugs in man pages.
                 continue;
+            } elseif (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
+                $nextLine = $parentNode->manLines[++$i];
+                if (mb_strlen($nextLine) === 0) {
+                    continue;
+                } else {
+                    if ($nextLine[0] === '.') {
+                        throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
+                    } else {
+                        if ($line === '.B') {
+                            $line          = $nextLine;
+                            $parentForLine = $parentNode->appendChild($dom->createElement('strong'));
+                        } elseif ($line === '.I') {
+                            $line          = $nextLine;
+                            $parentForLine = $parentNode->appendChild($dom->createElement('em'));
+                        } else {
+                            $line .= ' ' . $nextLine;
+                        }
+                    }
+                }
             }
 
             if ($addIndent > 0) {
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
-            TextContent::interpretAndAppendCommand($parentNode, $line);
+            TextContent::interpretAndAppendCommand($parentForLine, $line);
             if ($i !== $numLines - 1) {
                 $parentNode->appendChild(new DOMText("\n"));
             }
