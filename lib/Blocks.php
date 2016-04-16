@@ -45,7 +45,7 @@ class Blocks
                 }
                 $line       = $parentNode->manLines[++$i];
                 $addIndent = 4;
-            } elseif ($i === $numLines - 1 && preg_match('~^\.nf$~u', $line)) {
+            } elseif ($line === '.nf') {
                 // Skip trailing command to work-around bugs in man pages.
                 continue;
             }
