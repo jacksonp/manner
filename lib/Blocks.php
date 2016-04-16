@@ -18,7 +18,7 @@ class Blocks
                 $nextIndent = 0;
             }
 
-            if (mb_strlen($line) === 0 || $line === '.PP') {
+            if (mb_strlen($line) === 0 || in_array($line, ['.PP', '.br', '.sp'])) {
                 if ($i > 0) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
@@ -39,6 +39,12 @@ class Blocks
                 $line       = $parentNode->manLines[++$i];
                 $addIndent  = 0;
                 $nextIndent = 4;
+            } elseif (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
+                $line       = $parentNode->manLines[++$i];
+                $addIndent = 4;
             } elseif ($i === $numLines - 1 && preg_match('~^\.nf$~u', $line)) {
                 // Skip trailing command to work-around bugs in man pages.
                 continue;
