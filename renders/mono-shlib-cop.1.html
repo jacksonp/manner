@@ -57,8 +57,7 @@
 
                 [DllImport ("libcap.so")]
                 private static extern int cap_clear (IntPtr cap_p);
-        }
-</pre>
+        }</pre>
   <dl>
     <dt>Bad library name
     <dd>Assuming that the library <em>bad-library-name</em> doesn't exist on your machine, <em>Demo.BadLibraryName</em> will generate an error, as it requires a shared library which cannot be loaded. This may be ignorable; see <strong>BUGS</strong>
@@ -85,10 +84,9 @@
   <p>Mono looks for an <em>ASSEMBLY-NAME</em> .config file for each assembly loaded, and reads this file to find Dll mapping information. For example, with <em>mcs.exe</em> , Mono would read <em>mcs.exe.config</em> , and for <em>Mono.Posix.dll</em> , Mono would read <em>Mono.Posix.dll.config</em>
   <p>The <em>.config</em> file is an XML document containing a top-level &lt;configuration/&gt; section with nested &lt;dllmap/&gt; entries, which contains <strong>dll</strong> and <strong>target</strong> attributes. The dll attribute should contain the same string used in your <strong>DllImport</strong> attribute value, and the target attribute specifies which shared library mono should <em>actually</em> load at runtime.
   <p>A sample .config file is:
-  <pre>       &lt;configuration&gt;
+  <pre>      &lt;configuration&gt;
                 &lt;dllmap dll="gtkembedmoz" target="libgtkembedmoz.so" /&gt;
-        &lt;/configuration&gt;
-</pre>
+        &lt;/configuration&gt;</pre>
 </div>
 <div class="section">
   <h2>BUGS</h2>
@@ -96,7 +94,7 @@
     <dt>*
     <dd>Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. Consider this code:
   </dl>
-  <pre>   using System.Runtime.InteropServices; // for DllImport
+  <pre>     using System.Runtime.InteropServices; // for DllImport
         class Beep {
                 [DllImport ("kernel32.dll")]
                 private static extern int Beep (int dwFreq, int dwDuration);
@@ -113,8 +111,7 @@
                                 beep ();
                         }
                 }
-        }
-</pre>
+        }</pre>
   <p>If <em>mono-shlib-cop</em> is run on this assembly, an error will be reported for using <em>kernel32.dll</em> , even though <em>kernel32.dll</em> will never be used on Unix platforms.
   <dl>
     <dt>*

@@ -4,7 +4,53 @@
 class Blocks
 {
 
-    static function handle(HybridNode $parentSectionNode, $preformatted = false)
+    static function handlePreformatted(HybridNode $parentNode)
+    {
+
+        $addIndent = 0;
+        $nextIndent = 0;
+        $numLines  = count($parentNode->manLines);
+        for ($i = 0; $i < $numLines; ++$i) {
+            $line = $parentNode->manLines[$i];
+
+            if ($nextIndent !== 0) {
+                $addIndent = $nextIndent;
+                $nextIndent = 0;
+            }
+
+            if (mb_strlen($line) === 0 || $line === '.PP') {
+                if ($i > 0) {
+                    $parentNode->appendChild(new DOMText("\n"));
+                    $addIndent = 0;
+                }
+                continue;
+            } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
+                $ipArgs    = Macro::parseArgString($matches[1]);
+                $nextIndent = 4;
+                if (is_null($ipArgs) || trim($ipArgs[0]) === '') {
+                    continue;
+                } else {
+                    $line = $ipArgs[0];
+                }
+            } elseif ($i === $numLines - 1 && preg_match('~^\.nf$~u', $line)) {
+                // Skip trailing command to work-around bugs in man pages.
+                continue;
+            }
+
+            if ($addIndent > 0) {
+                $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
+            }
+
+            TextContent::interpretAndAppendCommand($parentNode, $line);
+            if ($i !== $numLines - 1) {
+                $parentNode->appendChild(new DOMText("\n"));
+            }
+
+        }
+
+    }
+
+    static function handle(HybridNode $parentSectionNode)
     {
 
         $dom = $parentSectionNode->ownerDocument;
@@ -17,7 +63,7 @@ class Blocks
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentSectionNode->manLines[$i];
 
-            $canAppendNextText = !$preformatted;
+            $canAppendNextText = true;
 
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
@@ -34,11 +80,6 @@ class Blocks
             if (mb_strlen($line) === 0) {
                 if ($i === $numLines - 1) {
                     continue; // don't care about last line in block being blank.
-                }
-
-                if ($preformatted) {
-                    $parentSectionNode->appendChild(new DOMText("\n"));
-                    continue;
                 }
 
                 if (mb_strlen($parentSectionNode->manLines[$i + 1]) === 0) {
@@ -170,7 +211,7 @@ class Blocks
                                 $rsBlock = $blocks[$blockNum];
                             }
                             $rsBlock->manLines = $rsLines;
-                            self::handle($rsBlock, $preformatted);
+                            self::handle($rsBlock);
                             continue 2; //End of block
                         }
                     }
@@ -200,9 +241,9 @@ class Blocks
                     continue;
                 }
 
-                $blocks[++$blockNum]         = $dom->createElement('code');
+                $blocks[++$blockNum]         = $dom->createElement('pre');
                 $blocks[$blockNum]->manLines = $blockLines;
-                self::handle($blocks[$blockNum], true);
+                self::handlePreformatted($blocks[$blockNum]);
                 continue; //End of block
             }
 
@@ -271,19 +312,15 @@ class Blocks
 
                 $blocks[++$blockNum]         = $pre;
                 $blocks[$blockNum]->manLines = $preLines;
-                self::handle($blocks[$blockNum], true);
+                self::handlePreformatted($blocks[$blockNum]);
                 continue; //End of block
             }
 
             $parentForLine = null;
 
             if ($blockNum === 0) {
-                if ($preformatted) {
-                    $parentForLine = $parentSectionNode;
-                } else {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                    $parentForLine       = $blocks[$blockNum];
-                }
+                $blocks[++$blockNum] = $dom->createElement('p');
+                $parentForLine       = $blocks[$blockNum];
             } else {
                 if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code'])) {
                     // Start a new paragraph after certain blocks
@@ -351,10 +388,6 @@ class Blocks
             }
 
             TextContent::interpretAndAppendCommand($parentForLine, $line);
-
-            if ($preformatted) {
-                $parentForLine->appendChild(new DOMText("\n"));
-            }
 
         }
 

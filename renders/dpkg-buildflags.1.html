@@ -84,8 +84,7 @@
    Enabled: no
 
    Feature: stackprotector
-   Enabled: yes
-</pre>
+   Enabled: yes</pre>
   <dl>
     <dt><strong>--help</strong>
     <dd>Show the usage message and exit.
@@ -242,19 +241,16 @@
   <div class="indent-4">
     <pre> $(MAKE) $(shell dpkg-buildflags --export=cmdline)
 
- ./configure $(shell dpkg-buildflags --export=cmdline)
-</pre>
+ ./configure $(shell dpkg-buildflags --export=cmdline)</pre>
   </div>
   <p>To set build flags in a shell script or shell fragment, <strong>eval</strong> can be used to interpret the output and to export the flags in the environment:
   <div class="indent-4">
-    <pre> eval "$(dpkg-buildflags --export=sh)" &amp;& make
-</pre>
+    <pre> eval "$(dpkg-buildflags --export=sh)" &amp;& make</pre>
   </div>
   <p>or to set the positional parameters to pass to a command:
   <div class="indent-4">
     <pre> eval "set -- $(dpkg-buildflags --export=cmdline)"
- for dir in a b c; do (cd $dir &amp;& ./configure "$@" &amp;& make); done
-</pre>
+ for dir in a b c; do (cd $dir &amp;& ./configure "$@" &amp;& make); done</pre>
   </div>
   <div class="subsection">
     <h3>Usage in debian/rules</h3>
@@ -264,21 +260,18 @@
     <p>If you want to export all buildflags into the environment (where they can be picked up by your build system):
     <div class="indent-4">
       <pre> DPKG_EXPORT_BUILDFLAGS = 1
- include /usr/share/dpkg/buildflags.mk
-</pre>
+ include /usr/share/dpkg/buildflags.mk</pre>
     </div>
     <p>For some extra control over what is exported, you can manually export the variables (as none are exported by default):
     <div class="indent-4">
       <pre> include /usr/share/dpkg/buildflags.mk
- export CPPFLAGS CFLAGS LDFLAGS
-</pre>
+ export CPPFLAGS CFLAGS LDFLAGS</pre>
     </div>
     <p>And you can of course pass the flags to commands manually:
     <div class="indent-4">
       <pre> include /usr/share/dpkg/buildflags.mk
  build-arch:
-        $(CC) -o hello hello.c $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-</pre>
+        $(CC) -o hello hello.c $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)</pre>
     </div>
   </div>
 </div>

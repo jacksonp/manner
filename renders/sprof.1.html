@@ -9,8 +9,7 @@
 </div>
 <div class="section">
   <h2>SYNOPSIS</h2>
-  <pre><strong> sprof</strong> [<em>option</em>]... <em>shared-object-path</em> [<em>profile-data-path</em>]
-</pre>
+  <pre><strong> sprof</strong> [<em>option</em>]... <em>shared-object-path</em> [<em>profile-data-path</em>]</pre>
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
@@ -57,8 +56,7 @@
      x1();
      x2();
      exit(EXIT_SUCCESS);
- }
-</pre>
+ }</pre>
   <p>The functions <em>x1()</em> and <em>x2()</em> are defined in the following source file that is used to construct the shared object:
   <pre> $ <strong>cat libdemo.c</strong>
  #include &lt;unistd.h&gt;
@@ -96,39 +94,31 @@
 
      for (j = 0; j &lt; 1000; j++)
         consumeCpu2(10000);
- }
-</pre>
+ }</pre>
   <p>Now we construct the shared object with the real name <em>libdemo.so.1.0.1</em>, and the soname <em>libdemo.so.1</em>:
   <pre> $ <strong>cc -g -fPIC -shared -Wl,-soname,libdemo.so.1 \</strong>
-         <strong>-o libdemo.so.1.0.1 libdemo.c</strong>
-</pre>
+         <strong>-o libdemo.so.1.0.1 libdemo.c</strong></pre>
   <p>Then we construct symbolic links for the library soname and the library linker name:
   <pre> $ <strong>ln -sf libdemo.so.1.0.1 libdemo.so.1</strong>
- $ <strong>ln -sf libdemo.so.1 libdemo.so</strong>
-</pre>
+ $ <strong>ln -sf libdemo.so.1 libdemo.so</strong></pre>
   <p>Next, we compile the main program, linking it against the shared object, and then list the dynamic dependencies of the program:
   <pre> $ <strong>cc -g -o prog prog.c -L. -ldemo</strong>
  $ <strong>ldd prog</strong>
         linux-vdso.so.1 =&gt;  (0x00007fff86d66000)
         libdemo.so.1 =&gt; not found
         libc.so.6 =&gt; /lib64/libc.so.6 (0x00007fd4dc138000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007fd4dc51f000)
-</pre>
+        /lib64/ld-linux-x86-64.so.2 (0x00007fd4dc51f000)</pre>
   <p>In order to get profiling information for the shared object, we define the environment variable <strong>LD_PROFILE</strong> with the soname of the library:
-  <pre> $ <strong>export LD_PROFILE=libdemo.so.1</strong>
-</pre>
+  <pre> $ <strong>export LD_PROFILE=libdemo.so.1</strong></pre>
   <p>We then define the environment variable <strong>LD_PROFILE_OUTPUT</strong> with the pathname of the directory where profile output should be written, and create that directory if it does not exist already:
   <pre> $ <strong>export LD_PROFILE_OUTPUT=$(pwd)/prof_data</strong>
- $ <strong>mkdir -p $LD_PROFILE_OUTPUT</strong>
-</pre>
+ $ <strong>mkdir -p $LD_PROFILE_OUTPUT</strong></pre>
   <p><strong>LD_PROFILE</strong> causes profiling output to be <em>appended</em> to the output file if it already exists, so we ensure that there is no preexisting profiling data:
-  <pre> $ <strong>rm -f $LD_PROFILE_OUTPUT/$LD_PROFILE.profile</strong>
-</pre>
+  <pre> $ <strong>rm -f $LD_PROFILE_OUTPUT/$LD_PROFILE.profile</strong></pre>
   <p>We then run the program to produce the profiling output, which is written to a file in the directory specified in <strong>LD_PROFILE_OUTPUT</strong>:
   <pre> $ <strong>LD_LIBRARY_PATH=. ./prog</strong>
  $ <strong>ls prof_data</strong>
- libdemo.so.1.profile
-</pre>
+ libdemo.so.1.profile</pre>
   <p>We then use the <strong>sprof -p</strong> option to generate a flat profile with counts and ticks:
   <pre> $ <strong>sprof -p libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</strong>
  Flat profile:
@@ -139,8 +129,7 @@
   60.00      0.06     0.06      100   600.00           consumeCpu1
   40.00      0.10     0.04     1000    40.00           consumeCpu2
    0.00      0.10     0.00        1     0.00           x1
-   0.00      0.10     0.00        1     0.00           x2
-</pre>
+   0.00      0.10     0.00        1     0.00           x2</pre>
   <p>The <strong>sprof -q</strong> option generates a call graph:
   <pre> $ <strong>sprof -q libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</strong>
 
@@ -159,16 +148,14 @@
                  0.00    0.00        1/1           &lt;UNKNOWN&gt;
  [3]      0.0    0.00    0.00        1         x2 [3]
                  0.00    0.00     1000/1000        consumeCpu2 [2]
- -----------------------------------------------
-</pre>
+ -----------------------------------------------</pre>
   <p>Above and below, the “&lt;UNKNOWN&gt;” strings represent identifiers that are outside of the profiled object (in this example, these are instances of <em>main()</em>).
   <p>The <strong>sprof -c</strong> option generates a list of call pairs and the number of their occurrences:
   <pre> $ <strong>sprof -c libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</strong>
  &lt;UNKNOWN&gt;                  x1                                 1
  x1                         consumeCpu1                      100
  &lt;UNKNOWN&gt;                  x2                                 1
- x2                         consumeCpu2                     1000
-</pre>
+ x2                         consumeCpu2                     1000</pre>
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>

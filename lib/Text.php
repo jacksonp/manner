@@ -63,6 +63,8 @@ class Text
                 continue;
             }
 
+            // TODO: see if instead of skipping empty requests we should treat them as a new line potentially causing a vertical break. See tc-hfsc.8
+
             $skipLines = [
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
               '\\&',
