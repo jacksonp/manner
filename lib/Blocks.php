@@ -7,14 +7,14 @@ class Blocks
     static function handlePreformatted(HybridNode $parentNode)
     {
 
-        $addIndent = 0;
+        $addIndent  = 0;
         $nextIndent = 0;
-        $numLines  = count($parentNode->manLines);
+        $numLines   = count($parentNode->manLines);
         for ($i = 0; $i < $numLines; ++$i) {
             $line = $parentNode->manLines[$i];
 
             if ($nextIndent !== 0) {
-                $addIndent = $nextIndent;
+                $addIndent  = $nextIndent;
                 $nextIndent = 0;
             }
 
@@ -25,13 +25,20 @@ class Blocks
                 }
                 continue;
             } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs    = Macro::parseArgString($matches[1]);
+                $ipArgs     = Macro::parseArgString($matches[1]);
                 $nextIndent = 4;
                 if (is_null($ipArgs) || trim($ipArgs[0]) === '') {
                     continue;
                 } else {
                     $line = $ipArgs[0];
                 }
+            } elseif (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
+                $line       = $parentNode->manLines[++$i];
+                $addIndent  = 0;
+                $nextIndent = 4;
             } elseif ($i === $numLines - 1 && preg_match('~^\.nf$~u', $line)) {
                 // Skip trailing command to work-around bugs in man pages.
                 continue;
@@ -169,6 +176,9 @@ class Blocks
 
             // .ti = temporary indent
             if (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
                 $line = $parentSectionNode->manLines[++$i];
                 if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'blockquote') {
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));

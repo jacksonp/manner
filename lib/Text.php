@@ -129,6 +129,9 @@ class Text
 
             // Don't care about .UR without an argument or with an invalid URL
             if (preg_match('~^\.UR\s*(?<url>.*)$~', $line, $matchesUR)) {
+                if ($i === $numFirstPassLines - 1) {
+                    continue;
+                }
                 $lineAfterUR = $firstPassLines[$i + 1];
                 if (preg_match('~^\.UE ?(.*)$~', $lineAfterUR, $matchesUE)) {
                     $line = $matchesUR['url'] . $matchesUE[1];
