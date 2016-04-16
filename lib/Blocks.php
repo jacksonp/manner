@@ -18,7 +18,7 @@ class Blocks
                 $nextIndent = 0;
             }
 
-            if (mb_strlen($line) === 0 || in_array($line, ['.PP', '.br', '.sp'])) {
+            if (mb_strlen($line) === 0 || preg_match('~^\.([LP]?P$|HP|br|sp)~u', $line)) {
                 if ($i > 0) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
