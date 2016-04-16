@@ -126,14 +126,15 @@ class Blocks
                 continue;
             }
 
-            /* HMM think more about .ti = temporary indent
+            // .ti = temporary indent
             if (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
                 $line = $parentSectionNode->manLines[++$i];
-                if ($blockNum === 0) {
-                    $blocks[++$blockNum] = $dom->createElement('p');
+                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'blockquote') {
+                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                } else {
+                    $blocks[++$blockNum] = $dom->createElement('blockquote');
                 }
             }
-            */
 
             if (preg_match('~^\.RS ?(.*)$~u', $line, $matches)) {
                 $rsLevel = 1;

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMDUMPLOG</title>
+<h1>PMDUMPLOG</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmdumplog</strong> - dump internal details of a performance metrics archive log
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmdumplog</strong> [<strong>-adilLmMrstxz</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-Z</strong> <em>timezone</em>] <em>archive</em> [<em>metricname</em> ...]<br>
+  <strong>pmdumplog</strong> [<strong>-v</strong> <em>file</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmdumplog</strong> dumps assorted control, metadata, index and state information from the files of a Performance Co-Pilot (PCP) archive log. The archive log has the base name <em>archive</em> and must have been previously created using <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>.
+  <p>Normally <strong>pmdumplog</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile.</em>
+  <p>If any <em>metricname</em> arguments appear, the report will be restricted to information relevant to the named performance metrics. If <em>metricname</em> is a non-leaf node in the namespace (see <a href="/5/pmns" class="link-man">pmns(5)</a>), then <strong>pmdumplog</strong> will recursively descend the archive's namespace and report on all leaf nodes.
+  <p>The options control the specific information to be reported.
+  <dl>
+    <dt><strong>-a</strong>
+    <dd>Report everything, i.e. the flags <strong>-d</strong>, <strong>-i</strong>, <strong>-l</strong>, <strong>-m</strong>, <strong>-s</strong> and <strong>-t</strong>.
+    <dt><strong>-d</strong>
+    <dd>
+      Display the metadata and descriptions for those performance metrics that appear at least once in the archive: see <a href="/3/pmLookupDesc" class="link-man">pmLookupDesc(3)</a> for more details on the metadata describing metrics.
+    <dt><strong>-i</strong>
+    <dd>
+      Display the instance domains, and any variations in their instance members over the duration of the archive: see <a href="/3/pmGetInDom" class="link-man">pmGetInDom(3)</a> for more details on instance domains.
+    <dt><strong>-l</strong>
+    <dd>Dump the archive label, showing the log format version, the time and date for the start and (current) end of the archive, and the host from which the performance metrics values were collected.
+    <dt><strong>-L</strong>
+    <dd>Like <strong>-l</strong>, just a little more verbose.
+    <dt><strong>-m</strong>
+    <dd>
+      Print the values for the performance metrics from the archive. This is the default display option.<br>
+      <p>Metrics without an instance domain are reported as:<br>
+      <blockquote>
+        [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>): <strong>value1</strong> <em>value2</em>
+      </blockquote>
+      <p>Metrics with an instance domain are reported as:<br>
+      <blockquote>
+        [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>):<br>
+        <br>
+        <strong>inst</strong> [<em>internal-id</em> <strong>or</strong> "<em>external-id</em>"] <strong>value1</strong> <em>value2</em>
+      </blockquote>
+      <p>The <em>timestamp</em> is only reported for the first metric in a group of metrics sharing the same timestamp.
+    <dt><strong>-M</strong>
+    <dd>
+      If no <em>metricname</em> is specified then <em>&lt;mark&gt;</em> records are reported when they are found in the <em>archive</em>. If <em>metricname</em> arguments are specified, then <em>&lt;mark&gt;</em> records are not reported by default. The <strong>-M</strong> option forces <em>&lt;mark&gt;</em> records to be reported, even when <em>metricname</em> arguments are specified.<br>
+      <p><em>&lt;mark&gt;</em> records are inserted into a PCP archive log by <a href="/1/pmlogextract" class="link-man">pmlogextract(1)</a> to indicate a temporal discontinuity in the time-series of metric values.
+    <dt><strong>-r</strong>
+    <dd>Process the archive in reverse order, from most recent to oldest recorded metric values.
+    <dt><strong>-S</strong>
+    <dd>
+      When using the <strong>-m</strong> option, the report will be restricted to those records logged at or after <em>starttime</em>. Refer to <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a> for a complete description of the syntax for <em>starttime</em>.
+    <dt><strong>-s</strong>
+    <dd>Report the size in bytes of each physical record in the archive.
+    <dt><strong>-T</strong>
+    <dd>
+      When using the <strong>-m</strong> option, the report will be restricted to those records logged before or at <em>endtime</em>. Refer to <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a> for a complete description of the syntax for <em>endtime</em>.
+    <dt><strong>-t</strong>
+    <dd>
+      Dump the temporal index that is used to provide accelerated access to large archive files.<br>
+      <p>The integrity of the index will also be checked. If the index is found to be corrupted, the “*.index” file can be renamed or removed and the archive will still be accessible, however retrievals may take longer without the index. Note however that a corrupted temporal index is usually indicative of a deeper malaise that may infect all files in a PCP archive.
+    <dt><strong>-v</strong>
+    <dd>Verbose mode. Dump the records from a physical archive file in hexadecimal format. In this case <em>file</em> is the name of a single file, usually a basename (as would otherwise appear as the <em>archive</em> command line argument), concatenated with “.” followed by one of <strong>meta</strong> (the metadata), <strong>index</strong> (the temporal index), or a digit (one of the volumes of metric values).<br>
+    <br>
+    Use of <strong>-v</strong> precludes the use of all other options and arguments.
+    <dt><strong>-x</strong>
+    <dd>
+      Extended timestamp reporting format that includes the day of the week, day of the month, month and year in addition to the (default) hours, minutes and seconds time. This is useful for archives that span multiple days.<br>
+      <p>A second -x option will also report the timestamp as an offset from the start of the archive in units of seconds. This is useful in conjunction with debug diagnostics from the archive handling routines in <em>libpcp</em>.
+  </dl>
+  <p>By default, <strong>pmdumplog</strong> reports the time of day according to the local timezone on the system where <strong>pmdumplog</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <a href="/7/environ" class="link-man">environ(7)</a>. The <strong>-z</strong> option changes the timezone to the local timezone at the host that is the source of the performance metrics, as specified in the label record of the archive log.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
+    <dd>default local PMNS specification files
+    <dt><strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em>
+    <dd>Default directory for PCP archives containing performance metric values collected from the host <em>hostname</em>.
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmlogcheck" class="link-man">pmlogcheck(1)</a>, <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>, <a href="/1/pmlogger_check" class="link-man">pmlogger_check(1)</a>, <a href="/1/pmlogger_daily" class="link-man">pmlogger_daily(1)</a>, <a href="/1/pmloglabel" class="link-man">pmloglabel(1)</a>, <a href="/1/pmlogextract" class="link-man">pmlogextract(1)</a>, <a href="/3/PMAPI" class="link-man">PMAPI(3)</a>, <a href="/3/pmGetInDom" class="link-man">pmGetInDom(3)</a>, <a href="/3/pmLookupDesc" class="link-man">pmLookupDesc(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>, <a href="/5/pcp.env" class="link-man">pcp.env(5)</a> and <a href="/5/pmns" class="link-man">pmns(5)</a>.
+</div>
+
