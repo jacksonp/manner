@@ -96,7 +96,7 @@ class Blocks
                 $ipArgs = Macro::parseArgString($matches[1]);
 
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-                if (!is_null($ipArgs) && mb_strlen($ipArgs[0]) > 0) {
+                if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
                     // Copied from .TP:
                     if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
                         $blocks[++$blockNum] = $dom->createElement('dl');
