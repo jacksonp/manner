@@ -272,7 +272,10 @@ class Blocks
                     $line = $parentSectionNode->manLines[$i];
                     if (preg_match('~^\.EE~u', $line)) {
                         break;
-                    } else {
+                    } elseif (preg_match('~^\.(nf|fi)~u', $line)) {
+                        // .EX already marks block as preformatted, just ignore
+                        continue;
+                    }  else {
                         $blockLines[] = $line;
                     }
                 }
