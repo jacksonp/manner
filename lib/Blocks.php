@@ -120,7 +120,6 @@ class Blocks
                 } elseif ($blocks[$blockNum]->tagName === 'blockquote') {
                     // Already in previous .IP,
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));
-                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
                 } else {
                     throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName);
                 }
