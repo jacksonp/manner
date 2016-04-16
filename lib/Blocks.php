@@ -49,8 +49,7 @@ class Blocks
                 }
                 $line      = $parentNode->manLines[++$i];
                 $addIndent = 4;
-            } elseif ($line === '.nf') {
-                // Skip trailing command to work-around bugs in man pages.
+            } elseif (preg_match('~^\.(nf|RS|RE)~u', $line)) {
                 continue;
             } elseif (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
                 if ($i === $numLines - 1) {
