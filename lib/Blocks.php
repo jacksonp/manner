@@ -352,7 +352,20 @@ class Blocks
                 }
             }
 
-            TextContent::interpretAndAppendCommand($parentForLine, $line);
+            if (preg_match('~^\\\\?\.br~u', $line)) {
+                if ($parentForLine->hasChildNodes()) {
+                    // Only bother if this isn't the first node.
+                    $parentForLine->appendChild($dom->createElement('br'));
+                }
+            } elseif (preg_match('~^\.sp~u', $line)) {
+                if ($parentForLine->hasChildNodes()) {
+                    // Only bother if this isn't the first node.
+                    $parentForLine->appendChild($dom->createElement('br'));
+                    $parentForLine->appendChild($dom->createElement('br'));
+                }
+            } else {
+                TextContent::interpretAndAppendCommand($parentForLine, $line);
+            }
 
         }
 
