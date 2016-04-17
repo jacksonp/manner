@@ -364,6 +364,15 @@ class Blocks
                     $parentForLine->appendChild($dom->createElement('br'));
                 }
             } else {
+
+                // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
+                if (mb_substr($line, 0, 1) === ' '
+                  && $parentForLine->hasChildNodes()
+                  && ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE || $parentForLine->lastChild->tagName !== 'br')
+                ) {
+                    $parentForLine->appendChild($dom->createElement('br'));
+                }
+
                 TextContent::interpretAndAppendCommand($parentForLine, $line);
             }
 

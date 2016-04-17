@@ -82,7 +82,7 @@ class BlockPreformatted
                 $blockNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
-            TextContent::interpretAndAppendCommand($parentForLine, $line, true);
+            TextContent::interpretAndAppendCommand($parentForLine, $line);
             if ($i !== $numLines - 1) {
                 $blockNode->appendChild(new DOMText("\n"));
             }

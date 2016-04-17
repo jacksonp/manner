@@ -15,7 +15,7 @@ class TextContent
      * @param string $line
      * @throws Exception
      */
-    static function interpretAndAppendCommand(HybridNode $parentNode, string $line, $preformatted = false)
+    static function interpretAndAppendCommand(HybridNode $parentNode, string $line)
     {
 
         $dom = $parentNode->ownerDocument;
@@ -28,15 +28,6 @@ class TextContent
         // See e.g. imgtool.1
         $line               = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
-
-        // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
-        if (mb_substr($line, 0, 1) === ' '
-          && !$preformatted
-          && $parentNode->hasChildNodes()
-          && ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
-        ) {
-            $parentNode->appendChild($dom->createElement('br'));
-        }
 
         if (preg_match('~^\.([RBI][RBI]?)\s(.*)$~u', $line, $matches)) {
 
