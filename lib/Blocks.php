@@ -22,8 +22,11 @@ class Blocks
 
             $parentForLine = $parentNode;
 
-            if (mb_strlen($line) === 0 || preg_match('~^\.([LP]?P$|HP|br|sp)~u', $line)) {
-                if ($i > 0) {
+            if (mb_strlen($line) === 0
+              || preg_match('~^\.([LP]?P$|HP|br|sp)~u', $line)
+              || preg_match('~^\\\\?\.$~u', $line) // empty requests
+            ) {
+                if ($i > 0 && $i !== $numLines - 1) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
                 }
@@ -102,6 +105,11 @@ class Blocks
             $line = $parentSectionNode->manLines[$i];
 
             $canAppendNextText = true;
+
+            // Empty requests '.' and '\.':
+            if (preg_match('~^\\\\?\.$~u', $line)) {
+                continue;
+            }
 
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
