@@ -68,14 +68,18 @@ class Blocks
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                    $blocks[++$blockNum] = $dom->createElement('dl');
-                }
                 $dtLine = $blockNode->manLines[++$i];
-                $dt     = $dom->createElement('dt');
-                TextContent::interpretAndAppendCommand($dt, $dtLine);
-                $blocks[$blockNum]->appendChild($dt);
-                continue;
+                if (in_array($dtLine, ['.br', '.sp'])) { // e.g. albumart-qt.1, ipmitool.1
+                    $line = $dtLine; // i.e. skip the .TP line
+                } else {
+                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
+                        $blocks[++$blockNum] = $dom->createElement('dl');
+                    }
+                    $dt = $dom->createElement('dt');
+                    TextContent::interpretAndAppendCommand($dt, $dtLine);
+                    $blocks[$blockNum]->appendChild($dt);
+                    continue;
+                }
             }
 
             if (preg_match('~^\.TQ$~u', $line)) {
@@ -196,7 +200,7 @@ class Blocks
                     } elseif (preg_match('~^\.(nf|fi)~u', $line)) {
                         // .EX already marks block as preformatted, just ignore
                         continue;
-                    }  else {
+                    } else {
                         $blockLines[] = $line;
                     }
                 }
