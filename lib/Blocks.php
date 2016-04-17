@@ -357,12 +357,12 @@ class Blocks
             }
 
             if (preg_match('~^\\\\?\.br~u', $line)) {
-                if ($parentForLine->hasChildNodes()) {
+                if ($parentForLine->hasChildNodes() && $i !== $numLines - 1) {
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));
                 }
             } elseif (preg_match('~^\.sp~u', $line)) {
-                if ($parentForLine->hasChildNodes()) {
+                if ($parentForLine->hasChildNodes() && $i !== $numLines - 1) {
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));
                     $parentForLine->appendChild($dom->createElement('br'));
