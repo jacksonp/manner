@@ -634,7 +634,7 @@ class Text
         $replacements['\\<']       = '<';
         $replacements['\\>']       = '>';
         $replacements['\\]']       = ']';
-        $replacements['\\' . "\t"] = ' ';
+        $replacements['\\' . "\t"] = "\t"; // See glite-lb-mon.1 where we want tabs inside <pre>
 
         $line = strtr($line, $replacements);
 
