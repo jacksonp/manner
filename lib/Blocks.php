@@ -308,24 +308,27 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
-                if ($i === $numLines - 1 || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
+            if (preg_match('~^\.([RBI][RBI]?|ft (?:[RBI]|CW))$~u', $line)) {
+                if ($i === $numLines - 1
+                  || $line === '.ft R'
+                  || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
                     continue;
                 }
                 $nextLine = $blockNode->manLines[++$i];
-                if (mb_strlen($nextLine) === 0) {
+                if (mb_strlen($nextLine) === 0 || strpos($nextLine, '.B') === 0 || strpos($nextLine, '.I') === 0) {
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
                         throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                     } else {
-                        if ($line === '.B') {
-                            $strongNode    = $parentForLine->appendChild($dom->createElement('strong'));
-                            $parentForLine = $strongNode;
+                        if ($line === '.B' || $line === '.ft B') {
+                            $parentForLine = $parentForLine->appendChild($dom->createElement('strong'));
                             $line          = $nextLine;
-                        } elseif ($line === '.I') {
-                            $emNode        = $parentForLine->appendChild($dom->createElement('em'));
-                            $parentForLine = $emNode;
+                        } elseif ($line === '.I' || $line === '.ft I') {
+                            $parentForLine = $parentForLine->appendChild($dom->createElement('em'));
+                            $line          = $nextLine;
+                        } elseif ($line === '.ft CW') {
+                            $parentForLine = $parentForLine->appendChild($dom->createElement('code'));
                             $line          = $nextLine;
                         } else {
                             $line .= ' ' . $nextLine;

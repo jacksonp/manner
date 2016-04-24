@@ -29,11 +29,13 @@ class TextContent
         $line               = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
-        if (preg_match('~^\.([RBI][RBI]?)\s(.*)$~u', $line, $matches)) {
 
-            $command = $matches[1];
+        if (preg_match('~^\.(?:([RBI][RBI]?)|ft ([RBI]))\s(?<text>.*)$~u', $line, $matches)) {
 
-            $bits = Macro::parseArgString($matches[2]);
+            // See why (?J) setting with named <command> didn't work sometime instead of this:
+            $command = $matches[1] ?: $matches[2];
+
+            $bits = Macro::parseArgString($matches['text']);
             if (is_null($bits)) {
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
@@ -42,7 +44,7 @@ class TextContent
             // TODO: maybe punt this to mankier? also get \fB \fR ones.
             if ($command === 'BR'
               && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u',
-                trim($matches[2]), $matches)
+                trim($matches['text']), $matches)
             ) {
                 $parentNode->appendChild(new DOMText(' '));
                 $anchor = $dom->createElement('a');
