@@ -15,13 +15,20 @@ class Text
         $macroReplacements = [];
         $aliases           = [];
         $foundTitle        = false;
-
+        $linePrefix        = '';
 
         $man = Man::instance();
 
         for ($i = 0; $i < $numRawLines; ++$i) {
 
-            $line = $rawLines[$i];
+            $line       = $linePrefix . $rawLines[$i];
+            $linePrefix = '';
+
+            // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
+            if (preg_match('~(^|.*?\s)\\\\#~u', $line, $matches)) {
+                $linePrefix = $matches[1];
+                continue;
+            }
 
             // Handle stuff like the following before continuations because of trailing slashes:
             //            .ie n \{\
