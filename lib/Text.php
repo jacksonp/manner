@@ -112,10 +112,9 @@ class Text
 
         }
 
-
+        $macroReplacements = [];
         $numNoCondLines    = count($linesNoCond);
         $firstPassLines    = [];
-        $macroReplacements = [];
         $aliases           = [];
         $foundTitle        = false;
 
@@ -124,6 +123,42 @@ class Text
         for ($i = 0; $i < $numNoCondLines; ++$i) {
 
             $line = $linesNoCond[$i];
+
+            if (isset($macroReplacements[$line])) {
+                foreach ($macroReplacements[$line] as $macroLine) {
+                    $firstPassLines[] = $macroLine;
+                }
+                continue;
+            }
+
+            if (preg_match('~\.de (..)\s*$~u', $line, $matches)) {
+                $newMacro   = '.' . $matches[1];
+                $macroLines = [];
+
+
+                for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
+                    $macroLine = $linesNoCond[$i];
+                    if ($macroLine === '..') {
+                        if ($newMacro === '.SS') {
+                            // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
+                            continue 2;
+                        }
+                        $macroReplacements[$newMacro] = $macroLines;
+                        continue 2;
+                    } else {
+                        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
+
+                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                        // Other \$ things are also arguments...
+                        if (strpos($macroLine, '\\$') !== false) {
+                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
+                        }
+
+                        $macroLines[] = $macroLine;
+                    }
+                }
+                throw new Exception($matches[0] . ' - not followed by expected pattern on line ' . $i . '.');
+            }
 
             // Continuations
             while ($i < $numNoCondLines - 1 && mb_substr($line, -1, 1) === '\\'
@@ -175,6 +210,7 @@ class Text
 
         $numFirstPassLines = count($firstPassLines);
         $lines             = [];
+        $macroReplacements = []; // Resetting this
 
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
@@ -220,31 +256,6 @@ class Text
                     $macroReplacements['\*(' . $matches[1]] = $matches[2];
                 }
                 $macroReplacements['\[' . $matches[1] . ']'] = $matches[2];
-
-                continue;
-            }
-
-            if (preg_match('~\.de (..)\s*$~u', $line, $matches)) {
-                // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                $macroLine = $firstPassLines[++$i];
-                if ($firstPassLines[++$i] !== '..') {
-                    throw new Exception($line . ' - not followed by expected pattern.');
-                }
-
-                $newMacro = '.' . $matches[1];
-
-                if ($newMacro === '.SS') {
-                    // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
-                    continue;
-                }
-
-                $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-
-                if (strpos($macroLine, '\\$') !== false) {
-                    throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
-                }
-
-                $macroReplacements[$newMacro] = $macroLine;
 
                 continue;
             }
