@@ -224,11 +224,28 @@ class Text
                 continue;
             }
 
-            if (rtrim($line) === '.de Sp') {
-                if ($firstPassLines[++$i] !== '.sp' || $firstPassLines[++$i] !== '..') {
+            if (preg_match('~\.de (..)\s*$~u', $line, $matches)) {
+                // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                $macroLine = $firstPassLines[++$i];
+                if ($firstPassLines[++$i] !== '..') {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }
-                $macroReplacements['.Sp'] = '.sp';
+
+                $newMacro = '.' . $matches[1];
+
+                if ($newMacro === '.SS') {
+                    // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
+                    continue;
+                }
+
+                $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
+
+                if (strpos($macroLine, '\\$') !== false) {
+                    throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
+                }
+
+                $macroReplacements[$newMacro] = $macroLine;
+
                 continue;
             }
 
