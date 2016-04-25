@@ -60,6 +60,24 @@ class Text
                 throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
             }
 
+            if ($line === '.if t \\{\\') {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    $line = $rawLines[$i];
+                    if (in_array($line, $conditionalBlockEndings)) {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.if t \\{\\ - not followed by expected pattern on line ' . $i . '.');
+            }
+
+            if (strpos($line, '.if t ') === 0) {
+                continue;
+            }
+
+            if (preg_match('~\.if n (.*)~', $line, $matches)) {
+                $line = $matches[1];
+            }
+
             $linesNoCond[] = $line;
 
         }
@@ -199,11 +217,7 @@ class Text
             }
 
             if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
-                if (
-                  $firstPassLines[++$i] !== '.if t .sp .5v'
-                  || $firstPassLines[++$i] !== '.if n .sp'
-                  || $firstPassLines[++$i] !== '..'
-                ) {
+                if ($firstPassLines[++$i] !== '.sp' || $firstPassLines[++$i] !== '..') {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }
                 $macroReplacements['.Sp'] = '.sp';

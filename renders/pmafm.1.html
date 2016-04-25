@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMAFM</title>
+<h1>PMAFM</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmafm</strong> - Performance Co-Pilot archive folio manager
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmafm</strong> <em>folioname</em> [<em>command</em> [<em>arg</em> ...]]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>A collection of one or more Performance Co-Pilot (PCP) archive logs may be combined with a control file to produce a PCP archive folio. Archive folios are created using either <a href="/1/mkaf" class="link-man">mkaf(1)</a> or the interactive “record mode” services of PCP clients like <a href="/1/pmchart" class="link-man">pmchart(1)</a>.
+  <p><strong>pmafm</strong> provides a number of services that may be used to process folios. In particular, it provides support for execution of PCP tools using one or more of the component archive logs within an archive folio.
+  <p>The target folio is identified by the folio control file <em>folioname</em>. The syntax for a folio control file is described in <a href="/1/mkaf" class="link-man">mkaf(1)</a>.
+  <p>If present, the command and arguments following <em>folioname</em> are interpreted and executed as a single command, otherwise commands are read from standard input.
+  <p>The following commands are supported.
+  <dl>
+    <dt><strong>archives</strong>
+    <dd>Subsequent commands apply to all archives in the folio.
+    <dt><strong>archives</strong> <em>N</em>[,...]
+    <dd>Archives within a folio are numbered 1, 2, etc. Subsequent commands are restricted to apply only to the designated archives.
+    <dt><strong>archives</strong> <em>name</em>[,...]
+    <dd>Archives within a folio have unique names. Subsequent commands are restricted to apply only to the designated archives.
+    <dt><strong>check</strong>
+    <dd>Validate the presence and format of each file in the folio and the component archives.
+    <dt><strong>help</strong>
+    <dd>A brief reminder of the command syntax. <strong>?</strong> is a synonym for <strong>help</strong>.
+    <dt><strong>hosts</strong>
+    <dd>Subsequent commands apply to all archives in the folio.
+    <dt><strong>hosts</strong> <em>hostname</em>[,...]
+    <dd>Subsequent commands are restricted to apply only to those archives that match the designated hostnames.
+    <dt><strong>list</strong> [<strong>verbose</strong>]
+    <dd>Display the contents of the folio. By default the control header and the ordinal number, hostname and archive base name for each archive in the folio. The <strong>verbose</strong> option causes <strong>pmafm</strong> to dump the label record from each archive using <strong>pmdumplog -l</strong>.<br>
+    The first named archive in the folio is assumed to be associated with the default host for any tool that tries to replay multiple archives from the folio.
+    <dt><strong>quit</strong>
+    <dd>Exit <strong>pmafm</strong>.
+    <dt><strong>remove</strong>
+    <dd>
+      Echo on standard output the <a href="/1/sh" class="link-man">sh(1)</a> commands required to remove all of the physical files associated with this archive folio.
+    <dt><strong>repeat</strong> <em>tool</em> [<em>arg</em> ...]
+    <dd>Execute the known PCP <em>tool</em> once per selected archive. For example, the command<br>
+  </dl>
+  <blockquote>
+    <code>repeat pmval -t60 kernel.all.load</code><br>
+    would run <a href="/1/pmval" class="link-man">pmval(1)</a> once per archive, with an appropriate <strong>-a</strong> argument.
+  </blockquote>
+  <dl>
+    <dt><strong>replay</strong>
+    <dd>
+      Some archive folios are created by tools (e.g. <a href="/1/pmchart" class="link-man">pmchart(1)</a>) that provide sufficient information to allow all of the information in all of the archives of a folio to be replayed.
+    <dt>[<strong>run</strong>] <em>tool</em> [<em>arg</em> ...]
+    <dd>Execute the known PCP <em>tool</em> on the selected archives. Some PCP tools are able to process multiple concurrent archives, and in this case the tool is run once with the list of all selected archives passed via a <strong>-a</strong> argument. Otherwise, this command is synonymous with <strong>repeat</strong>.
+    <dt><strong>selections</strong>
+    <dd>Display those archives that would be selected for processing with a <strong>repeat</strong>, <strong>replay</strong> or <strong>run</strong> command.
+  </dl>
+  <p>The restrictions via any <strong>hosts</strong> and <strong>archives</strong> commands are conjuncted. These restrictions serve to limit the specific archives processed in the subsequent <strong>repeat</strong>, <strong>replay</strong>, <strong>run</strong> and <strong>selections</strong> commands. By default, all archives are selected.
+  <p>Keywords in commands may be abbreviated provided no ambiguity is introduced, e.g. <strong>help</strong>, <strong>hel</strong> and <strong>he</strong> are synonymous, but <strong>h</strong> is ambiguous.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/config/pmafm/</strong><em>*</em>
+    <dd>control files that define the behavior of each PCP tool known to <strong>pmafm</strong>. This information may be customized or extended, see <em>$PCP_VAR_DIR/config/pmafm/pcp</em> for documentation of the syntax and semantics of these files.
+    <dt><strong>$HOME/.pcp/pmafm/</strong><em>*</em>
+    <dd>User customization of the control files. All files in this directory are treated in the same manner as control files in the <em>$PCP_VAR_DIR/config/pmafm</em> directory.
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/mkaf" class="link-man">mkaf(1)</a>, <a href="/1/pmchart" class="link-man">pmchart(1)</a>, <a href="/1/pmview" class="link-man">pmview(1)</a>, <a href="/3/PMAPI" class="link-man">PMAPI(3)</a>, <a href="/3/pmRecordSetup" class="link-man">pmRecordSetup(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>Many, but all are intended to be easily understood.
+</div>
+
