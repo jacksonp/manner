@@ -12,12 +12,39 @@ class Text
 
         $numRawLines = count($rawLines);
         $linesNoCond = [];
+        $linePrefix  = '';
 
         $conditionalBlockEndings = ['.\\}', '\'br\\}'];
 
         for ($i = 0; $i < $numRawLines; ++$i) {
 
-            $line = $rawLines[$i];
+            $line       = $linePrefix . $rawLines[$i];
+            $linePrefix = '';
+
+            // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
+            if (preg_match('~(^|.*?\s)\\\\#~u', $line, $matches)) {
+                $linePrefix = $matches[1];
+                continue;
+            }
+
+            // Skip full-line comments
+            if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
+                continue;
+            }
+
+            // \" is start of a comment. Everything up to the end of the line is ignored.
+            // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
+            // but this behaviour is consistent with what the man command renders:
+            $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
+
+            if (preg_match('~^\.ig( |$)~', $line)) {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    if ($rawLines[$i] === '..') {
+                        continue 2;
+                    }
+                }
+                throw new Exception('.ig with no corresponding ..');
+            }
 
             // Handle stuff like the following before continuations because of trailing slashes:
             //            .ie n \{\
@@ -88,30 +115,17 @@ class Text
         $macroReplacements = [];
         $aliases           = [];
         $foundTitle        = false;
-        $linePrefix        = '';
 
         $man = Man::instance();
 
         for ($i = 0; $i < $numNoCondLines; ++$i) {
 
-            $line       = $linePrefix . $linesNoCond[$i];
-            $linePrefix = '';
-
-            // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
-            if (preg_match('~(^|.*?\s)\\\\#~u', $line, $matches)) {
-                $linePrefix = $matches[1];
-                continue;
-            }
+            $line = $linesNoCond[$i];
 
             // Continuations
             while ($i < $numNoCondLines - 1 && mb_substr($line, -1, 1) === '\\'
               && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
                 $line = mb_substr($line, 0, -1) . $linesNoCond[++$i];
-            }
-
-            // Skip full-line comments
-            if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
-                continue;
             }
 
             $skipLines = [
@@ -150,15 +164,6 @@ class Text
             if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
                 $aliases[$matches['new']] = $matches['old'];
                 continue;
-            }
-
-            if (preg_match('~^\.ig( |$)~', $line)) {
-                for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
-                    if ($linesNoCond[$i] === '..') {
-                        continue 2;
-                    }
-                }
-                throw new Exception('.ig with no corresponding ..');
             }
 
             $firstPassLines[] = $line;
@@ -257,11 +262,6 @@ class Text
 
     private static function preprocess($line, $macroReplacements)
     {
-
-        // \" is start of a comment. Everything up to the end of the line is ignored.
-        // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
-        // but this behaviour is consistent with what the man command renders:
-        $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
 
         if (count($macroReplacements) > 0) {
             $line = strtr($line, $macroReplacements);
