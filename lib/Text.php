@@ -13,6 +13,8 @@ class Text
         $numRawLines = count($rawLines);
         $linesNoCond = [];
 
+        $conditionalBlockEndings = ['.\\}', '\'br\\}'];
+
         for ($i = 0; $i < $numRawLines; ++$i) {
 
             $line = $rawLines[$i];
@@ -29,13 +31,13 @@ class Text
             if ($line === '.ie n \\{\\') {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if ($line === '.\\}') {
-                        if ($rawLines[++$i] !== '.el \\{\\') {
+                    if (in_array($line, $conditionalBlockEndings)) {
+                        if (!in_array($rawLines[++$i], ['.el \\{\\', '.el\\{\\'])) {
                             throw new Exception('.ie n \\{\\ - not followed by expected pattern on line ' . $i . '.');
                         }
                         for ($i = $i + 1; $i < $numRawLines; ++$i) {
                             $line = $rawLines[$i];
-                            if ($line === '.\\}') {
+                            if (in_array($line, $conditionalBlockEndings)) {
                                 continue 3;
                             }
                         }
@@ -49,7 +51,7 @@ class Text
             if ($line === '.if n \\{\\') {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if ($line === '.\\}') {
+                    if (in_array($line, $conditionalBlockEndings)) {
                         continue 2;
                     } else {
                         $linesNoCond[] = $line;
