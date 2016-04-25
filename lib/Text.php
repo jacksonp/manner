@@ -22,7 +22,7 @@ class Text
             $linePrefix = '';
 
             // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
-            if (preg_match('~(^|.*?\s)\\\\#~u', $line, $matches)) {
+            if (preg_match('~(^|.*?[^\\\\])\\\\#~u', $line, $matches)) {
                 $linePrefix = $matches[1];
                 continue;
             }
@@ -35,9 +35,9 @@ class Text
             // \" is start of a comment. Everything up to the end of the line is ignored.
             // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
             // but this behaviour is consistent with what the man command renders:
-            $line = preg_replace('~^(.*)\s+\\\\".*$~', '$1', $line);
+            $line = preg_replace('~(^|.*?[^\\\\])\\\\".*$~', '$1', $line);
 
-            if (preg_match('~^\.ig( |$)~', $line)) {
+            if (preg_match('~^\.ig( |$)~u', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     if ($rawLines[$i] === '..') {
                         continue 2;
@@ -104,6 +104,9 @@ class Text
             if (preg_match('~\.if n (.*)~', $line, $matches)) {
                 $line = $matches[1];
             }
+
+            // construct for "hiding text from po4a", we don't need:
+            $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
 
             $linesNoCond[] = $line;
 
@@ -221,7 +224,7 @@ class Text
                 continue;
             }
 
-            if ($line === '.de Sp' or $line === '.de Sp \\" Vertical space (when we can\'t use .PP)') {
+            if (rtrim($line) === '.de Sp') {
                 if ($firstPassLines[++$i] !== '.sp' || $firstPassLines[++$i] !== '..') {
                     throw new Exception($line . ' - not followed by expected pattern.');
                 }
@@ -701,9 +704,6 @@ class Text
 
         // Don't worry colour changes:
         $line = preg_replace('~\\\\m(\(..|\[.*?\])~u', '', $line);
-
-        // construct for "hiding text from po4a", we don't need:
-        $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
 
         return rtrim($line);
 
