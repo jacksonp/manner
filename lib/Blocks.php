@@ -311,11 +311,14 @@ class Blocks
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[RBI]|CW))$~u', $line)) {
                 if ($i === $numLines - 1
                   || $line === '.ft R'
-                  || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
+                  || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/'
+                  || strpos($blockNode->manLines[$i + 1], '.B') === 0
+                  || strpos($blockNode->manLines[$i + 1], '.I') === 0
+                ) {
                     continue;
                 }
                 $nextLine = $blockNode->manLines[++$i];
-                if (mb_strlen($nextLine) === 0 || strpos($nextLine, '.B') === 0 || strpos($nextLine, '.I') === 0) {
+                if (mb_strlen($nextLine) === 0) {
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
