@@ -10,7 +10,60 @@ class Text
     static function preprocessLines($rawLines)
     {
 
-        $numRawLines       = count($rawLines);
+        $numRawLines = count($rawLines);
+        $linesNoCond = [];
+
+        for ($i = 0; $i < $numRawLines; ++$i) {
+
+            $line = $rawLines[$i];
+
+            // Handle stuff like the following before continuations because of trailing slashes:
+            //            .ie n \{\
+            //            USE
+            //            THIS
+            //            .\}
+            //            .el \{\
+            //            DISCARD
+            //            THIS
+            //            .\}
+            if ($line === '.ie n \\{\\') {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    $line = $rawLines[$i];
+                    if ($line === '.\\}') {
+                        if ($rawLines[++$i] !== '.el \\{\\') {
+                            throw new Exception('.ie n \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                        }
+                        for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                            $line = $rawLines[$i];
+                            if ($line === '.\\}') {
+                                continue 3;
+                            }
+                        }
+                        throw new Exception('.el \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                    } else {
+                        $linesNoCond[] = $line;
+                    }
+                }
+            }
+
+            if ($line === '.if n \\{\\') {
+                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+                    $line = $rawLines[$i];
+                    if ($line === '.\\}') {
+                        continue 2;
+                    } else {
+                        $linesNoCond[] = $line;
+                    }
+                }
+                throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
+            }
+
+            $linesNoCond[] = $line;
+
+        }
+
+
+        $numNoCondLines    = count($linesNoCond);
         $firstPassLines    = [];
         $macroReplacements = [];
         $aliases           = [];
@@ -19,9 +72,9 @@ class Text
 
         $man = Man::instance();
 
-        for ($i = 0; $i < $numRawLines; ++$i) {
+        for ($i = 0; $i < $numNoCondLines; ++$i) {
 
-            $line       = $linePrefix . $rawLines[$i];
+            $line       = $linePrefix . $linesNoCond[$i];
             $linePrefix = '';
 
             // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
@@ -30,39 +83,10 @@ class Text
                 continue;
             }
 
-            // Handle stuff like the following before continuations because of trailing slashes:
-            //            .ie n \{\
-            //            \h'-04'\(bu\h'+03'\c
-            //            .\}
-            //            .el \{\
-            //            .sp -1
-            //            .IP \(bu 2.3
-            //            .\}
-            if ($line === '.ie n \\{\\') {
-                $line = $rawLines[++$i];
-                if (
-                  $rawLines[++$i] !== '.\\}'
-                  || $rawLines[++$i] !== '.el \\{\\'
-                  || $rawLines[++$i] !== '.sp -1'
-                  || $rawLines[++$i] !== '.IP \(bu 2.3'
-                  || $rawLines[++$i] !== '.\\}'
-                ) {
-                    throw new Exception($rawLines[$i - 2] . ' - not followed by expected pattern.');
-                }
-            }
-
-            if ($line === '.if n \\{\\') {
-                $line = $rawLines[++$i];
-                if ($rawLines[++$i] !== '.\\}') {
-                    throw new Exception($rawLines[$i - 2] . ' - not followed by expected pattern.');
-                }
-
-            }
-
             // Continuations
-            while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
+            while ($i < $numNoCondLines - 1 && mb_substr($line, -1, 1) === '\\'
               && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
-                $line = mb_substr($line, 0, -1) . $rawLines[++$i];
+                $line = mb_substr($line, 0, -1) . $linesNoCond[++$i];
             }
 
             // Skip full-line comments
@@ -109,8 +133,8 @@ class Text
             }
 
             if (preg_match('~^\.ig( |$)~', $line)) {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    if ($rawLines[$i] === '..') {
+                for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
+                    if ($linesNoCond[$i] === '..') {
                         continue 2;
                     }
                 }
