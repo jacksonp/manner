@@ -151,7 +151,8 @@ class Text
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
                     $macroLine = $linesNoCond[$i];
                     if ($macroLine === '..') {
-                        if ($newMacro === '.SS') {
+                        if (in_array($newMacro, ['.SS', '.EX', '.EE'])) {
+                            // Don't override these macros.
                             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
                             continue 2;
                         }

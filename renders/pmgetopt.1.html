@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMGETOPT</title>
+<h1>PMGETOPT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmgetopt</strong> - Performance Co-Pilot shell script option parser
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>$PCP_BINADM_DIR/pmgetopt</strong> [<strong>-c</strong>|<strong>--config</strong> <em>file</em>] [<strong>-p</strong>|<strong>--progname</strong> <em>name</em>] [<strong>-u</strong>|<strong>--usage</strong>] [<strong>--</strong>] [<em>parameters</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmgetopt</strong> is used to perform command line option parsing for shell scripts used in the Performance Co-Pilot (PCP toolkit). It is also used to generate usage messages for those scripts.
+  <p>The parameters given to <strong>pmgetopt</strong> take two forms: initially, options specific to <strong>pmgetopt</strong> itself are passed in, and terminated using the -- mechanism. Thereafter, all of the parameters passed into the shell script should be passed (usually this is simply the “$@” variable).
+  <p>The options specific to <strong>pmgetopt</strong> are as follows:
+  <dl>
+    <dt><strong>-c</strong>,<strong>--config</strong>
+    <dd>A configuration <em>file</em> in the format described below is passed to <strong>pmconfig</strong> using this option. If this option is omitted, then <strong>pmconfig</strong> will read its configuration from the standard input stream.
+    <dt><strong>-p</strong>,<strong>--progname</strong>
+    <dd>When parsing the calling shell scripts parameters, error and usage messages will contain the given program <em>name</em> rather than referring to <strong>pmgetopt</strong> itself as the source of the error.
+    <dt><strong>-u</strong>,<strong>--usage</strong>
+    <dd>A usage message appropriate for the calling shell script to present as its own can be generated using the option.
+  </dl>
+  <p><strong>pmgetopt</strong> parses the given parameters, and produces output in a format suitable for sourcing in the calling shell script. When both short and long forms of an argument are allowed by the specification, <strong>pmgetopt</strong> will always indicate the short form for simpler shell processing. If arguments are presented that do not match the configuration, a request for a usage message (-?) will be generated for the calling script to respond to. Any non-option parameters will be echoed back to the calling script preceded by the double-hyphen delimiter. Thus a script should stop handling options when this delimiter is detected, and begin the handling of any non-option arguments.
+  <p>Unlike with the shell built-in <em>getopt</em> command, variables like $OPTARG are not set and the calling script will typically employ use of the shell built-in <em>eval</em>, <em>set</em> and positional <em>shift</em> commands to ensure option processing occurs correctly.
+</div>
+<div class="section">
+  <h2>CONFIGURATION</h2>
+  <p>The configuration format used by <strong>pmgetopt</strong> is intended to closely reflect the usage message which would be generated in the presence of invalid arguments (or the <strong>-?</strong>,<strong>--help</strong> option).
+  <p>There are primarily two types of configuration line - commands and options. Commands allow metadata to be passed into the option processing process, and options are the allowable command line options that the shell script will accept. Command lines are preceded by the hash character, whereas option lines will always begin with a hyphen (either single or double). Any other line in the configuration, which may include usage headers or descriptive text, has no impact on the option parsing and will be copied unmodified into the usage message.
+  <p>The set of commands is: <em>getopt</em> (provide short-argument option specification manually, if not present this will be generated from the options presented), <em>usage</em> (provide short one-line summary used at the head of the usage message, which will be prefixed by the <em>progname</em> before reporting), and <em>end</em> which informs <strong>pmgetopt</strong> to stop processing further commands and options - any subsequent text encountered will be simply appended to the usage message.
+  <p>A short-hand notation exists for each of the standard PCP options, as described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>. If any of these options (e.g <strong>--host</strong>) appears as a single word on any line, it will be transformed into the appropriate option for the shell script, including all metadata about that option (whether it accepts an argument, both short and long option forms, and so on).
+  <p>Use of the equals symbol (“=”) indicates the presence of a required argument to any option, for both short and long forms. Any non-standard option must be accompanied by a non-empty description of that argument.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>As an example, the following is a valid configuration:
+  <pre> # Usage: [options] node...
+
+ Options:
+     --archive
+     -d, --delay            pause between updates for archive replay
+     --host
+     --interval
+     -i=INST, --insts=INST  comma-separated metrics instance list
+     -r                     output raw counters (no rate conversion)
+     --width=N              set the width of each column of output
+     --timezone
+     --help</pre>
+  <p>This configuration will produce the following usage message, when run as shown.
+  <pre> $ pmgetopt --usage --progname=clusterstat -- "$@"
+ Usage: clusterstat [options] node...
+
+ Options:
+   -a FILE, --archive=FILE
+                         metrics source is a PCP log archive
+   -d, --delay           pause between updates for archive replay
+   -h HOST, --host=HOST  metrics source is PMCD on host
+   -t DELTA, --interval=DELTA
+                         sampling interval
+   -i INST, --insts=INST comma-separated metrics instance list
+   -r                    output raw counters (no rate conversion)
+   --width=N             set the width of each column of output
+   -Z TZ, --timezone=TZ  set reporting timezone
+   -?, --help            show this usage message and exit</pre>
+  <p>Several examples of <strong>pmgetopt</strong> use form part of the PCP toolkit, in particular the <a href="/1/pcp" class="link-man">pcp(1)</a> and <a href="/1/pmlogmv" class="link-man">pmlogmv(1)</a> scripts provide good reference examples.
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/pcp" class="link-man">pcp(1)</a>, <a href="/1/pmlogmv" class="link-man">pmlogmv(1)</a>, <a href="/3/pmgetopt_r" class="link-man">pmgetopt_r(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+</div>
+
