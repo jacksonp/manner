@@ -92,9 +92,9 @@
   <h2>BUGS</h2>
   <dl>
     <dt>*
-    <dd>Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. Consider this code:
-  </dl>
-  <pre>     using System.Runtime.InteropServices; // for DllImport
+    <dd>
+      Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. Consider this code:
+      <pre>       using System.Runtime.InteropServices; // for DllImport
         class Beep {
                 [DllImport ("kernel32.dll")]
                 private static extern int Beep (int dwFreq, int dwDuration);
@@ -111,9 +111,7 @@
                                 beep ();
                         }
                 }
-        }</pre>
-  <p>If <em>mono-shlib-cop</em> is run on this assembly, an error will be reported for using <em>kernel32.dll</em> , even though <em>kernel32.dll</em> will never be used on Unix platforms.
-  <dl>
+        }</pre>If <em>mono-shlib-cop</em> is run on this assembly, an error will be reported for using <em>kernel32.dll</em> , even though <em>kernel32.dll</em> will never be used on Unix platforms.
     <dt>*
     <dd><em>mono-shlib-cop</em> currently only examines the shared library file extension to determine if a warning should be generated. A <em>.so</em> extension will always generate a warning, even if the <em>.so</em> is not a symlink, isn't provided in a <em>-devel</em> package, and there is no versioned shared library (possible examples including <em>/usr/lib/libtcl8.4.so,</em> <em>/usr/lib/libubsec.so,</em> etc.).<br>
     <br>

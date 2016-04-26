@@ -707,6 +707,7 @@ class Text
 
         // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.
         // Just the cases we come across:
+        $replacements['\\W']       = 'W';
         $replacements['\\=']       = '=';
         $replacements['\\+']       = '+';
         $replacements['\\<']       = '<';

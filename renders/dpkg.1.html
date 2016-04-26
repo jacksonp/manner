@@ -204,10 +204,10 @@
     <dt><strong>--version</strong>
     <dd>Display <strong>dpkg</strong> version information.
     <dt><strong>dpkg-deb actions</strong>
-    <dd>See <strong>dpkg-deb</strong>(1) for more information about the following actions.<br>
-    <br>
-  </dl>
-  <pre> <strong>-b</strong>, <strong>--build</strong> <em>directory</em> [<em>archive</em>|<em>directory</em>]
+    <dd>
+      See <strong>dpkg-deb</strong>(1) for more information about the following actions.<br>
+      <br>
+      <pre> <strong>-b</strong>, <strong>--build</strong> <em>directory</em> [<em>archive</em>|<em>directory</em>]
      Build a deb package.
  <strong>-c</strong>, <strong>--contents</strong> <em>archive</em>
      List contents of a deb package.
@@ -226,12 +226,11 @@
      Output the filesystem tar-file contained by a Debian package.
  <strong>-I</strong>, <strong>--info</strong> <em>archive</em> [<em>control-file</em>...]
      Show information about a package.</pre>
-  <dl>
     <dt><strong>dpkg-query actions</strong>
-    <dd>See <strong>dpkg-query</strong>(1) for more information about the following actions.<br>
-    <br>
-  </dl>
-  <pre> <strong>-l</strong>, <strong>--list</strong> <em>package-name-pattern</em>...
+    <dd>
+      See <strong>dpkg-query</strong>(1) for more information about the following actions.<br>
+      <br>
+      <pre> <strong>-l</strong>, <strong>--list</strong> <em>package-name-pattern</em>...
      List packages matching given pattern.
  <strong>-s</strong>, <strong>--status</strong> <em>package-name</em>...
      Report status of specified package.
@@ -243,6 +242,7 @@
      Display details about <em>package-name</em>, as found in
      <em>/var/lib/dpkg/available</em>. Users of APT-based frontends
      should use <strong>apt-cache show</strong> <em>package-name</em> instead.</pre>
+  </dl>
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -353,22 +353,25 @@
     <dd>Set an invoke hook <em>command</em> to be run via “sh -c” before or after the <strong>dpkg</strong> run for the <em>unpack</em>, <em>configure</em>, <em>install</em>, <em>triggers-only</em>, <em>remove</em>, <em>purge</em>, <em>add-architecture</em> and <em>remove-architecture</em> <strong>dpkg</strong> actions (since dpkg 1.15.4; <em>add-architecture</em> and <em>remove-architecture</em> actions since dpkg 1.17.19). This option can be specified multiple times. The order the options are specified is preserved, with the ones from the configuration files taking precedence. The environment variable <strong>DPKG_HOOK_ACTION</strong> is set for the hooks to the current <strong>dpkg</strong> action. Note: front-ends might call <strong>dpkg</strong> several times per invocation, which might run the hooks more times than expected.
     <dt><strong>--path-exclude=</strong><em>glob-pattern</em>
     <dt><strong>--path-include=</strong><em>glob-pattern</em>
-    <dd>Set <em>glob-pattern</em> as a path filter, either by excluding or re-including previously excluded paths matching the specified patterns during install (since dpkg 1.15.8).<br>
-    <br>
-    <em>Warning: take into account that depending on the excluded paths you might completely break your system, use with caution.</em><br>
-    <br>
-    The glob patterns use the same wildcards used in the shell, were ‘*’ matches any sequence of characters, including the empty string and also ‘/’. For example, «<em>/usr/*/READ*</em>» matches «<em>/usr/share/doc/package/README</em>». As usual, ‘?’ matches any single character (again, including ‘/’). And ‘[’ starts a character class, which can contain a list of characters, ranges and complementations. See <strong>glob</strong>(7) for detailed information about globbing. Note: the current implementation might re-include more directories and symlinks than needed, to be on the safe side and avoid possible unpack failures; future work might fix this.<br>
-    <br>
-    This can be used to remove all paths except some particular ones; a typical case is:<br>
-    <br>
-  </dl>
-  <pre><strong> --path-exclude=/usr/share/doc/*</strong>
-<strong> --path-include=/usr/share/doc/*/copyright</strong></pre>
-  <p>to remove all documentation files except the copyright files.
-  <p>These two options can be specified multiple times, and interleaved with each other. Both are processed in the given order, with the last rule that matches a file name making the decision.
-  <p>The filters are applied when unpacking the binary packages, and as such only have knowledge of the type of object currently being filtered (e.g. a normal file or a directory) and have not visibility of what objects will come next. Because these filters have side effects (in contrast to <strong>find</strong>(1) filters), excluding an exact pathname that happens to be a directory object like <em>/usr/share/doc</em> will not have the desired result, and only that pathname will be excluded (which could be automatically reincluded if the code sees the need). Any subsequent files contained within that directory will fail to unpack.
-  <p>Hint: make sure the globs are not expanded by your shell.
-  <dl>
+    <dd>
+      Set <em>glob-pattern</em> as a path filter, either by excluding or re-including previously excluded paths matching the specified patterns during install (since dpkg 1.15.8).<br>
+      <br>
+      <em>Warning: take into account that depending on the excluded paths you might completely break your system, use with caution.</em><br>
+      <br>
+      The glob patterns use the same wildcards used in the shell, were ‘*’ matches any sequence of characters, including the empty string and also ‘/’. For example, «<em>/usr/*/READ*</em>» matches «<em>/usr/share/doc/package/README</em>». As usual, ‘?’ matches any single character (again, including ‘/’). And ‘[’ starts a character class, which can contain a list of characters, ranges and complementations. See <strong>glob</strong>(7) for detailed information about globbing. Note: the current implementation might re-include more directories and symlinks than needed, to be on the safe side and avoid possible unpack failures; future work might fix this.<br>
+      <br>
+      This can be used to remove all paths except some particular ones; a typical case is:<br>
+      <br>
+      <pre><strong> --path-exclude=/usr/share/doc/*</strong>
+<strong> --path-include=/usr/share/doc/*/copyright</strong></pre><br>
+      <br>
+      to remove all documentation files except the copyright files.<br>
+      <br>
+      These two options can be specified multiple times, and interleaved with each other. Both are processed in the given order, with the last rule that matches a file name making the decision.<br>
+      <br>
+      The filters are applied when unpacking the binary packages, and as such only have knowledge of the type of object currently being filtered (e.g. a normal file or a directory) and have not visibility of what objects will come next. Because these filters have side effects (in contrast to <strong>find</strong>(1) filters), excluding an exact pathname that happens to be a directory object like <em>/usr/share/doc</em> will not have the desired result, and only that pathname will be excluded (which could be automatically reincluded if the code sees the need). Any subsequent files contained within that directory will fail to unpack.<br>
+      <br>
+      Hint: make sure the globs are not expanded by your shell.
     <dt><strong>--verify-format</strong> <em>format-name</em>
     <dd>Sets the output format for the <strong>--verify</strong> command (since dpkg 1.17.2).<br>
     <br>

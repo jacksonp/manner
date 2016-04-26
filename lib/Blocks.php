@@ -279,9 +279,14 @@ class Blocks
                     continue;
                 }
 
-                $blocks[++$blockNum]         = $pre;
-                $blocks[$blockNum]->manLines = $preLines;
-                BlockPreformatted::handle($blocks[$blockNum]);
+                $pre->manLines = $preLines;
+                BlockPreformatted::handle($pre);
+
+                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
+                    $blocks[$blockNum]->lastChild->appendChild($pre);
+                } else {
+                    $blocks[++$blockNum] = $pre;
+                }
                 continue; //End of block
             }
 
