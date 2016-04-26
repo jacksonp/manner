@@ -132,7 +132,7 @@ class Text
                 continue;
             }
 
-            if (preg_match('~\.de (..)\s*$~u', $line, $matches)) {
+            if (preg_match('~\.de1? (..)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
 
