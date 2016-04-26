@@ -116,6 +116,7 @@ class Text
         $numNoCondLines    = count($linesNoCond);
         $firstPassLines    = [];
         $aliases           = [];
+        $registers         = [];
         $foundTitle        = false;
 
         $man = Man::instance();
@@ -204,6 +205,11 @@ class Text
                 continue;
             }
 
+            if (preg_match('~^\.nr (?<name>\w+) (?<val>\d+)$~u', $line, $matches)) {
+                $registers[$matches['val']] = $matches['val'];
+                continue;
+            }
+
             $firstPassLines[] = $line;
 
         }
@@ -241,6 +247,12 @@ class Text
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
                     $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
+                }
+            }
+
+            if (count($registers) > 0) {
+                foreach ($registers as $name => $val) {
+                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
                 }
             }
 
