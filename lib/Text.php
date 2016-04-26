@@ -13,6 +13,7 @@ class Text
         $numRawLines = count($rawLines);
         $linesNoCond = [];
         $linePrefix  = '';
+        $registers   = [];
 
         $conditionalBlockEndings = ['.\\}', '\'br\\}'];
 
@@ -44,6 +45,17 @@ class Text
                     }
                 }
                 throw new Exception('.ig with no corresponding ..');
+            }
+
+            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
+                $registers[$matches['val']] = $matches['val'];
+                continue;
+            }
+
+            if (count($registers) > 0) {
+                foreach ($registers as $name => $val) {
+                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
+                }
             }
 
             // Handle stuff like the following before continuations because of trailing slashes:
@@ -116,7 +128,6 @@ class Text
         $numNoCondLines    = count($linesNoCond);
         $firstPassLines    = [];
         $aliases           = [];
-        $registers         = [];
         $foundTitle        = false;
 
         $man = Man::instance();
@@ -132,7 +143,7 @@ class Text
                 continue;
             }
 
-            if (preg_match('~\.de1? (..)\s*$~u', $line, $matches)) {
+            if (preg_match('~\.de1? (\w+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
 
@@ -205,11 +216,6 @@ class Text
                 continue;
             }
 
-            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
-                $registers[$matches['val']] = $matches['val'];
-                continue;
-            }
-
             $firstPassLines[] = $line;
 
         }
@@ -247,12 +253,6 @@ class Text
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
                     $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
-                }
-            }
-
-            if (count($registers) > 0) {
-                foreach ($registers as $name => $val) {
-                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
                 }
             }
 
