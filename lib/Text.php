@@ -205,7 +205,7 @@ class Text
                 continue;
             }
 
-            if (preg_match('~^\.nr (?<name>\w+) (?<val>\d+)$~u', $line, $matches)) {
+            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
                 $registers[$matches['val']] = $matches['val'];
                 continue;
             }
