@@ -367,7 +367,7 @@ class Blocks
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));
                 }
-            } elseif (preg_match('~^\.sp~u', $line)) {
+            } elseif (preg_match('~^\.(sp|ne)~u', $line)) {
                 if ($parentForLine->hasChildNodes() && $i !== $numLines - 1) {
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="" data-package="" data-section-name="">
+<title>mdoc-export-html</title>
+<h1>mdoc-export-html</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>mdoc export-html - Convert <strong>mdoc</strong>(5) XML to HTML.
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>mdoc export-html</strong> [OPTION]* DIRECTORIES
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>mdoc export-html</strong> creates HTML files from the <strong>mdoc</strong>(5)-formatted documentation XML files within <em>DIRECTORIES</em>.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>--default-template</strong>
+    <dd>Writes the default XSLT used to <em>stdout</em>.
+    <dt><strong>--ext</strong>=<em>EXTENSION</em>
+    <dd>The file extension to use for created files.<br>
+    <br>
+    This defaults to <em>html</em>.
+    <dt><strong>--force-update</strong>
+    <dd>Always generate new files. If not specified, will only generate a new output file if the source documentation file is newer than the target output file.
+    <dt><strong>-o</strong>, <strong>--out</strong>=<em>DIRECTORY</em>
+    <dd>Write the created files within directory <em>DIRECTORY</em>.
+    <dt><strong>--template</strong>=<em>FILE</em>
+    <dd>An XSLT file to use to generate the created files.<br>
+    <br>
+    If not specified, uses the template produced by <em>--dump-template</em>.<br>
+    <br>
+    See the <em>TEMPLATE FORMAT</em> section below for more information.
+    <dt><strong>--with-profile</strong>=<em>PROFILE</em>
+    <dd>
+      Only process types and members within the .NET profile <em>PROFILE</em>. May be specified multiple times. If not specified, all types and members, regardless of version, are processed.<br>
+      <br>
+      Valid profiles are:
+      <pre>  monotouch
+        net_1_0
+        net_1_1
+        net_2_0
+        net_3_0
+        net_3_5
+        net_4_0
+        silverlight</pre>
+    <dt><strong>--with-version</strong>=<em>VERSION</em>
+    <dd>Only process types and members within the assembly version <em>VERSION</em>. May be specified multiple times. If not specified, all types and members, regardless of version, are processed.<br>
+    <br>
+    <em>VERSION</em> is an assembly version, e.g. 2.0.5.0.
+    <dt><strong>-h</strong>, <strong>-?</strong>, <strong>--help</strong>
+    <dd>Display a help message and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>TEMPLATE FORMAT</h2>
+  <p>The template file is an XSLT which needs to process the following input XML document:
+  <pre>   &lt;Page&gt;
+     &lt;CollectionTitle&gt;Collection Title&lt;/CollectionTitle&gt;
+     &lt;PageTitle&gt;Page Title&lt;/PageTitle&gt;
+     &lt;Summary&gt;Page Summary&lt;/Summary&gt;
+     &lt;Signature&gt;Type Declaration&lt;/Signature&gt;
+     &lt;Remarks&gt;Type Remarks&lt;/Remarks&gt;
+     &lt;Members&gt;Type Members&lt;/Members&gt;
+     &lt;Copyright&gt;Documentation Copyright&lt;/Copyright&gt;
+   &lt;/Page&gt;
+</pre>
+  <p>The generated HTML also makes use of several CSS classes. You can either use the <em>create-default-style</em> named template found within the <em>--default-template</em> output to generate these classes, or explicitly define the following CSS classes:
+  <div class="indent">
+    <dl>
+      <dt><em>.CollectionTitle</em>
+      <dt><em>.PageTitle</em>
+      <dt><em>.Summary</em>
+      <dt><em>.Signature</em>
+      <dt><em>.Remarks</em>
+      <dt><em>.Members</em>
+      <dt><em>.Copyright</em>
+      <dt><em>.Section</em>
+      <dt><em>.SectionBox</em>
+      <dt><em>.NamespaceName</em>
+      <dt><em>.NamespaceSummary</em>
+      <dt><em>.MemberName</em>
+      <dt><em>.MemberSignature</em>
+      <dt><em>.MemberBox</em>
+      <dt><em>.Subsection</em>
+      <dt><em>.SubsectionBox</em>
+      <dt><em>.SignatureTable</em>
+      <dt><em>.EnumerationsTable</em>
+      <dt><em>.CodeExampleTable</em>
+      <dt><em>.MembersListing</em>
+      <dt><em>.TypesListing</em>
+      <dt><em>.InnerSignatureTable</em>
+      <dt><em>.TypePermissionsTable</em>
+      <dd>
+    </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>HTML LINKS</h2>
+  <p>All members within the HTML file have an <em>id</em> attribute to permit linking to a specific member. The value of the <em>id</em> attribute is the String ID of the specified member.
+  <p>See the <em>CREF FORMAT</em> section of <strong>mdoc</strong>(5) for more information.
+</div>
+<div class="section">
+  <h2>MAILING LISTS</h2>
+  <dl>
+    <dt>Visit http://lists.ximian.com/mailman/listinfo/mono-docs-list for details.
+  </dl>
+</div>
+<div class="section">
+  <h2>WEB SITE</h2>
+  <p>Visit http://www.mono-project.com/docs/tools+libraries/tools/mdoc/ for details
+</div>
+
