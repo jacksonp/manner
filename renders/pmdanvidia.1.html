@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMDANVIDIA</title>
+<h1>PMDANVIDIA</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmdanvidia</strong> - nvidia gpu metrics domain agent (PMDA)
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>$PCP_PMDAS_DIR/nvidia/pmdanvidia</strong> [<strong>-d</strong> <em>domain</em>] [<strong>-l</strong> <em>logfile</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmdanvidia</strong> is a Performance Metrics Domain Agent (PMDA) which extracts performance metrics describing the metrics available on NVIDIA GPU cards via the NVML library.
+  <p>The <strong>nvidia</strong> PMDA exports metrics that measure gpu activity, memory utilization, fan speed, etc on NVIDIA Tesla and Quadro cards. Metrics are unlikely to be available for consumer class cards.
+  <p>A brief description of the <strong>pmdanvidia</strong> command line options follows:
+  <dl>
+    <dt><strong>-d</strong>
+    <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
+    <dt><strong>-l</strong>
+    <dd>
+      Location of the log file. By default, a log file named <em>nvidia.log</em> is written in the current directory of <a href="/1/pmcd" class="link-man">pmcd(1)</a> when <strong>pmdanvidia</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+  </dl>
+</div>
+<div class="section">
+  <h2>INSTALLATION</h2>
+  <p>The <strong>nvidia</strong> PMDA is not installed and available by default. If you want to undo the installation, do the following as root:
+  <pre> # cd $PCP_PMDAS_DIR/nvidia
+ # ./Remove</pre>
+  <p>If you want to establish access to the names, help text and values for the nvidia performance metrics once more, after removal, do the following as root:
+  <pre> # cd $PCP_PMDAS_DIR/nvidia
+ # ./Install</pre>
+  <p><strong>pmdanvidia</strong> is launched by <a href="/1/pmcd" class="link-man">pmcd(1)</a> and should never be executed directly. The Install and Remove scripts notify <a href="/1/pmcd" class="link-man">pmcd(1)</a> when the agent is installed or removed.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_PMCDCONF_PATH</strong>
+    <dd>command line options used to launch <strong>pmdanvidia</strong>
+    <dt><strong>$PCP_PMDAS_DIR/nvidia/help</strong>
+    <dd>default help text file for the nvidia metrics
+    <dt><strong>$PCP_PMDAS_DIR/nvidia/Install</strong>
+    <dd>installation script for the <strong>pmdanvidia</strong> agent
+    <dt><strong>$PCP_PMDAS_DIR/nvidia/Remove</strong>
+    <dd>undo installation script for the <strong>pmdanvidia</strong> agent
+    <dt><strong>$PCP_LOG_DIR/pmcd/nvidia.log</strong>
+    <dd>default log file for error messages and other information from <strong>pmdanvidia</strong>
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+</div>
+

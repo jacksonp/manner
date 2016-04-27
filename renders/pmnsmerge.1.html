@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMNSMERGE</title>
+<h1>PMNSMERGE</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmnsmerge</strong> - merge multiple versions of a Performance Co-Pilot PMNS
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>$PCP_BINADM_DIR/pmnsmerge</strong> [<strong>-adfxv</strong>] <em>infile</em> [...] <em>outfile</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmnsmerge</strong> merges multiple instances of a Performance Metrics Name Space (PMNS), as used by the components of the Performance Co-Pilot (PCP).
+  <p>Each <em>infile</em> argument names a file that includes the root of a PMNS, of the form
+  <pre> root {
+     /* arbitrary stuff */
+ }</pre>
+  <p>The order in which the <em>infile</em> files are processed is determined by the presence or absence of embedded control lines of the form <code>#define _DATESTAMP \f(COYYYYMMDD</code>
+  <p>Files without a control line are processed first and in the order they appear on the command line. The other files are then processed in order of ascending <code>_DATESTAMP</code>.
+  <p>The <strong>-a</strong> option suppresses the argument re-ordering and processes all files in the order they appear on the command line.
+  <p>The merging proceeds by matching names in PMNS, only those <strong>new</strong> names in each PMNS are considered, and these are added after any existing metrics with the longest possible matching prefix in their names. For example, merging these two input PMNS
+  <pre> root {                    root {
+                               surprise  1:1:3
+     mine       1:1:1          mine      1:1:1
+     foo                       foo
+                               yawn
+     yours      1:1:2
+ }                         }
+ foo {                     foo {
+     fumble     1:2:1
+                               mumble    1:2:3
+     stumble    1:2:2          stumble   1:2:2
+ }                         }
+                           yawn {
+                               sleepy    1:3:1
+                           }</pre>
+  <p>Produces the resulting PMNS in <em>out</em>.
+  <pre> root {
+     mine      1:1:1
+     foo
+     yours     1:1:2
+     surprise  1:1:3
+     yawn
+ }
+ foo {
+     fumble    1:2:1
+     stumble   1:2:2
+     mumble    1:2:3
+ }
+ yawn {
+     sleepy    1:3:1
+ }</pre>
+  <p>To avoid accidental over-writing of PMNS files, <em>outfile</em> is expected to not exist when <strong>pmnsmerge</strong> starts. The <strong>-f</strong> option allows an existing <em>outfile</em> to be unlinked (if possible) and truncated before writing starts.
+  <p>Normally duplicate names for the same Performance Metric Identifier (PMID) in a PMNS are allowed. The <strong>-d</strong> option is the default option and is included for backwards compatibility. The <strong>-x</strong> option reverses the default and <strong>pmnsmerge</strong> will report an error and exit with a non-zero status if a duplicate name is found for a PMID in any of the <em>input</em> PMNS files or in the merged <em>output</em> PMNS.
+  <p>The <strong>-v</strong> option produces one line of diagnostic output as each <em>infile</em> is processed.
+  <p>Once all of the merging has been completed, <strong>pmnsmerge</strong> will attempt to load the resultant namespace using <a href="/3/pmLoadASCIINameSpace" class="link-man">pmLoadASCIINameSpace(3)</a> - if this fails for any reason, <em>outfile</em> will still be created, but <strong>pmnsmerge</strong> will report the problem and exit with non-zero status.
+  <p>Using <strong>pmnsmerge</strong> with a single <em>input</em> argument allows that PMNS file to be checked. In addition to syntactic checking, specifying <strong>-x</strong> will also enable a check for duplicate names for all PMIDs.
+</div>
+<div class="section">
+  <h2>CAVEAT</h2>
+  <p>Once the writing of the new <em>outfile</em> file has begun, the signals SIGINT, SIGHUP and SIGTERM will be ignored to protect the integrity of the new file.
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/pmnsadd" class="link-man">pmnsadd(1)</a>, <a href="/1/pmnsdel" class="link-man">pmnsdel(1)</a>, <a href="/3/pmLoadASCIINameSpace" class="link-man">pmLoadASCIINameSpace(3)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>, <a href="/5/pcp.env" class="link-man">pcp.env(5)</a> and <a href="/5/pmns" class="link-man">pmns(5)</a>.
+</div>
+

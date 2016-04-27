@@ -313,7 +313,7 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.([RBI][RBI]?|ft (?:[RBI]|CW))$~u', $line)) {
+            if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBI]|CW))$~u', $line)) {
                 if ($i === $numLines - 1
                   || $line === '.ft R'
                   || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/'
@@ -327,12 +327,16 @@ class Blocks
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
+                        if ($line === '.ft 1' || ($line === '.ft CW' && $nextLine === '.nf')) {
+                            --$i;
+                            continue;
+                        }
                         throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                     } else {
-                        if ($line === '.B' || $line === '.ft B') {
+                        if ($line === '.B' || $line === '.ft B' || $line === '.ft 3') {
                             $parentForLine = $parentForLine->appendChild($dom->createElement('strong'));
                             $line          = $nextLine;
-                        } elseif ($line === '.I' || $line === '.ft I') {
+                        } elseif ($line === '.I' || $line === '.ft I' || $line === '.ft 2') {
                             $parentForLine = $parentForLine->appendChild($dom->createElement('em'));
                             $line          = $nextLine;
                         } elseif ($line === '.ft CW') {

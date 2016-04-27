@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="SGI" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMDUMPTEXT</title>
+<h1>PMDUMPTEXT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmdumptext</strong> - dump performance metrics to an ASCII table
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmdumptext</strong> [<strong>-CFGHilmMNoruXz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>[<strong>,</strong><em>archive</em><strong>,</strong>...]] [<strong>-c</strong> <em>config</em>] [<strong>-d</strong> <em>delimiter</em>] [<strong>-f</strong> <em>format</em>] [<strong>-h</strong> <em>host</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-O</strong> <em>offset</em>] [<strong>-P</strong> <em>precision</em>] [<strong>-R</strong> <em>lines</em>] [<strong>-s</strong> <em>sample</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-U</strong> <em>string</em>] [<strong>-w</strong> <em>width</em>] [<strong>-Z</strong> <em>timezone</em>] [<em>metric</em> ...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmdumptext</strong> outputs the values of performance metrics collected live or from a set of Performance Co-Pilot (PCP) archives. By default, the metric values are displayed in tab separated columns, prefixed by a timestamp.
+  <p>Unless directed to another host by the <strong>-h</strong> option, or to one or more sets of archives by the <strong>-a</strong> option, <strong>pmdumptext</strong> will contact <a href="/1/pmcd" class="link-man">pmcd(1)</a> on the local host to obtain the required information.
+  <p><strong>pmdumptext</strong> may be run in interactive mode with the <strong>-i</strong> option which displays the values in equal width columns. Without this option, no attempt is made to line up any values allowing the output to be easily parsed by other applications.
+  <p>The format of the output can be further controlled by changing the precision of the values with <strong>-P</strong>, the width of the columns with <strong>-w</strong>, and the format of the values with the <strong>-G</strong> and <strong>-F</strong> options for the shortest of scientific or fixed digits, and a fixed width format, respectively.
+  <p>The <em>metrics</em> to be dumped can be listed on the command line, in a <em>config</em> file, or piped to <strong>pmdumptext</strong> on <em>stdin</em>. A metric consists of an optional source (host or archive), the metric name, and an optional instance list immediately after the name. A colon is used to separate a host name from the metric, and a forward slash (“/”) to separate an archive name from the metric. Instances are enclosed in square brackets and a comma is used between each instance if more than one is stated. For example, some legal metrics are:
+  <pre> kernel.all.cpu.idle
+ myhost:kernel.all.cpu.idle[cpu0,cpu3]
+ /path/to/myarchive/kernel.all.cpu.idle[cpu1]</pre>
+  <p>The format of a metric is further described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>. A normalization value may optionally follow a metric name in a <em>config</em> file or on <em>stdin</em>. The metric value will be scaled by this value. For example, if the file system “/dev/root” has a capacity of 1965437 bytes, then the percentage of the file system that is used could be dumped with this <em>config</em>:
+  <pre> filesys.used[/dev/root] 19654.37</pre>
+  <p>A normalization value may not be used with <em>metrics</em> specified as command line arguments.
+  <p>A metric name is not required to be a leaf node in the Performance Metrics Name Space (PMNS), except when one or more instances are specified. For example, to dump all file system metrics, only <em>filesys</em> is required to dump <em>filesys.capacity</em>, <em>filesys.used</em>, <em>filesys.free</em> etc.
+</div>
+<div class="section">
+  <h2>COMMAND LINE OPTIONS</h2>
+  <p>The command line options <strong>-A</strong>, <strong>-O</strong>, <strong>-S</strong> and <strong>-T</strong> control the alignment, offset, start and end time when visualizing metrics from archives. These options are common to most Performance Co-Pilot tools and are fully described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>.
+  <p>The other available options are:
+  <dl>
+    <dt><strong>-a</strong>
+    <dd>
+      Specify a set of <em>archive</em> from which metrics can be obtained for a particular host. <em>archive</em> is the name of a directory containing archives, or the basename of an archive, previously created by <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>. Multiple sets of archives (separated by commas or in different <strong>-a</strong> options) from different hosts may be given, but only one set of archives per host is permitted. Any metrics that are not associated with a specific host or archive will use the first archive as their source.
+    <dt><strong>-C</strong>
+    <dd>Exit before dumping any values, but after parsing the metrics. Metrics, instances, normals and units are listed if <strong>-m</strong>, <strong>-l</strong>, <strong>-N</strong> and/or <strong>-u</strong> are specified.
+    <dt><strong>-c</strong>
+    <dd>If no <em>metrics</em> are listed on the command line, a <em>config</em> file can be used to specify the <em>metrics</em> to be dumped. Unlike the command line <em>metrics</em>, each metric may be followed by a normalization value. Empty lines and lines that begin with “#” are ignored.
+    <dt><strong>-d</strong>
+    <dd>Specify the <em>delimiter</em> that separates each column of output. The <em>delimiter</em> may only be a single character.
+    <dt><strong>-f</strong>
+    <dd>
+      Use the <em>format</em> string for formatting the timestamp with each set of values. The syntax of this string is the same as that described in <a href="/3/strftime" class="link-man">strftime(3)</a>. An empty <em>format</em> string (eg. '') will remove the timestamps from the output.
+    <dt><strong>-F</strong>
+    <dd>Output the values in a fixed width format of 6 characters. Positive numbers are represented as <em>dd</em>.<em>dd</em><strong>u</strong> and negative numbers as <strong>[</strong>-<strong>]</strong><em>d</em>.<em>dd</em><strong>u</strong>. The postfix multiplier may have the values <strong>K</strong>(10^3), <strong>M</strong>(10^6), <strong>G</strong>(10^9) and <strong>T</strong>(10^12). For example, 4567 would be displayed as 4.57K, even if the units of the metric are bytes.
+    <dt><strong>-G</strong>
+    <dd>Output the values using the shortest of a scientific format or a decimal notation.
+    <dt><strong>-h</strong>
+    <dd>
+      Fetch performance metrics from <a href="/1/pmcd" class="link-man">pmcd(1)</a> on <em>host</em>, rather than the default localhost.
+    <dt><strong>-H</strong>
+    <dd>Show all headers before dumping any metric values. This is equivalent to <strong>-lmNu</strong>.
+    <dt><strong>-i</strong>
+    <dd>Output the data in fixed width columns using fixed width values (see <strong>-F</strong>) so that it is human-readable. This option may not be used with <strong>-P</strong> as fixed point values are not fixed width. This option will also affect the output of <strong>-m</strong> and <strong>-u</strong> options as the metric, instance and unit names will be truncated.
+    <dt><strong>-l</strong>
+    <dd>Show the source of the metrics. In interactive mode, the host of the metrics is shown. In non-interactive mode, this option shows the source of the metrics with the metric name even if <strong>-m</strong> is not specified.
+    <dt><strong>-m</strong>
+    <dd>Output the metric names before the metric values. The source and units of the metrics may also be dumped with the <strong>-l</strong> and <strong>-u</strong> options respectively. If in interactive mode, the metrics names may be truncated, and the instance names, where relevant, are also truncated on the follow line.
+    <dt><strong>-M</strong>
+    <dd>Output the column number and complete metric names before dumping any values. If the <strong>-l</strong> flag is also specified, the source of the metrics is also shown.
+    <dt><strong>-n</strong>
+    <dd>Load an alternative local PMNS from the file <em>pmnsfile.</em>
+    <dt><strong>-o</strong>
+    <dd>When a timestamp is being reported (ie. unless an empty format string is given with the <strong>-f</strong> option), the timestamp is prefixed with the offset in seconds from the start of the set of archives or the beginning of the execution of <strong>pmdumptext</strong>.
+    <dt><strong>-N</strong>
+    <dd>Output the normalization factors before the metric values.
+    <dt><strong>-P</strong>
+    <dd>Set the <em>precision</em> of the values. This option may not be used with <strong>-F</strong> as the precision is constant. The default precision is 3.
+    <dt><strong>-r</strong>
+    <dd>Output the raw metric values, do not convert counters to rates. This option also causes <strong>pmdumptext</strong> to ignore the normalization values for each metric.
+    <dt><strong>-R</strong>
+    <dd>Repeat the header every <em>lines</em> of output. This option is useful in interactive mode when using a graphical window to avoid the header scrolling beyond the window's buffer, and to realign the header if the window is resized.
+    <dt><strong>-s</strong>
+    <dd><strong>pmdumptext</strong> will terminate after this many samples.
+    <dt><strong>-t</strong>
+    <dd>
+      The <em>interval</em> argument follows the syntax described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, and in the simplest form may be an unsigned integer (the implied units in this case are seconds). The default interval is 1.0 seconds.
+    <dt><strong>-u</strong>
+    <dd>Output the units of the metrics before the first values, but after the metric names if <strong>-m</strong> is also specified.
+    <dt><strong>-U</strong>
+    <dd>Change the output when values are unavailable to <em>string</em>. The default string is “?”.
+    <dt><strong>-w</strong>
+    <dd>Set the column width of the output. Strings will be truncated to this width, and maybe postfixed by “...” if the <em>width</em> is greater than 5.
+    <dt><strong>-X</strong>
+    <dd>Output the column number and complete metric names, one-per-line, both before dumping the first set of values and again each time the header is repeated.
+    <dt><strong>-z</strong>
+    <dd>Use the local timezone of the host that is the source of the performance metrics, as identified by either the <strong>-h</strong> or the first <strong>-a</strong> options. The default is to use the timezone of the local host.
+    <dt><strong>-Z</strong>
+    <dd>
+      Use <em>timezone</em> when displaying the date and time. <em>Timezone</em> is in the format of the environment variable <strong>TZ</strong> as described in <a href="/7/environ" class="link-man">environ(7)</a>.
+  </dl>
+</div>
+<div class="section">
+  <h2>MULTIPLE SOURCES</h2>
+  <p><strong>pmdumptext</strong> supports the dumping of metrics from multiple hosts or set of archives. The metrics listed on the command line or in the <em>config</em> file may have no specific source or come from different sources.
+  <p>However, restrictions apply when archives are specified on the command line (<strong>-a</strong>) and/or in the configuration file. Firstly, there may be only one set of archives for any one host. Secondly, the hosts of any metrics with host sources must correspond to the host of a set of archives, either on the command line or previously as the source of another metric.
+  <p>The options <strong>-a</strong> and <strong>-h</strong> may not be used together.
+</div>
+<div class="section">
+  <h2>UNIT CONVERSION</h2>
+  <p>All metrics that have the semantics of counters are automatically converted to rates over the sample time interval. In interactive mode, <strong>pmdumptext</strong> will also change the units of some metrics so that they are easier to comprehend:
+  <dl>
+    <dt>o
+    <dd>All metrics with space units (bytes to terabytes) are scaled to bytes. Note that 1024 bytes with be represented as 1.02K, not 1.00K.
+    <dt>o
+    <dd>Metrics that are counters with time units (nanoseconds to hours) represent time utilization over the sample interval. The unit strings of such metrics is changed to “Time Utilization” or abbreviated to “util” and the values are normalized to the range zero to one.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>o To examine the load on two hosts foo and bar, simultaneously:
+  <pre> $ pmdumptext -il 'foo:kernel.all.load[1]' 'bar:kernel.all.load[1]'
+              Source        foo     bar
+ Wed Jul 30 11:37:53      0.309   0.409
+ Wed Jul 30 11:37:54      0.309   0.409
+ Wed Jul 30 11:37:55      0.309   0.409</pre>
+  <p>o To output the memory utilization on a remote host called bong with a simpler timestamp:
+  <pre> $ pmdumptext -imu -h bong -f '%H:%M:%S' mem.util
+   Metric        kernel  fs_ctl  _dirty  _clean    free    user
+    Units             b       b       b       b       b       b
+ 09:32:28         8.98M   0.97M   0.00    3.90M   7.13M  46.13M
+ 09:32:29         8.99M   0.98M   0.00    5.71M   5.39M  46.03M
+ 09:32:30         8.99M   1.07M   0.00    5.81M   4.55M  46.69M
+ 09:32:31         9.03M   1.16M   0.00    6.45M   3.48M  47.00M
+ 09:32:32         9.09M   1.18M  20.48K   6.23M   3.29M  47.30M</pre>
+  <p>o To dump all metrics collected in an archive at a 30 second interval to a file for processing by another tool:
+  <pre> $ pminfo -a archive | pmdumptext -t 30s -m -a archive &gt; outfile</pre>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/pmns/*</strong>
+    <dd>default PMNS specification files
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><a href="/1/pmchart" class="link-man">pmchart(1)</a>, <a href="/1/pmtime" class="link-man">pmtime(1)</a>, <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>, <a href="/1/pmlogextract" class="link-man">pmlogextract(1)</a>, <a href="/1/pmrep" class="link-man">pmrep(1)</a>, <a href="/1/pmval" class="link-man">pmval(1)</a>, <a href="/3/PMAPI" class="link-man">PMAPI(3)</a>, <a href="/3/strftime" class="link-man">strftime(3)</a> and <a href="/7/environ" class="link-man">environ(7)</a>.
+</div>
+
