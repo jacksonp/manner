@@ -69,6 +69,9 @@ class Blocks
                     continue;
                 }
                 $dtLine = $blockNode->manLines[++$i];
+                while (in_array($dtLine, ['.fi', '.B'])) { // cutter.1
+                    $dtLine = $blockNode->manLines[++$i];
+                }
                 if (in_array($dtLine, ['.br', '.sp'])) { // e.g. albumart-qt.1, ipmitool.1
                     $line = $dtLine; // i.e. skip the .TP line
                 } else {
