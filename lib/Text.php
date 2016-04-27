@@ -136,18 +136,27 @@ class Text
 
             $line = $linesNoCond[$i];
 
-            if (isset($macroReplacements[$line])) {
-                foreach ($macroReplacements[$line] as $macroLine) {
-                    $firstPassLines[] = $macroLine;
+            $bits = Macro::parseArgString($line);
+            if (count($bits) > 0) {
+                $macro = array_shift($bits);
+                if (isset($macroReplacements[$macro])) {
+                    foreach ($macroReplacements[$macro] as $macroLine) {
+
+                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                        // Other \$ things are also arguments...
+                        if (strpos($macroLine, '\\$') !== false) {
+                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
+                        }
+
+                        $firstPassLines[] = $macroLine;
+                    }
+                    continue;
                 }
-                continue;
             }
 
             if (preg_match('~\.de1? (\w+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
-
-
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
                     $macroLine = $linesNoCond[$i];
                     if ($macroLine === '..') {
@@ -160,13 +169,6 @@ class Text
                         continue 2;
                     } else {
                         $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-
-                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                        // Other \$ things are also arguments...
-                        if (strpos($macroLine, '\\$') !== false) {
-                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
-                        }
-
                         $macroLines[] = $macroLine;
                     }
                 }
