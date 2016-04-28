@@ -53,7 +53,7 @@ class TextContent
                 $anchor->setAttribute('class', 'link-man');
                 $parentNode->appendChild($anchor);
                 if (mb_strlen($matches['punc']) !== 0) {
-                    $parentNode->appendChild(new DOMText($matches['punc']));
+                    self::interpretAndAppendText($parentNode, $matches['punc']);
                 }
                 if (mb_strlen($matches['rol']) !== 0) {
                     // get the 2nd bit of e.g. ".BR getcap (8), setcap (8)"
