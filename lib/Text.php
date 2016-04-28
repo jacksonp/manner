@@ -29,7 +29,8 @@ class Text
             }
 
             // Skip full-line comments
-            if (preg_match('~^[\'\.]?\\\\"~u', $line, $matches)) {
+            // See mscore.1 for full-line comments starting with '."
+            if (preg_match('~^([\'\.]?\\\\"|\'\."\')~u', $line, $matches)) {
                 continue;
             }
 
