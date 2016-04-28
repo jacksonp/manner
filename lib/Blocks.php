@@ -286,6 +286,9 @@ class Blocks
                 BlockPreformatted::handle($pre);
 
                 if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
+                    if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
+                        $blocks[$blockNum]->appendChild($dom->createElement('dd'));
+                    }
                     $blocks[$blockNum]->lastChild->appendChild($pre);
                 } else {
                     $blocks[++$blockNum] = $pre;
