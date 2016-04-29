@@ -338,8 +338,6 @@ class Blocks
                 continue; //End of block
             }
 
-            $parentForLine = null;
-
             if ($blockNum === 0) {
                 $blocks[++$blockNum] = $dom->createElement('p');
             } else {
@@ -348,6 +346,7 @@ class Blocks
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
             }
+
             $parentForLine = $blocks[$blockNum];
 
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBI]|CW))$~u', $line)) {
@@ -385,10 +384,6 @@ class Blocks
                         $canAppendNextText = false;
                     }
                 }
-            }
-
-            if (is_null($parentForLine)) {
-                throw new Exception($line - ' $parentForLine is null.');
             }
 
             if ($canAppendNextText
