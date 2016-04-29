@@ -23,11 +23,14 @@
   <p>The <em>outputpath</em> argument is interpreted as follows:
   <dl class="indent-3">
     <dt>*
-    <dd>If <em>outputpath</em> contains a slash character ('/'), it is interpreted as the name of the directory where the output definitions are to be stored. In this case, there is a separate output file for each locale category (<em>LC_TIME</em>, <em>LC_NUMERIC</em>, and so on).
+    <dd>
+      <p>If <em>outputpath</em> contains a slash character ('/'), it is interpreted as the name of the directory where the output definitions are to be stored. In this case, there is a separate output file for each locale category (<em>LC_TIME</em>, <em>LC_NUMERIC</em>, and so on).
     <dt>*
-    <dd>If the <strong>--no-archive</strong> option is used, <em>outputpath</em> is the name of a subdirectory in <em>/usr/lib/locale</em> where per-category compiled files are placed.
+    <dd>
+      <p>If the <strong>--no-archive</strong> option is used, <em>outputpath</em> is the name of a subdirectory in <em>/usr/lib/locale</em> where per-category compiled files are placed.
     <dt>*
-    <dd>Otherwise, <em>outputpath</em> is the name of a locale and the compiled locale data is added to the archive file <em>/usr/lib/locale/locale-archive</em>. A locale archive is a memory-mapped file which contains all the system-provided locales; it is used by all localized programs when the environment variable <strong>LOCPATH</strong> is not set.
+    <dd>
+      <p>Otherwise, <em>outputpath</em> is the name of a locale and the compiled locale data is added to the archive file <em>/usr/lib/locale/locale-archive</em>. A locale archive is a memory-mapped file which contains all the system-provided locales; it is used by all localized programs when the environment variable <strong>LOCPATH</strong> is not set.
   </dl>
   <p>In any case, <strong>localedef</strong> aborts if the directory in which it tries to write locale files has not already been created.
   <p>If no <em>charmapfile</em> is given, the value <em>ANSI_X3.4-1968</em> (for ASCII) is used by default. If no <em>inputfile</em> is given, or if it is given as a dash (-), <strong>localedef</strong> reads from standard input.
@@ -39,11 +42,14 @@
     <p>A few options direct <strong>localedef</strong> to do something other than compile locale definitions. Only one of these options should be used at a time.
     <dl>
       <dt><strong>--delete-from-archive</strong>
-      <dd>Delete the named locales from the locale archive file.
+      <dd>
+        <p>Delete the named locales from the locale archive file.
       <dt><strong>--list-archive</strong>
-      <dd>List the locales contained in the locale archive file.
+      <dd>
+        <p>List the locales contained in the locale archive file.
       <dt><strong>--add-to-archive</strong>
-      <dd>Add the <em>compiledpath</em> directories to the locale archive file. The directories should have been created by previous runs of <strong>localedef</strong>, using <strong>--no-archive</strong>.
+      <dd>
+        <p>Add the <em>compiledpath</em> directories to the locale archive file. The directories should have been created by previous runs of <strong>localedef</strong>, using <strong>--no-archive</strong>.
     </dl>
   </div>
   <div class="subsection">
@@ -51,35 +57,50 @@
     <p>Some of the following options are only sensible for certain operations; generally, it should be self-evident which ones.
     <dl>
       <dt><strong>-f</strong> <em>charmapfile</em><strong>, --charmap=</strong><em>charmapfile</em>
-      <dd>Specify the file that defines the character set that is used by the input file. If <em>charmapfile</em> contains a slash character ('/'), it is interpreted as the name of the character map. Otherwise, the file is sought in the current directory and the default directory for character maps. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/charmaps/</em> and <em>$I18NPATH/</em> are also searched after the current directory. The default directory for character maps is printed by <strong>localedef --help</strong>.
+      <dd>
+        <p>Specify the file that defines the character set that is used by the input file. If <em>charmapfile</em> contains a slash character ('/'), it is interpreted as the name of the character map. Otherwise, the file is sought in the current directory and the default directory for character maps. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/charmaps/</em> and <em>$I18NPATH/</em> are also searched after the current directory. The default directory for character maps is printed by <strong>localedef --help</strong>.
       <dt><strong>-i</strong> <em>inputfile</em><strong>, --inputfile=</strong><em>inputfile</em>
-      <dd>Specify the locale definition file to compile. The file is sought in the current directory and the default directory for locale definition files. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/locales/</em> and <em>$I18NPATH</em> are also searched after the current directory. The default directory for locale definition files is printed by <strong>localedef --help</strong>.
+      <dd>
+        <p>Specify the locale definition file to compile. The file is sought in the current directory and the default directory for locale definition files. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/locales/</em> and <em>$I18NPATH</em> are also searched after the current directory. The default directory for locale definition files is printed by <strong>localedef --help</strong>.
       <dt><strong>-u</strong> <em>repertoirefile</em><strong>, --repertoire-map=</strong><em>repertoirefile</em>
-      <dd>Read mappings from symbolic names to Unicode code points from <em>repertoirefile</em>. If <em>repertoirefile</em> contains a slash character ('/'), it is interpreted as the pathname of the repertoire map. Otherwise, the file is sought in the current directory and the default directory for repertoire maps. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/repertoiremaps/</em> and <em>$I18NPATH</em> are also searched after the current directory. The default directory for repertoire maps is printed by <strong>localedef --help</strong>.
+      <dd>
+        <p>Read mappings from symbolic names to Unicode code points from <em>repertoirefile</em>. If <em>repertoirefile</em> contains a slash character ('/'), it is interpreted as the pathname of the repertoire map. Otherwise, the file is sought in the current directory and the default directory for repertoire maps. If the environment variable <strong>I18NPATH</strong> is set, <em>$I18NPATH/repertoiremaps/</em> and <em>$I18NPATH</em> are also searched after the current directory. The default directory for repertoire maps is printed by <strong>localedef --help</strong>.
       <dt><strong>-A</strong> <em>aliasfile</em><strong>, --alias-file=</strong><em>aliasfile</em>
-      <dd>Use <em>aliasfile</em> to look up aliases for locale names. There is no default aliases file.
+      <dd>
+        <p>Use <em>aliasfile</em> to look up aliases for locale names. There is no default aliases file.
       <dt><strong>--prefix=</strong><em>pathname</em>
-      <dd>Set the prefix to be prepended to the full archive pathname. By default, the prefix is empty. Setting the prefix to <em>foo</em>, the archive would be placed in <em>foo/usr/lib/locale/locale-archive</em>.
+      <dd>
+        <p>Set the prefix to be prepended to the full archive pathname. By default, the prefix is empty. Setting the prefix to <em>foo</em>, the archive would be placed in <em>foo/usr/lib/locale/locale-archive</em>.
       <dt><strong>-c</strong>, <strong>--force</strong>
-      <dd>Write the output files even if warnings were generated about the input file.
+      <dd>
+        <p>Write the output files even if warnings were generated about the input file.
       <dt><strong>--old-style</strong>
-      <dd>Create old-style hash tables instead of 3-level access tables.
+      <dd>
+        <p>Create old-style hash tables instead of 3-level access tables.
       <dt><strong>-v</strong>, <strong>--verbose</strong>
-      <dd>Generate extra warnings about errors that are normally ignored.
+      <dd>
+        <p>Generate extra warnings about errors that are normally ignored.
       <dt><strong>--quiet</strong>
-      <dd>Suppress all notifications and warnings, and report only fatal errors.
+      <dd>
+        <p>Suppress all notifications and warnings, and report only fatal errors.
       <dt><strong>--posix</strong>
-      <dd>Conform strictly to POSIX. Implies <strong>--verbose</strong>. This option currently has no other effect. POSIX conformance is assumed if the environment variable <strong>POSIXLY_CORRECT</strong> is set.
+      <dd>
+        <p>Conform strictly to POSIX. Implies <strong>--verbose</strong>. This option currently has no other effect. POSIX conformance is assumed if the environment variable <strong>POSIXLY_CORRECT</strong> is set.
       <dt><strong>--replace</strong>
-      <dd>Replace a locale in the locale archive file. Without this option, if the locale is in the archive file already, an error occurs.
+      <dd>
+        <p>Replace a locale in the locale archive file. Without this option, if the locale is in the archive file already, an error occurs.
       <dt><strong>--no-archive</strong>
-      <dd>Do not use the locale archive file, instead create <em>outputpath</em> as a subdirectory in the same directory as the locale archive file, and create separate output files for locale categories in it. This is helpful to prevent system locale archive updates from overwriting custom locales created with <strong>localedef</strong>.
+      <dd>
+        <p>Do not use the locale archive file, instead create <em>outputpath</em> as a subdirectory in the same directory as the locale archive file, and create separate output files for locale categories in it. This is helpful to prevent system locale archive updates from overwriting custom locales created with <strong>localedef</strong>.
       <dt><strong>-?</strong>, <strong>--help</strong>
-      <dd>Print a usage summary and exit. Also prints the default paths used by <strong>localedef</strong>.
+      <dd>
+        <p>Print a usage summary and exit. Also prints the default paths used by <strong>localedef</strong>.
       <dt><strong>--usage</strong>
-      <dd>Print a short usage summary and exit.
+      <dd>
+        <p>Print a short usage summary and exit.
       <dt><strong>-V</strong>, <strong>--version</strong>
-      <dd>Print the version number, license, and disclaimer of warranty for <strong>localedef</strong>.
+      <dd>
+        <p>Print the version number, license, and disclaimer of warranty for <strong>localedef</strong>.
     </dl>
   </div>
 </div>
@@ -89,11 +110,14 @@
   <div class="indent-3">
     <dl>
       <dt><strong>0</strong>
-      <dd>Command completed successfully.
+      <dd>
+        <p>Command completed successfully.
       <dt><strong>1</strong>
-      <dd>Warnings or errors occurred, output files were written.
+      <dd>
+        <p>Warnings or errors occurred, output files were written.
       <dt><strong>4</strong>
-      <dd>Errors encountered, no output created.
+      <dd>
+        <p>Errors encountered, no output created.
     </dl>
   </div>
 </div>
@@ -101,48 +125,67 @@
   <h2>ENVIRONMENT</h2>
   <dl>
     <dt><strong>POSIXLY_CORRECT</strong>
-    <dd>The <strong>--posix</strong> flag is assumed if this environment variable is set.
+    <dd>
+      <p>The <strong>--posix</strong> flag is assumed if this environment variable is set.
     <dt><strong>I18NPATH</strong>
-    <dd>A colon-separated list of search directories for files.
+    <dd>
+      <p>A colon-separated list of search directories for files.
   </dl>
 </div>
 <div class="section">
   <h2>FILES</h2>
   <dl>
     <dt><em>/usr/share/i18n/charmaps</em>
-    <dd>Usual default character map path.
+    <dd>
+      <p>Usual default character map path.
     <dt><em>/usr/share/i18n/locales</em>
-    <dd>Usual default path for locale definition files.
+    <dd>
+      <p>Usual default path for locale definition files.
     <dt><em>/usr/share/i18n/repertoiremaps</em>
-    <dd>Usual default repertoire map path.
+    <dd>
+      <p>Usual default repertoire map path.
     <dt><em>/usr/lib/locale/locale-archive</em>
-    <dd>Usual default locale archive location.
+    <dd>
+      <p>Usual default locale archive location.
     <dt><em>/usr/lib/locale</em>
-    <dd>Usual default path for compiled individual locale data files.
+    <dd>
+      <p>Usual default path for compiled individual locale data files.
     <dt><em>outputpath/LC_ADDRESS</em>
-    <dd>An output file that contains information about formatting of addresses and geography-related items.
+    <dd>
+      <p>An output file that contains information about formatting of addresses and geography-related items.
     <dt><em>outputpath/LC_COLLATE</em>
-    <dd>An output file that contains information about the rules for comparing strings.
+    <dd>
+      <p>An output file that contains information about the rules for comparing strings.
     <dt><em>outputpath/LC_CTYPE</em>
-    <dd>An output file that contains information about character classes.
+    <dd>
+      <p>An output file that contains information about character classes.
     <dt><em>outputpath/LC_IDENTIFICATION</em>
-    <dd>An output file that contains metadata about the locale.
+    <dd>
+      <p>An output file that contains metadata about the locale.
     <dt><em>outputpath/LC_MEASUREMENT</em>
-    <dd>An output file that contains information about locale measurements (metric versus US customary).
+    <dd>
+      <p>An output file that contains information about locale measurements (metric versus US customary).
     <dt><em>outputpath/LC_MESSAGES/SYS_LC_MESSAGES</em>
-    <dd>An output file that contains information about the language messages should be printed in, and what an affirmative or negative answer looks like.
+    <dd>
+      <p>An output file that contains information about the language messages should be printed in, and what an affirmative or negative answer looks like.
     <dt><em>outputpath/LC_MONETARY</em>
-    <dd>An output file that contains information about formatting of monetary values.
+    <dd>
+      <p>An output file that contains information about formatting of monetary values.
     <dt><em>outputpath/LC_NAME</em>
-    <dd>An output file that contains information about salutations for persons.
+    <dd>
+      <p>An output file that contains information about salutations for persons.
     <dt><em>outputpath/LC_NUMERIC</em>
-    <dd>An output file that contains information about formatting of nonmonetary numeric values.
+    <dd>
+      <p>An output file that contains information about formatting of nonmonetary numeric values.
     <dt><em>outputpath/LC_PAPER</em>
-    <dd>An output file that contains information about settings related to standard paper size.
+    <dd>
+      <p>An output file that contains information about settings related to standard paper size.
     <dt><em>outputpath/LC_TELEPHONE</em>
-    <dd>An output file that contains information about formats to be used with telephone services.
+    <dd>
+      <p>An output file that contains information about formats to be used with telephone services.
     <dt><em>outputpath/LC_TIME</em>
-    <dd>An output file that contains information about formatting of data and time values.
+    <dd>
+      <p>An output file that contains information about formatting of data and time values.
   </dl>
 </div>
 <div class="section">

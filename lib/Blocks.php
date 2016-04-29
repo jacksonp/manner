@@ -37,15 +37,10 @@ class Blocks
 
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if (mb_strlen($line) === 0) {
-                if ($i === $numLines - 1) {
-                    continue; // don't care about last line in block being blank.
+                // Add a paragraph unless this is the last line in block, or the next line is also empty.
+                if ($i !== $numLines - 1 and mb_strlen($blockNode->manLines[$i + 1]) !== 0) {
+                    $blocks[++$blockNum] = $dom->createElement('p');
                 }
-
-                if (mb_strlen($blockNode->manLines[$i + 1]) === 0) {
-                    continue; // next line is also empty.
-                }
-
-                $blocks[++$blockNum] = $dom->createElement('p');
                 continue;
             }
 
@@ -346,19 +341,14 @@ class Blocks
             $parentForLine = null;
 
             if ($blockNum === 0) {
-                if ($blockNode->tagName === 'dd') {
-                    $parentForLine = $blockNode;
-                } else {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                    $parentForLine       = $blocks[$blockNum];
-                }
+                $blocks[++$blockNum] = $dom->createElement('p');
             } else {
                 if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code'])) {
                     // Start a new paragraph after certain blocks
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
-                $parentForLine = $blocks[$blockNum];
             }
+            $parentForLine = $blocks[$blockNum];
 
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBI]|CW))$~u', $line)) {
                 if ($i === $numLines - 1

@@ -19,63 +19,81 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-l</strong> <em>changelog-file</em>
-    <dd>Specifies the changelog file to read information from. A ‘-’ can be used to specify reading from standard input. The default is <strong>debian/changelog</strong>.
+    <dd>
+      <p>Specifies the changelog file to read information from. A ‘-’ can be used to specify reading from standard input. The default is <strong>debian/changelog</strong>.
     <dt><strong>-F</strong> <em>changelog-format</em>
-    <dd>Specifies the format of the changelog. By default the format is read from a special line near the bottom of the changelog or failing that defaults to the <strong>debian</strong> standard format. See also <strong>CHANGELOG FORMATS</strong>.
+    <dd>
+      <p>Specifies the format of the changelog. By default the format is read from a special line near the bottom of the changelog or failing that defaults to the <strong>debian</strong> standard format. See also <strong>CHANGELOG FORMATS</strong>.
     <dt><strong>-L</strong> <em>libdir</em>
-    <dd>Specify an additional directory to search for parser scripts. This directory is searched before the default directories which are currently <strong>/usr/local/lib/dpkg/parsechangelog</strong> and <strong>/usr/lib/dpkg/parsechangelog</strong>.
+    <dd>
+      <p>Specify an additional directory to search for parser scripts. This directory is searched before the default directories which are currently <strong>/usr/local/lib/dpkg/parsechangelog</strong> and <strong>/usr/lib/dpkg/parsechangelog</strong>.
     <dt><strong>-S</strong>, <strong>--show-field</strong> <em>field</em>
-    <dd>Specifies the name of the field to show (since dpkg 1.17.0). The field name is not printed, only its value.
+    <dd>
+      <p>Specifies the name of the field to show (since dpkg 1.17.0). The field name is not printed, only its value.
     <dt><strong>-?</strong>, <strong>--help</strong>
-    <dd>Show the usage message and exit.
+    <dd>
+      <p>Show the usage message and exit.
     <dt><strong>--version</strong>
-    <dd>Show the version and exit.
+    <dd>
+      <p>Show the version and exit.
   </dl>
   <div class="subsection">
     <h3>Parser Options</h3>
     <p>The following options can be used to influence the output of the changelog parser, e.g. the range of entries or the format of the output. They need to be supported by the parser script in question. See also <strong>NOTES</strong>.
     <dl>
       <dt><strong>--file</strong> <em>file</em>
-      <dd>Set the changelog filename to parse. Default is ‘-’ (standard input).
+      <dd>
+        <p>Set the changelog filename to parse. Default is ‘-’ (standard input).
       <dt><strong>-l</strong>, <strong>--label</strong> <em>file</em>
-      <dd>Set the name of the changelog file to use in error messages, instead of using the name from the <strong>--file</strong> option, or its default value.
+      <dd>
+        <p>Set the name of the changelog file to use in error messages, instead of using the name from the <strong>--file</strong> option, or its default value.
       <dt><strong>--format</strong> <em>output-format</em>
       <dd>
-        Set the output format. Currently supported values are <strong>dpkg</strong> and <strong>rfc822</strong>. <strong>dpkg</strong> is the classic output format (from before this option existed) and the default. It consists of one paragraph in Debian control format (see <strong>deb-control</strong>(5)). If more than one entry is requested, then most fields are taken from the most recent entry, except otherwise stated:
+        <p>Set the output format. Currently supported values are <strong>dpkg</strong> and <strong>rfc822</strong>. <strong>dpkg</strong> is the classic output format (from before this option existed) and the default. It consists of one paragraph in Debian control format (see <strong>deb-control</strong>(5)). If more than one entry is requested, then most fields are taken from the most recent entry, except otherwise stated:
         <div class="indent">
           <dl>
             <dt><strong>Source:</strong> <em>pkg-name</em>
             <dt><strong>Version:</strong> <em>version</em>
             <dt><strong>Distribution:</strong> <em>target-distribution</em>
             <dt><strong>Urgency:</strong> <em>urgency</em>
-            <dd>The highest urgency of all included entries is used, followed by the concatenated (space-separated) comments from all the versions requested.
+            <dd>
+              <p>The highest urgency of all included entries is used, followed by the concatenated (space-separated) comments from all the versions requested.
             <dt><strong>Maintainer:</strong> <em>author</em>
             <dt><strong>Date:</strong> <em>date</em>
             <dt><strong>Closes:</strong> <em>bug-number</em>
-            <dd>The Closes fields of all included entries are merged.
+            <dd>
+              <p>The Closes fields of all included entries are merged.
             <dt><strong>Changes:</strong> <em>changelog-entries</em>
-            <dd>The text of all changelog entries is concatenated. To make this field a valid Debian control format multiline field empty lines are replaced with a single full stop and all lines is intended by one space character. The exact content depends on the changelog format.
+            <dd>
+              <p>The text of all changelog entries is concatenated. To make this field a valid Debian control format multiline field empty lines are replaced with a single full stop and all lines is intended by one space character. The exact content depends on the changelog format.
           </dl>
         </div>
         <p>The <strong>Version</strong>, <strong>Distribution</strong>, <strong>Urgency</strong>, <strong>Maintainer</strong> and <strong>Changes</strong> fields are mandatory.<br>
         There might be additional user-defined fields present.<br>
         The <strong>rfc822</strong> format uses the same fields but outputs a separate paragraph for each changelog entry so that all metadata for each entry is preserved.
       <dt><strong>--all</strong>
-      <dd>Include all changes. Note: other options have no effect when this is in use.
+      <dd>
+        <p>Include all changes. Note: other options have no effect when this is in use.
       <dt><strong>-s</strong>, <strong>--since</strong> <em>version</em>
       <dt><strong>-v</strong> <em>version</em>
-      <dd>Include all changes later than <em>version</em>.
+      <dd>
+        <p>Include all changes later than <em>version</em>.
       <dt><strong>-u</strong>, <strong>--until</strong> <em>version</em>
-      <dd>Include all changes earlier than <em>version</em>.
+      <dd>
+        <p>Include all changes earlier than <em>version</em>.
       <dt><strong>-f</strong>, <strong>--from</strong> <em>version</em>
-      <dd>Include all changes equal or later than <em>version</em>.
+      <dd>
+        <p>Include all changes equal or later than <em>version</em>.
       <dt><strong>-t</strong>, <strong>--to</strong> <em>version</em>
-      <dd>Include all changes up to or equal than <em>version</em>.
+      <dd>
+        <p>Include all changes up to or equal than <em>version</em>.
       <dt><strong>-c</strong>, <strong>--count</strong> <em>number</em>
       <dt><strong>-n</strong> <em>number</em>
-      <dd>Include <em>number</em> entries from the top (or the tail if <em>number</em> is lower than 0).
+      <dd>
+        <p>Include <em>number</em> entries from the top (or the tail if <em>number</em> is lower than 0).
       <dt><strong>-o</strong>, <strong>--offset</strong> <em>number</em>
-      <dd>Change the starting point for <strong>--count</strong>, counted from the top (or the tail if <em>number</em> is lower than 0).
+      <dd>
+        <p>Change the starting point for <strong>--count</strong>, counted from the top (or the tail if <em>number</em> is lower than 0).
     </dl>
   </div>
 </div>
@@ -101,7 +119,8 @@
   <h2>FILES</h2>
   <dl>
     <dt><strong>debian/changelog</strong>
-    <dd>The changelog file, used to obtain version-dependent information about the source package, such as the urgency and distribution of an upload, the changes made since a particular release, and the source version number itself.
+    <dd>
+      <p>The changelog file, used to obtain version-dependent information about the source package, such as the urgency and distribution of an upload, the changes made since a particular release, and the source version number itself.
   </dl>
 </div>
 <div class="section">

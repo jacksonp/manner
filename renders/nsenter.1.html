@@ -16,19 +16,26 @@
   <p>Enters the namespaces of one or more other processes and then executes the specified program. Enterable namespaces are:
   <dl>
     <dt><strong>mount namespace</strong>
-    <dd>Mounting and unmounting filesystems will not affect the rest of the system (<strong>CLONE_NEWNS</strong> flag), except for filesystems which are explicitly marked as shared (with <strong>mount --make-shared</strong>; see <em>/proc/self/mountinfo</em> for the <strong>shared</strong> flag).
+    <dd>
+      <p>Mounting and unmounting filesystems will not affect the rest of the system (<strong>CLONE_NEWNS</strong> flag), except for filesystems which are explicitly marked as shared (with <strong>mount --make-shared</strong>; see <em>/proc/self/mountinfo</em> for the <strong>shared</strong> flag).
     <dt><strong>UTS namespace</strong>
-    <dd>Setting hostname or domainname will not affect the rest of the system. (<strong>CLONE_NEWUTS</strong> flag)
+    <dd>
+      <p>Setting hostname or domainname will not affect the rest of the system. (<strong>CLONE_NEWUTS</strong> flag)
     <dt><strong>IPC namespace</strong>
-    <dd>The process will have an independent namespace for System V message queues, semaphore sets and shared memory segments. (<strong>CLONE_NEWIPC</strong> flag)
+    <dd>
+      <p>The process will have an independent namespace for System V message queues, semaphore sets and shared memory segments. (<strong>CLONE_NEWIPC</strong> flag)
     <dt><strong>network namespace</strong>
-    <dd>The process will have independent IPv4 and IPv6 stacks, IP routing tables, firewall rules, the <em>/proc/net</em> and <em>/sys/class/net</em> directory trees, sockets, etc. (<strong>CLONE_NEWNET</strong> flag)
+    <dd>
+      <p>The process will have independent IPv4 and IPv6 stacks, IP routing tables, firewall rules, the <em>/proc/net</em> and <em>/sys/class/net</em> directory trees, sockets, etc. (<strong>CLONE_NEWNET</strong> flag)
     <dt><strong>PID namespace</strong>
-    <dd>Children will have a set of PID to process mappings separate from the <strong>nsenter</strong> process (<strong>CLONE_NEWPID</strong> flag). <strong>nsenter</strong> will fork by default if changing the PID namespace, so that the new program and its children share the same PID namespace and are visible to each other. If <strong>--no-fork</strong> is used, the new program will be exec'ed without forking.
+    <dd>
+      <p>Children will have a set of PID to process mappings separate from the <strong>nsenter</strong> process (<strong>CLONE_NEWPID</strong> flag). <strong>nsenter</strong> will fork by default if changing the PID namespace, so that the new program and its children share the same PID namespace and are visible to each other. If <strong>--no-fork</strong> is used, the new program will be exec'ed without forking.
     <dt><strong>user namespace</strong>
-    <dd>The process will have a distinct set of UIDs, GIDs and capabilities. (<strong>CLONE_NEWUSER</strong> flag)
+    <dd>
+      <p>The process will have a distinct set of UIDs, GIDs and capabilities. (<strong>CLONE_NEWUSER</strong> flag)
     <dt><strong>cgroup namespace</strong>
-    <dd>The process will have a virtualized view of <em>/proc/self/cgroup</em>, and new cgroup mounts will be rooted at the namespace cgroup root. (<strong>CLONE_NEWCGROUP</strong> flag)
+    <dd>
+      <p>The process will have a virtualized view of <em>/proc/self/cgroup</em>, and new cgroup mounts will be rooted at the namespace cgroup root. (<strong>CLONE_NEWCGROUP</strong> flag)
     <dt>See <strong>clone</strong>(2) for the exact semantics of the flags.
     <dt>If <em>program</em> is not given, then “${SHELL}” is run (default: /bin/sh).
   </dl>
@@ -38,61 +45,86 @@
   <dl>
     <dt><strong>-t</strong>, <strong>--target</strong> <em>pid</em>
     <dd>
-      Specify a target process to get contexts from. The paths to the contexts specified by <em>pid</em> are:
+      <p>Specify a target process to get contexts from. The paths to the contexts specified by <em>pid</em> are:
       <div class="indent">
         <dl>
           <dt>/proc/<em>pid</em>/ns/mnt
-          <dd>the mount namespace
+          <dd>
+            <p>the mount namespace
           <dt>/proc/<em>pid</em>/ns/uts
-          <dd>the UTS namespace
+          <dd>
+            <p>the UTS namespace
           <dt>/proc/<em>pid</em>/ns/ipc
-          <dd>the IPC namespace
+          <dd>
+            <p>the IPC namespace
           <dt>/proc/<em>pid</em>/ns/net
-          <dd>the network namespace
+          <dd>
+            <p>the network namespace
           <dt>/proc/<em>pid</em>/ns/pid
-          <dd>the PID namespace
+          <dd>
+            <p>the PID namespace
           <dt>/proc/<em>pid</em>/ns/user
-          <dd>the user namespace
+          <dd>
+            <p>the user namespace
           <dt>/proc/<em>pid</em>/ns/cgroup
-          <dd>the cgroup namespace
+          <dd>
+            <p>the cgroup namespace
           <dt>/proc/<em>pid</em>/root
-          <dd>the root directory
+          <dd>
+            <p>the root directory
           <dt>/proc/<em>pid</em>/cwd
-          <dd>the working directory respectively
+          <dd>
+            <p>the working directory respectively
         </dl>
       </div>
     <dt><strong>-m</strong>, <strong>--mount</strong>[=<em>file</em>]
-    <dd>Enter the mount namespace. If no file is specified, enter the mount namespace of the target process. If file is specified, enter the mount namespace specified by file.
+    <dd>
+      <p>Enter the mount namespace. If no file is specified, enter the mount namespace of the target process. If file is specified, enter the mount namespace specified by file.
     <dt><strong>-u</strong>, <strong>--uts</strong>[=<em>file</em>]
-    <dd>Enter the UTS namespace. If no file is specified, enter the UTS namespace of the target process. If file is specified, enter the UTS namespace specified by file.
+    <dd>
+      <p>Enter the UTS namespace. If no file is specified, enter the UTS namespace of the target process. If file is specified, enter the UTS namespace specified by file.
     <dt><strong>-i</strong>, <strong>--ipc</strong>[=<em>file</em>]
-    <dd>Enter the IPC namespace. If no file is specified, enter the IPC namespace of the target process. If file is specified, enter the IPC namespace specified by file.
+    <dd>
+      <p>Enter the IPC namespace. If no file is specified, enter the IPC namespace of the target process. If file is specified, enter the IPC namespace specified by file.
     <dt><strong>-n</strong>, <strong>--net</strong>[=<em>file</em>]
-    <dd>Enter the network namespace. If no file is specified, enter the network namespace of the target process. If file is specified, enter the network namespace specified by file.
+    <dd>
+      <p>Enter the network namespace. If no file is specified, enter the network namespace of the target process. If file is specified, enter the network namespace specified by file.
     <dt><strong>-p</strong>, <strong>--pid</strong>[=<em>file</em>]
-    <dd>Enter the PID namespace. If no file is specified, enter the PID namespace of the target process. If file is specified, enter the PID namespace specified by file.
+    <dd>
+      <p>Enter the PID namespace. If no file is specified, enter the PID namespace of the target process. If file is specified, enter the PID namespace specified by file.
     <dt><strong>-U</strong>, <strong>--user</strong>[=<em>file</em>]
-    <dd>Enter the user namespace. If no file is specified, enter the user namespace of the target process. If file is specified, enter the user namespace specified by file. See also the <strong>--setuid</strong> and <strong>--setgid</strong> options.
+    <dd>
+      <p>Enter the user namespace. If no file is specified, enter the user namespace of the target process. If file is specified, enter the user namespace specified by file. See also the <strong>--setuid</strong> and <strong>--setgid</strong> options.
     <dt><strong>-C</strong>, <strong>--cgroup</strong>[=<em>file</em>]
-    <dd>Enter the cgroup namespace. If no file is specified, enter the cgroup namespace of the target process. If file is specified, enter the cgroup namespace specified by file.
+    <dd>
+      <p>Enter the cgroup namespace. If no file is specified, enter the cgroup namespace of the target process. If file is specified, enter the cgroup namespace specified by file.
     <dt><strong>-G</strong>, <strong>--setgid</strong> <em>gid</em>
-    <dd>Set the group ID which will be used in the entered namespace and drop supplementary groups. <strong>nsenter</strong>(1) always sets GID for user namespaces, the default is 0.
+    <dd>
+      <p>Set the group ID which will be used in the entered namespace and drop supplementary groups. <strong>nsenter</strong>(1) always sets GID for user namespaces, the default is 0.
     <dt><strong>-S</strong>, <strong>--setuid</strong> <em>uid</em>
-    <dd>Set the user ID which will be used in the entered namespace. <strong>nsenter</strong>(1) always sets UID for user namespaces, the default is 0.
+    <dd>
+      <p>Set the user ID which will be used in the entered namespace. <strong>nsenter</strong>(1) always sets UID for user namespaces, the default is 0.
     <dt><strong>--preserve-credentials</strong>
-    <dd>Don't modify UID and GID when enter user namespace. The default is to drops supplementary groups and sets GID and UID to 0.
+    <dd>
+      <p>Don't modify UID and GID when enter user namespace. The default is to drops supplementary groups and sets GID and UID to 0.
     <dt><strong>-r</strong>, <strong>--root</strong>[=<em>directory</em>]
-    <dd>Set the root directory. If no directory is specified, set the root directory to the root directory of the target process. If directory is specified, set the root directory to the specified directory.
+    <dd>
+      <p>Set the root directory. If no directory is specified, set the root directory to the root directory of the target process. If directory is specified, set the root directory to the specified directory.
     <dt><strong>-w</strong>, <strong>--wd</strong>[=<em>directory</em>]
-    <dd>Set the working directory. If no directory is specified, set the working directory to the working directory of the target process. If directory is specified, set the working directory to the specified directory.
+    <dd>
+      <p>Set the working directory. If no directory is specified, set the working directory to the working directory of the target process. If directory is specified, set the working directory to the specified directory.
     <dt><strong>-F</strong>, <strong>--no-fork</strong>
-    <dd>Do not fork before exec'ing the specified program. By default, when entering a PID namespace, <strong>nsenter</strong> calls <strong>fork</strong> before calling <strong>exec</strong> so that any children will also be in the newly entered PID namespace.
+    <dd>
+      <p>Do not fork before exec'ing the specified program. By default, when entering a PID namespace, <strong>nsenter</strong> calls <strong>fork</strong> before calling <strong>exec</strong> so that any children will also be in the newly entered PID namespace.
     <dt><strong>-Z</strong>, <strong>--follow-context</strong>
-    <dd>Set the SELinux security context used for executing a new process according to already running process specified by <strong>--target</strong> PID. (The util-linux has to be compiled with SELinux support otherwise the option is unavailable.)
+    <dd>
+      <p>Set the SELinux security context used for executing a new process according to already running process specified by <strong>--target</strong> PID. (The util-linux has to be compiled with SELinux support otherwise the option is unavailable.)
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>Display version information and exit.
+    <dd>
+      <p>Display version information and exit.
     <dt><strong>-h</strong>, <strong>--help</strong>
-    <dd>Display help text and exit.
+    <dd>
+      <p>Display help text and exit.
   </dl>
 </div>
 <div class="section">

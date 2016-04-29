@@ -23,27 +23,38 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-c</strong>, <strong>--command</strong> <em>command</em>
-    <dd>Pass a single <em>command</em>, without arguments, to the shell with <strong>-c</strong>.
+    <dd>
+      <p>Pass a single <em>command</em>, without arguments, to the shell with <strong>-c</strong>.
     <dt><strong>-E</strong>, <strong>--conflict-exit-code</strong> <em>number</em>
-    <dd>The exit code used when the <strong>-n</strong> option is in use, and the conflicting lock exists, or the <strong>-w</strong> option is in use, and the timeout is reached. The default value is <strong>1</strong>.
+    <dd>
+      <p>The exit code used when the <strong>-n</strong> option is in use, and the conflicting lock exists, or the <strong>-w</strong> option is in use, and the timeout is reached. The default value is <strong>1</strong>.
     <dt><strong>-e</strong>, <strong>-x</strong>, <strong>--exclusive</strong>
-    <dd>Obtain an exclusive lock, sometimes called a write lock. This is the default.
+    <dd>
+      <p>Obtain an exclusive lock, sometimes called a write lock. This is the default.
     <dt><strong>-n</strong>, <strong>--nb</strong>, <strong>--nonblock</strong>
-    <dd>Fail rather than wait if the lock cannot be immediately acquired. See the <strong>-E</strong> option for the exit code used.
+    <dd>
+      <p>Fail rather than wait if the lock cannot be immediately acquired. See the <strong>-E</strong> option for the exit code used.
     <dt><strong>-o</strong>, <strong>--close</strong>
-    <dd>Close the file descriptor on which the lock is held before executing <em>command</em>. This is useful if <em>command</em> spawns a child process which should not be holding the lock.
+    <dd>
+      <p>Close the file descriptor on which the lock is held before executing <em>command</em>. This is useful if <em>command</em> spawns a child process which should not be holding the lock.
     <dt><strong>-s</strong>, <strong>--shared</strong>
-    <dd>Obtain a shared lock, sometimes called a read lock.
+    <dd>
+      <p>Obtain a shared lock, sometimes called a read lock.
     <dt><strong>-u</strong>, <strong>--unlock</strong>
-    <dd>Drop a lock. This is usually not required, since a lock is automatically dropped when the file is closed. However, it may be required in special cases, for example if the enclosed command group may have forked a background process which should not be holding the lock.
+    <dd>
+      <p>Drop a lock. This is usually not required, since a lock is automatically dropped when the file is closed. However, it may be required in special cases, for example if the enclosed command group may have forked a background process which should not be holding the lock.
     <dt><strong>-w</strong>, <strong>--wait</strong>, <strong>--timeout</strong> <em>seconds</em>
-    <dd>Fail if the lock cannot be acquired within <em>seconds</em>. Decimal fractional values are allowed. See the <strong>-E</strong> option for the exit code used. The zero number of <em>seconds</em> is interpreted as <strong>--nonblock</strong>.
+    <dd>
+      <p>Fail if the lock cannot be acquired within <em>seconds</em>. Decimal fractional values are allowed. See the <strong>-E</strong> option for the exit code used. The zero number of <em>seconds</em> is interpreted as <strong>--nonblock</strong>.
     <dt><strong>--verbose</strong>
-    <dd>Report how long it took to acquire the lock, or why the lock could not be obtained.
+    <dd>
+      <p>Report how long it took to acquire the lock, or why the lock could not be obtained.
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>Display version information and exit.
+    <dd>
+      <p>Display version information and exit.
     <dt><strong>-h</strong>, <strong>--help</strong>
-    <dd>Display help text and exit.
+    <dd>
+      <p>Display help text and exit.
   </dl>
 </div>
 <div class="section">
@@ -51,19 +62,24 @@
   <dl>
     <dt>shell1&gt; flock /tmp -c cat
     <dt>shell2&gt; flock -w .007 /tmp -c echo; /bin/echo $?
-    <dd>Set exclusive lock to directory /tmp and the second command will fail.
+    <dd>
+      <p>Set exclusive lock to directory /tmp and the second command will fail.
     <dt>shell1&gt; flock -s /tmp -c cat
     <dt>shell2&gt; flock -s -w .007 /tmp -c echo; /bin/echo $?
-    <dd>Set shared lock to directory /tmp and the second command will not fail. Notice that attempting to get exclusive lock with second command would fail.
+    <dd>
+      <p>Set shared lock to directory /tmp and the second command will not fail. Notice that attempting to get exclusive lock with second command would fail.
     <dt>shell&gt; flock -x local-lock-file echo 'a b c'
-    <dd>Grab the exclusive lock “local-lock-file” before running echo with 'a b c'.
+    <dd>
+      <p>Grab the exclusive lock “local-lock-file” before running echo with 'a b c'.
     <dt>(
     <dt>flock -n 9 || exit 1
     <dt># ... commands executed under lock ...
     <dt>) 9&gt;/var/lock/mylockfile
-    <dd>The form is convenient inside shell scripts. The mode used to open the file doesn't matter to <strong>flock</strong>; using <em>&gt;</em> or <em>&gt;&gt;</em> allows the lockfile to be created if it does not already exist, however, write permission is required. Using <em>&lt;</em> requires that the file already exists but only read permission is required.
+    <dd>
+      <p>The form is convenient inside shell scripts. The mode used to open the file doesn't matter to <strong>flock</strong>; using <em>&gt;</em> or <em>&gt;&gt;</em> allows the lockfile to be created if it does not already exist, however, write permission is required. Using <em>&lt;</em> requires that the file already exists but only read permission is required.
     <dt>[ “${FLOCKER}” != “$0” ] &amp;& exec env FLOCKER=“$0” flock -en “$0” “$0” “$@” || :
-    <dd>This is useful boilerplate code for shell scripts. Put it at the top of the shell script you want to lock and it'll automatically lock itself on the first run. If the env var $FLOCKER is not set to the shell script that is being run, then execute flock and grab an exclusive non-blocking lock (using the script itself as the lock file) before re-execing itself with the right arguments. It also sets the FLOCKER env var to the right value so it doesn't run again.
+    <dd>
+      <p>This is useful boilerplate code for shell scripts. Put it at the top of the shell script you want to lock and it'll automatically lock itself on the first run. If the env var $FLOCKER is not set to the shell script that is being run, then execute flock and grab an exclusive non-blocking lock (using the script itself as the lock file) before re-execing itself with the right arguments. It also sets the FLOCKER env var to the right value so it doesn't run again.
   </dl>
 </div>
 <div class="section">

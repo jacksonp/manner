@@ -21,35 +21,45 @@
   <p>As of this writing, a process can be in one of three scheduling classes:
   <dl>
     <dt><strong>Idle</strong>
-    <dd>A program running with idle I/O priority will only get disk time when no other program has asked for disk I/O for a defined grace period. The impact of an idle I/O process on normal system activity should be zero. This scheduling class does not take a priority argument. Presently, this scheduling class is permitted for an ordinary user (since kernel 2.6.25).
+    <dd>
+      <p>A program running with idle I/O priority will only get disk time when no other program has asked for disk I/O for a defined grace period. The impact of an idle I/O process on normal system activity should be zero. This scheduling class does not take a priority argument. Presently, this scheduling class is permitted for an ordinary user (since kernel 2.6.25).
     <dt><strong>Best-effort</strong>
     <dd>
-      This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. Programs running at the same best-effort priority are served in a round-robin fashion.
+      <p>This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. Programs running at the same best-effort priority are served in a round-robin fashion.
       <p>Note that before kernel 2.6.26 a process that has not asked for an I/O priority formally uses "<strong>none</strong>" as scheduling class, but the I/O scheduler will treat such processes as if it were in the best-effort class. The priority within the best-effort class will be dynamically derived from the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.
       <p>For kernels after 2.6.26 with the CFQ I/O scheduler, a process that has not asked for an I/O priority inherits its CPU scheduling class. The I/O priority is derived from the CPU nice level of the process (same as before kernel 2.6.26).
     <dt><strong>Realtime</strong>
-    <dd>The RT scheduling class is given first access to the disk, regardless of what else is going on in the system. Thus the RT class needs to be used with some care, as it can starve other processes. As with the best-effort class, 8 priority levels are defined denoting how big a time slice a given process will receive on each scheduling window. This scheduling class is not permitted for an ordinary (i.e., non-root) user.
+    <dd>
+      <p>The RT scheduling class is given first access to the disk, regardless of what else is going on in the system. Thus the RT class needs to be used with some care, as it can starve other processes. As with the best-effort class, 8 priority levels are defined denoting how big a time slice a given process will receive on each scheduling window. This scheduling class is not permitted for an ordinary (i.e., non-root) user.
   </dl>
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-c</strong>, <strong>--class</strong> <em>class</em>
-    <dd>Specify the name or number of the scheduling class to use; <em>0</em> for none, <em>1</em> for realtime, <em>2</em> for best-effort, <em>3</em> for idle.
+    <dd>
+      <p>Specify the name or number of the scheduling class to use; <em>0</em> for none, <em>1</em> for realtime, <em>2</em> for best-effort, <em>3</em> for idle.
     <dt><strong>-n</strong>, <strong>--classdata</strong> <em>level</em>
-    <dd>Specify the scheduling class data. This only has an effect if the class accepts an argument. For realtime and best-effort, <em>0-7</em> are valid data (priority levels).
+    <dd>
+      <p>Specify the scheduling class data. This only has an effect if the class accepts an argument. For realtime and best-effort, <em>0-7</em> are valid data (priority levels).
     <dt><strong>-p</strong>, <strong>--pid</strong> <em>PID</em>...
-    <dd>Specify the process IDs of running processes for which to get or set the scheduling parameters.
+    <dd>
+      <p>Specify the process IDs of running processes for which to get or set the scheduling parameters.
     <dt><strong>-P</strong>, <strong>--pgid</strong> <em>PGID</em>...
-    <dd>Specify the process group IDs of running processes for which to get or set the scheduling parameters.
+    <dd>
+      <p>Specify the process group IDs of running processes for which to get or set the scheduling parameters.
     <dt><strong>-t</strong>, <strong>--ignore</strong>
-    <dd>Ignore failure to set the requested priority. If <em>command</em> was specified, run it even in case it was not possible to set the desired scheduling priority, which can happen due to insufficient privileges or an old kernel version.
+    <dd>
+      <p>Ignore failure to set the requested priority. If <em>command</em> was specified, run it even in case it was not possible to set the desired scheduling priority, which can happen due to insufficient privileges or an old kernel version.
     <dt><strong>-h</strong>, <strong>--help</strong>
-    <dd>Display help text and exit.
+    <dd>
+      <p>Display help text and exit.
     <dt><strong>-u</strong>, <strong>--uid</strong> <em>UID</em>...
-    <dd>Specify the user IDs of running processes for which to get or set the scheduling parameters.
+    <dd>
+      <p>Specify the user IDs of running processes for which to get or set the scheduling parameters.
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>Display version information and exit.
+    <dd>
+      <p>Display version information and exit.
   </dl>
 </div>
 <div class="section">
