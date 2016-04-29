@@ -4,6 +4,50 @@
 class Blocks
 {
 
+    private static function getDDBlock($i, $blockNode)
+    {
+
+        $numLines   = count($blockNode->manLines);
+        $blockLines = [];
+        $rsLevel    = 0;
+
+        for ($i = $i + 1; $i < $numLines; ++$i) {
+            $line = $blockNode->manLines[$i];
+
+            if (preg_match('~^\.RS~u', $line)) {
+                ++$rsLevel;
+            } elseif (preg_match('~^\.RE~u', $line)) {
+                --$rsLevel;
+            }
+
+            $hitIP      = false;
+            $hitBlankIP = false;
+            if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
+                $hitIP      = true;
+                $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
+                $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
+            }
+
+            // <= 0 for stray .REs
+            if ($rsLevel <= 0) {
+                if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                    --$i;
+                    break;
+                }
+            }
+
+            if ($hitBlankIP) {
+                $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
+            } else {
+                $blockLines[] = $line;
+            }
+        }
+
+        return [$i, $blockLines];
+
+    }
+
+
     static function handle(HybridNode $blockNode)
     {
 
@@ -77,40 +121,7 @@ class Blocks
                         }
                     }
 
-                    $blockLines = [];
-                    $rsLevel    = 0;
-
-                    for ($i = $i + 1; $i < $numLines; ++$i) {
-                        $line = $blockNode->manLines[$i];
-
-                        if (preg_match('~^\.RS~u', $line)) {
-                            ++$rsLevel;
-                        } elseif (preg_match('~^\.RE~u', $line)) {
-                            --$rsLevel;
-                        }
-
-                        $hitIP      = false;
-                        $hitBlankIP = false;
-                        if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
-                            $hitIP      = true;
-                            $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
-                            $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
-                        }
-
-                        // <= 0 for stray .REs
-                        if ($rsLevel <= 0) {
-                            if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
-                                --$i;
-                                break;
-                            }
-                        }
-
-                        if ($hitBlankIP) {
-                            $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
-                        } else {
-                            $blockLines[] = $line;
-                        }
-                    }
+                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
@@ -145,40 +156,7 @@ class Blocks
                     TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
                     $blocks[$blockNum]->appendChild($dt);
 
-                    $blockLines = [];
-                    $rsLevel    = 0;
-
-                    for ($i = $i + 1; $i < $numLines; ++$i) {
-                        $line = $blockNode->manLines[$i];
-
-                        if (preg_match('~^\.RS~u', $line)) {
-                            ++$rsLevel;
-                        } elseif (preg_match('~^\.RE~u', $line)) {
-                            --$rsLevel;
-                        }
-
-                        $hitIP      = false;
-                        $hitBlankIP = false;
-                        if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
-                            $hitIP      = true;
-                            $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
-                            $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
-                        }
-
-                        // <= 0 for stray .REs
-                        if ($rsLevel <= 0) {
-                            if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
-                                --$i;
-                                break;
-                            }
-                        }
-
-                        if ($hitBlankIP) {
-                            $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
-                        } else {
-                            $blockLines[] = $line;
-                        }
-                    }
+                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
