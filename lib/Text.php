@@ -169,7 +169,7 @@ class Text
                         $macroReplacements[$newMacro] = $macroLines;
                         continue 2;
                     } else {
-                        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
+                        $macroLine    = str_replace(['\\\\'], ['\\'], $macroLine);
                         $macroLines[] = $macroLine;
                     }
                 }
@@ -227,6 +227,7 @@ class Text
         $numFirstPassLines = count($firstPassLines);
         $lines             = [];
         $macroReplacements = []; // Resetting this
+        $charSwaps         = [];
 
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
@@ -281,6 +282,23 @@ class Text
             }
 
             $line = Text::translateCharacters($line);
+
+            // Do this after translating characters:
+            if (preg_match('~^\.tr (.+)$~u', $line, $matches)) {
+                $tr    = $matches[1];
+                $trLen = mb_strlen($tr);
+                if ($trLen % 2 !== 0) {
+                    throw new Exception($line . ' - odd number of chars after .tr');
+                }
+                for ($j = 0; $j < mb_strlen($tr); $j += 2) {
+                    $charSwaps[$tr[$j]] = $tr[$j + 1];
+                }
+                continue;
+            }
+
+            if (count($charSwaps) > 0) {
+                $line = strtr($line, $charSwaps);
+            }
 
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
