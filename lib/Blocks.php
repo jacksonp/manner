@@ -89,18 +89,26 @@ class Blocks
                             --$rsLevel;
                         }
 
+                        $hitIP      = false;
+                        $hitBlankIP = false;
+                        if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
+                            $hitIP      = true;
+                            $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
+                            $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
+                        }
+
                         // <= 0 for stray .REs
-                        if ($rsLevel <= 0
-                          && (preg_match('~^\.[TLP]?P~u', $line) || preg_match('~^\.IP .~u', $line))
-                        ) {
-                            --$i;
-                            break;
-                        } else {
-                            if ($line === '.IP') { // See dir.1
-                                $blockLines[] = '.br';
-                            } else {
-                                $blockLines[] = $line;
+                        if ($rsLevel <= 0) {
+                            if (preg_match('~^\.[TLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                                --$i;
+                                break;
                             }
+                        }
+
+                        if ($hitBlankIP) {
+                            $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
+                        } else {
+                            $blockLines[] = $line;
                         }
                     }
 
@@ -149,18 +157,26 @@ class Blocks
                             --$rsLevel;
                         }
 
+                        $hitIP      = false;
+                        $hitBlankIP = false;
+                        if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
+                            $hitIP      = true;
+                            $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
+                            $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
+                        }
+
                         // <= 0 for stray .REs
-                        if ($rsLevel <= 0
-                          && (preg_match('~^\.[TLP]?P~u', $line) || preg_match('~^\.IP .~u', $line))
-                        ) {
-                            --$i;
-                            break;
-                        } else {
-                            if ($line === '.IP') { // See repoquery.1
-                                $blockLines[] = '.br';
-                            } else {
-                                $blockLines[] = $line;
+                        if ($rsLevel <= 0) {
+                            if (preg_match('~^\.[TLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                                --$i;
+                                break;
                             }
+                        }
+
+                        if ($hitBlankIP) {
+                            $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
+                        } else {
+                            $blockLines[] = $line;
                         }
                     }
 
