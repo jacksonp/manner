@@ -81,19 +81,21 @@ class Blocks
                     $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $dtLine);
                     $blocks[$blockNum]->appendChild($dt);
+
+                    for ($i = $i + 1; $i < $numLines; ++$i) {
+                        $line = $blockNode->manLines[$i];
+                        if (preg_match('~^\.TQ$~u', $line)) {
+                            $dtLine = $blockNode->manLines[++$i];
+                            $dt     = $dom->createElement('dt');
+                            TextContent::interpretAndAppendCommand($dt, $dtLine);
+                            $blocks[$blockNum]->appendChild($dt);
+                        } else {
+                            --$i;
+                            break;
+                        }
+                    }
                     continue;
                 }
-            }
-
-            if (preg_match('~^\.TQ$~u', $line)) {
-                if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl' || $blocks[$blockNum]->lastChild->tagName !== 'dt') {
-                    throw new Exception($line . ' - unexpected .TQ not after <dt>');
-                }
-                $dtLine = $blockNode->manLines[++$i];
-                $dt     = $dom->createElement('dt');
-                TextContent::interpretAndAppendCommand($dt, $dtLine);
-                $blocks[$blockNum]->appendChild($dt);
-                continue;
             }
 
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
