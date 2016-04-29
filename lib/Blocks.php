@@ -196,8 +196,6 @@ class Blocks
                 if (empty($blocks) || $blocks[$blockNum]->tagName === 'pre') {
                     $blocks[++$blockNum] = $dom->createElement('p');
                     continue;
-                } elseif ($blocks[$blockNum]->tagName === 'dl' && $blocks[$blockNum]->lastChild->tagName === 'dd') {
-                    $blocks[$blockNum]->lastChild->appendChild($dom->createElement('br'));
                 } elseif ($blocks[$blockNum]->tagName === 'p') {
                     $blocks[++$blockNum] = $dom->createElement('blockquote');
                 } elseif ($blocks[$blockNum]->tagName === 'blockquote') {
