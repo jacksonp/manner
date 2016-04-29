@@ -99,7 +99,7 @@ class Blocks
 
                         // <= 0 for stray .REs
                         if ($rsLevel <= 0) {
-                            if (preg_match('~^\.[TLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                            if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
                                 --$i;
                                 break;
                             }
@@ -167,7 +167,7 @@ class Blocks
 
                         // <= 0 for stray .REs
                         if ($rsLevel <= 0) {
-                            if (preg_match('~^\.[TLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                            if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
                                 --$i;
                                 break;
                             }
