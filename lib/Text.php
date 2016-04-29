@@ -276,7 +276,11 @@ class Text
                 continue;
             }
 
-            $line = Text::preprocess($line, $macroReplacements);
+            if (count($macroReplacements) > 0) {
+                $line = strtr($line, $macroReplacements);
+            }
+
+            $line = Text::translateCharacters($line);
 
             //<editor-fold desc="Handle man title macro">
             if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
@@ -307,12 +311,8 @@ class Text
 
     }
 
-    private static function preprocess($line, $macroReplacements)
+    private static function translateCharacters($line)
     {
-
-        if (count($macroReplacements) > 0) {
-            $line = strtr($line, $macroReplacements);
-        }
 
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html
 
