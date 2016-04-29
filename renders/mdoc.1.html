@@ -43,23 +43,27 @@
       From a <em>monodoc</em> source checkout, you can do this:
       <pre>     cd engine
      make web
-</pre>This will use <strong>xsp</strong>(1) to serve the ASP.NET webapp; Visit <em>http://localhost:8080/</em> to view the documentation.
+</pre>
+      <p>This will use <strong>xsp</strong>(1) to serve the ASP.NET webapp; Visit <em>http://localhost:8080/</em> to view the documentation.
     <dt><strong>*</strong>
     <dd>
       To use the <strong>monodoc</strong>(1) documentation browser, you must first <em>assemble</em> the documentation:
       <pre>     mdoc assemble -o ProjectName docs/en
-</pre>The above command creates the files <em>ProjectName.tree</em> and <em>ProjectName.zip</em>. An additional <em>ProjectName.sources</em> file must be provided which describes where in the help system the documentation should be hooked up; it is a very simple XML file, like this:
+</pre>
+      <p>The above command creates the files <em>ProjectName.tree</em> and <em>ProjectName.zip</em>. An additional <em>ProjectName.sources</em> file must be provided which describes where in the help system the documentation should be hooked up; it is a very simple XML file, like this:
       <pre>     &lt;?xml version="1.0"?&gt;
      &lt;monodoc&gt;
        &lt;source provider="ecma" basefile="ProjectName"
          path="various" /&gt;
      &lt;/monodoc&gt;
-</pre>The above configuration file describes that the documentation is in ECMA format, that the base file name is <em>ProjectName</em> and that it should be hooked up in the <em>“various”</em> part of the documentation tree. If you want to look at the various nodes defined in the documentation, you can look at the <em>monodoc.xml</em> file which is typically installed in <em>/usr/lib/monodoc/monodoc.xml</em>.<br>
+</pre>
+      <p>The above configuration file describes that the documentation is in ECMA format, that the base file name is <em>ProjectName</em> and that it should be hooked up in the <em>“various”</em> part of the documentation tree. If you want to look at the various nodes defined in the documentation, you can look at the <em>monodoc.xml</em> file which is typically installed in <em>/usr/lib/monodoc/monodoc.xml</em>.<br>
       <br>
       Once you have all of the required files (.zip, .tree and .sources) you can install them into the system with the following command:
       <pre>     cp ProjectName.tree ProjectName.zip ProjectName.source \
        `pkg-config monodoc --variable sourcesdir`
-</pre>The above will copy the files into the directory that Monodoc has registered; you might need root permissions to do this. The actual directory is returned by the <em>pkg-config</em> invocation.
+</pre>
+      <p>The above will copy the files into the directory that Monodoc has registered; you might need root permissions to do this. The actual directory is returned by the <em>pkg-config</em> invocation.
   </dl>
 </div>
 <div class="section">

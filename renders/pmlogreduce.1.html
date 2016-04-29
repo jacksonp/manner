@@ -38,8 +38,10 @@
   <dl>
     <dt><strong>-v</strong> <em>volsamples</em>
     <dd>
-      The <em>output</em> archive is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogreduce</strong> to start a new volume after <em>volsamples</em> log records have been written to the <em>output</em> archive.<br>
-      <p>Independent of any <strong>-v</strong> option, each volume of an archive is limited to no more than 2^31 bytes, so <em>pmlogreduce</em> will automatically create a new volume for the archive before this limit is reached.
+      The <em>output</em> archive is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogreduce</strong> to start a new volume after <em>volsamples</em> log records have been written to the <em>output</em> archive.
+      <div class="indent-7">
+        <p>Independent of any <strong>-v</strong> option, each volume of an archive is limited to no more than 2^31 bytes, so <em>pmlogreduce</em> will automatically create a new volume for the archive before this limit is reached.
+      </div>
   </dl>
   <dl>
     <dt><strong>-t</strong> <em>interval</em>
@@ -64,13 +66,15 @@
     <dd>If the semantics of a metric indicates it is <strong>instantaneous</strong> or <strong>discrete</strong> then <em>output</em> value is computed as the arithmetic mean of the observations (if any) over each <em>interval</em>.
     <dt>3.
     <dd>
-      If the semantics of a metric indicates it is a <strong>counter</strong> then the following transformations are applied:<br>
-      <dl>
-        <dt>a)
-        <dd>Metrics with 32-bit precision are promoted to 64-bit precision.
-        <dt>b)
-        <dd>Any counter wrap (overflow) is noted, and appropriate adjustment made in the value of the metric over each <em>interval</em>. This will be correct in the case of a single counter wrap, but will silently <strong>underestimate</strong> in the case where more than one counter wrap occurs between consecutive observations in the <em>input</em> archives, and silently <strong>overestimate</strong> in the case where a counter is reset occurs between consecutive observations in the <em>input</em> archives; unfortunately these situations cannot be detected, but are believed to be rare events for the sort of production monitoring environments where <strong>pmlogreduce</strong> is most likely to be deployed.
-      </dl>
+      If the semantics of a metric indicates it is a <strong>counter</strong> then the following transformations are applied:
+      <div class="indent-+4m">
+        <dl>
+          <dt>a)
+          <dd>Metrics with 32-bit precision are promoted to 64-bit precision.
+          <dt>b)
+          <dd>Any counter wrap (overflow) is noted, and appropriate adjustment made in the value of the metric over each <em>interval</em>. This will be correct in the case of a single counter wrap, but will silently <strong>underestimate</strong> in the case where more than one counter wrap occurs between consecutive observations in the <em>input</em> archives, and silently <strong>overestimate</strong> in the case where a counter is reset occurs between consecutive observations in the <em>input</em> archives; unfortunately these situations cannot be detected, but are believed to be rare events for the sort of production monitoring environments where <strong>pmlogreduce</strong> is most likely to be deployed.
+        </dl>
+      </div>
     <dt>4.
     <dd>Any changes in instance domains, and indeed all metadata, is preserved.
     <dt>5.

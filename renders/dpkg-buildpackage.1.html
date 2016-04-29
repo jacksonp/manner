@@ -104,31 +104,27 @@
     <dd>Pass option <em>opt</em> to the <em>check-command</em> specified with <strong>DEB_CHECK_COMMAND</strong> or <strong>--check-command</strong> (since dpkg 1.17.6). Can be used multiple times.
     <dt><strong>--hook-</strong><em>hook-name</em><strong>=</strong><em>hook-command</em>
     <dd>
-      Set the specified shell code <em>hook-command</em> as the hook <em>hook-name</em>, which will run at the times specified in the run steps (since dpkg 1.17.6). The hooks will always be executed even if the following action is not performed (except for the <strong>binary</strong> hook).<br>
-      <br>
-      Note: Hooks can affect the build process, and cause build failures if their commands fail, so watch out for unintended consequences.<br>
-      <br>
-      The current <em>hook-name</em> supported are:<br>
-      <br>
-      <strong>init preclean source build binary changes postclean check sign done</strong><br>
-      <br>
-      The <em>hook-command</em> supports the following substitution format string, which will get applied to it before execution:<br>
-      <br>
-      <br>
-      <dl>
-        <dt><strong>%%</strong>
-        <dd>A single % character.
-        <dt><strong>%a</strong>
-        <dd>A boolean value (0 or 1), representing whether the following action is being performed.
-        <dt><strong>%p</strong>
-        <dd>The source package name.
-        <dt><strong>%v</strong>
-        <dd>The source package version.
-        <dt><strong>%s</strong>
-        <dd>The source package version (without the epoch).
-        <dt><strong>%u</strong>
-        <dd>The upstream version.
-      </dl>
+      Set the specified shell code <em>hook-command</em> as the hook <em>hook-name</em>, which will run at the times specified in the run steps (since dpkg 1.17.6). The hooks will always be executed even if the following action is not performed (except for the <strong>binary</strong> hook).
+      <p>Note: Hooks can affect the build process, and cause build failures if their commands fail, so watch out for unintended consequences.
+      <p>The current <em>hook-name</em> supported are:
+      <p><strong>init preclean source build binary changes postclean check sign done</strong>
+      <p>The <em>hook-command</em> supports the following substitution format string, which will get applied to it before execution:
+      <div class="indent">
+        <dl>
+          <dt><strong>%%</strong>
+          <dd>A single % character.
+          <dt><strong>%a</strong>
+          <dd>A boolean value (0 or 1), representing whether the following action is being performed.
+          <dt><strong>%p</strong>
+          <dd>The source package name.
+          <dt><strong>%v</strong>
+          <dd>The source package version.
+          <dt><strong>%s</strong>
+          <dd>The source package version (without the epoch).
+          <dt><strong>%u</strong>
+          <dd>The upstream version.
+        </dl>
+      </div>
     <dt><strong>-p</strong><em>sign-command</em>
     <dd>When <strong>dpkg-buildpackage</strong> needs to execute GPG to sign a source control (<strong>.dsc</strong>) file or a <strong>.changes</strong> file it will run <em>sign-command</em> (searching the <strong>PATH</strong> if necessary) instead of <strong>gpg2</strong> or <strong>gpg</strong>. <em>sign-command</em> will get all the arguments that <strong>gpg2</strong> or <strong>gpg</strong> would have gotten. <em>sign-command</em> should not contain spaces or any other shell metacharacters.
     <dt><strong>-k</strong><em>key-id</em>

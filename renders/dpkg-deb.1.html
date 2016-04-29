@@ -22,57 +22,48 @@
   <h2>COMMANDS</h2>
   <dl>
     <dt><strong>-b</strong>, <strong>--build</strong> <em>directory</em> [<em>archive</em>|<em>directory</em>]
-    <dd>Creates a debian archive from the filesystem tree stored in <em>directory</em>. <em>directory</em> must have a <strong>DEBIAN</strong> subdirectory, which contains the control information files such as the control file itself. This directory will <em>not</em> appear in the binary package's filesystem archive, but instead the files in it will be put in the binary package's control information area.<br>
-    <br>
-    Unless you specify <strong>--nocheck</strong>, <strong>dpkg-deb</strong> will read <strong>DEBIAN/control</strong> and parse it. It will check the file for syntax errors and other problems, and display the name of the binary package being built. <strong>dpkg-deb</strong> will also check the permissions of the maintainer scripts and other files found in the <strong>DEBIAN</strong> control information directory.<br>
-    <br>
-    If no <em>archive</em> is specified then <strong>dpkg-deb</strong> will write the package into the file <em>directory</em><strong>.deb</strong>.<br>
-    <br>
-    If the archive to be created already exists it will be overwritten.<br>
-    <br>
-    If the second argument is a directory then <strong>dpkg-deb</strong> will write to the file <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>arch</em><strong>.deb,</strong> or <em>package</em><strong>_</strong><em>version</em><strong>.deb</strong> if no <strong>Architecture</strong> field is present in the package control file. When a target directory is specified, rather than a file, the <strong>--nocheck</strong> option may not be used (since <strong>dpkg-deb</strong> needs to read and parse the package control file to determine which filename to use).
+    <dd>
+      Creates a debian archive from the filesystem tree stored in <em>directory</em>. <em>directory</em> must have a <strong>DEBIAN</strong> subdirectory, which contains the control information files such as the control file itself. This directory will <em>not</em> appear in the binary package's filesystem archive, but instead the files in it will be put in the binary package's control information area.
+      <p>Unless you specify <strong>--nocheck</strong>, <strong>dpkg-deb</strong> will read <strong>DEBIAN/control</strong> and parse it. It will check the file for syntax errors and other problems, and display the name of the binary package being built. <strong>dpkg-deb</strong> will also check the permissions of the maintainer scripts and other files found in the <strong>DEBIAN</strong> control information directory.
+      <p>If no <em>archive</em> is specified then <strong>dpkg-deb</strong> will write the package into the file <em>directory</em><strong>.deb</strong>.
+      <p>If the archive to be created already exists it will be overwritten.
+      <p>If the second argument is a directory then <strong>dpkg-deb</strong> will write to the file <em>package</em><strong>_</strong><em>version</em><strong>_</strong><em>arch</em><strong>.deb,</strong> or <em>package</em><strong>_</strong><em>version</em><strong>.deb</strong> if no <strong>Architecture</strong> field is present in the package control file. When a target directory is specified, rather than a file, the <strong>--nocheck</strong> option may not be used (since <strong>dpkg-deb</strong> needs to read and parse the package control file to determine which filename to use).
     <dt><strong>-I</strong>, <strong>--info</strong> <em>archive</em> [<em>control-file-name</em>...]
-    <dd>Provides information about a binary package archive.<br>
-    <br>
-    If no <em>control-file-name</em>s are specified then it will print a summary of the contents of the package as well as its control file.<br>
-    <br>
-    If any <em>control-file-name</em>s are specified then <strong>dpkg-deb</strong> will print them in the order they were specified; if any of the components weren't present it will print an error message to stderr about each one and exit with status 2.
+    <dd>
+      Provides information about a binary package archive.
+      <p>If no <em>control-file-name</em>s are specified then it will print a summary of the contents of the package as well as its control file.
+      <p>If any <em>control-file-name</em>s are specified then <strong>dpkg-deb</strong> will print them in the order they were specified; if any of the components weren't present it will print an error message to stderr about each one and exit with status 2.
     <dt><strong>-W</strong>, <strong>--show</strong> <em>archive</em>
     <dd>Provides information about a binary package archive in the format specified by the <strong>--showformat</strong> argument. The default format displays the package's name and version on one line, separated by a tabulator.
     <dt><strong>-f</strong>, <strong>--field</strong> <em>archive</em> [<em>control-field-name</em>...]
-    <dd>Extracts control file information from a binary package archive.<br>
-    <br>
-    If no <em>control-field-name</em>s are specified then it will print the whole control file.<br>
-    <br>
-    If any are specified then <strong>dpkg-deb</strong> will print their contents, in the order in which they appear in the control file. If more than one <em>control-field-name</em> is specified then <strong>dpkg-deb</strong> will precede each with its field name (and a colon and space).<br>
-    <br>
-    No errors are reported for fields requested but not found.
+    <dd>
+      Extracts control file information from a binary package archive.
+      <p>If no <em>control-field-name</em>s are specified then it will print the whole control file.
+      <p>If any are specified then <strong>dpkg-deb</strong> will print their contents, in the order in which they appear in the control file. If more than one <em>control-field-name</em> is specified then <strong>dpkg-deb</strong> will precede each with its field name (and a colon and space).
+      <p>No errors are reported for fields requested but not found.
     <dt><strong>-c</strong>, <strong>--contents</strong> <em>archive</em>
     <dd>Lists the contents of the filesystem tree archive portion of the package archive. It is currently produced in the format generated by <strong>tar</strong>'s verbose listing.
     <dt><strong>-x</strong>, <strong>--extract</strong> <em>archive directory</em>
-    <dd>Extracts the filesystem tree from a package archive into the specified directory.<br>
-    <br>
-    Note that extracting a package to the root directory will <em>not</em> result in a correct installation! Use <strong>dpkg</strong> to install packages.<br>
-    <br>
-    <em>directory</em> (but not its parents) will be created if necessary, and its permissions modified to match the contents of the package.
+    <dd>
+      Extracts the filesystem tree from a package archive into the specified directory.
+      <p>Note that extracting a package to the root directory will <em>not</em> result in a correct installation! Use <strong>dpkg</strong> to install packages.
+      <p><em>directory</em> (but not its parents) will be created if necessary, and its permissions modified to match the contents of the package.
     <dt><strong>-X</strong>, <strong>--vextract</strong> <em>archive directory</em>
     <dd>Is like <strong>--extract</strong> (<strong>-x</strong>) with <strong>--verbose</strong> (<strong>-v</strong>) which prints a listing of the files extracted as it goes.
     <dt><strong>-R</strong>, <strong>--raw-extract</strong> <em>archive directory</em>
-    <dd>Extracts the filesystem tree from a package archive into a specified directory, and the control information files into a <strong>DEBIAN</strong> subdirectory of the specified directory (since dpkg 1.16.1).<br>
-    <br>
-    The target directory (but not its parents) will be created if necessary.<br>
-    <br>
-    The input archive is not (currently) processed sequentially, so reading it from standard input («<strong>-</strong>») is <strong>not</strong> supported.
+    <dd>
+      Extracts the filesystem tree from a package archive into a specified directory, and the control information files into a <strong>DEBIAN</strong> subdirectory of the specified directory (since dpkg 1.16.1).
+      <p>The target directory (but not its parents) will be created if necessary.
+      <p>The input archive is not (currently) processed sequentially, so reading it from standard input («<strong>-</strong>») is <strong>not</strong> supported.
     <dt><strong>--ctrl-tarfile</strong> <em>archive</em>
     <dd>Extracts the control data from a binary package and sends it to standard output in <strong>tar</strong> format (since dpkg 1.17.14). Together with <strong>tar</strong>(1) this can be used to extract a particular control file from a package archive. The input archive will always be processed sequentially.
     <dt><strong>--fsys-tarfile</strong> <em>archive</em>
     <dd>Extracts the filesystem tree data from a binary package and sends it to standard output in <strong>tar</strong> format. Together with <strong>tar</strong>(1) this can be used to extract a particular file from a package archive. The input archive will always be processed sequentially.
     <dt><strong>-e</strong>, <strong>--control</strong> <em>archive</em> [<em>directory</em>]
-    <dd>Extracts the control information files from a package archive into the specified directory.<br>
-    <br>
-    If no directory is specified then a subdirectory <strong>DEBIAN</strong> in the current directory is used.<br>
-    <br>
-    The target directory (but not its parents) will be created if necessary.
+    <dd>
+      Extracts the control information files from a package archive into the specified directory.
+      <p>If no directory is specified then a subdirectory <strong>DEBIAN</strong> in the current directory is used.
+      <p>The target directory (but not its parents) will be created if necessary.
     <dt><strong>-?</strong>, <strong>--help</strong>
     <dd>Show the usage message and exit.
     <dt><strong>--version</strong>
@@ -83,11 +74,10 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>--showformat=</strong><em>format</em>
-    <dd>This option is used to specify the format of the output <strong>--show</strong> will produce. The format is a string that will be output for each package listed.<br>
-    <br>
-    The string may reference any status field using the “${<em>field-name</em>}” form, a list of the valid fields can be easily produced using <strong>-I</strong> on the same package. A complete explanation of the formatting options (including escape sequences and field tabbing) can be found in the explanation of the <strong>--showformat</strong> option in <strong>dpkg-query</strong>(1).<br>
-    <br>
-    The default for this field is “${Package}\t${Version}\n”.
+    <dd>
+      This option is used to specify the format of the output <strong>--show</strong> will produce. The format is a string that will be output for each package listed.
+      <p>The string may reference any status field using the “${<em>field-name</em>}” form, a list of the valid fields can be easily produced using <strong>-I</strong> on the same package. A complete explanation of the formatting options (including escape sequences and field tabbing) can be found in the explanation of the <strong>--showformat</strong> option in <strong>dpkg-query</strong>(1).
+      <p>The default for this field is “${Package}\t${Version}\n”.
     <dt><strong>-z</strong><em>compress-level</em>
     <dd>Specify which compression level to use on the compressor backend, when building a package (default is 9 for gzip and bzip2, 6 for xz and lzma). The accepted values are 0-9 with: 0 being mapped to compressor none for gzip and 0 mapped to 1 for bzip2. Before dpkg 1.16.2 level 0 was equivalent to compressor none for all compressors.
     <dt><strong>-S</strong><em>compress-strategy</em>
@@ -97,9 +87,9 @@
     <dt><strong>--uniform-compression</strong>
     <dd>Specify that the same compression parameters should be used for all archive members (i.e. <strong>control.tar</strong> and <strong>data.tar</strong>; since dpkg 1.17.6). Otherwise only the <strong>data.tar</strong> member will use those parameters. The only supported compression types allowed to be uniformly used are <strong>none</strong>, <strong>gzip</strong> and <strong>xz</strong>.
     <dt><strong>--deb-format=</strong><em>format</em>
-    <dd>Set the archive format version used when building (since dpkg 1.17.0). Allowed values are <strong>2.0</strong> for the new format, and <strong>0.939000</strong> for the old one (default is <strong>2.0</strong>).<br>
-    <br>
-    The old archive format is less easily parsed by non-Debian tools and is now obsolete; its only use is when building packages to be parsed by versions of dpkg older than 0.93.76 (September 1995), which was released as i386 a.out only.
+    <dd>
+      Set the archive format version used when building (since dpkg 1.17.0). Allowed values are <strong>2.0</strong> for the new format, and <strong>0.939000</strong> for the old one (default is <strong>2.0</strong>).
+      <p>The old archive format is less easily parsed by non-Debian tools and is now obsolete; its only use is when building packages to be parsed by versions of dpkg older than 0.93.76 (September 1995), which was released as i386 a.out only.
     <dt><strong>--new</strong>
     <dd>This is a legacy alias for <strong>--deb-format=2.0</strong>.
     <dt><strong>--old</strong>

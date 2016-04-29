@@ -45,37 +45,41 @@
     <dt><strong>--list</strong>
     <dd>Print the list of flags supported by the current vendor (one per line). See the <strong>SUPPORTED FLAGS</strong> section for more information about them.
     <dt><strong>--status</strong>
-    <dd>Display any information that can be useful to explain the behaviour of <strong>dpkg-buildflags</strong> (since dpkg 1.16.5): relevant environment variables, current vendor, state of all feature flags. Also print the resulting compiler flags with their origin.<br>
-    <br>
-    This is intended to be run from <strong>debian/rules</strong>, so that the build log keeps a clear trace of the build flags used. This can be useful to diagnose problems related to them.
+    <dd>
+      Display any information that can be useful to explain the behaviour of <strong>dpkg-buildflags</strong> (since dpkg 1.16.5): relevant environment variables, current vendor, state of all feature flags. Also print the resulting compiler flags with their origin.
+      <p>This is intended to be run from <strong>debian/rules</strong>, so that the build log keeps a clear trace of the build flags used. This can be useful to diagnose problems related to them.
     <dt><strong>--export=</strong><em>format</em>
     <dd>
-      Print to standard output commands that can be used to export all the compilation flags for some particular tool. If the <em>format</em> value is not given, <strong>sh</strong> is assumed. Only compilation flags starting with an upper case character are included, others are assumed to not be suitable for the environment. Supported formats:<br>
-      <dl>
-        <dt><strong>sh</strong>
-        <dd>Shell commands to set and export all the compilation flags in the environment. The flag values are quoted so the output is ready for evaluation by a shell.
-        <dt><strong>cmdline</strong>
-        <dd>Arguments to pass to a build program's command line to use all the compilation flags (since dpkg 1.17.0). The flag values are quoted in shell syntax.
-        <dt><strong>configure</strong>
-        <dd>This is a legacy alias for <strong>cmdline</strong>.
-        <dt><strong>make</strong>
-        <dd>Make directives to set and export all the compilation flags in the environment. Output can be written to a makefile fragment and evaluated using an <strong>include</strong> directive.
-      </dl>
+      Print to standard output commands that can be used to export all the compilation flags for some particular tool. If the <em>format</em> value is not given, <strong>sh</strong> is assumed. Only compilation flags starting with an upper case character are included, others are assumed to not be suitable for the environment. Supported formats:
+      <div class="indent">
+        <dl>
+          <dt><strong>sh</strong>
+          <dd>Shell commands to set and export all the compilation flags in the environment. The flag values are quoted so the output is ready for evaluation by a shell.
+          <dt><strong>cmdline</strong>
+          <dd>Arguments to pass to a build program's command line to use all the compilation flags (since dpkg 1.17.0). The flag values are quoted in shell syntax.
+          <dt><strong>configure</strong>
+          <dd>This is a legacy alias for <strong>cmdline</strong>.
+          <dt><strong>make</strong>
+          <dd>Make directives to set and export all the compilation flags in the environment. Output can be written to a makefile fragment and evaluated using an <strong>include</strong> directive.
+        </dl>
+      </div>
     <dt><strong>--get</strong> <em>flag</em>
     <dd>Print the value of the flag on standard output. Exits with 0 if the flag is known otherwise exits with 1.
     <dt><strong>--origin</strong> <em>flag</em>
     <dd>
-      Print the origin of the value that is returned by <strong>--get</strong>. Exits with 0 if the flag is known otherwise exits with 1. The origin can be one of the following values:<br>
-      <dl>
-        <dt><strong>vendor</strong>
-        <dd>the original flag set by the vendor is returned;
-        <dt><strong>system</strong>
-        <dd>the flag is set/modified by a system-wide configuration;
-        <dt><strong>user</strong>
-        <dd>the flag is set/modified by a user-specific configuration;
-        <dt><strong>env</strong>
-        <dd>the flag is set/modified by an environment-specific configuration.
-      </dl>
+      Print the origin of the value that is returned by <strong>--get</strong>. Exits with 0 if the flag is known otherwise exits with 1. The origin can be one of the following values:
+      <div class="indent">
+        <dl>
+          <dt><strong>vendor</strong>
+          <dd>the original flag set by the vendor is returned;
+          <dt><strong>system</strong>
+          <dd>the flag is set/modified by a system-wide configuration;
+          <dt><strong>user</strong>
+          <dd>the flag is set/modified by a user-specific configuration;
+          <dt><strong>env</strong>
+          <dd>the flag is set/modified by an environment-specific configuration.
+        </dl>
+      </div>
     <dt><strong>--query-features</strong> <em>area</em>
     <dd>
       Print the features enabled for a given area (since dpkg 1.16.2). The only currently recognized areas on Debian and derivatives are <strong>qa</strong>, <strong>reproducible</strong>, <strong>sanitize</strong> and <strong>hardening</strong>, see the <strong>FEATURE AREAS</strong> section for more details. Exits with 0 if the area is known otherwise exits with 1.<br>
@@ -152,29 +156,27 @@
       <dt><strong>format</strong>
       <dd>This setting (enabled by default) adds <strong>-Wformat -Werror=format-security</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong> and <strong>OBJCXXFLAGS</strong>. This will warn about improper format string uses, and will fail when format functions are used in a way that represent possible security problems. At present, this warns about calls to <strong>printf</strong> and <strong>scanf</strong> functions where the format string is not a string literal and there are no format arguments, as in <strong>printf(foo);</strong> instead of printf(“%s”, foo); This may be a security hole if the format string came from untrusted input and contains ‘%n’.
       <dt><strong>fortify</strong>
-      <dd>This setting (enabled by default) adds <strong>-D_FORTIFY_SOURCE=2</strong> to <strong>CPPFLAGS</strong>. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain ‘%n’ are blocked. If an application depends on such a format string, it will need to be worked around.<br>
-      <br>
-      Note that for this option to have any effect, the source must also be compiled with <strong>-O1</strong> or higher. If the environment variable <strong>DEB_BUILD_OPTIONS</strong> contains <em>noopt</em>, then <strong>fortify</strong> support will be disabled, due to new warnings being issued by glibc 2.16 and later.
+      <dd>
+        This setting (enabled by default) adds <strong>-D_FORTIFY_SOURCE=2</strong> to <strong>CPPFLAGS</strong>. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain ‘%n’ are blocked. If an application depends on such a format string, it will need to be worked around.
+        <p>Note that for this option to have any effect, the source must also be compiled with <strong>-O1</strong> or higher. If the environment variable <strong>DEB_BUILD_OPTIONS</strong> contains <em>noopt</em>, then <strong>fortify</strong> support will be disabled, due to new warnings being issued by glibc 2.16 and later.
       <dt><strong>stackprotector</strong>
-      <dd>This setting (enabled by default if stackprotectorstrong is not in use) adds <strong>-fstack-protector --param=ssp-buffer-size=4</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>. This adds safety checks against stack overwrites. This renders many potential code injection attacks into aborting situations. In the best case this turns code injection vulnerabilities into denial of service or into non-issues (depending on the application).<br>
-      <br>
-      This feature requires linking against glibc (or another provider of <strong>__stack_chk_fail</strong>), so needs to be disabled when building with <strong>-nostdlib</strong> or <strong>-ffreestanding</strong> or similar.
+      <dd>
+        This setting (enabled by default if stackprotectorstrong is not in use) adds <strong>-fstack-protector --param=ssp-buffer-size=4</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>. This adds safety checks against stack overwrites. This renders many potential code injection attacks into aborting situations. In the best case this turns code injection vulnerabilities into denial of service or into non-issues (depending on the application).
+        <p>This feature requires linking against glibc (or another provider of <strong>__stack_chk_fail</strong>), so needs to be disabled when building with <strong>-nostdlib</strong> or <strong>-ffreestanding</strong> or similar.
       <dt><strong>stackprotectorstrong</strong>
-      <dd>This setting (enabled by default) adds <strong>-fstack-protector-strong</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>. This is a stronger variant of <strong>stackprotector</strong>, but without significant performance penalties.<br>
-      <br>
-      Disabling <strong>stackprotector</strong> will also disable this setting.<br>
-      <br>
-      This feature has the same requirements as <strong>stackprotector</strong>, and in addition also requires gcc 4.9 and later.
+      <dd>
+        This setting (enabled by default) adds <strong>-fstack-protector-strong</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>. This is a stronger variant of <strong>stackprotector</strong>, but without significant performance penalties.
+        <p>Disabling <strong>stackprotector</strong> will also disable this setting.
+        <p>This feature has the same requirements as <strong>stackprotector</strong>, and in addition also requires gcc 4.9 and later.
       <dt><strong>relro</strong>
       <dd>This setting (enabled by default) adds <strong>-Wl,-z,relro</strong> to <strong>LDFLAGS</strong>. During program load, several ELF memory sections need to be written to by the linker. This flags the loader to turn these sections read-only before turning over control to the program. Most notably this prevents GOT overwrite attacks. If this option is disabled, <strong>bindnow</strong> will become disabled as well.
       <dt><strong>bindnow</strong>
       <dd>This setting (disabled by default) adds <strong>-Wl,-z,now</strong> to <strong>LDFLAGS</strong>. During program load, all dynamic symbols are resolved, allowing for the entire PLT to be marked read-only (due to <strong>relro</strong> above). The option cannot become enabled if <strong>relro</strong> is not enabled.
       <dt><strong>pie</strong>
-      <dd>This setting (disabled by default) adds <strong>-fPIE</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>, and <strong>-fPIE -pie</strong> to <strong>LDFLAGS</strong>. Position Independent Executable are needed to take advantage of Address Space Layout Randomization, supported by some kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this (-fPIC), so they gain ASLR automatically, but binary .text regions need to be build PIE to gain ASLR. When this happens, ROP (Return Oriented Programming) attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.<br>
-      <br>
-      This is not compatible with <strong>-fPIC</strong> so care must be taken when building shared objects.<br>
-      <br>
-      Additionally, since PIE is implemented via a general register, some architectures (most notably i386) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
+      <dd>
+        This setting (disabled by default) adds <strong>-fPIE</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>, and <strong>-fPIE -pie</strong> to <strong>LDFLAGS</strong>. Position Independent Executable are needed to take advantage of Address Space Layout Randomization, supported by some kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this (-fPIC), so they gain ASLR automatically, but binary .text regions need to be build PIE to gain ASLR. When this happens, ROP (Return Oriented Programming) attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
+        <p>This is not compatible with <strong>-fPIC</strong> so care must be taken when building shared objects.
+        <p>Additionally, since PIE is implemented via a general register, some architectures (most notably i386) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
     </dl>
   </div>
   <div class="subsection">

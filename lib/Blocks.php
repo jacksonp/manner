@@ -45,20 +45,7 @@ class Blocks
                     continue; // next line is also empty.
                 }
 
-                if ($blockNum > 0) {
-                    if ($blocks[$blockNum]->tagName === 'dl') {
-                        $lastBlockChild = $blocks[$blockNum]->lastChild;
-                        // Not sure how to handle new paragraph blocks in dls yet, trying this for now:
-                        if ($lastBlockChild->tagName === 'dd') {
-                            if (!in_array(substr($blockNode->manLines[$i + 1], 0, 3), ['.TP', '.SH'])) {
-                                $lastBlockChild->appendChild($dom->createElement('br'));
-                                $lastBlockChild->appendChild($dom->createElement('br'));
-                            }
-                        }
-                    } else {
-                        $blocks[++$blockNum] = $dom->createElement('p');
-                    }
-                }
+                $blocks[++$blockNum] = $dom->createElement('p');
                 continue;
             }
 
@@ -94,6 +81,44 @@ class Blocks
                             break;
                         }
                     }
+
+                    $blockLines = [];
+                    $rsLevel    = 0;
+
+                    for ($i = $i + 1; $i < $numLines; ++$i) {
+                        $line = $blockNode->manLines[$i];
+
+                        if (preg_match('~^\.RS~u', $line)) {
+                            ++$rsLevel;
+                        } elseif (preg_match('~^\.RE~u', $line)) {
+                            --$rsLevel;
+                        }
+
+                        // <= 0 for stray .REs
+                        if ($rsLevel <= 0
+                          && (preg_match('~^\.[TLP]?P~u', $line) || preg_match('~^\.IP .~u', $line))
+                        ) {
+                            --$i;
+                            break;
+                        } else {
+                            if ($line === '.IP') { // See dir.1
+                                $blockLines[] = '.br';
+                            } else {
+                                $blockLines[] = $line;
+                            }
+                        }
+                    }
+
+                    // Skip empty block
+                    if (trim(implode('', $blockLines)) === '') {
+                        continue;
+                    }
+
+                    $dd           = $dom->createElement('dd');
+                    $dd->manLines = $blockLines;
+                    self::handle($dd);
+                    $blocks[$blockNum]->appendChild($dd);
+
                     continue;
                 }
             }
@@ -116,6 +141,44 @@ class Blocks
                     $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
                     $blocks[$blockNum]->appendChild($dt);
+
+                    $blockLines = [];
+                    $rsLevel    = 0;
+
+                    for ($i = $i + 1; $i < $numLines; ++$i) {
+                        $line = $blockNode->manLines[$i];
+
+                        if (preg_match('~^\.RS~u', $line)) {
+                            ++$rsLevel;
+                        } elseif (preg_match('~^\.RE~u', $line)) {
+                            --$rsLevel;
+                        }
+
+                        // <= 0 for stray .REs
+                        if ($rsLevel <= 0
+                          && (preg_match('~^\.[TLP]?P~u', $line) || preg_match('~^\.IP .~u', $line))
+                        ) {
+                            --$i;
+                            break;
+                        } else {
+                            if ($line === '.IP') { // See repoquery.1
+                                $blockLines[] = '.br';
+                            } else {
+                                $blockLines[] = $line;
+                            }
+                        }
+                    }
+
+                    // Skip empty block
+                    if (trim(implode('', $blockLines)) === '') {
+                        continue;
+                    }
+
+                    $dd           = $dom->createElement('dd');
+                    $dd->manLines = $blockLines;
+                    self::handle($dd);
+                    $blocks[$blockNum]->appendChild($dd);
+
                     continue;
                 }
 
@@ -130,7 +193,7 @@ class Blocks
                     // Already in previous .IP,
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));
                 } else {
-                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName);
+                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
                 }
                 continue;
             }
@@ -163,24 +226,14 @@ class Blocks
                                 // Skip empty .RS blocks
                                 continue 2;
                             }
-
-                            if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
-                                if ($blocks[$blockNum]->lastChild->tagName === 'dd') {
-                                    $rsBlock = $blocks[$blockNum]->lastChild;
-                                    $rsBlock->appendChild($dom->createElement('br'));
-                                } else {
-                                    $rsBlock = $dom->createElement('dd');
-                                    $rsBlock = $blocks[$blockNum]->appendChild($rsBlock);
-                                }
-                            } else {
-                                $blocks[++$blockNum] = $dom->createElement('div');
-                                $className           = 'indent';
-                                if (!empty($matches[1])) {
-                                    $className .= '-' . trim($matches[1]);
-                                }
-                                $blocks[$blockNum]->setAttribute('class', $className);
-                                $rsBlock = $blocks[$blockNum];
+                            $blocks[++$blockNum] = $dom->createElement('div');
+                            $className           = 'indent';
+                            if (!empty($matches[1])) {
+                                $className .= '-' . trim($matches[1]);
                             }
+                            $blocks[$blockNum]->setAttribute('class', $className);
+                            $rsBlock = $blocks[$blockNum];
+
                             $rsBlock->manLines = $rsLines;
                             self::handle($rsBlock);
                             continue 2; //End of block
@@ -188,7 +241,7 @@ class Blocks
                     }
                     $rsLines[] = $line;
                 }
-                throw new Exception($line . '.RS without corresponding .RE');
+                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . $blockNode->manLines[$i - 2] . '"');
             }
 
             if (preg_match('~^\.RE~u', $line)) {
@@ -286,39 +339,25 @@ class Blocks
 
                 $pre->manLines = $preLines;
                 BlockPreformatted::handle($pre);
-
-                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'dl') {
-                    if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
-                        $blocks[$blockNum]->appendChild($dom->createElement('dd'));
-                    }
-                    $blocks[$blockNum]->lastChild->appendChild($pre);
-                } else {
-                    $blocks[++$blockNum] = $pre;
-                }
+                $blocks[++$blockNum] = $pre;
                 continue; //End of block
             }
 
             $parentForLine = null;
 
             if ($blockNum === 0) {
-                $blocks[++$blockNum] = $dom->createElement('p');
-                $parentForLine       = $blocks[$blockNum];
+                if ($blockNode->tagName === 'dd') {
+                    $parentForLine = $blockNode;
+                } else {
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                    $parentForLine       = $blocks[$blockNum];
+                }
             } else {
                 if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code'])) {
                     // Start a new paragraph after certain blocks
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
-                if ($blocks[$blockNum]->tagName === 'dl') {
-                    if ($blocks[$blockNum]->lastChild->tagName === 'dt') {
-                        $dd            = $dom->createElement('dd');
-                        $parentForLine = $dd;
-                        $blocks[$blockNum]->appendChild($dd);
-                    } else {
-                        $parentForLine = $blocks[$blockNum]->lastChild;
-                    }
-                } else {
-                    $parentForLine = $blocks[$blockNum];
-                }
+                $parentForLine = $blocks[$blockNum];
             }
 
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBI]|CW))$~u', $line)) {

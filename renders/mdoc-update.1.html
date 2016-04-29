@@ -57,35 +57,36 @@
                    as the member.
          depasm  Find exceptions created in the member itself and
                    references to members within dependent
-                   assemblies.</pre><br>
+                   assemblies.</pre>
+      <p>If <em>SOURCES</em> isn't provided (the default), then only exceptions created within the member itself will be documented.<br>
       <br>
-      If <em>SOURCES</em> isn't provided (the default), then only exceptions created within the member itself will be documented.<br>
-      <br>
-      LIMITATIONS: Exception searching is currently implemented by looking for the exception types that are explicitly created based on the known compile-time types. This has the following limitations:<br>
-      <dl>
-        <dt><strong>*</strong>
-        <dd>This will not find exceptions which are implicit to the IL, such as NullReferenceException and IndexOutOfRangeException.
-        <dt><strong>*</strong>
-        <dd>
-          This will find exceptions which are <em>not</em> thrown, e.g.
-          <pre>     public void CreateAnException ()
+      LIMITATIONS: Exception searching is currently implemented by looking for the exception types that are explicitly created based on the known compile-time types. This has the following limitations:
+      <div class="indent">
+        <dl>
+          <dt><strong>*</strong>
+          <dd>This will not find exceptions which are implicit to the IL, such as NullReferenceException and IndexOutOfRangeException.
+          <dt><strong>*</strong>
+          <dd>
+            This will find exceptions which are <em>not</em> thrown, e.g.
+            <pre>     public void CreateAnException ()
      {
          Exception e = new Exception ();
      }
 </pre>
-        <dt><strong>*</strong>
-        <dd>
-          This will not “follow” delegate and interface calls:
-          <pre>     public void UsesDelegates ()
+          <dt><strong>*</strong>
+          <dd>
+            This will not “follow” delegate and interface calls:
+            <pre>     public void UsesDelegates ()
      {
          Func&lt;int, int&gt; a = x =&gt; {throw new Exception ();};
          a (4);
      }
-</pre>The function <em>UsesDelegates()</em> won't have any exceptions documented.
-        <dt><strong>*</strong>
-        <dd>
-          This will find exceptions which “cannot happen”, such as ArgumentNullExceptions for arguments which are “known” to be non-null:
-          <pre>     public void A ()
+</pre>
+            <p>The function <em>UsesDelegates()</em> won't have any exceptions documented.
+          <dt><strong>*</strong>
+          <dd>
+            This will find exceptions which “cannot happen”, such as ArgumentNullExceptions for arguments which are “known” to be non-null:
+            <pre>     public void A ()
      {
          B ("this parameter isn't null");
      }
@@ -95,15 +96,19 @@
          if (s == null)
              throw new ArgumentNullException ("s");
      }
-</pre>For the above, if <strong>--exceptions=asm</strong> is provided then <em>A()</em> will be documented as throwing an ArgumentNullException, which cannot happen.
-      </dl>
+</pre>
+            <p>For the above, if <strong>--exceptions=asm</strong> is provided then <em>A()</em> will be documented as throwing an ArgumentNullException, which cannot happen.
+        </dl>
+      </div>
     <dt><strong>-f</strong>=<em>FLAG</em>
     <dd>
-      Specify a flag to alter behavior. Valid flags include:<br>
-      <dl>
-        <dt><strong>no-assembly-versions</strong>
-        <dd>See the <strong>-fno-assembly-versions</strong> documentation, below.
-      </dl>
+      Specify a flag to alter behavior. Valid flags include:
+      <div class="indent">
+        <dl>
+          <dt><strong>no-assembly-versions</strong>
+          <dd>See the <strong>-fno-assembly-versions</strong> documentation, below.
+        </dl>
+      </div>
     <dt><strong>-fno-assembly-versions</strong>
     <dd>Do not generate <em>/Type/AssemblyInfo/AssemblyVersion</em> and <em>/Type/Members/Member/AssemblyInfo</em> elements.<br>
     <br>

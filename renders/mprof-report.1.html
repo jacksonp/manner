@@ -57,39 +57,45 @@
       <dd><em>[no]calls</em>: <em>nocalls</em> disables collecting method enter and leave events. When this option is used at each object allocation and at some other events (like lock contentions and exception throws) a stack trace is collected by default. See the <em>maxframes</em> option to control this behaviour. <em>calls</em> enables method enter/leave events if they were disabled by another option like <em>heapshot</em>.
       <dt>·
       <dd>
-        <em>heapshot[=MODE]</em>: collect heap shot data at each major collection. The frequency of the heap shots can be changed with the <em>MODE</em> parameter. When this option is used allocation events and method enter/leave events are not recorded by default: if they are needed, they need to be enabled explicitly. The optional parameter <em>MODE</em> can modify the default heap shot frequency. heapshot can be used multiple times with different modes: in that case a heap shot is taken if either of the conditions are met. MODE can be one of:<br>
-        <dl class="indent-2">
-          <dt>·
-          <dd><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
-          <dt>·
-          <dd><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
-          <dt>·
-          <dd><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
-        </dl>
+        <em>heapshot[=MODE]</em>: collect heap shot data at each major collection. The frequency of the heap shots can be changed with the <em>MODE</em> parameter. When this option is used allocation events and method enter/leave events are not recorded by default: if they are needed, they need to be enabled explicitly. The optional parameter <em>MODE</em> can modify the default heap shot frequency. heapshot can be used multiple times with different modes: in that case a heap shot is taken if either of the conditions are met. MODE can be one of:
+        <div class="indent-2">
+          <dl class="indent-2">
+            <dt>·
+            <dd><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
+            <dt>·
+            <dd><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
+            <dt>·
+            <dd><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
+          </dl>
+        </div>
       <dt>·
       <dd>
-        <em>sample[=TYPE[/FREQ]]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “cycles/100” for <em>TYPE</em>. On some systems, like with recent Linux kernels, it is possible to cause the sampling to happen for other events provided by the performance counters of the cpu. In this case, <em>TYPE</em> can be one of:<br>
-        <dl class="indent-2">
-          <dt>·
-          <dd><em>cycles</em>: processor cycles
-          <dt>·
-          <dd><em>instr</em>: executed instructions
-          <dt>·
-          <dd><em>cacherefs</em>: cache references
-          <dt>·
-          <dd><em>cachemiss</em>: cache misses
-          <dt>·
-          <dd><em>branches</em>: executed branches
-          <dt>·
-          <dd><em>branchmiss</em>: mispredicted branches
-        </dl>
+        <em>sample[=TYPE[/FREQ]]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “cycles/100” for <em>TYPE</em>. On some systems, like with recent Linux kernels, it is possible to cause the sampling to happen for other events provided by the performance counters of the cpu. In this case, <em>TYPE</em> can be one of:
+        <div class="indent-2">
+          <dl class="indent-2">
+            <dt>·
+            <dd><em>cycles</em>: processor cycles
+            <dt>·
+            <dd><em>instr</em>: executed instructions
+            <dt>·
+            <dd><em>cacherefs</em>: cache references
+            <dt>·
+            <dd><em>cachemiss</em>: cache misses
+            <dt>·
+            <dd><em>branches</em>: executed branches
+            <dt>·
+            <dd><em>branchmiss</em>: mispredicted branches
+          </dl>
+        </div>
       <dt>·
       <dd>
-        <em>time=TIMER</em>: use the TIMER timestamp mode. TIMER can have the following values:<br>
-        <dl class="indent-2">
-          <dt>·
-          <dd><em>fast</em>: a usually faster but possibly more inaccurate timer
-        </dl>
+        <em>time=TIMER</em>: use the TIMER timestamp mode. TIMER can have the following values:
+        <div class="indent-2">
+          <dl class="indent-2">
+            <dt>·
+            <dd><em>fast</em>: a usually faster but possibly more inaccurate timer
+          </dl>
+        </div>
       <dt>·
       <dd><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 8.
       <dt>·
@@ -100,24 +106,28 @@
       <dd><em>zip</em>: automatically compress the output data in gzip format.
       <dt>·
       <dd>
-        <em>output=OUTSPEC</em>: instead of writing the profiling data to the output.mlpd file, substitute <em>%p</em> in <em>OUTSPEC</em> with the current process id and <em>%t</em> with the current date and time, then do according to <em>OUTSPEC</em>:<br>
-        <dl class="indent-2">
-          <dt>·
-          <dd>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
-          <dt>·
-          <dd>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
-          <dt>·
-          <dd>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
-        </dl>
+        <em>output=OUTSPEC</em>: instead of writing the profiling data to the output.mlpd file, substitute <em>%p</em> in <em>OUTSPEC</em> with the current process id and <em>%t</em> with the current date and time, then do according to <em>OUTSPEC</em>:
+        <div class="indent-2">
+          <dl class="indent-2">
+            <dt>·
+            <dd>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
+            <dt>·
+            <dd>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
+            <dt>·
+            <dd>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
+          </dl>
+        </div>
       <dt>·
       <dd><em>report</em>: the profiling data is sent to mprof-report, which will print a summary report. This is equivalent to the option: <strong>output=mprof-report&nbsp;-</strong>. If the <em>output</em> option is specified as well, the report will be written to the output file instead of the console.
       <dt>·
       <dd>
-        <em>port=PORT</em>: specify the tcp/ip port to use for the listening command server. Currently not available for windows. This server is started for example when heapshot=ondemand is used: it will read commands line by line. The following commands are available:<br>
-        <dl class="indent-2">
-          <dt>·
-          <dd><em>heapshot</em>: perform a heapshot as soon as possible
-        </dl>
+        <em>port=PORT</em>: specify the tcp/ip port to use for the listening command server. Currently not available for windows. This server is started for example when heapshot=ondemand is used: it will read commands line by line. The following commands are available:
+        <div class="indent-2">
+          <dl class="indent-2">
+            <dt>·
+            <dd><em>heapshot</em>: perform a heapshot as soon as possible
+          </dl>
+        </div>
       <dt>·
       <dd><em>counters</em>: sample counters values every 1 second. This allow a really lightweight way to have insight in some of the runtime key metrics. Counters displayed in non verbose mode are : Methods from AOT, Methods JITted using mono JIT, Methods JITted using LLVM, Total time spent JITting (sec), User Time, System Time, Total Time, Working Set, Private Bytes, Virtual Bytes, Page Faults and CPU Load Average (1min, 5min and 15min).
     </dl>

@@ -20,17 +20,15 @@
   <h2>COMMANDS</h2>
   <dl>
     <dt><strong>-x</strong>, <strong>--extract</strong> <em>filename</em>.dsc [<em>output-directory</em>]
-    <dd>Extract a source package (<strong>--extract</strong> since dpkg 1.17.14). One non-option argument must be supplied, the name of the Debian source control file (<strong>.dsc</strong>). An optional second non-option argument may be supplied to specify the directory to extract the source package to, this must not exist. If no output directory is specified, the source package is extracted into a directory named <em>source</em>-<em>version</em> under the current working directory.<br>
-    <br>
-    <strong>dpkg-source</strong> will read the names of the other file(s) making up the source package from the control file; they are assumed to be in the same directory as the <strong>.dsc</strong>.<br>
-    <br>
-    The files in the extracted package will have their permissions and ownerships set to those which would have been expected if the files and directories had simply been created - directories and executable files will be 0777 and plain files will be 0666, both modified by the extractors' umask; if the parent directory is setgid then the extracted directories will be too, and all the files and directories will inherit its group ownership.<br>
-    <br>
-    If the source package uses a non-standard format (currently this means all formats except “1.0”), its name will be stored in <strong>debian/source/format</strong> so that the following builds of the source package use the same format by default.
+    <dd>
+      Extract a source package (<strong>--extract</strong> since dpkg 1.17.14). One non-option argument must be supplied, the name of the Debian source control file (<strong>.dsc</strong>). An optional second non-option argument may be supplied to specify the directory to extract the source package to, this must not exist. If no output directory is specified, the source package is extracted into a directory named <em>source</em>-<em>version</em> under the current working directory.
+      <p><strong>dpkg-source</strong> will read the names of the other file(s) making up the source package from the control file; they are assumed to be in the same directory as the <strong>.dsc</strong>.
+      <p>The files in the extracted package will have their permissions and ownerships set to those which would have been expected if the files and directories had simply been created - directories and executable files will be 0777 and plain files will be 0666, both modified by the extractors' umask; if the parent directory is setgid then the extracted directories will be too, and all the files and directories will inherit its group ownership.
+      <p>If the source package uses a non-standard format (currently this means all formats except “1.0”), its name will be stored in <strong>debian/source/format</strong> so that the following builds of the source package use the same format by default.
     <dt><strong>-b</strong>, <strong>--build</strong> <em>directory</em> [<em>format-specific-parameters</em>]
-    <dd>Build a source package (<strong>--build</strong> since dpkg 1.17.14). The first non-option argument is taken as the name of the directory containing the debianized source tree (i.e. with a debian sub-directory and maybe changes to the original files). Depending on the source package format used to build the package, additional parameters might be accepted.<br>
-    <br>
-    <strong>dpkg-source</strong> will build the source package with the first format found in this ordered list: the format indicated with the <em>--format</em> command line option, the format indicated in <strong>debian/source/format</strong>, “1.0”. The fallback to “1.0” is deprecated and will be removed at some point in the future, you should always document the desired source format in <strong>debian/source/format</strong>. See section <strong>SOURCE PACKAGE FORMATS</strong> for an extensive description of the various source package formats.
+    <dd>
+      Build a source package (<strong>--build</strong> since dpkg 1.17.14). The first non-option argument is taken as the name of the directory containing the debianized source tree (i.e. with a debian sub-directory and maybe changes to the original files). Depending on the source package format used to build the package, additional parameters might be accepted.
+      <p><strong>dpkg-source</strong> will build the source package with the first format found in this ordered list: the format indicated with the <em>--format</em> command line option, the format indicated in <strong>debian/source/format</strong>, “1.0”. The fallback to “1.0” is deprecated and will be removed at some point in the future, you should always document the desired source format in <strong>debian/source/format</strong>. See section <strong>SOURCE PACKAGE FORMATS</strong> for an extensive description of the various source package formats.
     <dt><strong>--print-format</strong> <em>directory</em>
     <dd>Print the source format that would be used to build the source package if <strong>dpkg-source --build</strong> <em>directory</em> was called (in the same conditions and with the same parameters; since dpkg 1.15.5).
     <dt><strong>--before-build</strong> <em>directory</em>
@@ -71,17 +69,16 @@
       <dt><strong>-z</strong><em>level</em>, <strong>--compression-level</strong>=<em>level</em>
       <dd>Compression level to use (<strong>--compression-level</strong> since dpkg 1.15.5). As with <strong>-Z</strong> it only affects newly created files. Supported values are: <em>1</em> to <em>9</em>, <em>best</em>, and <em>fast</em>. The default is <em>9</em> for gzip and bzip2, <em>6</em> for xz and lzma.
       <dt><strong>-i</strong>[<em>regex</em>], <strong>--diff-ignore</strong>[=<em>regex</em>]
-      <dd>You may specify a perl regular expression to match files you want filtered out of the list of files for the diff (<strong>--diff-ignore</strong> since dpkg 1.15.6). (This list is generated by a find command.) (If the source package is being built as a version 3 source package using a VCS, this can be used to ignore uncommited changes on specific files. Using -i.* will ignore all of them.)<br>
-      <br>
-      The <strong>-i</strong> option by itself enables this setting with a default regex (preserving any modification to the default regex done by a previous use of <strong>--extend-diff-ignore</strong>) that will filter out control files and directories of the most common revision control systems, backup and swap files and Libtool build output directories. There can only be one active regex, of multiple <strong>-i</strong> options only the last one will take effect.<br>
-      <br>
-      This is very helpful in cutting out extraneous files that get included in the diff, e.g. if you maintain your source in a revision control system and want to use a checkout to build a source package without including the additional files and directories that it will usually contain (e.g. CVS/, .cvsignore, .svn/). The default regex is already very exhaustive, but if you need to replace it, please note that by default it can match any part of a path, so if you want to match the begin of a filename or only full filenames, you will need to provide the necessary anchors (e.g. ‘(^|/)’, ‘($|/)’) yourself.
+      <dd>
+        You may specify a perl regular expression to match files you want filtered out of the list of files for the diff (<strong>--diff-ignore</strong> since dpkg 1.15.6). (This list is generated by a find command.) (If the source package is being built as a version 3 source package using a VCS, this can be used to ignore uncommited changes on specific files. Using -i.* will ignore all of them.)
+        <p>The <strong>-i</strong> option by itself enables this setting with a default regex (preserving any modification to the default regex done by a previous use of <strong>--extend-diff-ignore</strong>) that will filter out control files and directories of the most common revision control systems, backup and swap files and Libtool build output directories. There can only be one active regex, of multiple <strong>-i</strong> options only the last one will take effect.
+        <p>This is very helpful in cutting out extraneous files that get included in the diff, e.g. if you maintain your source in a revision control system and want to use a checkout to build a source package without including the additional files and directories that it will usually contain (e.g. CVS/, .cvsignore, .svn/). The default regex is already very exhaustive, but if you need to replace it, please note that by default it can match any part of a path, so if you want to match the begin of a filename or only full filenames, you will need to provide the necessary anchors (e.g. ‘(^|/)’, ‘($|/)’) yourself.
       <dt><strong>--extend-diff-ignore</strong>=<em>regex</em>
       <dd>The perl regular expression specified will extend the default value used by <strong>--diff-ignore</strong> and its current value, if set (since dpkg 1.15.6). It does this by concatenating “<strong>|</strong><em>regex</em>” to the existing value. This option is convenient to use in <strong>debian/source/options</strong> to exclude some auto-generated files from the automatic patch generation.
       <dt><strong>-I</strong>[<em>file-pattern</em>], <strong>--tar-ignore</strong>[=<em>file-pattern</em>]
-      <dd>If this option is specified, the pattern will be passed to <strong>tar</strong>(1)'s <strong>--exclude</strong> option when it is called to generate a .orig.tar or .tar file (<strong>--tar-ignore</strong> since dpkg 1.15.6). For example, <strong>-I</strong>CVS will make tar skip over CVS directories when generating a .tar.gz file. The option may be repeated multiple times to list multiple patterns to exclude.<br>
-      <br>
-      <strong>-I</strong> by itself adds default <strong>--exclude</strong> options that will filter out control files and directories of the most common revision control systems, backup and swap files and Libtool build output directories.
+      <dd>
+        If this option is specified, the pattern will be passed to <strong>tar</strong>(1)'s <strong>--exclude</strong> option when it is called to generate a .orig.tar or .tar file (<strong>--tar-ignore</strong> since dpkg 1.15.6). For example, <strong>-I</strong>CVS will make tar skip over CVS directories when generating a .tar.gz file. The option may be repeated multiple times to list multiple patterns to exclude.
+        <p><strong>-I</strong> by itself adds default <strong>--exclude</strong> options that will filter out control files and directories of the most common revision control systems, backup and swap files and Libtool build output directories.
     </dl>
     <p><strong>Note:</strong> While they have similar purposes, <strong>-i</strong> and <strong>-I</strong> have very different syntax and semantics. <strong>-i</strong> can only be specified once and takes a perl compatible regular expression which is matched against the full relative path of each file. <strong>-I</strong> can specified multiple times and takes a filename pattern with shell wildcards. The pattern is applied to the full relative path but also to each part of the path individually. The exact semantic of tar's <strong>--exclude</strong> option is somewhat complicated, see https://www.gnu.org/software/tar/manual/tar.html#wildcards for a full documentation.
     <p>The default regex and patterns for both options can be seen in the output of the <strong>--help</strong> command.
@@ -176,11 +173,10 @@
     <p><strong>Recording changes</strong>
     <dl>
       <dt><strong>--commit</strong> [<em>directory</em>] [<em>patch-name</em>] [<em>patch-file</em>]
-      <dd>Generates a patch corresponding to the local changes that are not managed by the <strong>quilt</strong> patch system and integrates it in the patch system under the name <em>patch-name</em>. If the name is missing, it will be asked interactively. If <em>patch-file</em> is given, it is used as the patch corresponding to the local changes to integrate. Once integrated, an editor is launched so that you can edit the meta-information in the patch header.<br>
-      <br>
-      Passing <em>patch-file</em> is mainly useful after a build failure that pre-generated this file, and on this ground the given file is removed after integration. Note also that the changes contained in the patch file must already be applied on the tree and that the files modified by the patch must not have supplementary unrecorded changes.<br>
-      <br>
-      If the patch generation detects modified binary files, they will be automatically added to <strong>debian/source/include-binaries</strong> so that they end up in the debian tarball (exactly like <strong>dpkg-source --include-binaries --build</strong> would do).
+      <dd>
+        Generates a patch corresponding to the local changes that are not managed by the <strong>quilt</strong> patch system and integrates it in the patch system under the name <em>patch-name</em>. If the name is missing, it will be asked interactively. If <em>patch-file</em> is given, it is used as the patch corresponding to the local changes to integrate. Once integrated, an editor is launched so that you can edit the meta-information in the patch header.
+        <p>Passing <em>patch-file</em> is mainly useful after a build failure that pre-generated this file, and on this ground the given file is removed after integration. Note also that the changes contained in the patch file must already be applied on the tree and that the files modified by the patch must not have supplementary unrecorded changes.
+        <p>If the patch generation detects modified binary files, they will be automatically added to <strong>debian/source/include-binaries</strong> so that they end up in the debian tarball (exactly like <strong>dpkg-source --include-binaries --build</strong> would do).
     </dl>
     <p><strong>Build options</strong>
     <dl>
@@ -203,8 +199,7 @@
       <dt><strong>--abort-on-upstream-changes</strong>
       <dd>The process fails if an automatic patch has been generated (since dpkg 1.15.8). This option can be used to ensure that all changes were properly recorded in separate <strong>quilt</strong> patches prior to the source package build. This option is not allowed in <strong>debian/source/options</strong> but can be used in <strong>debian/source/local-options</strong>.
       <dt><strong>--auto-commit</strong>
-      <dd>The process doesn't fail if an automatic patch has been generated, instead it's immediately recorded in the <strong>quilt</strong> series.<br>
-      <br>
+      <dd>The process doesn't fail if an automatic patch has been generated, instead it's immediately recorded in the <strong>quilt</strong> series.
     </dl>
     <p><strong>Extract options</strong>
     <dl>

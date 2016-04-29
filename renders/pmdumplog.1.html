@@ -31,22 +31,26 @@
     <dd>Like <strong>-l</strong>, just a little more verbose.
     <dt><strong>-m</strong>
     <dd>
-      Print the values for the performance metrics from the archive. This is the default display option.<br>
-      <p>Metrics without an instance domain are reported as:<br>
-      <blockquote>
-        [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>): <strong>value1</strong> <em>value2</em>
-      </blockquote>
-      <p>Metrics with an instance domain are reported as:<br>
-      <blockquote>
-        [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>):<br>
-        <br>
-        <strong>inst</strong> [<em>internal-id</em> <strong>or</strong> "<em>external-id</em>"] <strong>value1</strong> <em>value2</em>
-      </blockquote>
-      <p>The <em>timestamp</em> is only reported for the first metric in a group of metrics sharing the same timestamp.
+      Print the values for the performance metrics from the archive. This is the default display option.
+      <div class="indent-+5n">
+        <p>Metrics without an instance domain are reported as:<br>
+        <blockquote>
+          [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>): <strong>value1</strong> <em>value2</em>
+        </blockquote>
+        <p>Metrics with an instance domain are reported as:<br>
+        <blockquote>
+          [<em>timestamp</em>] <em>metric-id</em> (<em>metric-name</em>):<br>
+          <br>
+          <strong>inst</strong> [<em>internal-id</em> <strong>or</strong> "<em>external-id</em>"] <strong>value1</strong> <em>value2</em>
+        </blockquote>
+        <p>The <em>timestamp</em> is only reported for the first metric in a group of metrics sharing the same timestamp.
+      </div>
     <dt><strong>-M</strong>
     <dd>
-      If no <em>metricname</em> is specified then <em>&lt;mark&gt;</em> records are reported when they are found in the <em>archive</em>. If <em>metricname</em> arguments are specified, then <em>&lt;mark&gt;</em> records are not reported by default. The <strong>-M</strong> option forces <em>&lt;mark&gt;</em> records to be reported, even when <em>metricname</em> arguments are specified.<br>
-      <p><em>&lt;mark&gt;</em> records are inserted into a PCP archive log by <strong>pmlogextract</strong>(1) to indicate a temporal discontinuity in the time-series of metric values.
+      If no <em>metricname</em> is specified then <em>&lt;mark&gt;</em> records are reported when they are found in the <em>archive</em>. If <em>metricname</em> arguments are specified, then <em>&lt;mark&gt;</em> records are not reported by default. The <strong>-M</strong> option forces <em>&lt;mark&gt;</em> records to be reported, even when <em>metricname</em> arguments are specified.
+      <div class="indent-+5n">
+        <p><em>&lt;mark&gt;</em> records are inserted into a PCP archive log by <strong>pmlogextract</strong>(1) to indicate a temporal discontinuity in the time-series of metric values.
+      </div>
     <dt><strong>-r</strong>
     <dd>Process the archive in reverse order, from most recent to oldest recorded metric values.
     <dt><strong>-S</strong>
@@ -57,16 +61,20 @@
     <dd>When using the <strong>-m</strong> option, the report will be restricted to those records logged before or at <em>endtime</em>. Refer to <strong>PCPIntro</strong>(1) for a complete description of the syntax for <em>endtime</em>.
     <dt><strong>-t</strong>
     <dd>
-      Dump the temporal index that is used to provide accelerated access to large archive files.<br>
-      <p>The integrity of the index will also be checked. If the index is found to be corrupted, the “*.index” file can be renamed or removed and the archive will still be accessible, however retrievals may take longer without the index. Note however that a corrupted temporal index is usually indicative of a deeper malaise that may infect all files in a PCP archive.
+      Dump the temporal index that is used to provide accelerated access to large archive files.
+      <div class="indent">
+        <p>The integrity of the index will also be checked. If the index is found to be corrupted, the “*.index” file can be renamed or removed and the archive will still be accessible, however retrievals may take longer without the index. Note however that a corrupted temporal index is usually indicative of a deeper malaise that may infect all files in a PCP archive.
+      </div>
     <dt><strong>-v</strong>
     <dd>Verbose mode. Dump the records from a physical archive file in hexadecimal format. In this case <em>file</em> is the name of a single file, usually a basename (as would otherwise appear as the <em>archive</em> command line argument), concatenated with “.” followed by one of <strong>meta</strong> (the metadata), <strong>index</strong> (the temporal index), or a digit (one of the volumes of metric values).<br>
     <br>
     Use of <strong>-v</strong> precludes the use of all other options and arguments.
     <dt><strong>-x</strong>
     <dd>
-      Extended timestamp reporting format that includes the day of the week, day of the month, month and year in addition to the (default) hours, minutes and seconds time. This is useful for archives that span multiple days.<br>
-      <p>A second -x option will also report the timestamp as an offset from the start of the archive in units of seconds. This is useful in conjunction with debug diagnostics from the archive handling routines in <em>libpcp</em>.
+      Extended timestamp reporting format that includes the day of the week, day of the month, month and year in addition to the (default) hours, minutes and seconds time. This is useful for archives that span multiple days.
+      <div class="indent-+5n">
+        <p>A second -x option will also report the timestamp as an offset from the start of the archive in units of seconds. This is useful in conjunction with debug diagnostics from the archive handling routines in <em>libpcp</em>.
+      </div>
   </dl>
   <p>By default, <strong>pmdumplog</strong> reports the time of day according to the local timezone on the system where <strong>pmdumplog</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7). The <strong>-z</strong> option changes the timezone to the local timezone at the host that is the source of the performance metrics, as specified in the label record of the archive log.
 </div>
