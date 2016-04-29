@@ -20,15 +20,14 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>Each supported platform has a kernel Performance Metrics Domain Agent (PMDA) which extracts performance metrics from the kernel of that platfrom. A variety of platform-specific metrics are available, with an equally varied set of access mechanisms - typically this involves special system calls, or reading from files in kernel virtual filesystems such as the Linux <em>sysfs</em> and <em>procfs</em> filesystems.
-  <p>The platform kernel PMDA is one of the most critical components of the PCP installation, and must be as efficient and reliable as possible. In all installations the default kernel PMDA will be installed as a shared library and thus executes directly within the <a href="/1/pmcd" class="link-man">pmcd(1)</a> process. This slightly reduces overheads associated with querying the metadata and values associated with these metrics (no message passing is required).
+  <p>The platform kernel PMDA is one of the most critical components of the PCP installation, and must be as efficient and reliable as possible. In all installations the default kernel PMDA will be installed as a shared library and thus executes directly within the <strong>pmcd</strong>(1) process. This slightly reduces overheads associated with querying the metadata and values associated with these metrics (no message passing is required).
   <p>Unlike many other PMDAs, the kernel PMDA exports a number of metric namespace subtrees, such as kernel, network, swap, mem, ipc, filesys, nfs, disk and hinv (hardware inventory).
-  <p>Despite usually running as shared libraries, most installations also include a stand-alone executable for the kernel PMDA. This is to aid profiling and debugging activities, with <a href="/1/dbpmda" class="link-man">dbpmda(1)</a> for example. In this case (but not for shared libraries), the following command line options are available:
+  <p>Despite usually running as shared libraries, most installations also include a stand-alone executable for the kernel PMDA. This is to aid profiling and debugging activities, with <strong>dbpmda</strong>(1) for example. In this case (but not for shared libraries), the following command line options are available:
   <dl>
     <dt><strong>-d</strong>
     <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>
-      Location of the log file. By default, a log file named <em>[platform].log</em> is written in the current directory of <a href="/1/pmcd" class="link-man">pmcd(1)</a> when <strong>pmda[platform]</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>Location of the log file. By default, a log file named <em>[platform].log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmda[platform]</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-U</strong>
     <dd>User account under which to run the agent. The default is the unprivileged “pcp” account in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
   </dl>
@@ -48,10 +47,10 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/dbpmda" class="link-man">dbpmda(1)</a> <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+  <p><strong>PCPIntro</strong>(1), <strong>dbpmda</strong>(1) <strong>pmcd</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
 </div>
 

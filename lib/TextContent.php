@@ -40,29 +40,6 @@ class TextContent
                 throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
 
-            // Detect references to other man pages:
-            // TODO: maybe punt this to mankier? also get \fB \fR ones.
-            if ($command === 'BR'
-              && preg_match('~^(?<name>[-+0-9a-zA-Z_:\.]+) \((?<num>[\dn]p?)\)(?<punc>\S*)(?<rol>.*)~u',
-                trim($matches['text']), $matches)
-            ) {
-                $parentNode->appendChild(new DOMText(' '));
-                $anchor = $dom->createElement('a');
-                $anchor->appendChild(new DOMText($matches['name'] . '(' . $matches['num'] . ')'));
-                $anchor->setAttribute('href', '/' . $matches['num'] . '/' . $matches['name']);
-                $anchor->setAttribute('class', 'link-man');
-                $parentNode->appendChild($anchor);
-                if (mb_strlen($matches['punc']) !== 0) {
-                    self::interpretAndAppendText($parentNode, $matches['punc']);
-                }
-                if (mb_strlen($matches['rol']) !== 0) {
-                    // get the 2nd bit of e.g. ".BR getcap (8), setcap (8)"
-                    self::interpretAndAppendCommand($parentNode, '.BR' . $matches['rol']);
-                }
-
-                return;
-            }
-
             if (mb_strlen($command) === 1) {
                 $bits = [implode(' ', $bits)];
             }

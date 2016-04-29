@@ -14,9 +14,9 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p><strong>pmdiff</strong> compares the average values for every metric in either one or two sets of archives, in a given time window, for changes that are likely to be of interest when searching for performance regressions.
-  <p>The archive specifiers <em>archive1</em> and <em>archive2</em> may be comma-separated lists of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. Each archive in the resulting set of archives must have been previously created using <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>. The <a href="/1/pmlogsummary" class="link-man">pmlogsummary(1)</a> utility is used to obtain the average values used for comparison.
+  <p>The archive specifiers <em>archive1</em> and <em>archive2</em> may be comma-separated lists of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. Each archive in the resulting set of archives must have been previously created using <strong>pmlogger</strong>(1). The <strong>pmlogsummary</strong>(1) utility is used to obtain the average values used for comparison.
   <p>There are two sorts of invocation of the tool: with either one or two sets of archives.
-  <p>In the first case, the only sensible command line requires use of all four time window arguments. These are specified using the same time window format described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, and are <strong>-S</strong>/<strong>--start</strong> and <strong>-T</strong>/<strong>--finish</strong> for the start and end times of the first time window of interest in the archive set, and <strong>-B</strong>/<strong>--before</strong> and <strong>-E</strong>/<strong>--end</strong> for the start and end times of the second time window of interest.
+  <p>In the first case, the only sensible command line requires use of all four time window arguments. These are specified using the same time window format described in <strong>PCPIntro</strong>(1), and are <strong>-S</strong>/<strong>--start</strong> and <strong>-T</strong>/<strong>--finish</strong> for the start and end times of the first time window of interest in the archive set, and <strong>-B</strong>/<strong>--before</strong> and <strong>-E</strong>/<strong>--end</strong> for the start and end times of the second time window of interest.
   <p>In the second case, with two sets of archives, the <strong>-B</strong>/<strong>--before</strong> and <strong>-E</strong>/<strong>--end</strong> options might be unnecessary. This might be the case, for example, when comparing the same time window of two consecutive days (usually two separate sets of archives), or a time window on the same day of different weeks.
   <p>In either case, <strong>pmdiff</strong> produces a sorted summary of those metrics in the specified window whose values have deviated the most from a minimal threshold. The level of deviation is calculated by dividing the average value of each metric in both logs, and then calculating whether the ratio falls outside of a range considered normal. This ratio can be adjusted using the <strong>-q</strong>/<strong>--threshold</strong> option, and by default it is 2 (i.e. report all metrics with average values that have more than doubled in the two time windows or more than halved in the two time windows).
   <p>If the baseline value is zero and the comparison value is non-zero, the ratio is reported as “|+|” (infinitely large). If the comparison value is zero and the baseline value is non-zero, the ratio is reported as “|-|” (infinitely small).
@@ -31,16 +31,13 @@
     <dt><strong>--skip-missing</strong>
     <dd>By default, <strong>pmdiff</strong> will report the names of any metrics that are in one archive set but not the other. This option suppresses that reporting.
     <dt><strong>-x</strong>
-    <dd>
-      Compare each metric in each archive set in the time windows specified to a given <a href="/1/egrep" class="link-man">egrep(1)</a> pattern, excluding those that match from the report output.
+    <dd>Compare each metric in each archive set in the time windows specified to a given <strong>egrep</strong>(1) pattern, excluding those that match from the report output.
     <dt><strong>-X</strong>
-    <dd>
-      Allows a <em>file</em> to be specified which containing <a href="/1/egrep" class="link-man">egrep(1)</a> patterns which are applied to the metric names to optionally exclude some from the report.
+    <dd>Allows a <em>file</em> to be specified which containing <strong>egrep</strong>(1) patterns which are applied to the metric names to optionally exclude some from the report.
     <dt><strong>-z</strong>
     <dd>Use the local timezone from the given archive set.
     <dt><strong>-Z</strong>/<strong>--timezone</strong>
-    <dd>
-      Changes the timezone in the archive labels to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <a href="/7/environ" class="link-man">environ(7)</a>.
+    <dd>Changes the timezone in the archive labels to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
   </dl>
 </div>
 <div class="section">
@@ -52,10 +49,10 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmlogger" class="link-man">pmlogger(1)</a>, <a href="/1/pmlogsummary" class="link-man">pmlogsummary(1)</a>, <a href="/1/egrep" class="link-man">egrep(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+  <p><strong>PCPIntro</strong>(1), <strong>pmlogger</strong>(1), <strong>pmlogsummary</strong>(1), <strong>egrep</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
 </div>
 

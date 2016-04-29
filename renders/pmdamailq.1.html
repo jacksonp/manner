@@ -13,22 +13,20 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p><strong>pmdamailq</strong> is a Performance Metrics Domain Agent (PMDA) which extracts performance metrics describing the state of the e-mail queues managed by <a href="/1/sendmail" class="link-man">sendmail(1)</a> and other mail transfer agents.
+  <p><strong>pmdamailq</strong> is a Performance Metrics Domain Agent (PMDA) which extracts performance metrics describing the state of the e-mail queues managed by <strong>sendmail</strong>(1) and other mail transfer agents.
   <p>The <strong>mailq</strong> PMDA exports metrics that measure the total number of entries in the mail queue, and the subtotals for entries that have been queued for various time periods.
   <p>A brief description of the <strong>pmdamailq</strong> command line options follows:
   <dl>
     <dt><strong>-b</strong>
     <dd>
-      The <em>binlist</em> argument specifies a list of delay thresholds used to “bin” the entries in the queue into a a histogram based on how long the entry has been in the mail queue. The default thresholds are: 1 hour, 4 hours, 8 hours, 1 day, 3 days and 7 days. The entries in <em>binlist</em> are comma separated time intervals, using the syntax described in <a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a> for an update or reporting interval, e.g. the default list could be specified using the value <strong>1hr,4hrs,8hrs,1day,3days,7days</strong>.<br>
+      The <em>binlist</em> argument specifies a list of delay thresholds used to “bin” the entries in the queue into a a histogram based on how long the entry has been in the mail queue. The default thresholds are: 1 hour, 4 hours, 8 hours, 1 day, 3 days and 7 days. The entries in <em>binlist</em> are comma separated time intervals, using the syntax described in <strong>PCPIntro</strong>(1) for an update or reporting interval, e.g. the default list could be specified using the value <strong>1hr,4hrs,8hrs,1day,3days,7days</strong>.<br>
       <p>Values in <em>binlist</em> are assumed to be in ascending order, and mail items in the queue less than the first threshold are binned into a special bin labeled “recent”.
     <dt><strong>-d</strong>
     <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>
-      Location of the log file. By default, a log file named <em>mailq.log</em> is written in the current directory of <a href="/1/pmcd" class="link-man">pmcd(1)</a> when <strong>pmdamailq</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd .</strong> If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>Location of the log file. By default, a log file named <em>mailq.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdamailq</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd .</strong> If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-r</strong>
-    <dd>
-      Use an extended regular expression to match file names in the mail queue directory, rather than assuming all “df” prefixed files in the directory are mail files (the “df” prefix is the <strong>sendmail</strong> convention, but this convention is not followed by other mail daemons). The <em>regex</em> pattern specified should conform to the POSIX format described in <a href="/3/regex" class="link-man">regex(3)</a>, and it describes file names that should be considered mail.
+    <dd>Use an extended regular expression to match file names in the mail queue directory, rather than assuming all “df” prefixed files in the directory are mail files (the “df” prefix is the <strong>sendmail</strong> convention, but this convention is not followed by other mail daemons). The <em>regex</em> pattern specified should conform to the POSIX format described in <strong>regex</strong>(3), and it describes file names that should be considered mail.
     <dt><strong>-U</strong>
     <dd>User account under which to run the agent. The default is the unprivileged “pcp” account in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
   </dl>
@@ -42,7 +40,7 @@
   <p>If you want to undo the installation, do the following as root:
   <pre> # cd $PCP_PMDAS_DIR/mailq
  # ./Remove</pre>
-  <p><strong>pmdamailq</strong> is launched by <a href="/1/pmcd" class="link-man">pmcd(1)</a> and should never be executed directly. The Install and Remove scripts notify <a href="/1/pmcd" class="link-man">pmcd(1)</a> when the agent is installed or removed.
+  <p><strong>pmdamailq</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
 </div>
 <div class="section">
   <h2>FILES</h2>
@@ -61,10 +59,10 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/1/PCPIntro" class="link-man">PCPIntro(1)</a>, <a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+  <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
 </div>
 

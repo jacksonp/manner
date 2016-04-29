@@ -21,8 +21,7 @@
     <dt><strong>-d</strong>
     <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>
-      Location of the log file. By default, a log file named <em>cisco.log</em> is written in the current directory of <a href="/1/pmcd" class="link-man">pmcd(1)</a> when <strong>pmdacisco</strong> is started, i.e. <em>$PCP_LOG_DIR/pmcd</em>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>Location of the log file. By default, a log file named <em>cisco.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdacisco</strong> is started, i.e. <em>$PCP_LOG_DIR/pmcd</em>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-P</strong>
     <dd>By default, it is assumed that no user-level password is required to access the Cisco's telnet port. If user-level passwords have been enabled on the Ciscos, then those passwords must be specified to <strong>pmdacisco</strong>. If specified with the <strong>-P</strong> option, <em>password</em> will be used as the default user-level password for all Ciscos. See also the INTERFACE IDENTIFICATION section below.
     <dt><strong>-r</strong>
@@ -48,7 +47,7 @@
     <dt>interface
     <dd>
       Depending on the model of the Cisco, this will either be an integer, e.g. <strong>s0</strong>, or an integer followed by a slash (“/”) followed by a subinterface identification in one of a variety of syntactic forms, e.g. <strong>e1/0</strong>, <strong>G0/0/1</strong> or <strong>s4/2.1</strong>.<br>
-      <p>To discover the valid interfaces on a particular Cisco, connect to the telnet port (using <a href="/1/telnet" class="link-man">telnet(1)</a>) and enter the command “show int” and look for the interface identifiers following the keywords “Ethernet”, “Fddi”, “Serial”, etc.
+      <p>To discover the valid interfaces on a particular Cisco, connect to the telnet port (using <strong>telnet</strong>(1)) and enter the command “show int” and look for the interface identifiers following the keywords “Ethernet”, “Fddi”, “Serial”, etc.
       <p>Alternatively run the <strong>probe</strong> command.
     <dt>username
     <dd>If there is a username login, and it is different to the default (see <strong>-U</strong> above), it may be optionally specified here by appending “@” and the username to the end of <em>interface-spec</em>.
@@ -70,7 +69,7 @@
 <div class="section">
   <h2>HELPER UTILITIES</h2>
   <p>The <strong>probe</strong> command may be used to discover the names of all interfaces for a particular Cisco router identified by <em>host</em>. The <strong>-P</strong> argument is the same as for <strong>pmdacisco</strong>.
-  <p>The <strong>parse</strong> command takes exactly the same arguments as <strong>pmdacisco</strong>, but executes outside the control of any <a href="/1/pmcd" class="link-man">pmcd(1)</a> and so may be used to diagnose problems with handling a particular Cisco router and/or one of its interfaces.
+  <p>The <strong>parse</strong> command takes exactly the same arguments as <strong>pmdacisco</strong>, but executes outside the control of any <strong>pmcd</strong>(1) and so may be used to diagnose problems with handling a particular Cisco router and/or one of its interfaces.
   <p>Additional diagnostic verbosity may be produced using the <strong>-D appl0,appl1,appl2</strong> command line option. <strong>appl0</strong> logs connect and disconnect events, login progress, high-level flow of control and extracted statistics. <strong>appl1</strong> traces all commands sent to the Cisco device. <strong>appl2</strong> logs tokenizing and parsing of the output from the Cisco device. Diagnostics are generated on standard error as each sample is fetched and parsed.
 </div>
 <div class="section">
@@ -81,7 +80,7 @@
   <p>If you want to undo the installation, do the following as root:
   <pre> # cd $PCP_PMDAS_DIR/cisco
  # ./Remove</pre>
-  <p><strong>pmdacisco</strong> is launched by <a href="/1/pmcd" class="link-man">pmcd(1)</a> and should never be executed directly. The Install and Remove scripts notify <a href="/1/pmcd" class="link-man">pmcd(1)</a> when the agent is installed or removed.
+  <p><strong>pmdacisco</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
 </div>
 <div class="section">
   <h2>FILES</h2>
@@ -100,10 +99,10 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/1/pmcd" class="link-man">pmcd(1)</a>, <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a> and <a href="/5/pcp.env" class="link-man">pcp.env(5)</a>.
+  <p><strong>pmcd</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
 </div>
 

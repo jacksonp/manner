@@ -13,7 +13,7 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p><strong>pmdabash</strong> is an experimental Performance Metrics Domain Agent (PMDA) which exports “xtrace” events from a traced <a href="/1/bash" class="link-man">bash(1)</a> process. This includes the command execution information that would usually be sent to standard error with the <strong>set -x</strong> option to the shell.
+  <p><strong>pmdabash</strong> is an experimental Performance Metrics Domain Agent (PMDA) which exports “xtrace” events from a traced <strong>bash</strong>(1) process. This includes the command execution information that would usually be sent to standard error with the <strong>set -x</strong> option to the shell.
   <p>Event metrics are exported showing each command executed, the function name and line number in the script, and a timestamp. Additionally, the process identifier for the shell and its parent process are exported.
   <p>This requires <strong>bash</strong> version 4 or later.
   <p>A brief description of the <strong>pmdabash</strong> command line options follows:
@@ -21,8 +21,7 @@
     <dt><strong>-d</strong>
     <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>
-      Location of the log file. By default, a log file named <em>bash.log</em> is written in the current directory of <a href="/1/pmcd" class="link-man">pmcd(1)</a> when <strong>pmdabash</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>Location of the log file. By default, a log file named <em>bash.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdabash</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-s</strong>
     <dd>Amount of time (in seconds) between subsequent evaluations of the shell trace file descriptor(s). The default is 2 seconds.
   </dl>
@@ -42,11 +41,11 @@
   <p>If you want to undo the installation, do the following as root:
   <pre> # cd $PCP_PMDAS_DIR/bash
  # ./Remove</pre>
-  <p><strong>pmdabash</strong> is launched by <a href="/1/pmcd" class="link-man">pmcd(1)</a> and should never be executed directly. The Install and Remove scripts notify <a href="/1/pmcd" class="link-man">pmcd(1)</a> when the agent is installed or removed.
+  <p><strong>pmdabash</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
 </div>
 <div class="section">
   <h2>INSTRUMENTATION</h2>
-  <p>In order to allow the flow of event data between a <a href="/1/bash" class="link-man">bash(1)</a> script and <strong>pmdabash</strong>, the script should take the following actions:
+  <p>In order to allow the flow of event data between a <strong>bash</strong>(1) script and <strong>pmdabash</strong>, the script should take the following actions:
   <pre> #!/bin/sh
  source $PCP_DIR/etc/pcp.sh
 
@@ -66,7 +65,7 @@
  bash.xtrace.parameters.lineno
  bash.xtrace.parameters.function
  bash.xtrace.parameters.command</pre>
-  <p>When an instrumented script is running, the generation of event records can be verified using the <a href="/1/pmevent" class="link-man">pmevent(1)</a> command, as follows:
+  <p>When an instrumented script is running, the generation of event records can be verified using the <strong>pmevent</strong>(1) command, as follows:
   <pre> $ pmevent -t 1 -x '' bash.xtrace.records
  host:      localhost
  samples:   all
@@ -115,10 +114,10 @@
 </div>
 <div class="section">
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <a href="/5/pcp.conf" class="link-man">pcp.conf(5)</a>.
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/1/bash" class="link-man">bash(1)</a>, <a href="/1/pmevent" class="link-man">pmevent(1)</a> and <a href="/1/pmcd" class="link-man">pmcd(1)</a>.
+  <p><strong>bash</strong>(1), <strong>pmevent</strong>(1) and <strong>pmcd</strong>(1).
 </div>
 

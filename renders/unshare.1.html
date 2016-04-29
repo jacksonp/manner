@@ -14,7 +14,7 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>Unshares the indicated namespaces from the parent process and then executes the specified <em>program</em>.
-  <p>The namespaces can optionally be made persistent by bind mounting /proc/<em>pid</em>/ns/<em>type</em> files to a filesystem path and entered with <a href="/1/nsenter" class="link-man">nsenter(1)</a> even after the <em>program</em> terminates. Once a persistent namespace is no longer needed, it can be unpersisted with <a href="/8/umount" class="link-man">umount(8)</a>. See the <strong>EXAMPLES</strong> section for more details.
+  <p>The namespaces can optionally be made persistent by bind mounting /proc/<em>pid</em>/ns/<em>type</em> files to a filesystem path and entered with <strong>nsenter</strong>(1) even after the <em>program</em> terminates. Once a persistent namespace is no longer needed, it can be unpersisted with <strong>umount</strong>(8). See the <strong>EXAMPLES</strong> section for more details.
   <p>The namespaces to be unshared are indicated via options. Unshareable namespaces are:
   <dl>
     <dt><strong>mount namespace</strong>
@@ -62,10 +62,9 @@
     <dt><strong>--propagation private</strong>|<strong>shared</strong>|<strong>slave</strong>|<strong>unchanged</strong>
     <dd>Recursively set the mount propagation flag in the new mount namespace. The default is to set the propagation to <em>private</em>. It is possible to disable this feature with the argument <strong>unchanged</strong>. The option is silently ignored when the mount namespace (<strong>--mount</strong>) is not requested.
     <dt><strong>--setgroups allow</strong>|<strong>deny</strong>
-    <dd>
-      Allow or deny the <a href="/2/setgroups" class="link-man">setgroups(2)</a> syscall in a user namespace.<br>
-      <br>
-      To be able to call <a href="/2/setgroups" class="link-man">setgroups(2)</a>, the calling process must at least have CAP_SETGID. But since Linux 3.19 a further restriction applies: the kernel gives permission to call <a href="/2/setgroups" class="link-man">setgroups(2)</a> only after the GID map (<strong>/proc/</strong><em>pid</em><strong>/gid_map</strong>) has been set. The GID map is writable by root when <a href="/2/setgroups" class="link-man">setgroups(2)</a> is enabled (i.e. <strong>allow</strong>, the default), and the GID map becomes writable by unprivileged processes when <a href="/2/setgroups" class="link-man">setgroups(2)</a> is permanently disabled (with <strong>deny</strong>).
+    <dd>Allow or deny the <strong>setgroups</strong>(2) syscall in a user namespace.<br>
+    <br>
+    To be able to call <strong>setgroups</strong>(2), the calling process must at least have CAP_SETGID. But since Linux 3.19 a further restriction applies: the kernel gives permission to call <strong>setgroups</strong>(2) only after the GID map (<strong>/proc/</strong><em>pid</em><strong>/gid_map</strong>) has been set. The GID map is writable by root when <strong>setgroups</strong>(2) is enabled (i.e. <strong>allow</strong>, the default), and the GID map becomes writable by unprivileged processes when <strong>setgroups</strong>(2) is permanently disabled (with <strong>deny</strong>).
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>Display version information and exit.
     <dt><strong>-h</strong>, <strong>--help</strong>
@@ -96,7 +95,7 @@
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><a href="/2/unshare" class="link-man">unshare(2)</a>, <a href="/2/clone" class="link-man">clone(2)</a>, <a href="/8/mount" class="link-man">mount(8)</a>
+  <p><strong>unshare</strong>(2), <strong>clone</strong>(2), <strong>mount</strong>(8)
 </div>
 <div class="section">
   <h2>AUTHORS</h2>

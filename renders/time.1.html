@@ -13,8 +13,8 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p>The <strong>time</strong> command runs the specified program <em>command</em> with the given arguments. When <em>command</em> finishes, <strong>time</strong> writes a message to standard error giving timing statistics about this program run. These statistics consist of (i) the elapsed real time between invocation and termination, (ii) the user CPU time (the sum of the <em>tms_utime</em> and <em>tms_cutime</em> values in a <em>struct tms</em> as returned by <a href="/2/times" class="link-man">times(2)</a>), and (iii) the system CPU time (the sum of the <em>tms_stime</em> and <em>tms_cstime</em> values in a <em>struct tms</em> as returned by <a href="/2/times" class="link-man">times(2)</a>).
-  <p>Note: some shells (e.g., <a href="/1/bash" class="link-man">bash(1)</a>) have a built-in <strong>time</strong> command that provides similar information on the usage of time and possibly other resources. To access the real command, you may need to specify its pathname (something like <em>/usr/bin/time</em>).
+  <p>The <strong>time</strong> command runs the specified program <em>command</em> with the given arguments. When <em>command</em> finishes, <strong>time</strong> writes a message to standard error giving timing statistics about this program run. These statistics consist of (i) the elapsed real time between invocation and termination, (ii) the user CPU time (the sum of the <em>tms_utime</em> and <em>tms_cutime</em> values in a <em>struct tms</em> as returned by <strong>times</strong>(2)), and (iii) the system CPU time (the sum of the <em>tms_stime</em> and <em>tms_cstime</em> values in a <em>struct tms</em> as returned by <strong>times</strong>(2)).
+  <p>Note: some shells (e.g., <strong>bash</strong>(1)) have a built-in <strong>time</strong> command that provides similar information on the usage of time and possibly other resources. To access the real command, you may need to specify its pathname (something like <em>/usr/bin/time</em>).
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -46,14 +46,13 @@
   <p>is used.
   <div class="subsection">
     <h3>The format string</h3>
-    <p>The format is interpreted in the usual printf-like way. Ordinary characters are directly copied, tab, newline and backslash are escaped using \t, \n and \\, a percent sign is represented by %%, and otherwise % indicates a conversion. The program <strong>time</strong> will always add a trailing newline itself. The conversions follow. All of those used by <a href="/1/tcsh" class="link-man">tcsh(1)</a> are supported.
+    <p>The format is interpreted in the usual printf-like way. Ordinary characters are directly copied, tab, newline and backslash are escaped using \t, \n and \\, a percent sign is represented by %%, and otherwise % indicates a conversion. The program <strong>time</strong> will always add a trailing newline itself. The conversions follow. All of those used by <strong>tcsh</strong>(1) are supported.
     <p><strong>Time</strong>
     <dl>
       <dt><strong>%E</strong>
       <dd>Elapsed real time (in [hours:]minutes:seconds).
       <dt><strong>%e</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Elapsed real time (in seconds).
+      <dd>(Not in <strong>tcsh</strong>(1).) Elapsed real time (in seconds).
       <dt><strong>%S</strong>
       <dd>Total number of CPU-seconds that the process spent in kernel mode.
       <dt><strong>%U</strong>
@@ -66,20 +65,17 @@
       <dt><strong>%M</strong>
       <dd>Maximum resident set size of the process during its lifetime, in Kbytes.
       <dt><strong>%t</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Average resident set size of the process, in Kbytes.
+      <dd>(Not in <strong>tcsh</strong>(1).) Average resident set size of the process, in Kbytes.
       <dt><strong>%K</strong>
       <dd>Average total (data+stack+text) memory use of the process, in Kbytes.
       <dt><strong>%D</strong>
       <dd>Average size of the process's unshared data area, in Kbytes.
       <dt><strong>%p</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Average size of the process's unshared stack space, in Kbytes.
+      <dd>(Not in <strong>tcsh</strong>(1).) Average size of the process's unshared stack space, in Kbytes.
       <dt><strong>%X</strong>
       <dd>Average size of the process's shared text space, in Kbytes.
       <dt><strong>%Z</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) System's page size, in bytes. This is a per-system constant, but varies between systems.
+      <dd>(Not in <strong>tcsh</strong>(1).) System's page size, in bytes. This is a per-system constant, but varies between systems.
       <dt><strong>%F</strong>
       <dd>Number of major page faults that occurred while the process was running. These are faults where the page has to be read in from disk.
       <dt><strong>%R</strong>
@@ -104,11 +100,9 @@
       <dt><strong>%k</strong>
       <dd>Number of signals delivered to the process.
       <dt><strong>%C</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Name and command-line arguments of the command being timed.
+      <dd>(Not in <strong>tcsh</strong>(1).) Name and command-line arguments of the command being timed.
       <dt><strong>%x</strong>
-      <dd>
-        (Not in <a href="/1/tcsh" class="link-man">tcsh(1)</a>.) Exit status of the command.
+      <dd>(Not in <strong>tcsh</strong>(1).) Exit status of the command.
     </dl>
   </div>
   <div class="subsection">
@@ -142,7 +136,7 @@
   <h2>BUGS</h2>
   <p>Not all resources are measured by all versions of UNIX, so some of the values might be reported as zero. The present selection was mostly inspired by the data provided by 4.2 or 4.3BSD.
   <p>GNU time version 1.7 is not yet localized. Thus, it does not implement the POSIX requirements.
-  <p>The environment variable <strong>TIME</strong> was badly chosen. It is not unusual for systems like <a href="/1/autoconf" class="link-man">autoconf(1)</a> or <a href="/1/make" class="link-man">make(1)</a> to use environment variables with the name of a utility to override the utility to be used. Uses like MORE or TIME for options to programs (instead of program pathnames) tend to lead to difficulties.
+  <p>The environment variable <strong>TIME</strong> was badly chosen. It is not unusual for systems like <strong>autoconf</strong>(1) or <strong>make</strong>(1) to use environment variables with the name of a utility to override the utility to be used. Uses like MORE or TIME for options to programs (instead of program pathnames) tend to lead to difficulties.
   <p>It seems unfortunate that <em>-o</em> overwrites instead of appends. (That is, the <em>-a</em> option should be the default.)
   <p>Mail suggestions and bug reports for GNU <strong>time</strong> to<br>
   <em>bug-utils@prep.ai.mit.edu</em><br>
@@ -152,6 +146,6 @@
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><strong>bash(1),</strong> <a href="/1/tcsh" class="link-man">tcsh(1)</a>, <a href="/2/times" class="link-man">times(2)</a>, <a href="/2/wait3" class="link-man">wait3(2)</a>
+  <p><strong>bash(1),</strong> <strong>tcsh</strong>(1), <strong>times</strong>(2), <strong>wait3</strong>(2)
 </div>
 
