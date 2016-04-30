@@ -269,7 +269,7 @@ class Blocks
                 continue;
             }
 
-            if (preg_match('~^\.UR (.*)~u', $line, $matches)) {
+            if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
                 $url    = trim($matches[1]);
                 if (filter_var($url, FILTER_VALIDATE_EMAIL)) {

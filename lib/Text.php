@@ -234,7 +234,7 @@ class Text
             $line = $firstPassLines[$i];
 
             // Don't care about .UR without an argument or with an invalid URL
-            if (preg_match('~^\.UR\s*(?<url>.*)$~', $line, $matchesUR)) {
+            if (preg_match('~^\.UR\s*<?(?<url>.*?)>?$~', $line, $matchesUR)) {
                 if ($i === $numFirstPassLines - 1) {
                     continue;
                 }
