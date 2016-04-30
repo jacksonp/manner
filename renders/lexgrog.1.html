@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="2013-06-27" data-package="2.6.5" data-section-name="Manual pager utils">
+<title>LEXGROG</title>
+<h1>LEXGROG</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>lexgrog - parse header information in man pages
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>lexgrog</strong> [<strong>-m</strong>|<strong>-c</strong>] [<strong>-fhwV</strong>] [<strong>-E</strong> <em>encoding</em>] <em>file</em> ...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>lexgrog</strong> is an implementation of the traditional “groff guess” utility in <strong>lex</strong>. It reads the list of files on its command line as either man page source files or preformatted “cat” pages, and displays their name and description as used by <strong>apropos</strong> and <strong>whatis</strong>, the list of preprocessing filters required by the man page before it is passed to <strong>nroff</strong> or <strong>troff</strong>, or both.
+  <p>If its input is badly formatted, <strong>lexgrog</strong> will print “parse failed”; this may be useful for external programs that need to check man pages for correctness. If one of <strong>lexgrog</strong>'s input files is “-”, it will read from standard input; if any input file is compressed, a decompressed version will be read automatically.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-m</strong>, <strong>--man</strong>
+    <dd>
+      <p>Parse input as man page source files. This is the default if neither <strong>--man</strong> nor <strong>--cat</strong> is given.
+    <dt><strong>-c</strong>, <strong>--cat</strong>
+    <dd>
+      <p>Parse input as preformatted man pages (“cat pages”). <strong>--man</strong> and <strong>--cat</strong> may not be given simultaneously.
+    <dt><strong>-w</strong>, <strong>--whatis</strong>
+    <dd>
+      <p>Display the name and description from the man page's header, as used by <strong>apropos</strong> and <strong>whatis</strong>. This is the default if neither <strong>--whatis</strong> nor <strong>--filters</strong> is given.
+    <dt><strong>-f</strong>, <strong>--filters</strong>
+    <dd>
+      <p>Display the list of filters needed to preprocess the man page before formatting with <strong>nroff</strong> or <strong>troff</strong>.
+    <dt><strong>-E</strong> <em>encoding</em>, <strong>--encoding</strong> <em>encoding</em>
+    <dd>
+      <p>Override the guessed character set for the page to <em>encoding</em>.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>
+      <p>Print a help message and exit.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>
+      <p>Display version information.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXIT STATUS</h2>
+  <dl>
+    <dt><strong>0</strong>
+    <dd>
+      <p>Successful program execution.
+    <dt><strong>1</strong>
+    <dd>
+      <p>Usage error.
+    <dt><strong>2</strong>
+    <dd>
+      <p><strong>lexgrog</strong> failed to parse one or more of its input files.
+  </dl>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <pre>   $ lexgrog man.1
+   man.1: "man - an interface to the on-line reference manuals"
+   $ lexgrog -fw man.1
+   man.1 (t): "man - an interface to the on-line reference manuals"
+   $ lexgrog -c whatis.cat1
+   whatis.cat1: "whatis - display manual page descriptions"
+   $ lexgrog broken.1
+   broken.1: parse failed</pre>
+</div>
+<div class="section">
+  <h2>WHATIS PARSING</h2>
+  <p><strong>mandb</strong> (which uses the same code as <strong>lexgrog</strong>) parses the <strong>NAME</strong> section at the top of each manual page looking for names and descriptions of the features documented in each. While the parser is quite tolerant, as it has to cope with a number of different forms that have historically been used, it may sometimes fail to extract the required information.
+  <p>When using the traditional <em>man</em> macro set, a correct <strong>NAME</strong> section looks something like this:
+  <div class="indent">
+    <pre> .SH NAME
+ foo \- program to do something</pre>
+  </div>
+  <p>Some manual pagers require the ‘\-’ to be exactly as shown; <strong>mandb</strong> is more tolerant, but for compatibility with other systems it is nevertheless a good idea to retain the backslash.
+  <p>On the left-hand side, there may be several names, separated by commas. Names containing whitespace will be ignored to avoid pathological behaviour on certain ill-formed <strong>NAME</strong> sections. The text on the right-hand side is free-form, and may be spread over multiple lines. If several features with different descriptions are being documented in the same manual page, the following form is therefore used:
+  <div class="indent">
+    <pre> .SH NAME
+ foo, bar \- programs to do something
+ .br
+ baz \- program to do nothing</pre>
+  </div>
+  <p>(A macro which starts a new paragraph, like <code>.PP</code>, may be used instead of the break macro <code>.br</code>.)
+  <p>When using the BSD-derived <em>mdoc</em> macro set, a correct <strong>NAME</strong> section looks something like this:
+  <div class="indent">
+    <pre> .Sh NAME
+ .Nm foo
+ .Nd program to do something</pre>
+  </div>
+  <p>There are several common reasons why whatis parsing fails. Sometimes authors of manual pages replace ‘.SH NAME’ with ‘.SH MYPROGRAM’, and then <strong>mandb</strong> cannot find the section from which to extract the information it needs. Sometimes authors include a NAME section, but place free-form text there rather than ‘name \- description’. However, any syntax resembling the above should be accepted.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><em>apropos</em>(1), <em>man</em>(1), <em>whatis</em>(1), <em>mandb</em>(8)
+</div>
+<div class="section">
+  <h2>NOTES</h2>
+  <p><strong>lexgrog</strong> attempts to parse files containing .so requests, but will only be able to do so correctly if the files are properly installed in a manual page hierarchy.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>The code used by <strong>lexgrog</strong> to scan man pages was written by:
+  <pre> Wilf. (G.Wilford@ee.surrey.ac.uk).
+ Fabrizio Polacco (fpolacco@debian.org).
+ Colin Watson (cjwatson@debian.org).</pre>
+  <p>Colin Watson wrote the current incarnation of the command-line front-end, as well as this man page.
+</div>
+
