@@ -104,17 +104,17 @@ class Text
                 throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
             }
 
-            if ($line === '.if t \\{\\') {
+            if (preg_match('~\.if [tv] \\\\{\\\\~', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
                     if (preg_match('~\\\\}$~', $line)) {
                         continue 2;
                     }
                 }
-                throw new Exception('.if t \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                throw new Exception('.if [tv] \\{\\ - not followed by expected pattern on line ' . $i . '.');
             }
 
-            if (strpos($line, '.if t ') === 0) {
+            if (preg_match('~\.if [tv] ~', $line)) {
                 continue;
             }
 
@@ -129,11 +129,12 @@ class Text
 
         }
 
-        $macroReplacements = [];
-        $numNoCondLines    = count($linesNoCond);
-        $firstPassLines    = [];
-        $aliases           = [];
-        $foundTitle        = false;
+        $macroReplacements  = [];
+        $numNoCondLines     = count($linesNoCond);
+        $firstPassLines     = [];
+        $aliases            = [];
+        $stringReplacements = [];
+        $foundTitle         = false;
 
         $man = Man::instance();
 
@@ -232,6 +233,18 @@ class Text
                 continue;
             }
 
+            if (preg_match('~^\.ds (.*?) (.*)$~u', $line, $matches)) {
+                if (mb_strlen($matches[1]) === 1) {
+                    $stringReplacements['\*' . $matches[1]] = $matches[2];
+                }
+                if (mb_strlen($matches[1]) <= 2) {
+                    $stringReplacements['\(' . $matches[1]]  = $matches[2];
+                    $stringReplacements['\*(' . $matches[1]] = $matches[2];
+                }
+                $stringReplacements['\[' . $matches[1] . ']'] = $matches[2];
+                continue;
+            }
+
             $firstPassLines[] = $line;
 
         }
@@ -271,6 +284,10 @@ class Text
                 foreach ($aliases as $new => $old) {
                     $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
                 }
+            }
+
+            if (count($stringReplacements) > 0) {
+                $line = strtr($line, $stringReplacements);
             }
 
             // Handle stuff like:
