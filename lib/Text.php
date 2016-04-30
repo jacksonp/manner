@@ -147,6 +147,8 @@ class Text
                 if (isset($macroReplacements[$macro])) {
                     foreach ($macroReplacements[$macro] as $macroLine) {
 
+                        $macroLine = str_replace('\\$1', @$bits[0] ?: '', $macroLine);
+
                         // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
                         // Other \$ things are also arguments...
                         if (strpos($macroLine, '\\$') !== false) {
