@@ -52,7 +52,7 @@ class BlockPreformatted
                 }
                 $line      = $blockNode->manLines[++$i];
                 $addIndent = 4;
-            } elseif (preg_match('~^\.(nf|RS|RE)~u', $line)) {
+            } elseif (preg_match('~^\.(nf|RS|RE|ft)~u', $line)) {
                 continue;
             } elseif (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
                 if ($i === $numLines - 1) {

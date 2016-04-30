@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMLOGGER</title>
+<h1>PMLOGGER</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmlogger</strong> - create archive log for performance metrics
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmlogger</strong> [<strong>-c</strong> <em>configfile</em>] [<strong>-h</strong> <em>host</em>] [<strong>-K</strong> <em>spec</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-L</strong>] [<strong>-m</strong> <em>note</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-o</strong>] [<strong>-p</strong> <em>pid</em>] [<strong>-P</strong>] [<strong>-r</strong>] [<strong>-s</strong> <em>endsize</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-u</strong>] [<strong>-U</strong> <em>username</em>] [<strong>-v</strong> <em>volsize</em>] [<strong>-V</strong> <em>version</em>] [<strong>-x</strong> <em>fd</em>] [<strong>-y</strong>] <em>archive</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmlogger</strong> creates the archive logs of performance metric values that may be “played back” by other Performance Co-Pilot (see <strong>PCPIntro</strong>(1)) tools. These logs form the basis of the VCR paradigm and retrospective performance analysis services common to the PCP toolkit.
+  <p>The mandatory argument <em>archive</em> is the base name for the physical files that constitute an archive log.
+  <p>The <strong>-V</strong> option specifies the version for the archive that is generated. By default a version 2 archive is generated, and the only value currently supported for <em>version</em> is 2.
+  <p>Unless directed to another host by the <strong>-h</strong> option or when directly using PMDAs via the <strong>-o</strong> option, <strong>pmlogger</strong> will contact the Performance Metrics Collector Daemon (PMCD) on the local host and use that as the source of the metric values to be logged.
+  <p>To support the required flexibility and control over what is logged and when, <strong>pmlogger</strong> maintains an independent two level logging state for each instance of each performance metric. At the first (mandatory) level, logging is allowed to be <strong>on</strong> (with an associated interval between samples), or <strong>off</strong> or <strong>maybe</strong>. In the latter case, the second (advisory) level logging is allowed to be <strong>on</strong> (with an associated interval between samples), or <strong>off</strong>.
+  <p>The mandatory level allows universal specification that some metrics must be logged, or must <strong>not</strong> be logged. The default state for all instances of all metrics when <strong>pmlogger</strong> starts is mandatory maybe and advisory off.
+  <p>Use <strong>pmlc</strong>(1) to interrogate and change the logging state once <strong>pmlogger</strong> is running.
+  <p>If a metric's state is mandatory (on or off) and a request is made to change it to mandatory maybe, the new state is mandatory maybe and advisory off. If a metric's state is already advisory (on or off) and a request is made to change it to mandatory maybe, the current state is retained.
+  <p>It is not possible for <strong>pmlogger</strong> to log specific instances of a metric and all instances of the same metric concurrently. If specific instances are being logged and a request to log all instances is made, then all instances of the metric will be logged according to the new request, superseding any prior logging request for the metric. A request to log all instances of a metric will supersede any previous request to log all instances. A request to log specific instances of a metric when all instances are already being logged is refused. To do this one must turn off logging for all instances of the metric first. In each case, the validity of the request is checked first; for example a request to change a metric's logging state to advisory on when it is currently mandatory off is never permitted (it is necessary to change the state to mandatory maybe first).
+  <p>Optionally, each system running <strong>pmcd</strong>(1) may also be configured to run a “primary” <strong>pmlogger</strong> instance. This <strong>pmlogger</strong> instance is launched by <strong>$PCP_RC_DIR/pmlogger</strong>, and is affected by the files <em>$PCP_SYSCONF_DIR/pmlogger/control</em>, <em>$PCP_SYSCONF_DIR/pmlogger/control</em>.d (use <strong>chkconfig</strong>(8) or similar platform-specific commands to activate or disable the primary <strong>pmlogger</strong> instance), <em>$PCP_SYSCONFIG_DIR/pmlogger</em> (environment variable settings for the primary <strong>pmlogger</strong>) <em>$PCP_SYSCONF_DIR/pmlogger/pmlogger.options</em> (command line options passed to the primary <strong>pmlogger</strong>) and <em>$PCP_VAR_DIR/config/pmlogger/config.default</em> (the default initial configuration file for the primary <strong>pmlogger</strong>).
+  <p>The primary <strong>pmlogger</strong> instance is identified by the <strong>-P</strong> option. There may be at most one “primary” <strong>pmlogger</strong> instance on each system. The primary <strong>pmlogger</strong> instance (if any) must be running on the same host as the <strong>pmcd</strong>(1) to which it connects (if any), so the <strong>-h</strong> and <strong>-P</strong> options are mutually exclusive.
+  <p>Logging of some metrics is possible even in the absence of a local <strong>pmcd</strong>(1), using the “local context” mode of operation. This is activated using the <strong>-o</strong> option, and causes <strong>pmlogger</strong> to make use of local DSO PMDAs instead of communicating with <strong>pmcd</strong>(1). When operating using a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
+  <p>When launched as a non-primary instance, <strong>pmlogger</strong> will exit immediately if the configuration file causes no metric logging to be scheduled. The <strong>-L</strong> option overrides this behavior, and causes a non-primary <strong>pmlogger</strong> instance to “linger”, presumably pending some future dynamic re-configuration and state change via <strong>pmlc</strong>(1). <strong>pmlogger</strong> will also linger without the <strong>-L</strong> option being used if all the metrics to be logged are logged as once only metrics. When the once only metrics have been logged, a warning message will be generated stating that the event queue is empty and no more events will be scheduled.
+  <p>By default all diagnostics and errors from <strong>pmlogger</strong> are written to the file <em>pmlogger.log</em> in the directory where <strong>pmlogger</strong> is launched. The <strong>-l</strong> option may be used to override the default behavior. If the log file cannot be created or is not writable, output is written to standard error instead.
+  <p>If specified, the <strong>-s</strong> option instructs <strong>pmlogger</strong> to terminate after a certain size in records, bytes or time units has been accumulated. If <em>endsize</em> is an integer then <em>endsize</em> records will be written to the log. If <em>endsize</em> is an integer suffixed by <strong>b</strong> or <strong>bytes</strong> then <em>endsize</em> bytes of the archive data will be written out (note, however, that archive log record boundaries will not be broken and so this limit may be slightly surpassed). Other viable file size units include: <strong>K</strong>, <strong>Kb</strong>, <strong>Kbyte</strong>, <strong>Kilobyte</strong> for kilobytes and <strong>M</strong>, <strong>Mb</strong>, <strong>Mbyte</strong>, <strong>Megabyte</strong> for megabytes and <strong>G</strong>, <strong>Gb</strong>, <strong>Gbyte</strong>, <strong>Gigabyte</strong> for gigabytes. These units may be optionally suffixed by an <strong>s</strong> and may be of mixed case. Alternatively <em>endsize</em> may be an integer or a floating point number suffixed using a time unit as described in <strong>PCPIntro</strong>(1) for the <em>interval</em> argument (to the standard PCP <strong>-t</strong> command line option).
+  <pre> Some examples of different formats:
+<strong> -s 100</strong>
+<strong> -s 100bytes</strong>
+<strong> -s 100K</strong>
+<strong> -s 100Mb</strong>
+<strong> -s 10Gbyte</strong>
+<strong> -s 10mins</strong>
+<strong> -s 1.5hours</strong></pre>
+  <p>The default is for <strong>pmlogger</strong> to run forever.
+  <p>The <strong>-r</strong> option causes the size of the physical record(s) for each group of metrics and the expected contribution of the group to the size of the PCP archive for one full day of collection to be reported in the log file. This information is reported the first time each group is successfully written to the archive.
+  <p>The <strong>-U</strong> option specifies the user account under which to run <strong>pmlogger</strong>. The default is the current user account for interactive use. When run as a daemon, the unprivileged “pcp” account is used in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
+  <p>The log file is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogger</strong> to start a new volume after a certain size in records, bytes, or time units has been accumulated for the current volume. The format of this size specification is identical to that of the <strong>-s</strong> option (see above). The default is for <strong>pmlogger</strong> to create a single volume log. Additional volume switches can also be forced asynchronously by either using <strong>pmlc</strong>(1) or sending <strong>pmlogger</strong> a SIGHUP signal (see below). Note, if a scheduled volume switch is in operation due to the <strong>-v</strong> option, then its counters will be reset after an asynchronous switch.
+  <p>Independent of any <strong>-v</strong> option, each volume of an archive is limited to no more than 2^31 bytes, so <em>pmlogger</em> will automatically create a new volume for the archive before this limit is reached.
+  <p>Normally <strong>pmlogger</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile.</em>
+  <p>Under normal circumstances, <strong>pmlogger</strong> will run forever (except for a <strong>-s</strong> option or a termination signal). The <strong>-T</strong> option may be used to limit the execution time using the format of time as prescribed by <strong>PCPIntro</strong>(1). The time is interpreted within the time zone of the PMCD server, unless the <strong>-y</strong> option is given, within which case the time zone at this logger host is used.
+  <pre> Some examples of different formats:
+<strong> -T 10mins</strong>
+<strong> -T '@ 11:30'</strong></pre>
+  <p>From this it can be seen that <strong>-T 10mins</strong> and <strong>-s 10mins</strong> perform identical actions.
+  <p>Alternatively, <strong>pmlogger</strong> runtime may be limited to the lifetime of another process by using the <strong>-p</strong> or <strong>--PID</strong> option to nominate the PID of the process of interest. In this case the <strong>pmlogger</strong> will exit when the other process no longer exists.
+  <p>When <strong>pmlogger</strong> receives a SIGHUP signal, the current volume of the log is closed, and a new volume is opened. This mechanism (or the alternative mechanism via <strong>pmlc</strong>(1)) may be used to manage the growth of the log files - once a log volume is closed, that file may be archived without ill-effect on the continued operation of <strong>pmlogger</strong>. See also the <strong>-v</strong> option above.
+  <p>Historically the buffers for the current log may be flushed to disk using the <strong>flush</strong> command of <strong>pmlc</strong>(1), or by sending <strong>pmlogger</strong> a SIGUSR1 signal or by using the <strong>-u</strong> option. The current version of <em>pmlogger</em> and the <em>libpcp</em> routines that underpin <em>pmlogger</em> unconditionally use unbuffered writes and a single <strong>fwrite</strong>(3) for each logical record written, and so “flushing” does not force any additional data to be written to the file system. The <strong>-u</strong> option, the SIGUSR1 handling and the <strong>pmlc</strong>(1) <strong>flush</strong> command are retained for backwards compatibility.
+  <p>When launched with the <strong>-x</strong> option, pmlogger will accept asynchronous control requests on the file descriptor <em>fd</em>. This option is only expected to be used internally by PCP applications that support “live record mode”.
+  <p>The <strong>-m</strong> option allows the string <em>note</em> to be appended to the map file for this instance of <strong>pmlogger</strong> in the <strong>$PCP_TMP_DIR/pmlogger</strong> directory. This is currently used internally to document the file descriptor (<em>fd</em>) when the <strong>-x</strong> option is used, or to indicate that this <strong>pmlogger</strong> instance was started under the control of <strong>pmlogger_check</strong>(1).
+</div>
+<div class="section">
+  <h2>CONFIGURATION FILE SYNTAX</h2>
+  <p>The configuration file may be specified with the <strong>-c</strong> option. If it is not, configuration specifications are read from standard input.
+  <p>If <em>configfile</em> does not exist, then a search is made in the directory <em>$PCP_VAR_DIR/config/pmlogger</em> for a file of the same name, and if found that file is used, e.g. if <em>config.mumble</em> does not exist in the current directory and the file <em>$PCP_VAR_DIR/config/pmlogger/config.mumble</em> does exist, then <strong>-c config.mumble</strong> and <strong>-c $PCP_VAR_DIR/config/pmlogger/config.mumble</strong> are equivalent.
+  <p>The syntax for the configuration file is as follows.
+  <dl class="indent-5n">
+    <dt>1.
+    <dd>
+      <p>Words are separated by white space (space, tab or newline).
+    <dt>2.
+    <dd>
+      <p>The symbol “#” (hash) introduces a comment, and all text up to the next newline is ignored.
+    <dt>3.
+    <dd>
+      <p>Keywords (shown in <strong>bold</strong> below) must appear literally (i.e. in lower case).
+    <dt>4.
+    <dd>
+      <p>Each specification begins with the optional keyword <strong>log</strong>, followed by one of the states <strong>mandatory on</strong>, <strong>mandatory off</strong>, <strong>mandatory maybe</strong>, <strong>advisory on</strong> or <strong>advisory off</strong>.
+    <dt>5.
+    <dd>
+      <p>For the <strong>on</strong> states, a logging interval must follow using the syntax ``<strong>once</strong>'', or ``<strong>default</strong>'', or ``<strong>every</strong> <em>N timeunits</em>'', or simply ``<em>N timeunits</em>'' - <em>N</em> is an unsigned integer, and <em>timeunits</em> is one of the keywords <strong>msec</strong>, <strong>millisecond</strong>, <strong>sec</strong>, <strong>second</strong>, <strong>min</strong>, <strong>minute</strong>, <strong>hour</strong> or the plural form of one of the above.<br>
+      <br>
+      Internal limitations require the interval to be smaller than (approximately) 74 hours. An interval value of zero is a synonym for <strong>once</strong>. An interval of <strong>default</strong> means to use the default logging interval of 60 seconds; this default value may be changed to <em>interval</em> with the <strong>-t</strong> command line option.
+      <p>The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds).
+    <dt>6.
+    <dd>
+      <p>Following the state and possible interval specifications comes a “{”, followed by a list of one or more metric specifications and a closing “}”. The list is white space (or comma) separated. If there is only one metric specification in the list, the braces are optional.
+    <dt>7.
+    <dd>
+      <p>A metric specification consists of a metric name optionally followed by a set of instance names. The metric name follows the standard PCP naming conventions, see <strong>pmns</strong>(5), and if the metric name is a non-leaf node in the PMNS (see <strong>pmns</strong>(5)), then <strong>pmlogger</strong> will recursively descend the PMNS and apply the logging specification to all descendent metric names that are leaf nodes in the PMNS. The set of instance names is a “[”, followed by a list of one or more space (or comma) separated names, numbers or strings, and a closing “]”. Elements in the list that are numbers are assumed to be internal instance identifiers, other elements are assumed to be external instance identifiers - see <strong>pmGetInDom</strong>(3) for more information.
+      <div class="indent">
+        <p>If no instances are given, then the logging specification is applied to all instances of the associated metric.
+      </div>
+    <dt>8.
+    <dd>
+      <p>There may be an arbitrary number of logging specifications.
+    <dt>9.
+    <dd>
+      <p>Following all of the logging specifications, there may be an optional access control section, introduced by the literal token <strong>[access]</strong>. Thereafter come access control rules that allow or disallow operations from particular hosts or groups of hosts.
+      <div class="indent-5n">
+        <p>The operations may be used to interrogate or control a running <strong>pmlogger</strong> using <strong>pmlc</strong>(1) and fall into the following classes:
+        <dl>
+          <dt><strong>enquire</strong>
+          <dd>
+            <p>interrogate the status of <strong>pmlogger</strong> and the metrics it is logging
+          <dt><strong>advisory</strong>
+          <dd>
+            <p>Change advisory logging.
+          <dt><strong>mandatory</strong>
+          <dd>
+            <p>Change mandatory logging.
+          <dt><strong>all</strong>
+          <dd>
+            <p>All of the above.
+        </dl>
+        <p>Access control rules are of the form ``<strong>allow</strong> <em>hostlist</em> <strong>:</strong> <em>operationlist</em> <strong>;</strong>'' and ``<strong>disallow</strong> <em>hostlist</em> <strong>:</strong> <em>operationlist</em> <strong>;</strong>''.
+        <p>The <em>hostlist</em> follows the syntax and semantics for the access control mechanisms used by PMCD and are fully documented in <strong>pmcd</strong>(1). An <em>operationslist</em> is a comma separated list of the operations <strong>advisory</strong>, <strong>mandatory</strong>, <strong>enquire</strong> and <strong>all</strong>.
+        <p>A missing <strong>[access]</strong> section allows all access and is equivalent to <strong>allow * : all;</strong>.
+      </div>
+  </dl>
+  <p>The configuration (either from standard input or <em>configfile</em>) is initially scanned by <strong>pmcpp</strong>(1) with the options <strong>-rs</strong> and <strong>-I</strong> <em>$PCP_VAR_DIR/config/pmlogger</em>. This extends the configuration file syntax with include file processing (<strong>%include</strong>), a common location to search for include files (<em>$PCP_VAR_DIR/config/pmlogger</em>), macro definitions (<strong>%define</strong>), macro expansion (<strong>%</strong><em>name</em> and <strong>%{</strong><em>name</em><strong>}</strong>) and conditional inclusion of lines (<strong>%ifdef</strong> <em>name</em> ... <strong>%else</strong> ... <strong>%endif</strong> and <strong>%ifndef</strong> <em>name</em> ... <strong>%else</strong> ... <strong>%endif</strong>).
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>For each PCP utility, there is a sample <strong>pmlogger</strong> configuration file that could be used to create an archive log suitable for replaying with that tool (i.e. includes all of the performance metrics used by the tool). For a tool named <em>foo</em> this configuration file is located in <em>$PCP_VAR_DIR/config/pmlogger/config.foo</em>.
+  <p>The following is a simple default configuration file for a primary <strong>pmlogger</strong> instance, and demonstrates most of the capabilities of the configuration specification language.
+  <pre> log mandatory on once { hinv.ncpu hinv.ndisk }
+ log mandatory on every 10 minutes {
+     disk.all.write
+     disk.all.read
+     network.interface.in.packets [ "et0" ]
+     network.interface.out.packets [ "et0" ]
+     nfs.server.reqs [ "lookup" "getattr" "read" "write" ]
+ }
+
+ log advisory on every 30 minutes {
+     environ.temp
+     pmcd.pdu_in.total
+     pmcd.pdu_out.total
+ }
+
+ %include "macros.default"
+
+ %ifdef %disk_detail
+ log mandatory on %disk_detail_freq {
+     disk.dev
+ }
+ %endif
+
+ [access]
+ disallow * : all except enquire;
+ allow localhost : mandatory, advisory;
+</pre>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><em>archive</em><strong>.meta</strong>
+    <dd>
+      <p>metadata (metric descriptions, instance domains, etc.) for the archive log
+    <dt><em>archive</em><strong>.0</strong>
+    <dd>
+      <p>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...)
+    <dt><em>archive</em><strong>.index</strong>
+    <dd>
+      <p>temporal index to support rapid random access to the other files in the archive log
+    <dt><strong>$PCP_TMP_DIR/pmlogger</strong>
+    <dd>
+      <p><strong>pmlogger</strong> maintains the files in this directory as the map between the process id of the <strong>pmlogger</strong> instance and the IPC port that may be used to control each <strong>pmlogger</strong> instance (as used by <strong>pmlc</strong>(1))
+    <dt><strong>$PCP_VAR_DIR/config/pmlogger/config.default</strong>
+    <dd>
+      <p>default configuration file for the primary logger instance launched from <strong>$PCP_RC_DIR/pmlogger</strong>
+    <dt><strong>$PCP_VAR_DIR/config/pmlogger/config.</strong>*
+    <dd>
+      <p>assorted configuration files suitable for creating logs that may be subsequently replayed with the PCP visualization and monitoring tools
+    <dt><strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em>
+    <dd>
+      <p>Default directory for PCP archive files for performance metric values collected from the host <em>hostname</em>.
+    <dt><strong>$PCP_SYSCONFIG_DIR/pmlogger</strong>
+    <dd>
+      <p>additional environment variables that will be set when the primary <strong>pmlogger</strong> instance executes. Only settings of the form “PMLOGGER_VARIABLE=value” will be honoured.
+    <dt><em>./pmlogger.log</em>
+    <dd>
+      <p>(or <strong>$PCP_LOG_DIR/pmlogger/<em>hostname</em>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
+      all messages and diagnostics are directed here
+  </dl>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>Normally <strong>pmlogger</strong> creates a socket to receive control messages from <strong>pmlc</strong>(1) on the first available TCP/IP port numbered 4330 or higher. The environment variable <strong>PMLOGGER_PORT</strong> may be used to specify an alternative starting port number.
+  <p>If set to the value 1, the <strong>PMLOGGER_LOCAL</strong> environment variable will cause <strong>pmlogger</strong> to run in a localhost-only mode of operation, where it binds only to the loopback interface.
+  <p>The <strong>PMLOGGER_MAXPENDING</strong> variable can be set to indicate the maximum length to which the queue of pending <strong>pmlc</strong> connections may grow.
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogger_check</strong>(1), <strong>__pmSpecLocalPMDA</strong>(3), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5), <strong>pmns</strong>(5) and <strong>chkconfig</strong>(8).
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>The archive logs are sufficiently precious that <strong>pmlogger</strong> will not truncate an existing physical file. A message of the form<br>
+  __pmLogNewFile: “foo.index” already exists, not over-written<br>
+  __pmLogCreate: File exists indicates this situation has arisen. You must explicitly remove the files and launch <strong>pmlogger</strong> again.
+  <p>There may be at most one primary <strong>pmlogger</strong> instance per monitored host; attempting to bend this rule produces the error:<br>
+  pmlogger: there is already a primary pmlogger running
+  <p>Various other messages relating to the creation and/or deletion of files in <em>$PCP_TMP_DIR/pmlogger</em> suggest a permission problem on this directory, or some feral files have appeared therein.
+</div>
+

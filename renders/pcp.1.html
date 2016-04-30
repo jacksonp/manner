@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PCP</title>
+<h1>PCP</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pcp</strong>, <strong>pcp-summary</strong> - run a command or summarize an installation
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pcp</strong> [pcp options...] pcp-<em>command</em> [command options...]<br>
+  <strong>pcp</strong> [<strong>-P</strong>] [<strong>-a</strong> <em>archive</em>] [<strong>-h</strong> <em>host</em>] [<strong>-n</strong> <em>pmnsfile</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>pcp</strong> command is used in one of two modes. By default, it summarizes the Performance Co-Pilot (PCP) installation on the local host. This mode can also be used to summarize the installation from a remote <em>host</em>, or a historical installation from a set of PCP <em>archives</em>. This mode indirectly invokes the <strong>pcp-summary</strong> <em>command</em> (in the absence of any other requested command).
+  <p>Alternatively, a <em>command</em> can be passed to <strong>pcp</strong> to run, again possibly in the context of a remote <em>host</em> or set of historical <em>archives</em>.
+</div>
+<div class="section">
+  <h2>COMMAND MODE</h2>
+  <p>When <strong>pcp</strong> is invoked with a command to run, it will search for the named <em>command</em> in <strong>$PCP_BINADM_DIR</strong> and also <strong>$HOME/.pcp/bin</strong> (these are usually scripts, and are installed with a “pcp-” prefix). This mode of operation allows system performance tools to be implemented using <strong>PMAPI</strong>(3) services, while still preserving all of their usual command line options. These options are thus (indirectly) augmented with the standard PCP option set, as described in <strong>PCPIntro</strong>(1).
+  <p>This provides a convenient mechanism for obtaining retrospective or remote monitoring capabilities while preserving the behaviour of the system tools.
+  <p>For example, the <strong>pcp-free</strong>(1) utility can be invoked as follows, for recorded data from host <em>munch</em>:
+  <pre> $ pcp -a $PCP_LOG_DIR/pmlogger/<em>munch</em>/20140317 -O 11:35:50am <strong>free -m</strong>
+              total       used       free     shared    buffers     cached
+ Mem:         23960      14554       9406          0        176       2137
+ -/+ buffers/cache:      12240      11720
+ Swap         12047          0      12047
+</pre>
+  <p>A complete list of the available and installed tools is provided along with the <strong>pcp</strong>(1) usage message, but some examples include: <strong>pcp-free</strong>(1), <strong>pcp-uptime</strong>(1) and <strong>pcp-numastat</strong>(1).
+</div>
+<div class="section">
+  <h2>SUMMARY MODE</h2>
+  <p>The summary report includes: the OS version, a summary of the hardware inventory, the local timezone, the PCP software version, the state of the <strong>pmcd</strong>(1) process and associated Performance Metrics Domain Agents (PMDAs), as well as information about any PCP archive loggers (<strong>pmlogger</strong>(1)) and PCP inference engines (<strong>pmie</strong>(1)) that are running.
+  <p>With no arguments, <strong>pcp</strong> reports on the local host, however the following options are accepted:
+  <dl>
+    <dt><strong>-a</strong> <em>archive</em>
+    <dd>
+      <p>Report the PCP configuration as described in the set of PCP archive logs, <em>archive</em>, which is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives.
+    <dt><strong>-h</strong> <em>host</em>
+    <dd>
+      <p>Report the PCP configuration on <em>host</em> rather than the local host.
+    <dt><strong>-n</strong> <em>pmnsfile</em>
+    <dd>
+      <p>Load an alternative Performance Metrics Name Space (<strong>pmns</strong>(5)) from the file <em>pmnsfile</em>.
+    <dt><strong>-P</strong>
+    <dd>
+      <p>Display <strong>pmie</strong> performance information - counts of rules evaluating to true, false, or indeterminate, as well as the expected rate of rule calculation, for each <strong>pmie</strong> process running on the default host. Refer to the individual metric help text for full details on these values.
+  </dl>
+  <p>All of the displayed values are performance <em>metric</em> values and further information for each can be obtained using the command:
+  <pre> $ pminfo -dtT <em>metric</em>
+</pre>
+  <p>The complete set of <em>metric</em>s required by <strong>pcp</strong> to produce its output is contained in <strong>$PCP_VAR_DIR/config/pmlogconf/tools/pcp-summary</strong>.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$HOME/.pcp/bin</strong>
+    <dd>
+      <p>Per-user location for <em>command</em> scripts.
+    <dt><strong>$PCP_BINADM_DIR</strong>
+    <dd>
+      <p>System location for installed <em>command</em> scripts.
+    <dt><strong>$PCP_VAR_DIR/config/pmlogconf/tools/pcp-summary</strong>
+    <dd>
+      <p><strong>pmlogconf</strong>(1) configuration file for collecting all of the metrics required by <strong>pcp</strong>.
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>pcp-free</strong>(1), <strong>pcp-numastat</strong>(1), <strong>pcp-python</strong>(1), <strong>pcp-uptime</strong>(1), <strong>pcp-verify</strong>(1), <strong>pmcd</strong>(1), <strong>pmie</strong>(1), <strong>pmlogconf</strong>(1), <strong>pmlogger</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p><strong>pcp</strong> will terminate with an exit status of <strong>1</strong> if <strong>pmcd</strong> on the target host could not be reached or the set of archives could not be opened, or <strong>2</strong> for any other error.
+</div>
+
