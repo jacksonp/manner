@@ -15,8 +15,6 @@ class Text
         $linePrefix  = '';
         $registers   = [];
 
-        $conditionalBlockEndings = ['.\\}', '\'br\\}'];
-
         for ($i = 0; $i < $numRawLines; ++$i) {
 
             $line       = $linePrefix . $rawLines[$i];
@@ -71,13 +69,16 @@ class Text
             if ($line === '.ie n \\{\\') {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if (in_array($line, $conditionalBlockEndings)) {
+                    if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
+                        if (!empty($matches[1])) {
+                            $linesNoCond[] = $matches[1];
+                        }
                         if (!in_array($rawLines[++$i], ['.el \\{\\', '.el\\{\\'])) {
                             throw new Exception('.ie n \\{\\ - not followed by expected pattern on line ' . $i . '.');
                         }
                         for ($i = $i + 1; $i < $numRawLines; ++$i) {
                             $line = $rawLines[$i];
-                            if (in_array($line, $conditionalBlockEndings)) {
+                            if (preg_match('~\\\\}$~', $line)) {
                                 continue 3;
                             }
                         }
@@ -91,7 +92,10 @@ class Text
             if ($line === '.if n \\{\\') {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if (in_array($line, $conditionalBlockEndings)) {
+                    if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
+                        if (!empty($matches[1])) {
+                            $linesNoCond[] = $matches[1];
+                        }
                         continue 2;
                     } else {
                         $linesNoCond[] = $line;
@@ -103,7 +107,7 @@ class Text
             if ($line === '.if t \\{\\') {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if (in_array($line, $conditionalBlockEndings)) {
+                    if (preg_match('~\\\\}$~', $line)) {
                         continue 2;
                     }
                 }
