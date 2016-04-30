@@ -159,7 +159,7 @@ class Text
                 }
             }
 
-            if (preg_match('~\.de1? (\w+)\s*$~u', $line, $matches)) {
+            if (preg_match('~\.de1? ([!\w]+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
