@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="Extended Attributes" data-package="Dec 2001" data-section-name="File Utilities">
+<title>GETFATTR</title>
+<h1>GETFATTR</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>getfattr - get extended attributes of filesystem objects
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <pre> <strong>getfattr</strong> [<strong>-hRLP</strong>] <strong>-n name</strong> [<strong>-e en</strong>] 
+<strong>pathname</strong>...
+ <strong>getfattr</strong> [<strong>-hRLP</strong>] <strong>-d</strong> [<strong>-e en</strong>] 
+[<strong>-m pattern</strong>] <strong>pathname</strong>...</pre>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>For each file, <strong>getfattr</strong> displays the file name, and the set of extended attribute names (and optionally values) which are associated with that file.
+  <p>The output format of <strong>getfattr -d</strong> is as follows:
+  <div class="indent">
+    <pre>  1:  # file: somedir/
+  2:  user.name0="value0"
+  3:  user.name1="value1"
+  4:  user.name2="value2"
+  5:  ...</pre>
+  </div>
+  <p>Line 1 identifies the file name for which the following lines are being reported. The remaining lines (lines 2 to 4 above) show the <em>name</em> and <em>value</em> pairs associated with the specified file.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-n</strong> <em>name</em>, <strong>--name</strong>=<em>name</em>
+    <dd>
+      <p>Dump the value of the named extended attribute.
+    <dt><strong>-d</strong>, <strong>--dump</strong>
+    <dd>
+      <p>Dump the values of all extended attributes associated with <em>pathname</em>.
+    <dt><strong>-e</strong> <em>en</em>, <strong>--encoding</strong>=<em>en</em>
+    <dd>
+      <p>Encode values after retrieving them. Valid values of <em>en</em> are “text”, “hex”, and “base64”. Values encoded as text strings are enclosed in double quotes ("), while strings encoded as hexidecimal and base64 are prefixed with 0x and 0s, respectively.
+    <dt><strong>-h</strong>, <strong>--no-dereference</strong>
+    <dd>
+      <p>Do not dereference symlinks. Instead of the file a symlink refers to, the symlink itself is examined. Unless doing a logical (-L) traversal, do not traverse symlinks to directories.
+    <dt><strong>-m</strong> <em>pattern</em>, <strong>--match</strong>=<em>pattern</em>
+    <dd>
+      <p>Only include attributes with names matching the regular expression <em>pattern</em>. The default value for <em>pattern</em> is “^user\\.”, which includes all the attributes in the user namespace. Specify “-” for including all attributes. Refer to <strong>attr</strong>(5) for a more detailed discussion of namespaces.
+    <dt><strong>--absolute-names</strong>
+    <dd>
+      <p>Do not strip leading slash characters ('/'). The default behaviour is to strip leading slash characters.
+    <dt><strong>--only-values</strong>
+    <dd>
+      <p>Dump out the raw extended attribute value(s) without encoding them.
+    <dt><strong>-R</strong>, <strong>--recursive</strong>
+    <dd>
+      <p>List the attributes of all files and directories recursively.
+    <dt><strong>-L</strong>, <strong>--logical</strong>
+    <dd>
+      <p>Logical walk, follow symbolic links to directories. The default behaviour is to follow symbolic link arguments unless --no-dereference is given, and to skip symbolic links encountered in subdirectories. Only effective in combination with -R.
+    <dt><strong>-P</strong>, <strong>--physical</strong>
+    <dd>
+      <p>Physical walk, do not follow symbolic links to directories. This also skips symbolic link arguments. Only effective in combination with -R.
+    <dt><strong>--version</strong>
+    <dd>
+      <p>Print the version of <strong>getfattr</strong> and exit.
+    <dt><strong>--help</strong>
+    <dd>
+      <p>Print help explaining the command line options.
+    <dt><strong>--</strong>
+    <dd>
+      <p>End of command line options. All remaining parameters are interpreted as file names, even if they start with a dash character.
+  </dl>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Andreas Gruenbacher, &lt;<em>a.gruenbacher@bestbits.at</em>&gt; and the SGI XFS development team, &lt;<em>linux-xfs@oss.sgi.com</em>&gt;.
+  <p>Please send your bug reports or comments to these addresses.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>setfattr(1), and attr(5).
+</div>
+
