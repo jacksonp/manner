@@ -63,11 +63,6 @@ class Blocks
 
             $canAppendNextText = true;
 
-            // Empty requests '.' and '\.':
-            if (preg_match('~^\\\\?\.$~u', $line)) {
-                continue;
-            }
-
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
                 // If this is last line, or the next line is .RS, this would be an empty paragraph: don't bother.

@@ -186,7 +186,10 @@ class Text
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
               '\\&',
               '.so man.macros',
+                // Empty requests:
               '...',
+              '.',
+              '\\.',
             ];
 
             if (in_array($line, $skipLines)) {
