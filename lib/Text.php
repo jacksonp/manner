@@ -220,7 +220,8 @@ class Text
             // .RP: "Specifies the report format for your document. The report format creates a separate cover page."
             // .po, .in, .ll: "dimensions which gtroff uses for placing a line of output onto the page." see http://apollo.ubishops.ca/~ajaja/TROFF/groff.html
             // .fam: sets font family, generally used in conjunction with .nf blocks which already get a monospace font.
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam)~u', $line)) {
+            // .rs: "Restore spacing; turn no-space mode off."
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs)~u', $line)) {
                 continue;
             }
 
