@@ -789,7 +789,7 @@ class Text
         }, $line);
 
         // Don't worry about changes in point size for now:
-        $line = preg_replace('~\\\\s[-+]?\d(.*?)\\\\s[-+]?\d~u', '$1', $line);
+        $line = preg_replace('~\\\\s[-+]?\d~u', '', $line);
 
         // Don't worry about this: "Local horizontal motion; move right N (left if negative)."
         $line = preg_replace('~\\\\h\'[-+]?\d+\'~u', ' ', $line);

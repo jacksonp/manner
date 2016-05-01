@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMDASAMPLE</title>
+<h1>PMDASAMPLE</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmdasample</strong> - sample performance metrics domain agent (PMDA)
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>$PCP_PMDAS_DIR/pmdasample</strong> [<strong>-d</strong> <em>domain</em>] [<strong>-i</strong> <em>port</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-p</strong>] [<strong>-u</strong> <em>socket</em>] [<strong>-U</strong> <em>username</em>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmdasample</strong> is a sample Performance Metrics Domain Agent (PMDA) which exports a variety of synthetic performance metrics.
+  <p>This PMDA was developed as part of the quality assurance testing for the PCP product, but has other uses, most notably in the development of new PCP clients.
+  <p>The metrics exported by the sample PMDA cover the full range of data types, data semantics, value cardinality, instance domain stability and error conditions found in real PMDAs.
+  <p>A brief description of the <strong>pmdasample</strong> command line options follows:
+  <dl>
+    <dt><strong>-d</strong>
+    <dd>
+      <p>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
+    <dt><strong>-i</strong>
+    <dd>
+      <p>Expect PMCD to connect to <strong>pmdasample</strong> on the specified TCP/IP port. <em>port</em> may be a port number or port name.
+    <dt><strong>-l</strong>
+    <dd>
+      <p>Location of the log file. By default, a log file named <em>sample.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdasample</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dt><strong>-p</strong>
+    <dd>
+      <p>Expect PMCD to create a pipe and the connection to <strong>pmdasample</strong> is via standard input and standard output. This is the default connection mode.
+    <dt><strong>-u</strong>
+    <dd>
+      <p>Expect PMCD to connect to <strong>pmdasample</strong> on the Unix domain socket named <em>socket</em>.
+    <dt><strong>-U</strong>
+    <dd>
+      <p>User account under which to run the agent. The default is the unprivileged “pcp” account in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
+  </dl>
+  <p>At most one of the options <strong>-i</strong>, <strong>-p</strong> and <strong>-u</strong> may be specified.
+</div>
+<div class="section">
+  <h2>INSTALLATION</h2>
+  <p>If you want access to the names, help text and values for the sample performance metrics, do the following as root:
+  <pre> # cd $PCP_PMDAS_DIR/sample
+ # ./Install</pre>
+  <p>Note that the installation script also installs the DSO version of the sample PMDA, so there are in fact two PMDAs installed, and two sets of performance metrics, namely <strong>sample.*</strong> and <strong>sampledso.*</strong>.
+  <p>If you want to undo the installation (and remove both PMDAs), do the following as root:
+  <pre> # cd $PCP_PMDAS_DIR/sample
+ # ./Remove</pre>
+  <p><strong>pmdasample</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_PMCDCONF_PATH</strong>
+    <dd>
+      <p>command line options used to launch <strong>pmdasample</strong>
+    <dt><strong>$PCP_PMDAS_DIR/sample/help</strong>
+    <dd>
+      <p>default help text file for the sample metrics
+    <dt><strong>$PCP_PMDAS_DIR/sample/Install</strong>
+    <dd>
+      <p>installation script for the <strong>pmdasample</strong> agent
+    <dt><strong>$PCP_PMDAS_DIR/sample/Remove</strong>
+    <dd>
+      <p>undo installation script for the <strong>pmdasample</strong> agent
+    <dt><strong>$PCP_LOG_DIR/pmcd/sample.log</strong>
+    <dd>
+      <p>default log file for error messages and other information from <strong>pmdasample</strong>
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdasimple</strong>(1), <strong>pmdatrivial</strong>(1), <strong>pmdatxmon</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
+</div>
+
