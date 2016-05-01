@@ -4,6 +4,10 @@
 class Text
 {
 
+    private static function trimWSAfterDot ($str) {
+        return preg_replace('~^\.\s+~', '.', $str);
+    }
+
     /**
      * Strip comments, handle title, stick rest in $lines
      */
@@ -71,7 +75,7 @@ class Text
                     $line = $rawLines[$i];
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1])) {
-                            $linesNoCond[] = $matches[1];
+                            $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
                         if (!in_array($rawLines[++$i], ['.el \\{\\', '.el\\{\\'])) {
                             throw new Exception('.ie n \\{\\ - not followed by expected pattern on line ' . $i . '.');
@@ -84,7 +88,7 @@ class Text
                         }
                         throw new Exception('.el \\{\\ - not followed by expected pattern on line ' . $i . '.');
                     } else {
-                        $linesNoCond[] = $line;
+                        $linesNoCond[] = self::trimWSAfterDot($line);
                     }
                 }
             }
@@ -94,11 +98,11 @@ class Text
                     $line = $rawLines[$i];
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1])) {
-                            $linesNoCond[] = $matches[1];
+                            $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
                         continue 2;
                     } else {
-                        $linesNoCond[] = $line;
+                        $linesNoCond[] = self::trimWSAfterDot($line);
                     }
                 }
                 throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
