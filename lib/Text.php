@@ -18,7 +18,6 @@ class Text
         $numRawLines = count($rawLines);
         $linesNoCond = [];
         $linePrefix  = '';
-        $registers   = [];
 
         for ($i = 0; $i < $numRawLines; ++$i) {
 
@@ -49,17 +48,6 @@ class Text
                     }
                 }
                 throw new Exception('.ig with no corresponding ..');
-            }
-
-            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
-                $registers[$matches['val']] = $matches['val'];
-                continue;
-            }
-
-            if (count($registers) > 0) {
-                foreach ($registers as $name => $val) {
-                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
-                }
             }
 
             // Handle stuff like the following before continuations because of trailing slashes:
@@ -148,6 +136,7 @@ class Text
         $numNoCondLines     = count($linesNoCond);
         $firstPassLines     = [];
         $aliases            = [];
+        $registers          = [];
         $stringReplacements = [];
         $foundTitle         = false;
 
@@ -188,7 +177,7 @@ class Text
                             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
                             continue 2;
                         }
-                        $macroReplacements[$newMacro] = $macroLines;
+                        $macroReplacements[$newMacro] = self::trimWSAfterDot($macroLines);
                         continue 2;
                     } else {
                         $macroLine    = str_replace(['\\\\'], ['\\'], $macroLine);
@@ -196,6 +185,17 @@ class Text
                     }
                 }
                 throw new Exception($matches[0] . ' - not followed by expected pattern on line ' . $i . '.');
+            }
+
+            // Do registers after .de -see e.g. yum-copr.8
+            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
+                $registers[$matches['val']] = $matches['val'];
+                continue;
+            }
+            if (count($registers) > 0) {
+                foreach ($registers as $name => $val) {
+                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
+                }
             }
 
             // Continuations
@@ -246,7 +246,8 @@ class Text
             // .rs: "Restore spacing; turn no-space mode off."
             // .rm: "Remove request, macro, or string name."
             // .ta: "Set tabs after every position that is a multiple of N (default scaling indicator m)."
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta)~u', $line)) {
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta)~u',
+              $line)) {
                 continue;
             }
 
