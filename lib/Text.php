@@ -258,14 +258,25 @@ class Text
                 if (empty($matches[2])) {
                     continue;
                 }
-                if (mb_strlen($matches[1]) === 1) {
-                    $stringReplacements['\*' . $matches[1]] = $matches[2];
+                $newRequest = $matches[1];
+                $requestVal = $matches[2];
+
+                if ($newRequest === 'C+') {
+                    $requestVal = 'C++';
+                } elseif (in_array($newRequest, ['C\'', 'C`'])) {
+                    $requestVal = '"';
+                } elseif (in_array($newRequest, ['L"', 'R"'])) {
+                    continue;
                 }
-                if (mb_strlen($matches[1]) <= 2) {
-                    $stringReplacements['\(' . $matches[1]]  = $matches[2];
-                    $stringReplacements['\*(' . $matches[1]] = $matches[2];
+
+                if (mb_strlen($newRequest) === 1) {
+                    $stringReplacements['\*' . $newRequest] = $requestVal;
                 }
-                $stringReplacements['\[' . $matches[1] . ']'] = $matches[2];
+                if (mb_strlen($newRequest) <= 2) {
+                    $stringReplacements['\(' . $newRequest]  = $requestVal;
+                    $stringReplacements['\*(' . $newRequest] = $requestVal;
+                }
+                $stringReplacements['\[' . $newRequest . ']'] = $requestVal;
                 continue;
             }
 
