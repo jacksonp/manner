@@ -245,7 +245,8 @@ class Text
             // .fam: sets font family, generally used in conjunction with .nf blocks which already get a monospace font.
             // .rs: "Restore spacing; turn no-space mode off."
             // .rm: "Remove request, macro, or string name."
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm)~u', $line)) {
+            // .ta: "Set tabs after every position that is a multiple of N (default scaling indicator m)."
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta)~u', $line)) {
                 continue;
             }
 
