@@ -4,7 +4,8 @@
 class Text
 {
 
-    private static function trimWSAfterDot ($str) {
+    private static function trimWSAfterDot($str)
+    {
         return preg_replace('~^\.\s+~', '.', $str);
     }
 
@@ -74,7 +75,7 @@ class Text
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
-                        if (!empty($matches[1])) {
+                        if (!empty($matches[1]) && $matches[1] !== '\'br') {
                             $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
                         if (!in_array($rawLines[++$i], ['.el \\{\\', '.el\\{\\'])) {
@@ -97,7 +98,7 @@ class Text
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
-                        if (!empty($matches[1])) {
+                        if (!empty($matches[1]) && $matches[1] !== '\'br') {
                             $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
                         continue 2;
@@ -108,14 +109,24 @@ class Text
                 throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
             }
 
-            if (preg_match('~\.if [tv] \\\\{\\\\~', $line)) {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
+            if (preg_match('~^\.if [tv] \\\\{\\\\~', $line)
+              || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
+              || preg_match('~\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 \\\\~', $line)
+            ) {
+                $openBraces = 0;
+                for (; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
+                    if (preg_match('~\\\\{$~', $line)) {
+                        ++$openBraces;
+                    }
                     if (preg_match('~\\\\}$~', $line)) {
-                        continue 2;
+                        --$openBraces;
+                        if ($openBraces < 1) {
+                            continue 2;
+                        }
                     }
                 }
-                throw new Exception('.if [tv] \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
             }
 
             if (preg_match('~\.if [tv] ~', $line)) {
@@ -201,6 +212,11 @@ class Text
               '...',
               '.',
               '\\.',
+                // hmm
+              '.if (\n(.H=4u)&(1m=24u) .ds -- \(*W\h\'-12u\'\(*W\h\'-12u\'-\" diablo 10 pitch', // e.g. lmmin.3
+              '.if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h\'-12u\'\(*W\h\'-8u\'-\"  diablo 12 pitch', // e.g. lmmin.3
+              '.if \n(.g .if rF .nr rF 1',
+              '.rr rF',
             ];
 
             if (in_array($line, $skipLines)) {
@@ -228,7 +244,8 @@ class Text
             // .po, .in, .ll: "dimensions which gtroff uses for placing a line of output onto the page." see http://apollo.ubishops.ca/~ajaja/TROFF/groff.html
             // .fam: sets font family, generally used in conjunction with .nf blocks which already get a monospace font.
             // .rs: "Restore spacing; turn no-space mode off."
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs)~u', $line)) {
+            // .rm: "Remove request, macro, or string name."
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm)~u', $line)) {
                 continue;
             }
 
@@ -238,6 +255,9 @@ class Text
             }
 
             if (preg_match('~^\.ds (.*?) (.*)$~u', $line, $matches)) {
+                if (empty($matches[2])) {
+                    continue;
+                }
                 if (mb_strlen($matches[1]) === 1) {
                     $stringReplacements['\*' . $matches[1]] = $matches[2];
                 }
@@ -247,6 +267,10 @@ class Text
                 }
                 $stringReplacements['\[' . $matches[1] . ']'] = $matches[2];
                 continue;
+            }
+
+            if (preg_match('~^\.ds~u', $line, $matches)) {
+                continue; // ignore any that didn't match above.
             }
 
             $firstPassLines[] = $line;

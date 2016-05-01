@@ -20,7 +20,7 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (mb_strlen($line) === 0 || preg_match('~^\.(ad|fi)~u', $line)) {
+        if (mb_strlen($line) === 0 || preg_match('~^\.(ad|fi)~u', $line) || $line === '.') {
             return;
         }
 
@@ -95,7 +95,7 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        $textSegments = preg_split('~(\\\\f(?:[1-4BRIPCV]|\(CW[IB]?|\[[ICB]?\])|\\\\[ud])~u', $line, null,
+        $textSegments = preg_split('~(\\\\f(?:[1-4BRIPCV]|\(CW[IB]?|\(BI|\[[ICB]?\])|\\\\[ud])~u', $line, null,
           PREG_SPLIT_DELIM_CAPTURE);
 
         $numTextSegments = count($textSegments);
@@ -143,6 +143,7 @@ class TextContent
                     }
                     break;
                 case '\f4':
+                case '\f(BI':
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
                         $em     = $dom->createElement('em');
