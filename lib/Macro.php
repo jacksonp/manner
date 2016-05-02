@@ -4,7 +4,7 @@
 class Macro
 {
 
-    static function parseArgString(string $argString)
+    static function parseArgString($argString)
     {
         // sometimes get double spaces, see e.g. samba_selinux.8:
         $argString = preg_replace('~\s+~', ' ', $argString);

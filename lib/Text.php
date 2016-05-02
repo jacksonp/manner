@@ -270,6 +270,11 @@ class Text
                 } elseif (in_array($newRequest, ['L"', 'R"'])) {
                     continue;
                 }
+                
+                // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
+                if (count($stringReplacements) > 0) {
+                    $requestVal = strtr($requestVal, $stringReplacements);
+                }
 
                 Macro::addStringDefToReplacementArray($newRequest, $requestVal, $stringReplacements);
 
