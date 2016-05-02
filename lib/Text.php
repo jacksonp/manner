@@ -99,12 +99,13 @@ class Text
 
             if (preg_match('~^\.if [tv] \\\\{\\\\~', $line)
               || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
+              || preg_match('~^\.if \\\\nF>0 \\\\{\\\\~', $line)
               || preg_match('~\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 \\\\~', $line)
             ) {
                 $openBraces = 0;
                 for (; $i < $numRawLines; ++$i) {
                     $line = $rawLines[$i];
-                    if (preg_match('~\\\\{$~', $line)) {
+                    if (preg_match('~\\\\{~', $line)) {
                         ++$openBraces;
                     }
                     if (preg_match('~\\\\}$~', $line)) {
@@ -127,6 +128,10 @@ class Text
 
             // construct for "hiding text from po4a", we don't need:
             $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
+
+            // part of indexing we don't care about
+            $line = preg_replace('~^\.if !\\\\nF \.nr F 0~u', '', $line);
+
 
             $linesNoCond[] = $line;
 
