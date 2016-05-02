@@ -334,7 +334,7 @@ class Blocks
               && (
                 strpos($blockNode->manLines[$i + 1], "\t") > 0
                 || (
-                  $blockNode->manLines[$i + 1] === '.br'
+                  in_array($blockNode->manLines[$i + 1], ['.br', ''])
                   && $i < $numLines - 2
                   && strpos($blockNode->manLines[$i + 2], "\t") > 0
                 )
@@ -358,7 +358,7 @@ class Blocks
 
                     $line = $blockNode->manLines[$i + 1];
 
-                    if ($line === '.br') {
+                    if (in_array($line, ['.br', ''])) {
                         ++$i;
                         if ($i === $numLines - 1) {
                             break 2;
