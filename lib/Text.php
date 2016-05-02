@@ -261,16 +261,14 @@ class Text
                     continue;
                 }
                 $newRequest = $matches[1];
-                $requestVal = $matches[2];
+                $requestVal = Macro::simplifyRequest($matches[2]);
 
-                if ($newRequest === 'C+') {
-                    $requestVal = 'C++';
-                } elseif (in_array($newRequest, ['C\'', 'C`'])) {
+                if (in_array($newRequest, ['C\'', 'C`'])) {
                     $requestVal = '"';
                 } elseif (in_array($newRequest, ['L"', 'R"'])) {
                     continue;
                 }
-                
+
                 // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
                 if (count($stringReplacements) > 0) {
                     $requestVal = strtr($requestVal, $stringReplacements);
@@ -822,8 +820,8 @@ class Text
         // Don't worry about changes in point size for now:
         $line = preg_replace('~\\\\s[-+]?\d~u', '', $line);
 
-        // Don't worry about this: "Local horizontal motion; move right N (left if negative)."
-        $line = preg_replace('~\\\\h\'[-+]?\d+\'~u', ' ', $line);
+        // Don't worry about this: "Local vertical/horizontal motion"
+        $line = preg_replace('~\\\\[vh]\'.*?\'~u', ' ', $line);
 
         // Don't worry colour changes:
         $line = preg_replace('~\\\\m(\(..|\[.*?\])~u', '', $line);
