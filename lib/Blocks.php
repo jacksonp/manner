@@ -325,11 +325,20 @@ class Blocks
                 continue; //End of block
             }
 
+            // Make tables out of tab-separated lines
+            // strpos() > 0: avoid indented stuff
             if ($i < $numLines - 1
               && mb_strlen($line) > 0
               && $line[0] !== '.'
-              && strpos($line, "\t") !== false
-              && strpos($blockNode->manLines[$i + 1], "\t") !== false
+              && strpos($line, "\t") > 0
+              && (
+                strpos($blockNode->manLines[$i + 1], "\t") > 0
+                || (
+                  $blockNode->manLines[$i + 1] === '.br'
+                  && $i < $numLines - 2
+                  && strpos($blockNode->manLines[$i + 2], "\t") > 0
+                )
+              )
             ) {
                 $table               = $dom->createElement('table');
                 $blocks[++$blockNum] = $table;
@@ -339,7 +348,7 @@ class Blocks
                     $tr   = $table->appendChild($dom->createElement('tr'));
                     foreach ($bits as $tdLine) {
                         $td = $dom->createElement('td');
-                        TextContent::interpretAndAppendCommand($td, $tdLine);
+                        TextContent::interpretAndAppendText($td, $tdLine);
                         $tr->appendChild($td);
                     }
 
