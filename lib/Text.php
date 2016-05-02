@@ -271,14 +271,8 @@ class Text
                     continue;
                 }
 
-                if (mb_strlen($newRequest) === 1) {
-                    $stringReplacements['\*' . $newRequest] = $requestVal;
-                }
-                if (mb_strlen($newRequest) <= 2) {
-                    $stringReplacements['\(' . $newRequest]  = $requestVal;
-                    $stringReplacements['\*(' . $newRequest] = $requestVal;
-                }
-                $stringReplacements['\[' . $newRequest . ']'] = $requestVal;
+                Macro::addStringDefToReplacementArray($newRequest, $requestVal, $stringReplacements);
+
                 continue;
             }
 
@@ -338,12 +332,7 @@ class Text
                 if (!preg_match('~^\.el~u', $firstPassLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
-                if (mb_strlen($matches[1]) === 2) {
-                    $macroReplacements['\(' . $matches[1]]  = $matches[2];
-                    $macroReplacements['\*(' . $matches[1]] = $matches[2];
-                }
-                $macroReplacements['\[' . $matches[1] . ']'] = $matches[2];
-
+                Macro::addStringDefToReplacementArray($matches[1], $matches[2], $macroReplacements);
                 continue;
             }
 
@@ -802,11 +791,7 @@ class Text
         ];
 
         foreach ($namedGlyphs as $name => $val) {
-            if (mb_strlen($name) === 2) {
-                $replacements['\(' . $name]  = $val;
-                $replacements['\*(' . $name] = $val;
-            }
-            $replacements['\[' . $name . ']'] = $val;
+            Macro::addStringDefToReplacementArray($name, $val, $replacements);
         }
 
         // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.

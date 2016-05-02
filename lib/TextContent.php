@@ -216,22 +216,16 @@ class TextContent
 
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
-          '\\e'   => '\\',
-          '\(rs'  => '\\',
-          '\*(rs' => '\\',
-          '\[rs]' => '\\',
+          '\\e' => '\\',
             // If we do this earlier and it's on a line on its own, it would then erroneously be detected as a command:
-          '\\.'   => '.',
-            // Do double quotes here: if we do them earlier it messes up cases like in aide.1: .IP "--before=\(dq\fBconfigparameters\fR\(dq , -B \(dq\fBconfigparameters\fR\(dq"
-          '\(dq'  => '"',
-          '\*(dq' => '"',
-          '\[dq]' => '"',
-            // Do single quotes here: otherwise we hit problems earlier on if they are the first character on the line.
-          '\(aq'  => '\'',
-          '\*(aq' => '\'',
-          '\[aq]' => '\'',
+          '\\.' => '.',
         ];
-        $string       = strtr($string, $replacements);
+
+        Macro::addStringDefToReplacementArray('rs', '\\', $replacements);
+        Macro::addStringDefToReplacementArray('dq', '"', $replacements);
+        Macro::addStringDefToReplacementArray('aq', '\'', $replacements);
+
+        $string = strtr($string, $replacements);
 
         // Prettier double quotes:
         $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
