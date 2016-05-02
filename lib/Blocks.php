@@ -325,10 +325,49 @@ class Blocks
                 continue; //End of block
             }
 
+            if ($i < $numLines - 1
+              && mb_strlen($line) > 0
+              && $line[0] !== '.'
+              && strpos($line, "\t") !== false
+              && strpos($blockNode->manLines[$i + 1], "\t") !== false
+            ) {
+                $table               = $dom->createElement('table');
+                $blocks[++$blockNum] = $table;
+                for (; ; ++$i) {
+
+                    $bits = preg_split('~\t+~', $line);
+                    $tr   = $table->appendChild($dom->createElement('tr'));
+                    foreach ($bits as $tdLine) {
+                        $td = $dom->createElement('td');
+                        TextContent::interpretAndAppendCommand($td, $tdLine);
+                        $tr->appendChild($td);
+                    }
+
+                    if ($i === $numLines - 1) {
+                        break 2;
+                    }
+
+                    $line = $blockNode->manLines[$i + 1];
+
+                    if ($line === '.br') {
+                        ++$i;
+                        if ($i === $numLines - 1) {
+                            break 2;
+                        }
+                        $line = $blockNode->manLines[$i + 1];
+                    }
+
+                    if (strpos($line, "\t") === false) {
+                        continue 2; // Done with table.
+                    }
+
+                }
+            }
+
             if ($blockNum === 0) {
                 $blocks[++$blockNum] = $dom->createElement('p');
             } else {
-                if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code'])) {
+                if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code', 'table'])) {
                     // Start a new paragraph after certain blocks
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
