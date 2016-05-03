@@ -57,7 +57,7 @@ class Section
 
             if ($level === 2 && empty($sectionNodes)) {
                 if (mb_strlen($line) === 0
-                  || preg_match('~^\.ad~u', $line)
+                  || preg_match('~^\.(ad|fi)~u', $line)
                   || preg_match('~^\\\\?\.$~u', $line) // Empty request
                 ) {
                     continue;

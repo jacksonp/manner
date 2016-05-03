@@ -398,9 +398,7 @@ class Blocks
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
-                        if (in_array($line, ['.ft 1', '.ft P'])
-                          || (in_array($line, ['.ft CW', '.ft 3']) && $nextLine === '.nf')
-                        ) {
+                        if (in_array($line, ['.ft 1', '.ft P']) || $nextLine === '.nf') {
                             --$i;
                             continue;
                         }
