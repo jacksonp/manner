@@ -90,6 +90,13 @@ class Text
                 }
             }
 
+            if (strpos($line, '~^\.ie t $~') === 0) {
+                if (!preg_match('~^\.el (.*)$~', $rawLines[++$i], $matches)) {
+                    throw new Exception('.ie t - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
+                }
+                $line = $matches[1];
+            }
+
             if (preg_match('~^\.ie n (.*)$~', $line, $matches)) {
                 $line = $matches[1];
                 if (!preg_match('~^\.el ~', $rawLines[++$i])) {
