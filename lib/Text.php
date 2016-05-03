@@ -24,6 +24,13 @@ class Text
             $line       = $linePrefix . $rawLines[$i];
             $linePrefix = '';
 
+            // Continuations
+            // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
+            while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
+              && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
+                $line = mb_substr($line, 0, -1) . $rawLines[++$i];
+            }
+
             // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
             if (preg_match('~(^|.*?[^\\\\])\\\\#~u', $line, $matches)) {
                 $linePrefix = $matches[1];
@@ -50,24 +57,22 @@ class Text
                 throw new Exception('.ig with no corresponding ..');
             }
 
-            // Handle stuff like the following before continuations because of trailing slashes:
-            //            .ie n \{\
-            //            USE
+            //            .ie n \{ USE
             //            THIS
             //            .\}
-            //            .el \{\
-            //            DISCARD
+            //            .el \{ DISCARD
             //            THIS
             //            .\}
-            if ($line === '.ie n \\{\\') {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    $line = $rawLines[$i];
+            if (preg_match('~^\.ie n \\\\{(.*)$~', $line, $matches)) {
+                $line = $matches[1];
+                while ($i < $numRawLines) {
+
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1]) && $matches[1] !== '\'br') {
                             $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
-                        if (!in_array($rawLines[++$i], ['.el \\{\\', '.el\\{\\'])) {
-                            throw new Exception('.ie n \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                        if (!preg_match('~^\.el\s*\\\\{~', $rawLines[++$i])) {
+                            throw new Exception('.ie n \\{ - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
                         }
                         for ($i = $i + 1; $i < $numRawLines; ++$i) {
                             $line = $rawLines[$i];
@@ -75,45 +80,46 @@ class Text
                                 continue 3;
                             }
                         }
-                        throw new Exception('.el \\{\\ - not followed by expected pattern on line ' . $i . '.');
-                    } else {
+                        throw new Exception('.el \\{ - not followed by expected pattern on line ' . $i . '.');
+                    } elseif (!empty($line)) {
                         $linesNoCond[] = self::trimWSAfterDot($line);
                     }
+
+                    $line = $rawLines[++$i];
+
                 }
             }
 
-            if ($line === '.if n \\{\\') {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    $line = $rawLines[$i];
+            if (preg_match('~^\.if n \\\\{(.*)$~', $line, $matches)) {
+                $line = $matches[1];
+                while ($i < $numRawLines) {
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1]) && $matches[1] !== '\'br') {
                             $linesNoCond[] = self::trimWSAfterDot($matches[1]);
                         }
                         continue 2;
-                    } else {
+                    } elseif (!empty($line)) {
                         $linesNoCond[] = self::trimWSAfterDot($line);
                     }
+
+                    $line = $rawLines[++$i];
                 }
-                throw new Exception('.if n \\{\\ - not followed by expected pattern on line ' . $i . '.');
+                throw new Exception('.if n \\{ - not followed by expected pattern on line ' . $i . '.');
             }
 
-            if (preg_match('~^\.if [tv] \\\\{\\\\~', $line)
+            if (preg_match('~^\.if [tv] \\\\{~', $line)
               || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
-              || preg_match('~^\.if \\\\nF>0 \\\\{\\\\~', $line)
-              || preg_match('~\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 \\\\~', $line)
+              || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
+              || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
             ) {
                 $openBraces = 0;
-                for (; $i < $numRawLines; ++$i) {
-                    $line = $rawLines[$i];
-                    if (preg_match('~\\\\{~', $line)) {
-                        ++$openBraces;
+                while ($i < $numRawLines) {
+                    $openBraces += substr_count($line, '\\{');
+                    $openBraces -= substr_count($line, '\\}');
+                    if ($openBraces < 1) {
+                        continue 2;
                     }
-                    if (preg_match('~\\\\}$~', $line)) {
-                        --$openBraces;
-                        if ($openBraces < 1) {
-                            continue 2;
-                        }
-                    }
+                    $line = $rawLines[++$i];
                 }
                 throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
             }
@@ -131,7 +137,6 @@ class Text
 
             // part of indexing we don't care about
             $line = preg_replace('~^\.if !\\\\nF \.nr F 0~u', '', $line);
-
 
             $linesNoCond[] = $line;
 
@@ -201,12 +206,6 @@ class Text
                 foreach ($registers as $name => $val) {
                     $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
                 }
-            }
-
-            // Continuations
-            while ($i < $numNoCondLines - 1 && mb_substr($line, -1, 1) === '\\'
-              && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
-                $line = mb_substr($line, 0, -1) . $linesNoCond[++$i];
             }
 
             $skipLines = [
