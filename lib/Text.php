@@ -268,7 +268,8 @@ class Text
             // .rs: "Restore spacing; turn no-space mode off."
             // .rm: "Remove request, macro, or string name."
             // .ta: "Set tabs after every position that is a multiple of N (default scaling indicator m)."
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta)~u',
+            // .cp: Enable or disable compatibility mode.
+            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp)~u',
               $line)) {
                 continue;
             }
