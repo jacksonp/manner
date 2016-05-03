@@ -215,7 +215,7 @@
       <dd>
         <p>This setting (disabled by default) adds <strong>-fPIE</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>, and <strong>-fPIE -pie</strong> to <strong>LDFLAGS</strong>. Position Independent Executable are needed to take advantage of Address Space Layout Randomization, supported by some kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this (-fPIC), so they gain ASLR automatically, but binary .text regions need to be build PIE to gain ASLR. When this happens, ROP (Return Oriented Programming) attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
         <p>This is not compatible with <strong>-fPIC</strong> so care must be taken when building shared objects.
-        <p>Additionally, since PIE is implemented via a general register, some architectures (most notably i386) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
+        <p>Additionally, since PIE is implemented via a general register, some register starved architectures (but not including i386 anymore since optimizations implemented in gcc &gt;= 5) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
     </dl>
   </div>
   <div class="subsection">
@@ -225,6 +225,9 @@
       <dt><strong>timeless</strong>
       <dd>
         <p>This setting (enabled by default) adds <strong>-Wdate-time</strong> to <strong>CPPFLAGS</strong>. This will cause warnings when the <strong>__TIME__</strong>, <strong>__DATE__</strong> and <strong>__TIMESTAMP__</strong> macros are used.
+      <dt><strong>fixdebugpath</strong>
+      <dd>
+        <p>This setting (disabled by default) adds <strong>%-fdebug-path-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
     </dl>
   </div>
 </div>

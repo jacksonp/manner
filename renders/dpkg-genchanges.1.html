@@ -18,18 +18,47 @@
 <div class="section">
   <h2>OPTIONS</h2>
   <dl>
+    <dt><strong>--build=</strong><em>type</em>
+    <dd>
+      <p>Specifies the build <em>type</em> from a comma-separated list of components (since dpkg 1.18.5).
+      <p>The allowed values are:
+      <div class="indent">
+        <dl>
+          <dt><strong>source</strong>
+          <dd>
+            <p>Upload the source package.
+          <dt><strong>any</strong>
+          <dd>
+            <p>Upload the architecture specific binary packages.
+          <dt><strong>all</strong>
+          <dd>
+            <p>Upload the architecture independent binary packages.
+          <dt><strong>binary</strong>
+          <dd>
+            <p>Upload the architecture specific and independent binary packages. This is an alias for <strong>any,all</strong>.
+          <dt><strong>full</strong>
+          <dd>
+            <p>Upload everything. This is alias for <strong>source,any,all</strong>, and the same as the default case when no build option is specified.
+        </dl>
+      </div>
     <dt><strong>-g</strong>
     <dd>
-      <p>Specifies that only source and architecture independent packages should be uploaded, thus no architecture specific packages will be included (since dpkg 1.17.11).
+      <p>Equivalent to <strong>--build=source,all</strong> (since dpkg 1.17.11).
     <dt><strong>-G</strong>
     <dd>
-      <p>Specifies that only source and architecture specific packages should be uploaded, thus no architecture independent packages will be included (since dpkg 1.17.11).
-    <dt><strong>-b</strong>, <strong>-B</strong>, <strong>-A</strong>
+      <p>Equivalent to <strong>--build=source,any</strong> (since dpkg 1.17.11).
+    <dt><strong>-b</strong>
     <dd>
-      <p>Specifies that a binary-only build is taking place, thus no source files are to be included. There's no distinction between <strong>-b</strong>, <strong>-B</strong> and <strong>-A</strong>, the produced <strong>.changes</strong> file will include whatever files were created by the <strong>binary-*</strong> target(s) of the package being built.
+      <p>Equivalent to <strong>--build=binary</strong> or <strong>--build=any,all</strong>.
+    <dt><strong>-B</strong>
+    <dd>
+      <p>Equivalent to <strong>--build=any</strong>.
+    <dt><strong>-A</strong>
+    <dd>
+      <p>Equivalent to <strong>--build=all</strong>.
     <dt><strong>-S</strong>
     <dd>
-      <p>Specifies that only the source should be uploaded, thus no binary packages will be included.
+      <p>Equivalent to <strong>--build=source</strong>.
   </dl>
   <p>The <strong>-s</strong><em>x</em> options control whether the original source archive is included in the upload if any source is being generated (i.e. <strong>-b</strong> or <strong>-B</strong> haven't been used).
   <dl>
@@ -84,6 +113,9 @@
     <dt><strong>-q</strong>
     <dd>
       <p>Usually <strong>dpkg-genchanges</strong> will produce informative messages on standard error, for example about how many of the package's source files are being uploaded. <strong>-q</strong> suppresses these messages.
+    <dt><strong>-O</strong>[<em>filename</em>]
+    <dd>
+      <p>Print the changes file to standard output (the default) or to <em>filename</em> if specified (since dpkg 1.18.5).
     <dt><strong>-?</strong>, <strong>--help</strong>
     <dd>
       <p>Show the usage message and exit.

@@ -26,10 +26,10 @@
       <p>If a specific target has been selected with the <strong>-T</strong> or <strong>--target</strong> option, it calls that target and stops here. Otherwise it runs the <strong>preclean</strong> hook and calls <strong>fakeroot debian/rules clean</strong> to clean the build-tree (unless <strong>-nc</strong> is specified).
     <dt><strong>4.</strong>
     <dd>
-      <p>It runs the <strong>source</strong> hook and calls <strong>dpkg-source -b</strong> to generate the source package (unless a binary-only build has been requested with <strong>-b</strong>, <strong>-B</strong> or <strong>-A</strong>).
+      <p>It runs the <strong>source</strong> hook and calls <strong>dpkg-source -b</strong> to generate the source package (if a <strong>source</strong> build has been requested with <strong>--build</strong> or equivalent options).
     <dt><strong>5.</strong>
     <dd>
-      <p>It runs the <strong>build</strong> hook and calls <strong>debian/rules</strong> <em>build-target</em>, then runs the <strong>binary</strong> hook followed by <strong>fakeroot debian/rules</strong> <em>binary-target</em> (unless a source-only build has been requested with <strong>-S</strong>). Note that <em>build-target</em> and <em>binary-target</em> are either <strong>build</strong> and <strong>binary</strong> (default case, or if <strong>-b</strong> is specified), or <strong>build-arch</strong> and <strong>binary-arch</strong> (if <strong>-B</strong> or <strong>-G</strong> are specified), or <strong>build-indep</strong> and <strong>binary-indep</strong> (if <strong>-A</strong> or <strong>-g</strong> are specified).
+      <p>It runs the <strong>build</strong> hook and calls <strong>debian/rules</strong> <em>build-target</em>, then runs the <strong>binary</strong> hook followed by <strong>fakeroot debian/rules</strong> <em>binary-target</em> (unless a source-only build has been requested with <strong>--build=source</strong> or equivalent options). Note that <em>build-target</em> and <em>binary-target</em> are either <strong>build</strong> and <strong>binary</strong> (default case, or if an <strong>any</strong> and <strong>all</strong> build has been requested with <strong>--build</strong> or equivalent options), or <strong>build-arch</strong> and <strong>binary-arch</strong> (if an <strong>any</strong> and not <strong>all</strong> build has been requested with <strong>--build</strong> or equivalent options), or <strong>build-indep</strong> and <strong>binary-indep</strong> (if an <strong>all</strong> and not <strong>any</strong> build has been requested with <strong>--build</strong> or equivalent options).
     <dt><strong>6.</strong>
     <dd>
       <p>It runs the <strong>changes</strong> hook and calls <strong>dpkg-genchanges</strong> to generate a <strong>.changes</strong> file. Many <strong>dpkg-buildpackage</strong> options are forwarded to <strong>dpkg-genchanges</strong>.
@@ -53,27 +53,50 @@
 <div class="section">
   <h2>OPTIONS</h2>
   <dl>
+    <dt><strong>--build=</strong><em>type</em>
+    <dd>
+      <p>Specifies the build <em>type</em> from a comma-separated list of components (since dpkg 1.18.5). Passed to <strong>dpkg-genchanges</strong>.
+      <p>The allowed values are:
+      <div class="indent">
+        <dl>
+          <dt><strong>source</strong>
+          <dd>
+            <p>Builds the source package. Note: when using this value standalone and if what you want is simply to (re-)build the source package, using <strong>dpkg-source</strong> is always better as it does not require any build dependencies to be installed to be able to call the <strong>clean</strong> target.
+          <dt><strong>any</strong>
+          <dd>
+            <p>Builds the architecture specific binary packages.
+          <dt><strong>all</strong>
+          <dd>
+            <p>Builds the architecture independent binary packages.
+          <dt><strong>binary</strong>
+          <dd>
+            <p>Builds the architecture specific and independent binary packages. This is an alias for <strong>any,all</strong>.
+          <dt><strong>full</strong>
+          <dd>
+            <p>Builds everything. This is an alias for <strong>source,any,all</strong>, and the same as the default case when no build option is specified.
+        </dl>
+      </div>
     <dt><strong>-g</strong>
     <dd>
-      <p>Specifies a build limited to source and architecture independent packages (since dpkg 1.17.11). Passed to <strong>dpkg-genchanges</strong>.
+      <p>Equivalent to <strong>--build=source,all</strong> (since dpkg 1.17.11).
     <dt><strong>-G</strong>
     <dd>
-      <p>Specifies a build limited to source and architecture specific packages (since dpkg 1.17.11). Passed to <strong>dpkg-genchanges</strong>.
+      <p>Equivalent to <strong>--build=source,any</strong> (since dpkg 1.17.11).
     <dt><strong>-b</strong>
     <dd>
-      <p>Specifies a binary-only build, no source files are to be built and/or distributed. Passed to <strong>dpkg-genchanges</strong>.
+      <p>Equivalent to <strong>--build=binary</strong> or <strong>--build=any,all</strong>.
     <dt><strong>-B</strong>
     <dd>
-      <p>Specifies a binary-only build, limited to architecture dependent packages. Passed to <strong>dpkg-genchanges</strong>.
+      <p>Equivalent to <strong>--build=any</strong>.
     <dt><strong>-A</strong>
     <dd>
-      <p>Specifies a binary-only build, limited to architecture independent packages. Passed to <strong>dpkg-genchanges</strong>.
+      <p>Equivalent to <strong>--build=all</strong>.
     <dt><strong>-S</strong>
     <dd>
-      <p>Specifies a source-only build, no binary packages need to be made. Passed to <strong>dpkg-genchanges</strong>. Note: if what you want is simply to (re-)build the source package, using <strong>dpkg-source</strong> is always better as it does not require any build dependencies to be installed to be able to call the <strong>clean</strong> target.
+      <p>Equivalent to <strong>--build=source</strong>.
     <dt><strong>-F</strong>
     <dd>
-      <p>Specifies a normal full build, binary and source packages will be built (since dpkg 1.15.8). This is the same as the default case when no build option is specified.
+      <p>Equivalent to <strong>--build=full</strong>, <strong>--build=source,binary</strong> or <strong>--build=source,any,all</strong> since dpkg 1.15.8).
     <dt><strong>--target=</strong><em>target</em>
     <dt><strong>--target</strong> <em>target</em>
     <dt><strong>-T</strong><em>target</em>
@@ -222,6 +245,9 @@
     <dt><strong>DEB_BUILD_PROFILES</strong>
     <dd>
       <p>If set, it will be used as the active build profile(s) for the package being built (since dpkg 1.17.2). It is a space separated list of profile names. Overridden by the <strong>-P</strong> option.
+    <dt><strong>DPKG_COLORS</strong>
+    <dd>
+      <p>Sets the color mode (since dpkg 1.18.5). The currently accepted values are: <strong>auto</strong>, <strong>always</strong> and <strong>never</strong> (default).
   </dl>
   <div class="subsection">
     <h3>Reliance on exported environment flags</h3>
