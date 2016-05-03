@@ -156,6 +156,8 @@ class Text
 
             $line = $linesNoCond[$i];
 
+            $line = strtr($line, $registers);
+
             $bits = Macro::parseArgString($line);
             if (count($bits) > 0) {
                 $macro = array_shift($bits);
@@ -199,13 +201,16 @@ class Text
 
             // Do registers after .de -see e.g. yum-copr.8
             if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
-                $registers[$matches['val']] = $matches['val'];
-                continue;
-            }
-            if (count($registers) > 0) {
-                foreach ($registers as $name => $val) {
-                    $line = preg_replace('~^\\\\n\[' . preg_quote($name, '~') . '\]~', $val, $line);
+                $registerName = $matches['name'];
+                $registerVal  = $matches['val'];
+                if (mb_strlen($registerName) === 1) {
+                    $registers['\\n' . $registerName] = $registerVal;
                 }
+                if (mb_strlen($registerName) === 2) {
+                    $registers['\\n(' . $registerName] = $registerVal;
+                }
+                $registers['\\n[' . $registerName . ']'] = $registerVal;
+                continue;
             }
 
             $skipLines = [
