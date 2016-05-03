@@ -254,7 +254,7 @@ class Text
             }
 
             // Skip stuff we don't care about:
-            // .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
+            // .iX, .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
             // .nh: No hyphenation
             // .na: "No output-line adjusting."
             // .hy: "Switch to hyphenation mode N."
@@ -277,7 +277,8 @@ class Text
             // .rm: "Remove request, macro, or string name."
             // .ta: "Set tabs after every position that is a multiple of N (default scaling indicator m)."
             // .cp: Enable or disable compatibility mode.
-            if (preg_match('~^\.(IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp)~u',
+
+            if (preg_match('~^\.(iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp)~u',
               $line)) {
                 continue;
             }
