@@ -118,6 +118,7 @@ class Text
               || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
               || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
               || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
+              || strpos($line, '.if require_index') === 0
             ) {
                 $openBraces = 0;
                 while ($i < $numRawLines) {
