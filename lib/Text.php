@@ -156,8 +156,6 @@ class Text
 
             $line = $linesNoCond[$i];
 
-            $line = strtr($line, $registers);
-
             $bits = Macro::parseArgString($line);
             if (count($bits) > 0) {
                 $macro = array_shift($bits);
@@ -188,6 +186,12 @@ class Text
                             // Don't override these macros.
                             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
                             continue 2;
+                        } elseif ($newMacro === '.INDENT') {
+                            $aliases['INDENT'] = 'RS';
+                            continue 2;
+                        } elseif ($newMacro === '.UNINDENT') {
+                            $aliases['INDENT'] = 'RE';
+                            continue 2;
                         }
                         $macroReplacements[$newMacro] = self::trimWSAfterDot($macroLines);
                         continue 2;
@@ -212,6 +216,8 @@ class Text
                 $registers['\\n[' . $registerName . ']'] = $registerVal;
                 continue;
             }
+
+            $line = strtr($line, $registers);
 
             $skipLines = [
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
