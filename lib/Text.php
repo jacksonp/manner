@@ -90,6 +90,13 @@ class Text
                 }
             }
 
+            if (preg_match('~^\.ie n (.*)$~', $line, $matches)) {
+                $line = $matches[1];
+                if (!preg_match('~^\.el ~', $rawLines[++$i])) {
+                    throw new Exception('.ie n - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
+                }
+            }
+
             if (preg_match('~^\.if n \\\\{(.*)$~', $line, $matches)) {
                 $line = $matches[1];
                 while ($i < $numRawLines) {
@@ -346,7 +353,7 @@ class Text
             // Handle stuff like:
             // .ie \n(.g .ds Aq \(aq
             // .el       .ds Aq '
-            if (preg_match('~^\.ie \\\\n\(\.g \.ds (..) (.+)$~u', $line, $matches)) {
+            if (preg_match('~^\.ie \\\\n\(\.g \.ds (.+?) (.+)$~u', $line, $matches)) {
                 if (!preg_match('~^\.el~u', $firstPassLines[++$i])) {
                     throw new Exception('.ie not followed by .el');
                 }
