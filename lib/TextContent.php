@@ -217,8 +217,8 @@ class TextContent
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e' => '\\',
-            // If we do this earlier and it's on a line on its own, it would then erroneously be detected as a command:
-          '\\.' => '.',
+            // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
+          '\\|'  => '',
         ];
 
         Macro::addStringDefToReplacementArray('rs', '\\', $replacements);

@@ -395,7 +395,7 @@ class Text
             }
 
             //<editor-fold desc="Handle man title macro">
-            if (!$foundTitle && preg_match('~^\.TH (.*)$~u', $line, $matches)) {
+            if (!$foundTitle && preg_match('~^\.TH\s(.*)$~u', $line, $matches)) {
                 $foundTitle   = true;
                 $titleDetails = Macro::parseArgString($matches[1]);
                 if (is_null($titleDetails) || count($titleDetails) < 2) {
@@ -435,6 +435,8 @@ class Text
           '\\/'  => '',
             // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
           '\\,'  => '',
+            // The same as a dot (‘.’).  Necessary in nested macro definitions so that ‘\\..’ expands to ‘..’.
+          '\\.'  => '.',
           '\\\'' => '´',
             // The acute accent ´; same as \(aa.
           '\\´'  => '´',
@@ -451,8 +453,6 @@ class Text
           '\\:'  => '',
             // Digit-width space.
           '\\0'  => ' ',
-            // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now.
-          '\\|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
           '\\^'  => '',
             // Unpaddable space size space glyph (no line break). See enigma.6:
