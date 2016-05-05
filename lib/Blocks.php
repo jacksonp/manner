@@ -325,6 +325,47 @@ class Blocks
                 continue; //End of block
             }
 
+            if (preg_match('~^\.TS~u', $line)) {
+                $table               = $dom->createElement('table');
+                $blocks[++$blockNum] = $table;
+
+                $columnSeparator = "\t";
+
+                $line = $blockNode->manLines[++$i];
+                if (mb_substr($line, -1, 1) === ';') {
+                    $tableOptions = preg_split('~[\s,]+~', $line);
+                    foreach ($tableOptions as $tableOption) {
+                        if (preg_match('~tab\((.)\)~', $tableOption, $matches)) {
+                            $columnSeparator = $matches[1];
+                        }
+                    }
+                    $line = $blockNode->manLines[++$i];
+                }
+
+                while ($i < $numLines - 1 && strpos($line, $columnSeparator) === false) {
+                    // Just skipping format definitions for now.
+                    $line = $blockNode->manLines[++$i];
+                }
+
+                while ($i < $numLines - 1) {
+                    $tr   = $table->appendChild($dom->createElement('tr'));
+                    $cols = explode($columnSeparator, $line);
+                    foreach ($cols as $c) {
+                        $td = $dom->createElement('td');
+                        TextContent::interpretAndAppendCommand($td, $c);
+                        $tr->appendChild($td);
+                    }
+
+                    $line = $blockNode->manLines[++$i];
+                    if (preg_match('~^\.TE~u', $line)) {
+                        continue 2;
+                    }
+                }
+
+                throw new Exception($line . ' - .TS without .TE in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+
+            }
+
             // Make tables out of tab-separated lines
             // strpos() > 0: avoid indented stuff
             if ($i < $numLines - 1
