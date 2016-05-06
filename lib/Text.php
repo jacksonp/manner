@@ -447,14 +447,6 @@ class Text
           '\\_'  => '_',
           '\\en' => '\n',
           '\\t'  => "\t",
-            // Default optional hyphenation character. Just remove for now.
-          '\\%'  => '',
-            // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
-          '\\:'  => '',
-            // Digit-width space.
-          '\\0'  => ' ',
-            // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
-          '\\^'  => '',
             // Unpaddable space size space glyph (no line break). See enigma.6:
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
             // Unbreakable space that stretches like a normal inter-word space when a line is adjusted

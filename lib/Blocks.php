@@ -223,7 +223,7 @@ class Blocks
                     }
                     $rsLines[] = $line;
                 }
-                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . $blockNode->manLines[$i - 2] . '"');
+                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$blockNode->manLines[$i - 2] . '"');
             }
 
             if (preg_match('~^\.RE~u', $line)) {
@@ -266,7 +266,7 @@ class Blocks
 
             if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
-                $url    = trim($matches[1]);
+                $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
                 if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
                     $url = 'mailto:' . $url;
                 }
