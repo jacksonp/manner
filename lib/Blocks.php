@@ -326,48 +326,131 @@ class Blocks
             }
 
             if (preg_match('~^\.TS~u', $line)) {
-                $table               = $dom->createElement('table');
+                $table = $dom->createElement('table');
+                $table->setAttribute('class', 'tbl');
                 $blocks[++$blockNum] = $table;
 
                 $columnSeparator = "\t";
 
                 $line = $blockNode->manLines[++$i];
                 if (mb_substr($line, -1, 1) === ';') {
-                    $tableOptions = preg_split('~[\s,]+~', $line);
-                    foreach ($tableOptions as $tableOption) {
-                        if (preg_match('~tab\((.)\)~', $tableOption, $matches)) {
-                            $columnSeparator = $matches[1];
-                        }
+                    if (preg_match('~tab\s?\((.)\)~', $line, $matches)) {
+                        $columnSeparator = $matches[1];
                     }
                     $line = $blockNode->manLines[++$i];
                 }
 
-                $rowFormats = [];
-
-                while ($i < $numLines - 1 && strpos($line, $columnSeparator) === false) {
-                    $rowFormats[] = preg_split('~[\s]+~', $line);
-                    // Just skipping format definitions for now.
+                $rowFormats  = [];
+                $formatsDone = false;
+                while ($i < $numLines - 1 && !$formatsDone) {
+                    if (mb_substr($line, -1, 1) === '.') {
+                        $line        = rtrim($line, '.');
+                        $formatsDone = true;
+                    }
+                    if (preg_match('~^-+$~u', $line)) {
+                        $rowFormats[] = '---';
+                    } else {
+                        // Ignore vertical bars for now:
+                        $line = str_replace('|', '', $line);
+                        $colDefs = preg_split('~[\s]+~', $line);
+                        if (count($colDefs) === 1) {
+                            $colDefs = str_split($colDefs[0]);
+                        }
+                        foreach ($colDefs as $k => $v) {
+                            $colDefs[$k] = strtr($v, ['l' => '', 'L' => '']);
+                        }
+                        $rowFormats[] = $colDefs;
+                    }
                     $line = $blockNode->manLines[++$i];
                 }
 
                 $tableRowNum = 0;
+                $tr          = false;
 
                 while ($i < $numLines - 1) {
+                    if ($line === '_') {
+                        if ($tr) {
+                            $tr->setAttribute('class', 'border-bottom');
+                        }
+                        $line = $blockNode->manLines[++$i];
+                        continue;
+                    } elseif ($line === '=') {
+                        if ($tr) {
+                            $tr->setAttribute('class', 'border-bottom-double');
+                        }
+                        $line = $blockNode->manLines[++$i];
+                        continue;
+                    }
                     $tr      = $table->appendChild($dom->createElement('tr'));
                     $cols    = explode($columnSeparator, $line);
                     $numCols = count($cols);
-                    if ($numCols === 1) {
-                        throw new Exception($line . ' - expected more than one column in table row at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
-                    }
                     for ($j = 0; $j < $numCols; ++$j) {
-                        $c = $cols[$j];
-                        if ($tableRowNum === 0 && @$rowFormats[0][$j] === 'lb') {
+                        if (isset($rowFormats[$tableRowNum])) {
+                            $thisRowFormat = $rowFormats[$tableRowNum];
+                            if (is_string($thisRowFormat) && $thisRowFormat === '---') {
+                                $tr->setAttribute('class', 'border-top');
+                                $thisRowFormat = @$rowFormats[$tableRowNum + 1];
+                            }
+                        }
+
+                        $tdClass = @$thisRowFormat[$j];
+
+                        // Ignore for now:
+                        // * equal-width columns
+                        $tdClass = str_replace(['e', 'E'], '', $tdClass);
+
+                        $tdClass = preg_replace('~[fF]?[bB]~', '', $tdClass, -1, $numReplaced);
+                        $bold    = $numReplaced > 0;
+
+                        if ($tableRowNum === 0 && $bold) {
                             $cell = $dom->createElement('th');
                         } else {
                             $cell = $dom->createElement('td');
+                            if ($bold) {
+                                $tdClass = trim($tdClass . ' bold');
+                            }
+                        }
+                        if (!empty($tdClass)) {
+                            $cell->setAttribute('class', $tdClass);
+                        }
+                        $colspan = 1;
+                        for ($k = $j + 1; $k < count($thisRowFormat); ++$k) {
+                            if (@$thisRowFormat[$k] === 's') {
+                                ++$colspan;
+                            } else {
+                                break;
+                            }
+                        }
+                        if ($colspan > 1) {
+                            $cell->setAttribute('colspan', $colspan);
                         }
 
-                        TextContent::interpretAndAppendCommand($cell, $c);
+                        $tdContents = $cols[$j];
+
+                        if ($tdContents === '_') {
+                            $cell->appendChild($dom->createElement('hr'));
+                        } elseif (mb_strpos($tdContents, 'T{') === 0) {
+                            $tBlockLines = [];
+                            if (mb_strlen($tdContents) > 2) {
+                                $tBlockLines[] = mb_substr($tdContents, 2);
+                            }
+                            for ($i = $i + 1; $i < $numLines; ++$i) {
+                                $tBlockLine = $blockNode->manLines[$i];
+                                if (mb_strpos($tBlockLine, 'T}') === 0) {
+                                    if (mb_strlen($tBlockLine) > 2) {
+                                        throw new Exception($line . ' - cannot handle stuff after T} at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+                                    }
+                                    $cell->manLines = $tBlockLines;
+                                    self::handle($cell);
+                                    break;
+                                } else {
+                                    $tBlockLines[] = $tBlockLine;
+                                }
+                            }
+
+                        } else {
+                            TextContent::interpretAndAppendCommand($cell, $tdContents);
+                        }
                         $tr->appendChild($cell);
                     }
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMLC</title>
+<h1>PMLC</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmlc</strong> - configure active Performance Co-Pilot pmlogger(s) interactively
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmlc</strong> [<strong>-e</strong>] [<strong>-h</strong> <em>host</em>] [<strong>-i</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-P</strong>] [<strong>-p</strong> <em>port</em>] [<strong>-Z</strong> <em>timezone</em>] [<strong>-z</strong>] [<strong>pid</strong>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmlc</strong> may be used to change those metrics and instances which a <strong>pmlogger</strong>(1) writes to a Performance Co-Pilot archive (see <strong>PCPIntro</strong>(1)), the frequency with which the metrics are collected and whether the logging is mandatory, advisory, on or off. It also reports the current logging status of metrics and instances. <strong>pmlc</strong> may be used to control pmlogger instances on remote hosts as well as those on the local host.
+  <p>Normally <strong>pmlc</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile</em>.
+  <p>If the <strong>-P</strong> option is specified, <strong>pmlc</strong> will attempt to start with a connection to the primary pmlogger on the local host. If the <strong>-p</strong> option is specified, then <strong>pmlc</strong> will attempt to start with a connection to the pmlogger on this TCP/IP <em>port</em>. Alternatively, if <em>pid</em> is specified, a connection to the pmlogger instance with that process id will be attempted on startup. The <strong>-h</strong> option may only be used if <strong>-P,</strong> <strong>-p</strong> <em>port</em> or a <em>pid</em> is also specified. In that case <strong>pmlc</strong> will initially connect to the specified (remote) pmlogger instance on <em>host</em> rather than the local host. If the connection to the specified pmlogger instance cannot be established, <strong>pmlc</strong> will start with no connection. These options typically allow the same file of <strong>pmlc</strong> commands to be directed to multiple pmlogger instances by varying the command line arguments. Note that <strong>-P</strong>, <strong>-p</strong> <em>port</em>, <em>pid</em> and <strong>-h</strong> are used only when making an initial connection to a pmlogger instance. They are not used as defaults if subsequent connections are made interactively (see the <strong>connect</strong> command below).
+  <p>By default, <strong>pmlc</strong> reports the time of day according to the local timezone on the system where <strong>pmlc</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7). The <strong>-z</strong> option changes the timezone to the timezone of the pmlogger instance from which information is being obtained. Only one of <strong>-z</strong> or <strong>-Z</strong> may be specified.
+  <p>If standard input is from a tty, <strong>pmlc</strong> is interactive, with prompts. The <strong>-i</strong> flag may be used to force interactive behavior, and is typically used in conjunction with <strong>-e</strong> to echo all command input on standard output.
+  <p>The following commands may be used:
+  <dl>
+    <dt><strong>show</strong> [ <strong>loggers</strong> ] [ <strong>@</strong><em>host</em> ]
+    <dd>
+      <p>Displays the process identities of all pmlogger instances running on the local host (or <em>host</em>, if specified). The primary pmlogger pid is parenthesized because it can be referred to as “primary” as well as by its pid.
+    <dt><strong>connect</strong> <em>pid</em> [ <strong>@</strong><em>host</em> ]
+    <dd>
+      <p><strong>connect</strong> <strong>primary</strong> [ <strong>@</strong><em>host</em> ] Connects <strong>pmlc</strong> to the specified pmlogger process. Any existing connection to a pmlogger instance is closed first. Each pmlogger instance will accept at most one connection at a time, so if the connection is successfully established, your <strong>pmlc</strong> will be the only one controlling the pmlogger instance it is connected to.
+    <dt><strong>new volume</strong>
+    <dd>
+      <p>This command works only while a connection to a pmlogger instance is established. It tells the pmlogger to close the current volume of the log and open a new volume. Closed volumes may be archived, e.g. as part of a regular log management procedure to control the size of the physical log files.
+    <dt><strong>status</strong>
+    <dd>
+      <p>This command works only while a connection to a pmlogger instance is established. It prints information about the state of the pmlogger instance and its associated log.
+    <dt><strong>timezone</strong> <strong>local</strong> | <strong>logger</strong> | <strong>"</strong><em>timezone</em><strong>"</strong>
+    <dd>
+      <p>This command sets the time zone used when times are printed. <strong>local</strong> means use the time zone of the machine that <strong>pmlc</strong> is running on. <strong>logger</strong> means use the time zone of the machine where the pmlogger instance is running. Alternatively an explicit <em>timezone</em> enclosed in quotes may be supplied (refer to <strong>TZ</strong> in <strong>environ</strong>(7) for details). The default time zone is <strong>local</strong> unless one of the <strong>-z</strong> or <strong>-Z</strong> options has been supplied on the command line.
+    <dt><strong>flush</strong>
+    <dd>
+      <p>This command works only while a connection to a pmlogger instance is established, and requests the pmlogger instance to flush to disk all buffers associated with the current archive. For old-timers, <strong>sync</strong> is a synonym for <strong>flush</strong>. In current versions of <strong>pmlogger</strong>(1) all writes are unbuffered and aligned with the logical records in the external files, so this command achieves nothing, but is retained for backwards compatibility.
+    <dt><strong>help</strong>
+    <dd>
+      <p>Displays a summary of the available commands.<br>
+      <br>
+      <strong>h</strong> and <strong>?</strong> are synonyms for <strong>help</strong>.
+    <dt><strong>quit</strong>
+    <dd>
+      <p>Exits from <strong>pmlc</strong>.
+  </dl>
+  <p>The remaining commands query and change the logging state of metrics and instances. They will work only if <strong>pmlc</strong> has a connection to a pmlogger instance. Metrics may be specified as fully qualified names (e.g. hinv.ncpu) or subtrees of the PMNS (e.g. hinv) which are expanded to include all metrics in the subtree (e.g. hinv.ncpu, hinv.cpuclock, etc.). Lists of metrics may be specified by enclosing them in braces with spaces or a comma between metrics (e.g. {hinv.ncpu hinv.ndisk}). Subtrees of metrics may be included in such lists.
+  <p>Each individual metric specification may be further qualified with a space or comma separated list of instances in square brackets (e.g. kernel.all.load[“1 minute”, “5 minute”]). External instance names or numeric internal instance identifiers or both may be used in the same list (e.g. sample.colour.[red,1,“blue”]). If an instance qualification is applied to a subtree of the PMNS all of the metrics in the subtree must have the same instance domain. Instance qualifications may not be applied to entire lists of metrics but may appear inside such lists.
+  <p>If no instances are specified for a metric, all instances are used. All instances means all instances available at the time the pmlogger instance in question fetches the metrics for logging. If an instance domain changes over time this is not always the same as the set of instances displayed by <strong>pmlc</strong>, which can only display the currently available instances. To prevent unintentional errors, only the instances that are currently available to <strong>pmlc</strong> may appear in instance specifications.
+  <dl>
+    <dt><strong>query</strong> <em>metriclist</em>
+    <dd>
+      <p>The current logging state of each metric (and instances, where applicable) in <em>metriclist</em> is displayed. This includes the logging state (e.g. on, maybe, off) and the logging interval for each metric (and instance) requested. The following abbreviations pertaining to metrics (and instances) may appear in the output: <strong>adv</strong>, advisory; <strong>mand</strong>, mandatory; <strong>nl</strong>, not in the log; <strong>na</strong>, in the log but not currently available from its Performance Metrics Domain Agent (PMDA). Where appropriate, an instance name will appear last on a line preceded by its numeric internal instance identifier.
+    <dt>[ <strong>log</strong> ] <strong>mandatory on</strong> <em>interval</em> <em>metriclist</em>
+    <dd>
+      <p>This form of the <strong>log</strong> command turns on logging for the metrics (and any instances) in <em>metriclist.</em> <em>interval</em> specifies how often the specified metrics/instances should be logged. <strong>once</strong> indicates that the metrics/instances should appear at most once in the log. More often one would use the optional keyword <strong>every</strong> followed by a positive number and one of <strong>millisecond</strong> (or <strong>msec</strong>), <strong>second</strong> (or <strong>sec</strong>), <strong>minute</strong> (or <strong>min</strong>), <strong>hour</strong> or their plurals.<br>
+      <br>
+      Note that the keyword <strong>default</strong> which may be used for the default <em>interval</em> in a <strong>pmlogger</strong>(1) configuration file cannot be used in <strong>pmlc</strong>.<br>
+      <br>
+      Internal limitations require the <em>interval</em> to be less than (approximately) 74 hours. An <em>interval</em> value of zero is a synonym for <strong>once</strong>.
+    <dt>[ <strong>log</strong> ] <strong>mandatory off</strong> <em>metriclist</em>
+    <dd>
+      <p>This tells the pmlogger instance not to log any of the metrics/instances in <em>metriclist</em>.
+    <dt>[ <strong>log</strong> ] <strong>mandatory maybe</strong> <em>metriclist</em>
+    <dd>
+      <p>This tells the pmlogger instance to honor any subsequent advisory logging requests for the metrics/instances in <em>metriclist</em>. If the current logging state of the metrics/instances is mandatory (either on or off) the new state will be set to maybe (effectively advisory off). If the current state of the metrics/instances is already advisory (either on or off) the state(s) for the metrics/instances will remain as they are.
+    <dt>[ <strong>log</strong> ] <strong>advisory on</strong> <em>interval</em> <em>metriclist</em>
+    <dd>
+      <p>[ <strong>log</strong> ] <strong>advisory off</strong> <em>metriclist</em> Advisory logging is only applicable if the last logging state specified for a metric/instance was “mandatory maybe” (which permits subsequent advisory logging control) or if the logging state is already advisory. These two statements turn advisory logging on or off (respectively) for the specified metrics/instances.<br>
+      <br>
+      The interpretation for <em>interval</em> is as above for the <strong>mandatory</strong> case.
+  </dl>
+  <p>There is no continuation character required for commands that span lines.
+  <p>The word <strong>at</strong> may be used interchangeably with <strong>@</strong>.
+  <p>A request to log all instances of a metric will supersede any prior request to log either all or specific instances of a metric (if the request specifies a permissible transition in the logging state). A request to log specific instances of a metric when all instances of a metric are already being logged is refused by <strong>pmlogger</strong>.
+</div>
+<div class="section">
+  <h2>ACCESS CONTROL</h2>
+  <p><strong>pmlc</strong> may have restricted access to and control over <strong>pmlogger</strong>(1) processes.
+  <p>If a <strong>pmlogger</strong>(1) is unable to export its control information to the local <strong>pmcd</strong>(1), then that <strong>pmlogger</strong>(1) cannot cannot be connected to nor controlled by <strong>pmlc</strong>. In practice, this means the <strong>pmlogger</strong>(1) process has to be owned by the user “pcp” and/or the group “pcp”. If <strong>pmlogger</strong>(1) is running on the host “foo” then use “pminfo -f -h foo pmcd.pmlogger” to verify that the <strong>pmlogger</strong>(1) of interest is known to <strong>pmcd</strong>(1), alternatively <strong>pmlogger</strong>(1) instances that are not reported from the <strong>pmlc</strong> <strong>show loggers @foo</strong> command are not known to <strong>pmcd</strong>(1) on the host “foo”.
+  <p>If <strong>pmlogger</strong>(1) is launched with a configuration file that contains an <strong>[access]</strong> section, then <strong>pmlc</strong> will be unable to connect to that <strong>pmlogger</strong>(1) unless the access controls allow <strong>some</strong> access from the host where <strong>pmlc</strong> is being run. Minimally this requires the <strong>enquire</strong> access to be permitted in the <strong>pmlogger</strong>(1) access control section.
+  <p>If <strong>pmlc</strong> is able to connect to the <strong>pmlogger</strong>(1) of interest, then the following table summarizes the permissions needed to perform different <strong>pmlc</strong> commands:
+  <table class="tbl">
+    <tr class="border-bottom-double">
+      <td class="c"><strong>pmlc</strong> command
+      <td class="c">Required <strong>pmlogger</strong> access
+    <tr>
+      <td class="f() bold">show loggers
+      <td>Any
+    <tr>
+      <td class="f() bold">connect
+      <td>Any of <strong>enquire</strong>, <strong>advisory</strong> or <strong>mandatory</strong>
+    <tr>
+      <td class="f() bold">status
+      <td>Any of <strong>enquire</strong>, <strong>advisory</strong> or <strong>mandatory</strong>
+    <tr>
+      <td class="f() bold">query ...
+      <td>Any of <strong>enquire</strong>, <strong>advisory</strong> or <strong>mandatory</strong>
+    <tr>
+      <td class="f() bold">log advisory ...
+      <td><strong>advisory</strong>
+    <tr>
+      <td class="f() bold">log mandatory ...
+      <td><strong>mandatory</strong>
+    <tr>
+      <td class="f() bold">new volume
+      <td><strong>mandatory</strong>
+  </table>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlogger</strong>(1), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5) and <strong>environ</strong>(7).
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>Most error or warning messages are self-explanatory. A message of the form<br>
+  Warning: unable to change logging state for... followed by a list of metrics (and possibly instances) indicates that <strong>pmlogger</strong> refused the request for the metrics (and instances) that appear. Any metrics (and instances) that were specified but do not appear in the message have had their logging state updated successfully (no news is good news). Usually this warning results from requesting advisory logging when a mandatory control is already in place, or requesting logging for specific instances when all instances are already being logged.
+</div>
+<div class="section">
+  <h2>CAVEAT</h2>
+  <p>If all instances of a metric are being logged and a request is made to log specific instances of the metric with the same state and frequency, the request may appear to succeed, even though <strong>pmlogger</strong> has refused the request. This is not normally a problem, as the required information will still be placed into the log by <strong>pmlogger</strong>.
+  <p>However in the case where the metric is to be logged once, the outcome is not what might be expected. When <strong>pmlogger</strong> receives a request to log a metric once, it places the current value(s) of the metric into the log as soon as it can, regardless of whether the metric is already in the log. This may be used to force values into the log. When a request to log specific instances of a metric arrives and is refused because all instances of the metric are already being logged, <strong>pmlogger</strong> does not place values for the instances requested into the log. It returns the current logging state for each instance requested to <strong>pmlc</strong>. The requested and returned states are identical, so <strong>pmlc</strong> doesn't raise an error as it should.
+  <p>To ensure that only certain instances of a metric are being logged, one should always turn off logging for all instances of the metric prior to turning on logging for the specific instances required.
+</div>
+

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMVAL</title>
+<h1>PMVAL</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmval</strong>, <strong>pmevent</strong> - arbitrary performance metrics value dumper
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmval</strong> [<strong>-dgLrvz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>] [<strong>-f</strong> <em>N</em>] [<strong>-h</strong> <em>host</em>] [<strong>-i</strong> <em>instances</em>] [<strong>-K</strong> <em>spec</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-O</strong> <em>offset</em>] [<strong>-p</strong> <em>port</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-s</strong> <em>samples</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-U</strong> <em>archive</em>] [<strong>-w</strong> <em>width</em>] [<strong>-x</strong> <em>pattern</em>] [<strong>-Z</strong> <em>timezone</em>] <em>metricname</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmval</strong> prints current or archived values for the nominated performance metric. The metric of interest is named in the <em>metricname</em> argument, subject to instance qualification with the <strong>-i</strong> flag as described below.
+  <p>Unless directed to another host by the <strong>-h</strong> option, or to a set of archives by the <strong>-a</strong> or <strong>-U</strong> options, <strong>pmval</strong> will contact the Performance Metrics Collector Daemon (PMCD) on the local host to obtain the required information.
+  <p>The <em>metricname</em> argument may also be given in the metric specification syntax, as described in <strong>PCPIntro</strong>(1), where the source, metric and instance may all be included in the <em>metricname</em>, e.g. thathost:kernel.all.load[“1 minute”]. When this format is used, none of the <strong>-h</strong> or <strong>-a</strong> or <strong>-U</strong> options may be specified.
+  <p>When using the metric specification syntax, the “hostname” <strong>@</strong> is treated specially and causes <strong>pmval</strong> to use a local context to collect metrics from PMDAs on the local host without PMCD. Only some metrics are available in this mode.
+  <p>When processing a set of archives, <strong>pmval</strong> may relinquish its own timing control, and operate as a “slave” of a <strong>pmtime</strong>(1) process that uses a GUI dialog to provide timing control. In this case, either the <strong>-g</strong> option should be used to start <strong>pmval</strong> as the sole slave of a new <strong>pmtime</strong>(1) instance, or <strong>-p</strong> should be used to attach <strong>pmval</strong> to an existing <strong>pmtime</strong>(1) instance via the IPC channel identified by the <em>port</em> argument.
+  <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a “natural” alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
+  <p>The other options which control the source, timing and layout of the information reported by <strong>pmval</strong> are as follows:
+  <dl>
+    <dt><strong>-a</strong>
+    <dd>
+      <p>Performance metric values are retrieved from the set of Performance Co-Pilot (PCP) archive logs identified. The argument is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. See also <strong>-U</strong>.
+    <dt><strong>-d</strong>
+    <dd>
+      <p>When replaying from a set of archives, this option requests that the prevailing real-time delay be applied between samples (see <strong>-t</strong>) to effect a pause, rather than the default behaviour of replaying at full speed.
+    <dt><strong>-f</strong>
+    <dd>
+      <p>Numbers are reported in “fixed point” notation, rather than the default scientific notation. Each number will be up to the column width determined by the default heuristics, else the <strong>-w</strong> option if specified, and include <em>N</em> digits after the decimal point. So, the options <strong>-f 3 -w 8</strong> would produce numbers of the form 9999.999. A value of zero for <em>N</em> omits the decimal point and any fractional digits.
+    <dt><strong>-g</strong>
+    <dd>
+      <p>Start <strong>pmval</strong> as the slave of a new <strong>pmtime</strong>(1) process for replay of archived performance data using the <strong>pmtime</strong>(1) graphical user interface.
+    <dt><strong>-h</strong>
+    <dd>
+      <p>Current performance metric values are retrieved from the nominated <em>host</em> machine.
+    <dt><strong>-i</strong>
+    <dd>
+      <p><em>instances</em> is a list of one or more instance names for the nominated performance metric - just these instances will be retrieved and reported (the default is to report all instances). The list must be a single argument, with elements of the list separated by commas and/or white space.
+      <div class="indent">
+        <p>The instance name may be quoted with single (') or double (") quotes for those cases where the instance name contains white space or commas.
+        <p>Multiple <strong>-i</strong> options are allowed as an alternative way of specifying more than one instance of interest.
+        <p>As an example, the following are all equivalent:
+        <pre> $ pmval -i "'1 minute','5 minute'" kernel.all.load
+ $ pmval -i '"1 minute","5 minute"' kernel.all.load
+ $ pmval -i "'1 minute' '5 minute'" kernel.all.load
+ $ pmval -i "'1 minute'" -i "'5 minute'" kernel.all.load
+ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
+      </div>
+    <dt><strong>-K</strong>
+    <dd>
+      <p>When fetching metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
+    <dt><strong>-n</strong>
+    <dd>
+      <p>Normally <strong>pmval</strong> operates on the default Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative namespace is loaded from the file <em>pmnsfile.</em>
+    <dt><strong>-p</strong>
+    <dd>
+      <p>Attach <strong>pmval</strong> to an existing <strong>pmtime</strong>(1) time control process instance via the IPC channel identified by the <em>port</em> argument. This option is normally only used by other tools, e.g. <strong>pmchart</strong>(1), when they launch <strong>pmval</strong> with synchronized time control.
+    <dt><strong>-r</strong>
+    <dd>
+      <p>Print raw values for cumulative counter metrics. Normally cumulative counter metrics are converted to rates. For example, disk transfers are reported as number of disk transfers per second during the preceding sample interval, rather than the raw value of number of disk transfers since the machine was booted. If you specify this option, the raw metric values are printed.
+    <dt><strong>-s</strong>
+    <dd>
+      <p>The argument <em>samples</em> defines the number of samples to be retrieved and reported. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmval</strong> will sample and report continuously (in real time mode) or until the end of the set of PCP archives (in archive mode).
+    <dt><strong>-t</strong>
+    <dd>
+      <p>The default update <em>interval</em> may be set to something other than the default 1 second. The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds).
+    <dt><strong>-U</strong>
+    <dd>
+      <p>Performance metric values are retrieved from the set of Performance Co-Pilot (PCP) archive logs identified. The argument is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. However, unlike <strong>-a</strong> every recorded value in the archive for the selected metric and instances is reported (so no interpolation mode, and the sample interval (<strong>-t</strong> option) is ignored. See also <strong>-a</strong>.
+      <div class="indent-+5n">
+        <p>At most one of the options <strong>-a</strong> and <strong>-U</strong> may be specified.
+      </div>
+    <dt><strong>-w</strong>
+    <dd>
+      <p>Set the width of each column of output to be <em>width</em> columns. If not specified columns are wide enough to accommodate the largest value of the type being printed.
+    <dt><strong>-x</strong>
+    <dd>
+      <p>The given <em>pattern</em> is sent to the performance metric domain agent for the requested <em>metricname</em> before any values are requested. This serves two purposes. Firstly, it provides a mechanism for server-side event filtering that is customisable for individual event streams. In addition, some performance metrics domain agents also use the PMCD store mechanism to provide a basic security model (e.g. for sensitive log files, only a client host with <strong>pmStore</strong>(3) access would be able to access the event stream).
+      <div class="indent">
+        <p>As <em>pattern</em> may be processed by <strong>regcomp</strong>(3) it should be a non-empty string. Use . (dot) for a “match all” <em>pattern</em>.
+      </div>
+    <dt><strong>-Z</strong>
+    <dd>
+      <p>By default, <strong>pmval</strong> reports the time of day according to the local timezone on the system where <strong>pmval</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
+    <dt><strong>-z</strong>
+    <dd>
+      <p>Change the reporting timezone to the local timezone at the host that is the source of the performance metrics, as identified via either the <em>metricname</em> or the <strong>-h</strong> or <strong>-a</strong> or <strong>-U</strong> options.
+  </dl>
+  <p>The following symbols may occasionally appear, in place of a metric value, in <strong>pmval</strong> output: A question mark symbol (?) indicates that a value is no longer available for that metric instance. An exclamation mark (!) indicates that a 64-bit counter wrapped during the sample.
+  <p>The output from <strong>pmval</strong> is directed to standard output.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
+    <dd>
+      <p>default PMNS specification files
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmchart</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmdumptext</strong>(1), <strong>pminfo</strong>(1), <strong>pmlogger</strong>(1), <strong>pmrep</strong>(1), <strong>pmtime</strong>(1), <strong>PMAPI</strong>(3), <strong>pmStore</strong>(3), <strong>__pmSpecLocalPMDA</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
+</div>
+<div class="section">
+  <h2>DIAGNOSTICS</h2>
+  <p>All are generated on standard error and are intended to be self-explanatory.
+</div>
+<div class="section">
+  <h2>CAVEATS</h2>
+  <p>By default, <strong>pmval</strong> attempts to display non-integer numeric values in a way that does not distort the inherent precision (rarely more than 4 significant digits), and tries to maintain a tabular format in the output. These goals are sometimes in conflict.
+  <p>In the absence of the <strong>-f</strong> option (described above), the following table describes the formats used for different ranges of numeric values for any metric that is of type <strong>PM_TYPE_FLOAT</strong> or <strong>PM_TYPE_DOUBLE</strong>, or any metric that has the semantics of a counter (for which <strong>pmval</strong> reports the rate converted value):
+  <table class="tbl">
+    <tr class="border-bottom">
+      <td class="cf(R)">Format
+      <td class="cf(R)">Value Range
+    <tr>
+      <td class="rf(CW)">!
+      <td class="f(R)">No values available
+    <tr>
+      <td class="rf(CW)">9.999E-99
+      <td class="f(R)">&lt; 0.1
+    <tr>
+      <td class="rf(CW)">0.0
+      <td class="f(R)">0
+    <tr>
+      <td class="rf(CW)">9.9999
+      <td class="f(R)">&gt; 0 and &lt;= 0.9999
+    <tr>
+      <td class="rf(CW)">9.999
+      <td class="f(R)">&gt; 0.9999 and &lt; 9.999
+    <tr>
+      <td class="rf(CW)">99.99
+      <td class="f(R)">&gt; 9.999 and &lt; 99.99
+    <tr>
+      <td class="rf(CW)">999.9
+      <td class="f(R)">&gt; 99.99 and &lt; 999.9
+    <tr>
+      <td class="rf(CW)">9999.
+      <td class="f(R)">&gt; 999.9 and &lt; 9999
+    <tr>
+      <td class="rf(CW)">9.999E+99
+      <td class="f(R)">&gt; 9999
+  </table>
+</div>
+
