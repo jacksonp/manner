@@ -342,24 +342,40 @@ class Blocks
                     $line = $blockNode->manLines[++$i];
                 }
 
+                $rowFormats = [];
+
                 while ($i < $numLines - 1 && strpos($line, $columnSeparator) === false) {
+                    $rowFormats[] = preg_split('~[\s]+~', $line);
                     // Just skipping format definitions for now.
                     $line = $blockNode->manLines[++$i];
                 }
 
+                $tableRowNum = 0;
+
                 while ($i < $numLines - 1) {
-                    $tr   = $table->appendChild($dom->createElement('tr'));
-                    $cols = explode($columnSeparator, $line);
-                    foreach ($cols as $c) {
-                        $td = $dom->createElement('td');
-                        TextContent::interpretAndAppendCommand($td, $c);
-                        $tr->appendChild($td);
+                    $tr      = $table->appendChild($dom->createElement('tr'));
+                    $cols    = explode($columnSeparator, $line);
+                    $numCols = count($cols);
+                    if ($numCols === 1) {
+                        throw new Exception($line . ' - expected more than one column in table row at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+                    }
+                    for ($j = 0; $j < $numCols; ++$j) {
+                        $c = $cols[$j];
+                        if ($tableRowNum === 0 && @$rowFormats[0][$j] === 'lb') {
+                            $cell = $dom->createElement('th');
+                        } else {
+                            $cell = $dom->createElement('td');
+                        }
+
+                        TextContent::interpretAndAppendCommand($cell, $c);
+                        $tr->appendChild($cell);
                     }
 
                     $line = $blockNode->manLines[++$i];
                     if (preg_match('~^\.TE~u', $line)) {
                         continue 2;
                     }
+                    ++$tableRowNum;
                 }
 
                 throw new Exception($line . ' - .TS without .TE in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
@@ -388,9 +404,9 @@ class Blocks
                     $bits = preg_split('~\t+~', $line);
                     $tr   = $table->appendChild($dom->createElement('tr'));
                     foreach ($bits as $tdLine) {
-                        $td = $dom->createElement('td');
-                        TextContent::interpretAndAppendText($td, $tdLine);
-                        $tr->appendChild($td);
+                        $cell = $dom->createElement('td');
+                        TextContent::interpretAndAppendText($cell, $tdLine);
+                        $tr->appendChild($cell);
                     }
 
                     if ($i === $numLines - 1) {
