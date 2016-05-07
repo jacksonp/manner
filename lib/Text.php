@@ -139,6 +139,32 @@ class Text
                 throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
             }
 
+            if (strpos($line, '.ie \\nF \\{') === 0) {
+                $openBraces = 0;
+                while ($i < $numRawLines) {
+                    $openBraces += substr_count($line, '\\{');
+                    $openBraces -= substr_count($line, '\\}');
+                    $line = $rawLines[++$i];
+                    if ($openBraces < 1) {
+                        break;
+                    }
+                }
+                if (strpos($line, '.el \{') !== 0) {
+                    throw new Exception('.ie - not followed by expected .el on line ' . $i . '.');
+                }
+                $openBraces = 0;
+                while ($i < $numRawLines) {
+                    $openBraces += substr_count($line, '\\{');
+                    $openBraces -= substr_count($line, '\\}');
+                    if ($openBraces < 1) {
+                        continue 2;
+                    }
+                    $line = $rawLines[++$i];
+                }
+
+                throw new Exception('.ie - not followed by expected pattern on line ' . $i . '.');
+            }
+
             if (preg_match('~\.if [tv] ~', $line)) {
                 continue;
             }
