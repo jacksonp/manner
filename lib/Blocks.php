@@ -522,7 +522,7 @@ class Blocks
 
             $parentForLine = $blocks[$blockNum];
 
-            if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBIP]|CW))$~u', $line)) {
+            if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
                 if ($i === $numLines - 1
                   || $line === '.ft R'
                   || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/'
@@ -536,7 +536,7 @@ class Blocks
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
-                        if (in_array($line, ['.ft 1', '.ft P']) || $nextLine === '.nf') {
+                        if (in_array($line, ['.ft 1', '.ft P', '.ft CR']) || $nextLine === '.nf') {
                             --$i;
                             continue;
                         }
