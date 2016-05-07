@@ -279,7 +279,8 @@ class Text
             // .cp: Enable or disable compatibility mode.
             // .it: "Set an input-line count trap for the next N lines."
             // .ps: affects point size
-            if (preg_match('~^\.(iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps)~u',
+            // .bp: "Eject current page and begin new page."
+            if (preg_match('~^[\.\'](iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp)~u',
               $line)) {
                 continue;
             }
