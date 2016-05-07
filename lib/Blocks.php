@@ -351,7 +351,7 @@ class Blocks
                         $rowFormats[] = '---';
                     } else {
                         // Ignore vertical bars for now:
-                        $line = str_replace('|', '', $line);
+                        $line    = str_replace('|', '', $line);
                         $colDefs = preg_split('~[\s]+~', $line);
                         if (count($colDefs) === 1) {
                             $colDefs = str_split($colDefs[0]);
@@ -381,10 +381,10 @@ class Blocks
                         $line = $blockNode->manLines[++$i];
                         continue;
                     }
-                    $tr      = $table->appendChild($dom->createElement('tr'));
-                    $cols    = explode($columnSeparator, $line);
-                    $numCols = count($cols);
-                    for ($j = 0; $j < $numCols; ++$j) {
+                    $tr   = $table->appendChild($dom->createElement('tr'));
+                    $cols = explode($columnSeparator, $line);
+
+                    for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can get more elements with T{...
                         if (isset($rowFormats[$tableRowNum])) {
                             $thisRowFormat = $rowFormats[$tableRowNum];
                             if (is_string($thisRowFormat) && $thisRowFormat === '---') {
@@ -438,7 +438,8 @@ class Blocks
                                 $tBlockLine = $blockNode->manLines[$i];
                                 if (mb_strpos($tBlockLine, 'T}') === 0) {
                                     if (mb_strlen($tBlockLine) > 2) {
-                                        throw new Exception($line . ' - cannot handle stuff after T} at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+                                        $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
+                                        $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                     }
                                     $cell->manLines = $tBlockLines;
                                     self::handle($cell);

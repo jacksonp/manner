@@ -277,8 +277,9 @@ class Text
             // .rm: "Remove request, macro, or string name."
             // .ta: "Set tabs after every position that is a multiple of N (default scaling indicator m)."
             // .cp: Enable or disable compatibility mode.
-
-            if (preg_match('~^\.(iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp)~u',
+            // .it: "Set an input-line count trap for the next N lines."
+            // .ps: affects point size
+            if (preg_match('~^\.(iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps)~u',
               $line)) {
                 continue;
             }
