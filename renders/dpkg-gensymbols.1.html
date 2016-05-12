@@ -66,17 +66,17 @@
         <p>These tags allow one to restrict the set of architectures where the symbol is supposed to exist. The <strong>arch-bits</strong> and <strong>arch-endian</strong> tags are supported since dpkg 1.18.0. When the symbols list is updated with the symbols discovered in the library, all arch-specific symbols which do not concern the current host architecture are treated as if they did not exist. If an arch-specific symbol matching the current host architecture does not exist in the library, normal procedures for missing symbols apply and it may cause <strong>dpkg-gensymbols</strong> to fail. On the other hand, if the arch-specific symbol is found when it was not supposed to exist (because the current host architecture is not listed in the tag or does not match the endianness and bits), it is made arch neutral (i.e. the arch, arch-bits and arch-endian tags are dropped and the symbol will appear in the diff due to this change), but it is not considered as new.
         <p>When operating in the default non-template mode, among arch-specific symbols only those that match the current host architecture are written to the symbols file. On the contrary, all arch-specific symbols (including those from foreign arches) are always written to the symbol file when operating in template mode.
         <p>The format of <em>architecture-list</em> is the same as the one used in the <strong>Build-Depends</strong> field of <em>debian/control</em> (except the enclosing square brackets []). For example, the first symbol from the list below will be considered only on alpha, any-amd64 and ia64 architectures, the second only on linux architectures, while the third one anywhere except on armel.
-        <p>(arch=alpha any-amd64 ia64)a_64bit_specific_symbol@Base 1.0<br>
+        <p>(arch=alpha any-amd64 ia64)64bit_specific_symbol@Base 1.0<br>
         (arch=linux-any)linux_specific_symbol@Base 1.0<br>
         (arch=!armel)symbol_armel_does_not_have@Base 1.0
         <p>The <em>architecture-bits</em> is either <strong>32</strong> or <strong>64</strong>.
-        <p>(arch-bits=32)a_32bit_specific_symbol@Base 1.0<br>
-        (arch-bits=64)a_64bit_specific_symbol@Base 1.0
+        <p>(arch-bits=32)32bit_specific_symbol@Base 1.0<br>
+        (arch-bits=64)64bit_specific_symbol@Base 1.0
         <p>The <em>architecture-endianness</em> is either <strong>little</strong> or <strong>big</strong>.
-        <p>(arch-endian=little)a_little_endian_specific_symbol@Base 1.0<br>
-        (arch-endian=big)a_big_endian_specific_symbol@Base 1.0
+        <p>(arch-endian=little)little_endian_specific_symbol@Base 1.0<br>
+        (arch-endian=big)big_endian_specific_symbol@Base 1.0
         <p>Multiple restrictions can be chained.
-        <p>(arch-bits=32|arch-endian=little)a_32bit_le_symbol@Base 1.0
+        <p>(arch-bits=32|arch-endian=little)32bit_le_symbol@Base 1.0
       <dt><strong>ignore-blacklist</strong>
       <dd>
         <p>dpkg-gensymbols has an internal blacklist of symbols that should not appear in symbols files as they are usually only side-effects of implementation details of the toolchain. If for some reason, you really want one of those symbols to be included in the symbols file, you should tag the symbol with <strong>ignore-blacklist</strong>. It can be necessary for some low level toolchain libraries like libgcc.

@@ -2845,6 +2845,8 @@
         <br>
         To avoid permanent data loss, rollback will refuse to rollback a commit transaction if it isn't checked out. Use --force to override this protection.<br>
         <br>
+        The rollback command can be entirely disabled by setting the <strong>ui.rollback</strong> configuration setting to false. If you're here because you want to use rollback and it's disabled, you can re-enable the command by setting <strong>ui.rollback</strong> to true.<br>
+        <br>
         This command is not intended for use on public repositories. Once changes are visible for pull by other users, rolling a transaction back locally is ineffective (someone else may already have pulled the changes). Furthermore, a race is possible with readers of the repository; for example an in-progress pull from the repository may fail if a rollback is performed.<br>
         <br>
         Returns 0 on success, 1 if no rollback data is available.<br>
@@ -5473,6 +5475,9 @@
     <dt><strong>rstdoc(text, style)</strong>
     <dd>
       <p>Format ReStructuredText.
+    <dt><strong>separate(sep, args)</strong>
+    <dd>
+      <p>Add a separator between non-empty arguments.
     <dt><strong>shortest(node, minlength=4)</strong>
     <dd>
       <p>Obtain the shortest representation of a node.
@@ -5522,6 +5527,12 @@
       <p>Join the list of files with a “, ”:<br>
       <br>
       <pre> $ hg log -r 0 --template "files: {join(files, ', ')}\n"
+</pre>
+    <dt>·
+    <dd>
+      <p>Separate non-empty arguments by a “ ”:<br>
+      <br>
+      <pre> $ hg log -r 0 --template "{separate(' ', node, bookmarks, tags}\n"
 </pre>
     <dt>·
     <dd>
