@@ -237,8 +237,15 @@ class Text
                         $macroReplacements[$newMacro] = $macroLines;
                         continue 2;
                     } else {
-                        $macroLine    = str_replace(['\\\\'], ['\\'], $macroLine);
-                        $macroLines[] = self::trimWSAfterDot($macroLine);
+                        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
+                        $macroLine = self::trimWSAfterDot($macroLine);
+                        if (isset($macroReplacements[$macroLine])) {
+                            foreach ($macroReplacements[$macroLine] as $subMacroLine) {
+                                $macroLines[] = $subMacroLine;
+                            }
+                        } else {
+                            $macroLines[] = $macroLine;
+                        }
                     }
                 }
                 throw new Exception($matches[0] . ' - not followed by expected pattern on line ' . $i . '.');
