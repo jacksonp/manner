@@ -413,8 +413,9 @@ class Text
                 if ($trLen % 2 !== 0) {
                     throw new Exception($line . ' - odd number of chars after .tr');
                 }
-                for ($j = 0; $j < mb_strlen($tr); $j += 2) {
-                    $charSwaps[$tr[$j]] = $tr[$j + 1];
+                $chrArray = preg_split('~~u', $tr, -1, PREG_SPLIT_NO_EMPTY);
+                for ($j = 0; $j < count($chrArray); $j += 2) {
+                    $charSwaps[$chrArray[$j]] = $chrArray[$j + 1];
                 }
                 continue;
             }
