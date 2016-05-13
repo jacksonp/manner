@@ -4,7 +4,7 @@
 class Text
 {
 
-    private static function trimWSAfterDot($str)
+    private static function trimWSAfterDot(string $str)
     {
         return preg_replace('~^\.\s+~', '.', $str);
     }
@@ -234,11 +234,11 @@ class Text
                             $aliases['INDENT'] = 'RE';
                             continue 2;
                         }
-                        $macroReplacements[$newMacro] = self::trimWSAfterDot($macroLines);
+                        $macroReplacements[$newMacro] = $macroLines;
                         continue 2;
                     } else {
                         $macroLine    = str_replace(['\\\\'], ['\\'], $macroLine);
-                        $macroLines[] = $macroLine;
+                        $macroLines[] = self::trimWSAfterDot($macroLine);
                     }
                 }
                 throw new Exception($matches[0] . ' - not followed by expected pattern on line ' . $i . '.');
