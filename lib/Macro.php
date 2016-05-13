@@ -33,7 +33,8 @@ class Macro
 
     }
 
-    static function simplifyRequest(string $string) {
+    static function simplifyRequest(string $string)
+    {
 
         $known = [];
 
@@ -70,9 +71,12 @@ ROFF;
 
     }
 
-    public static function trimWSAfterDot(string $str)
+    public static function massageLine(string $macroLine)
     {
-        return preg_replace('~^\.\s+~', '.', $str);
+        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
+        $macroLine = preg_replace('~^\.\s+~', '.', $macroLine);
+
+        return preg_replace('~^\.nop ~u', '', $macroLine);
     }
 
 }

@@ -64,7 +64,7 @@ class Text
 
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1]) && $matches[1] !== '\'br') {
-                            $linesNoCond[] = Macro::trimWSAfterDot($matches[1]);
+                            $linesNoCond[] = Macro::massageLine($matches[1]);
                         }
                         if (!preg_match('~^\.el\s*\\\\{~', $rawLines[++$i])) {
                             throw new Exception('.ie n \\{ - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
@@ -77,7 +77,7 @@ class Text
                         }
                         throw new Exception('.el \\{ - not followed by expected pattern on line ' . $i . '.');
                     } elseif (!empty($line)) {
-                        $linesNoCond[] = Macro::trimWSAfterDot($line);
+                        $linesNoCond[] = Macro::massageLine($line);
                     }
 
                     $line = $rawLines[++$i];
@@ -104,11 +104,11 @@ class Text
                 while ($i < $numRawLines) {
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1]) && $matches[1] !== '\'br') {
-                            $linesNoCond[] = Macro::trimWSAfterDot($matches[1]);
+                            $linesNoCond[] = Macro::massageLine($matches[1]);
                         }
                         continue 2;
                     } elseif (!empty($line)) {
-                        $linesNoCond[] = Macro::trimWSAfterDot($line);
+                        $linesNoCond[] = Macro::massageLine($line);
                     }
 
                     $line = $rawLines[++$i];
@@ -232,9 +232,7 @@ class Text
                         $macroReplacements[$newMacro] = $macroLines;
                         continue 2;
                     } else {
-                        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-                        $macroLine = Macro::trimWSAfterDot($macroLine);
-                        $macroLine = preg_replace('~^\.nop ~u', '', $macroLine);
+                        $macroLine = Macro::massageLine($macroLine);
                         if (isset($macroReplacements[$macroLine])) {
                             foreach ($macroReplacements[$macroLine] as $subMacroLine) {
                                 $macroLines[] = $subMacroLine;
