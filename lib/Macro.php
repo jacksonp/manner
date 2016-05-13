@@ -70,4 +70,9 @@ ROFF;
 
     }
 
+    public static function trimWSAfterDot(string $str)
+    {
+        return preg_replace('~^\.\s+~', '.', $str);
+    }
+
 }
