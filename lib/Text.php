@@ -231,7 +231,7 @@ class Text
                             $aliases['INDENT'] = 'RS';
                             continue 2;
                         } elseif ($newMacro === '.UNINDENT') {
-                            $aliases['INDENT'] = 'RE';
+                            $aliases['UNINDENT'] = 'RE';
                             continue 2;
                         }
                         $macroReplacements[$newMacro] = $macroLines;
