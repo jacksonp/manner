@@ -121,6 +121,7 @@ class Text
               || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
               || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
               || strpos($line, '.if require_index') === 0
+              || strpos($line, '.if \\nF \\{') === 0
             ) {
                 $openBraces = 0;
                 while ($i < $numRawLines) {
@@ -408,20 +409,18 @@ class Text
 
             // Do this after translating characters:
             if (preg_match('~^\.tr (.+)$~u', $line, $matches)) {
-                $tr    = $matches[1];
-                $trLen = mb_strlen($tr);
-                if ($trLen % 2 !== 0) {
-                    throw new Exception($line . ' - odd number of chars after .tr');
-                }
-                $chrArray = preg_split('~~u', $tr, -1, PREG_SPLIT_NO_EMPTY);
+                $chrArray = preg_split('~~u', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
                 for ($j = 0; $j < count($chrArray); $j += 2) {
-                    $charSwaps[$chrArray[$j]] = $chrArray[$j + 1];
+                    //  "If there is an odd number of arguments, the last one is translated to an unstretchable space (‘\ ’)."
+                    $charSwaps[$chrArray[$j]] = $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1];
                 }
                 continue;
             }
 
             if (count($charSwaps) > 0) {
-                $line = strtr($line, $charSwaps);
+                $line = preg_replace(array_map(function ($c) {
+                    return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
+                }, array_keys($charSwaps)), $charSwaps, $line);
             }
 
             //<editor-fold desc="Handle man title macro">
@@ -485,6 +484,9 @@ class Text
         ];
 
         $namedGlyphs = [
+            // Hack for .tr (see e.g. myproxy-replicate.8):
+          'Tr'             => '☃',
+            // Nordic
           '-D'             => 'Ð',
           'Sd'             => 'ð',
           'TP'             => 'Þ',
