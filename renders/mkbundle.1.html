@@ -14,7 +14,20 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. By default only the assemblies specified in the command line will be included in the bundle. To automatically include all of the dependencies referenced, use the “--deps” command line option.
-  <p>Use <em>mkbundle\FP when you want the startup runtime to load the 1.0 profile, and use mkbundle2</em> when you want the startup runtime to load the 2.0 profile.
+  <p>There are two modes of operation, the default one uses the C compiler to create a bundle and requires a complete C and Mono SDK to produced executables. The simple mode (enabled when using the “--simple”) command line option does not require this, and also allows for cross compilation.
+  <p>For example, to create a bundle for hello world, use the following command:
+  <pre>     $ mkbundle -o hello --simple hello.exe</pre>
+  <p>The simple version allows for cross-compiling, this requires a Mono runtime to be installed in the ~/.mono/targets/TARGET/mono to be available. You can use the “--local-targets” to list all available targets, and the “--cross” argument to specify the target, like this:
+  <pre>        $ mkbundle --local-targets
+        Available targets:
+                default - Current System Mono
+                4.4.0-macosx-x86
+                4.4.0-debian-8-arm64
+        $ mkbundle --cross 4.4.0-debian-8-x86 hello.exe -o hello-debian</pre>
+  <p>The above will bundle your native library into hello-debian for PowerPC running on ARM64.
+</div>
+<div class="section">
+  <h2>OLD EMBEDDING</h2>
   <p>For example, to create a bundle for hello world, use the following command:
   <pre>         $ mkbundle -o hello hello.exe</pre>
   <p>The above will pull hello.exe into a native program called “hello”. Notice that the produced image still contains the CIL image and no precompilation is done.
@@ -30,6 +43,9 @@
     <dt><em>-c</em>
     <dd>
       <p>Produce the stub file, do not compile the resulting stub.
+    <dt><em>--cross target</em>
+    <dd>
+      <p>Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains a “mono” binary. You can fetch various targets using the --fetch-target command line option.
     <dt><em>-o filename</em>
     <dd>
       <p>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
@@ -42,15 +58,24 @@
     <dt>Specifies that a machine.config file must be bundled as well.
     <dd>
       <p>Typically this is $prefix/etc/mono/1.0/machine.config or $prefix/etc/mono/2.0/machine.config depending on the profile that you are using (1.0 or 2.0)
-    <dt><em>--nodeps</em>
-    <dd>
-      <p>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
     <dt><em>--deps</em>
     <dd>
       <p>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
+    <dt><em>--fetch-target target</em>
+    <dd>
+      <p>Downloads a precompiled runtime for the specified target from the Mono distribution site.
+    <dt><em>--nodeps</em>
+    <dd>
+      <p>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
     <dt><em>--keeptemp</em>
     <dd>
       <p>By default <em>mkbundle</em> will delete the temporary files that it uses to produce the bundle. This option keeps the file around.
+    <dt><em>--lists-targets</em>
+    <dd>
+      <p>Lists all of the available local cross compilation targets available as precompiled binaries on the Mono distribution server.
+    <dt><em>--local-targets</em>
+    <dd>
+      <p>Lists all of the available local cross compilation targets.
     <dt><em>--machine-config FILE</em>
     <dd>
       <p>Uses the given FILE as the machine.config file for the generated application.
@@ -63,12 +88,9 @@
     <dt><em>--static</em>
     <dd>
       <p>By default <em>mkbundle</em> dynamically links to mono and glib. This option causes it to statically link instead.
-    <dt><strong>Important:</strong>
+    <dt><em>--target-server SERVER</em>
     <dd>
-      <p>Since the Mono runtime is licensed under the LGPL, even if you use static you should transfer the component pieces of the mkbundle to your users so they are able to upgrade the Mono runtime on their own.
-    <dt>If you want to use this for commercial licenses, you must obtain a
-    <dd>
-      <p>proprietary license for Mono from mono@novell.com
+      <p>By default the mkbundle tool will download from a Mono server the target runtimes, you can specify a different server to provide cross-compiled runtimes.
     <dt><em>-z</em>
     <dd>
       <p>Compresses the assemblies before embedding. This results in smaller executable files, but increases startup time and requires zlib to be installed on the target system.
@@ -95,6 +117,7 @@
 <div class="section">
   <h2>FILES</h2>
   <p>This program will load referenced assemblies from the Mono assembly cache.
+  <p>Targets are loaded from ~/.mono/targets/TARGETNAME/mono
 </div>
 <div class="section">
   <h2>BUGS</h2>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="man-page-info" data-date="MARCH 2016" data-package="Linux" data-section-name="Linux User's Manual">
+<meta name="man-page-info" data-date="MAY 2016" data-package="Linux" data-section-name="Linux User's Manual">
 <title>SADF</title>
 <h1>SADF</h1>
 <div class="section">
@@ -9,7 +9,7 @@
 </div>
 <div class="section">
   <h2>SYNOPSIS</h2>
-  <p><strong>sadf [ -C ] [ -c | -d | -g | -j | -p | -x ] [ -H ] [ -h ] [ -T | -t | -U ] [ -V ] [ -P {</strong> <em>cpu</em> <strong>[,...] | ALL } ] [ -s [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ -e [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ --</strong> <em>sar_options</em> <strong>] [</strong> <em>interval</em> <strong>[</strong> <em>count</em> <strong>] ] [</strong> <em>datafile</em> | <em>-[0-9]+</em> <strong>]</strong>
+  <p><strong>sadf [ -C ] [ -c | -d | -g | -j | -p | -x ] [ -H ] [ -h ] [ -T | -t | -U ] [ -V ] [ -O</strong> <em>opts</em> <strong>[,...] ] [ -P {</strong> <em>cpu</em> <strong>[,...] | ALL } ] [ -s [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ -e [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ --</strong> <em>sar_options</em> <strong>] [</strong> <em>interval</em> <strong>[</strong> <em>count</em> <strong>] ] [</strong> <em>datafile</em> | <em>-[0-9]+</em> <strong>]</strong>
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
@@ -49,6 +49,19 @@
     <dt>-j
     <dd>
       <p>Print the contents of the data file in JSON (JavaScript Object Notation) format. Timestamps can be controlled by options -T and -t.
+    <dt>-O opts
+    <dd>
+      <p>Use the specified options to control SVG output displayed by <strong>sadf -g.</strong> Possible options are:
+      <p><strong>autoscale</strong>
+      <div class="indent">
+        <div class="indent">
+          <p>Tell <strong>sadf</strong> to draw all the graphs of a given view as large as possible based on current view's scale. To do this, a factor (10, 100, 1000...) is used to enlarge the graph drawing. This option may be intesting when several graphs are drawn on the same view, some with only very small values, and others with high ones, the latter making the former hardly visible.
+        </div>
+        <p><strong>skipempty</strong>
+        <div class="indent">
+          <p>Tell <strong>sadf</strong> to not display views where all graphs have only zero values.
+        </div>
+      </div>
     <dt>-P { cpu [,...] | ALL }
     <dd>
       <p>Tell <strong>sadf</strong> that processor dependent statistics are to be reported only for the specified processor or processors. Specifying the <strong>ALL</strong> keyword reports statistics for each individual processor, and globally for all processors. Note that processor 0 is the first processor.
@@ -113,7 +126,7 @@
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>
-  <p><strong>sar</strong>(1), <strong>sadc</strong>(8), <strong>sa1</strong>(8), <strong>sa2</strong>(8)
+  <p><strong>sar</strong>(1), <strong>sadc</strong>(8), <strong>sa1</strong>(8), <strong>sa2</strong>(8), <strong>sysstat</strong>(5)
   <p><em>http://pagesperso-orange.fr/sebastien.godard/</em>
 </div>
 
