@@ -60,6 +60,10 @@ try {
 
 $html = $dom->saveHTML();
 
+$hacks = ['</strong><strong>' => '', '</em><em>' => ''];
+
+$html = strtr($html, $hacks);
+
 echo '<!DOCTYPE html>',
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
 '<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
