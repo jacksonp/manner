@@ -349,7 +349,11 @@ class Blocks
                             foreach ($tds as $tdLine) {
                                 $cell     = $dom->createElement('td');
                                 $codeNode = $cell->appendChild($dom->createElement('code'));
-                                TextContent::interpretAndAppendCommand($codeNode, $request . $tdLine);
+                                if (empty($request)) {
+                                    TextContent::interpretAndAppendText($codeNode, $tdLine);
+                                } else {
+                                    TextContent::interpretAndAppendCommand($codeNode, $request . $tdLine);
+                                }
                                 $tr->appendChild($cell);
                             }
                         }
