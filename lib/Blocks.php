@@ -590,6 +590,17 @@ class Blocks
                 $canAppendNextText = false;
             }
 
+            if ($line === '.SB') {
+                $nextLine = $blockNode->manLines[++$i];
+                if (mb_strlen($nextLine) === 0) {
+                    continue;
+                }
+                $small             = $parentForLine->appendChild($dom->createElement('small'));
+                $parentForLine     = $small->appendChild($dom->createElement('strong'));
+                $line              = $nextLine;
+                $canAppendNextText = false;
+            }
+
             if ($canAppendNextText
               && !in_array(mb_substr($line, 0, 1), ['.', ' '])
               && (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.')

@@ -35,6 +35,19 @@ class TextContent
             if ($smallNode->hasContent()) {
                 $parentNode->appendChild($smallNode);
             }
+
+            return;
+        }
+
+        if (mb_strpos($line, '.SB ') === 0) {
+            $bold = $dom->createElement('strong');
+            TextContent::interpretAndAppendText($bold, mb_substr($line, 4), true);
+            if ($bold->hasContent()) {
+                $small = $dom->createElement('small');
+                $small->appendChild($bold);
+                $parentNode->appendChild($small);
+            }
+
             return;
         }
 
