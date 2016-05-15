@@ -29,6 +29,14 @@ class TextContent
         $line               = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
+        if (mb_strpos($line, '.SM ') === 0) {
+            $smallNode = $dom->createElement('small');
+            TextContent::interpretAndAppendText($smallNode, mb_substr($line, 4), true);
+            if ($smallNode->hasContent()) {
+                $parentNode->appendChild($smallNode);
+            }
+            return;
+        }
 
         if (preg_match('~^\.(?:([RBI][RBI]?)|ft ([RBI]))\s(?<text>.*)$~u', $line, $matches)) {
 
