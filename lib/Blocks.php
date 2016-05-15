@@ -264,6 +264,27 @@ class Blocks
                 continue;
             }
 
+            if (preg_match('~^\.ce ?(\d*)$~u', $line, $matches)) {
+                $blockLines = [];
+                $centerLinesUpTo = $i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]);
+                while ($i <= $centerLinesUpTo) {
+                    $line = $blockNode->manLines[$i + 1];
+                    if (mb_strpos($line, '.ce') === 0) {
+                        break;
+                    }
+                    ++$i;
+                    $blockLines[] = $line;
+                    $blockLines[] = '.br';
+                }
+                if (trim(implode('', $blockLines)) !== '') {
+                    $blocks[++$blockNum] = $dom->createElement('div');
+                    $blocks[$blockNum]->setAttribute('class', 'center');
+                    $blocks[$blockNum]->manLines = $blockLines;
+                    self::handle($blocks[$blockNum]);
+                }
+                continue;
+            }
+
             if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
                 $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
@@ -468,13 +489,13 @@ class Blocks
             if ($i < $numLines - 1
               && mb_strlen($line) > 0
               && $line[0] !== '.'
-              && strpos($line, "\t") > 0
+              && mb_strpos($line, "\t") > 0
               && (
-                strpos($blockNode->manLines[$i + 1], "\t") > 0
+                mb_strpos($blockNode->manLines[$i + 1], "\t") > 0
                 || (
                   in_array($blockNode->manLines[$i + 1], ['.br', ''])
                   && $i < $numLines - 2
-                  && strpos($blockNode->manLines[$i + 2], "\t") > 0
+                  && mb_strpos($blockNode->manLines[$i + 2], "\t") > 0
                 )
               )
             ) {
@@ -504,7 +525,7 @@ class Blocks
                         $line = $blockNode->manLines[$i + 1];
                     }
 
-                    if (strpos($line, "\t") === false) {
+                    if (mb_strpos($line, "\t") === false) {
                         continue 2; // Done with table.
                     }
 
@@ -526,8 +547,8 @@ class Blocks
                 if ($i === $numLines - 1
                   || $line === '.ft R'
                   || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/'
-                  || strpos($blockNode->manLines[$i + 1], '.B') === 0
-                  || strpos($blockNode->manLines[$i + 1], '.I') === 0
+                  || mb_strpos($blockNode->manLines[$i + 1], '.B') === 0
+                  || mb_strpos($blockNode->manLines[$i + 1], '.I') === 0
                 ) {
                     continue;
                 }

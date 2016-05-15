@@ -85,7 +85,7 @@ class Text
                 }
             }
 
-            if (strpos($line, '~^\.ie t $~') === 0) {
+            if (mb_strpos($line, '~^\.ie t $~') === 0) {
                 if (!preg_match('~^\.el (.*)$~', $rawLines[++$i], $matches)) {
                     throw new Exception('.ie t - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
                 }
@@ -120,8 +120,8 @@ class Text
               || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
               || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
               || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
-              || strpos($line, '.if require_index') === 0
-              || strpos($line, '.if \\nF \\{') === 0
+              || mb_strpos($line, '.if require_index') === 0
+              || mb_strpos($line, '.if \\nF \\{') === 0
             ) {
                 $openBraces = 0;
                 while ($i < $numRawLines) {
@@ -135,7 +135,7 @@ class Text
                 throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
             }
 
-            if (strpos($line, '.ie \\nF \\{') === 0) {
+            if (mb_strpos($line, '.ie \\nF \\{') === 0) {
                 $openBraces = 0;
                 while ($i < $numRawLines) {
                     $openBraces += substr_count($line, '\\{');
@@ -145,7 +145,7 @@ class Text
                         break;
                     }
                 }
-                if (strpos($line, '.el \{') !== 0) {
+                if (mb_strpos($line, '.el \{') !== 0) {
                     throw new Exception('.ie - not followed by expected .el on line ' . $i . '.');
                 }
                 $openBraces = 0;
@@ -203,7 +203,7 @@ class Text
 
                         // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
                         // Other \$ things are also arguments...
-                        if (strpos($macroLine, '\\$') !== false) {
+                        if (mb_strpos($macroLine, '\\$') !== false) {
                             throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
                         }
 
