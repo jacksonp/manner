@@ -266,7 +266,7 @@ class Blocks
 
             if (preg_match('~^\.ce ?(\d*)$~u', $line, $matches)) {
                 $blockLines      = [];
-                $centerLinesUpTo = $i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]);
+                $centerLinesUpTo = min($i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]), $numLines - 2);
                 while ($i <= $centerLinesUpTo) {
                     $line = $blockNode->manLines[$i + 1];
                     if (mb_strpos($line, '.ce') === 0) {
@@ -317,11 +317,47 @@ class Blocks
                     }
                 }
 
-                $pre = $dom->createElement('pre');
-
                 if (count($preLines) === 0) {
                     continue;
                 }
+
+                if (count($preLines) > 1) {
+                    $isTable = true;
+                    foreach ($preLines as $preLine) {
+                        $firstTab = mb_strpos($preLine, "\t");
+                        if ($firstTab === false || $firstTab === 0) {
+                            $isTable = false;
+                            break;
+                        }
+                    }
+
+                    if ($isTable) {
+                        $table               = $dom->createElement('table');
+                        $blocks[++$blockNum] = $table;
+                        foreach ($preLines as $preLine) {
+                            if (in_array($preLine, ['.br', ''])) {
+                                continue;
+                            }
+                            $request = '';
+                            if (mb_substr($preLine, 0, 1) === '.') {
+                                preg_match('~^(\.\w+ )"?(.*?)"?$~u', $preLine, $matches);
+                                $request = $matches[1];
+                                $preLine = $matches[2];
+                            }
+                            $tds = preg_split('~\t+~u', $preLine);
+                            $tr  = $table->appendChild($dom->createElement('tr'));
+                            foreach ($tds as $tdLine) {
+                                $cell     = $dom->createElement('td');
+                                $codeNode = $cell->appendChild($dom->createElement('code'));
+                                TextContent::interpretAndAppendCommand($codeNode, $request . $tdLine);
+                                $tr->appendChild($cell);
+                            }
+                        }
+                        continue;
+                    }
+                }
+
+                $pre = $dom->createElement('pre');
 
                 if (preg_match('~^\.RS ?(.*)$~u', $preLines[0], $matches)) {
                     if (!preg_match('~^\.RE~u', array_pop($preLines))) {
@@ -485,7 +521,7 @@ class Blocks
             }
 
             // Make tables out of tab-separated lines
-            // strpos() > 0: avoid indented stuff
+            // mb_strpos() > 0: avoid indented stuff
             if ($i < $numLines - 1
               && mb_strlen($line) > 0
               && $line[0] !== '.'
@@ -503,9 +539,9 @@ class Blocks
                 $blocks[++$blockNum] = $table;
                 for (; ; ++$i) {
 
-                    $bits = preg_split('~\t+~', $line);
-                    $tr   = $table->appendChild($dom->createElement('tr'));
-                    foreach ($bits as $tdLine) {
+                    $tds = preg_split('~\t+~u', $line);
+                    $tr  = $table->appendChild($dom->createElement('tr'));
+                    foreach ($tds as $tdLine) {
                         $cell = $dom->createElement('td');
                         TextContent::interpretAndAppendText($cell, $tdLine);
                         $tr->appendChild($cell);
