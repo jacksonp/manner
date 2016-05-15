@@ -265,7 +265,7 @@ class Blocks
             }
 
             if (preg_match('~^\.ce ?(\d*)$~u', $line, $matches)) {
-                $blockLines = [];
+                $blockLines      = [];
                 $centerLinesUpTo = $i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]);
                 while ($i <= $centerLinesUpTo) {
                     $line = $blockNode->manLines[$i + 1];
@@ -578,6 +578,16 @@ class Blocks
                         $canAppendNextText = false;
                     }
                 }
+            }
+
+            if ($line === '.SM') {
+                $nextLine = $blockNode->manLines[++$i];
+                if (mb_strlen($nextLine) === 0) {
+                    continue;
+                }
+                $parentForLine     = $parentForLine->appendChild($dom->createElement('small'));
+                $line              = $nextLine;
+                $canAppendNextText = false;
             }
 
             if ($canAppendNextText
