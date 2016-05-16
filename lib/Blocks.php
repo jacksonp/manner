@@ -524,7 +524,7 @@ class Blocks
 
             }
 
-            // Make tables out of tab-separated lines
+            //<editor-fold desc="Make tables out of tab-separated lines">
             // mb_strpos() > 0: avoid indented stuff
             if ($i < $numLines - 1
               && mb_strlen($line) > 0
@@ -571,6 +571,7 @@ class Blocks
 
                 }
             }
+            //</editor-fold>
 
             if ($blockNum === 0) {
                 $blocks[++$blockNum] = $dom->createElement('p');
@@ -648,7 +649,7 @@ class Blocks
             ) {
                 while ($i < $numLines - 1) {
                     $nextLine = $blockNode->manLines[$i + 1];
-                    if (mb_strlen($nextLine) === 0 || mb_substr($nextLine, 0, 1) === '.'
+                    if (mb_strlen($nextLine) === 0 || in_array(mb_substr($nextLine, 0, 1), ['.', ' '])
                       || (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
                     ) {
                         break;

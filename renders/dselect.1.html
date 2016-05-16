@@ -13,7 +13,11 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p><strong>dselect</strong> is one of the primary user interfaces for managing packages on a Debian system. At the <strong>dselect</strong> main menu, the system administrator can: - Update the list of available package versions, - View the status of installed and available packages, - Alter package selections and manage dependencies, - Install new packages or upgrade to newer versions.
+  <p><strong>dselect</strong> is one of the primary user interfaces for managing packages on a Debian system. At the <strong>dselect</strong> main menu, the system administrator can:<br>
+  - Update the list of available package versions,<br>
+  - View the status of installed and available packages,<br>
+  - Alter package selections and manage dependencies,<br>
+  - Install new packages or upgrade to newer versions.
   <p><strong>dselect</strong> operates as a front-end to <strong>dpkg</strong>(1), the low-level debian package handling tool. It features a full-screen package selections manager with package depends and conflicts resolver. When run with administrator privileges, packages can be installed, upgraded and removed. Various access methods can be configured to retrieve available package version information and installable packages from package repositories. Depending on the used access method, these repositories can be public archive servers on the internet, local archive servers or cdroms. The recommended access method is <em>apt</em>, which is provided by the package <strong>apt</strong>.
   <p>Normally <strong>dselect</strong> is invoked without parameters. An interactive menu is presented, offering the user a list of commands. If a command is given as argument, then that command is started immediately. Several command line parameters are still available to modify the running behaviour of <strong>dselect</strong> or show additional information about the program.
 </div>
@@ -153,7 +157,10 @@
   </div>
   <div class="subsection">
     <h3>Package details view</h3>
-    <p>The package details view by default shows the extended package description for the package that is currently selected in the packages status list. The type of detail can be toggled by pressing the ‘<strong>i</strong>’ key. This alternates between: - the extended description - the control information for the installed version - the control information for the available version<br>
+    <p>The package details view by default shows the extended package description for the package that is currently selected in the packages status list. The type of detail can be toggled by pressing the ‘<strong>i</strong>’ key. This alternates between:<br>
+    - the extended description<br>
+    - the control information for the installed version<br>
+    - the control information for the available version<br>
     <br>
     In a dependency resolution screen, there is also the possibility of viewing the specific unresolved depends or conflicts related to the package and causing it to be listed.
   </div>
@@ -165,7 +172,23 @@
     <br>
     The shorthand status indication consists of four parts: an error flag, which should normally be clear, the current status, the last selection state and the current selection state. The first two relate to the actual state of the package, the second pair are about the selections set by the user.<br>
     <br>
-    These are the meanings of the shorthand package status indicator codes: Error flag: <em>empty</em> no error <strong>R</strong> serious error, needs reinstallation; Installed state: <em>empty</em> not installed; <strong>*</strong> fully installed and configured; <strong>-</strong> not installed but some config files may remain; <strong>U</strong> unpacked but not yet configured; <strong>C</strong> half-configured (an error happened); <strong>I</strong> half-installed (an error happened). Current and requested selections: <strong>*</strong> marked for installation or upgrade; <strong>-</strong> marked for removal, configuration files remain; <strong>=</strong> on hold: package will not be processed at all; <strong>_</strong> marked for purge, also remove configuration; <strong>n</strong> package is new and has yet to be marked.
+    These are the meanings of the shorthand package status indicator codes:<br>
+    Error flag:<br>
+    <em>empty</em> no error<br>
+    <strong>R</strong> serious error, needs reinstallation;<br>
+    Installed state:<br>
+    <em>empty</em> not installed;<br>
+    <strong>*</strong> fully installed and configured;<br>
+    <strong>-</strong> not installed but some config files may remain;<br>
+    <strong>U</strong> unpacked but not yet configured;<br>
+    <strong>C</strong> half-configured (an error happened);<br>
+    <strong>I</strong> half-installed (an error happened).<br>
+    Current and requested selections:<br>
+    <strong>*</strong> marked for installation or upgrade;<br>
+    <strong>-</strong> marked for removal, configuration files remain;<br>
+    <strong>=</strong> on hold: package will not be processed at all;<br>
+    <strong>_</strong> marked for purge, also remove configuration;<br>
+    <strong>n</strong> package is new and has yet to be marked.
   </div>
   <div class="subsection">
     <h3>Cursor and screen movement</h3>
@@ -191,12 +214,20 @@
     <h3>Searching and sorting</h3>
     <p>The list of packages can be searched by package name. This is done by pressing ‘<strong>/</strong>’, and typing a simple search string. The string is interpreted as a <strong>regex</strong>(7) regular expression. If you add ‘<strong>/d</strong>’ to the search expression, dselect will also search in descriptions. If you add ‘<strong>/i</strong>’ the search will be case insensitive. You may combine these two suffixes like this: ‘<strong>/id</strong>’. Repeated searching is accomplished by repeatedly pressing the ‘<strong>n</strong>’ or ‘<strong>\</strong>’ keys, until the wanted package is found. If the search reaches the bottom of the list, it wraps to the top and continues searching from there.<br>
     <br>
-    The list sort order can be varied by pressing the ‘<strong>o</strong>’ and ‘<strong>O</strong>’ keys repeatedly. The following nine sort orderings can be selected: alphabet available status priority+section available+priority status+priority section+priority available+section status+section<br>
+    The list sort order can be varied by pressing the ‘<strong>o</strong>’ and ‘<strong>O</strong>’ keys repeatedly. The following nine sort orderings can be selected:<br>
+    alphabet available status<br>
+    priority+section available+priority status+priority<br>
+    section+priority available+section status+section<br>
     Where not listed above explicitly, alphabetic order is used as the final subordering sort key.
   </div>
   <div class="subsection">
     <h3>Altering selections</h3>
-    <p>The requested selection state of individual packages may be altered with the following commands: <strong>+, Insert</strong> install or upgrade <strong>=, H</strong> hold in present state and version <strong>:, G</strong> unhold: upgrade or leave uninstalled <strong>-, Delete</strong> remove, but leave configuration <strong>_</strong> remove & purge configuration<br>
+    <p>The requested selection state of individual packages may be altered with the following commands:<br>
+    <strong>+, Insert</strong> install or upgrade<br>
+    <strong>=, H</strong> hold in present state and version<br>
+    <strong>:, G</strong> unhold: upgrade or leave uninstalled<br>
+    <strong>-, Delete</strong> remove, but leave configuration<br>
+    <strong>_</strong> remove & purge configuration<br>
     <br>
     When the change request results in one or more unsatisfied depends or conflicts, <strong>dselect</strong> prompts the user with a dependency resolution screen. This will be further explained below.<br>
     <br>
