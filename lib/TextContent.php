@@ -117,7 +117,7 @@ class TextContent
         $dom = $parentNode->ownerDocument;
 
         $textSegments = preg_split(
-          '~(\\\\f(?:[1-4BRIPCV]|\(CW?[IB]?|\(BI|\[[BRICWSM]*?\])|\\\\[ud])~u',
+          '~(\\\\f(?:[1-4BRIPCV]|\(..|\(BI|\[[BRICWSM]*?\])|\\\\[ud])~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
@@ -182,10 +182,13 @@ class TextContent
                     break;
                 case '\fC':
                 case '\fV':
+                case '\f(CR':
                 case '\f(CW':
+                case '\f(CO':
                 case '\f[C]':
                 case '\f[CR]':
                 case '\f[CW]':
+                case '\f[CO]':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
@@ -226,6 +229,7 @@ class TextContent
                     }
                     break;
                 case '\f[SM]':
+                case '\f(SM':
                     if ($i < $numTextSegments - 1) {
                         $small = $parentNode->appendChild($dom->createElement('small'));
                         $small->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
