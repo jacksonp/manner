@@ -116,8 +116,12 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        $textSegments = preg_split('~(\\\\f(?:[1-4BRIPCV]|\(CW[IB]?|\(BI|\[[ICB]?\])|\\\\[ud])~u', $line, null,
-          PREG_SPLIT_DELIM_CAPTURE);
+        $textSegments = preg_split(
+          '~(\\\\f(?:[1-4BRIPCV]|\(CW?[IB]?|\(BI|\[[BRIC]*?\])|\\\\[ud])~u',
+          $line,
+          null,
+          PREG_SPLIT_DELIM_CAPTURE
+        );
 
         $numTextSegments = count($textSegments);
 
@@ -165,6 +169,7 @@ class TextContent
                     break;
                 case '\f4':
                 case '\f(BI':
+                case '\f[BI]':
                     if ($i < $numTextSegments - 1) {
                         $strong = $dom->createElement('strong');
                         $em     = $dom->createElement('em');
@@ -184,6 +189,7 @@ class TextContent
                 case '\fV':
                 case '\f(CW':
                 case '\f[C]':
+                case '\f[CR]':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
@@ -197,6 +203,8 @@ class TextContent
                     }
                     break;
                 case '\f(CWI':
+                case '\f[CI]':
+                case '\f(CI':
                     if ($i < $numTextSegments - 1) {
                         $code = $dom->createElement('code');
                         $em   = $dom->createElement('em');
@@ -206,6 +214,8 @@ class TextContent
                     }
                     break;
                 case '\f(CWB':
+                case '\f[CB]':
+                case '\f(CB':
                     if ($i < $numTextSegments - 1) {
                         $code   = $dom->createElement('code');
                         $strong = $dom->createElement('strong');
