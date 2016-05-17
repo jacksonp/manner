@@ -117,7 +117,7 @@ class TextContent
         $dom = $parentNode->ownerDocument;
 
         $textSegments = preg_split(
-          '~(\\\\f(?:[1-4BRIPCV]|\(CW?[IB]?|\(BI|\[[BRIC]*?\])|\\\\[ud])~u',
+          '~(\\\\f(?:[1-4BRIPCV]|\(CW?[IB]?|\(BI|\[[BRICWSM]*?\])|\\\\[ud])~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
@@ -132,9 +132,8 @@ class TextContent
             switch ($textSegments[$i]) {
                 case '\u':
                     if ($i < $numTextSegments - 1) {
-                        $sup = $dom->createElement('sup');
+                        $sup = $parentNode->appendChild($dom->createElement('sup'));
                         $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
-                        $parentNode->appendChild($sup);
                     }
                     break;
                 case '\d':
@@ -147,9 +146,8 @@ class TextContent
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
                               $addSpacing)));
                         } else {
-                            $strong = $dom->createElement('strong');
+                            $strong = $parentNode->appendChild($dom->createElement('strong'));
                             $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
-                            $parentNode->appendChild($strong);
                         }
                     }
                     break;
@@ -161,9 +159,8 @@ class TextContent
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
                               $addSpacing)));
                         } else {
-                            $em = $dom->createElement('em');
+                            $em = $parentNode->appendChild($dom->createElement('em'));
                             $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
-                            $parentNode->appendChild($em);
                         }
                     }
                     break;
@@ -171,11 +168,9 @@ class TextContent
                 case '\f(BI':
                 case '\f[BI]':
                     if ($i < $numTextSegments - 1) {
-                        $strong = $dom->createElement('strong');
-                        $em     = $dom->createElement('em');
+                        $strong = $parentNode->appendChild($dom->createElement('strong'));
+                        $em     = $strong->appendChild($dom->createElement('em'));
                         $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
-                        $strong->appendChild($em);
-                        $parentNode->appendChild($strong);
                     }
                     break;
                 case '\fP':
@@ -190,6 +185,7 @@ class TextContent
                 case '\f(CW':
                 case '\f[C]':
                 case '\f[CR]':
+                case '\f[CW]':
                     if ($i < $numTextSegments - 1) {
                         if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
                             $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
@@ -206,23 +202,33 @@ class TextContent
                 case '\f[CI]':
                 case '\f(CI':
                     if ($i < $numTextSegments - 1) {
-                        $code = $dom->createElement('code');
-                        $em   = $dom->createElement('em');
-                        $code->appendChild($em);
+                        $code = $parentNode->appendChild($dom->createElement('code'));
+                        $em   = $code->appendChild($dom->createElement('em'));
                         $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing, false)));
-                        $parentNode->appendChild($code);
                     }
                     break;
                 case '\f(CWB':
                 case '\f[CB]':
                 case '\f(CB':
                     if ($i < $numTextSegments - 1) {
-                        $code   = $dom->createElement('code');
-                        $strong = $dom->createElement('strong');
-                        $code->appendChild($strong);
+                        $code   = $parentNode->appendChild($dom->createElement('code'));
+                        $strong = $code->appendChild($dom->createElement('strong'));
                         $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing,
                           false)));
-                        $parentNode->appendChild($code);
+                    }
+                    break;
+                case '\f[CBI]':
+                    if ($i < $numTextSegments - 1) {
+                        $code   = $parentNode->appendChild($dom->createElement('code'));
+                        $strong = $code->appendChild($dom->createElement('strong'));
+                        $em     = $strong->appendChild($dom->createElement('em'));
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing, false)));
+                    }
+                    break;
+                case '\f[SM]':
+                    if ($i < $numTextSegments - 1) {
+                        $small = $parentNode->appendChild($dom->createElement('small'));
+                        $small->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                     }
                     break;
                 default:
