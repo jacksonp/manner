@@ -189,6 +189,7 @@ class TextContent
                 case '\fc':
                 case '\fV':
                 case '\fv':
+                case '\f5':
                 case '\f(CR':
                 case '\f(CW':
                 case '\f(CO':
@@ -243,8 +244,10 @@ class TextContent
                     }
                     break;
                 default:
-                    $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i], $addSpacing,
-                      !$parentNode->isOrInTag(['pre', 'code']))));
+                    if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
+                        $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i], $addSpacing,
+                          !$parentNode->isOrInTag(['pre', 'code']))));
+                    }
             }
 
         }
