@@ -117,7 +117,7 @@ class TextContent
         $dom = $parentNode->ownerDocument;
 
         $textSegments = preg_split(
-          '~(\\\\f(?:[1-4BRIPCV]|\(..|\(BI|\[[BRICWSM]*?\])|\\\\[ud])~u',
+          '~(?<!\\\\)(\\\\f(?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
@@ -139,6 +139,7 @@ class TextContent
                 case '\d':
                     break;
                 case '\fB':
+                case '\fb':
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
@@ -152,6 +153,7 @@ class TextContent
                     }
                     break;
                 case '\fI':
+                case '\fi':
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
@@ -173,15 +175,20 @@ class TextContent
                         $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
                     }
                     break;
+                case '\f':
                 case '\fP':
+                case '\fp':
                     // \fP: "Switch back to previous font." - groff(7)
                     // Assume back to normal text for now, so do nothing so next line passes thru to default.
                 case '\fR':
+                case '\fr':
                 case '\f[]':
                 case '\f1':
                     break;
                 case '\fC':
+                case '\fc':
                 case '\fV':
+                case '\fv':
                 case '\f(CR':
                 case '\f(CW':
                 case '\f(CO':
