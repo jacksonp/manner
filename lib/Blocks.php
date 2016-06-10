@@ -4,15 +4,22 @@
 class Blocks
 {
 
-    private static function getDDBlock($i, $blockNode)
+    /**
+     * Utility function to avoid duplicating code.
+     *
+     * @param int $i
+     * @param array $lines
+     * @return array
+     */
+    private static function getDDBlock(int $i, array $lines)
     {
 
-        $numLines   = count($blockNode->manLines);
+        $numLines   = count($lines);
         $blockLines = [];
         $rsLevel    = 0;
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $blockNode->manLines[$i];
+            $line = $lines[$i];
 
             if (preg_match('~^\.RS~u', $line)) {
                 ++$rsLevel;
@@ -123,7 +130,7 @@ class Blocks
                         }
                     }
 
-                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode);
+                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode->manLines);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
@@ -158,7 +165,7 @@ class Blocks
                     TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
                     $blocks[$blockNum]->appendChild($dt);
 
-                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode);
+                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode->manLines);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
@@ -257,7 +264,7 @@ class Blocks
                     continue;
                 }
 
-                $blocks[++$blockNum]         = $dom->createElement('pre');
+                $blocks[++$blockNum] = $dom->createElement('pre');
                 BlockPreformatted::handle($blocks[$blockNum], $blockLines);
                 continue; //End of block
             }
