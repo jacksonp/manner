@@ -18,7 +18,7 @@ class HybridNode extends DOMElement
 
     function isOrInTag($tagNames)
     {
-        $tagNames = (array)$tagNames;
+        $tagNames   = (array)$tagNames;
         $parentNode = $this;
 
         while ($parentNode instanceof DOMElement) {
@@ -31,8 +31,18 @@ class HybridNode extends DOMElement
         return false;
     }
 
-    function hasContent () {
+    function hasContent()
+    {
         return $this->childNodes->length > 1 || $this->firstChild->nodeValue !== '';
+    }
+
+    function appendBlockIfHasContent(HybridNode $block)
+    {
+        if ($block->hasChildNodes()) {
+            if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+                $this->appendChild($block);
+            }
+        }
     }
 
 

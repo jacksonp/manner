@@ -694,11 +694,7 @@ class Blocks
 
         // Add the blocks
         foreach ($blocks as $block) {
-            if ($block->hasChildNodes()) {
-                if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
-                    $blockNode->appendChild($block);
-                }
-            }
+            $blockNode->appendBlockIfHasContent($block);
         }
 
     }
