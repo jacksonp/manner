@@ -103,7 +103,12 @@ class TextContent
 
         // FAIL on unknown command
         if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
-            throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
+            if (in_array($line, ['.pp'])) {
+                // ignore spurious .pp in *_selinux.8 pages
+                return;
+            } else {
+                throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
+            }
         }
 
         TextContent::interpretAndAppendText($parentNode, $line, true);
