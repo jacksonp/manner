@@ -77,7 +77,7 @@ class Section
         }
         //</editor-fold>
 
-        Blocks::handle($parentSectionNode);
+        Blocks::handle($parentSectionNode, $parentSectionNode->manLines);
 
         // Sections come after any other content.
         foreach ($sectionNodes as $section) {

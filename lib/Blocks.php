@@ -55,25 +55,25 @@ class Blocks
     }
 
 
-    static function handle(HybridNode $blockNode)
+    static function handle(HybridNode $parentNode, array $lines)
     {
 
-        $dom = $blockNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         /** @var HybridNode[] $blocks */
         $blocks   = [];
         $blockNum = 0;
 
-        $numLines = count($blockNode->manLines);
+        $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
 
             // Temporary workaround for case where e.g. index 0 is missing after remove of .SS ""
             // Temporary because should do something else, maybe pass node and array and use array_values to reset indexes...
-            if (!isset($blockNode->manLines[$i])) {
+            if (!isset($lines[$i])) {
                 continue;
             }
 
-            $line = $blockNode->manLines[$i];
+            $line = $lines[$i];
 
             $canAppendNextText = true;
 
@@ -81,7 +81,7 @@ class Blocks
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
                 // If this is last line, or the next line is .RS, this would be an empty paragraph: don't bother.
                 if ($i !== $numLines - 1
-                  && !preg_match('~^\.RS ?(.*)$~u', $blockNode->manLines[$i + 1])
+                  && !preg_match('~^\.RS ?(.*)$~u', $lines[$i + 1])
                 ) {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
@@ -91,7 +91,7 @@ class Blocks
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if (mb_strlen($line) === 0) {
                 // Add a paragraph unless this is the last line in block, or the next line is also empty.
-                if ($i !== $numLines - 1 and mb_strlen($blockNode->manLines[$i + 1]) !== 0) {
+                if ($i !== $numLines - 1 and mb_strlen($lines[$i + 1]) !== 0) {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
                 continue;
@@ -103,9 +103,9 @@ class Blocks
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $dtLine = $blockNode->manLines[++$i];
+                $dtLine = $lines[++$i];
                 while (in_array($dtLine, ['.fi', '.B'])) { // cutter.1
-                    $dtLine = $blockNode->manLines[++$i];
+                    $dtLine = $lines[++$i];
                 }
                 if (in_array($dtLine, ['.br', '.sp'])) { // e.g. albumart-qt.1, ipmitool.1
                     $line = $dtLine; // i.e. skip the .TP line
@@ -118,9 +118,9 @@ class Blocks
                     $blocks[$blockNum]->appendChild($dt);
 
                     for ($i = $i + 1; $i < $numLines; ++$i) {
-                        $line = $blockNode->manLines[$i];
+                        $line = $lines[$i];
                         if (preg_match('~^\.TQ$~u', $line)) {
-                            $dtLine = $blockNode->manLines[++$i];
+                            $dtLine = $lines[++$i];
                             $dt     = $dom->createElement('dt');
                             TextContent::interpretAndAppendCommand($dt, $dtLine);
                             $blocks[$blockNum]->appendChild($dt);
@@ -130,16 +130,15 @@ class Blocks
                         }
                     }
 
-                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode->manLines);
+                    list ($i, $blockLines) = self::getDDBlock($i, $lines);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
                         continue;
                     }
 
-                    $dd           = $dom->createElement('dd');
-                    $dd->manLines = $blockLines;
-                    self::handle($dd);
+                    $dd = $dom->createElement('dd');
+                    self::handle($dd, $blockLines);
                     $blocks[$blockNum]->appendChild($dd);
 
                     continue;
@@ -165,16 +164,15 @@ class Blocks
                     TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
                     $blocks[$blockNum]->appendChild($dt);
 
-                    list ($i, $blockLines) = self::getDDBlock($i, $blockNode->manLines);
+                    list ($i, $blockLines) = self::getDDBlock($i, $lines);
 
                     // Skip empty block
                     if (trim(implode('', $blockLines)) === '') {
                         continue;
                     }
 
-                    $dd           = $dom->createElement('dd');
-                    $dd->manLines = $blockLines;
-                    self::handle($dd);
+                    $dd = $dom->createElement('dd');
+                    self::handle($dd, $blockLines);
                     $blocks[$blockNum]->appendChild($dd);
 
                     continue;
@@ -189,7 +187,7 @@ class Blocks
                     // Already in previous .IP,
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));
                 } else {
-                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
                 }
                 continue;
             }
@@ -199,7 +197,7 @@ class Blocks
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $line = $blockNode->manLines[++$i];
+                $line = $lines[++$i];
                 if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'blockquote') {
                     $blocks[$blockNum]->appendChild($dom->createElement('br'));
                 } else {
@@ -211,7 +209,7 @@ class Blocks
                 $rsLevel = 1;
                 $rsLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $blockNode->manLines[$i];
+                    $line = $lines[$i];
                     if (preg_match('~^\.RS~u', $line)) {
                         ++$rsLevel;
                     } elseif (preg_match('~^\.RE~u', $line)) {
@@ -230,14 +228,13 @@ class Blocks
                             $blocks[$blockNum]->setAttribute('class', $className);
                             $rsBlock = $blocks[$blockNum];
 
-                            $rsBlock->manLines = $rsLines;
-                            self::handle($rsBlock);
+                            self::handle($rsBlock, $rsLines);
                             continue 2; //End of block
                         }
                     }
                     $rsLines[] = $line;
                 }
-                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$blockNode->manLines[$i - 2] . '"');
+                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$lines[$i - 2] . '"');
             }
 
             if (preg_match('~^\.RE~u', $line)) {
@@ -248,7 +245,7 @@ class Blocks
             if (preg_match('~^\.EX~u', $line)) {
                 $blockLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $blockNode->manLines[$i];
+                    $line = $lines[$i];
                     if (preg_match('~^\.EE~u', $line)) {
                         break;
                     } elseif (preg_match('~^\.(nf|fi)~u', $line)) {
@@ -281,7 +278,7 @@ class Blocks
                 $blockLines      = [];
                 $centerLinesUpTo = min($i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]), $numLines - 2);
                 while ($i <= $centerLinesUpTo) {
-                    $line = $blockNode->manLines[$i + 1];
+                    $line = $lines[$i + 1];
                     if (mb_strpos($line, '.ce') === 0) {
                         break;
                     }
@@ -292,8 +289,7 @@ class Blocks
                 if (trim(implode('', $blockLines)) !== '') {
                     $blocks[++$blockNum] = $dom->createElement('div');
                     $blocks[$blockNum]->setAttribute('class', 'center');
-                    $blocks[$blockNum]->manLines = $blockLines;
-                    self::handle($blocks[$blockNum]);
+                    self::handle($blocks[$blockNum], $blockLines);
                 }
                 continue;
             }
@@ -310,7 +306,7 @@ class Blocks
                 }
                 $blocks[$blockNum]->appendChild($anchor);
                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $blockNode->manLines[$i];
+                    $line = $lines[$i];
                     if (preg_match('~^\.UE~u', $line)) {
                         continue 2;
                     }
@@ -322,7 +318,7 @@ class Blocks
             if (preg_match('~^\.nf~u', $line)) {
                 $preLines = [];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $blockNode->manLines[$i];
+                    $line = $lines[$i];
                     if (preg_match('~^\.(fi|ad [nb])~u', $line)) {
                         break;
                     } else {
@@ -405,12 +401,12 @@ class Blocks
 
                 $columnSeparator = "\t";
 
-                $line = $blockNode->manLines[++$i];
+                $line = $lines[++$i];
                 if (mb_substr($line, -1, 1) === ';') {
                     if (preg_match('~tab\s?\((.)\)~', $line, $matches)) {
                         $columnSeparator = $matches[1];
                     }
-                    $line = $blockNode->manLines[++$i];
+                    $line = $lines[++$i];
                 }
 
                 $rowFormats  = [];
@@ -434,7 +430,7 @@ class Blocks
                         }
                         $rowFormats[] = $colDefs;
                     }
-                    $line = $blockNode->manLines[++$i];
+                    $line = $lines[++$i];
                 }
 
                 $tableRowNum = 0;
@@ -504,14 +500,13 @@ class Blocks
                                     $tBlockLines[] = mb_substr($tdContents, 2);
                                 }
                                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                                    $tBlockLine = $blockNode->manLines[$i];
+                                    $tBlockLine = $lines[$i];
                                     if (mb_strpos($tBlockLine, 'T}') === 0) {
                                         if (mb_strlen($tBlockLine) > 2) {
                                             $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
                                             $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                         }
-                                        $cell->manLines = $tBlockLines;
-                                        self::handle($cell);
+                                        self::handle($cell, $tBlockLines);
                                         break;
                                     } else {
                                         $tBlockLines[] = $tBlockLine;
@@ -526,13 +521,13 @@ class Blocks
                         ++$tableRowNum;
                     }
 
-                    $line = $blockNode->manLines[++$i];
+                    $line = $lines[++$i];
                     if (preg_match('~^\.TE~u', $line)) {
                         continue 2;
                     }
                 }
 
-                throw new Exception($line . ' - .TS without .TE in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $blockNode->manLines[$i - 1] . '"');
+                throw new Exception($line . ' - .TS without .TE in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
 
             }
 
@@ -543,11 +538,11 @@ class Blocks
               && $line[0] !== '.'
               && mb_strpos($line, "\t") > 0
               && (
-                mb_strpos($blockNode->manLines[$i + 1], "\t") > 0
+                mb_strpos($lines[$i + 1], "\t") > 0
                 || (
-                  in_array($blockNode->manLines[$i + 1], ['.br', ''])
+                  in_array($lines[$i + 1], ['.br', ''])
                   && $i < $numLines - 2
-                  && mb_strpos($blockNode->manLines[$i + 2], "\t") > 0
+                  && mb_strpos($lines[$i + 2], "\t") > 0
                 )
               )
             ) {
@@ -567,14 +562,14 @@ class Blocks
                         break 2;
                     }
 
-                    $line = $blockNode->manLines[$i + 1];
+                    $line = $lines[$i + 1];
 
                     if (in_array($line, ['.br', ''])) {
                         ++$i;
                         if ($i === $numLines - 1) {
                             break 2;
                         }
-                        $line = $blockNode->manLines[$i + 1];
+                        $line = $lines[$i + 1];
                     }
 
                     if (mb_strpos($line, "\t") === false) {
@@ -599,13 +594,13 @@ class Blocks
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
                 if ($i === $numLines - 1
                   || $line === '.ft R'
-                  || $blockNode->manLines[$i + 1] === '.IP http://www.gnutls.org/manual/'
-                  || mb_strpos($blockNode->manLines[$i + 1], '.B') === 0
-                  || mb_strpos($blockNode->manLines[$i + 1], '.I') === 0
+                  || $lines[$i + 1] === '.IP http://www.gnutls.org/manual/'
+                  || mb_strpos($lines[$i + 1], '.B') === 0
+                  || mb_strpos($lines[$i + 1], '.I') === 0
                 ) {
                     continue;
                 }
-                $nextLine = $blockNode->manLines[++$i];
+                $nextLine = $lines[++$i];
                 if (mb_strlen($nextLine) === 0) {
                     continue;
                 } else {
@@ -634,7 +629,7 @@ class Blocks
             }
 
             if ($line === '.SM') {
-                $nextLine = $blockNode->manLines[++$i];
+                $nextLine = $lines[++$i];
                 if (mb_strlen($nextLine) === 0) {
                     continue;
                 }
@@ -644,7 +639,7 @@ class Blocks
             }
 
             if ($line === '.SB') {
-                $nextLine = $blockNode->manLines[++$i];
+                $nextLine = $lines[++$i];
                 if (mb_strlen($nextLine) === 0) {
                     continue;
                 }
@@ -660,7 +655,7 @@ class Blocks
               && !preg_match('~\\\\c$~', $line)
             ) {
                 while ($i < $numLines - 1) {
-                    $nextLine = $blockNode->manLines[$i + 1];
+                    $nextLine = $lines[$i + 1];
                     if (mb_strlen($nextLine) === 0 || in_array(mb_substr($nextLine, 0, 1), ['.', ' '])
                       || (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
                     ) {
@@ -699,7 +694,7 @@ class Blocks
 
         // Add the blocks
         foreach ($blocks as $block) {
-            $blockNode->appendBlockIfHasContent($block);
+            $parentNode->appendBlockIfHasContent($block);
         }
 
     }

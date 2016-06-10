@@ -4,10 +4,10 @@
 class BlockPreformatted
 {
 
-    public static function handle(HybridNode $blockNode, array $lines)
+    public static function handle(HybridNode $parentNode, array $lines)
     {
 
-        $dom = $blockNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $addIndent  = 0;
         $nextIndent = 0;
@@ -20,14 +20,14 @@ class BlockPreformatted
                 $nextIndent = 0;
             }
 
-            $parentForLine = $blockNode;
+            $parentForLine = $parentNode;
 
             if (mb_strlen($line) === 0
               || preg_match('~^\.([LP]?P$|HP|br|sp|ne)~u', $line)
               || preg_match('~^\\\\?\.$~u', $line) // empty requests
             ) {
                 if ($i > 0 && $i !== $numLines - 1) {
-                    $blockNode->appendChild(new DOMText("\n"));
+                    $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
                 }
                 continue;
@@ -67,10 +67,10 @@ class BlockPreformatted
                     } else {
                         if ($line === '.B') {
                             $line          = $nextLine;
-                            $parentForLine = $blockNode->appendChild($dom->createElement('strong'));
+                            $parentForLine = $parentNode->appendChild($dom->createElement('strong'));
                         } elseif ($line === '.I') {
                             $line          = $nextLine;
-                            $parentForLine = $blockNode->appendChild($dom->createElement('em'));
+                            $parentForLine = $parentNode->appendChild($dom->createElement('em'));
                         } else {
                             $line .= ' ' . $nextLine;
                         }
@@ -79,12 +79,12 @@ class BlockPreformatted
             }
 
             if ($addIndent > 0) {
-                $blockNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
+                $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
             TextContent::interpretAndAppendCommand($parentForLine, $line);
             if ($i !== $numLines - 1) {
-                $blockNode->appendChild(new DOMText("\n"));
+                $parentNode->appendChild(new DOMText("\n"));
             }
 
         }
