@@ -4,16 +4,16 @@
 class BlockPreformatted
 {
 
-    public static function handle(HybridNode $blockNode)
+    public static function handle(HybridNode $blockNode, array $lines)
     {
 
         $dom = $blockNode->ownerDocument;
 
         $addIndent  = 0;
         $nextIndent = 0;
-        $numLines   = count($blockNode->manLines);
+        $numLines   = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
-            $line = $blockNode->manLines[$i];
+            $line = $lines[$i];
 
             if ($nextIndent !== 0) {
                 $addIndent  = $nextIndent;
@@ -43,14 +43,14 @@ class BlockPreformatted
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $line       = $blockNode->manLines[++$i];
+                $line       = $lines[++$i];
                 $addIndent  = 0;
                 $nextIndent = 4;
             } elseif (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $line      = $blockNode->manLines[++$i];
+                $line      = $lines[++$i];
                 $addIndent = 4;
             } elseif (preg_match('~^\.(nf|RS|RE|ft)~u', $line)) {
                 continue;
@@ -58,7 +58,7 @@ class BlockPreformatted
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $nextLine = $blockNode->manLines[++$i];
+                $nextLine = $lines[++$i];
                 if (mb_strlen($nextLine) === 0) {
                     continue;
                 } else {

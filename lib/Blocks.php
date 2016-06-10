@@ -258,8 +258,7 @@ class Blocks
                 }
 
                 $blocks[++$blockNum]         = $dom->createElement('pre');
-                $blocks[$blockNum]->manLines = $blockLines;
-                BlockPreformatted::handle($blocks[$blockNum]);
+                BlockPreformatted::handle($blocks[$blockNum], $blockLines);
                 continue; //End of block
             }
 
@@ -387,8 +386,7 @@ class Blocks
                     continue;
                 }
 
-                $pre->manLines = $preLines;
-                BlockPreformatted::handle($pre);
+                BlockPreformatted::handle($pre, $preLines);
                 $blocks[++$blockNum] = $pre;
                 continue; //End of block
             }
