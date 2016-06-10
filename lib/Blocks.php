@@ -59,6 +59,13 @@ class Blocks
 
         $numLines = count($blockNode->manLines);
         for ($i = 0; $i < $numLines; ++$i) {
+
+            // Temporary workaround for case where e.g. index 0 is missing after remove of .SS ""
+            // Temporary because should do something else, maybe pass node and array and use array_values to reset indexes...
+            if (!isset($blockNode->manLines[$i])) {
+                continue;
+            }
+
             $line = $blockNode->manLines[$i];
 
             $canAppendNextText = true;

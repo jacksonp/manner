@@ -44,18 +44,13 @@ class Section
 
                 unset($parentSectionNode->manLines[$i]); // made a subsection out of this!
 
-                if (empty($sectionHeading)) {
-                    continue;
-                    // throw new Exception($line . ' - empty section heading.');
+                if (!empty($sectionHeading)) { // We ignore sections with empty headings
+                    $sectionNodes[++$sectionNum] = $dom->createElement('div');
+                    $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
+                    $h = $dom->createElement('h' . $level);
+                    TextContent::interpretAndAppendText($h, $sectionHeading);
+                    $sectionNodes[$sectionNum]->appendChild($h);
                 }
-
-
-
-                $sectionNodes[++$sectionNum] = $dom->createElement('div');
-                $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
-                $h = $dom->createElement('h' . $level);
-                TextContent::interpretAndAppendText($h, $sectionHeading);
-                $sectionNodes[$sectionNum]->appendChild($h);
                 continue;
             }
 
