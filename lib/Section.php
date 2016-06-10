@@ -41,11 +41,15 @@ class Section
             ) {
                 $sectionHeading = $matches[1];
                 $sectionHeading = trim($sectionHeading, '"');
-                if (empty($sectionHeading)) {
-                    throw new Exception($line . ' - empty section heading.');
-                }
 
                 unset($parentSectionNode->manLines[$i]); // made a subsection out of this!
+
+                if (empty($sectionHeading)) {
+                    continue;
+                    // throw new Exception($line . ' - empty section heading.');
+                }
+
+
 
                 $sectionNodes[++$sectionNum] = $dom->createElement('div');
                 $sectionNodes[$sectionNum]->setAttribute('class', $level === 2 ? 'section' : 'subsection');
