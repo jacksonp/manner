@@ -35,7 +35,7 @@
     <dt><strong>--id</strong>[<strong>=<em>id</em></strong>]
     <dd>
       <p>Log the PID of the logger process with each line. When the optional argument <em>id</em> is specified, then it is used instead of the logger command's PID. The use of <strong>--id=$$</strong> (PPID) is recommended in scripts that send several messages.
-      <p>Note that the system logging infrastructure (for example <strong>systemd</strong> when listening on /dev/log) may follow local socket credentials to overwrite the PID specified in the message. <strong>logger(1)</strong> is able to set those socket credentials to the given <em>id</em>, but only if you have root permissions and a process with the specified PID exists, otherwise the socket credentials are not modified and the problem is silently ignored.
+      <p>Note that the system logging infrastructure (for example <strong>systemd</strong> when listening on /dev/log) may follow local socket credentials to overwrite the PID specified in the message. <strong>logger</strong>(1) is able to set those socket credentials to the given <em>id</em>, but only if you have root permissions and a process with the specified PID exists, otherwise the socket credentials are not modified and the problem is silently ignored.
     <dt><strong>--journald</strong>[<strong>=<em>file</em></strong>]
     <dd>
       <p>Write a systemd journal entry. The entry is read from the given <em>file</em>, when specified, otherwise from standard input. Each line must begin with a field that is accepted by journald; see <strong>systemd.journal-fields</strong>(7) for details. The use of a MESSAGE_ID field is generally a good idea, as it makes finding entries easy. Examples:
@@ -53,7 +53,7 @@
       <p>Sets the RFC5424 MSGID field. Note that the space character is not permitted inside of <em>msgid</em>. This option is only used if <strong>--rfc5424</strong> is specified as well; otherwise, it is silently ignored.
     <dt><strong>-n</strong>, <strong>--server</strong> <em>server</em>
     <dd>
-      <p>Write to the specified remote syslog <em>server</em> instead of to the system log socket. Unless <strong>--udp</strong> or <strong>--tcp</strong> is specified, <strong>logger</strong> will first try to use UDP, but if thist fails a TCP connection is attempted.
+      <p>Write to the specified remote syslog <em>server</em> instead of to the system log socket. Unless <strong>--udp</strong> or <strong>--tcp</strong> is specified, <strong>logger</strong> will first try to use UDP, but if this fails a TCP connection is attempted.
     <dt><strong>--no-act</strong>
     <dd>
       <p>Causes everything to be done except for writing the log message to the system log, and removing the connection or the journal. This option can be used together with <strong>--stderr</strong> for testing purposes.
@@ -92,7 +92,7 @@
       <p><strong>logger</strong> currently generates the <strong>timeQuality</strong> standardized element only. RFC 5424 also describes the elements <strong>origin</strong> (with parameters ip, enterpriseId, software and swVersion) and <strong>meta</strong> (with parameters sequenceId, sysUpTime and language). These element IDs may be specified without the <strong>@</strong><em>digits</em> suffix.
     <dt><strong>--sd-param</strong> <em>name</em><strong>="<em>value</em>"</strong>
     <dd>
-      <p>Specifies a structured data element paramameter, a name and value pair. The option has to be used after <strong>--sd-id</strong> and may be specified more than once for the same element. Note that the quotation marks around <em>value</em> are required and must be escaped on the command line.
+      <p>Specifies a structured data element parameter, a name and value pair. The option has to be used after <strong>--sd-id</strong> and may be specified more than once for the same element. Note that the quotation marks around <em>value</em> are required and must be escaped on the command line.
       <pre> <strong>    logger --rfc5424 --sd-id zoo@123               \</strong>
  <strong>                     --sd-param tiger=\“hungry\”   \</strong>
  <strong>                     --sd-param zebra=\“running\”  \</strong>
@@ -108,7 +108,7 @@
       <p>Note: the message-size limit limits the overall message size, including the syslog header. Header sizes vary depending on the selected options and the hostname length. As a rule of thumb, headers are usually not longer than 50 to 80 characters. When selecting a maximum message size, it is important to ensure that the receiver supports the max size as well, otherwise messages may become truncated. Again, as a rule of thumb two to four KiB message size should generally be OK, whereas anything larger should be verified to work.
     <dt><strong>--socket-errors</strong>[<strong>=<em>mode</em></strong>]
     <dd>
-      <p>Print errors about Unix socket connections. The <em>mode</em> can be a value of <strong>off</strong>, <strong>on</strong>, or <strong>auto</strong>. When the mode is auto logger will detect if the init process is systemd, and if so assumption is made /dev/log can be used early at boot. Other init systems lack of /dev/log will not cause errors that is identical with messaging using <strong>openlog</strong>(3) system call. The <strong>logger</strong>(1) before version 2.26 used openlog, and hence was inable to detected loss of messages sent to Unix sockets.
+      <p>Print errors about Unix socket connections. The <em>mode</em> can be a value of <strong>off</strong>, <strong>on</strong>, or <strong>auto</strong>. When the mode is auto logger will detect if the init process is systemd, and if so assumption is made /dev/log can be used early at boot. Other init systems lack of /dev/log will not cause errors that is identical with messaging using <strong>openlog</strong>(3) system call. The <strong>logger</strong>(1) before version 2.26 used openlog, and hence was unable to detected loss of messages sent to Unix sockets.
       <p>The default mode is <strong>auto</strong>. When errors are not enabled lost messages are not communicated and will result to successful return value of <strong>logger</strong>(1) invocation.
     <dt><strong>-T</strong>, <strong>--tcp</strong>
     <dd>
