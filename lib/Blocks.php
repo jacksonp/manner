@@ -84,20 +84,9 @@ class Blocks
             $canAppendNextText = true;
 
             // empty lines cause a new para also, see sar.1
-            if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                // If this is last line, or the next line is .RS, this would be an empty paragraph: don't bother.
-                if ($i !== $numLines - 1 and !preg_match('~^\.RS ?(.*)$~u', $lines[$i + 1])) {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                }
-                continue;
-            }
-
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            if ($line === '') {
-                // Add a paragraph unless the next line is also empty.
-                if ($lines[$i + 1] !== '') {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                }
+            if ($line === '' or preg_match('~^\.([LP]?P$|HP)~u', $line)) {
+                $blocks[++$blockNum] = $dom->createElement('p');
                 continue;
             }
 
@@ -136,14 +125,9 @@ class Blocks
 
                     list ($i, $blockLines) = self::getDDBlock($i, $lines);
 
-                    // Skip empty block
-                    if (trim(implode('', $blockLines)) === '') {
-                        continue;
-                    }
-
                     $dd = $dom->createElement('dd');
                     self::handle($dd, $blockLines);
-                    $blocks[$blockNum]->appendChild($dd);
+                    $blocks[$blockNum]->appendBlockIfHasContent($dd);
 
                     continue;
                 }
@@ -170,14 +154,9 @@ class Blocks
 
                     list ($i, $blockLines) = self::getDDBlock($i, $lines);
 
-                    // Skip empty block
-                    if (trim(implode('', $blockLines)) === '') {
-                        continue;
-                    }
-
                     $dd = $dom->createElement('dd');
                     self::handle($dd, $blockLines);
-                    $blocks[$blockNum]->appendChild($dd);
+                    $blocks[$blockNum]->appendBlockIfHasContent($dd);
 
                     continue;
                 }
