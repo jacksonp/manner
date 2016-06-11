@@ -46,9 +46,7 @@ try {
         throw new Exception('No $man->title.');
     }
 
-    $manPageContainer->manLines = $lines;
-
-    Section::handle($manPageContainer, 2);
+    Section::handle($manPageContainer, $lines);
 } catch (Exception $e) {
     file_put_contents($errorLog, $e->getMessage() . ' (' . basename($filePath) . ')' . PHP_EOL, FILE_APPEND);
     echo 'Doc status:', PHP_EOL;

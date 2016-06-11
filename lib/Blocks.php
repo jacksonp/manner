@@ -46,7 +46,9 @@ class Blocks
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                $blockLines[] = $line;
+                if ($i < $numLines - 1 or $line !== '') {
+                    $blockLines[] = $line;
+                }
             }
         }
 
@@ -58,6 +60,16 @@ class Blocks
     static function handle(HybridNode $parentNode, array $lines)
     {
 
+        // Right trim $lines
+        for ($i = count($lines) - 1; $i >= 0; --$i) {
+            if (in_array($lines[$i], ['', '.br'])) {
+                unset($lines[$i]);
+            } else {
+                break;
+            }
+        }
+
+
         $dom = $parentNode->ownerDocument;
 
         /** @var HybridNode[] $blocks */
@@ -67,12 +79,6 @@ class Blocks
         $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
 
-            // Temporary workaround for case where e.g. index 0 is missing after remove of .SS ""
-            // Temporary because should do something else, maybe pass node and array and use array_values to reset indexes...
-            if (!isset($lines[$i])) {
-                continue;
-            }
-
             $line = $lines[$i];
 
             $canAppendNextText = true;
@@ -80,18 +86,16 @@ class Blocks
             // empty lines cause a new para also, see sar.1
             if (preg_match('~^\.([LP]?P$|HP)~u', $line)) {
                 // If this is last line, or the next line is .RS, this would be an empty paragraph: don't bother.
-                if ($i !== $numLines - 1
-                  && !preg_match('~^\.RS ?(.*)$~u', $lines[$i + 1])
-                ) {
+                if ($i !== $numLines - 1 and !preg_match('~^\.RS ?(.*)$~u', $lines[$i + 1])) {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
                 continue;
             }
 
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            if (mb_strlen($line) === 0) {
-                // Add a paragraph unless this is the last line in block, or the next line is also empty.
-                if ($i !== $numLines - 1 and mb_strlen($lines[$i + 1]) !== 0) {
+            if ($line === '') {
+                // Add a paragraph unless the next line is also empty.
+                if ($lines[$i + 1] !== '') {
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
                 continue;
@@ -322,7 +326,9 @@ class Blocks
                     if (preg_match('~^\.(fi|ad [nb])~u', $line)) {
                         break;
                     } else {
-                        $preLines[] = $line;
+                        if ($i < $numLines - 1 or $line !== '') {
+                            $preLines[] = $line;
+                        }
                     }
                 }
 
