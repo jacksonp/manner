@@ -88,12 +88,12 @@
     <dt><strong>-i</strong>, <strong>--install</strong> <em>package-file</em>...
     <dd>
       <p>Install the package. If <strong>--recursive</strong> or <strong>-R</strong> option is specified, <em>package-file</em> must refer to a directory instead.
-      <p>Installation consists of the following steps:<br>
-      <p><strong>1.</strong> Extract the control files of the new package.<br>
-      <p><strong>2.</strong> If another version of the same package was installed before the new installation, execute <em>prerm</em> script of the old package.<br>
-      <p><strong>3.</strong> Run <em>preinst</em> script, if provided by the package.<br>
-      <p><strong>4.</strong> Unpack the new files, and at the same time back up the old files, so that if something goes wrong, they can be restored.<br>
-      <p><strong>5.</strong> If another version of the same package was installed before the new installation, execute the <em>postrm</em> script of the old package. Note that this script is executed after the <em>preinst</em> script of the new package, because new files are written at the same time old files are removed.<br>
+      <p>Installation consists of the following steps:
+      <p><strong>1.</strong> Extract the control files of the new package.
+      <p><strong>2.</strong> If another version of the same package was installed before the new installation, execute <em>prerm</em> script of the old package.
+      <p><strong>3.</strong> Run <em>preinst</em> script, if provided by the package.
+      <p><strong>4.</strong> Unpack the new files, and at the same time back up the old files, so that if something goes wrong, they can be restored.
+      <p><strong>5.</strong> If another version of the same package was installed before the new installation, execute the <em>postrm</em> script of the old package. Note that this script is executed after the <em>preinst</em> script of the new package, because new files are written at the same time old files are removed.
       <p><strong>6.</strong> Configure the package. See <strong>--configure</strong> for detailed information about how this is done.
     <dt><strong>--unpack</strong> <em>package-file</em>...
     <dd>
@@ -102,8 +102,8 @@
     <dd>
       <p>Configure a package which has been unpacked but not yet configured. If <strong>-a</strong> or <strong>--pending</strong> is given instead of <em>package</em>, all unpacked but unconfigured packages are configured.
       <p>To reconfigure a package which has already been configured, try the <strong>dpkg-reconfigure</strong>(8) command instead.
-      <p>Configuring consists of the following steps:<br>
-      <p><strong>1.</strong> Unpack the conffiles, and at the same time back up the old conffiles, so that they can be restored if something goes wrong.<br>
+      <p>Configuring consists of the following steps:
+      <p><strong>1.</strong> Unpack the conffiles, and at the same time back up the old conffiles, so that they can be restored if something goes wrong.
       <p><strong>2.</strong> Run <em>postinst</em> script, if provided by the package.
     <dt><strong>--triggers-only</strong> <em>package</em>...|<strong>-a</strong>|<strong>--pending</strong>
     <dd>
@@ -111,16 +111,16 @@
     <dt><strong>-r</strong>, <strong>--remove</strong> <em>package</em>...|<strong>-a</strong>|<strong>--pending</strong>
     <dd>
       <p>Remove an installed package. This removes everything except conffiles, which may avoid having to reconfigure the package if it is reinstalled later (conffiles are configuration files that are listed in the <em>DEBIAN/conffiles</em> control file). If <strong>-a</strong> or <strong>--pending</strong> is given instead of a package name, then all packages unpacked, but marked to be removed in file <em>/var/lib/dpkg/status</em>, are removed.
-      <p>Removing of a package consists of the following steps:<br>
-      <p><strong>1.</strong> Run <em>prerm</em> script<br>
-      <p><strong>2.</strong> Remove the installed files<br>
+      <p>Removing of a package consists of the following steps:
+      <p><strong>1.</strong> Run <em>prerm</em> script
+      <p><strong>2.</strong> Remove the installed files
       <p><strong>3.</strong> Run <em>postrm</em> script
     <dt><strong>-P</strong>, <strong>--purge</strong> <em>package</em>...|<strong>-a</strong>|<strong>--pending</strong>
     <dd>
       <p>Purge an installed or already removed package. This removes everything, including conffiles. If <strong>-a</strong> or <strong>--pending</strong> is given instead of a package name, then all packages unpacked or removed, but marked to be purged in file <em>/var/lib/dpkg/status</em>, are purged.
       <p>Note: some configuration files might be unknown to <strong>dpkg</strong> because they are created and handled separately through the configuration scripts. In that case, <strong>dpkg</strong> won't remove them by itself, but the package's <em>postrm</em> script (which is called by <strong>dpkg</strong>), has to take care of their removal during purge. Of course, this only applies to files in system directories, not configuration files written to individual users' home directories.
-      <p>Purging of a package consists of the following steps:<br>
-      <p><strong>1.</strong> Remove the package, if not already removed. See <strong>--remove</strong> for detailed information about how this is done.<br>
+      <p>Purging of a package consists of the following steps:
+      <p><strong>1.</strong> Remove the package, if not already removed. See <strong>--remove</strong> for detailed information about how this is done.
       <p><strong>2.</strong> Run <em>postrm</em> script.
     <dt><strong>-V</strong>, <strong>--verify</strong> [<em>package-name</em>...]
     <dd>
@@ -523,21 +523,21 @@
   <p>To list installed packages related to the editor <strong>vi</strong>(1) (note that <strong>dpkg-query</strong> does not load the <em>available</em> file anymore by default, and the <strong>dpkg-query</strong> <strong>--load-avail</strong> option should be used instead for that):<br>
   <strong>dpkg -l '*vi*'</strong><br>
   <p>To see the entries in <em>/var/lib/dpkg/available</em> of two packages:<br>
-  <strong>dpkg --print-avail elvis vim | less</strong><br>
+  <strong>dpkg --print-avail elvis vim | less</strong>
   <p>To search the listing of packages yourself:<br>
-  <strong>less /var/lib/dpkg/available</strong><br>
+  <strong>less /var/lib/dpkg/available</strong>
   <p>To remove an installed elvis package:<br>
-  <strong>dpkg -r elvis</strong><br>
+  <strong>dpkg -r elvis</strong>
   <p>To install a package, you first need to find it in an archive or CDROM. The <em>available</em> file shows that the vim package is in section <strong>editors</strong>:<br>
-  <strong>cd /media/cdrom/pool/main/v/vim</strong> <strong>dpkg -i vim_4.5-3.deb</strong><br>
+  <strong>cd /media/cdrom/pool/main/v/vim</strong> <strong>dpkg -i vim_4.5-3.deb</strong>
   <p>To make a local copy of the package selection states:<br>
-  <strong>dpkg --get-selections &gt;myselections</strong><br>
+  <strong>dpkg --get-selections &gt;myselections</strong>
   <p>You might transfer this file to another computer, and after having updated the <em>available</em> file there with your package manager frontend of choice (see https://wiki.debian.org/Teams/Dpkg/FAQ for more details), for example:<br>
   <strong>apt-cache dumpavail | dpkg --merge-avail</strong><br>
   or with dpkg 1.17.6 and earlier:<br>
   <strong>avail=`mktemp`</strong> <strong>apt-cache dumpavail &gt;“$avail”</strong> <strong>dpkg --merge-avail “$avail”</strong> <strong>rm “$avail”</strong><br>
   you can install it with:<br>
-  <strong>dpkg --clear-selections</strong> <strong>dpkg --set-selections &lt;myselections</strong><br>
+  <strong>dpkg --clear-selections</strong> <strong>dpkg --set-selections &lt;myselections</strong>
   <p>Note that this will not actually install or remove anything, but just set the selection state on the requested packages. You will need some other application to actually download and install the requested packages. For example, run <strong>apt-get dselect-upgrade</strong>.
   <p>Ordinarily, you will find that <strong>dselect</strong>(1) provides a more convenient way to modify the package selection states.
 </div>

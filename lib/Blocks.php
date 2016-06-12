@@ -86,7 +86,21 @@ class Blocks
             // empty lines cause a new para also, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if ($line === '' or preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                $blocks[++$blockNum] = $dom->createElement('p');
+                $blockLines = [];
+                while ($i < $numLines) {
+                    if ($i === $numLines - 1) {
+                        break;
+                    }
+                    $nextLine = $lines[$i + 1];
+                    if ($nextLine === '' or preg_match('~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u', $nextLine)) {
+                        break;
+                    }
+                    $blockLines[] = $nextLine;
+                    ++$i;
+                }
+                $p = $dom->createElement('p');
+                self::handle($p, $blockLines);
+                $blocks[++$blockNum] = $p;
                 continue;
             }
 
@@ -275,27 +289,6 @@ class Blocks
                     self::handle($blocks[$blockNum], $blockLines);
                 }
                 continue;
-            }
-
-            if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
-                $anchor = $dom->createElement('a');
-                $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
-                if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
-                    $url = 'mailto:' . $url;
-                }
-                $anchor->setAttribute('href', $url);
-                if ($blockNum === 0) {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                }
-                $blocks[$blockNum]->appendChild($anchor);
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.UE~u', $line)) {
-                        continue 2;
-                    }
-                    TextContent::interpretAndAppendCommand($anchor, $line);
-                }
-                throw new Exception('.UR with no corresponding .UE');
             }
 
             if (preg_match('~^\.nf~u', $line)) {
@@ -565,16 +558,39 @@ class Blocks
             }
             //</editor-fold>
 
+
             if ($blockNum === 0) {
-                $blocks[++$blockNum] = $dom->createElement('p');
+                if ($parentNode->tagName === 'p') {
+                    $parentForLine = $parentNode;
+                } else {
+                    $blocks[++$blockNum] = $dom->createElement('p');
+                    $parentForLine       = $blocks[$blockNum];
+                }
             } else {
                 if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code', 'table'])) {
                     // Start a new paragraph after certain blocks
                     $blocks[++$blockNum] = $dom->createElement('p');
                 }
+                $parentForLine = $blocks[$blockNum];
             }
 
-            $parentForLine = $blocks[$blockNum];
+            if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
+                $anchor = $dom->createElement('a');
+                $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
+                if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+                    $url = 'mailto:' . $url;
+                }
+                $anchor->setAttribute('href', $url);
+                $parentForLine->appendChild($anchor);
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $lines[$i];
+                    if (preg_match('~^\.UE~u', $line)) {
+                        continue 2;
+                    }
+                    TextContent::interpretAndAppendCommand($anchor, $line);
+                }
+                throw new Exception('.UR with no corresponding .UE');
+            }
 
             if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
                 if ($i === $numLines - 1
