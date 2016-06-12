@@ -26,7 +26,7 @@ class TextContent
 
         self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
-        $line               = preg_replace('~\\\\c$~', '', $line, -1, $replacements);
+        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
         if (mb_strpos($line, '.SM ') === 0) {
@@ -263,7 +263,7 @@ class TextContent
     {
 
         // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
-        $string = preg_replace('~\\\\&~u', '', $string);
+        $string = Replace::preg('~\\\\&~u', '', $string);
 
         if (self::$canAddWhitespace && $addSpacing) {
             // Do this after regex above
@@ -292,13 +292,13 @@ class TextContent
         $string = strtr($string, $replacements);
 
         // Prettier double quotes:
-        $string = preg_replace('~``(.*?)\'\'~', '“$1”', $string);
+        $string = Replace::preg('~``(.*?)\'\'~', '“$1”', $string);
         if ($replaceDoubleQuotes) {
-            $string = preg_replace('~"(.*?)"~', '“$1”', $string);
+            $string = Replace::preg('~"(.*?)"~', '“$1”', $string);
         }
 
         // Get rid of <> around URLs - these get translater to &lt; and &gt; and then cause problems with finding out what we can make into links.
-        $string = preg_replace(
+        $string = Replace::preg(
           '~<(?:URL:)?(?<url>(?:ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|(?:[^[:punct:]\s]|/)))>~u',
           '$1',
           $string);

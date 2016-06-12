@@ -41,7 +41,7 @@ class Text
             // \" is start of a comment. Everything up to the end of the line is ignored.
             // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
             // but this behaviour is consistent with what the man command renders:
-            $line = preg_replace('~(^|.*?[^\\\\])\\\\".*$~', '$1', $line);
+            $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~', '$1', $line);
 
             if (preg_match('~^\.ig( |$)~u', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
@@ -170,10 +170,10 @@ class Text
             }
 
             // construct for "hiding text from po4a", we don't need:
-            $line = preg_replace('~^\.if !\'po4a\'hide\' ~u', '', $line);
+            $line = Replace::preg('~^\.if !\'po4a\'hide\' ~u', '', $line);
 
             // part of indexing we don't care about
-            $line = preg_replace('~^\.if !\\\\nF \.nr F 0~u', '', $line);
+            $line = Replace::preg('~^\.if !\\\\nF \.nr F 0~u', '', $line);
 
             $linesNoCond[] = $line;
 
@@ -382,7 +382,7 @@ class Text
 
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
-                    $line = preg_replace('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
+                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
                 }
             }
 
@@ -418,7 +418,7 @@ class Text
             }
 
             if (count($charSwaps) > 0) {
-                $line = preg_replace(array_map(function ($c) {
+                $line = Replace::preg(array_map(function ($c) {
                     return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
                 }, array_keys($charSwaps)), $charSwaps, $line);
             }
@@ -431,7 +431,8 @@ class Text
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.
-                $man->title        = TextContent::interpretString(preg_replace('~\\\\F[BR]~', '', $titleDetails[0]));
+                $man->title        = TextContent::interpretString(Replace::preg('~\\\\F[BR]~', '',
+                  $titleDetails[0]));
                 $man->section      = TextContent::interpretString($titleDetails[1]);
                 $man->date         = TextContent::interpretString(@$titleDetails[2] ?: '');
                 $man->package      = TextContent::interpretString(@$titleDetails[3] ?: '');
@@ -865,22 +866,22 @@ class Text
 
         $line = strtr($line, $replacements);
 
-        $line = preg_replace_callback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
+        $line = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
             return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
         }, $line);
 
-        $line = preg_replace_callback('~\\\\\[char(\d+)\]~u', function ($matches) {
+        $line = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
             return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
         }, $line);
 
         // Don't worry about changes in point size for now:
-        $line = preg_replace('~\\\\s[-+]?\d~u', '', $line);
+        $line = Replace::preg('~\\\\s[-+]?\d~u', '', $line);
 
         // Don't worry about this: "Local vertical/horizontal motion"
-        $line = preg_replace('~\\\\[vh]\'.*?\'~u', ' ', $line);
+        $line = Replace::preg('~\\\\[vh]\'.*?\'~u', ' ', $line);
 
         // Don't worry colour changes:
-        $line = preg_replace('~\\\\m(\(..|\[.*?\])~u', '', $line);
+        $line = Replace::preg('~\\\\m(\(..|\[.*?\])~u', '', $line);
 
         return rtrim($line);
 

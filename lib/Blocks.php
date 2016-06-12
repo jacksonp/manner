@@ -442,7 +442,7 @@ class Blocks
                             // * equal-width columns
                             $tdClass = str_replace(['e', 'E'], '', $tdClass);
 
-                            $tdClass = preg_replace('~[fF]?[bB]~', '', $tdClass, -1, $numReplaced);
+                            $tdClass = Replace::preg('~[fF]?[bB]~', '', $tdClass, -1, $numReplaced);
                             $bold    = $numReplaced > 0;
 
                             if ($tableRowNum === 0 && $bold) {

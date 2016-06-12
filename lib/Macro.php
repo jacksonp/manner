@@ -7,7 +7,7 @@ class Macro
     static function parseArgString($argString)
     {
         // sometimes get double spaces, see e.g. samba_selinux.8:
-        $argString = preg_replace('~\s+~', ' ', $argString);
+        $argString = Replace::preg('~\s+~', ' ', $argString);
 
         $argString = trim($argString);
 
@@ -74,9 +74,9 @@ ROFF;
     public static function massageLine(string $macroLine)
     {
         $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-        $macroLine = preg_replace('~^\.\s+~', '.', $macroLine);
+        $macroLine = Replace::preg('~^\.\s+~', '.', $macroLine);
 
-        return preg_replace('~^\.nop ~u', '', $macroLine);
+        return Replace::preg('~^\.nop ~u', '', $macroLine);
     }
 
 }
