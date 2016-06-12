@@ -423,6 +423,8 @@ class Blocks
                         if ($tr) {
                             $tr->setAttribute('class', 'border-bottom-double');
                         }
+                    } elseif (in_array($line, ['.ft CW', '.ft R'])) {
+                        // Do nothing for now - see sox.1
                     } else {
                         $tr   = $table->appendChild($dom->createElement('tr'));
                         $cols = explode($columnSeparator, $line);
@@ -630,8 +632,11 @@ class Blocks
             }
 
             if ($line === '.SM') {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
                 $nextLine = $lines[++$i];
-                if (mb_strlen($nextLine) === 0) {
+                if ($nextLine === '') {
                     continue;
                 }
                 $parentForLine     = $parentForLine->appendChild($dom->createElement('small'));
@@ -640,8 +645,11 @@ class Blocks
             }
 
             if ($line === '.SB') {
+                if ($i === $numLines - 1) {
+                    continue;
+                }
                 $nextLine = $lines[++$i];
-                if (mb_strlen($nextLine) === 0) {
+                if ($nextLine === '') {
                     continue;
                 }
                 $small             = $parentForLine->appendChild($dom->createElement('small'));
