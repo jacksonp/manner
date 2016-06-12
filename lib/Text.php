@@ -308,7 +308,8 @@ class Text
             // .it: "Set an input-line count trap for the next N lines."
             // .ps: affects point size
             // .bp: "Eject current page and begin new page."
-            if (preg_match('~^[\.\'](iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp)~u',
+            // .ul: "Underline (italicize in troff) N input lines." - Could revisit this and implement.
+            if (preg_match('~^[\.\'](iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul)~u',
               $line)) {
                 continue;
             }

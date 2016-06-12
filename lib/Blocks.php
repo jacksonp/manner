@@ -107,7 +107,7 @@ class Blocks
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
                 // if this is the last line in a section, it's a bug in the man page, just ignore.
-                if ($i === $numLines - 1) {
+                if ($i === $numLines - 1 or $lines[$i + 1] === '.TP') {
                     continue;
                 }
                 $dtLine = $lines[++$i];
