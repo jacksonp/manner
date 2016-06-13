@@ -111,10 +111,10 @@ class Blocks
                     continue;
                 }
                 $dtLine = $lines[++$i];
-                while (in_array($dtLine, ['.fi', '.B'])) { // cutter.1
+                while ($i < $numLines - 1 && in_array($dtLine, ['.fi', '.B'])) { // cutter.1
                     $dtLine = $lines[++$i];
                 }
-                if (in_array($dtLine, ['.br', '.sp'])) { // e.g. albumart-qt.1, ipmitool.1
+                if (in_array($dtLine, ['.br', '.sp', '.B'])) { // e.g. albumart-qt.1, ipmitool.1, blackbox.1
                     $line = $dtLine; // i.e. skip the .TP line
                 } else {
                     if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
