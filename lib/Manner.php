@@ -4,41 +4,30 @@
 class Manner
 {
 
-    static function roffToHTML($filePath, $errorLog)
+    static function roffToHTML(array $fileLines, string $outputFile = null)
     {
-        $rawLines = file($filePath, FILE_IGNORE_NEW_LINES);
 
         $dom = new DOMDocument('1.0', 'utf-8');
         $dom->registerNodeClass('DOMElement', 'HybridNode');
-        $xpath = new DOMXpath($dom);
 
         /** @var HybridNode $manPageContainer */
         $manPageContainer = $dom->createElement('body');
         $manPageContainer = $dom->appendChild($manPageContainer);
 
         $man = Man::instance();
+        $man->reset();
 
-        try {
+        $lines = Text::preprocessLines($fileLines);
 
-            $lines = Text::preprocessLines($rawLines);
-
-            if (isset($man->title)) {
-                $h1 = $dom->createElement('h1');
-                $h1->appendChild(new DOMText($man->title));
-                $manPageContainer->appendChild($h1);
-            } else {
-                throw new Exception('No $man->title.');
-            }
-
-            Section::handle($manPageContainer, $lines);
-        } catch (Exception $e) {
-            file_put_contents($errorLog, $e->getMessage() . ' (' . basename($filePath) . ')' . PHP_EOL, FILE_APPEND);
-            echo 'Doc status:', PHP_EOL;
-            echo $dom->saveHTML($manPageContainer);
-            echo PHP_EOL, PHP_EOL, $e->getMessage(), PHP_EOL;
-            echo $e->getTraceAsString(), PHP_EOL;
-            exit(1);
+        if (isset($man->title)) {
+            $h1 = $dom->createElement('h1');
+            $h1->appendChild(new DOMText($man->title));
+            $manPageContainer->appendChild($h1);
+        } else {
+            throw new Exception('No $man->title.');
         }
+
+        Section::handle($manPageContainer, $lines);
 
         $html = $dom->saveHTML();
 
@@ -46,11 +35,22 @@ class Manner
 
         $html = strtr($html, $hacks);
 
-        echo '<!DOCTYPE html>',
-        '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
-        '<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
-        '<title>', htmlspecialchars($man->title), '</title>',
-        $html;
+        if (is_null($outputFile)) {
+            echo '<!DOCTYPE html>',
+            '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
+            '<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
+            '<title>', htmlspecialchars($man->title), '</title>',
+            $html;
+        } else {
+            $fp = fopen($outputFile, 'w');
+            fwrite($fp, '<!DOCTYPE html>');
+            fwrite($fp, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">');
+            fwrite($fp,
+              '<meta name="man-page-info" data-date="' . htmlspecialchars($man->date) . '" data-package="' . htmlspecialchars($man->package) . '" data-section-name="' . htmlspecialchars($man->section_name) . '">');
+            fwrite($fp, '<title>' . htmlspecialchars($man->title) . '</title>');
+            fwrite($fp, $html);
+            fclose($fp);            
+        }
     }
 
 }
