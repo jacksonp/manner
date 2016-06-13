@@ -272,22 +272,20 @@ class Blocks
             }
 
             if (preg_match('~^\.ce ?(\d*)$~u', $line, $matches)) {
-                $blockLines      = [];
-                $centerLinesUpTo = min($i + (mb_strlen($matches[1]) === 0 ? 1 : $matches[1]), $numLines - 2);
-                while ($i <= $centerLinesUpTo) {
-                    $line = $lines[$i + 1];
-                    if (mb_strpos($line, '.ce') === 0) {
+                $blockLines       = [];
+                $numLinesToCenter = empty($matches[1]) ? 1 : (int)$matches[1];
+                $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
+                for (; $i < $centerLinesUpTo; ++$i) {
+                    $nextLine = $lines[$i + 1];
+                    if (mb_strpos($nextLine, '.ce') === 0) {
                         break;
                     }
-                    ++$i;
-                    $blockLines[] = $line;
+                    $blockLines[] = $nextLine;
                     $blockLines[] = '.br';
                 }
-                if (trim(implode('', $blockLines)) !== '') {
-                    $blocks[++$blockNum] = $dom->createElement('div');
-                    $blocks[$blockNum]->setAttribute('class', 'center');
-                    self::handle($blocks[$blockNum], $blockLines);
-                }
+                $blocks[++$blockNum] = $dom->createElement('div');
+                $blocks[$blockNum]->setAttribute('class', 'center');
+                self::handle($blocks[$blockNum], $blockLines);
                 continue;
             }
 
