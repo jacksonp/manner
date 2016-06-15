@@ -292,10 +292,14 @@ class TextContent
         $string = strtr($string, $replacements);
 
         // Prettier double quotes:
-        $string = Replace::preg('~``(.*?)\'\'~', '“$1”', $string);
+        $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);
         if ($replaceDoubleQuotes) {
-            $string = Replace::preg('~"(.*?)"~', '“$1”', $string);
+            $string = Replace::preg('~"(.*?)"~u', '“$1”', $string);
         }
+
+        $string = Replace::pregCallback('~\\\\N\'(\d+)\'~u', function ($matches) {
+            return chr($matches[1]);
+        }, $string);
 
         // Get rid of <> around URLs - these get translater to &lt; and &gt; and then cause problems with finding out what we can make into links.
         $string = Replace::preg(
