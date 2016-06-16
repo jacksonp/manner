@@ -69,7 +69,6 @@ class Blocks
             }
         }
 
-
         $dom = $parentNode->ownerDocument;
 
         /** @var HybridNode[] $blocks */
@@ -86,22 +85,30 @@ class Blocks
             // empty lines cause a new para also, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             if ($line === '' or preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                $blockLines = [];
-                while ($i < $numLines) {
-                    if ($i === $numLines - 1) {
-                        break;
+                if ($line === '' and $i < $numLines - 3 and mb_strpos($lines[$i + 1], "\t") > 0 and
+                  (mb_strpos($lines[$i + 2], "\t") > 0 or $lines[$i + 2] === '') and
+                  mb_strpos($lines[$i + 3], "\t") > 0
+                ) {
+                    // Looks like a table next, we detect that lower down, do nothing for now
+                    continue;
+                } else {
+                    $blockLines = [];
+                    while ($i < $numLines) {
+                        if ($i === $numLines - 1) {
+                            break;
+                        }
+                        $nextLine = $lines[$i + 1];
+                        if ($nextLine === '' or preg_match('~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u', $nextLine)) {
+                            break;
+                        }
+                        $blockLines[] = $nextLine;
+                        ++$i;
                     }
-                    $nextLine = $lines[$i + 1];
-                    if ($nextLine === '' or preg_match('~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u', $nextLine)) {
-                        break;
-                    }
-                    $blockLines[] = $nextLine;
-                    ++$i;
+                    $p = $dom->createElement('p');
+                    self::handle($p, $blockLines);
+                    $blocks[++$blockNum] = $p;
+                    continue;
                 }
-                $p = $dom->createElement('p');
-                self::handle($p, $blockLines);
-                $blocks[++$blockNum] = $p;
-                continue;
             }
 
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
@@ -512,15 +519,15 @@ class Blocks
             //<editor-fold desc="Make tables out of tab-separated lines">
             // mb_strpos() > 0: avoid indented stuff
             if ($i < $numLines - 1
-              && mb_strlen($line) > 0
-              && $line[0] !== '.'
-              && mb_strpos($line, "\t") > 0
-              && (
+              and mb_strlen($line) > 0
+              and $line[0] !== '.'
+              and mb_strpos($line, "\t") > 0
+              and (
                 mb_strpos($lines[$i + 1], "\t") > 0
                 || (
                   in_array($lines[$i + 1], ['.br', ''])
-                  && $i < $numLines - 2
-                  && mb_strpos($lines[$i + 2], "\t") > 0
+                  and $i < $numLines - 2
+                  and mb_strpos($lines[$i + 2], "\t") > 0
                 )
               )
             ) {
