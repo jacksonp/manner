@@ -52,6 +52,9 @@ class Text
                 throw new Exception('.ig with no corresponding ..');
             }
 
+            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
+            $line = Replace::preg('~^\.do ~u', '.', $line);
+
             //            .ie n \{ USE
             //            THIS
             //            .\}
