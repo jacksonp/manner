@@ -72,16 +72,12 @@
   <p><strong>mandb</strong> (which uses the same code as <strong>lexgrog</strong>) parses the <strong>NAME</strong> section at the top of each manual page looking for names and descriptions of the features documented in each. While the parser is quite tolerant, as it has to cope with a number of different forms that have historically been used, it may sometimes fail to extract the required information.
   <p>When using the traditional <em>man</em> macro set, a correct <strong>NAME</strong> section looks something like this:
   <div class="indent">
-    <pre> .SH NAME
- foo \- program to do something</pre>
+    <p>.SH NAME foo \- program to do something
   </div>
   <p>Some manual pagers require the ‘\-’ to be exactly as shown; <strong>mandb</strong> is more tolerant, but for compatibility with other systems it is nevertheless a good idea to retain the backslash.
   <p>On the left-hand side, there may be several names, separated by commas. Names containing whitespace will be ignored to avoid pathological behaviour on certain ill-formed <strong>NAME</strong> sections. The text on the right-hand side is free-form, and may be spread over multiple lines. If several features with different descriptions are being documented in the same manual page, the following form is therefore used:
   <div class="indent">
-    <pre> .SH NAME
- foo, bar \- programs to do something
- .br
- baz \- program to do nothing</pre>
+    <p>.SH NAME foo, bar \- programs to do something .br baz \- program to do nothing
   </div>
   <p>(A macro which starts a new paragraph, like <code>.PP</code>, may be used instead of the break macro <code>.br</code>.)
   <p>When using the BSD-derived <em>mdoc</em> macro set, a correct <strong>NAME</strong> section looks something like this:

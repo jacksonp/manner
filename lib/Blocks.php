@@ -136,12 +136,12 @@ class Blocks
                 throw new Exception('.UR with no corresponding .UE');
             }
 
-            if (preg_match('~^\.([RBI][RBI]?|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
+            if (preg_match('~^\.([RBI][RBI]?|ft|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
                 if ($i === $numLines - 1
-                  || $line === '.ft R'
-                  || $lines[$i + 1] === '.IP http://www.gnutls.org/manual/'
-                  || mb_strpos($lines[$i + 1], '.B') === 0
-                  || mb_strpos($lines[$i + 1], '.I') === 0
+                  or in_array($line, ['.ft', '.ft R'])
+                  or $lines[$i + 1] === '.IP http://www.gnutls.org/manual/'
+                  or mb_strpos($lines[$i + 1], '.B') === 0
+                  or mb_strpos($lines[$i + 1], '.I') === 0
                 ) {
                     continue;
                 }
