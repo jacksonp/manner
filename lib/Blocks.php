@@ -63,7 +63,7 @@ class Blocks
     {
 
         // Trim $lines
-        $trimVals = ['', '.br', '.sp', '.ad'];
+        $trimVals = ['', '.br', '.sp', '.ad', '.ad n', '.ad b'];
         ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, $trimVals);
 

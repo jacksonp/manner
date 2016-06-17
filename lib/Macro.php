@@ -11,7 +11,7 @@ class Macro
 
         $argString = trim($argString);
 
-        if (mb_strlen($argString) === 0) {
+        if ($argString === '') {
             return null;
         } else {
             return str_getcsv($argString, ' ');

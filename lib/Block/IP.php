@@ -31,7 +31,7 @@ class Block_IP
                 $dl = $parentNode->lastChild;
             }
             $dt = $dom->createElement('dt');
-            TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
+            TextContent::interpretAndAppendText($dt, $ipArgs[0]);
             $dl->appendChild($dt);
 
             list ($i, $blockLines) = Blocks::getDDBlock($i, $lines);
