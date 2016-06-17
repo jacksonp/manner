@@ -4,7 +4,7 @@
 class Block_EX
 {
 
-    static function checkAppend(HybridNode $parentNode, $lines, $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
         if (!preg_match('~^\.EX~u', $lines[$i])) {
             return false;

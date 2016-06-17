@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="1995 October 31" data-package="" data-section-name="">
+<title>LASTCOMM</title>
+<h1>LASTCOMM</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>lastcomm - print out information about previously executed commands.
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <dl>
+    <dt><strong>lastcomm</strong>
+    <dd>
+      <p>[ <em>command-name ...</em> ]<br>
+      [ <em>user-name ...</em> ]<br>
+      [ <em>terminal-name ...</em> ]<br>
+      [ OPTION ... ]
+  </dl>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>lastcomm</strong> prints out information about previously executed commands. If no arguments are specified, <strong>lastcomm</strong> will print info about all of the commands in <em>acct</em> (the record file). If called with one or more of <em>command-name, user-name,</em> or <em>terminal-name,</em> only records containing those items will be displayed. For example, to find out which users used command `a.out' and which users were logged into `tty0', type:
+  <div class="center">
+    <p>lastcomm a.out tty0
+  </div>
+  <p>This will print any entry for which `a.out' or `tty0' matches in any of the record's fields (command, name, or terminal). If you want to find only items that match *all* of the arguments on the command line, you must use the '-strict-match' option. For example, to list all of the executions of command <em>a.out</em> by user <em>root</em> on terminal <em>tty0,</em> type:
+  <div class="center">
+    <p>lastcomm --strict-match --command a.out --user root --tty tty0
+  </div>
+  <p>The order of the arguments is not important.
+  <p>For each entry the following information is printed:<br>
+  + command name of the process<br>
+  + flags, as recorded by the system accounting routines:<br>
+  S -- command executed by super-user<br>
+  F -- command executed after a fork but without a following exec<br>
+  C -- command run in PDP-11 compatibility mode (VAX only)<br>
+  D -- command terminated with the generation of a core file<br>
+  X -- command was terminated with the signal SIGTERM<br>
+  + the name of the user who ran the process<br>
+  + time the process exited
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>--strict-match</strong>
+    <dd>
+      <p>Print only entries that match *all* of the arguments on the command line.
+    <dt><strong>--print-controls</strong>
+    <dd>
+      <p>Print control characters.
+    <dt><strong>--user</strong> <em>name</em>
+    <dd>
+      <p>List records for user with <em>name.</em> This is useful if you're trying to match a username that happens to be the same as a command (e.g., <em>ed</em> ).
+    <dt><strong>--command</strong> <em>name</em>
+    <dd>
+      <p>List records for command <em>name.</em>
+    <dt><strong>--tty</strong> <em>name</em>
+    <dd>
+      <p>List records for tty <em>name.</em>
+    <dt><strong>--forwards</strong>
+    <dd>
+      <p>Read file forwards instead of backwards. This avoids trying to seek on the file and can be used to read from a pipe. This must be specified prior to any <strong>-f</strong> arguments.
+    <dt><strong>-f</strong> <em>filename,</em> <strong>--file</strong> <em>filename</em>
+    <dd>
+      <p>Read from the file <em>filename</em> instead of <em>acct.</em> A filename of “-” will result in reading from stdin. This must either be the first <strong>-f</strong> option, or <strong>--forwards</strong> must precede all <strong>-f</strong> options.
+    <dt><strong>--ahz</strong> <em>hz</em>
+    <dd>
+      <p>Use this flag to tell the program what <strong>AHZ</strong> should be (in hertz). This option is useful if you are trying to view an <em>acct</em> file created on another machine which has the same byte order and file format as your current machine, but has a different value for <strong>AHZ.</strong>
+    <dt><strong>-p, --show-paging</strong>
+    <dd>
+      <p>Print paging statistics
+    <dt><strong>--debug</strong>
+    <dd>
+      <p>Print verbose internal information.
+    <dt><strong>-V, --version</strong>
+    <dd>
+      <p>Print the version number of <strong>lastcomm.</strong>
+    <dt><strong>-h, --help</strong>
+    <dd>
+      <p>Prints the usage string and default locations of system files to standard output and exits.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <p><em>acct</em>
+  <div class="indent">
+    <p>The system wide process accounting file. See <strong>acct</strong>(5) (or <strong>pacct</strong>(5)) for further details. <em>/var/log/account</em>
+    <div class="indent">
+      <p>This directory contains pacct files which contain the binary process accounting data as written by the kernel.
+    </div>
+  </div>
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>The GNU accounting utilities were written by Noel Cragg &lt;noel@gnu.ai.mit.edu&gt;. The man page was adapted from the accounting texinfo page by Susan Kleinmann &lt;sgk@sgk.tiac.net&gt;.
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>last</strong>(1), <strong>acct</strong>(5)
+</div>
+

@@ -4,7 +4,7 @@
 class Block_ti
 {
 
-    static function checkAppend(HybridNode $parentNode, $lines, $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
         // .ti = temporary indent

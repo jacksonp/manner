@@ -4,7 +4,7 @@
 class Block_RS
 {
 
-    static function checkAppend(HybridNode $parentNode, $lines, $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
         if (!preg_match('~^\.RS ?(.*)$~u', $lines[$i], $matches)) {
@@ -23,25 +23,23 @@ class Block_RS
             } elseif (preg_match('~^\.RE~u', $line)) {
                 --$rsLevel;
                 if ($rsLevel === 0) {
-
-                    $rsBlock   = $dom->createElement('div');
-                    $className = 'indent';
-                    if (!empty($matches[1])) {
-                        $className .= '-' . trim($matches[1]);
-                    }
-                    $rsBlock->setAttribute('class', $className);
-
-                    Blocks::handle($rsBlock, $rsLines);
-
-                    $parentNode->appendBlockIfHasContent($rsBlock);
-
-                    return $i;
+                    break;
                 }
             }
             $rsLines[] = $line;
         }
 
-        throw new Exception($lines[$i] . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$lines[$i - 2] . '"');
+        $rsBlock   = $dom->createElement('div');
+        $className = 'indent';
+        if (!empty($matches[1])) {
+            $className .= '-' . trim($matches[1]);
+        }
+        $rsBlock->setAttribute('class', $className);
+
+        Blocks::handle($rsBlock, $rsLines);
+        $parentNode->appendBlockIfHasContent($rsBlock);
+
+        return $i;
 
     }
 

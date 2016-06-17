@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="April 2013" data-package="util-linux" data-section-name="User Commands">
+<title>HEXDUMP</title>
+<h1>HEXDUMP</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>hexdump - display file contents in hexadecimal, decimal, octal, or ascii
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>hexdump</strong> [options] <em>file</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>hexdump</strong> utility is a filter which displays the specified files, or standard input if no files are specified, in a user-specified format.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <p>Below, the <em>length</em> and <em>offset</em> arguments may be followed by the multiplicative suffixes KiB (=1024), MiB (=1024*1024), and so on for GiB, TiB, PiB, EiB, ZiB and YiB (the “iB” is optional, e.g. “K” has the same meaning as “KiB”), or the suffixes KB (=1000), MB (=1000*1000), and so on for GB, TB, PB, EB, ZB and YB.
+  <dl>
+    <dt><strong>-b</strong>, <strong>--one-byte-octal</strong>
+    <dd>
+      <p><em>One-byte octal display</em>. Display the input offset in hexadecimal, followed by sixteen space-separated, three-column, zero-filled bytes of input data, in octal, per line.
+    <dt><strong>-c</strong>, <strong>--one-byte-char</strong>
+    <dd>
+      <p><em>One-byte character display</em>. Display the input offset in hexadecimal, followed by sixteen space-separated, three-column, space-filled characters of input data per line.
+    <dt><strong>-C</strong>, <strong>--canonical</strong>
+    <dd>
+      <p><em>Canonical hex+ASCII display</em>. Display the input offset in hexadecimal, followed by sixteen space-separated, two-column, hexadecimal bytes, followed by the same sixteen bytes in <strong>%_p</strong> format enclosed in '<strong>|</strong>' characters.
+    <dt><strong>-d</strong>, <strong>--two-bytes-decimal</strong>
+    <dd>
+      <p><em>Two-byte decimal display</em>. Display the input offset in hexadecimal, followed by eight space-separated, five-column, zero-filled, two-byte units of input data, in unsigned decimal, per line.
+    <dt><strong>-e</strong>, <strong>--format</strong> <em>format_string</em>
+    <dd>
+      <p>Specify a format string to be used for displaying data.
+    <dt><strong>-f</strong>, <strong>--format-file</strong> <em>file</em>
+    <dd>
+      <p>Specify a file that contains one or more newline-separated format strings. Empty lines and lines whose first non-blank character is a hash mark (#) are ignored.
+    <dt><strong>-L</strong>, <strong>--color</strong>[=<em>when</em>]
+    <dd>
+      <p>Accept color units for the output. The optional argument <em>when</em> can be <strong>auto</strong>, <strong>never</strong> or <strong>always</strong>. If the <em>when</em> argument is omitted, it defaults to <strong>auto</strong>. The colors can be disabled; for the current built-in default see the <strong>--help</strong> output. See also the <strong>Colors</strong> subsection and the <strong>COLORS</strong> section below.
+    <dt><strong>-n</strong>, <strong>--length</strong> <em>length</em>
+    <dd>
+      <p>Interpret only <em>length</em> bytes of input.
+    <dt><strong>-o</strong>, <strong>--two-bytes-octal</strong>
+    <dd>
+      <p><em>Two-byte octal display</em>. Display the input offset in hexadecimal, followed by eight space-separated, six-column, zero-filled, two-byte quantities of input data, in octal, per line.
+    <dt><strong>-s</strong>, <strong>--skip</strong> <em>offset</em>
+    <dd>
+      <p>Skip <em>offset</em> bytes from the beginning of the input.
+    <dt><strong>-v</strong>, <strong>--no-squeezing</strong>
+    <dd>
+      <p>The <strong>-v</strong> option causes <strong>hexdump</strong> to display all input data. Without the <strong>-v</strong> option, any number of groups of output lines which would be identical to the immediately preceding group of output lines (except for the input offsets), are replaced with a line comprised of a single asterisk.
+    <dt><strong>-x</strong>, <strong>--two-bytes-hex</strong>
+    <dd>
+      <p><em>Two-byte hexadecimal display</em>. Display the input offset in hexadecimal, followed by eight space-separated, four-column, zero-filled, two-byte quantities of input data, in hexadecimal, per line.
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>
+      <p>Display version information and exit.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>
+      <p>Display help text and exit.
+  </dl>
+  <p>For each input file, <strong>hexdump</strong> sequentially copies the input to standard output, transforming the data according to the format strings specified by the <strong>-e</strong> and <strong>-f</strong> options, in the order that they were specified.
+</div>
+<div class="section">
+  <h2>FORMATS</h2>
+  <p>A format string contains any number of format units, separated by whitespace. A format unit contains up to three items: an iteration count, a byte count, and a format.
+  <p>The iteration count is an optional positive integer, which defaults to one. Each format is applied iteration count times.
+  <p>The byte count is an optional positive integer. If specified it defines the number of bytes to be interpreted by each iteration of the format.
+  <p>If an iteration count and/or a byte count is specified, a single slash must be placed after the iteration count and/or before the byte count to disambiguate them. Any whitespace before or after the slash is ignored.
+  <p>The format is required and must be surrounded by double quote (“ ”) marks. It is interpreted as a fprintf-style format string (see <strong>fprintf</strong>(3), with the following exceptions:
+  <dl>
+    <dt>1.
+    <dd>
+      <p>An asterisk (*) may not be used as a field width or precision.
+    <dt>2.
+    <dd>
+      <p>A byte count or field precision <em>is</em> required for each <strong>s</strong> conversion character (unlike the <strong>fprintf</strong>(3) default which prints the entire string if the precision is unspecified).
+    <dt>3.
+    <dd>
+      <p>The conversion characters <strong>h</strong>,<strong>&nbsp;l</strong>,<strong>&nbsp;n</strong>,<strong>&nbsp;p</strong>, and<strong>&nbsp;q</strong> are not supported.
+    <dt>4.
+    <dd>
+      <p>The single character escape sequences described in the C standard are supported:
+  </dl>
+  <div class="indent-13">
+    <dl>
+      <dt>NULL
+      <dd>
+        <p>\0
+      <dt>&lt;alert character&gt;
+      <dd>
+        <p>\a
+      <dt>&lt;backspace&gt;
+      <dd>
+        <p>\b
+      <dt>&lt;form-feed&gt;
+      <dd>
+        <p>\f
+      <dt>&lt;newline&gt;
+      <dd>
+        <p>\n
+      <dt>&lt;carriage return&gt;
+      <dd>
+        <p>\r
+      <dt>&lt;tab&gt;
+      <dd>
+        <p>\t
+      <dt>&lt;vertical tab&gt;
+      <dd>
+        <p>\v
+    </dl>
+  </div>
+  <div class="subsection">
+    <h3>Conversion strings</h3>
+    <p>The <strong>hexdump</strong> utility also supports the following additional conversion strings.
+    <dl>
+      <dt><strong>_a[dox]</strong>
+      <dd>
+        <p>Display the input offset, cumulative across input files, of the next byte to be displayed. The appended characters <strong>d</strong>, <strong>o</strong>, and <strong>x</strong> specify the display base as decimal, octal or hexadecimal respectively.
+      <dt><strong>_A[dox]</strong>
+      <dd>
+        <p>Identical to the <strong>_a</strong> conversion string except that it is only performed once, when all of the input data has been processed.
+      <dt><strong>_c</strong>
+      <dd>
+        <p>Output characters in the default character set. Non-printing characters are displayed in three-character, zero-padded octal, except for those representable by standard escape notation (see above), which are displayed as two-character strings.
+      <dt><strong>_p</strong>
+      <dd>
+        <p>Output characters in the default character set. Non-printing characters are displayed as a single '<strong>.</strong>'.
+      <dt><strong>_u</strong>
+      <dd>
+        <p>Output US ASCII characters, with the exception that control characters are displayed using the following, lower-case, names. Characters greater than 0xff, hexadecimal, are displayed as hexadecimal strings.
+        <div class="indent-10">
+          <table class="tbl">
+            <tr>
+              <td class="ft">000 nul
+              <td>001 soh
+              <td>002 stx
+              <td>003 etx
+              <td>004 eot
+              <td>005 enq
+            <tr>
+              <td class="ft">006 ack
+              <td>007 bel
+              <td>008 bs
+              <td>009 ht
+              <td>00A lf
+              <td>00B vt
+            <tr>
+              <td class="ft">00C ff
+              <td>00D cr
+              <td>00E so
+              <td>00F si
+              <td>010 dle
+              <td>011 dc1
+            <tr>
+              <td class="ft">012 dc2
+              <td>013 dc3
+              <td>014 dc4
+              <td>015 nak
+              <td>016 syn
+              <td>017 etb
+            <tr>
+              <td class="ft">018 can
+              <td>019 em
+              <td>01A sub
+              <td>01B esc
+              <td>01C fs
+              <td>01D gs
+            <tr>
+              <td class="ft">01E rs
+              <td>01F us
+              <td>0FF del
+          </table>
+        </div>
+    </dl>
+  </div>
+  <div class="subsection">
+    <h3>Colors</h3>
+    <p>When put at the end of a format specifier, hexdump highlights the respective string with the color specified. Conditions, if present, are evaluated prior to highlighting.
+    <p><strong>_L[color_unit_1,color_unit_2,...,color_unit_n]</strong>
+    <p>The full syntax of a color unit is as follows:
+    <p><strong>[!]COLOR[:VALUE][@OFFSET_START[-END]]</strong>
+    <dl>
+      <dt><strong>!</strong>
+      <dd>
+        <p>Negate the condition. Please note that it only makes sense to negate a unit if both a value/string and an offset are specified. In that case the respective output string will be highlighted if and only if the value/string does not match the one at the offset.
+      <dt><strong>COLOR</strong>
+      <dd>
+        <p>One of the 8 basic shell colors.
+      <dt><strong>VALUE</strong>
+      <dd>
+        <p>A value to be matched specified in hexadecimal, or octal base, or as a string. Please note that the usual C escape sequences are not interpreted by hexdump inside the color_units.
+      <dt><strong>OFFSET</strong>
+      <dd>
+        <p>An offset or an offset range at which to check for a match. Please note that lone OFFSET_START uses the same value as END offset.
+    </dl>
+  </div>
+  <div class="subsection">
+    <h3>Counters</h3>
+    <p>The default and supported byte counts for the conversion characters are as follows:
+    <dl>
+      <dt><strong>%_c</strong>,<strong>&nbsp;%_p</strong>,<strong>&nbsp;%_u</strong>,<strong>&nbsp;%c</strong>
+      <dd>
+        <p>One byte counts only.
+      <dt><strong>%d</strong>,<strong>&nbsp;%i</strong>,<strong>&nbsp;%o</strong>,<strong>&nbsp;%u</strong>,<strong>&nbsp;%X</strong>,<strong>&nbsp;%x</strong>
+      <dd>
+        <p>Four byte default, one, two and four byte counts supported.
+      <dt><strong>%E</strong>,<strong>&nbsp;%e</strong>,<strong>&nbsp;%f</strong>,<strong>&nbsp;%G</strong>,<strong>&nbsp;%g</strong>
+      <dd>
+        <p>Eight byte default, four byte counts supported.
+    </dl>
+    <p>The amount of data interpreted by each format string is the sum of the data required by each format unit, which is the iteration count times the byte count, or the iteration count times the number of bytes required by the format if the byte count is not specified.
+    <p>The input is manipulated in <em>blocks</em>, where a block is defined as the largest amount of data specified by any format string. Format strings interpreting less than an input block's worth of data, whose last format unit both interprets some number of bytes and does not have a specified iteration count, have the iteration count incremented until the entire input block has been processed or there is not enough data remaining in the block to satisfy the format string.
+    <p>If, either as a result of user specification or <strong>hexdump</strong> modifying the iteration count as described above, an iteration count is greater than one, no trailing whitespace characters are output during the last iteration.
+    <p>It is an error to specify a byte count as well as multiple conversion characters or strings unless all but one of the conversion characters or strings is <strong>_a</strong> or <strong>_A</strong>.
+    <p>If, as a result of the specification of the <strong>-n</strong> option or end-of-file being reached, input data only partially satisfies a format string, the input block is zero-padded sufficiently to display all available data (i.e. any format units overlapping the end of data will display some number of the zero bytes).
+    <p>Further output by such format strings is replaced by an equivalent number of spaces. An equivalent number of spaces is defined as the number of spaces output by an <strong>s</strong> conversion character with the same field width and precision as the original conversion character or conversion string but with any '<strong>+</strong>', ´ ´, '<strong>#</strong>' conversion flag characters removed, and referencing a NULL string.
+    <p>If no format strings are specified, the default display is very similar to the <strong>-x</strong> output format (the <strong>-x</strong> option causes more space to be used between format units than in the default output).
+  </div>
+</div>
+<div class="section">
+  <h2>EXIT STATUS</h2>
+  <p><strong>hexdump</strong> exits 0 on success and &gt;0 if an error occurred.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>Display the input in perusal format:
+  <pre>    "%06.6_ao "  12/1 "%3_u "
+    "\t\t" "%_p "
+    "\n"
+
+ Implement the -x option:
+    "%07.7_Ax\n"
+    "%07.7_ax  " 8/2 "%04x " "\n"
+
+ MBR Boot Signature example: Highlight the addresses cyan and the bytes at
+ offsets 510 and 511 green if their value is 0xAA55, red otherwise.
+    "%07.7_Ax_L[cyan]\n"
+    "%07.7_ax_L[cyan]  " 8/2 "   %04x_L[green:0xAA55@510-511,!red:0xAA55@510-511] " "\n"
+</pre>
+</div>
+<div class="section">
+  <h2>COLORS</h2>
+  <p>Implicit coloring can be disabled by an empty file <em>/etc/terminal-colors.d/hexdump.disable</em>.
+  <p>See <strong>terminal-colors.d</strong>(5) for more details about colorization configuration.
+</div>
+<div class="section">
+  <h2>STANDARDS</h2>
+  <p>The <strong>hexdump</strong> utility is expected to be IEEE Std 1003.2 (“POSIX.2”) compatible.
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The hexdump command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+

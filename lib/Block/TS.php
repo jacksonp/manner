@@ -4,7 +4,7 @@
 class Block_TS
 {
 
-    static function checkAppend(HybridNode $parentNode, $lines, $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
         if (!preg_match('~^\.TS~u', $lines[$i])) {

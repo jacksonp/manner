@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="February 2014" data-package="util-linux" data-section-name="User Commands">
+<title>MORE</title>
+<h1>MORE</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>more - file perusal filter for crt viewing
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>more</strong> [options] <em>file</em>...
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>more</strong> is a filter for paging through text one screenful at a time. This version is especially primitive. Users should realize that <strong>less</strong>(1) provides <strong>more</strong>(1) emulation plus extensive enhancements.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <p>Options are also taken from the environment variable <strong>MORE</strong> (make sure to precede them with a dash (<strong>-</strong>)) but command-line options will override those.
+  <dl>
+    <dt><strong>-d</strong>
+    <dd>
+      <p>Prompt with “[Press space to continue, 'q' to quit.]”, and display “[Press 'h' for instructions.]” instead of ringing the bell when an illegal key is pressed.
+    <dt><strong>-l</strong>
+    <dd>
+      <p>Do not pause after any line containing a <strong>^L</strong> (form feed).
+    <dt><strong>-f</strong>
+    <dd>
+      <p>Count logical lines, rather than screen lines (i.e., long lines are not folded).
+    <dt><strong>-p</strong>
+    <dd>
+      <p>Do not scroll. Instead, clear the whole screen and then display the text. Notice that this option is switched on automatically if the executable is named <strong>page</strong>.
+    <dt><strong>-c</strong>
+    <dd>
+      <p>Do not scroll. Instead, paint each screen from the top, clearing the remainder of each line as it is displayed.
+    <dt><strong>-s</strong>
+    <dd>
+      <p>Squeeze multiple blank lines into one.
+    <dt><strong>-u</strong>
+    <dd>
+      <p>Suppress underlining.
+    <dt><strong>-</strong><em>number</em>
+    <dd>
+      <p>The screen size to use, in <em>number</em> of lines.
+    <dt><strong>+</strong><em>number</em>
+    <dd>
+      <p>Start displaying each file at line <em>number</em>.
+    <dt><strong>+/</strong><em>string</em>
+    <dd>
+      <p>The <em>string</em> to be searched in each file before starting to display it.
+  </dl>
+</div>
+<div class="section">
+  <h2>COMMANDS</h2>
+  <p>Interactive commands for <strong>more</strong> are based on <strong>vi</strong>(1). Some commands may be preceded by a decimal number, called k in the descriptions below. In the following descriptions, <strong>^X</strong> means <strong>control-X</strong>.
+  <div class="indent">
+    <dl>
+      <dt><strong>h</strong>&nbsp;or<strong>&nbsp;?</strong>
+      <dd>
+        <p>Help; display a summary of these commands. If you forget all other commands, remember this one.
+      <dt><strong>SPACE</strong>
+      <dd>
+        <p>Display next k lines of text. Defaults to current screen size.
+      <dt><strong>z</strong>
+      <dd>
+        <p>Display next k lines of text. Defaults to current screen size. Argument becomes new default.
+      <dt><strong>RETURN</strong>
+      <dd>
+        <p>Display next k lines of text. Defaults to 1. Argument becomes new default.
+      <dt><strong>d</strong>&nbsp;or<strong>&nbsp;^D</strong>
+      <dd>
+        <p>Scroll k lines. Default is current scroll size, initially 11. Argument becomes new default.
+      <dt><strong>q</strong>&nbsp;or<strong>&nbsp;Q</strong>&nbsp;or<strong>&nbsp;INTERRUPT</strong>
+      <dd>
+        <p>Exit.
+      <dt><strong>s</strong>
+      <dd>
+        <p>Skip forward k lines of text. Defaults to 1.
+      <dt><strong>f</strong>
+      <dd>
+        <p>Skip forward k screenfuls of text. Defaults to 1.
+      <dt><strong>b</strong>&nbsp;or<strong>&nbsp;^B</strong>
+      <dd>
+        <p>Skip backwards k screenfuls of text. Defaults to 1. Only works with files, not pipes.
+      <dt><strong>'</strong>
+      <dd>
+        <p>Go to the place where the last search started.
+      <dt><strong>=</strong>
+      <dd>
+        <p>Display current line number.
+      <dt><strong>/pattern</strong>
+      <dd>
+        <p>Search for kth occurrence of regular expression. Defaults to 1.
+      <dt><strong>n</strong>
+      <dd>
+        <p>Search for kth occurrence of last regular expression. Defaults to 1.
+      <dt><strong>!command</strong>&nbsp;or<strong>&nbsp;:!command</strong>
+      <dd>
+        <p>Execute <em>command</em> in a subshell.
+      <dt><strong>v</strong>
+      <dd>
+        <p>Start up an editor at current line. The editor is taken from the environment variable <strong>VISUAL</strong> if defined, or <strong>EDITOR</strong> if <strong>VISUAL</strong> is not defined, or defaults to <strong>vi</strong> if neither <strong>VISUAL</strong> nor <strong>EDITOR</strong> is defined.
+      <dt><strong>^L</strong>
+      <dd>
+        <p>Redraw screen.
+      <dt><strong>:n</strong>
+      <dd>
+        <p>Go to kth next file. Defaults to 1.
+      <dt><strong>:p</strong>
+      <dd>
+        <p>Go to kth previous file. Defaults to 1.
+      <dt><strong>:f</strong>
+      <dd>
+        <p>Display current file name and line number.
+      <dt><strong>.</strong>
+      <dd>
+        <p>Repeat previous command.
+    </dl>
+  </div>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>The <strong>more</strong> command respects the following environment variables, if they exist:
+  <dl>
+    <dt><strong>MORE</strong>
+    <dd>
+      <p>This variable may be set with favored options to <strong>more</strong>.
+    <dt><strong>SHELL</strong>
+    <dd>
+      <p>Current shell in use (normally set by the shell at login time).
+    <dt><strong>TERM</strong>
+    <dd>
+      <p>The terminal type used by <strong>more</strong> to get the terminal characteristics necessary to manipulate the screen.
+    <dt><strong>VISUAL</strong>
+    <dd>
+      <p>The editor the user prefers. Invoked when command key <em>v</em> is pressed.
+    <dt><strong>EDITOR</strong>
+    <dd>
+      <p>The editor of choice when <strong>VISUAL</strong> is not specified.
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>vi</strong>(1), <strong>less</strong>(1)
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <p>Eric Shienbrood, UC Berkeley<br>
+  Modified by Geoff Peck, UCB to add underlining, single spacing<br>
+  Modified by John Foderaro, UCB to add -c and MORE environment variable
+</div>
+<div class="section">
+  <h2>HISTORY</h2>
+  <p>The <strong>more</strong> command appeared in 3.0BSD. This man page documents <strong>more</strong> version 5.19 (Berkeley 6/29/88), which is currently in use in the Linux community. Documentation was produced using several other versions of the man page, and extensive inspection of the source code.
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The more command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+
