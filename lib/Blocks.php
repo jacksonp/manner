@@ -301,90 +301,15 @@ class Blocks
                 continue;
             }
 
-            if (preg_match('~^\.nf~u', $line)) {
-                $preLines = [];
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.(fi|ad [nb])~u', $line)) {
-                        break;
-                    } else {
-                        if ($i < $numLines - 1 or $line !== '') {
-                            $preLines[] = $line;
-                        }
-                    }
+            $blockClasses = ['nf', 'TS'];
+
+            foreach ($blockClasses as $blockClass) {
+                $className = 'Block_' . $blockClass;
+                $res       = $className::checkAppend($parentNode, $lines, $i);
+                if ($res !== false) {
+                    $i = $res;
+                    continue 2;
                 }
-
-                if (count($preLines) === 0) {
-                    continue;
-                }
-
-                if (count($preLines) > 1) {
-                    $isTable = true;
-                    foreach ($preLines as $preLine) {
-                        $firstTab = mb_strpos($preLine, "\t");
-                        if ($firstTab === false || $firstTab === 0) {
-                            $isTable = false;
-                            break;
-                        }
-                    }
-
-                    if ($isTable) {
-                        $table = $parentNode->appendChild($dom->createElement('table'));
-                        foreach ($preLines as $preLine) {
-                            if (in_array($preLine, ['.br', ''])) {
-                                continue;
-                            }
-                            $request = '';
-                            if (mb_substr($preLine, 0, 1) === '.') {
-                                preg_match('~^(\.\w+ )"?(.*?)"?$~u', $preLine, $matches);
-                                $request = $matches[1];
-                                $preLine = $matches[2];
-                            }
-                            $tds = preg_split('~\t+~u', $preLine);
-                            $tr  = $table->appendChild($dom->createElement('tr'));
-                            foreach ($tds as $tdLine) {
-                                $cell     = $dom->createElement('td');
-                                $codeNode = $cell->appendChild($dom->createElement('code'));
-                                if (empty($request)) {
-                                    TextContent::interpretAndAppendText($codeNode, $tdLine);
-                                } else {
-                                    TextContent::interpretAndAppendCommand($codeNode, $request . $tdLine);
-                                }
-                                $tr->appendChild($cell);
-                            }
-                        }
-                        continue;
-                    }
-                }
-
-                $pre = $dom->createElement('pre');
-
-                if (preg_match('~^\.RS ?(.*)$~u', $preLines[0], $matches)) {
-                    if (!preg_match('~^\.RE~u', array_pop($preLines))) {
-                        throw new Exception('.nf block contains initial .RS but not final .RE');
-                    }
-                    array_shift($preLines);
-                    $className = 'indent';
-                    if (!empty($matches[1])) {
-                        $className .= '-' . trim($matches[1]);
-                    }
-                    $pre->setAttribute('class', $className);
-                }
-
-                // Skip empty block
-                if (trim(implode('', $preLines)) === '') {
-                    continue;
-                }
-
-                BlockPreformatted::handle($pre, $preLines);
-                $parentNode->appendBlockIfHasContent($pre);
-                continue; //End of block
-            }
-
-            $res = Block_TS::checkAppend($parentNode, $lines, $i);
-            if ($res !== false) {
-                $i = $res;
-                continue;
             }
 
             //<editor-fold desc="Make tables out of tab-separated lines">
