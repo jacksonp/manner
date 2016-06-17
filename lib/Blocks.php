@@ -11,7 +11,7 @@ class Blocks
      * @param array $lines
      * @return array
      */
-    private static function getDDBlock(int $i, array $lines)
+    static function getDDBlock(int $i, array $lines)
     {
 
         $numLines   = count($lines);
@@ -107,52 +107,6 @@ class Blocks
                 }
             }
 
-            // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-            if (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
-                // if this is the last line in a section, it's a bug in the man page, just ignore.
-                if ($i === $numLines - 1 or $lines[$i + 1] === '.TP') {
-                    continue;
-                }
-                $dtLine = $lines[++$i];
-                while ($i < $numLines - 1 && in_array($dtLine, ['.fi', '.B'])) { // cutter.1
-                    $dtLine = $lines[++$i];
-                }
-                if (in_array($dtLine, ['.br', '.sp', '.B'])) { // e.g. albumart-qt.1, ipmitool.1, blackbox.1
-                    $line = $dtLine; // i.e. skip the .TP line
-                } else {
-                    if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName !== 'dl') {
-                        $dl = $dom->createElement('dl');
-                        $parentNode->appendChild($dl);
-                    } else {
-                        $dl = $parentNode->lastChild;
-                    }
-                    $dt = $dom->createElement('dt');
-                    TextContent::interpretAndAppendCommand($dt, $dtLine);
-                    $dl->appendChild($dt);
-
-                    for ($i = $i + 1; $i < $numLines; ++$i) {
-                        $line = $lines[$i];
-                        if (preg_match('~^\.TQ$~u', $line)) {
-                            $dtLine = $lines[++$i];
-                            $dt     = $dom->createElement('dt');
-                            TextContent::interpretAndAppendCommand($dt, $dtLine);
-                            $dl->appendChild($dt);
-                        } else {
-                            --$i;
-                            break;
-                        }
-                    }
-
-                    list ($i, $blockLines) = self::getDDBlock($i, $lines);
-
-                    $dd = $dom->createElement('dd');
-                    self::handle($dd, $blockLines);
-                    $dl->appendBlockIfHasContent($dd);
-
-                    continue;
-                }
-            }
-
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
@@ -198,9 +152,7 @@ class Blocks
                 continue;
             }
 
-
-
-            $blockClasses = ['ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
