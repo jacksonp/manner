@@ -80,9 +80,9 @@ class Blocks
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
-                $res       = $className::checkAppend($parentNode, $lines, $i);
-                if ($res !== false) {
-                    $i = $res;
+                $newI      = $className::checkAppend($parentNode, $lines, $i);
+                if ($newI !== false) {
+                    $i = $newI;
                     continue 2;
                 }
             }
@@ -146,7 +146,7 @@ class Blocks
                     continue;
                 }
                 $nextLine = $lines[++$i];
-                if (mb_strlen($nextLine) === 0) {
+                if ($nextLine === '') {
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
