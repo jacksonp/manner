@@ -4,7 +4,7 @@
 class HybridNode extends DOMElement
 {
 
-    const BLOCK_TAGS = ['p', 'div', 'pre', 'table', 'blockquote'];
+    const BLOCK_TAGS = ['p', 'div', 'pre', 'table', 'blockquote', 'dl'];
 
     function __construct($name, $value = null)
     {

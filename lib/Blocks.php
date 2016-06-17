@@ -108,7 +108,7 @@ class Blocks
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if ($parentNode->tagName === 'p') {
+                if (in_array($parentNode->tagName, ['p', 'blockquote'])) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
