@@ -78,35 +78,6 @@ class Blocks
 
             $canAppendNextText = true;
 
-            // empty lines cause a new para also, see sar.1
-            // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            if ($line === '' or preg_match('~^\.([LP]?P$|HP)~u', $line)) {
-                if ($line === '' and $i < $numLines - 3 and mb_strpos($lines[$i + 1], "\t") > 0 and
-                  (mb_strpos($lines[$i + 2], "\t") > 0 or $lines[$i + 2] === '') and
-                  mb_strpos($lines[$i + 3], "\t") > 0
-                ) {
-                    // Looks like a table next, we detect that lower down, do nothing for now
-                    continue;
-                } else {
-                    $blockLines = [];
-                    while ($i < $numLines) {
-                        if ($i === $numLines - 1) {
-                            break;
-                        }
-                        $nextLine = $lines[$i + 1];
-                        if ($nextLine === '' or preg_match('~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u', $nextLine)) {
-                            break;
-                        }
-                        $blockLines[] = $nextLine;
-                        ++$i;
-                    }
-                    $p = $dom->createElement('p');
-                    self::handle($p, $blockLines);
-                    $parentNode->appendBlockIfHasContent($p);
-                    continue;
-                }
-            }
-
             // TODO:  --group-directories-first in ls.1 - separate para rather than br?
             // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
             if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
@@ -152,7 +123,7 @@ class Blocks
                 continue;
             }
 
-            $blockClasses = ['TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['P', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
