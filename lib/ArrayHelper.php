@@ -4,6 +4,20 @@
 class ArrayHelper
 {
 
+    static function ltrim(array &$arrayToTrim, array $unwantedValues)
+    {
+
+        foreach ($arrayToTrim as $line) {
+            if (in_array($line, $unwantedValues)) {
+                array_shift($arrayToTrim);
+            } else {
+                break;
+            }
+        }
+
+    }
+
+
     static function rtrim(array &$arrayToTrim, array $unwantedValues)
     {
 

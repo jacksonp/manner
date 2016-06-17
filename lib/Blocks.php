@@ -62,17 +62,10 @@ class Blocks
     static function handle(DOMElement $parentNode, array $lines)
     {
 
-        $trimVals = ['', '.br', '.sp'];
-
         // Trim $lines
+        $trimVals = ['', '.br', '.sp'];
+        ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, $trimVals);
-        foreach ($lines as $line) {
-            if (in_array($line, $trimVals)) {
-                array_shift($lines);
-            } else {
-                break;
-            }
-        }
 
         $dom = $parentNode->ownerDocument;
 

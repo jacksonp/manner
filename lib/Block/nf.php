@@ -7,6 +7,9 @@ class Block_nf
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
+        // These get swallowed:
+        $blockEnds = ['.fi', '.ad', '.ad n', '.ad b'];
+
         if (!preg_match('~^\.nf~u', $lines[$i])) {
             return false;
         }
@@ -17,18 +20,14 @@ class Block_nf
         $preLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.(fi|ad( [nb])?)~u', $line)) {
+            if (in_array($line, $blockEnds)) {
                 break;
             } else {
-                if ($i < $numLines - 1 or $line !== '') {
-                    $preLines[] = $line;
-                }
+                $preLines[] = $line;
             }
         }
 
-        ArrayHelper::rtrim($preLines, ['', '.br', '.fi', '.ad', '.ad n', '.ad b']);
-
-        var_dump($preLines);
+        ArrayHelper::rtrim($preLines, array_merge($blockEnds, ['', '.br', '.sp']));
 
         if (count($preLines) === 0) {
             return $i;
