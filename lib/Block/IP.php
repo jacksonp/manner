@@ -43,17 +43,36 @@ class Block_IP
             return $i;
         }
 
-        if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
-            $p = $dom->createElement('p');
-            $parentNode->appendChild($p);
-        } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2'])) {
-            $parentNode->appendChild($dom->createElement('blockquote'));
-        } elseif ($parentNode->lastChild->tagName === 'blockquote') {
-            // Already in previous .IP,
+        // If already in previous .IP:
+        if ($parentNode->hasChildNodes() and $parentNode->lastChild->tagName === 'blockquote') {
             $parentNode->lastChild->appendChild($dom->createElement('br'));
+
+            return $i;
+        }
+
+        $blockLines = [];
+        while ($i < $numLines) {
+            if ($i === $numLines - 1) {
+                break;
+            }
+            $nextLine = $lines[$i + 1];
+            if ($nextLine === '' or preg_match(Blocks::BLOCK_END_REGEX, $nextLine)) {
+                break;
+            }
+            $blockLines[] = $nextLine;
+            ++$i;
+        }
+
+        if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
+            $block = $parentNode->appendChild($dom->createElement('p'));
+        } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2'])) {
+            $block = $parentNode->appendChild($dom->createElement('blockquote'));
         } else {
             throw new Exception($lines[$i] . ' - unexpected .IP in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
         }
+
+        Blocks::handle($block, $blockLines);
+        $parentNode->appendBlockIfHasContent($block);
 
         return $i;
     }

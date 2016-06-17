@@ -21,7 +21,7 @@
   <p><em>Screen</em> does not understand the prefix “C-” to mean control, although this notation is used in this manual for readability. Please use the caret notation (“^A” instead of “C-a”) as arguments to e.g. the <em>escape</em> command or the <em>-e</em> option. <em>Screen</em> will also print out control characters in caret notation.
   <p>The standard way to create a new window is to type “C-a c”. This creates a new window running a shell and switches to that window immediately, regardless of the state of the process running in the current window. Similarly, you can create a new window with a custom command in it by first binding the command to a keystroke (in your .screenrc file or at the “C-a :” command line) and then using it just like the “C-a c” command. In addition, new windows can be created by running a command like:
   <blockquote>
-    screen emacs prog.c
+    <p>screen emacs prog.c
   </blockquote>
   <p>from a shell prompt within a previously created window. This will not run another copy of <em>screen</em>, but will instead supply the command name and its arguments to the window manager (specified in the $STY environment variable) who will use it to create the new window. The above example would start the emacs editor (editing prog.c) and switch to its window. - Note that you cannot transport environment variables from the invoking shell to the application (emacs in this case), because it is forked from the parent screen process, not from the invoking shell.
   <p>If “/etc/utmp” is writable by <em>screen</em>, an appropriate record will be written to this file for each window, and removed when the window is terminated. This is useful for working with “talk”, “script”, “shutdown”, “rsend”, “sccs” and other similar programs that use the utmp file to determine who you are. As long as <em>screen</em> is active on your terminal, the terminal's own record is removed from the utmp file. See also “C-a L”.
@@ -1933,7 +1933,7 @@
   <p><em>Screen</em> displays informational messages and other diagnostics in a <em>message line</em>. While this line is distributed to appear at the bottom of the screen, it can be defined to appear at the top of the screen during compilation. If your terminal has a status line defined in its termcap, <em>screen</em> will use this for displaying its messages, otherwise a line of the current screen will be temporarily overwritten and output will be momentarily interrupted. The message line is automatically removed after a few seconds delay, but it can also be removed early (on terminals without a status line) by beginning to type.
   <p>The message line facility can be used by an application running in the current window by means of the ANSI <em>Privacy message</em> control sequence. For instance, from within the shell, try something like:
   <blockquote>
-    echo '&lt;esc&gt;^Hello world from window '$WINDOW'&lt;esc&gt;\\'
+    <p>echo '&lt;esc&gt;^Hello world from window '$WINDOW'&lt;esc&gt;\\'
   </blockquote>
   <p>where '&lt;esc&gt;' is an <em>escape</em>, '^' is a literal up-arrow, and '\\' turns into a single backslash.
 </div>
@@ -2182,21 +2182,21 @@
   <p>Here's how it works: you must modify your shell prompt to output a null title-escape-sequence (&lt;esc&gt;k&lt;esc&gt;\) as a part of your prompt. The last part of your prompt must be the same as the string you specified for the <em>search</em> portion of the title. Once this is set up, <em>screen</em> will use the title-escape-sequence to clear the previous command name and get ready for the next command. Then, when a newline is received from the shell, a search is made for the end of the prompt. If found, it will grab the first word after the matched string and use it as the command name. If the command name begins with either '!', '%', or '^' <em>screen</em> will use the first word on the following line (if found) in preference to the just-found name. This helps csh users get better command names when using job control or history recall commands.
   <p>Here's some .screenrc examples:
   <blockquote>
-    screen -t top 2 nice top
+    <p>screen -t top 2 nice top
   </blockquote>
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre>   shelltitle '&gt; |csh'
+  <pre>     shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
   <blockquote>
-    /usr/joe/src/dir&gt; trn
+    <p>/usr/joe/src/dir&gt; trn
   </blockquote>
   <p>(it looks after the '&gt; ' for the command name). The window status would show the name “trn” while the command was running, and revert to “csh” upon completion.
   <blockquote>
-    bind R screen -t '% |root:' su
+    <p>bind R screen -t '% |root:' su
   </blockquote>
   <p>Having this command in your .screenrc would bind the key sequence “C-a R” to the “su” command and give it an auto-title name of “root:”. For this auto-title to work, the screen could look something like this:
-  <pre>  % !em
+  <pre>    % !em
         emacs file.c</pre>
   <p>Here the user typed the csh history command “!em” which ran the previously entered “emacs” command. The window status would show “root:emacs” during the execution of the command, and revert to simply “root:” at its completion.
   <pre>       bind o title
@@ -2205,11 +2205,11 @@
   <p>The first binding doesn't have any arguments, so it would prompt you for a title. when you type “C-a o”. The second binding would clear an auto-title's current setting (C-a E). The third binding would set the current window's title to “(unknown)” (C-a u).
   <p>One thing to keep in mind when adding a null title-escape-sequence to your prompt is that some shells (like the csh) count all the non-control characters as part of the prompt's length. If these invisible characters aren't a multiple of 8 then backspacing over a tab will result in an incorrect display. One way to get around this is to use a prompt like this:
   <blockquote>
-    set prompt='^[[0000m^[k^[\% '
+    <p>set prompt='^[[0000m^[k^[\% '
   </blockquote>
   <p>The escape-sequence “&lt;esc&gt;[0000m” not only normalizes the character attributes, but all the zeros round the length of the invisible characters up to 8. Bash users will probably want to echo the escape sequence in the PROMPT_COMMAND:
   <blockquote>
-    PROMPT_COMMAND='printf “\033k\033\134”'
+    <p>PROMPT_COMMAND='printf “\033k\033\134”'
   </blockquote>
   <p>(I used “\134” to output a `\' because of a bug in bash v1.04).
 </div>

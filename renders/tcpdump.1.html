@@ -26,7 +26,7 @@
   <p><em>Tcpdump</em> will, if not run with the <strong>-c</strong> flag, continue capturing packets until it is interrupted by a SIGINT signal (generated, for example, by typing your interrupt character, typically control-C) or a SIGTERM signal (typically generated with the <strong>kill</strong>(1) command); if run with the <strong>-c</strong> flag, it will capture packets until it is interrupted by a SIGINT or SIGTERM signal or the specified number of packets have been processed.
   <p>When <em>tcpdump</em> finishes capturing packets, it will report counts of:
   <blockquote>
-    packets “captured” (this is the number of packets that <em>tcpdump</em> has received and processed);<br>
+    <p>packets “captured” (this is the number of packets that <em>tcpdump</em> has received and processed);<br>
     packets “received by filter” (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);<br>
     packets “dropped by kernel” (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
   </blockquote>
@@ -395,7 +395,7 @@
   <strong>Capturing TCP packets with particular flag combinations (SYN-ACK, URG-ACK, etc.)</strong>
   <p>There are 8 bits in the control bits section of the TCP header:
   <blockquote>
-    <em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
+    <p><em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
   </blockquote>
   <p>Let's assume that we want to watch packets used in establishing a TCP connection. Recall that TCP uses a 3-way handshake protocol when it initializes a new connection; the connection sequence with regard to the TCP control bits is
   <div class="indent">
@@ -444,7 +444,7 @@
   <p>Looking at the control bits section we see that only bit number 1 (SYN) is set.
   <p>Assuming that octet number 13 is an 8-bit unsigned integer in network byte order, the binary value of this octet is
   <blockquote>
-    00000010
+    <p>00000010
   </blockquote>
   <p>and its decimal representation is
   <pre>    7     6     5     4     3     2     1     0
@@ -467,7 +467,7 @@
       |7 6 5 4 3 2 1 0|</pre>
   <p>Now bits 1 and 4 are set in the 13th octet. The binary value of octet 13 is
   <blockquote>
-    00010010
+    <p>00010010
   </blockquote>
   <p>which translates to decimal
   <pre>    7     6     5     4     3     2     1     0
@@ -480,7 +480,7 @@
       =    00000010                 =    00000010</pre>
   <p>We see that this AND operation delivers the same result regardless whether ACK or another TCP control bit is set. The decimal representation of the AND value as well as the result of this operation is 2 (binary 00000010), so we know that for packets with SYN set the following relation must hold true:
   <blockquote>
-    ( ( value of octet 13 ) AND ( 2 ) ) == ( 2 )
+    <p>( ( value of octet 13 ) AND ( 2 ) ) == ( 2 )
   </blockquote>
   <p>This points us to the <em>tcpdump</em> filter expression
   <div class="indent">
@@ -701,7 +701,7 @@
   <p>NIT doesn't let you watch your own outbound traffic, BPF will. We recommend that you use the latter.
   <p>On Linux systems with 2.0[.x] kernels:
   <blockquote>
-    packets on the loopback device will be seen twice;<br>
+    <p>packets on the loopback device will be seen twice;<br>
     packet filtering cannot be done in the kernel, so that all packets must be copied from the kernel in order to be filtered in user mode;<br>
     all of a packet, not just the part that's within the snapshot length, will be copied from the kernel (the 2.0[.x] packet capture mechanism, if asked to copy only part of a packet to userland, will not report the true length of the packet; this would cause most IP packets to get an error from <strong>tcpdump</strong>);<br>
     capturing on some PPP devices won't work correctly.
