@@ -71,10 +71,6 @@ class Blocks
 
         $dom = $parentNode->ownerDocument;
 
-        /** @var HybridNode[] $blocks */
-        $blocks   = [];
-        $blockNum = 0;
-
         $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
 
@@ -106,7 +102,7 @@ class Blocks
                     }
                     $p = $dom->createElement('p');
                     self::handle($p, $blockLines);
-                    $blocks[++$blockNum] = $p;
+                    $parentNode->appendBlockIfHasContent($p);
                     continue;
                 }
             }
@@ -124,12 +120,15 @@ class Blocks
                 if (in_array($dtLine, ['.br', '.sp', '.B'])) { // e.g. albumart-qt.1, ipmitool.1, blackbox.1
                     $line = $dtLine; // i.e. skip the .TP line
                 } else {
-                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                        $blocks[++$blockNum] = $dom->createElement('dl');
+                    if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName !== 'dl') {
+                        $dl = $dom->createElement('dl');
+                        $parentNode->appendChild($dl);
+                    } else {
+                        $dl = $parentNode->lastChild;
                     }
                     $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $dtLine);
-                    $blocks[$blockNum]->appendChild($dt);
+                    $dl->appendChild($dt);
 
                     for ($i = $i + 1; $i < $numLines; ++$i) {
                         $line = $lines[$i];
@@ -137,7 +136,7 @@ class Blocks
                             $dtLine = $lines[++$i];
                             $dt     = $dom->createElement('dt');
                             TextContent::interpretAndAppendCommand($dt, $dtLine);
-                            $blocks[$blockNum]->appendChild($dt);
+                            $dl->appendChild($dt);
                         } else {
                             --$i;
                             break;
@@ -148,7 +147,7 @@ class Blocks
 
                     $dd = $dom->createElement('dd');
                     self::handle($dd, $blockLines);
-                    $blocks[$blockNum]->appendBlockIfHasContent($dd);
+                    $dl->appendBlockIfHasContent($dd);
 
                     continue;
                 }
@@ -163,35 +162,38 @@ class Blocks
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
                     // Copied from .TP:
-                    if (empty($blocks) || $blocks[$blockNum]->tagName !== 'dl') {
-                        $blocks[++$blockNum] = $dom->createElement('dl');
+                    if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName !== 'dl') {
+                        $dl = $dom->createElement('dl');
+                        $parentNode->appendChild($dl);
                         if (count($ipArgs) > 1) {
-                            $blocks[$blockNum]->setAttribute('class', 'indent-' . $ipArgs[1]);
+                            $dl->setAttribute('class', 'indent-' . $ipArgs[1]);
                         }
+                    } else {
+                        $dl = $parentNode->lastChild;
                     }
                     $dt = $dom->createElement('dt');
                     TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
-                    $blocks[$blockNum]->appendChild($dt);
+                    $dl->appendChild($dt);
 
                     list ($i, $blockLines) = self::getDDBlock($i, $lines);
 
                     $dd = $dom->createElement('dd');
                     self::handle($dd, $blockLines);
-                    $blocks[$blockNum]->appendBlockIfHasContent($dd);
+                    $dl->appendBlockIfHasContent($dd);
 
                     continue;
                 }
 
-                if (empty($blocks) || $blocks[$blockNum]->tagName === 'pre') {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                    continue;
-                } elseif ($blocks[$blockNum]->tagName === 'p') {
-                    $blocks[++$blockNum] = $dom->createElement('blockquote');
-                } elseif ($blocks[$blockNum]->tagName === 'blockquote') {
+                if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
+                    $p = $dom->createElement('p');
+                    $parentNode->appendChild($p);
+                } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2'])) {
+                    $parentNode->appendChild($dom->createElement('blockquote'));
+                } elseif ($parentNode->lastChild->tagName === 'blockquote') {
                     // Already in previous .IP,
-                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                    $parentNode->lastChild->appendChild($dom->createElement('br'));
                 } else {
-                    throw new Exception($line . ' - unexpected .IP in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
+                    throw new Exception($line . ' - unexpected .IP in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
                 }
                 continue;
             }
@@ -202,10 +204,10 @@ class Blocks
                     continue;
                 }
                 $line = $lines[++$i];
-                if ($blockNum > 0 && $blocks[$blockNum]->tagName === 'blockquote') {
-                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                if ($parentNode->hasChildNodes() > 0 && $parentNode->lastChild->tagName === 'blockquote') {
+                    $parentNode->lastChild->appendChild($dom->createElement('br'));
                 } else {
-                    $blocks[++$blockNum] = $dom->createElement('blockquote');
+                    $parentNode->appendChild($dom->createElement('blockquote'));
                 }
             }
 
@@ -224,15 +226,16 @@ class Blocks
                                 // Skip empty .RS blocks
                                 continue 2;
                             }
-                            $blocks[++$blockNum] = $dom->createElement('div');
-                            $className           = 'indent';
+                            $rsBlock   = $dom->createElement('div');
+                            $className = 'indent';
                             if (!empty($matches[1])) {
                                 $className .= '-' . trim($matches[1]);
                             }
-                            $blocks[$blockNum]->setAttribute('class', $className);
-                            $rsBlock = $blocks[$blockNum];
+                            $rsBlock->setAttribute('class', $className);
 
                             self::handle($rsBlock, $rsLines);
+
+                            $parentNode->appendBlockIfHasContent($rsBlock);
                             continue 2; //End of block
                         }
                     }
@@ -265,15 +268,16 @@ class Blocks
                     continue;
                 }
 
-                $blocks[++$blockNum] = $dom->createElement('pre');
-                BlockPreformatted::handle($blocks[$blockNum], $blockLines);
+                $block = $dom->createElement('pre');
+                BlockPreformatted::handle($block, $blockLines);
+                $parentNode->appendBlockIfHasContent($block);
                 continue; //End of block
             }
 
             if ($line === '.EE') {
                 // Strays
-                if ($blockNum > 0) {
-                    $blocks[$blockNum]->appendChild($dom->createElement('br'));
+                if ($parentNode->hasChildNodes()) {
+                    $parentNode->appendChild($dom->createElement('br'));
                 }
                 continue;
             }
@@ -290,9 +294,10 @@ class Blocks
                     $blockLines[] = $nextLine;
                     $blockLines[] = '.br';
                 }
-                $blocks[++$blockNum] = $dom->createElement('div');
-                $blocks[$blockNum]->setAttribute('class', 'center');
-                self::handle($blocks[$blockNum], $blockLines);
+                $block = $dom->createElement('div');
+                $block->setAttribute('class', 'center');
+                self::handle($block, $blockLines);
+                $parentNode->appendBlockIfHasContent($block);
                 continue;
             }
 
@@ -324,8 +329,7 @@ class Blocks
                     }
 
                     if ($isTable) {
-                        $table               = $dom->createElement('table');
-                        $blocks[++$blockNum] = $table;
+                        $table = $parentNode->appendChild($dom->createElement('table'));
                         foreach ($preLines as $preLine) {
                             if (in_array($preLine, ['.br', ''])) {
                                 continue;
@@ -373,14 +377,14 @@ class Blocks
                 }
 
                 BlockPreformatted::handle($pre, $preLines);
-                $blocks[++$blockNum] = $pre;
+                $parentNode->appendBlockIfHasContent($pre);
                 continue; //End of block
             }
 
             if (preg_match('~^\.TS~u', $line)) {
                 $table = $dom->createElement('table');
                 $table->setAttribute('class', 'tbl');
-                $blocks[++$blockNum] = $table;
+                $parentNode->appendChild($table);
 
                 $columnSeparator = "\t";
 
@@ -512,7 +516,7 @@ class Blocks
                     }
                 }
 
-                throw new Exception($line . ' - .TS without .TE in ' . $blocks[$blockNum]->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
+                throw new Exception($line . ' - .TS without .TE in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
 
             }
 
@@ -531,8 +535,8 @@ class Blocks
                 )
               )
             ) {
-                $table               = $dom->createElement('table');
-                $blocks[++$blockNum] = $table;
+                $table = $dom->createElement('table');
+                $parentNode->appendChild($table);
                 for (; ; ++$i) {
 
                     $tds = preg_split('~\t+~u', $line);
@@ -565,20 +569,21 @@ class Blocks
             }
             //</editor-fold>
 
+            $parentNodeLastBlock = $parentNode->getLastBlock();
 
-            if ($blockNum === 0) {
+            if (is_null($parentNodeLastBlock)) {
                 if ($parentNode->tagName === 'p') {
                     $parentForLine = $parentNode;
                 } else {
-                    $blocks[++$blockNum] = $dom->createElement('p');
-                    $parentForLine       = $blocks[$blockNum];
+                    $parentForLine = $parentNode->appendChild($dom->createElement('p'));
                 }
             } else {
-                if (in_array($blocks[$blockNum]->tagName, ['div', 'pre', 'code', 'table'])) {
+                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2'])) {
                     // Start a new paragraph after certain blocks
-                    $blocks[++$blockNum] = $dom->createElement('p');
+                    $parentForLine = $parentNode->appendChild($dom->createElement('p'));
+                } else {
+                    $parentForLine = $parentNodeLastBlock;
                 }
-                $parentForLine = $blocks[$blockNum];
             }
 
             if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
@@ -704,11 +709,6 @@ class Blocks
                 TextContent::interpretAndAppendCommand($parentForLine, $line);
             }
 
-        }
-
-        // Add the blocks
-        foreach ($blocks as $block) {
-            $parentNode->appendBlockIfHasContent($block);
         }
 
     }

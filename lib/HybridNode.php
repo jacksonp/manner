@@ -4,6 +4,7 @@
 class HybridNode extends DOMElement
 {
 
+    const BLOCK_TAGS = ['p', 'div', 'pre', 'table', 'blockquote'];
 
     function __construct($name, $value = null)
     {
@@ -39,5 +40,19 @@ class HybridNode extends DOMElement
         }
     }
 
+    function getLastBlock()
+    {
+        if (!$this->hasChildNodes()) {
+            return null;
+        }
+        $lastChild = $this->lastChild;
+        do {
+            if ($lastChild instanceof DOMElement && in_array($lastChild->tagName, self::BLOCK_TAGS)) {
+                return $lastChild;
+            }
+        } while ($lastChild = $lastChild->previousSibling);
+
+        return null;
+    }
 
 }
