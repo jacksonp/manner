@@ -4,7 +4,7 @@
 class Blocks
 {
 
-    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u';
+    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS)~u';
 
     /**
      * Utility function to avoid duplicating code.
@@ -39,7 +39,7 @@ class Blocks
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (preg_match('~^\.[HTLP]?P~u', $line) || ($hitIP && !$hitBlankIP)) {
+                if (preg_match('~^\.([HTLP]?P|SS)~u', $line) || ($hitIP && !$hitBlankIP)) {
                     --$i;
                     break;
                 }
@@ -76,7 +76,7 @@ class Blocks
 
             $canAppendNextText = true;
 
-            $blockClasses = ['P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['SS', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;

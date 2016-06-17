@@ -32,7 +32,7 @@ class Section
                     if (is_null($sectionStart)) {
                         Blocks::handle($documentNode, array_slice($lines, 0, $i));
                     } else {
-                        SubSection::handle($section, array_slice($lines, $sectionStart, $i - $sectionStart));
+                        Blocks::handle($section, array_slice($lines, $sectionStart, $i - $sectionStart));
                     }
 
                     $section = $dom->createElement('div');
@@ -46,7 +46,7 @@ class Section
             }
 
             if ($i === $numLines - 1 && !is_null($sectionStart)) {
-                SubSection::handle($section, array_slice($lines, $sectionStart, $i + 1 - $sectionStart));
+                Blocks::handle($section, array_slice($lines, $sectionStart, $i + 1 - $sectionStart));
             }
 
         }
