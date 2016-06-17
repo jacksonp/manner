@@ -57,7 +57,7 @@ class Blocks
     }
 
 
-    static function handle(HybridNode $parentNode, array $lines)
+    static function handle(DOMElement $parentNode, array $lines)
     {
 
         // Right trim $lines
@@ -198,20 +198,9 @@ class Blocks
                 continue;
             }
 
-            // .ti = temporary indent
-            if (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
-                if ($i === $numLines - 1) {
-                    continue;
-                }
-                $line = $lines[++$i];
-                if ($parentNode->hasChildNodes() > 0 && $parentNode->lastChild->tagName === 'blockquote') {
-                    $parentNode->lastChild->appendChild($dom->createElement('br'));
-                } else {
-                    $parentNode->appendChild($dom->createElement('blockquote'));
-                }
-            }
 
-                        $blockClasses = ['RS', 'EX', 'ce', 'nf', 'TS'];
+
+            $blockClasses = ['ti', 'RS', 'EX', 'ce', 'nf', 'TS'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;

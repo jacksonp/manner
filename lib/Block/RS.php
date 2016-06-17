@@ -40,8 +40,9 @@ class Block_RS
             }
             $rsLines[] = $line;
         }
-        throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$lines[$i - 2] . '"');
-        
+
+        throw new Exception($lines[$i] . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$lines[$i - 2] . '"');
+
     }
 
 
