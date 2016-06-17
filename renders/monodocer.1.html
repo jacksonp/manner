@@ -92,18 +92,15 @@
   </dl>
   <p>To turn the <em>monodocer</em> documentation into something that can be consumed by the Mono Documentation Browser (the desktop help browser, or the web interface for it) it is necessary to compile the documentation into a packed format. This is done with the mdassembler tool, for example, you could use this toolchain like this:
   <pre>    $ monodocer -assembly:MyWidgets -path:generated_docs
-        $ mdassembler --ecma generated_docs -out:MyWidgets
-</pre>
+        $ mdassembler --ecma generated_docs -out:MyWidgets</pre>
   <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
   <pre> &lt;?xml version="1.0"?&gt;
  &lt;monodoc&gt;
    &lt;source provider="ecma" basefile="MyWidgets" path="classlib-gnome"/&gt;
- &lt;/monodoc&gt;
-</pre>
+ &lt;/monodoc&gt;</pre>
   <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the “classlib-gnome” part of the tree. If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml.
   <p>Once you have all of your files (.zip, .tree and .sources) you can install them into the system with the following command:
-  <pre>         $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`
-</pre>
+  <pre>         $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`</pre>
   <p>The above will copy the files into the directory that Monodoc has registered (you might need root permissions to do this). The actual directory is returned by the <em>pkg-config</em> invocation.
 </div>
 <div class="section">
@@ -139,7 +136,7 @@
   <p><strong>Bound:</strong> <em>T:System.Collections.Generic.List{System.Int32} T:System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Predicate{System.String}}}</em> .
   <p>As you can see, bound variants can be arbitrarily complex (just like generics).
   <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the “index” of the type/method's generic parameter is used as the binding, so given
-  <pre>         class FooType {
+  <pre>   class FooType {
           public static void Foo&lt;T&gt; (System.Predicate&lt;T&gt; predicate) {}
         }</pre>
   <p>The String ID for this method is <em>M:FooType.Foo``1(System.Predicate{``0})</em> , as <em>``0</em> is the 0th generic parameter index which is bound to <em>System.Predicate&lt;T&gt;</em> .

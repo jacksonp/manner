@@ -62,16 +62,10 @@ class Blocks
     static function handle(DOMElement $parentNode, array $lines)
     {
 
-        $trimVals = ['', '.br', '.sp', '.ad', '.fi'];
+        $trimVals = ['', '.br', '.sp'];
 
         // Trim $lines
-        for ($i = count($lines) - 1; $i >= 0; --$i) {
-            if (in_array($lines[$i], $trimVals)) {
-                unset($lines[$i]);
-            } else {
-                break;
-            }
-        }
+        ArrayHelper::rtrim($lines, $trimVals);
         foreach ($lines as $line) {
             if (in_array($line, $trimVals)) {
                 array_shift($lines);

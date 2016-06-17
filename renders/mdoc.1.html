@@ -30,8 +30,7 @@
       <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. It's also possible that the documentation team will have minimal experience with the programming language being used. In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. <em>mdoc</em> allows the documentation to be kept <em>completely</em> separate and distinct from the source code used to create the assembly.
   </dl>
   <p>Documentation can be generated using the <strong>mdoc update</strong> command:
-  <pre>     mdoc update -o docs/en ProjectName.dll
-</pre>
+  <pre>     mdoc update -o docs/en ProjectName.dll</pre>
   <p>Once the documentation stubs have been generated (and hopefully later filled in with actual documentation), there are three ways to view the documentation:
   <dl>
     <dt><strong>*</strong>
@@ -44,27 +43,23 @@
       <br>
       From a <em>monodoc</em> source checkout, you can do this:
       <pre>     cd engine
-     make web
-</pre>
+     make web</pre>
       <p>This will use <strong>xsp</strong>(1) to serve the ASP.NET webapp; Visit <em>http://localhost:8080/</em> to view the documentation.
     <dt><strong>*</strong>
     <dd>
       <p>To use the <strong>monodoc</strong>(1) documentation browser, you must first <em>assemble</em> the documentation:
-      <pre>     mdoc assemble -o ProjectName docs/en
-</pre>
+      <pre>     mdoc assemble -o ProjectName docs/en</pre>
       <p>The above command creates the files <em>ProjectName.tree</em> and <em>ProjectName.zip</em>. An additional <em>ProjectName.sources</em> file must be provided which describes where in the help system the documentation should be hooked up; it is a very simple XML file, like this:
       <pre>     &lt;?xml version="1.0"?&gt;
      &lt;monodoc&gt;
        &lt;source provider="ecma" basefile="ProjectName"
          path="various" /&gt;
-     &lt;/monodoc&gt;
-</pre>
+     &lt;/monodoc&gt;</pre>
       <p>The above configuration file describes that the documentation is in ECMA format, that the base file name is <em>ProjectName</em> and that it should be hooked up in the <em>“various”</em> part of the documentation tree. If you want to look at the various nodes defined in the documentation, you can look at the <em>monodoc.xml</em> file which is typically installed in <em>/usr/lib/monodoc/monodoc.xml</em>.<br>
       <br>
       Once you have all of the required files (.zip, .tree and .sources) you can install them into the system with the following command:
       <pre>     cp ProjectName.tree ProjectName.zip ProjectName.source \
-       `pkg-config monodoc --variable sourcesdir`
-</pre>
+       `pkg-config monodoc --variable sourcesdir`</pre>
       <p>The above will copy the files into the directory that Monodoc has registered; you might need root permissions to do this. The actual directory is returned by the <em>pkg-config</em> invocation.
   </dl>
 </div>

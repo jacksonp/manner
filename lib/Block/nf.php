@@ -17,7 +17,7 @@ class Block_nf
         $preLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.(fi|ad [nb])~u', $line)) {
+            if (preg_match('~^\.(fi|ad( [nb])?)~u', $line)) {
                 break;
             } else {
                 if ($i < $numLines - 1 or $line !== '') {
@@ -25,6 +25,10 @@ class Block_nf
                 }
             }
         }
+
+        ArrayHelper::rtrim($preLines, ['', '.br', '.fi', '.ad', '.ad n', '.ad b']);
+
+        var_dump($preLines);
 
         if (count($preLines) === 0) {
             return $i;
