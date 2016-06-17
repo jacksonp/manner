@@ -17,6 +17,9 @@ class Block_SS
         $h3 = $dom->createElement('h3');
 
         if ($matches[1] === '') {
+            if ($i === $numLines - 1) {
+                return $i;
+            }
             // Text for subheading is on next line.
             $subsectionHeading = $lines[++$i];
             TextContent::interpretAndAppendCommand($h3, $subsectionHeading);
