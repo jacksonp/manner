@@ -78,52 +78,7 @@ class Blocks
 
             $canAppendNextText = true;
 
-            // TODO:  --group-directories-first in ls.1 - separate para rather than br?
-            // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-            if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-
-                $ipArgs = Macro::parseArgString($matches[1]);
-
-                // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-                if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
-                    // Copied from .TP:
-                    if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName !== 'dl') {
-                        $dl = $dom->createElement('dl');
-                        $parentNode->appendChild($dl);
-                        if (count($ipArgs) > 1) {
-                            $dl->setAttribute('class', 'indent-' . $ipArgs[1]);
-                        }
-                    } else {
-                        $dl = $parentNode->lastChild;
-                    }
-                    $dt = $dom->createElement('dt');
-                    TextContent::interpretAndAppendCommand($dt, $ipArgs[0]);
-                    $dl->appendChild($dt);
-
-                    list ($i, $blockLines) = self::getDDBlock($i, $lines);
-
-                    $dd = $dom->createElement('dd');
-                    self::handle($dd, $blockLines);
-                    $dl->appendBlockIfHasContent($dd);
-
-                    continue;
-                }
-
-                if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
-                    $p = $dom->createElement('p');
-                    $parentNode->appendChild($p);
-                } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2'])) {
-                    $parentNode->appendChild($dom->createElement('blockquote'));
-                } elseif ($parentNode->lastChild->tagName === 'blockquote') {
-                    // Already in previous .IP,
-                    $parentNode->lastChild->appendChild($dom->createElement('br'));
-                } else {
-                    throw new Exception($line . ' - unexpected .IP in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
-                }
-                continue;
-            }
-
-            $blockClasses = ['P', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;

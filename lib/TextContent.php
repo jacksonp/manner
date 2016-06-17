@@ -15,7 +15,7 @@ class TextContent
      * @param string $line
      * @throws Exception
      */
-    static function interpretAndAppendCommand(HybridNode $parentNode, string $line)
+    static function interpretAndAppendCommand(DOMElement $parentNode, string $line)
     {
 
         $dom = $parentNode->ownerDocument;
