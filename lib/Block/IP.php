@@ -20,16 +20,15 @@ class Block_IP
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
-            // Copied from .TP:
-            if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName !== 'dl') {
-                $dl = $dom->createElement('dl');
-                $parentNode->appendChild($dl);
+
+            $dl = $parentNode->getLastBlock();
+            if (is_null($dl) or $dl->tagName !== 'dl') {
+                $dl = $parentNode->appendChild($dom->createElement('dl'));
                 if (count($ipArgs) > 1) {
                     $dl->setAttribute('class', 'indent-' . $ipArgs[1]);
                 }
-            } else {
-                $dl = $parentNode->lastChild;
             }
+
             $dt = $dom->createElement('dt');
             TextContent::interpretAndAppendText($dt, $ipArgs[0]);
             $dl->appendChild($dt);

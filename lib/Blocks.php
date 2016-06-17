@@ -13,7 +13,7 @@ class Blocks
      * @param array $lines
      * @return array
      */
-    static function getDDBlock(int $i, array $lines)
+    static function getDDBlock(int $i, array $lines): array
     {
 
         $numLines   = count($lines);
