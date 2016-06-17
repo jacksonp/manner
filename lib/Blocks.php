@@ -211,47 +211,7 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.RS ?(.*)$~u', $line, $matches)) {
-                $rsLevel = 1;
-                $rsLines = [];
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.RS~u', $line)) {
-                        ++$rsLevel;
-                    } elseif (preg_match('~^\.RE~u', $line)) {
-                        --$rsLevel;
-                        if ($rsLevel === 0) {
-
-                            if (trim(implode('', $rsLines)) === '') {
-                                // Skip empty .RS blocks
-                                continue 2;
-                            }
-                            $rsBlock   = $dom->createElement('div');
-                            $className = 'indent';
-                            if (!empty($matches[1])) {
-                                $className .= '-' . trim($matches[1]);
-                            }
-                            $rsBlock->setAttribute('class', $className);
-
-                            self::handle($rsBlock, $rsLines);
-
-                            $parentNode->appendBlockIfHasContent($rsBlock);
-                            continue 2; //End of block
-                        }
-                    }
-                    $rsLines[] = $line;
-                }
-                throw new Exception($line . '.RS without corresponding .RE ending at line ' . $i . '. Prev line is "' . @$lines[$i - 2] . '"');
-            }
-
-            if (preg_match('~^\.RE~u', $line)) {
-                // Ignore .RE macros without corresponding .RS
-                continue;
-            }
-
-            
-
-            $blockClasses = ['EX', 'ce', 'nf', 'TS'];
+                        $blockClasses = ['RS', 'EX', 'ce', 'nf', 'TS'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
@@ -260,6 +220,11 @@ class Blocks
                     $i = $res;
                     continue 2;
                 }
+            }
+
+            if (preg_match('~^\.RE~u', $line)) {
+                // Ignore .RE macros without corresponding .RS
+                continue;
             }
 
             if ($line === '.EE') {
