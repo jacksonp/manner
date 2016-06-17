@@ -20,7 +20,10 @@ class Block_nf
         $preLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (in_array($line, $blockEnds)) {
+            if (preg_match(Blocks::BLOCK_END_REGEX, $line)) {
+                --$i;
+                break;
+            } elseif (in_array($line, $blockEnds)) {
                 while ($i < $numLines - 1 and in_array($lines[$i + 1], $blockEnds)) {
                     ++$i;
                 }
