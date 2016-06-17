@@ -137,11 +137,25 @@ class TextContent
             switch ($textSegments[$i]) {
                 case '\u':
                     if ($i < $numTextSegments - 1) {
-                        $sup = $parentNode->appendChild($dom->createElement('sup'));
-                        $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        if ($i < $numTextSegments - 2 and $textSegments[$i + 2] === '\d') {
+                            $sup = $parentNode->appendChild($dom->createElement('sup'));
+                            $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            ++$i;
+                        } else {
+                            throw new Exception('\u followed by unexpected pattern: ' . $line);
+                        }
                     }
                     break;
                 case '\d':
+                    if ($i < $numTextSegments - 1) {
+                        if ($i < $numTextSegments - 2 and $textSegments[$i + 2] === '\u') {
+                            $sub = $parentNode->appendChild($dom->createElement('sub'));
+                            $sub->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            ++$i;
+                        } else {
+                            throw new Exception('\d followed by unexpected pattern: ' . $line);
+                        }
+                    }
                     break;
                 case '\fB':
                 case '\fb':
