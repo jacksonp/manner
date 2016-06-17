@@ -63,7 +63,7 @@ class Blocks
     {
 
         // Trim $lines
-        $trimVals = ['', '.br', '.sp'];
+        $trimVals = ['', '.br', '.sp', '.ad'];
         ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, $trimVals);
 
@@ -87,8 +87,8 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.RE~u', $line)) {
-                // Ignore .RE macros without corresponding .RS
+            // Ignore .RE macros without corresponding .RS, and .ad macros that haven't been trimmed as in middle of $lines
+            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b'])) {
                 continue;
             }
 

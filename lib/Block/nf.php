@@ -21,6 +21,9 @@ class Block_nf
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (in_array($line, $blockEnds)) {
+                while ($i < $numLines - 1 and in_array($lines[$i + 1], $blockEnds)) {
+                    ++$i;
+                }
                 break;
             } else {
                 $preLines[] = $line;
