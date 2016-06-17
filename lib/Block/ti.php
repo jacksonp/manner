@@ -23,7 +23,8 @@ class Block_ti
         for (; $i < $numLines - 1; ++$i) {
             $line = $lines[$i + 1];
             if (preg_match('~^\.ti~u', $line)) {
-                // Could be a change in indentation, just ignore for now
+                // Could be a change in indentation, just add a break for now
+                $blockLines[] = '.br';
                 continue;
             } elseif (preg_match(Blocks::BLOCK_END_REGEX, $line, $matches)) {
                 // This check has to come after .ti check, as .ti is otherwise a block-ender.

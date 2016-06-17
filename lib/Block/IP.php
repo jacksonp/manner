@@ -65,7 +65,7 @@ class Block_IP
 
         if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
             $block = $parentNode->appendChild($dom->createElement('p'));
-        } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2'])) {
+        } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2', 'h3'])) {
             $block = $parentNode->appendChild($dom->createElement('blockquote'));
         } else {
             throw new Exception($lines[$i] . ' - unexpected .IP in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
