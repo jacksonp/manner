@@ -249,40 +249,9 @@ class Blocks
                 continue;
             }
 
-            if (preg_match('~^\.EX~u', $line)) {
-                $blockLines = [];
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.EE~u', $line)) {
-                        break;
-                    } elseif (preg_match('~^\.(nf|fi)~u', $line)) {
-                        // .EX already marks block as preformatted, just ignore
-                        continue;
-                    } else {
-                        $blockLines[] = $line;
-                    }
-                }
+            
 
-                // Skip empty block
-                if (trim(implode('', $blockLines)) === '') {
-                    continue;
-                }
-
-                $block = $dom->createElement('pre');
-                BlockPreformatted::handle($block, $blockLines);
-                $parentNode->appendBlockIfHasContent($block);
-                continue; //End of block
-            }
-
-            if ($line === '.EE') {
-                // Strays
-                if ($parentNode->hasChildNodes()) {
-                    $parentNode->appendChild($dom->createElement('br'));
-                }
-                continue;
-            }
-
-            $blockClasses = ['ce', 'nf', 'TS'];
+            $blockClasses = ['EX', 'ce', 'nf', 'TS'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
@@ -291,6 +260,14 @@ class Blocks
                     $i = $res;
                     continue 2;
                 }
+            }
+
+            if ($line === '.EE') {
+                // Strays
+                if ($parentNode->hasChildNodes()) {
+                    $parentNode->appendChild($dom->createElement('br'));
+                }
+                continue;
             }
 
             //<editor-fold desc="Make tables out of tab-separated lines">
