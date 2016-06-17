@@ -23,15 +23,18 @@ class Section
 
             if (preg_match('~^\.SH (.*)$~u', $line, $matches)) {
 
-                if (is_null($sectionStart)) {
-                    Blocks::handle($documentNode, array_slice($lines, 0, $i));
-                } else {
-                    SubSection::handle($section, array_slice($lines, $sectionStart, $i - $sectionStart));
-                }
-
                 $sectionHeading = $matches[1];
                 $sectionHeading = trim($sectionHeading, '"');
-                if (!empty($sectionHeading)) { // We ignore empty .SH macros
+
+                // We ignore empty .SH macros
+                if (!empty($sectionHeading)) {
+
+                    if (is_null($sectionStart)) {
+                        Blocks::handle($documentNode, array_slice($lines, 0, $i));
+                    } else {
+                        SubSection::handle($section, array_slice($lines, $sectionStart, $i - $sectionStart));
+                    }
+
                     $section = $dom->createElement('div');
                     $section->setAttribute('class', 'section');
                     $h = $dom->createElement('h2');
