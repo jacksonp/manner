@@ -314,8 +314,10 @@ class Text
             // .ul: "Underline (italicize in troff) N input lines." - Could revisit this and implement.
             // .so: ignore for now so we can build builtins.1
             // .bd: "Embolden font by N-1 units."
-            if (preg_match('~^[\.\'](iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd)~u',
-              $line)) {
+            if (preg_match(
+              '~^[\.\'](iX|IX|nh|na|hy|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd)~u',
+              $line)
+            ) {
                 continue;
             }
 

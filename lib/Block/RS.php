@@ -3,7 +3,7 @@
 
 class Block_RS
 {
-    
+
     // TODO: see munch.6 Copyright section and .RS 0
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
@@ -16,8 +16,8 @@ class Block_RS
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
-        $rsLevel = 1;
-        $rsLines = [];
+        $rsLevel    = 1;
+        $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (preg_match('~^\.RS~u', $line)) {
@@ -28,18 +28,20 @@ class Block_RS
                     break;
                 }
             }
-            $rsLines[] = $line;
+            $blockLines[] = $line;
         }
 
-        $rsBlock   = $dom->createElement('div');
-        $className = 'indent';
-        if (!empty($matches[1])) {
-            $className .= '-' . trim($matches[1]);
-        }
-        $rsBlock->setAttribute('class', $className);
+        if (count($blockLines) > 0) {
+            $rsBlock   = $dom->createElement('div');
+            $className = 'indent';
+            if (!empty($matches[1])) {
+                $className .= '-' . trim($matches[1]);
+            }
+            $rsBlock->setAttribute('class', $className);
 
-        Blocks::handle($rsBlock, $rsLines);
-        $parentNode->appendBlockIfHasContent($rsBlock);
+            Blocks::handle($rsBlock, $blockLines);
+            $parentNode->appendBlockIfHasContent($rsBlock);
+        }
 
         return $i;
 

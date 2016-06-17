@@ -37,9 +37,12 @@ class Block_P
             $blockLines[] = $nextLine;
             ++$i;
         }
-        $p = $dom->createElement('p');
-        Blocks::handle($p, $blockLines);
-        $parentNode->appendBlockIfHasContent($p);
+
+        if (count($blockLines) > 0) {
+            $p = $dom->createElement('p');
+            Blocks::handle($p, $blockLines);
+            $parentNode->appendBlockIfHasContent($p);
+        }
 
         return $i;
 
