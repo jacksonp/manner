@@ -18,19 +18,18 @@ class Block_nf
         $dom      = $parentNode->ownerDocument;
 
         $preLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match(Blocks::BLOCK_END_REGEX, $line)) {
-                --$i;
+        while ($i < $numLines - 1) {
+            $line = $lines[$i + 1];
+            if (preg_match('~^\.S[SH]~u', $line)) {
                 break;
             } elseif (in_array($line, $blockEnds)) {
                 while ($i < $numLines - 1 and in_array($lines[$i + 1], $blockEnds)) {
                     ++$i;
                 }
                 break;
-            } else {
-                $preLines[] = $line;
             }
+            $preLines[] = $line;
+            ++$i;
         }
 
         ArrayHelper::rtrim($preLines, array_merge($blockEnds, ['', '.br', '.sp']));
