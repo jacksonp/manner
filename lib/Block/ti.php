@@ -12,8 +12,6 @@ class Block_ti
             return false;
         }
 
-        $blockEndsRegex = '~^\.[HTLP]?P~u';
-
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
@@ -24,11 +22,12 @@ class Block_ti
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
             $line = $lines[$i + 1];
-            if (preg_match($blockEndsRegex, $line)) {
-                break;
-            } elseif (preg_match('~^\.ti~u', $line)) {
+            if (preg_match('~^\.ti~u', $line)) {
                 // Could be a change in indentation, just ignore for now
                 continue;
+            } elseif (preg_match(Blocks::BLOCK_END_REGEX, $line, $matches)) {
+                // This check has to come after .ti check, as .ti is otherwise a block-ender.
+                break;
             } else {
                 $blockLines[] = $line;
             }

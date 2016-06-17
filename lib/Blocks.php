@@ -4,6 +4,8 @@
 class Blocks
 {
 
+    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u';
+
     /**
      * Utility function to avoid duplicating code.
      *

@@ -31,7 +31,7 @@ class Block_P
                 break;
             }
             $nextLine = $lines[$i + 1];
-            if ($nextLine === '' or preg_match('~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS)~u', $nextLine)) {
+            if ($nextLine === '' or preg_match(Blocks::BLOCK_END_REGEX, $nextLine)) {
                 break;
             }
             $blockLines[] = $nextLine;
