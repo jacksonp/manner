@@ -333,10 +333,16 @@ class Text
                 $newRequest = $matches[1];
                 $requestVal = Macro::simplifyRequest($matches[2]);
 
+                // Q and U are special cases for when replacement is in a macro argument, which are separated by double
+                // quotes and otherwise get messed up.
                 if (in_array($newRequest, ['C\'', 'C`'])) {
                     $requestVal = '"';
                 } elseif (in_array($newRequest, ['L"', 'R"'])) {
                     continue;
+                } elseif ($newRequest === 'Q' and $requestVal === '\&"') {
+                    $requestVal = '“';
+                } elseif ($newRequest === 'U' and $requestVal === '\&"') {
+                    $requestVal = '”';
                 }
 
                 // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.

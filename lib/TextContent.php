@@ -116,7 +116,7 @@ class TextContent
 
     }
 
-    static function interpretAndAppendText(HybridNode $parentNode, string $line, $addSpacing = false)
+    static function interpretAndAppendText(DOMElement $parentNode, string $line, $addSpacing = false)
     {
 
         $dom = $parentNode->ownerDocument;
