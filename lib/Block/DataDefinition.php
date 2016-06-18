@@ -8,12 +8,11 @@ class Block_DataDefinition
     {
 
         $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
 
         $blockLines = [];
         $rsLevel    = 0;
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
             if (preg_match('~^\.RS~u', $line)) {
@@ -32,7 +31,7 @@ class Block_DataDefinition
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (preg_match('~^\.([HTLP]?P|SS)~u', $line) || ($hitIP && !$hitBlankIP)) {
+                if (preg_match('~^\.([HTLP]?P|SS)~u', $line) or ($hitIP && !$hitBlankIP)) {
                     --$i;
                     break;
                 }
@@ -47,9 +46,9 @@ class Block_DataDefinition
             }
         }
 
-        $dd = $dom->createElement('dd');
-        Blocks::handle($dd, $blockLines);
-        $parentNode->appendBlockIfHasContent($dd);
+        if (count($blockLines) > 0) {
+            Blocks::handle($parentNode, $blockLines);
+        }
 
         return $i;
 

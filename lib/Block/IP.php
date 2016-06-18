@@ -4,9 +4,7 @@
 class Block_IP
 {
 
-//    Change the function below to handle .IPs in a sequence (as they make one dl block)
-
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(DOMElement $parentNode, array $lines, int $i)
     {
 
         // TODO:  --group-directories-first in ls.1 - separate para rather than br?
@@ -15,65 +13,84 @@ class Block_IP
             return false;
         }
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
-
         $ipArgs = Macro::parseArgString($matches[1]);
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
-
-            $dl = $parentNode->getLastBlock();
-            if (is_null($dl) or $dl->tagName !== 'dl') {
-                $dl = $parentNode->appendChild($dom->createElement('dl'));
-                if (count($ipArgs) > 1) {
-                    $dl->setAttribute('class', 'indent-' . $ipArgs[1]);
-                }
-            }
-
-            $dt = $dom->createElement('dt');
-            TextContent::interpretAndAppendText($dt, $ipArgs[0]);
-            $dl->appendChild($dt);
-
-            $i = Block_DataDefinition::checkAppend($dl, $lines, $i);
-
-            return $i;
-        }
-
-        // If already in previous .IP:
-        if ($parentNode->hasChildNodes() and $parentNode->lastChild->tagName === 'blockquote') {
-            if ($parentNode->lastChild->hasChildNodes()) {
-                $parentNode->lastChild->appendChild($dom->createElement('br'));
-            }
-
-            return $i;
-        }
-
-        $blockLines = [];
-        while ($i < $numLines) {
-            if ($i === $numLines - 1) {
-                break;
-            }
-            $nextLine = $lines[$i + 1];
-            if ($nextLine === '' or preg_match(Blocks::BLOCK_END_REGEX, $nextLine)) {
-                break;
-            }
-            $blockLines[] = $nextLine;
-            ++$i;
-        }
-
-        if (!$parentNode->hasChildNodes() or $parentNode->lastChild->tagName === 'pre') {
-            $block = $parentNode->appendChild($dom->createElement('p'));
-        } elseif (in_array($parentNode->lastChild->tagName, ['p', 'h2', 'h3'])) {
-            $block = $parentNode->appendChild($dom->createElement('blockquote'));
+            return self::appendDl($parentNode, $lines, $i);
         } else {
-            throw new Exception($lines[$i] . ' - unexpected .IP in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
+            return self::appendBlockquote($parentNode, $lines, $i);
         }
 
-        Blocks::handle($block, $blockLines);
+    }
+
+    //    Change the functions below to handle .IPs in a sequence (as they make one dl block)
+
+    static function appendDl(DOMElement $parentNode, array $lines, int $i)
+    {
+
+        $numLines = count($lines);
+        $dom      = $parentNode->ownerDocument;
+
+        $dl          = $dom->createElement('dl');
+        $firstIndent = null;
+
+        for (; $i < $numLines; ++$i) {
+            $line = $lines[$i];
+            if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
+                $ipArgs = Macro::parseArgString($matches[1]);
+                // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
+                if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
+                    if (is_null($firstIndent) and count($ipArgs) > 1) {
+                        $firstIndent = 'indent-' . $ipArgs[1];
+                        $dl->setAttribute('class', $firstIndent);
+                    }
+                    $dt = $dom->createElement('dt');
+                    TextContent::interpretAndAppendText($dt, $ipArgs[0]);
+                    $dl->appendChild($dt);
+                    $dd = $dom->createElement('dd');
+                    $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
+                    $dl->appendBlockIfHasContent($dd);
+                }
+            } else {
+                --$i;
+                break;
+            }
+        }
+
+        $parentNode->appendBlockIfHasContent($dl);
+
+        return $i;
+
+    }
+
+    static function appendBlockquote(DOMElement $parentNode, array $lines, int $i)
+    {
+
+        $numLines = count($lines);
+        $dom      = $parentNode->ownerDocument;
+
+        $block = $dom->createElement('blockquote');
+
+        for (; $i < $numLines; ++$i) {
+            $line = $lines[$i];
+            if (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
+                $ipArgs = Macro::parseArgString($matches[1]);
+                if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
+                    --$i;
+                    break;
+                }
+            } else {
+                --$i;
+                break;
+            }
+            $i = Block_DataDefinition::checkAppend($block, $lines, $i + 1);
+        }
+
         $parentNode->appendBlockIfHasContent($block);
 
         return $i;
+
     }
 
 

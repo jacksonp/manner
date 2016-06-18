@@ -36,9 +36,9 @@
   <p><em>Tcpdump</em> will, if not run with the <strong>-c</strong> flag, continue capturing packets until it is interrupted by a SIGINT signal (generated, for example, by typing your interrupt character, typically control-C) or a SIGTERM signal (typically generated with the <strong>kill</strong>(1) command); if run with the <strong>-c</strong> flag, it will capture packets until it is interrupted by a SIGINT or SIGTERM signal or the specified number of packets have been processed.
   <p>When <em>tcpdump</em> finishes capturing packets, it will report counts of:
   <blockquote>
-    packets “captured” (this is the number of packets that <em>tcpdump</em> has received and processed);<br>
-    packets “received by filter” (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);<br>
-    packets “dropped by kernel” (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
+    packets “captured” (this is the number of packets that <em>tcpdump</em> has received and processed);
+    <p>packets “received by filter” (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);
+    <p>packets “dropped by kernel” (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
   </blockquote>
   <p>On platforms that support the SIGINFO signal, such as most BSDs (including Mac OS X) and Digital/Tru64 UNIX, it will report those counts when it receives a SIGINFO signal (generated, for example, by typing your “status” character, typically control-T, although on some platforms, such as Mac OS X, the “status” character is not set by default, so you must set it with <strong>stty</strong>(1) in order to use it) and will continue capturing packets. On platforms that do not support the SIGINFO signal, the same can be achieved by using the SIGUSR1 signal.
   <p>Reading packets from a network interface may require that you have special privileges; see the <strong>pcap (3PCAP)</strong> man page for details. Reading a saved packet file doesn't require special privileges.
@@ -283,6 +283,8 @@
     <dd>
       <p>If <em>tcpdump</em> is running as root, after opening the capture device or input savefile, but before opening any savefiles for output, change the user ID to <em>user</em> and the group ID to the primary group of <em>user</em>.
       <p>This behavior can also be enabled by default at compile time.
+  </dl>
+  <dl>
     <dt><em>expression</em>
     <dd>
       <div class="indent">
@@ -711,10 +713,10 @@
   <p>NIT doesn't let you watch your own outbound traffic, BPF will. We recommend that you use the latter.
   <p>On Linux systems with 2.0[.x] kernels:
   <blockquote>
-    packets on the loopback device will be seen twice;<br>
-    packet filtering cannot be done in the kernel, so that all packets must be copied from the kernel in order to be filtered in user mode;<br>
-    all of a packet, not just the part that's within the snapshot length, will be copied from the kernel (the 2.0[.x] packet capture mechanism, if asked to copy only part of a packet to userland, will not report the true length of the packet; this would cause most IP packets to get an error from <strong>tcpdump</strong>);<br>
-    capturing on some PPP devices won't work correctly.
+    packets on the loopback device will be seen twice;
+    <p>packet filtering cannot be done in the kernel, so that all packets must be copied from the kernel in order to be filtered in user mode;
+    <p>all of a packet, not just the part that's within the snapshot length, will be copied from the kernel (the 2.0[.x] packet capture mechanism, if asked to copy only part of a packet to userland, will not report the true length of the packet; this would cause most IP packets to get an error from <strong>tcpdump</strong>);
+    <p>capturing on some PPP devices won't work correctly.
   </blockquote>
   <p>We recommend that you upgrade to a 2.2 or later kernel.
   <p>Some attempt should be made to reassemble IP fragments or, at least to compute the right length for the higher level protocol.

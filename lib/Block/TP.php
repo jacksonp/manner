@@ -50,7 +50,9 @@ class Block_TP
                 }
             }
 
-            $i = Block_DataDefinition::checkAppend($dl, $lines, $i);
+            $dd = $dom->createElement('dd');
+            $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
+            $dl->appendBlockIfHasContent($dd);
 
             return $i;
         }

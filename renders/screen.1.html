@@ -195,7 +195,7 @@
       <td class="bold">C-a C-a
       <td>(other)
       <td>
-        <p>Toggle to the window displayed previously. Note that this binding defaults to the command character typed twice, unless overridden. For instance, if you use the option "<strong>-e]x</strong>“, this command becomes ”]]".
+        <p>Toggle to the window displayed previously. Note that this binding defaults to the command character typed twice, unless overridden. For instance, if you use the option “<strong>-e]x</strong>”, this command becomes “]]”.
     <tr>
       <td class="bold">C-a a
       <td>(meta)
@@ -263,12 +263,12 @@
       <td class="bold">C-a h
       <td>(hardcopy)
       <td>
-        <p>Write a hardcopy of the current window to the file "hardcopy.<em>n</em>".
+        <p>Write a hardcopy of the current window to the file “hardcopy.<em>n</em>”.
     <tr>
       <td class="bold">C-a H
       <td>(log)
       <td>
-        <p>Begins/ends logging of the current window to the file "screenlog.<em>n</em>".
+        <p>Begins/ends logging of the current window to the file “screenlog.<em>n</em>”.
     <tr>
       <td class="bold">
         <p>C-a i,<br>
@@ -1350,7 +1350,7 @@
             <dt><strong>log</strong> [<strong>on</strong>|<strong>off</strong>]
             <dd>
               <div class="indent">
-                <p>Start/stop writing output of the current window to a file "screenlog.<em>n</em>" in the window's default directory, where <em>n</em> is the number of the current window. This filename can be changed with the `logfile' command. If no parameter is given, the state of logging is toggled. The session log is appended to the previous contents of the file if it already exists. The current contents and the contents of the scrollback history are not included in the session log. Default is `off'.
+                <p>Start/stop writing output of the current window to a file “screenlog.<em>n</em>” in the window's default directory, where <em>n</em> is the number of the current window. This filename can be changed with the `logfile' command. If no parameter is given, the state of logging is toggled. The session log is appended to the previous contents of the file if it already exists. The current contents and the contents of the scrollback history are not included in the session log. Default is `off'.
               </div>
             <dt><strong>logfile</strong> <em>filename</em>
             <dt><strong>logfile flush</strong> <em>secs</em>
@@ -1528,7 +1528,7 @@
             <dd>
               <div class="indent">
                 <p>Does one of two things, dependent on number of arguments: with zero or one arguments it it duplicates the paste buffer contents into the register specified or entered at the prompt. With two arguments it reads the contents of the named file into the register, just as <em>readbuf</em> reads the screen-exchange file into the paste buffer. You can tell screen the encoding of the file via the <strong>-e</strong> option. The following example will paste the system's password file into the <em>screen</em> window (using register p, where a copy remains):
-                <pre>     C-a : readreg p /etc/passwd
+                <pre>         C-a : readreg p /etc/passwd
  C-a : paste p</pre>
               </div>
             <dt><strong>redisplay</strong>
@@ -2151,13 +2151,13 @@
   As a special case, “%{-}” restores the attributes and colors that were set before the last change was made (i.e., pops one level of the color-change stack).
   <p>Examples:
   <dl>
-    <dt>G“”
+    <dt>“G”
     <dd>
       <p>set color to bright green
-    <dt>+b
+    <dt>“+b r”
     <dd>
       <p>use bold red
-    <dt>=
+    <dt>“= yd”
     <dd>
       <p>clear all attributes, write in default color on yellow background.
     <dt>%-Lw%{= BW}%50&gt;%n%f* %t%{-}%+Lw%&lt;
@@ -2179,14 +2179,14 @@
   <h2>TITLES (naming windows)</h2>
   <p>You can customize each window's name in the window display (viewed with the “windows” command (C-a w)) by setting it with one of the title commands. Normally the name displayed is the actual command name of the program created in the window. However, it is sometimes useful to distinguish various programs of the same name or to change the name on-the-fly to reflect the current state of the window.
   <p>The default name for all shell windows can be set with the “shelltitle” command in the .screenrc file, while all other windows are created with a “screen” command and thus can have their name set with the <strong>-t</strong> option. Interactively, there is the title-string escape-sequence (&lt;esc&gt;k<em>name</em>&lt;esc&gt;\) and the “title” command (C-a A). The former can be output from an application to control the window's name under software control, and the latter will prompt for a name when typed. You can also bind pre-defined names to keys with the “title” command to set things quickly without prompting.
-  <p>Finally, <em>screen</em> has a shell-specific heuristic that is enabled by setting the window's name to "<em>search|name</em>" and arranging to have a null title escape-sequence output as a part of your prompt. The <em>search</em> portion specifies an end-of-prompt search string, while the <em>name</em> portion specifies the default shell name for the window. If the <em>name</em> ends in a `:' <em>screen</em> will add what it believes to be the current command running in the window to the end of the window's shell name (e.g. "<em>name:cmd</em>"). Otherwise the current command name supersedes the shell name while it is running.
+  <p>Finally, <em>screen</em> has a shell-specific heuristic that is enabled by setting the window's name to “<em>search|name</em>” and arranging to have a null title escape-sequence output as a part of your prompt. The <em>search</em> portion specifies an end-of-prompt search string, while the <em>name</em> portion specifies the default shell name for the window. If the <em>name</em> ends in a `:' <em>screen</em> will add what it believes to be the current command running in the window to the end of the window's shell name (e.g. “<em>name:cmd</em>”). Otherwise the current command name supersedes the shell name while it is running.
   <p>Here's how it works: you must modify your shell prompt to output a null title-escape-sequence (&lt;esc&gt;k&lt;esc&gt;\) as a part of your prompt. The last part of your prompt must be the same as the string you specified for the <em>search</em> portion of the title. Once this is set up, <em>screen</em> will use the title-escape-sequence to clear the previous command name and get ready for the next command. Then, when a newline is received from the shell, a search is made for the end of the prompt. If found, it will grab the first word after the matched string and use it as the command name. If the command name begins with either '!', '%', or '^' <em>screen</em> will use the first word on the following line (if found) in preference to the just-found name. This helps csh users get better command names when using job control or history recall commands.
   <p>Here's some .screenrc examples:
   <blockquote>
     screen -t top 2 nice top
   </blockquote>
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre>       shelltitle '&gt; |csh'
+  <pre>      shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
   <blockquote>
