@@ -50,11 +50,7 @@ class Block_TP
                 }
             }
 
-            list ($i, $blockLines) = Blocks::getDDBlock($i, $lines);
-
-            $dd = $dom->createElement('dd');
-            Blocks::handle($dd, $blockLines);
-            $dl->appendBlockIfHasContent($dd);
+            $i = Block_DataDefinition::checkAppend($dl, $lines, $i);
 
             return $i;
         }

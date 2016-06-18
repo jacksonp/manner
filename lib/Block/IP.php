@@ -4,6 +4,8 @@
 class Block_IP
 {
 
+//    Change the function below to handle .IPs in a sequence (as they make one dl block)
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
@@ -33,18 +35,16 @@ class Block_IP
             TextContent::interpretAndAppendText($dt, $ipArgs[0]);
             $dl->appendChild($dt);
 
-            list ($i, $blockLines) = Blocks::getDDBlock($i, $lines);
-
-            $dd = $dom->createElement('dd');
-            Blocks::handle($dd, $blockLines);
-            $dl->appendBlockIfHasContent($dd);
+            $i = Block_DataDefinition::checkAppend($dl, $lines, $i);
 
             return $i;
         }
 
         // If already in previous .IP:
         if ($parentNode->hasChildNodes() and $parentNode->lastChild->tagName === 'blockquote') {
-            $parentNode->lastChild->appendChild($dom->createElement('br'));
+            if ($parentNode->lastChild->hasChildNodes()) {
+                $parentNode->lastChild->appendChild($dom->createElement('br'));
+            }
 
             return $i;
         }

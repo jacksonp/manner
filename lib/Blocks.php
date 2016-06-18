@@ -6,59 +6,6 @@ class Blocks
 
     const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS)~u';
 
-    /**
-     * Utility function to avoid duplicating code.
-     *
-     * @param int $i
-     * @param array $lines
-     * @return array
-     */
-    static function getDDBlock(int $i, array $lines): array
-    {
-
-        $numLines   = count($lines);
-        $blockLines = [];
-        $rsLevel    = 0;
-
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-
-            if (preg_match('~^\.RS~u', $line)) {
-                ++$rsLevel;
-            } elseif (preg_match('~^\.RE~u', $line)) {
-                --$rsLevel;
-            }
-
-            $hitIP      = false;
-            $hitBlankIP = false;
-            if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
-                $hitIP      = true;
-                $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
-                $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
-            }
-
-            // <= 0 for stray .REs
-            if ($rsLevel <= 0) {
-                if (preg_match('~^\.([HTLP]?P|SS)~u', $line) || ($hitIP && !$hitBlankIP)) {
-                    --$i;
-                    break;
-                }
-            }
-
-            if ($hitBlankIP) {
-                $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
-            } else {
-                if ($i < $numLines - 1 or $line !== '') {
-                    $blockLines[] = $line;
-                }
-            }
-        }
-
-        return [$i, $blockLines];
-
-    }
-
-
     static function handle(DOMElement $parentNode, array $lines)
     {
 
