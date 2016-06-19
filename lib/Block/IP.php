@@ -7,7 +7,6 @@ class Block_IP
     static function checkAppend(DOMElement $parentNode, array $lines, int $i)
     {
 
-        // TODO:  --group-directories-first in ls.1 - separate para rather than br?
         // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
         if (!preg_match('~^\.IP ?(.*)$~u', $lines[$i], $matches)) {
             return false;
@@ -23,8 +22,6 @@ class Block_IP
         }
 
     }
-
-    //    Change the functions below to handle .IPs in a sequence (as they make one dl block)
 
     static function appendDl(DOMElement $parentNode, array $lines, int $i)
     {
