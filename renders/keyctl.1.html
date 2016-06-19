@@ -83,10 +83,8 @@
   <p>(*) <strong>Display the package version number</strong>
   <p><strong>keyctl --version</strong>
   <p>This command prints the package version number and build date and exits:
-  <div class="indent">
-    <p>testbox&gt;keyctl --version<br>
-    keyctl from keyutils-1.5.3 (Built 2011-08-24)
-  </div>
+  <p>testbox&gt;keyctl --version<br>
+  keyctl from keyutils-1.5.3 (Built 2011-08-24)
   <p>(*) <strong>Show process keyrings</strong>
   <p><strong>keyctl show [-x] [&lt;keyring&gt;]</strong>
   <p>By default this command recursively shows what keyrings a process is subscribed to and what keys and keyrings they contain. If a keyring is specified then that keyring will be dumped instead. If <strong>-x</strong> is specified then the keyring IDs will be dumped in hex instead of decimal.
@@ -94,15 +92,11 @@
   <p><strong>keyctl add</strong> &lt;type&gt; &lt;desc&gt; &lt;data&gt; &lt;keyring&gt;<br>
   <strong>keyctl padd</strong> &lt;type&gt; &lt;desc&gt; &lt;keyring&gt;
   <p>This command creates a key of the specified type and description; instantiates it with the given data and attaches it to the specified keyring. It then prints the new key's ID on stdout:
-  <div class="indent">
-    <p>testbox&gt;keyctl add user mykey stuff @u<br>
-    26
-  </div>
+  <p>testbox&gt;keyctl add user mykey stuff @u<br>
+  26
   <p>The <strong>padd</strong> variant of the command reads the data from stdin rather than taking it from the command line:
-  <div class="indent">
-    <p>testbox&gt;echo -n stuff | keyctl padd user mykey @u<br>
-    26
-  </div>
+  <p>testbox&gt;echo -n stuff | keyctl padd user mykey @u<br>
+  26
   <p>(*) <strong>Request a key</strong>
   <p><strong>keyctl request</strong> &lt;type&gt; &lt;desc&gt; [&lt;dest_keyring&gt;]<br>
   <strong>keyctl request2</strong> &lt;type&gt; &lt;desc&gt; &lt;info&gt; [&lt;dest_keyring&gt;]<br>
@@ -112,106 +106,82 @@
   <p>The third command is like the second, except that the callout information is read from stdin rather than being passed on the command line.
   <p>If a valid key is obtained, the ID will be printed and the key attached as if the original search had succeeded.
   <p>If there wasn't a valid key obtained, a temporary negative key will be attached to the destination keyring if given and the error “Requested key not available” will be given.
-  <div class="indent">
-    <p>testbox&gt;keyctl request2 user debug:hello wibble<br>
-    23<br>
-    testbox&gt;echo -n wibble | keyctl prequest2 user debug:hello<br>
-    23<br>
-    testbox&gt;keyctl request user debug:hello<br>
-    23
-  </div>
+  <p>testbox&gt;keyctl request2 user debug:hello wibble<br>
+  23<br>
+  testbox&gt;echo -n wibble | keyctl prequest2 user debug:hello<br>
+  23<br>
+  testbox&gt;keyctl request user debug:hello<br>
+  23
   <p>(*) <strong>Update a key</strong>
   <p><strong>keyctl update</strong> &lt;key&gt; &lt;data&gt;<br>
   <strong>keyctl pupdate</strong> &lt;key&gt;
   <p>This command replaces the data attached to a key with a new set of data. If the type of the key doesn't support update then error “Operation not supported” will be returned.
-  <div class="indent">
-    <p>testbox&gt;keyctl update 23 zebra
-  </div>
+  <p>testbox&gt;keyctl update 23 zebra
   <p>The <strong>pupdate</strong> variant of the command reads the data from stdin rather than taking it from the command line:
-  <div class="indent">
-    <p>testbox&gt;echo -n zebra | keyctl pupdate 23
-  </div>
+  <p>testbox&gt;echo -n zebra | keyctl pupdate 23
   <p>(*) <strong>Create a keyring</strong>
   <p><strong>keyctl newring</strong> &lt;name&gt; &lt;keyring&gt;
   <p>This command creates a new keyring of the specified name and attaches it to the specified keyring. The ID of the new keyring will be printed to stdout if successful.
-  <div class="indent">
-    <p>testbox&gt;keyctl newring squelch @us<br>
-    27
-  </div>
+  <p>testbox&gt;keyctl newring squelch @us<br>
+  27
   <p>(*) <strong>Revoke a key</strong>
   <p><strong>keyctl revoke</strong> &lt;key&gt;
   <p>This command marks a key as being revoked. Any further operations on that key (apart from unlinking it) will return error “Key has been revoked”.
-  <div class="indent">
-    <p>testbox&gt;keyctl revoke 26<br>
-    testbox&gt;keyctl describe 26<br>
-    keyctl_describe: Key has been revoked
-  </div>
+  <p>testbox&gt;keyctl revoke 26<br>
+  testbox&gt;keyctl describe 26<br>
+  keyctl_describe: Key has been revoked
   <p>(*) <strong>Clear a keyring</strong>
   <p><strong>keyctl clear</strong> &lt;keyring&gt;
   <p>This command unlinks all the keys attached to the specified keyring. Error “Not a directory” will be returned if the key specified is not a keyring.
-  <div class="indent">
-    <p>testbox&gt;keyctl clear 27
-  </div>
+  <p>testbox&gt;keyctl clear 27
   <p>(*) <strong>Link a key to a keyring</strong>
   <p><strong>keyctl link</strong> &lt;key&gt; &lt;keyring&gt;
   <p>This command makes a link from the key to the keyring if there's enough capacity to do so. Error “Not a directory” will be returned if the destination is not a keyring. Error “Permission denied” will be returned if the key doesn't have link permission or the keyring doesn't have write permission. Error “File table overflow” will be returned if the keyring is full. Error “Resource deadlock avoided” will be returned if an attempt was made to introduce a recursive link.
-  <div class="indent">
-    <p>testbox&gt;keyctl link 23 27<br>
-    testbox&gt;keyctl link 27 27<br>
-    keyctl_link: Resource deadlock avoided
-  </div>
+  <p>testbox&gt;keyctl link 23 27<br>
+  testbox&gt;keyctl link 27 27<br>
+  keyctl_link: Resource deadlock avoided
   <p>(*) <strong>Unlink a key from a keyring or the session keyring tree</strong>
   <p><strong>keyctl unlink</strong> &lt;key&gt; [&lt;keyring&gt;]
   <p>If the keyring is specified, this command removes a link to the key from the keyring. Error “Not a directory” will be returned if the destination is not a keyring. Error “Permission denied” will be returned if the keyring doesn't have write permission. Error “No such file or directory” will be returned if the key is not linked to by the keyring.
   <p>If the keyring is not specified, this command performs a depth-first search of the session keyring tree and removes all the links to the nominated key that it finds (and that it is permitted to remove). It prints the number of successful unlinks before exiting.
-  <div class="indent">
-    <p>testbox&gt;keyctl unlink 23 27
-  </div>
+  <p>testbox&gt;keyctl unlink 23 27
   <p>(*) <strong>Search a keyring</strong>
   <p><strong>keyctl search</strong> &lt;keyring&gt; &lt;type&gt; &lt;desc&gt; [&lt;dest_keyring&gt;]
   <p>This command non-recursively searches a keyring for a key of a particular type and description. If found, the ID of the key will be printed on stdout and the key will be attached to the destination keyring if present. Error “Requested key not available” will be returned if the key is not found.
-  <div class="indent">
-    <p>testbox&gt;keyctl search @us user debug:hello<br>
-    23<br>
-    testbox&gt;keyctl search @us user debug:bye<br>
-    keyctl_search: Requested key not available
-  </div>
+  <p>testbox&gt;keyctl search @us user debug:hello<br>
+  23<br>
+  testbox&gt;keyctl search @us user debug:bye<br>
+  keyctl_search: Requested key not available
   <p>(*) <strong>Read a key</strong>
   <p><strong>keyctl read</strong> &lt;key&gt;<br>
   <strong>keyctl pipe</strong> &lt;key&gt;<br>
   <strong>keyctl print</strong> &lt;key&gt;
   <p>These commands read the payload of a key. “read” prints it on stdout as a hex dump, “pipe” dumps the raw data to stdout and “print” dumps it to stdout directly if it's entirely printable or as a hexdump preceded by “:hex:” if not.
   <p>If the key type does not support reading of the payload, then error “Operation not supported” will be returned.
-  <div class="indent">
-    <p>testbox&gt;keyctl read 26<br>
-    1 bytes of data in key:<br>
-    62<br>
-    testbox&gt;keyctl print 26<br>
-    b<br>
-    testbox&gt;keyctl pipe 26<br>
-    btestbox&gt;
-  </div>
+  <p>testbox&gt;keyctl read 26<br>
+  1 bytes of data in key:<br>
+  62<br>
+  testbox&gt;keyctl print 26<br>
+  b<br>
+  testbox&gt;keyctl pipe 26<br>
+  btestbox&gt;
   <p>(*) <strong>List a keyring</strong>
   <p><strong>keyctl list</strong> &lt;keyring&gt;<br>
   <strong>keyctl rlist</strong> &lt;keyring&gt;
   <p>These commands list the contents of a key as a keyring. “list” pretty prints the contents and “rlist” just produces a space-separated list of key IDs.
   <p>No attempt is made to check that the specified keyring is a keyring.
-  <div class="indent">
-    <p>testbox&gt;keyctl list @us<br>
-    2 keys in keyring:<br>
-    22: vrwsl---------- 4043 -1 keyring: _uid.4043<br>
-    23: vrwsl---------- 4043 4043 user: debug:hello<br>
-    testbox&gt;keyctl rlist @us<br>
-    22 23
-  </div>
+  <p>testbox&gt;keyctl list @us<br>
+  2 keys in keyring:<br>
+  22: vrwsl---------- 4043 -1 keyring: _uid.4043<br>
+  23: vrwsl---------- 4043 4043 user: debug:hello<br>
+  testbox&gt;keyctl rlist @us<br>
+  22 23
   <p>(*) <strong>Describe a key</strong>
   <p><strong>keyctl describe</strong> &lt;keyring&gt;<br>
   <strong>keyctl rdescribe</strong> &lt;keyring&gt; [sep]
   <p>These commands fetch a description of a keyring. “describe” pretty prints the description in the same fashion as the “list” command; “rdescribe” prints the raw data returned from the kernel.
-  <div class="indent">
-    <p>testbox&gt;keyctl describe @us<br>
-    -5: vrwsl---------- 4043 -1 keyring: _uid_ses.4043 testbox&gt;keyctl rdescribe @us keyring;4043;-1;3f1f0000;_uid_ses.4043
-  </div>
+  <p>testbox&gt;keyctl describe @us<br>
+  -5: vrwsl---------- 4043 -1 keyring: _uid_ses.4043 testbox&gt;keyctl rdescribe @us keyring;4043;-1;3f1f0000;_uid_ses.4043
   <p>The raw string is “&lt;type&gt;;&lt;uid&gt;;&lt;gid&gt;;&lt;perms&gt;;&lt;description&gt;”, where <em>uid</em> and <em>gid</em> are the decimal user and group IDs, <em>perms</em> is the permissions mask in hex, <em>type</em> and <em>description</em> are the type name and description strings (neither of which will contain semicolons).
   <p>(*) <strong>Change the access controls on a key</strong>
   <p><strong>keyctl chown</strong> &lt;key&gt; &lt;uid&gt;<br>
@@ -219,35 +189,29 @@
   <p>These two commands change the UID and GID associated with evaluating a key's permissions mask. The UID also governs which quota a key is taken out of.
   <p>The chown command is not currently supported; attempting it will earn the error “Operation not supported” at best.
   <p>For non-superuser users, the GID may only be set to the process's GID or a GID in the process's groups list. The superuser may set any GID it likes.
-  <div class="indent">
-    <p>testbox&gt;sudo keyctl chown 27 0<br>
-    keyctl_chown: Operation not supported<br>
-    testbox&gt;sudo keyctl chgrp 27 0
-  </div>
+  <p>testbox&gt;sudo keyctl chown 27 0<br>
+  keyctl_chown: Operation not supported<br>
+  testbox&gt;sudo keyctl chgrp 27 0
   <p>(*) <strong>Set the permissions mask on a key</strong>
   <p><strong>keyctl setperm</strong> &lt;key&gt; &lt;mask&gt;
   <p>This command changes the permission control mask on a key. The mask may be specified as a hex number if it begins “0x”, an octal number if it begins “0” or a decimal number otherwise.
   <p>The hex numbers are a combination of:
-  <div class="indent">
-    <p>Possessor UID GID Other Permission Granted<br>
-    ======== ======== ======== ======== ==================<br>
-    01000000 00010000 00000100 00000001 View<br>
-    02000000 00020000 00000200 00000002 Read<br>
-    04000000 00040000 00000400 00000004 Write<br>
-    08000000 00080000 00000800 00000008 Search<br>
-    10000000 00100000 00001000 00000010 Link<br>
-    20000000 00200000 00002000 00000020 Set Attribute<br>
-    3f000000 003f0000 00003f00 0000003f All
-  </div>
+  <p>Possessor UID GID Other Permission Granted<br>
+  ======== ======== ======== ======== ==================<br>
+  01000000 00010000 00000100 00000001 View<br>
+  02000000 00020000 00000200 00000002 Read<br>
+  04000000 00040000 00000400 00000004 Write<br>
+  08000000 00080000 00000800 00000008 Search<br>
+  10000000 00100000 00001000 00000010 Link<br>
+  20000000 00200000 00002000 00000020 Set Attribute<br>
+  3f000000 003f0000 00003f00 0000003f All
   <p><em>View</em> permits the type, description and other parameters of a key to be viewed.
   <p><em>Read</em> permits the payload (or keyring list) to be read if supported by the type.
   <p><em>Write</em> permits the payload (or keyring list) to be modified or updated.
   <p><em>Search</em> on a key permits it to be found when a keyring to which it is linked is searched.
   <p><em>Link</em> permits a key to be linked to a keyring.
   <p><em>Set Attribute</em> permits a key to have its owner, group membership, permissions mask and timeout changed.
-  <div class="indent">
-    <p>testbox&gt;keyctl setperm 27 0x1f1f1f00
-  </div>
+  <p>testbox&gt;keyctl setperm 27 0x1f1f1f00
   <p>(*) <strong>Start a new session with fresh keyrings</strong>
   <p><strong>keyctl session</strong><br>
   <strong>keyctl session</strong> - [&lt;prog&gt; &lt;arg1&gt; &lt;arg2&gt; ...]<br>
@@ -256,28 +220,26 @@
   <p>The variation with no arguments just creates an anonymous session keyring and attaches that as the session keyring; it then exec's $SHELL.
   <p>The variation with a dash in place of a name creates an anonymous session keyring and attaches that as the session keyring; it then exec's the supplied command, or $SHELL if one isn't supplied.
   <p>The variation with a name supplied creates or joins the named keyring and attaches that as the session keyring; it then exec's the supplied command, or $SHELL if one isn't supplied.
-  <div class="indent">
-    <p>testbox&gt;keyctl rdescribe @s<br>
-    keyring;4043;-1;3f1f0000;_uid_ses.4043
-    <p>testbox&gt;keyctl session<br>
-    Joined session keyring: 28<br>
-    testbox&gt;keyctl rdescribe @s<br>
-    keyring;4043;4043;3f1f0000;_ses.24082
-    <p>testbox&gt;keyctl session -<br>
-    Joined session keyring: 29<br>
-    testbox&gt;keyctl rdescribe @s<br>
-    keyring;4043;4043;3f1f0000;_ses.24139
-    <p>testbox&gt;keyctl session - keyctl rdescribe @s<br>
-    Joined session keyring: 30<br>
-    keyring;4043;4043;3f1f0000;_ses.24185
-    <p>testbox&gt;keyctl session fish<br>
-    Joined session keyring: 34<br>
-    testbox&gt;keyctl rdescribe @s<br>
-    keyring;4043;4043;3f1f0000;fish
-    <p>testbox&gt;keyctl session fish keyctl rdesc @s<br>
-    Joined session keyring: 35<br>
-    keyring;4043;4043;3f1f0000;fish
-  </div>
+  <p>testbox&gt;keyctl rdescribe @s<br>
+  keyring;4043;-1;3f1f0000;_uid_ses.4043
+  <p>testbox&gt;keyctl session<br>
+  Joined session keyring: 28<br>
+  testbox&gt;keyctl rdescribe @s<br>
+  keyring;4043;4043;3f1f0000;_ses.24082
+  <p>testbox&gt;keyctl session -<br>
+  Joined session keyring: 29<br>
+  testbox&gt;keyctl rdescribe @s<br>
+  keyring;4043;4043;3f1f0000;_ses.24139
+  <p>testbox&gt;keyctl session - keyctl rdescribe @s<br>
+  Joined session keyring: 30<br>
+  keyring;4043;4043;3f1f0000;_ses.24185
+  <p>testbox&gt;keyctl session fish<br>
+  Joined session keyring: 34<br>
+  testbox&gt;keyctl rdescribe @s<br>
+  keyring;4043;4043;3f1f0000;fish
+  <p>testbox&gt;keyctl session fish keyctl rdesc @s<br>
+  Joined session keyring: 35<br>
+  keyring;4043;4043;3f1f0000;fish
   <p>(*) <strong>Instantiate a key</strong>
   <p><strong>keyctl instantiate</strong> &lt;key&gt; &lt;data&gt; &lt;keyring&gt;<br>
   <strong>keyctl pinstantiate</strong> &lt;key&gt; &lt;keyring&gt;<br>
@@ -287,43 +249,33 @@
   <p>Reject's error argument can either be a UNIX error number or one of '<strong>rejected</strong>', '<strong>expired</strong>' or '<strong>revoked</strong>'.
   <p>The newly instantiated key will be attached to the specified keyring.
   <p>These commands may only be run from the program run by request-key - a special authorisation key is set up by the kernel and attached to the request-key's session keyring. This special key is revoked once the key to which it refers has been instantiated one way or another.
-  <div class="indent">
-    <p>testbox&gt;keyctl instantiate $1 “Debug $3” $4<br>
-    testbox&gt;keyctl negate $1 30 $4<br>
-    testbox&gt;keyctl reject $1 30 64 $4
-  </div>
+  <p>testbox&gt;keyctl instantiate $1 “Debug $3” $4<br>
+  testbox&gt;keyctl negate $1 30 $4<br>
+  testbox&gt;keyctl reject $1 30 64 $4
   <p>The <strong>pinstantiate</strong> variant of the command reads the data from stdin rather than taking it from the command line:
-  <div class="indent">
-    <p>testbox&gt;echo -n “Debug $3” | keyctl pinstantiate $1 $4
-  </div>
+  <p>testbox&gt;echo -n “Debug $3” | keyctl pinstantiate $1 $4
   <p>(*) <strong>Set the expiry time on a key</strong>
   <p><strong>keyctl timeout</strong> &lt;key&gt; &lt;timeout&gt;
   <p>This command is used to set the timeout on a key, or clear an existing timeout if the value specified is zero. The timeout is given as a number of seconds into the future.
-  <div class="indent">
-    <p>testbox&gt;keyctl timeout $1 45
-  </div>
+  <p>testbox&gt;keyctl timeout $1 45
   <p>(*) <strong>Retrieve a key's security context</strong>
   <p><strong>keyctl security</strong> &lt;key&gt;
   <p>This command is used to retrieve a key's LSM security context. The label is printed on stdout.
-  <div class="indent">
-    <p>testbox&gt;keyctl security @s<br>
-    unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
-  </div>
+  <p>testbox&gt;keyctl security @s<br>
+  unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
   <p>(*) <strong>Give the parent process a new session keyring</strong>
   <p><strong>keyctl new_session</strong>
   <p>This command is used to give the invoking process (typically a shell) a new session keyring, discarding its old session keyring.
-  <div class="indent">
-    <p>testbox&gt; keyctl session foo<br>
-    Joined session keyring: 723488146<br>
-    testbox&gt; keyctl show<br>
-    Session Keyring<br>
-    -3 --alswrv 0 0 keyring: foo<br>
-    testbox&gt; keyctl new_session<br>
-    490511412<br>
-    testbox&gt; keyctl show<br>
-    Session Keyring<br>
-    -3 --alswrv 0 0 keyring: _ses
-  </div>
+  <p>testbox&gt; keyctl session foo<br>
+  Joined session keyring: 723488146<br>
+  testbox&gt; keyctl show<br>
+  Session Keyring<br>
+  -3 --alswrv 0 0 keyring: foo<br>
+  testbox&gt; keyctl new_session<br>
+  490511412<br>
+  testbox&gt; keyctl show<br>
+  Session Keyring<br>
+  -3 --alswrv 0 0 keyring: _ses
   <p>Note that this affects the <em>parent</em> of the process that invokes the system call, and so may only affect processes with matching credentials. Furthermore, the change does not take effect till the parent process next transitions from kernel space to user space - typically when the <strong>wait</strong>() system call returns.
   <p>(*) <strong>Remove dead keys from the session keyring tree</strong>
   <p><strong>keyctl reap</strong>

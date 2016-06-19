@@ -40,50 +40,46 @@
     <dt>-D debugopts
     <dd>
       <p>Print diagnostic information; this can be helpful to diagnose problems with why <strong>find</strong> is not doing what you want. The list of debug options should be comma separated. Compatibility of the debug options is not guaranteed between releases of findutils. For a complete list of valid debug options, see the output of <strong>find -D help</strong>. Valid debug options include
-      <div class="indent">
-        <dl>
-          <dt>exec
-          <dd>
-            <p>Show diagnostic information relating to -exec, -execdir, -ok and -okdir
-          <dt>help
-          <dd>
-            <p>Explain the debugging options.
-          <dt>opt
-          <dd>
-            <p>Prints diagnostic information relating to the optimisation of the expression tree; see the -O option.
-          <dt>rates
-          <dd>
-            <p>Prints a summary indicating how often each predicate succeeded or failed.
-          <dt>search
-          <dd>
-            <p>Navigate the directory tree verbosely.
-          <dt>stat
-          <dd>
-            <p>Print messages as files are examined with the <strong>stat</strong> and <strong>lstat</strong> system calls. The <strong>find</strong> program tries to minimise such calls.
-          <dt>tree
-          <dd>
-            <p>Show the expression tree in its original and optimised form.
-        </dl>
-      </div>
+      <dl>
+        <dt>exec
+        <dd>
+          <p>Show diagnostic information relating to -exec, -execdir, -ok and -okdir
+        <dt>help
+        <dd>
+          <p>Explain the debugging options.
+        <dt>opt
+        <dd>
+          <p>Prints diagnostic information relating to the optimisation of the expression tree; see the -O option.
+        <dt>rates
+        <dd>
+          <p>Prints a summary indicating how often each predicate succeeded or failed.
+        <dt>search
+        <dd>
+          <p>Navigate the directory tree verbosely.
+        <dt>stat
+        <dd>
+          <p>Print messages as files are examined with the <strong>stat</strong> and <strong>lstat</strong> system calls. The <strong>find</strong> program tries to minimise such calls.
+        <dt>tree
+        <dd>
+          <p>Show the expression tree in its original and optimised form.
+      </dl>
     <dt>-Olevel
     <dd>
       <p>Enables query optimisation. The <strong>find</strong> program reorders tests to speed up execution while preserving the overall effect; that is, predicates with side effects are not reordered relative to each other. The optimisations performed at each optimisation level are as follows.
-      <div class="indent">
-        <dl>
-          <dt>0
-          <dd>
-            <p>Equivalent to optimisation level 1.
-          <dt>1
-          <dd>
-            <p>This is the default optimisation level and corresponds to the traditional behaviour. Expressions are reordered so that tests based only on the names of files (for example <strong>-name</strong> and <strong>-regex</strong>) are performed first.
-          <dt>2
-          <dd>
-            <p>Any <strong>-type</strong> or <strong>-xtype</strong> tests are performed after any tests based only on the names of files, but before any tests that require information from the inode. On many modern versions of Unix, file types are returned by <strong>readdir()</strong> and so these predicates are faster to evaluate than predicates which need to stat the file first. If you use the <strong>-fstype</strong> <em>FOO</em> predicate and specify a filesystem type <em>FOO</em> which is not known (that is, present in `/etc/mtab') at the time <strong>find</strong> starts, that predicate is equivalent to <strong>-false</strong>.
-          <dt>3
-          <dd>
-            <p>At this optimisation level, the full cost-based query optimiser is enabled. The order of tests is modified so that cheap (i.e. fast) tests are performed first and more expensive ones are performed later, if necessary. Within each cost band, predicates are evaluated earlier or later according to whether they are likely to succeed or not. For <strong>-o</strong>, predicates which are likely to succeed are evaluated earlier, and for <strong>-a</strong>, predicates which are likely to fail are evaluated earlier.
-        </dl>
-      </div>
+      <dl>
+        <dt>0
+        <dd>
+          <p>Equivalent to optimisation level 1.
+        <dt>1
+        <dd>
+          <p>This is the default optimisation level and corresponds to the traditional behaviour. Expressions are reordered so that tests based only on the names of files (for example <strong>-name</strong> and <strong>-regex</strong>) are performed first.
+        <dt>2
+        <dd>
+          <p>Any <strong>-type</strong> or <strong>-xtype</strong> tests are performed after any tests based only on the names of files, but before any tests that require information from the inode. On many modern versions of Unix, file types are returned by <strong>readdir()</strong> and so these predicates are faster to evaluate than predicates which need to stat the file first. If you use the <strong>-fstype</strong> <em>FOO</em> predicate and specify a filesystem type <em>FOO</em> which is not known (that is, present in `/etc/mtab') at the time <strong>find</strong> starts, that predicate is equivalent to <strong>-false</strong>.
+        <dt>3
+        <dd>
+          <p>At this optimisation level, the full cost-based query optimiser is enabled. The order of tests is modified so that cheap (i.e. fast) tests are performed first and more expensive ones are performed later, if necessary. Within each cost band, predicates are evaluated earlier or later according to whether they are likely to succeed or not. For <strong>-o</strong>, predicates which are likely to succeed are evaluated earlier, and for <strong>-a</strong>, predicates which are likely to fail are evaluated earlier.
+      </dl>
       <p>The cost-based optimiser has a fixed idea of how likely any given test is to succeed. In some cases the probability takes account of the specific nature of the test (for example, <strong>-type f</strong> is assumed to be more likely to succeed than <strong>-type c</strong>). The cost-based optimiser is currently being evaluated. If it does not actually improve the performance of <strong>find</strong>, it will be removed again. Conversely, optimisations that prove to be reliable, robust and effective may be enabled at lower optimisation levels over time. However, the default behaviour (i.e. optimisation level 1) will not be changed in the 4.3.x release series. The findutils test suite runs all the tests on <strong>find</strong> at each optimisation level and ensures that the result is the same.
   </dl>
 </div>
@@ -316,28 +312,26 @@
       <dt>-size <em>n</em>[cwbkMG]
       <dd>
         <p>File uses <em>n</em> units of space, rounding up. The following suffixes can be used:
-        <div class="indent">
-          <dl>
-            <dt>`b'
-            <dd>
-              <p>for 512-byte blocks (this is the default if no suffix is used)
-            <dt>`c'
-            <dd>
-              <p>for bytes
-            <dt>`w'
-            <dd>
-              <p>for two-byte words
-            <dt>`k'
-            <dd>
-              <p>for Kilobytes (units of 1024 bytes)
-            <dt>`M'
-            <dd>
-              <p>for Megabytes (units of 1048576 bytes)
-            <dt>`G'
-            <dd>
-              <p>for Gigabytes (units of 1073741824 bytes)
-          </dl>
-        </div>
+        <dl>
+          <dt>`b'
+          <dd>
+            <p>for 512-byte blocks (this is the default if no suffix is used)
+          <dt>`c'
+          <dd>
+            <p>for bytes
+          <dt>`w'
+          <dd>
+            <p>for two-byte words
+          <dt>`k'
+          <dd>
+            <p>for Kilobytes (units of 1024 bytes)
+          <dt>`M'
+          <dd>
+            <p>for Megabytes (units of 1048576 bytes)
+          <dt>`G'
+          <dd>
+            <p>for Gigabytes (units of 1073741824 bytes)
+        </dl>
         <p>The size does not count indirect blocks, but it does count blocks in sparse files that are not actually allocated. Bear in mind that the `%k' and `%b' format specifiers of <strong>-printf</strong> handle sparse files differently. The `b' suffix always denotes 512-byte blocks and never 1 Kilobyte blocks, which is different to the behaviour of <strong>-ls</strong>.
         <p>The + and - prefixes signify greater than and less than, as usual. Bear in mind that the size is rounded up to the next unit. Therefore <strong>-size -1M</strong> is not equivalent to <strong>-size -1048576c.</strong> The former only matches empty files, the latter matches files from 1 to 1,048,575 bytes.
       <dt>-true
@@ -346,34 +340,32 @@
       <dt>-type <em>c</em>
       <dd>
         <p>File is of type <em>c</em>:
-        <div class="indent">
-          <dl>
-            <dt>b
-            <dd>
-              <p>block (buffered) special
-            <dt>c
-            <dd>
-              <p>character (unbuffered) special
-            <dt>d
-            <dd>
-              <p>directory
-            <dt>p
-            <dd>
-              <p>named pipe (FIFO)
-            <dt>f
-            <dd>
-              <p>regular file
-            <dt>l
-            <dd>
-              <p>symbolic link; this is never true if the <strong>-L</strong> option or the <strong>-follow</strong> option is in effect, unless the symbolic link is broken. If you want to search for symbolic links when <strong>-L</strong> is in effect, use <strong>-xtype</strong>.
-            <dt>s
-            <dd>
-              <p>socket
-            <dt>D
-            <dd>
-              <p>door (Solaris)
-          </dl>
-        </div>
+        <dl>
+          <dt>b
+          <dd>
+            <p>block (buffered) special
+          <dt>c
+          <dd>
+            <p>character (unbuffered) special
+          <dt>d
+          <dd>
+            <p>directory
+          <dt>p
+          <dd>
+            <p>named pipe (FIFO)
+          <dt>f
+          <dd>
+            <p>regular file
+          <dt>l
+          <dd>
+            <p>symbolic link; this is never true if the <strong>-L</strong> option or the <strong>-follow</strong> option is in effect, unless the symbolic link is broken. If you want to search for symbolic links when <strong>-L</strong> is in effect, use <strong>-xtype</strong>.
+          <dt>s
+          <dd>
+            <p>socket
+          <dt>D
+          <dd>
+            <p>door (Solaris)
+        </dl>
         <p>To search for more than one type at once, you can supply the combined list of type letters separated by a comma `,' (GNU extension).
       <dt>-uid <em>n</em>
       <dd>
@@ -446,238 +438,236 @@
       <dt>-printf <em>format</em>
       <dd>
         <p>True; print <em>format</em> on the standard output, interpreting `\' escapes and `%' directives. Field widths and precisions can be specified as with the `printf' C function. Please note that many of the fields are printed as %s rather than %d, and this may mean that flags don't work as you might expect. This also means that the `-' flag does work (it forces fields to be left-aligned). Unlike <strong>-print</strong>, <strong>-printf</strong> does not add a newline at the end of the string. The escapes and directives are:
-        <div class="indent">
-          <dl>
-            <dt>\a
-            <dd>
-              <p>Alarm bell.
-            <dt>\b
-            <dd>
-              <p>Backspace.
-            <dt>\c
-            <dd>
-              <p>Stop printing from this format immediately and flush the output.
-            <dt>\f
-            <dd>
-              <p>Form feed.
-            <dt>\n
-            <dd>
-              <p>Newline.
-            <dt>\r
-            <dd>
-              <p>Carriage return.
-            <dt>\t
-            <dd>
-              <p>Horizontal tab.
-            <dt>\v
-            <dd>
-              <p>Vertical tab.
-            <dt>\0
-            <dd>
-              <p>ASCII NUL.
-            <dt>\\
-            <dd>
-              <p>A literal backslash (`\').
-            <dt>\NNN
-            <dd>
-              <p>The character whose ASCII code is NNN (octal).
-          </dl>
-          <p>A `\' character followed by any other character is treated as an ordinary character, so they both are printed.
-          <dl>
-            <dt>%%
-            <dd>
-              <p>A literal percent sign.
-            <dt>%a
-            <dd>
-              <p>File's last access time in the format returned by the C `ctime' function.
-            <dt>%A<em>k</em>
-            <dd>
-              <p>File's last access time in the format specified by <em>k</em>, which is either `@' or a directive for the C `strftime' function. The possible values for <em>k</em> are listed below; some of them might not be available on all systems, due to differences in `strftime' between systems.
-            <dt>@
-            <dd>
-              <p>seconds since Jan. 1, 1970, 00:00 GMT, with fractional part.
-          </dl>
-          <p>Time fields:
-          <dl>
-            <dt>H
-            <dd>
-              <p>hour (00..23)
-            <dt>I
-            <dd>
-              <p>hour (01..12)
-            <dt>k
-            <dd>
-              <p>hour ( 0..23)
-            <dt>l
-            <dd>
-              <p>hour ( 1..12)
-            <dt>M
-            <dd>
-              <p>minute (00..59)
-            <dt>p
-            <dd>
-              <p>locale's AM or PM
-            <dt>r
-            <dd>
-              <p>time, 12-hour (hh:mm:ss [AP]M)
-            <dt>S
-            <dd>
-              <p>Second (00.00 .. 61.00). There is a fractional part.
-            <dt>T
-            <dd>
-              <p>time, 24-hour (hh:mm:ss.xxxxxxxxxx)
-            <dt>+
-            <dd>
-              <p>Date and time, separated by `+', for example `2004-04-28+22:22:05.0'. This is a GNU extension. The time is given in the current timezone (which may be affected by setting the TZ environment variable). The seconds field includes a fractional part.
-            <dt>X
-            <dd>
-              <p>locale's time representation (H:M:S). The seconds field includes a fractional part.
-            <dt>Z
-            <dd>
-              <p>time zone (e.g., EDT), or nothing if no time zone is determinable
-          </dl>
-          <p>Date fields:
-          <dl>
-            <dt>a
-            <dd>
-              <p>locale's abbreviated weekday name (Sun..Sat)
-            <dt>A
-            <dd>
-              <p>locale's full weekday name, variable length (Sunday..Saturday)
-            <dt>b
-            <dd>
-              <p>locale's abbreviated month name (Jan..Dec)
-            <dt>B
-            <dd>
-              <p>locale's full month name, variable length (January..December)
-            <dt>c
-            <dd>
-              <p>locale's date and time (Sat Nov 04 12:02:33 EST 1989). The format is the same as for <strong>ctime</strong>(3) and so to preserve compatibility with that format, there is no fractional part in the seconds field.
-            <dt>d
-            <dd>
-              <p>day of month (01..31)
-            <dt>D
-            <dd>
-              <p>date (mm/dd/yy)
-            <dt>h
-            <dd>
-              <p>same as b
-            <dt>j
-            <dd>
-              <p>day of year (001..366)
-            <dt>m
-            <dd>
-              <p>month (01..12)
-            <dt>U
-            <dd>
-              <p>week number of year with Sunday as first day of week (00..53)
-            <dt>w
-            <dd>
-              <p>day of week (0..6)
-            <dt>W
-            <dd>
-              <p>week number of year with Monday as first day of week (00..53)
-            <dt>x
-            <dd>
-              <p>locale's date representation (mm/dd/yy)
-            <dt>y
-            <dd>
-              <p>last two digits of year (00..99)
-            <dt>Y
-            <dd>
-              <p>year (1970...)
-            <dt>%b
-            <dd>
-              <p>The amount of disk space used for this file in 512-byte blocks. Since disk space is allocated in multiples of the filesystem block size this is usually greater than %s/512, but it can also be smaller if the file is a sparse file.
-            <dt>%c
-            <dd>
-              <p>File's last status change time in the format returned by the C `ctime' function.
-            <dt>%C<em>k</em>
-            <dd>
-              <p>File's last status change time in the format specified by <em>k</em>, which is the same as for %A.
-            <dt>%d
-            <dd>
-              <p>File's depth in the directory tree; 0 means the file is a starting-point.
-            <dt>%D
-            <dd>
-              <p>The device number on which the file exists (the st_dev field of struct stat), in decimal.
-            <dt>%f
-            <dd>
-              <p>File's name with any leading directories removed (only the last element).
-            <dt>%F
-            <dd>
-              <p>Type of the filesystem the file is on; this value can be used for -fstype.
-            <dt>%g
-            <dd>
-              <p>File's group name, or numeric group ID if the group has no name.
-            <dt>%G
-            <dd>
-              <p>File's numeric group ID.
-            <dt>%h
-            <dd>
-              <p>Leading directories of file's name (all but the last element). If the file name contains no slashes (since it is in the current directory) the %h specifier expands to “.”.
-            <dt>%H
-            <dd>
-              <p>Starting-point under which file was found.
-            <dt>%i
-            <dd>
-              <p>File's inode number (in decimal).
-            <dt>%k
-            <dd>
-              <p>The amount of disk space used for this file in 1K blocks. Since disk space is allocated in multiples of the filesystem block size this is usually greater than %s/1024, but it can also be smaller if the file is a sparse file.
-            <dt>%l
-            <dd>
-              <p>Object of symbolic link (empty string if file is not a symbolic link).
-            <dt>%m
-            <dd>
-              <p>File's permission bits (in octal). This option uses the `traditional' numbers which most Unix implementations use, but if your particular implementation uses an unusual ordering of octal permissions bits, you will see a difference between the actual value of the file's mode and the output of %m. Normally you will want to have a leading zero on this number, and to do this, you should use the <strong>#</strong> flag (as in, for example, `%#m').
-            <dt>%M
-            <dd>
-              <p>File's permissions (in symbolic form, as for <strong>ls</strong>). This directive is supported in findutils 4.2.5 and later.
-            <dt>%n
-            <dd>
-              <p>Number of hard links to file.
-            <dt>%p
-            <dd>
-              <p>File's name.
-            <dt>%P
-            <dd>
-              <p>File's name with the name of the starting-point under which it was found removed.
-            <dt>%s
-            <dd>
-              <p>File's size in bytes.
-            <dt>%S
-            <dd>
-              <p>File's sparseness. This is calculated as (BLOCKSIZE*st_blocks / st_size). The exact value you will get for an ordinary file of a certain length is system-dependent. However, normally sparse files will have values less than 1.0, and files which use indirect blocks may have a value which is greater than 1.0. The value used for BLOCKSIZE is system-dependent, but is usually 512 bytes. If the file size is zero, the value printed is undefined. On systems which lack support for st_blocks, a file's sparseness is assumed to be 1.0.
-            <dt>%t
-            <dd>
-              <p>File's last modification time in the format returned by the C `ctime' function.
-            <dt>%T<em>k</em>
-            <dd>
-              <p>File's last modification time in the format specified by <em>k</em>, which is the same as for %A.
-            <dt>%u
-            <dd>
-              <p>File's user name, or numeric user ID if the user has no name.
-            <dt>%U
-            <dd>
-              <p>File's numeric user ID.
-            <dt>%y
-            <dd>
-              <p>File's type (like in <strong>ls -l</strong>), U=unknown type (shouldn't happen)
-            <dt>%Y
-            <dd>
-              <p>File's type (like %y), plus follow symlinks: L=loop, N=nonexistent
-            <dt>%Z
-            <dd>
-              <p>(SELinux only) file's security context.
-            <dt>%{ %[ %(
-            <dd>
-              <p>Reserved for future use.
-          </dl>
-          <p>A `%' character followed by any other character is discarded, but the other character is printed (don't rely on this, as further format characters may be introduced). A `%' at the end of the format argument causes undefined behaviour since there is no following character. In some locales, it may hide your door keys, while in others it may remove the final page from the novel you are reading.
-          <p>The %m and %d directives support the <strong>#</strong> , <strong>0</strong> and <strong>+</strong> flags, but the other directives do not, even if they print numbers. Numeric directives that do not support these flags include <strong>G</strong>, <strong>U</strong>, <strong>b</strong>, <strong>D</strong>, <strong>k</strong> and <strong>n</strong>. The `-' format flag is supported and changes the alignment of a field from right-justified (which is the default) to left-justified.
-          <p>See the <strong>UNUSUAL FILENAMES</strong> section for information about how unusual characters in filenames are handled.
-        </div>
+        <dl>
+          <dt>\a
+          <dd>
+            <p>Alarm bell.
+          <dt>\b
+          <dd>
+            <p>Backspace.
+          <dt>\c
+          <dd>
+            <p>Stop printing from this format immediately and flush the output.
+          <dt>\f
+          <dd>
+            <p>Form feed.
+          <dt>\n
+          <dd>
+            <p>Newline.
+          <dt>\r
+          <dd>
+            <p>Carriage return.
+          <dt>\t
+          <dd>
+            <p>Horizontal tab.
+          <dt>\v
+          <dd>
+            <p>Vertical tab.
+          <dt>\0
+          <dd>
+            <p>ASCII NUL.
+          <dt>\\
+          <dd>
+            <p>A literal backslash (`\').
+          <dt>\NNN
+          <dd>
+            <p>The character whose ASCII code is NNN (octal).
+        </dl>
+        <p>A `\' character followed by any other character is treated as an ordinary character, so they both are printed.
+        <dl>
+          <dt>%%
+          <dd>
+            <p>A literal percent sign.
+          <dt>%a
+          <dd>
+            <p>File's last access time in the format returned by the C `ctime' function.
+          <dt>%A<em>k</em>
+          <dd>
+            <p>File's last access time in the format specified by <em>k</em>, which is either `@' or a directive for the C `strftime' function. The possible values for <em>k</em> are listed below; some of them might not be available on all systems, due to differences in `strftime' between systems.
+          <dt>@
+          <dd>
+            <p>seconds since Jan. 1, 1970, 00:00 GMT, with fractional part.
+        </dl>
+        <p>Time fields:
+        <dl>
+          <dt>H
+          <dd>
+            <p>hour (00..23)
+          <dt>I
+          <dd>
+            <p>hour (01..12)
+          <dt>k
+          <dd>
+            <p>hour ( 0..23)
+          <dt>l
+          <dd>
+            <p>hour ( 1..12)
+          <dt>M
+          <dd>
+            <p>minute (00..59)
+          <dt>p
+          <dd>
+            <p>locale's AM or PM
+          <dt>r
+          <dd>
+            <p>time, 12-hour (hh:mm:ss [AP]M)
+          <dt>S
+          <dd>
+            <p>Second (00.00 .. 61.00). There is a fractional part.
+          <dt>T
+          <dd>
+            <p>time, 24-hour (hh:mm:ss.xxxxxxxxxx)
+          <dt>+
+          <dd>
+            <p>Date and time, separated by `+', for example `2004-04-28+22:22:05.0'. This is a GNU extension. The time is given in the current timezone (which may be affected by setting the TZ environment variable). The seconds field includes a fractional part.
+          <dt>X
+          <dd>
+            <p>locale's time representation (H:M:S). The seconds field includes a fractional part.
+          <dt>Z
+          <dd>
+            <p>time zone (e.g., EDT), or nothing if no time zone is determinable
+        </dl>
+        <p>Date fields:
+        <dl>
+          <dt>a
+          <dd>
+            <p>locale's abbreviated weekday name (Sun..Sat)
+          <dt>A
+          <dd>
+            <p>locale's full weekday name, variable length (Sunday..Saturday)
+          <dt>b
+          <dd>
+            <p>locale's abbreviated month name (Jan..Dec)
+          <dt>B
+          <dd>
+            <p>locale's full month name, variable length (January..December)
+          <dt>c
+          <dd>
+            <p>locale's date and time (Sat Nov 04 12:02:33 EST 1989). The format is the same as for <strong>ctime</strong>(3) and so to preserve compatibility with that format, there is no fractional part in the seconds field.
+          <dt>d
+          <dd>
+            <p>day of month (01..31)
+          <dt>D
+          <dd>
+            <p>date (mm/dd/yy)
+          <dt>h
+          <dd>
+            <p>same as b
+          <dt>j
+          <dd>
+            <p>day of year (001..366)
+          <dt>m
+          <dd>
+            <p>month (01..12)
+          <dt>U
+          <dd>
+            <p>week number of year with Sunday as first day of week (00..53)
+          <dt>w
+          <dd>
+            <p>day of week (0..6)
+          <dt>W
+          <dd>
+            <p>week number of year with Monday as first day of week (00..53)
+          <dt>x
+          <dd>
+            <p>locale's date representation (mm/dd/yy)
+          <dt>y
+          <dd>
+            <p>last two digits of year (00..99)
+          <dt>Y
+          <dd>
+            <p>year (1970...)
+          <dt>%b
+          <dd>
+            <p>The amount of disk space used for this file in 512-byte blocks. Since disk space is allocated in multiples of the filesystem block size this is usually greater than %s/512, but it can also be smaller if the file is a sparse file.
+          <dt>%c
+          <dd>
+            <p>File's last status change time in the format returned by the C `ctime' function.
+          <dt>%C<em>k</em>
+          <dd>
+            <p>File's last status change time in the format specified by <em>k</em>, which is the same as for %A.
+          <dt>%d
+          <dd>
+            <p>File's depth in the directory tree; 0 means the file is a starting-point.
+          <dt>%D
+          <dd>
+            <p>The device number on which the file exists (the st_dev field of struct stat), in decimal.
+          <dt>%f
+          <dd>
+            <p>File's name with any leading directories removed (only the last element).
+          <dt>%F
+          <dd>
+            <p>Type of the filesystem the file is on; this value can be used for -fstype.
+          <dt>%g
+          <dd>
+            <p>File's group name, or numeric group ID if the group has no name.
+          <dt>%G
+          <dd>
+            <p>File's numeric group ID.
+          <dt>%h
+          <dd>
+            <p>Leading directories of file's name (all but the last element). If the file name contains no slashes (since it is in the current directory) the %h specifier expands to “.”.
+          <dt>%H
+          <dd>
+            <p>Starting-point under which file was found.
+          <dt>%i
+          <dd>
+            <p>File's inode number (in decimal).
+          <dt>%k
+          <dd>
+            <p>The amount of disk space used for this file in 1K blocks. Since disk space is allocated in multiples of the filesystem block size this is usually greater than %s/1024, but it can also be smaller if the file is a sparse file.
+          <dt>%l
+          <dd>
+            <p>Object of symbolic link (empty string if file is not a symbolic link).
+          <dt>%m
+          <dd>
+            <p>File's permission bits (in octal). This option uses the `traditional' numbers which most Unix implementations use, but if your particular implementation uses an unusual ordering of octal permissions bits, you will see a difference between the actual value of the file's mode and the output of %m. Normally you will want to have a leading zero on this number, and to do this, you should use the <strong>#</strong> flag (as in, for example, `%#m').
+          <dt>%M
+          <dd>
+            <p>File's permissions (in symbolic form, as for <strong>ls</strong>). This directive is supported in findutils 4.2.5 and later.
+          <dt>%n
+          <dd>
+            <p>Number of hard links to file.
+          <dt>%p
+          <dd>
+            <p>File's name.
+          <dt>%P
+          <dd>
+            <p>File's name with the name of the starting-point under which it was found removed.
+          <dt>%s
+          <dd>
+            <p>File's size in bytes.
+          <dt>%S
+          <dd>
+            <p>File's sparseness. This is calculated as (BLOCKSIZE*st_blocks / st_size). The exact value you will get for an ordinary file of a certain length is system-dependent. However, normally sparse files will have values less than 1.0, and files which use indirect blocks may have a value which is greater than 1.0. The value used for BLOCKSIZE is system-dependent, but is usually 512 bytes. If the file size is zero, the value printed is undefined. On systems which lack support for st_blocks, a file's sparseness is assumed to be 1.0.
+          <dt>%t
+          <dd>
+            <p>File's last modification time in the format returned by the C `ctime' function.
+          <dt>%T<em>k</em>
+          <dd>
+            <p>File's last modification time in the format specified by <em>k</em>, which is the same as for %A.
+          <dt>%u
+          <dd>
+            <p>File's user name, or numeric user ID if the user has no name.
+          <dt>%U
+          <dd>
+            <p>File's numeric user ID.
+          <dt>%y
+          <dd>
+            <p>File's type (like in <strong>ls -l</strong>), U=unknown type (shouldn't happen)
+          <dt>%Y
+          <dd>
+            <p>File's type (like %y), plus follow symlinks: L=loop, N=nonexistent
+          <dt>%Z
+          <dd>
+            <p>(SELinux only) file's security context.
+          <dt>%{ %[ %(
+          <dd>
+            <p>Reserved for future use.
+        </dl>
+        <p>A `%' character followed by any other character is discarded, but the other character is printed (don't rely on this, as further format characters may be introduced). A `%' at the end of the format argument causes undefined behaviour since there is no following character. In some locales, it may hide your door keys, while in others it may remove the final page from the novel you are reading.
+        <p>The %m and %d directives support the <strong>#</strong> , <strong>0</strong> and <strong>+</strong> flags, but the other directives do not, even if they print numbers. Numeric directives that do not support these flags include <strong>G</strong>, <strong>U</strong>, <strong>b</strong>, <strong>D</strong>, <strong>k</strong> and <strong>n</strong>. The `-' format flag is supported and changes the alignment of a field from right-justified (which is the default) to left-justified.
+        <p>See the <strong>UNUSUAL FILENAMES</strong> section for information about how unusual characters in filenames are handled.
       <dt>-prune
       <dd>
         <p>True; if the file is a directory, do not descend into it. If <strong>-depth</strong> is given, false; no effect. Because <strong>-delete</strong> implies <strong>-depth</strong>, you cannot usefully use <strong>-prune</strong> and <strong>-delete</strong> together.

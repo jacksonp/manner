@@ -177,28 +177,26 @@
     <dt><strong>--assert-</strong><em>feature</em>
     <dd>
       <p>Asserts that <strong>dpkg</strong> supports the requested feature. Returns 0 if the feature is fully supported, 1 if the feature is known but <strong>dpkg</strong> cannot provide support for it yet, and 2 if the feature is unknown. The current list of assertable features is:
-      <div class="indent">
-        <dl>
-          <dt><strong>support-predepends</strong>
-          <dd>
-            <p>Supports the <strong>Pre-Depends</strong> field (since dpkg 1.1.0).
-          <dt><strong>working-epoch</strong>
-          <dd>
-            <p>Supports epochs in version strings (since dpkg 1.4.0.7).
-          <dt><strong>long-filenames</strong>
-          <dd>
-            <p>Supports long filenames in <strong>deb</strong>(5) archives (since dpkg 1.4.1.17).
-          <dt><strong>multi-conrep</strong>
-          <dd>
-            <p>Supports multiple <strong>Conflicts</strong> and <strong>Replaces</strong> (since dpkg 1.4.1.19).
-          <dt><strong>multi-arch</strong>
-          <dd>
-            <p>Supports multi-arch fields and semantics (since dpkg 1.16.2).
-          <dt><strong>versioned-provides</strong>
-          <dd>
-            <p>Supports versioned <strong>Provides</strong> (since dpkg 1.17.11).
-        </dl>
-      </div>
+      <dl>
+        <dt><strong>support-predepends</strong>
+        <dd>
+          <p>Supports the <strong>Pre-Depends</strong> field (since dpkg 1.1.0).
+        <dt><strong>working-epoch</strong>
+        <dd>
+          <p>Supports epochs in version strings (since dpkg 1.4.0.7).
+        <dt><strong>long-filenames</strong>
+        <dd>
+          <p>Supports long filenames in <strong>deb</strong>(5) archives (since dpkg 1.4.1.17).
+        <dt><strong>multi-conrep</strong>
+        <dd>
+          <p>Supports multiple <strong>Conflicts</strong> and <strong>Replaces</strong> (since dpkg 1.4.1.19).
+        <dt><strong>multi-arch</strong>
+        <dd>
+          <p>Supports multi-arch fields and semantics (since dpkg 1.16.2).
+        <dt><strong>versioned-provides</strong>
+        <dd>
+          <p>Supports versioned <strong>Provides</strong> (since dpkg 1.17.11).
+      </dl>
     <dt><strong>--compare-versions <em>ver1 op ver2</em></strong>
     <dd>
       <p>Compare version numbers, where <em>op</em> is a binary operator. <strong>dpkg</strong> returns true (<strong>0</strong>) if the specified condition is satisfied, and false (<strong>1</strong>) otherwise. There are two groups of operators, which differ in how they treat an empty <em>ver1</em> or <em>ver2</em>. These treat an empty version as earlier than any version: <strong>lt le eq ne ge gt</strong>. These treat an empty version as later than any version: <strong>lt-nl le-nl ge-nl gt-nl</strong>. These are provided only for compatibility with control file syntax: <strong>&lt; &lt;&lt; &lt;= = &gt;= &gt;&gt; &gt;</strong>. The <strong>&lt;</strong> and <strong>&gt;</strong> operators are obsolete and should <strong>not</strong> be used, due to confusing semantics. To illustrate: <strong>0.1 &lt; 0.1</strong> evaluates to true.
@@ -366,22 +364,20 @@
     <dt><strong>--status-fd</strong> <em>n</em>
     <dd>
       <p>Send machine-readable package status and progress information to file descriptor <em>n</em>. This option can be specified multiple times. The information is generally one record per line, in one of the following forms:
-      <div class="indent">
-        <dl>
-          <dt><strong>status:</strong> <em>package</em><strong>:</strong> <em>status</em>
-          <dd>
-            <p>Package status changed; <em>status</em> is as in the status file.
-          <dt><strong>status:</strong> <em>package</em> <strong>: error :</strong> <em>extended-error-message</em>
-          <dd>
-            <p>An error occurred. Any possible newlines in <em>extended-error-message</em> will be converted to spaces before output.
-          <dt><strong>status:</strong> <em>file</em> <strong>: conffile-prompt : '</strong><em>real-old</em><strong>' '</strong><em>real-new</em><strong>'</strong> <em>useredited</em> <em>distedited</em>
-          <dd>
-            <p>User is being asked a conffile question.
-          <dt><strong>processing:</strong> <em>stage</em><strong>:</strong> <em>package</em>
-          <dd>
-            <p>Sent just before a processing stage starts. <em>stage</em> is one of <strong>upgrade</strong>, <strong>install</strong> (both sent before unpacking), <strong>configure</strong>, <strong>trigproc</strong>, <strong>disappear</strong>, <strong>remove</strong>, <strong>purge</strong>.
-        </dl>
-      </div>
+      <dl>
+        <dt><strong>status:</strong> <em>package</em><strong>:</strong> <em>status</em>
+        <dd>
+          <p>Package status changed; <em>status</em> is as in the status file.
+        <dt><strong>status:</strong> <em>package</em> <strong>: error :</strong> <em>extended-error-message</em>
+        <dd>
+          <p>An error occurred. Any possible newlines in <em>extended-error-message</em> will be converted to spaces before output.
+        <dt><strong>status:</strong> <em>file</em> <strong>: conffile-prompt : '</strong><em>real-old</em><strong>' '</strong><em>real-new</em><strong>'</strong> <em>useredited</em> <em>distedited</em>
+        <dd>
+          <p>User is being asked a conffile question.
+        <dt><strong>processing:</strong> <em>stage</em><strong>:</strong> <em>package</em>
+        <dd>
+          <p>Sent just before a processing stage starts. <em>stage</em> is one of <strong>upgrade</strong>, <strong>install</strong> (both sent before unpacking), <strong>configure</strong>, <strong>trigproc</strong>, <strong>disappear</strong>, <strong>remove</strong>, <strong>purge</strong>.
+      </dl>
     <dt><strong>--status-logger</strong>=<em>command</em>
     <dd>
       <p>Send machine-readable package status and progress information to the shell <em>command</em>'s standard input, to be run via “sh -c” (since dpkg 1.16.0). This option can be specified multiple times. The output format used is the same as in <strong>--status-fd</strong>.
@@ -504,15 +500,13 @@
       <p>The status file is backed up daily in <em>/var/backups</em>. It can be useful if it's lost or corrupted due to filesystems troubles.
   </dl>
   <p>The following files are components of a binary package. See <strong>deb</strong>(5) for more information about them:
-  <div class="indent">
-    <pre><em> control</em>
+  <pre><em> control</em>
 <em> conffiles</em>
 <em> preinst</em>
 <em> postinst</em>
 <em> prerm</em>
 <em> postrm</em>
 <em> triggers</em></pre>
-  </div>
 </div>
 <div class="section">
   <h2>BUGS</h2>

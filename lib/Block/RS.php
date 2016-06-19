@@ -54,8 +54,12 @@ class Block_RS
         }
 
         if (count($blockLines) > 0) {
-            $rsBlock   = $dom->createElement('div');
-            $rsBlock->setAttribute('class', $className);
+            if ($className === 'indent') {
+                $rsBlock = $dom->createElement('p');
+            } else {
+                $rsBlock = $dom->createElement('div');
+                $rsBlock->setAttribute('class', $className);
+            }
             Blocks::handle($rsBlock, $blockLines);
             $parentNode->appendBlockIfHasContent($rsBlock);
         }
