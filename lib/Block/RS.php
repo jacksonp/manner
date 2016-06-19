@@ -14,6 +14,10 @@ class Block_RS
         }
 
         $thisIndent = trim($matches[1]);
+        $className = 'indent';
+        if ($thisIndent !== '') {
+            $className .= '-' . $thisIndent;
+        }
         $numLines   = count($lines);
         $dom        = $parentNode->ownerDocument;
         $skippedRSs = 0;
@@ -42,18 +46,16 @@ class Block_RS
                         break;
                     }
                 }
+            } elseif (preg_match('~^\.TP~u', $line)) {
+                // prevent skipping
+                $thisIndent = 'GARBAGE';
             }
             $blockLines[] = $line;
         }
 
         if (count($blockLines) > 0) {
             $rsBlock   = $dom->createElement('div');
-            $className = 'indent';
-            if ($thisIndent !== '') {
-                $className .= '-' . $thisIndent;
-            }
             $rsBlock->setAttribute('class', $className);
-
             Blocks::handle($rsBlock, $blockLines);
             $parentNode->appendBlockIfHasContent($rsBlock);
         }
