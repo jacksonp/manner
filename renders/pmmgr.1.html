@@ -88,7 +88,10 @@
         <p>If this file exists, pmmgr will run <strong>pmlogextract</strong> to periodically merge together preexisting log archives for each target pmcd into a single large one. Then, the preexisting log archives are deleted (including any prior merged ones). This configuration file may contain a time interval specification as per the <em>PCPintro</em> man page, representing the period after which pmlogger should be temporarily stopped, and archives merged. It represents the maximum amount of time that the merged archive <em>lags</em> the present time. The default is <strong>24hours</strong>.
       <dt>pmlogmerge-granular
       <dd>
-        <p>If this file exists, pmmgr will merge only a subset of preexisting log archives into the new one, instead of all of them, so as to approximate a granular, aligned set of merged archives. The subset chosen corresponds to the previous time interval specified by the <em>pmlogmerge</em> control file. The default is <strong>no granularity</strong>.
+        <p>If this file also exists, pmmgr will merge only a subset of preexisting log archives into the new one, instead of all of them, so as to approximate a granular, aligned set of merged archives. The subset chosen corresponds to the previous time interval specified by the <em>pmlogmerge</em> control file. The default is <strong>no granularity</strong>.
+      <dt>pmlogcheck-corrupt-gc
+      <dd>
+        <p>Before archives are considered for merging, they are processed through <em>pmlogcheck</em> to check for corruption. In the unlikely case of a problem, such archives are renamed out of the way (named “corrupt-*”), and retained up to a limited time. This file specifies how long. If this file exists, it the time interval it contains is the maximum age. The default is <strong>90days</strong>. To store corrupt archives indefinitely, set this to a large quantity like “99999weeks”.
       <dt>pmlogmerge-rewrite
       <dd>
         <p>If this file exists, pmmgr will run <strong>pmlogrewrite -i</strong> (plus any other options listed in this file) on each input archive before merging it. This will naturally require more disk I/O. The default is <strong>no rewriting</strong>.
