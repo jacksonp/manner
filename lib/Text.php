@@ -396,7 +396,7 @@ class Text
 
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
-                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . ' ~', '.' . $old . ' ', $line);
+                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . '( |$)~', '.' . $old . '$1', $line);
                 }
             }
 
