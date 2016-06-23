@@ -315,7 +315,7 @@ class TextContent
             return chr($matches[1]);
         }, $string);
 
-        // Get rid of <> around URLs - these get translater to &lt; and &gt; and then cause problems with finding out what we can make into links.
+        // Get rid of <> around URLs - these get translated to &lt; and &gt; and then cause problems with finding out what we can make into links.
         $string = Replace::preg(
           '~<(?:URL:)?(?<url>(?:ftp|https?)://[^\s()<>]+(?:\([\w\d]+\)|(?:[^[:punct:]\s]|/)))>~u',
           '$1',
