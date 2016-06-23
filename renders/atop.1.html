@@ -32,7 +32,7 @@
   <h2>PROCESS ACCOUNTING</h2>
   <p>With every interval, <em>atop</em> reads the kernel administration to obtain information about all running processes. However, it is likely that during the interval also processes have terminated. These processes might have consumed system resources during this interval as well before they terminated. Therefor, <em>atop</em> tries to read the process accounting records that contain the accounting information of terminated processes and report these processes too. Only when the process accounting mechanism in the kernel is activated, the kernel writes such process accounting record to a file for every process that terminates.
   <p>There are various ways for <em>atop</em> to get access to the process accounting records (tried in this order):
-  <dl>
+  <dl class="indent-4">
     <dt>1.
     <dd>
       <p>When the environment variable ATOPACCT is set, it specifies the name of the process accounting file. In that case, process accounting for this file should have been activated on beforehand. Before opening this file for reading, <em>atop</em> drops its root privileges (if any).<br>
@@ -58,7 +58,7 @@
   <h2>COLORS</h2>
   <p>For the resource consumption on system level, <em>atop</em> uses colors to indicate that a critical occupation percentage has been (almost) reached. A critical occupation percentage means that is likely that this load causes a noticeable negative performance influence for applications using this resource. The critical percentage depends on the type of resource: e.g. the performance influence of a disk with a busy percentage of 80% might be more noticeable for applications/user than a CPU with a busy percentage of 90%.<br>
   Currently <em>atop</em> uses the following default values to calculate a weighted percentage per resource:
-  <dl>
+  <dl class="indent-5">
     <dt><strong>&nbsp;Processor</strong>
     <dd>
       <p>A busy percentage of 90% or higher is considered `critical'.
@@ -93,7 +93,7 @@
 <div class="section">
   <h2>INTERACTIVE COMMANDS</h2>
   <p>When running <em>atop</em> interactively (no output redirection), keys can be pressed to control the output. In general, lower case keys can be used to show other information for the active processes and upper case keys can be used to influence the sort order of the active process/thread list.
-  <dl>
+  <dl class="indent-5">
     <dt><strong>g</strong>
     <dd>
       <p>Show generic output (default).
@@ -174,7 +174,7 @@
       A sorting-order for disk is only possible when “storage accounting” is active. A sorting-order for network is only possible when the kernel module `netatop' is loaded.
   </dl>
   <p>Miscellaneous interactive commands:
-  <dl>
+  <dl class="indent-5">
     <dt><strong>?</strong>
     <dd>
       <p>Request for help information (also the key 'h' can be pressed).
@@ -304,7 +304,7 @@
 <div class="section">
   <h2>OUTPUT DESCRIPTION - SYSTEM LEVEL</h2>
   <p>The system level information consists of the following output lines:
-  <dl>
+  <dl class="indent-5">
     <dt><strong>PRC</strong>
     <dd>
       <p>Process and thread level totals.<br>
@@ -381,7 +381,7 @@
   <h2>OUTPUT DESCRIPTION - PROCESS LEVEL</h2>
   <p>Following the system level information, the processes are shown from which the resource utilization has changed during the last interval. These processes might have used cpu time or issued disk or network requests. However a process is also shown if part of it has been paged out due to lack of memory (while the process itself was in sleep state).
   <p>Per process the following fields may be shown (in alphabetical order), depending on the current output mode as described in the section INTERACTIVE COMMANDS and depending on the current width of your window:
-  <dl>
+  <dl class="indent-9">
     <dt><strong>AVGRSZ</strong>
     <dd>
       <p>The average size of one read-action on disk.
@@ -622,7 +622,7 @@
   When a sample contains the values since boot, <strong>atop</strong> shows a line just containing the label “RESET” before the lines for this sample are generated.
   <p>The first part of each output-line consists of the following six fields: <strong>label</strong> (the name of the label), <strong>host</strong> (the name of this machine), <strong>epoch</strong> (the time of this interval as number of seconds since 1-1-1970), <strong>date</strong> (date of this interval in format YYYY/MM/DD), <strong>time</strong> (time of this interval in format HH:MM:SS), and <strong>interval</strong> (number of seconds elapsed for this interval).
   <p>The subsequent fields of each output-line depend on the label:
-  <dl>
+  <dl class="indent-9">
     <dt><strong>CPU</strong>
     <dd>
       <p>Subsequent fields: total number of clock-ticks per second for this machine, number of processors, consumption for all CPUs in system mode (clock-ticks), consumption for all CPUs in user mode (clock-ticks), consumption for all CPUs in user mode for niced processes (clock-ticks), consumption for all CPUs in idle mode (clock-ticks), consumption for all CPUs in wait mode (clock-ticks), consumption for all CPUs in irq mode (clock-ticks), consumption for all CPUs in softirq mode (clock-ticks), consumption for all CPUs in steal mode (clock-ticks), consumption for all CPUs in guest mode (clock-ticks) overlapping user mode, frequency of all CPUs and frequency percentage of all CPUs.
@@ -687,15 +687,15 @@
 <div class="section">
   <h2>EXAMPLES</h2>
   <p>To monitor the current system load interactively with an interval of 5 seconds:
-  <dl>
+  <dl class="indent-12">
     <dt><strong>&nbsp; atop 5</strong>
   </dl>
   <p>To monitor the system load and write it to a file (in plain ASCII) with an interval of one minute during half an hour with active processes sorted on memory consumption:
-  <dl>
+  <dl class="indent-12">
     <dt><strong>&nbsp; atop -M 60 30 &gt; /log/atop.mem</strong>
   </dl>
   <p>Store information about the system and process activity in binary compressed form to a file with an interval of ten minutes during an hour:
-  <dl>
+  <dl class="indent-12">
     <dt><strong>&nbsp; atop -w /tmp/atop.raw 600 6</strong>
   </dl>
   <p>View the contents of this file interactively:
@@ -711,7 +711,7 @@
 </div>
 <div class="section">
   <h2>FILES</h2>
-  <dl>
+  <dl class="indent-5">
     <dt><strong>/var/run/pacct_shadow.d/</strong>
     <dd>
       <p>Directory containing the process accounting shadow files that are used by <em>atop</em> when the <em>atopacctd</em> daemon is active.

@@ -26,11 +26,11 @@ class Block_TP
                     continue;
                 }
 
-//                $requestArgs = Macro::parseArgString($matches[1]);
-//                if (is_null($firstIndent) and count($requestArgs) > 0) {
-//                    $firstIndent = 'indent-' . $requestArgs[0];
-//                    $dl->setAttribute('class', $firstIndent);
-//                }
+                $requestArgs = Macro::parseArgString($matches[1]);
+                if (is_null($firstIndent) and count($requestArgs) > 0) {
+                    $firstIndent = 'indent-' . $requestArgs[0];
+                    $dl->setAttribute('class', $firstIndent);
+                }
 
                 $dtLine = $lines[++$i];
                 while ($i < $numLines - 1 && in_array($dtLine, ['.fi', '.B'])) { // cutter.1
