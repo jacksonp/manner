@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="December 2014" data-package="util-linux" data-section-name="User Commands">
+<title>GETOPT</title>
+<h1>GETOPT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>getopt - parse command options (enhanced)
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>getopt</strong> <em>optstring parameters</em><br>
+  <strong>getopt</strong> [options] [<strong>--</strong>] <em>optstring parameters</em><br>
+  <strong>getopt</strong> [options] <strong>-o</strong>|<strong>--options</strong> <em>optstring</em> [options] [<strong>--</strong>] <em>parameters</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>getopt</strong> is used to break up (<em>parse</em>) options in command lines for easy parsing by shell procedures, and to check for legal options. It uses the <small>GNU</small> <strong>getopt</strong>(3) routines to do this.
+  <p>The parameters <strong>getopt</strong> is called with can be divided into two parts: options which modify the way <strong>getopt</strong> will do the parsing (the <em>options</em> and the <em>optstring</em> in the <strong>SYNOPSIS</strong>), and the parameters which are to be parsed (<em>parameters</em> in the <strong>SYNOPSIS</strong>). The second part will start at the first non-option parameter that is not an option argument, or after the first occurrence of '<strong>--</strong>'. If no '<strong>-o</strong>' or '<strong>--options</strong>' option is found in the first part, the first parameter of the second part is used as the short options string.
+  <p>If the environment variable <strong>GETOPT_COMPATIBLE</strong> is set, or if the first <em>parameter</em> is not an option (does not start with a '<strong>-</strong>', the first format in the <strong>SYNOPSIS</strong>), <strong>getopt</strong> will generate output that is compatible with that of other versions of <strong>getopt</strong>(1). It will still do parameter shuffling and recognize optional arguments (see section <strong>COMPATIBILITY</strong> for more information).
+  <p>Traditional implementations of <strong>getopt</strong>(1) are unable to cope with whitespace and other (shell-specific) special characters in arguments and non-option parameters. To solve this problem, this implementation can generate quoted output which must once again be interpreted by the shell (usually by using the <strong>eval</strong> command). This has the effect of preserving those characters, but you must call <strong>getopt</strong> in a way that is no longer compatible with other versions (the second or third format in the <strong>SYNOPSIS</strong>). To determine whether this enhanced version of <strong>getopt</strong>(1) is installed, a special test option (<strong>-T</strong>) can be used.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-a</strong>, <strong>--alternative</strong>
+    <dd>
+      <p>Allow long options to start with a single '<strong>-</strong>'.
+    <dt><strong>-h</strong>, <strong>--help</strong>
+    <dd>
+      <p>Display help text and exit. No other output is generated.
+    <dt><strong>-l</strong>, <strong>--longoptions <em>longopts</em></strong>
+    <dd>
+      <p>The long (multi-character) options to be recognized. More than one option name may be specified at once, by separating the names with commas. This option may be given more than once, the <em>longopts</em> are cumulative. Each long option name in <em>longopts</em> may be followed by one colon to indicate it has a required argument, and by two colons to indicate it has an optional argument.
+    <dt><strong>-n</strong>, <strong>--name <em>progname</em></strong>
+    <dd>
+      <p>The name that will be used by the <strong>getopt</strong>(3) routines when it reports errors. Note that errors of <strong>getopt</strong>(1) are still reported as coming from getopt.
+    <dt><strong>-o</strong>, <strong>--options <em>shortopts</em></strong>
+    <dd>
+      <p>The short (one-character) options to be recognized. If this option is not found, the first parameter of <strong>getopt</strong> that does not start with a '<strong>-</strong>' (and is not an option argument) is used as the short options string. Each short option character in <em>shortopts</em> may be followed by one colon to indicate it has a required argument, and by two colons to indicate it has an optional argument. The first character of shortopts may be '<strong>+</strong>' or '<strong>-</strong>' to influence the way options are parsed and output is generated (see section <strong>SCANNING MODES</strong> for details).
+    <dt><strong>-q</strong>, <strong>--quiet</strong>
+    <dd>
+      <p>Disable error reporting by getopt(3).
+    <dt><strong>-Q</strong>, <strong>--quiet-output</strong>
+    <dd>
+      <p>Do not generate normal output. Errors are still reported by <strong>getopt</strong>(3), unless you also use <strong>-q</strong>.
+    <dt><strong>-s</strong>, <strong>--shell <em>shell</em></strong>
+    <dd>
+      <p>Set quoting conventions to those of <em>shell</em>. If the <strong>-s</strong> option is not given, the <small>BASH</small> conventions are used. Valid arguments are currently '<strong>sh</strong>' '<strong>bash</strong>', '<strong>csh</strong>', and '<strong>tcsh</strong>'.
+    <dt><strong>-T</strong>, <strong>--test</strong>
+    <dd>
+      <p>Test if your <strong>getopt</strong>(1) is this enhanced version or an old version. This generates no output, and sets the error status to 4. Other implementations of <strong>getopt</strong>(1), and this version if the environment variable <strong>GETOPT_COMPATIBLE</strong> is set, will return '<strong>--</strong>' and error status 0.
+    <dt><strong>-u</strong>, <strong>--unquoted</strong>
+    <dd>
+      <p>Do not quote the output. Note that whitespace and special (shell-dependent) characters can cause havoc in this mode (like they do with other <strong>getopt</strong>(1) implementations).
+    <dt><strong>-V</strong>, <strong>--version</strong>
+    <dd>
+      <p>Display version information and exit. No other output is generated.
+  </dl>
+</div>
+<div class="section">
+  <h2>PARSING</h2>
+  <p>This section specifies the format of the second part of the parameters of <strong>getopt</strong> (the <em>parameters</em> in the <strong>SYNOPSIS</strong>). The next section (<strong>OUTPUT</strong>) describes the output that is generated. These parameters were typically the parameters a shell function was called with. Care must be taken that each parameter the shell function was called with corresponds to exactly one parameter in the parameter list of <strong>getopt</strong> (see the <strong>EXAMPLES</strong>). All parsing is done by the GNU <strong>getopt</strong>(3) routines.
+  <p>The parameters are parsed from left to right. Each parameter is classified as a short option, a long option, an argument to an option, or a non-option parameter.
+  <p>A simple short option is a '<strong>-</strong>' followed by a short option character. If the option has a required argument, it may be written directly after the option character or as the next parameter (i.e. separated by whitespace on the command line). If the option has an optional argument, it must be written directly after the option character if present.
+  <p>It is possible to specify several short options after one '<strong>-</strong>', as long as all (except possibly the last) do not have required or optional arguments.
+  <p>A long option normally begins with '<strong>--</strong>' followed by the long option name. If the option has a required argument, it may be written directly after the long option name, separated by '<strong>=</strong>', or as the next argument (i.e. separated by whitespace on the command line). If the option has an optional argument, it must be written directly after the long option name, separated by '<strong>=</strong>', if present (if you add the '<strong>=</strong>' but nothing behind it, it is interpreted as if no argument was present; this is a slight bug, see the <strong>BUGS</strong>). Long options may be abbreviated, as long as the abbreviation is not ambiguous.
+  <p>Each parameter not starting with a '<strong>-</strong>', and not a required argument of a previous option, is a non-option parameter. Each parameter after a '<strong>--</strong>' parameter is always interpreted as a non-option parameter. If the environment variable <strong>POSIXLY_CORRECT</strong> is set, or if the short option string started with a '<strong>+</strong>', all remaining parameters are interpreted as non-option parameters as soon as the first non-option parameter is found.
+</div>
+<div class="section">
+  <h2>OUTPUT</h2>
+  <p>Output is generated for each element described in the previous section. Output is done in the same order as the elements are specified in the input, except for non-option parameters. Output can be done in <em>compatible</em> (<em>unquoted</em>) mode, or in such way that whitespace and other special characters within arguments and non-option parameters are preserved (see <strong>QUOTING</strong>). When the output is processed in the shell script, it will seem to be composed of distinct elements that can be processed one by one (by using the shift command in most shell languages). This is imperfect in unquoted mode, as elements can be split at unexpected places if they contain whitespace or special characters.
+  <p>If there are problems parsing the parameters, for example because a required argument is not found or an option is not recognized, an error will be reported on stderr, there will be no output for the offending element, and a non-zero error status is returned.
+  <p>For a short option, a single '<strong>-</strong>' and the option character are generated as one parameter. If the option has an argument, the next parameter will be the argument. If the option takes an optional argument, but none was found, the next parameter will be generated but be empty in quoting mode, but no second parameter will be generated in unquoted (compatible) mode. Note that many other <strong>getopt</strong>(1) implementations do not support optional arguments.
+  <p>If several short options were specified after a single '<strong>-</strong>', each will be present in the output as a separate parameter.
+  <p>For a long option, '<strong>--</strong>' and the full option name are generated as one parameter. This is done regardless whether the option was abbreviated or specified with a single '<strong>-</strong>' in the input. Arguments are handled as with short options.
+  <p>Normally, no non-option parameters output is generated until all options and their arguments have been generated. Then '<strong>--</strong>' is generated as a single parameter, and after it the non-option parameters in the order they were found, each as a separate parameter. Only if the first character of the short options string was a '<strong>-</strong>', non-option parameter output is generated at the place they are found in the input (this is not supported if the first format of the <strong>SYNOPSIS</strong> is used; in that case all preceding occurrences of '<strong>-</strong>' and '<strong>+</strong>' are ignored).
+</div>
+<div class="section">
+  <h2>QUOTING</h2>
+  <p>In compatible mode, whitespace or 'special' characters in arguments or non-option parameters are not handled correctly. As the output is fed to the shell script, the script does not know how it is supposed to break the output into separate parameters. To circumvent this problem, this implementation offers quoting. The idea is that output is generated with quotes around each parameter. When this output is once again fed to the shell (usually by a shell <strong>eval</strong> command), it is split correctly into separate parameters.
+  <p>Quoting is not enabled if the environment variable <strong>GETOPT_COMPATIBLE</strong> is set, if the first form of the <strong>SYNOPSIS</strong> is used, or if the option '<strong>-u</strong>' is found.
+  <p>Different shells use different quoting conventions. You can use the '<strong>-s</strong>' option to select the shell you are using. The following shells are currently supported: '<strong>sh</strong>', '<strong>bash</strong>', '<strong>csh</strong>' and '<strong>tcsh</strong>'. Actually, only two 'flavors' are distinguished: sh-like quoting conventions and csh-like quoting conventions. Chances are that if you use another shell script language, one of these flavors can still be used.
+</div>
+<div class="section">
+  <h2>SCANNING MODES</h2>
+  <p>The first character of the short options string may be a '<strong>-</strong>' or a '<strong>+</strong>' to indicate a special scanning mode. If the first calling form in the <strong>SYNOPSIS</strong> is used they are ignored; the environment variable <strong>POSIXLY_CORRECT</strong> is still examined, though.
+  <p>If the first character is '<strong>+</strong>', or if the environment variable <strong>POSIXLY_CORRECT</strong> is set, parsing stops as soon as the first non-option parameter (i.e. a parameter that does not start with a '<strong>-</strong>') is found that is not an option argument. The remaining parameters are all interpreted as non-option parameters.
+  <p>If the first character is a '<strong>-</strong>', non-option parameters are outputted at the place where they are found; in normal operation, they are all collected at the end of output after a '<strong>--</strong>' parameter has been generated. Note that this '<strong>--</strong>' parameter is still generated, but it will always be the last parameter in this mode.
+</div>
+<div class="section">
+  <h2>COMPATIBILITY</h2>
+  <p>This version of <strong>getopt</strong>(1) is written to be as compatible as possible to other versions. Usually you can just replace them with this version without any modifications, and with some advantages.
+  <p>If the first character of the first parameter of getopt is not a '<strong>-</strong>', <strong>getopt</strong> goes into compatibility mode. It will interpret its first parameter as the string of short options, and all other arguments will be parsed. It will still do parameter shuffling (i.e. all non-option parameters are output at the end), unless the environment variable <strong>POSIXLY_CORRECT</strong> is set.
+  <p>The environment variable <strong>GETOPT_COMPATIBLE</strong> forces <strong>getopt</strong> into compatibility mode. Setting both this environment variable and <strong>POSIXLY_CORRECT</strong> offers 100% compatibility for 'difficult' programs. Usually, though, neither is needed.
+  <p>In compatibility mode, leading '<strong>-</strong>' and '<strong>+</strong>' characters in the short options string are ignored.
+</div>
+<div class="section">
+  <h2>RETURN CODES</h2>
+  <p><strong>getopt</strong> returns error code <strong>0</strong> for successful parsing, <strong>1</strong> if <strong>getopt</strong>(3) returns errors, <strong>2</strong> if it does not understand its own parameters, <strong>3</strong> if an internal error occurs like out-of-memory, and <strong>4</strong> if it is called with <strong>-T</strong>.
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <p>Example scripts for (ba)sh and (t)csh are provided with the <strong>getopt</strong>(1) distribution, and are optionally installed in <strong>/usr/share/getopt/</strong> or <strong>/usr/share/doc/</strong> in the util-linux subdirectory.
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <dl>
+    <dt>POSIXLY_CORRECT
+    <dd>
+      <p>This environment variable is examined by the <strong>getopt</strong>(3) routines. If it is set, parsing stops as soon as a parameter is found that is not an option or an option argument. All remaining parameters are also interpreted as non-option parameters, regardless whether they start with a '<strong>-</strong>'.
+    <dt>GETOPT_COMPATIBLE
+    <dd>
+      <p>Forces <strong>getopt</strong> to use the first calling format as specified in the <strong>SYNOPSIS</strong>.
+  </dl>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p><strong>getopt</strong>(3) can parse long options with optional arguments that are given an empty optional argument (but can not do this for short options). This <strong>getopt</strong>(1) treats optional arguments that are empty as if they were not present.
+  <p>The syntax if you do not want any short option variables at all is not very intuitive (you have to set them explicitly to the empty string).
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p><a href="mailto:frodo@frodo.looijaard.name">Frodo Looijaard</a>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>getopt</strong>(3), <strong>bash</strong>(1), <strong>tcsh</strong>(1).
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The getopt command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+

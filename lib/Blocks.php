@@ -65,6 +65,24 @@ class Blocks
                 }
             }
 
+            if (preg_match('~^\.MT <?(.*?)>?$~u', $line, $matches)) {
+                $anchor       = $dom->createElement('a');
+                $emailAddress = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
+                if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+                    $emailAddress = 'mailto:' . $emailAddress;
+                }
+                $anchor->setAttribute('href', $emailAddress);
+                $parentForLine->appendChild($anchor);
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $line = $lines[$i];
+                    if (preg_match('~^\.ME~u', $line)) {
+                        continue 2;
+                    }
+                    TextContent::interpretAndAppendCommand($anchor, $line);
+                }
+                throw new Exception('.MT with no corresponding .ME');
+            }
+
             if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
                 $anchor = $dom->createElement('a');
                 $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);

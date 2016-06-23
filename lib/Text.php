@@ -41,9 +41,9 @@ class Text
             // \" is start of a comment. Everything up to the end of the line is ignored.
             // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
             // but this behaviour is consistent with what the man command renders:
-            $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~', '$1', $line);
+            $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $line);
 
-            if (preg_match('~^\.ig( |$)~u', $line)) {
+            if (preg_match('~^\.ig(\s|$)~u', $line)) {
                 for ($i = $i + 1; $i < $numRawLines; ++$i) {
                     if ($rawLines[$i] === '..') {
                         continue 2;
@@ -315,7 +315,7 @@ class Text
             // .so: ignore for now so we can build builtins.1
             // .bd: "Embolden font by N-1 units."
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd)( |$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd)(\s|$)~u',
               $line)
             ) {
                 continue;
@@ -396,7 +396,7 @@ class Text
 
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
-                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . '( |$)~', '.' . $old . '$1', $line);
+                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
                 }
             }
 

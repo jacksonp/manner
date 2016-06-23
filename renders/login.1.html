@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="June 2012" data-package="util-linux" data-section-name="User Commands">
+<title>LOGIN</title>
+<h1>LOGIN</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>login - begin session on the system
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>login</strong> [ <strong>-p</strong> ] [ <strong>-h</strong> <em>host</em> ] [ <strong>-H</strong> ] [ <strong>-f</strong> <em>username</em> | <em>username</em> ]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>login</strong> is used when signing onto a system. If no argument is given, <strong>login</strong> prompts for the username.
+  <p>The user is then prompted for a password, where appropriate. Echoing is disabled to prevent revealing the password. Only a small number of password failures are permitted before <strong>login</strong> exits and the communications link is severed.
+  <p>If password aging has been enabled for the account, the user may be prompted for a new password before proceeding. He will be forced to provide his old password and the new password before continuing. Please refer to <strong>passwd</strong>(1) for more information.
+  <p>The user and group ID will be set according to their values in the <em>/etc/passwd</em> file. There is one exception if the user ID is zero: in this case, only the primary group ID of the account is set. This should allow the system administrator to login even in case of network problems. The value for <strong>$HOME</strong>, <strong>$USER</strong>, <strong>$SHELL</strong>, <strong>$PATH</strong>, <strong>$LOGNAME</strong>, and <strong>$MAIL</strong> are set according to the appropriate fields in the password entry. <strong>$PATH</strong> defaults to <em>/usr/local/bin:/bin:/usr/bin</em> for normal users, and to <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em> for root, if not otherwise configured.
+  <p>The environment variable <strong>$TERM</strong> will be preserved, if it exists (other environment variables are preserved if the <strong>-p</strong> option is given), else it will be initialized to the terminal type on your tty.
+  <p>Then the user's shell is started. If no shell is specified for the user in <strong>/etc/passwd</strong>, then <strong>/bin/sh</strong> is used. If there is no directory specified in <em>/etc/passwd</em>, then <em>/</em> is used (the home directory is checked for the <em>.hushlogin</em> file described below).
+  <p>If the file <em>.hushlogin</em> exists, then a “quiet” login is performed (this disables the checking of mail and the printing of the last login time and message of the day). Otherwise, if <em>/var/log/lastlog</em> exists, the last login time is printed (and the current login is recorded).
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><strong>-p</strong>
+    <dd>
+      <p>Used by <strong>getty</strong>(8) to tell <strong>login</strong> not to destroy the environment.
+    <dt><strong>-f</strong>
+    <dd>
+      <p>Used to skip a second login authentication. This specifically does <strong>not</strong> work for root, and does not appear to work well under Linux.
+    <dt><strong>-h</strong>
+    <dd>
+      <p>Used by other servers (i.e., <strong>telnetd</strong>(8)) to pass the name of the remote host to <strong>login</strong> so that it may be placed in utmp and wtmp. Only the superuser may use this option.
+      <p>Note that the <strong>-h</strong> option has impact on the <strong>PAM service name</strong>. The standard service name is <em>login</em>, with the <strong>-h</strong> option the name is <em>remote</em>. It is necessary to create proper PAM config files (e.g. <em>/etc/pam.d/login</em> and <em>/etc/pam.d/remote</em>).
+    <dt><strong>-H</strong>
+    <dd>
+      <p>Used by other servers (i.e., <strong>telnetd</strong>(8)) to tell <strong>login</strong> that printing the hostname should be suppressed in the login: prompt.
+    <dt><strong>-V</strong>
+    <dd>
+      <p>Display version information and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>CONFIG FILE ITEMS</h2>
+  <p><strong>login</strong> reads the <em>/etc/login.defs</em>(5) configuration file. Note that the configuration file could be distributed with another package (e.g. shadow-utils). The following configuration items are relevant for <strong>login</strong>(1):
+  <p><strong>MOTD_FILE</strong> (string)
+  <div class="indent-4">
+    <p>If defined, a “:” delimited list of “message of the day” files to be displayed upon login. The default value is <em>/etc/motd</em>. If the <strong>MOTD_FILE</strong> item is empty or a quiet login is enabled, then the message of the day is not displayed. Note that the same functionality is also provided by <strong>pam_motd</strong>(8) PAM module.
+  </div>
+  <p><strong>LOGIN_TIMEOUT</strong> (number)
+  <div class="indent-4">
+    <p>Max time in seconds for login. The default value is <em>60</em>.
+  </div>
+  <p><strong>LOGIN_RETRIES</strong> (number)
+  <div class="indent-4">
+    <p>Maximum number of login retries in case of a bad password. The default value is <em>3</em>.
+  </div>
+  <p><strong>FAIL_DELAY</strong> (number)
+  <div class="indent-4">
+    <p>Delay in seconds before being allowed another three tries after a login failure. The default value is <em>5</em>.
+  </div>
+  <p><strong>TTYPERM</strong> (string)
+  <div class="indent-4">
+    <p>The terminal permissions. The default value is <em>0600</em> or <em>0620</em> if tty group is used.
+  </div>
+  <p><strong>TTYGROUP</strong> (string)
+  <div class="indent-4">
+    <p>The login tty will be owned by the <strong>TTYGROUP</strong>. The default value is <em>tty</em>. If the <strong>TTYGROUP</strong> does not exist, then the ownership of the terminal is set to the user´s primary group.
+    <p>The <strong>TTYGROUP</strong> can be either the name of a group or a numeric group identifier.
+  </div>
+  <p><strong>HUSHLOGIN_FILE</strong> (string)
+  <div class="indent-4">
+    <p>If defined, this file can inhibit all the usual chatter during the login sequence. If a full pathname (e.g. <em>/etc/hushlogins</em>) is specified, then hushed mode will be enabled if the user´s name or shell are found in the file. If this global hush login file is empty then the hushed mode will be enabled for all users.
+    <p>If a full pathname is not specified, then hushed mode will be enabled if the file exists in the user´s home directory.
+    <p>The default is to check <em>/etc/hushlogins</em> and if it does not exist then <em>~/.hushlogin</em>
+    <p>If the <strong>HUSHLOGIN_FILE</strong> item is empty, then all the checks are disabled.
+  </div>
+  <p><strong>DEFAULT_HOME</strong> (boolean)
+  <div class="indent-4">
+    <p>Indicate if login is allowed if we can not change directory to the home directory. If set to <em>yes</em>, the user will login in the root (/) directory if it is not possible to change directory to her home. The default value is <em>yes</em>.
+  </div>
+  <p><strong>LOG_UNKFAIL_ENAB</strong> (boolean)
+  <div class="indent-4">
+    <p>Enable display of unknown usernames when login failures are recorded. The default value is <em>no</em>.
+    <p>Note that logging unknown usernames may be a security issue if a user enters her password instead of her login name.
+  </div>
+  <p><strong>ENV_PATH</strong> (string)
+  <div class="indent-4">
+    <p>If set, it will be used to define the PATH environment variable when a regular user logs in. The default value is <em>/usr/local/bin:/bin:/usr/bin</em>
+  </div>
+  <p><strong>ENV_ROOTPATH</strong> (string)<br>
+  <strong>ENV_SUPATH</strong> (string)
+  <div class="indent-4">
+    <p>If set, it will be used to define the PATH environment variable when the superuser logs in. The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>
+  </div>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <pre><em> /var/run/utmp</em>
+<em> /var/log/wtmp</em>
+<em> /var/log/lastlog</em>
+<em> /var/spool/mail/*</em>
+<em> /etc/motd</em>
+<em> /etc/passwd</em>
+<em> /etc/nologin</em>
+<em> /etc/pam.d/login</em>
+<em> /etc/pam.d/remote</em>
+<em> /etc/hushlogins</em>
+<em> .hushlogin</em></pre>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>init</strong>(8), <strong>getty</strong>(8), <strong>mail</strong>(1), <strong>passwd</strong>(1), <strong>passwd</strong>(5), <strong>environ</strong>(7), <strong>shutdown</strong>(8)
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>The undocumented BSD <strong>-r</strong> option is not supported. This may be required by some <strong>rlogind</strong>(8) programs.
+  <p>A recursive login, as used to be possible in the good old days, no longer works; for most purposes <strong>su</strong>(1) is a satisfactory substitute. Indeed, for security reasons, login does a vhangup() system call to remove any possible listening processes on the tty. This is to avoid password sniffing. If one uses the command <strong>login</strong>, then the surrounding shell gets killed by vhangup() because it's no longer the true owner of the tty. This can be avoided by using <strong>exec login</strong> in a top-level shell or xterm.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Derived from BSD login 5.40 (5/9/89) by <a href="mailto:glad@daimi.dk">Michael Glad</a> for HP-UX<br>
+  Ported to Linux 0.12: <a href="mailto:poe@daimi.aau.dk">Peter Orbaek</a><br>
+  Rewritten to a PAM-only version by <a href="mailto:kzak@redhat.com">Karel Zak</a>
+</div>
+<div class="section">
+  <h2>AVAILABILITY</h2>
+  <p>The login command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>
+</div>
+
