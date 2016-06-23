@@ -27,7 +27,7 @@ class Manner
             throw new Exception('No $man->title.');
         }
 
-        Section::handle($manPageContainer, $lines);
+        Blocks::handle($manPageContainer, $lines);
 
         $html = $dom->saveHTML();
 
@@ -49,7 +49,7 @@ class Manner
               '<meta name="man-page-info" data-date="' . htmlspecialchars($man->date) . '" data-package="' . htmlspecialchars($man->package) . '" data-section-name="' . htmlspecialchars($man->section_name) . '">');
             fwrite($fp, '<title>' . htmlspecialchars($man->title) . '</title>');
             fwrite($fp, $html);
-            fclose($fp);            
+            fclose($fp);
         }
     }
 

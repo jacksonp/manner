@@ -37,7 +37,7 @@ class Block_TP
                     $dtLine = $lines[++$i];
                 }
 
-                if (in_array($dtLine, ['.br', '.sp', '.B'])) { // e.g. albumart-qt.1, ipmitool.1, blackbox.1
+                if (in_array($dtLine, ['.br', '.sp', '.B']) or preg_match(Blocks::BLOCK_END_REGEX, $dtLine)) { // e.g. albumart-qt.1, ipmitool.1, blackbox.1
                     --$i;
                     break; // i.e. skip the .TP line
                 }

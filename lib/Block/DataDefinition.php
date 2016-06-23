@@ -34,7 +34,7 @@ class Block_DataDefinition
                 if (preg_match('~^\.[LP]?P$~u', $line) and $i < $numLines - 1 and mb_substr($lines[$i + 1], 0, 3) === '.TP') {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
-                } elseif (preg_match('~^\.([HTLP]?P|SS)~u', $line) or ($hitIP && !$hitBlankIP)) {
+                } elseif (preg_match('~^\.([HTLP]?P|SS|SH)~u', $line) or ($hitIP && !$hitBlankIP)) {
                     --$i;
                     break;
                 }

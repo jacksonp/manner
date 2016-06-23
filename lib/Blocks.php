@@ -4,7 +4,7 @@
 class Blocks
 {
 
-    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS)~u';
+    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH)~u';
 
     static function handle(DOMElement $parentNode, array $lines)
     {
@@ -23,7 +23,7 @@ class Blocks
 
             $canAppendNextText = true;
 
-            $blockClasses = ['SS', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['SH', 'SS', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
