@@ -34,19 +34,10 @@ class Blocks
                 }
             }
 
-            // Ignore .RE macros without corresponding .RS, and .ad macros that haven't been trimmed as in middle of $lines
-            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b'])) {
+            // Ignore stray .RE and .EE macros, and .ad macros that haven't been trimmed as in middle of $lines
+            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b', '.EE'])) {
                 continue;
             }
-
-            if ($line === '.EE') {
-                // Strays
-                if ($parentNode->hasChildNodes()) {
-                    $parentNode->appendChild($dom->createElement('br'));
-                }
-                continue;
-            }
-
 
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
