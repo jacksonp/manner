@@ -34,8 +34,11 @@ class Blocks
                 }
             }
 
-            // Ignore stray .RE and .EE macros, and .ad macros that haven't been trimmed as in middle of $lines
-            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b', '.EE'])) {
+            // Ignore:
+            // stray .RE and .EE macros,
+            // .ad macros that haven't been trimmed as in middle of $lines
+            // empty .BR macros
+            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR'])) {
                 continue;
             }
 
@@ -56,7 +59,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'SM', 'SB'];
+            $inlineClasses = ['MT', 'UR', 'SM', 'SB', 'B', 'I'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -87,10 +90,10 @@ class Blocks
                         }
                         throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
                     } else {
-                        if ($line === '.B' || $line === '.ft B' || $line === '.ft 3') {
+                        if ($line === '.ft B' || $line === '.ft 3') {
                             $parentForLine = $parentForLine->appendChild($dom->createElement('strong'));
                             $line          = $nextLine;
-                        } elseif ($line === '.I' || $line === '.ft I' || $line === '.ft 2') {
+                        } elseif ($line === '.ft I' || $line === '.ft 2') {
                             $parentForLine = $parentForLine->appendChild($dom->createElement('em'));
                             $line          = $nextLine;
                         } elseif ($line === '.ft CW') {

@@ -28,13 +28,13 @@ class HybridNode extends DOMElement
 
     function hasContent()
     {
-        return $this->childNodes->length > 1 || $this->firstChild->nodeValue !== '';
+        return $this->childNodes->length > 1 or ($this->firstChild and $this->firstChild->nodeValue !== '');
     }
 
     function appendBlockIfHasContent(HybridNode $block)
     {
         if ($block->hasChildNodes()) {
-            if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+            if ($block->childNodes->length > 1 or trim($block->firstChild->textContent) !== '') {
                 $this->appendChild($block);
             }
         }
