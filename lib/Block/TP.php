@@ -41,13 +41,14 @@ class Block_TP
                     }
                 }
 
-                if (in_array($dtLine, ['.br', '.sp']) or preg_match(Blocks::BLOCK_END_REGEX, $dtLine)) { // e.g. albumart-qt.1, ipmitool.1
+                // e.g. albumart-qt.1, ipmitool.1:
+                if (in_array($dtLine, ['.br', '.sp']) or preg_match(Blocks::BLOCK_END_REGEX, $dtLine)) {
                     --$i;
                     break; // i.e. skip the .TP line
                 }
 
                 $dt = $dom->createElement('dt');
-                TextContent::interpretAndAppendCommand($dt, $dtLine);
+                Blocks::handle($dt, [$dtLine]);
                 $dl->appendChild($dt);
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {

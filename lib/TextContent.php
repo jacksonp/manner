@@ -24,33 +24,6 @@ class TextContent
             return;
         }
 
-        self::$canAddWhitespace = !self::$continuation;
-        // See e.g. imgtool.1
-        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
-        self::$continuation = $replacements > 0;
-
-        if (mb_strpos($line, '.SM ') === 0) {
-            $smallNode = $dom->createElement('small');
-            TextContent::interpretAndAppendText($smallNode, mb_substr($line, 4), true);
-            if ($smallNode->hasContent()) {
-                $parentNode->appendChild($smallNode);
-            }
-
-            return;
-        }
-
-        if (mb_strpos($line, '.SB ') === 0) {
-            $bold = $dom->createElement('strong');
-            TextContent::interpretAndAppendText($bold, mb_substr($line, 4), true);
-            if ($bold->hasContent()) {
-                $small = $dom->createElement('small');
-                $small->appendChild($bold);
-                $parentNode->appendChild($small);
-            }
-
-            return;
-        }
-
         if (preg_match('~^\.(?:([RBI][RBI]?)|ft ([RBI]))\s(?<text>.*)$~u', $line, $matches)) {
 
             // See why (?J) setting with named <command> didn't work sometime instead of this:
@@ -120,6 +93,11 @@ class TextContent
     {
 
         $dom = $parentNode->ownerDocument;
+
+        self::$canAddWhitespace = !self::$continuation;
+        // See e.g. imgtool.1
+        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
+        self::$continuation = $replacements > 0;
 
         $textSegments = preg_split(
           '~(?<!\\\\)(\\\\f(?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',

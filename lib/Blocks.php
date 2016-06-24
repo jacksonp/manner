@@ -42,7 +42,7 @@ class Blocks
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName, ['p', 'blockquote'])) {
+                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt'])) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
@@ -56,40 +56,15 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.MT <?(.*?)>?$~u', $line, $matches)) {
-                $anchor       = $dom->createElement('a');
-                $emailAddress = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
-                if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-                    $emailAddress = 'mailto:' . $emailAddress;
-                }
-                $anchor->setAttribute('href', $emailAddress);
-                $parentForLine->appendChild($anchor);
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.ME~u', $line)) {
-                        continue 2;
-                    }
-                    TextContent::interpretAndAppendCommand($anchor, $line);
-                }
-                throw new Exception('.MT with no corresponding .ME');
-            }
+            $inlineClasses = ['MT', 'UR', 'SM', 'SB'];
 
-            if (preg_match('~^\.UR <?(.*?)>?$~u', $line, $matches)) {
-                $anchor = $dom->createElement('a');
-                $url    = TextContent::interpretString(Macro::parseArgString($matches[1])[0]);
-                if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
-                    $url = 'mailto:' . $url;
+            foreach ($inlineClasses as $inlineClass) {
+                $className = 'Inline_' . $inlineClass;
+                $newI      = $className::checkAppend($parentForLine, $lines, $i);
+                if ($newI !== false) {
+                    $i = $newI;
+                    continue 2;
                 }
-                $anchor->setAttribute('href', $url);
-                $parentForLine->appendChild($anchor);
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (preg_match('~^\.UE~u', $line)) {
-                        continue 2;
-                    }
-                    TextContent::interpretAndAppendCommand($anchor, $line);
-                }
-                throw new Exception('.UR with no corresponding .UE');
             }
 
             if (preg_match('~^\.([RBI][RBI]?|ft|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
@@ -127,33 +102,6 @@ class Blocks
                         $canAppendNextText = false;
                     }
                 }
-            }
-
-            if ($line === '.SM') {
-                if ($i === $numLines - 1) {
-                    continue;
-                }
-                $nextLine = $lines[++$i];
-                if ($nextLine === '') {
-                    continue;
-                }
-                $parentForLine     = $parentForLine->appendChild($dom->createElement('small'));
-                $line              = $nextLine;
-                $canAppendNextText = false;
-            }
-
-            if ($line === '.SB') {
-                if ($i === $numLines - 1) {
-                    continue;
-                }
-                $nextLine = $lines[++$i];
-                if ($nextLine === '') {
-                    continue;
-                }
-                $small             = $parentForLine->appendChild($dom->createElement('small'));
-                $parentForLine     = $small->appendChild($dom->createElement('strong'));
-                $line              = $nextLine;
-                $canAppendNextText = false;
             }
 
             if ($canAppendNextText
