@@ -22,6 +22,10 @@ class Block_SS
             }
             // Text for subheading is on next line.
             $subsectionHeading = $lines[++$i];
+            if ($subsectionHeading === '.br') {
+                // Skip this to work around bugs in man pages, e.g. xorrecord.1
+                return $i;
+            }
             TextContent::interpretAndAppendCommand($h3, $subsectionHeading);
         } else {
             $subsectionHeading = trim($matches[1]);

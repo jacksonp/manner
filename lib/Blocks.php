@@ -10,7 +10,7 @@ class Blocks
     {
 
         // Trim $lines
-        $trimVals = ['', '.br', '.sp', '.ad', '.ad n', '.ad b'];
+        $trimVals = ['', '.ad', '.ad n', '.ad b'];
         ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
 
@@ -45,7 +45,7 @@ class Blocks
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt'])) {
+                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt', 'strong', 'em', 'small'])) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
@@ -59,7 +59,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'SM', 'SB', 'B', 'I'];
+            $inlineClasses = ['MT', 'UR', 'FontOneInputLine'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -84,7 +84,7 @@ class Blocks
                     continue;
                 } else {
                     if ($nextLine[0] === '.') {
-                        if (in_array($line, ['.ft 1', '.ft P', '.ft CR']) || $nextLine === '.nf') {
+                        if (in_array($line, ['.ft 1', '.ft P', '.ft CR']) or in_array($nextLine, ['.nf', '.br'])) {
                             --$i;
                             continue;
                         }
@@ -125,12 +125,16 @@ class Blocks
             }
 
             if (preg_match('~^\\\\?\.br~u', $line)) {
-                if ($parentForLine->hasChildNodes() && $i !== $numLines - 1) {
+                if (!in_array($parentForLine->tagName,
+                    ['p', 'blockquote']) or ($parentForLine->hasChildNodes() and $i !== $numLines - 1)
+                ) {
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));
                 }
             } elseif (preg_match('~^\.(sp|ne)~u', $line)) {
-                if ($parentForLine->hasChildNodes() && $i !== $numLines - 1) {
+                if (!in_array($parentForLine->tagName,
+                    ['p', 'blockquote']) or ($parentForLine->hasChildNodes() and $i !== $numLines - 1)
+                ) {
                     // Only bother if this isn't the first node.
                     $parentForLine->appendChild($dom->createElement('br'));
                     $parentForLine->appendChild($dom->createElement('br'));
