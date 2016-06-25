@@ -38,8 +38,9 @@ class Blocks
             // empty .BR macros
             // .R: man page trying to set font to Regular? (not an actual macro, not needed)
             // .BB: ???
+            // .sp,, .sp2: man page bugs
             if (preg_match('~^\.RE~u', $line) or
-              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB'])
+              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2'])
             ) {
                 continue;
             }
@@ -61,7 +62,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont', 'ft'];
+            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont', 'ft', 'VerticalSpace'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -88,33 +89,17 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\\\\?\.br~u', $line)) {
-                if (!in_array($parentForLine->tagName,
-                    ['p', 'blockquote']) or ($parentForLine->hasChildNodes() and $i !== $numLines - 1)
-                ) {
-                    // Only bother if this isn't the first node.
-                    $parentForLine->appendChild($dom->createElement('br'));
-                }
-            } elseif (preg_match('~^\.(sp|ne)~u', $line)) {
-                if (!in_array($parentForLine->tagName,
-                    ['p', 'blockquote']) or ($parentForLine->hasChildNodes() and $i !== $numLines - 1)
-                ) {
-                    // Only bother if this isn't the first node.
-                    $parentForLine->appendChild($dom->createElement('br'));
-                    $parentForLine->appendChild($dom->createElement('br'));
-                }
-            } else {
 
-                // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
-                if (mb_substr($line, 0, 1) === ' '
-                  && $parentForLine->hasChildNodes()
-                  && ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE || $parentForLine->lastChild->tagName !== 'br')
-                ) {
-                    $parentForLine->appendChild($dom->createElement('br'));
-                }
-
-                TextContent::interpretAndAppendCommand($parentForLine, $line);
+            // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
+            if (mb_substr($line, 0, 1) === ' '
+              && $parentForLine->hasChildNodes()
+              && ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE || $parentForLine->lastChild->tagName !== 'br')
+            ) {
+                $parentForLine->appendChild($dom->createElement('br'));
             }
+
+            TextContent::interpretAndAppendCommand($parentForLine, $line);
+
 
         }
 
