@@ -54,7 +54,7 @@ class BlockPreformatted
                 continue;
             }
 
-            $inlineClasses = ['FontOneInputLine', 'AlternatingFont'];
+            $inlineClasses = ['FontOneInputLine', 'AlternatingFont', 'ft'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;

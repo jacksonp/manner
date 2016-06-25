@@ -18,58 +18,7 @@ class TextContent
     static function interpretAndAppendCommand(DOMElement $parentNode, string $line)
     {
 
-        $dom = $parentNode->ownerDocument;
-
         if (in_array($line, ['', '.']) || preg_match('~^\.(ad|fi)~u', $line)) {
-            return;
-        }
-
-        // NB: these are also used for preformatted blocks, have to handle there as well before removing:
-        if (preg_match('~^\.ft ([RBI])\s(?<text>.*)$~u', $line, $matches)) {
-
-            $command = $matches[1];
-
-            $bits = Macro::parseArgString($matches['text']);
-            if (is_null($bits)) {
-                return; // Just skip
-            }
-
-            if (mb_strlen($command) === 1) {
-                $bits = [implode(' ', $bits)];
-            }
-
-            foreach ($bits as $bi => $bit) {
-                $commandCharIndex = $bi % 2;
-                if (!isset($command[$commandCharIndex])) {
-                    throw new Exception($line . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
-                }
-                if (trim($bit) === '') {
-                    TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
-                    continue;
-                }
-                switch ($command[$commandCharIndex]) {
-                    case 'R':
-                        TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
-                        break;
-                    case 'B':
-                        $strongNode = $dom->createElement('strong');
-                        TextContent::interpretAndAppendText($strongNode, $bit, $bi === 0);
-                        if ($strongNode->hasContent()) {
-                            $parentNode->appendChild($strongNode);
-                        }
-                        break;
-                    case 'I':
-                        $emNode = $dom->createElement('em');
-                        TextContent::interpretAndAppendText($emNode, $bit, $bi === 0);
-                        if ($emNode->hasContent()) {
-                            $parentNode->appendChild($emNode);
-                        }
-                        break;
-                    default:
-                        throw new Exception($line . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
-                }
-            }
-
             return;
         }
 
