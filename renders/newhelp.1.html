@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>NEWHELP</title>
+<h1>NEWHELP</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>newhelp</strong> - generate a performance metrics help database
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>$PCP_BINADM_DIR/newhelp</strong> [<strong>-V</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-o</strong> <em>outputfile</em>] [<strong>-v</strong> <em>version</em>] [<em>file</em> ...]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>newhelp</strong> generates the Performance Co-Pilot help text files used by Performance Metric Domain Agents (PMDAs).
+  <p>Normally <strong>newhelp</strong> operates on the default Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative namespace is loaded from the file <em>pmnsfile</em>.
+  <p>When there is only one input file, the base name of the new database is derived from the name of the input <em>file</em>, otherwise the <strong>-o</strong> flag must be given to explicitly name the database. If no input files are supplied, <strong>newhelp</strong> reads from the standard input stream, in which case the <strong>-o</strong> flag must be given.
+  <p>If the output file name is determined to be <strong>foo</strong>, <strong>newhelp</strong> will create <strong>foo.dir</strong> and <strong>foo.pag</strong>.
+  <p>Although historically there have been multiple help text file formats, the only format currently supported using the <strong>-v</strong> option is <em>version</em> 2, and this is the default if no <strong>-v</strong> flag is provided.
+  <p>The <strong>-V</strong> flag causes verbose messages to be printed while <strong>newhelp</strong> is parsing its input.
+  <p>The first line of each entry in a help source file consists of an “@” character beginning the line followed by a space and then the performance metric name and a one line description of the metric. Following lines (up to the next line beginning with “@” or end of file) may contain a verbose help description. E.g.
+  <pre> #
+ # This is an example of newhelp's input syntax
+ #
+ @ kernel.all.cpu.idle CPU idle time
+ A cumulative count of the number of milliseconds
+ of CPU idle time, summed over all processors.</pre>
+  <p>Three-part numeric metric identifiers (PMIDs) may be used in place of metric names, e.g. <code>60.0.23</code> rather than <code>kernel.all.cpu.idle</code> in the example above. Other than for dynamic metrics (where the existence of a metric is known to a PMDA, but not visible in the PMNS and hence has no name that could be known to <em>newhelp</em>) use of this syntactic variant is not encouraged.
+  <p>Lines beginning with “#” are ignored, as are blank lines in the file before the first “@”. The verbose help text is optional.
+  <p>As a special case, a “metric” name of the form <em>NNN.MM</em> (for numeric <em>NNN</em> and <em>MM</em>) is interpreted as an instance domain identification, and the text describes the instance domain.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl class="indent-10">
+    <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
+    <dd>
+      <p>default PMNS specification files
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>chkhelp</strong>(1), <strong>PMAPI</strong>(3), <strong>pmLookupInDomText</strong>(3), <strong>pmLookupText</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
+</div>
+

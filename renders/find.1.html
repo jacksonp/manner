@@ -39,7 +39,7 @@
   <dl>
     <dt>-D debugopts
     <dd>
-      <p>Print diagnostic information; this can be helpful to diagnose problems with why <strong>find</strong> is not doing what you want. The list of debug options should be comma separated. Compatibility of the debug options is not guaranteed between releases of findutils. For a complete list of valid debug options, see the output of <strong>find -D help</strong>. Valid debug options include
+      <p>Print diagnostic information; this can be helpful to diagnose problems with why <strong>find</strong> is not doing what you want. The list of debug options should be comma separated. Compatibility of the debug options is not guaranteed between releases of findutils. For a complete list of valid debug options, see the output of <strong>find -D</strong> <strong>help</strong>. Valid debug options include
       <dl>
         <dt>exec
         <dd>
@@ -117,7 +117,7 @@
         <p>Deprecated; use the <strong>-L</strong> option instead. Dereference symbolic links. Implies <strong>-noleaf</strong>. The <strong>-follow</strong> option affects only those tests which appear after it on the command line. Unless the <strong>-H</strong> or <strong>-L</strong> option has been specified, the position of the <strong>-follow</strong> option changes the behaviour of the <strong>-newer</strong> predicate; any files listed as the argument of <strong>-newer</strong> will be dereferenced if they are symbolic links. The same consideration applies to <strong>-newerXY</strong>, <strong>-anewer</strong> and <strong>-cnewer</strong>. Similarly, the <strong>-type</strong> predicate will always match against the type of the file that a symbolic link points to rather than the link itself. Using <strong>-follow</strong> causes the <strong>-lname and -ilname</strong> predicates always to return false.
       <dt>-regextype <em>type</em>
       <dd>
-        <p>Changes the regular expression syntax understood by <strong>-regex</strong> and <strong>-iregex</strong> tests which occur later on the command line. To see which regular expression types are known, use <strong>-regextype help</strong>. The Texinfo documentation (see <strong>SEE ALSO</strong>) explains the meaning of and differences between the various types of regular expression.
+        <p>Changes the regular expression syntax understood by <strong>-regex</strong> and <strong>-iregex</strong> tests which occur later on the command line. To see which regular expression types are known, use <strong>-regextype</strong> <strong>help</strong>. The Texinfo documentation (see <strong>SEE</strong> <strong>ALSO</strong>) explains the meaning of and differences between the various types of regular expression.
       <dt>-warn, -nowarn
       <dd>
         <p>Turn warning messages on or off. These warnings apply only to the command line usage, not to any conditions that <strong>find</strong> might encounter when it searches directories. The default behaviour corresponds to <strong>-warn</strong> if standard input is a tty, and to <strong>-nowarn</strong> otherwise. If a warning message relating to command-line usage is produced, the exit status of <strong>find</strong> is not affected. If the POSIXLY_CORRECT environment variable is set, and <strong>-warn is also used, it is not specified which, if any, warnings will be active.</strong>
@@ -188,7 +188,7 @@
         <p>File was last accessed more recently than <em>file</em> was modified. If <em>file</em> is a symbolic link and the <strong>-H</strong> option or the <strong>-L</strong> option is in effect, the access time of the file it points to is always used.
       <dt>-atime <em>n</em>
       <dd>
-        <p>File was last accessed <em>n</em>*24 hours ago. When find figures out how many 24-hour periods ago the file was last accessed, any fractional part is ignored, so to match <strong>-atime +1</strong>, a file has to have been accessed at least <em>two</em> days ago.
+        <p>File was last accessed <em>n</em>*24 hours ago. When find figures out how many 24-hour periods ago the file was last accessed, any fractional part is ignored, so to match <strong>-atime</strong> <strong>+1</strong>, a file has to have been accessed at least <em>two</em> days ago.
       <dt>-cmin <em>n</em>
       <dd>
         <p>File's status was last changed <em>n</em> minutes ago.
@@ -296,7 +296,7 @@
         <p>All of the permission bits <em>mode</em> are set for the file. Symbolic modes are accepted in this form, and this is usually the way in which you would want to use them. You must specify `u', `g' or `o' if you use a symbolic mode. See the <strong>EXAMPLES</strong> section for some illustrative examples.
       <dt>-perm /<em>mode</em>
       <dd>
-        <p>Any of the permission bits <em>mode</em> are set for the file. Symbolic modes are accepted in this form. You must specify `u', `g' or `o' if you use a symbolic mode. See the <strong>EXAMPLES</strong> section for some illustrative examples. If no permission bits in <em>mode</em> are set, this test matches any file (the idea here is to be consistent with the behaviour of <strong>-perm -000</strong>).
+        <p>Any of the permission bits <em>mode</em> are set for the file. Symbolic modes are accepted in this form. You must specify `u', `g' or `o' if you use a symbolic mode. See the <strong>EXAMPLES</strong> section for some illustrative examples. If no permission bits in <em>mode</em> are set, this test matches any file (the idea here is to be consistent with the behaviour of <strong>-perm</strong> <strong>-000</strong>).
       <dt>-perm +<em>mode</em>
       <dd>
         <p>This is no longer supported (and has been deprecated since 2005). Use <strong>-perm /<em>mode</em></strong> instead.
@@ -816,7 +816,7 @@
 <strong> \( -size +100M -fprintf /root/big.txt '%-10s %p\n' \)</strong></pre>
   <p>Traverse the filesystem just once, listing setuid files and directories into <strong>/root/suid.txt</strong> and large files into <strong>/root/big.txt</strong>.
   <pre><strong> find $HOME -mtime 0</strong></pre>
-  <p>Search for files in your home directory which have been modified in the last twenty-four hours. This command works this way because the time since each file was last modified is divided by 24 hours and any remainder is discarded. That means that to match <strong>-mtime 0</strong>, a file will have to have a modification in the past which is less than 24 hours ago.
+  <p>Search for files in your home directory which have been modified in the last twenty-four hours. This command works this way because the time since each file was last modified is divided by 24 hours and any remainder is discarded. That means that to match <strong>-mtime</strong> <strong>0</strong>, a file will have to have a modification in the past which is less than 24 hours ago.
   <pre><strong> find /sbin /usr/sbin -executable \! -readable -print</strong></pre>
   <p>Search for files which are executable but not readable.
   <pre><strong> find . -perm 664</strong></pre>
@@ -957,7 +957,7 @@
       <td>-iregex
       <td>3.8
   </table>
-  <p>The syntax <strong>-perm +MODE</strong> was removed in findutils-4.5.12, in favour of <strong>-perm /MODE</strong>. The <strong>+MODE</strong> syntax had been deprecated since findutils-4.2.21 which was released in 2005.
+  <p>The syntax <strong>-perm +MODE</strong> was removed in findutils-4.5.12, in favour of <strong>-perm</strong> <strong>/MODE</strong>. The <strong>+MODE</strong> syntax had been deprecated since findutils-4.2.21 which was released in 2005.
 </div>
 <div class="section">
   <h2>NON-BUGS</h2>

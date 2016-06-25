@@ -21,8 +21,6 @@ class Blocks
 
             $line = $lines[$i];
 
-            $canAppendNextText = true;
-
             $blockClasses = ['SH', 'SS', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
@@ -49,13 +47,13 @@ class Blocks
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt', 'strong', 'em', 'small'])) {
+                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code'])) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
                 }
             } else {
-                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2'])) {
+                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3'])) {
                     // Start a new paragraph after certain blocks
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
                 } else {
@@ -63,7 +61,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont'];
+            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont', 'ft'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -74,45 +72,7 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.(ft|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
-                if ($i === $numLines - 1
-                  or in_array($line, ['.ft', '.ft R'])
-                  or $lines[$i + 1] === '.IP http://www.gnutls.org/manual/'
-                  or mb_strpos($lines[$i + 1], '.B') === 0
-                  or mb_strpos($lines[$i + 1], '.I') === 0
-                ) {
-                    continue;
-                }
-                $nextLine = $lines[++$i];
-                if ($nextLine === '') {
-                    continue;
-                } else {
-                    if ($nextLine[0] === '.') {
-                        if (in_array($line, ['.ft 1', '.ft P', '.ft CR']) or in_array($nextLine, ['.nf', '.br'])) {
-                            --$i;
-                            continue;
-                        }
-                        throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
-                    } else {
-                        if ($line === '.ft B' || $line === '.ft 3') {
-                            $parentForLine = $parentForLine->appendChild($dom->createElement('strong'));
-                            $line          = $nextLine;
-                        } elseif ($line === '.ft I' || $line === '.ft 2') {
-                            $parentForLine = $parentForLine->appendChild($dom->createElement('em'));
-                            $line          = $nextLine;
-                        } elseif ($line === '.ft CW') {
-                            $parentForLine = $parentForLine->appendChild($dom->createElement('code'));
-                            $line          = $nextLine;
-                        } else {
-                            $line .= ' ' . $nextLine;
-                        }
-                        $canAppendNextText = false;
-                    }
-                }
-            }
-
-            if ($canAppendNextText
-              && !in_array(mb_substr($line, 0, 1), ['.', ' '])
+            if (!in_array(mb_substr($line, 0, 1), ['.', ' '])
               && (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.')
               && !preg_match('~\\\\c$~', $line)
             ) {

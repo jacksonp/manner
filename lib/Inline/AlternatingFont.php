@@ -19,8 +19,12 @@ class Inline_AlternatingFont
         }
 
         $command = $matches[1];
-        
+
         $dom      = $parentNode->ownerDocument;
+
+        if ($parentNode->hasContent()) {
+            $parentNode->appendChild(new DOMText(' '));
+        }
 
         foreach ($arguments as $bi => $bit) {
             $commandCharIndex = $bi % 2;
@@ -28,23 +32,23 @@ class Inline_AlternatingFont
                 throw new Exception($lines[$i] . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
             }
             if (trim($bit) === '') {
-                TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
+                TextContent::interpretAndAppendText($parentNode, $bit);
                 continue;
             }
             switch ($command[$commandCharIndex]) {
                 case 'R':
-                    TextContent::interpretAndAppendText($parentNode, $bit, $bi === 0);
+                    TextContent::interpretAndAppendText($parentNode, $bit);
                     break;
                 case 'B':
                     $strongNode = $dom->createElement('strong');
-                    TextContent::interpretAndAppendText($strongNode, $bit, $bi === 0);
+                    TextContent::interpretAndAppendText($strongNode, $bit);
                     if ($strongNode->hasContent()) {
                         $parentNode->appendChild($strongNode);
                     }
                     break;
                 case 'I':
                     $emNode = $dom->createElement('em');
-                    TextContent::interpretAndAppendText($emNode, $bit, $bi === 0);
+                    TextContent::interpretAndAppendText($emNode, $bit);
                     if ($emNode->hasContent()) {
                         $parentNode->appendChild($emNode);
                     }
