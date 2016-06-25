@@ -54,7 +54,7 @@ class Blocks
 
             if (is_null($parentNodeLastBlock)) {
                 if (in_array($parentNode->tagName,
-                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'th', 'pre', 'a'])
+                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'th', 'pre', 'a', 'h2', 'h3'])
                 ) {
                     $parentForLine = $parentNode;
                 } else {
@@ -114,8 +114,7 @@ class Blocks
                 throw new Exception($line . ' unexpected command in Blocks::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line, true);
-
+            TextContent::interpretAndAppendText($parentForLine, $line, !in_array($parentForLine->tagName, ['h2', 'h3']));
 
         }
 
