@@ -38,9 +38,10 @@ class Blocks
             // empty .BR macros
             // .R: man page trying to set font to Regular? (not an actual macro, not needed)
             // .BB: ???
-            // .sp,, .sp2: man page bugs
+            // .sp,, .sp2, .br.: man page bugs
+            // .pp: spurious, in *_selinux.8 pages
             if (preg_match('~^\.RE~u', $line) or
-              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2'])
+              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2', '.br.', '.pp'])
             ) {
                 continue;
             }

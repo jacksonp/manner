@@ -20,7 +20,7 @@ class TextContent
 
         $dom = $parentNode->ownerDocument;
 
-        if (in_array($line, ['', '.', '.SH ""', '.SS ""']) || preg_match('~^\.(ad|fi)~u', $line)) {
+        if (in_array($line, ['', '.']) || preg_match('~^\.(ad|fi)~u', $line)) {
             return;
         }
 
@@ -32,10 +32,7 @@ class TextContent
 
             $bits = Macro::parseArgString($matches['text']);
             if (is_null($bits)) {
-//                if (in_array($command, [])) {
-                    return; // Just skip
-//                }
-//                throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
+                return; // Just skip
             }
 
             if (mb_strlen($command) === 1) {
@@ -74,18 +71,12 @@ class TextContent
                 }
             }
 
-
             return;
         }
 
         // FAIL on unknown command
         if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
-            if (in_array($line, ['.pp'])) {
-                // ignore spurious .pp in *_selinux.8 pages
-                return;
-            } else {
-                throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
-            }
+            throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
         }
 
         TextContent::interpretAndAppendText($parentNode, $line, true);

@@ -39,9 +39,13 @@ class Block_P
         }
 
         if (count($blockLines) > 0) {
-            $p = $dom->createElement('p');
-            Blocks::handle($p, $blockLines);
-            $parentNode->appendBlockIfHasContent($p);
+            if ($parentNode->tagName === 'p' and !$parentNode->hasContent()) {
+                Blocks::handle($parentNode, $blockLines);
+            } else {
+                $p = $dom->createElement('p');
+                Blocks::handle($p, $blockLines);
+                $parentNode->appendBlockIfHasContent($p);
+            }
         }
 
         return $i;
