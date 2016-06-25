@@ -50,7 +50,7 @@ class BlockPreformatted
                 }
                 $line      = $lines[++$i];
                 $addIndent = 4;
-            } elseif (preg_match('~^\.(nf|RS|RE|ft|fi)~u', $line)) {
+            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line)) {
                 continue;
             }
 

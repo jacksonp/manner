@@ -117,14 +117,14 @@
   <h2>EXAMPLES</h2>
   <p>For each PCP utility, there is a sample <strong>pmlogger</strong> configuration file that could be used to create an archive log suitable for replaying with that tool (i.e. includes all of the performance metrics used by the tool). For a tool named <em>foo</em> this configuration file is located in <em>$PCP_VAR_DIR/config/pmlogger/config.foo</em>.
   <p>The following is a simple default configuration file for a primary <strong>pmlogger</strong> instance, and demonstrates most of the capabilities of the configuration specification language.
-  <pre>log mandatory on once { hinv.ncpu hinv.ndisk }
+  <pre><code>log mandatory on once { hinv.ncpu hinv.ndisk }
 log mandatory on every 10 minutes {
     disk.all.write
     disk.all.read
     network.interface.in.packets [ "et0" ]
     network.interface.out.packets [ "et0" ]
     nfs.server.reqs [ "lookup" "getattr" "read" "write" ]
-}
+}</code>
 
 log advisory on every 30 minutes {
     environ.temp

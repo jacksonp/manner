@@ -54,14 +54,21 @@ class Inline_ft
                 case '3':
                     $node = $dom->createElement('strong');
                     break;
+                case 'C':
                 case 'CW':
+                case '4':
+                case 'tt':
                     $node = $dom->createElement('code');
                     break;
                 default:
                     throw new Exception($fontAbbreviation . ': Unhandled font abbreviation.');
 
             }
-            Blocks::handle($node, $blockLines);
+            if ($parentNode->isOrInTag('pre')) {
+                BlockPreformatted::handle($node, $blockLines);
+            } else {
+                Blocks::handle($node, $blockLines);
+            }
             $parentNode->appendBlockIfHasContent($node);
         }
 

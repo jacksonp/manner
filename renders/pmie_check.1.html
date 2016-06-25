@@ -58,14 +58,14 @@
       <p>All other fields are interpreted as arguments to be passed to <strong>pmie</strong>(1). Most typically this would be the <strong>-c</strong> option.
   </dl>
   <p>The following sample control lines specify one <strong>pmie</strong> instance monitoring the local host ( <em>wobbly</em>), and another monitoring performance metrics from the host <em>splat</em>.
-  <pre>wobbly  n  PCP_LOG_DIR/pmie/wobbly  -c config.default
-splat   n  PCP_LOG_DIR/pmie/splat   -c splat/cpu.conf
+  <pre><code>wobbly  n  PCP_LOG_DIR/pmie/wobbly  -c config.default
+splat   n  PCP_LOG_DIR/pmie/splat   -c splat/cpu.conf</code>
 </pre>
   <p>Typical <strong>crontab</strong>(5) entries for periodic execution of <strong>pmie_daily</strong> and <strong>pmie_check</strong> are given in <strong>$PCP_SYSCONF_DIR/pmie/crontab</strong> (unless installed by default in <em>/etc/cron.d</em> already) and shown below.
-  <pre># daily processing of pmie logs
+  <pre><code># daily processing of pmie logs
 08      0       *       *       *       $PCP_BINADM_DIR/pmie_daily
 # every 30 minutes, check pmie instances are running
-28,58   *       *       *       *       $PCP_BINADM_DIR/pmie_check
+28,58   *       *       *       *       $PCP_BINADM_DIR/pmie_check</code>
 </pre>
   <p>In order to ensure that mail is not unintentionally sent when these scripts are run from <strong>cron</strong>(8) diagnostics are always sent to log files. By default, these files are <strong>$PCP_LOG_DIR/pmie/pmie_daily.log</strong> and <strong>$PCP_LOG_DIR/pmie/pmie_check.log</strong> but this can be changed using the <strong>-l</strong> option. If this log file already exists when the script starts, it will be renamed with a <em>.prev</em> suffix (overwriting any log file saved earlier) before diagnostics are generated to the new log file.
   <p>The output from the <strong>cron</strong> execution of the scripts may be extended using the <strong>-V</strong> option to the scripts which will enable verbose tracing of their activity. By default the scripts generate no output unless some error or warning condition is encountered.
