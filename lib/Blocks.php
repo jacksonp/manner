@@ -38,7 +38,11 @@ class Blocks
             // stray .RE and .EE macros,
             // .ad macros that haven't been trimmed as in middle of $lines
             // empty .BR macros
-            if (preg_match('~^\.RE~u', $line) or in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR'])) {
+            // .R: man page trying to set font to Regular? (not an actual macro, not needed)
+            // .BB: ???
+            if (preg_match('~^\.RE~u', $line) or
+              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB'])
+            ) {
                 continue;
             }
 
@@ -59,7 +63,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'FontOneInputLine'];
+            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -70,7 +74,7 @@ class Blocks
                 }
             }
 
-            if (preg_match('~^\.([RBI][RBI]?|ft|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
+            if (preg_match('~^\.(ft|ft (?:[123RBIP]|C[WR]))$~u', $line)) {
                 if ($i === $numLines - 1
                   or in_array($line, ['.ft', '.ft R'])
                   or $lines[$i + 1] === '.IP http://www.gnutls.org/manual/'

@@ -11,7 +11,7 @@ class TextContent
     /**
      * Interpret a line inside a block - could be a macro or text.
      *
-     * @param HybridNode $parentNode
+     * @param DOMElement $parentNode
      * @param string $line
      * @throws Exception
      */
@@ -24,6 +24,7 @@ class TextContent
             return;
         }
 
+        // NB: these are also used for preformatted blocks, have to handle there as well before removing:
         if (preg_match('~^\.(?:([RBI][RBI]?)|ft ([RBI]))\s(?<text>.*)$~u', $line, $matches)) {
 
             // See why (?J) setting with named <command> didn't work sometime instead of this:
@@ -31,7 +32,10 @@ class TextContent
 
             $bits = Macro::parseArgString($matches['text']);
             if (is_null($bits)) {
-                throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
+//                if (in_array($command, [])) {
+                    return; // Just skip
+//                }
+//                throw new Exception($line . ' - UNHANDLED: if no text next input line should be bold/italic. See https://www.mankier.com/7/groff_man#Macros_to_Set_Fonts');
             }
 
             if (mb_strlen($command) === 1) {
