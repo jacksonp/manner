@@ -72,7 +72,7 @@ class BlockPreformatted
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
-            if (in_array($line, ['', '.'])) {
+            if ($line === '.') {
                 continue;
             }
 

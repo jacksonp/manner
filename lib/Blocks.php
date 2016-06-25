@@ -17,8 +17,8 @@ class Blocks
         // .sp,, .sp2, .br.: man page bugs
         // .pp: spurious, in *_selinux.8 pages
         return
-          preg_match('~^\.(RE|fi)~u', $line) or
-          in_array($line, ['.ad', '.ad n', '.ad b', '.ad l', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2', '.br.', '.pp']);
+          preg_match('~^\.(RE|fi|ad)~u', $line) or
+          in_array($line, ['.EE', '.BR', '.R', '.BB', '.sp,', '.sp2', '.br.', '.pp']);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
@@ -55,7 +55,7 @@ class Blocks
 
             if (is_null($parentNodeLastBlock)) {
                 if (in_array($parentNode->tagName,
-                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'pre', 'a'])
+                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'th', 'pre', 'a'])
                 ) {
                     $parentForLine = $parentNode;
                 } else {
