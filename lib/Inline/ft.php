@@ -17,11 +17,6 @@ class Inline_ft
             return $i; // trailing .ft: skip
         }
 
-        if ($lines[$i + 1] === '.IP http://www.gnutls.org/manual/') {
-            // TODO: revisit skipping .ft in this case
-            return $i;
-        }
-
         $arguments = Macro::parseArgString(@$matches[1]);
 
         if (is_null($arguments)) {
@@ -38,21 +33,15 @@ class Inline_ft
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        while ($i < $numLines) {
-            if ($i === $numLines - 1) {
-                break;
-            }
+        for (; $i < $numLines - 1; ++$i) {
             $nextLine = $lines[$i + 1];
             if ($nextLine === '' or
-              preg_match('~^\.ft~u', $nextLine) or
-              preg_match('~^\.(I|B|SB|SM)~u', $nextLine) or
-              preg_match('~^\.(BI|BR|IB|IR|RB|RI)\s$~u', $nextLine) or
+              preg_match('~^\.((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) or
               preg_match(Blocks::BLOCK_END_REGEX, $nextLine)
             ) {
                 break;
             }
             $blockLines[] = $nextLine;
-            ++$i;
         }
 
         if (count($blockLines) > 0) {
