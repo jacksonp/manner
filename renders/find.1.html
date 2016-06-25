@@ -806,52 +806,52 @@
 </div>
 <div class="section">
   <h2>EXAMPLES</h2>
-  <pre><strong> find /tmp -name core -type f -print | xargs /bin/rm -f</strong></pre>
+  <pre><strong>find /tmp -name core -type f -print | xargs /bin/rm -f</strong></pre>
   <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them. Note that this will work incorrectly if there are any filenames containing newlines, single or double quotes, or spaces.
   <p><strong>find /tmp -name core -type f -print0 | xargs -0 /bin/rm -f</strong>
   <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them, processing filenames in such a way that file or directory names containing single or double quotes, spaces or newlines are correctly handled. The <strong>-name</strong> test comes before the <strong>-type</strong> test in order to avoid having to call <strong>stat(2)</strong> on every file.
-  <pre><strong> find . -type f -exec file '{}' \;</strong></pre>
+  <pre><strong>find . -type f -exec file '{}' \;</strong></pre>
   <p>Runs `file' on every file in or below the current directory. Notice that the braces are enclosed in single quote marks to protect them from interpretation as shell script punctuation. The semicolon is similarly protected by the use of a backslash, though single quotes could have been used in that case also.
-  <pre><strong> find / \( -perm -4000 -fprintf /root/suid.txt '%#m %u %p\n' \) , \</strong>
+  <pre><strong>find / \( -perm -4000 -fprintf /root/suid.txt '%#m %u %p\n' \) , \</strong>
 <strong> \( -size +100M -fprintf /root/big.txt '%-10s %p\n' \)</strong></pre>
   <p>Traverse the filesystem just once, listing setuid files and directories into <strong>/root/suid.txt</strong> and large files into <strong>/root/big.txt</strong>.
-  <pre><strong> find $HOME -mtime 0</strong></pre>
+  <pre><strong>find $HOME -mtime 0</strong></pre>
   <p>Search for files in your home directory which have been modified in the last twenty-four hours. This command works this way because the time since each file was last modified is divided by 24 hours and any remainder is discarded. That means that to match <strong>-mtime</strong> <strong>0</strong>, a file will have to have a modification in the past which is less than 24 hours ago.
-  <pre><strong> find /sbin /usr/sbin -executable \! -readable -print</strong></pre>
+  <pre><strong>find /sbin /usr/sbin -executable \! -readable -print</strong></pre>
   <p>Search for files which are executable but not readable.
-  <pre><strong> find . -perm 664</strong></pre>
+  <pre><strong>find . -perm 664</strong></pre>
   <p>Search for files which have read and write permission for their owner, and group, but which other users can read but not write to. Files which meet these criteria but have other permissions bits set (for example if someone can execute the file) will not be matched.
-  <pre><strong> find . -perm -664</strong></pre>
+  <pre><strong>find . -perm -664</strong></pre>
   <p>Search for files which have read and write permission for their owner and group, and which other users can read, without regard to the presence of any extra permission bits (for example the executable bit). This will match a file which has mode 0777, for example.
-  <pre><strong> find . -perm /222</strong></pre>
+  <pre><strong>find . -perm /222</strong></pre>
   <p>Search for files which are writable by somebody (their owner, or their group, or anybody else).
-  <pre><strong> find . -perm /220</strong>
+  <pre><strong>find . -perm /220</strong>
 <strong> find . -perm /u+w,g+w</strong>
 <strong> find . -perm /u=w,g=w</strong></pre>
   <p>All three of these commands do the same thing, but the first one uses the octal representation of the file mode, and the other two use the symbolic form. These commands all search for files which are writable by either their owner or their group. The files don't have to be writable by both the owner and group to be matched; either will do.
-  <pre><strong> find . -perm -220</strong>
+  <pre><strong>find . -perm -220</strong>
 <strong> find . -perm -g+w,u+w</strong></pre>
   <p>Both these commands do the same thing; search for files which are writable by both their owner and their group.
-  <pre><strong> find . -perm -444 -perm /222 ! -perm /111</strong>
+  <pre><strong>find . -perm -444 -perm /222 ! -perm /111</strong>
 <strong> find . -perm -a+r -perm /a+w ! -perm /a+x</strong></pre>
   <p>These two commands both search for files that are readable for everybody ( <strong>-perm -444</strong> or <strong>-perm -a+r</strong>), have at least one write bit set ( <strong>-perm /222</strong> or <strong>-perm /a+w</strong>) but are not executable for anybody ( <strong>! -perm /111</strong> and <strong>! -perm /a+x</strong> respectively).
-  <pre><strong> cd /source-dir</strong>
+  <pre><strong>cd /source-dir</strong>
 <strong> find . -name .snapshot -prune -o \( \! -name *~ -print0 \)|</strong>
 <strong> cpio -pmd0 /dest-dir</strong></pre>
   <p>This command copies the contents of <strong>/source-dir</strong> to <strong>/dest-dir</strong>, but omits files and directories named <strong>.snapshot</strong> (and anything in them). It also omits files or directories whose name ends in <strong>~</strong>, but not their contents. The construct <strong>-prune -o \( ... -print0 \)</strong> is quite common. The idea here is that the expression before <strong>-prune</strong> matches things which are to be pruned. However, the <strong>-prune</strong> action itself returns true, so the following <strong>-o</strong> ensures that the right hand side is evaluated only for those directories which didn't get pruned (the contents of the pruned directories are not even visited, so their contents are irrelevant). The expression on the right hand side of the <strong>-o</strong> is in parentheses only for clarity. It emphasises that the <strong>-print0</strong> action takes place only for things that didn't have <strong>-prune</strong> applied to them. Because the default `and' condition between tests binds more tightly than <strong>-o</strong>, this is the default anyway, but the parentheses help to show what is going on.
-  <pre><strong> find repo/ \( -exec test -d {}/.svn \; -or \</strong>
+  <pre><strong>find repo/ \( -exec test -d {}/.svn \; -or \</strong>
 <strong> -exec test -d {}/.git \; -or -exec test -d {}/CVS \; \) \</strong>
 <strong> -print -prune</strong></pre>
   <p>Given the following directory of projects and their associated SCM administrative directories, perform an efficient search for the projects' roots:
-  <pre><strong> repo/project1/CVS</strong>
+  <pre><strong>repo/project1/CVS</strong>
 <strong> repo/gnu/project2/.svn</strong>
 <strong> repo/gnu/project3/.svn</strong>
 <strong> repo/gnu/project3/src/.svn</strong>
 <strong> repo/project4/.git</strong></pre>
   <p>In this example, <strong>-prune</strong> prevents unnecessary descent into directories that have already been discovered (for example we do not search project3/src because we already found project3/.svn), but ensures sibling directories (project2 and project3) are found.
-  <pre><strong> find /tmp -type f,d,l</strong></pre>
+  <pre><strong>find /tmp -type f,d,l</strong></pre>
   <p>Search for files, directories, and symbolic links in the directory <strong>/tmp</strong> passing these types as a comma-separated list (GNU extension), which is otherwise equivalent to the longer, yet more portable:
-  <pre><strong> find /tmp \( -type f -o -type d -o -type l \)</strong></pre>
+  <pre><strong>find /tmp \( -type f -o -type d -o -type l \)</strong></pre>
 </div>
 <div class="section">
   <h2>EXIT STATUS</h2>
@@ -967,13 +967,13 @@
   </div>
   <div class="subsection">
     <h3>“paths must precede expression” error message</h3>
-    <pre><strong> $ find . -name *.c -print</strong>
+    <pre><strong>$ find . -name *.c -print</strong>
  find: paths must precede expression
  Usage: find [-H] [-L] [-P] [-Olevel] [-D ... [path...] [expression]</pre>
     <p>This happens because <em>*.c</em> has been expanded by the shell resulting in <strong>find</strong> actually receiving a command line like this:
-    <pre><strong> find . -name frcode.c locate.c word_io.c -print</strong></pre>
+    <pre><strong>find . -name frcode.c locate.c word_io.c -print</strong></pre>
     <p>That command is of course not going to work. Instead of doing things this way, you should enclose the pattern in quotes or escape the wildcard:
-    <pre><strong> $ find . -name '*.c' -print</strong>
+    <pre><strong>$ find . -name '*.c' -print</strong>
 <strong> $ find . -name \*.c -print</strong></pre>
   </div>
 </div>

@@ -7,8 +7,6 @@ class BlockPreformatted
     public static function handle(HybridNode $parentNode, array $lines)
     {
 
-        $dom = $parentNode->ownerDocument;
-
         $addIndent  = 0;
         $nextIndent = 0;
         $numLines   = count($lines);
@@ -54,27 +52,19 @@ class BlockPreformatted
                 $addIndent = 4;
             } elseif (preg_match('~^\.(nf|RS|RE|ft)~u', $line)) {
                 continue;
-            } elseif (preg_match('~^\.[RBI][RBI]?$~u', $line)) {
-                if ($i === $numLines - 1) {
-                    continue;
-                }
-                $nextLine = $lines[++$i];
-                if (mb_strlen($nextLine) === 0) {
-                    continue;
-                } else {
-                    if ($nextLine[0] === '.') {
-                        throw new Exception($nextLine . ' - ' . $line . ' followed by non-text');
-                    } else {
-                        if ($line === '.B') {
-                            $line          = $nextLine;
-                            $parentForLine = $parentNode->appendChild($dom->createElement('strong'));
-                        } elseif ($line === '.I') {
-                            $line          = $nextLine;
-                            $parentForLine = $parentNode->appendChild($dom->createElement('em'));
-                        } else {
-                            $line .= ' ' . $nextLine;
-                        }
+            }
+
+            $inlineClasses = ['FontOneInputLine'];
+
+            foreach ($inlineClasses as $inlineClass) {
+                $className = 'Inline_' . $inlineClass;
+                $newI      = $className::checkAppend($parentNode, $lines, $i);
+                if ($newI !== false) {
+                    if ($i !== $numLines - 1) {
+                        $parentNode->appendChild(new DOMText("\n"));
                     }
+                    $i = $newI;
+                    continue 2;
                 }
             }
 
