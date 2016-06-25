@@ -15,44 +15,44 @@
   <h2>DESCRIPTION</h2>
   <p><strong>pmnsmerge</strong> merges multiple instances of a Performance Metrics Name Space (PMNS), as used by the components of the Performance Co-Pilot (PCP).
   <p>Each <em>infile</em> argument names a file that includes the root of a PMNS, of the form
-  <pre> root {
-     /* arbitrary stuff */
- }</pre>
+  <pre>root {
+    /* arbitrary stuff */
+}</pre>
   <p>The order in which the <em>infile</em> files are processed is determined by the presence or absence of embedded control lines of the form <code>#define _DATESTAMP YYYYMMDD</code>
   <p>Files without a control line are processed first and in the order they appear on the command line. The other files are then processed in order of ascending <code>_DATESTAMP</code>.
   <p>The <strong>-a</strong> option suppresses the argument re-ordering and processes all files in the order they appear on the command line.
   <p>The merging proceeds by matching names in PMNS, only those <strong>new</strong> names in each PMNS are considered, and these are added after any existing metrics with the longest possible matching prefix in their names. For example, merging these two input PMNS
-  <pre> root {                    root {
-                               surprise  1:1:3
-     mine       1:1:1          mine      1:1:1
-     foo                       foo
-                               yawn
-     yours      1:1:2
- }                         }
- foo {                     foo {
-     fumble     1:2:1
-                               mumble    1:2:3
-     stumble    1:2:2          stumble   1:2:2
- }                         }
-                           yawn {
-                               sleepy    1:3:1
-                           }</pre>
+  <pre>root {                    root {
+                              surprise  1:1:3
+    mine       1:1:1          mine      1:1:1
+    foo                       foo
+                              yawn
+    yours      1:1:2
+}                         }
+foo {                     foo {
+    fumble     1:2:1
+                              mumble    1:2:3
+    stumble    1:2:2          stumble   1:2:2
+}                         }
+                          yawn {
+                              sleepy    1:3:1
+                          }</pre>
   <p>Produces the resulting PMNS in <em>out</em>.
-  <pre> root {
-     mine      1:1:1
-     foo
-     yours     1:1:2
-     surprise  1:1:3
-     yawn
- }
- foo {
-     fumble    1:2:1
-     stumble   1:2:2
-     mumble    1:2:3
- }
- yawn {
-     sleepy    1:3:1
- }</pre>
+  <pre>root {
+    mine      1:1:1
+    foo
+    yours     1:1:2
+    surprise  1:1:3
+    yawn
+}
+foo {
+    fumble    1:2:1
+    stumble   1:2:2
+    mumble    1:2:3
+}
+yawn {
+    sleepy    1:3:1
+}</pre>
   <p>To avoid accidental over-writing of PMNS files, <em>outfile</em> is expected to not exist when <strong>pmnsmerge</strong> starts. The <strong>-f</strong> option allows an existing <em>outfile</em> to be unlinked (if possible) and truncated before writing starts.
   <p>Normally duplicate names for the same Performance Metric Identifier (PMID) in a PMNS are allowed. The <strong>-d</strong> option is the default option and is included for backwards compatibility. The <strong>-x</strong> option reverses the default and <strong>pmnsmerge</strong> will report an error and exit with a non-zero status if a duplicate name is found for a PMID in any of the <em>input</em> PMNS files or in the merged <em>output</em> PMNS.
   <p>The <strong>-v</strong> option produces one line of diagnostic output as each <em>infile</em> is processed.

@@ -26,7 +26,7 @@ class Inline_MT
             if (preg_match('~^\.ME~u', $line)) {
                 return $i;
             }
-            TextContent::interpretAndAppendCommand($anchor, $line);
+            Blocks::handle($anchor, [$line]);
         }
         throw new Exception('.MT with no corresponding .ME');
 

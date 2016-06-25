@@ -50,7 +50,7 @@ class BlockPreformatted
                 }
                 $line      = $lines[++$i];
                 $addIndent = 4;
-            } elseif (preg_match('~^\.(nf|RS|RE|ft)~u', $line)) {
+            } elseif (preg_match('~^\.(nf|RS|RE|ft|fi)~u', $line)) {
                 continue;
             }
 
@@ -72,7 +72,16 @@ class BlockPreformatted
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
-            TextContent::interpretAndAppendCommand($parentForLine, $line);
+            if (in_array($line, ['', '.'])) {
+                continue;
+            }
+
+            // FAIL on unknown command
+            if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
+                throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
+            }
+
+            TextContent::interpretAndAppendText($parentForLine, $line);
             if ($i !== $numLines - 1) {
                 $parentNode->appendChild(new DOMText("\n"));
             }

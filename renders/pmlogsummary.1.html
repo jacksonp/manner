@@ -77,11 +77,11 @@
   <h2>OUTPUT FORMAT</h2>
   <p>The <strong>pmlogsummary</strong> output format is spartan as it is intended to be post-processed with standard tools. This means that there is no annotation associated with each output field which would make processing harder. The intention is that <strong>pmlogsummary</strong> output be massaged into a format which can be used by a spreadsheet program, is suitable for inclusion in a web page, or whatever.
   <p>For each metric, <strong>pmlogsummary</strong> produces a single output line as follows:
-  <pre> <em>metricname</em>  <em>value(s)</em> <em>units</em></pre>
+  <pre><em>metricname</em>  <em>value(s)</em> <em>units</em></pre>
   <p>For metrics with multiple instances, <strong>pmlogsummary</strong> produces multiple lines of output as follows:
-  <pre> <em>metricname</em> ["<em>instance 1</em>"] <em>value(s)</em> <em>units</em>
- <em>metricname</em> ["<em>instance 2</em>"] <em>value(s)</em> <em>units</em>
- <em>metricname</em> ["<em>instance N</em>"] <em>value(s)</em> <em>units</em></pre>
+  <pre><em>metricname</em> ["<em>instance 1</em>"] <em>value(s)</em> <em>units</em>
+<em>metricname</em> ["<em>instance 2</em>"] <em>value(s)</em> <em>units</em>
+<em>metricname</em> ["<em>instance N</em>"] <em>value(s)</em> <em>units</em></pre>
   <p>The printed <em>value(s)</em> for each metric always follow this order: stochastic average, time average, minimum, minimum timestamp, maximum, maximum timestamp, count, [bin 1 range], bin 1 count, ... [bin <em>nbins</em> range], bin <em>nbins</em> count. The individual values for each metric are space-separated (unless the <strong>-f</strong> option is used).
   <p>All counter metrics which are measured in units of time will be converted to seconds before being rate converted and used in the <strong>pmlogsummary</strong> calculations. The values calculated for these metrics are also printed in seconds.
   <p>The units will be displayed in the format described by <strong>pmUnitsStr</strong>(3).
@@ -96,19 +96,19 @@
 </div>
 <div class="section">
   <h2>EXAMPLE</h2>
-  <pre> $ pmlogsummary -aN -p 1 -B 3 surf network.interface.out.bytes
- Log Label (Log Format Version 1)
- Performance metrics from host www.sgi.com
-   commencing Tue Jan 14 20:50:50.317 1997
-   ending     Wed Jan 29 10:13:07.387 1997
- network.interface.out.bytes ["xpi0"] 202831.3 202062.5 20618.7 \
+  <pre>$ pmlogsummary -aN -p 1 -B 3 surf network.interface.out.bytes
+Log Label (Log Format Version 1)
+Performance metrics from host www.sgi.com
+  commencing Tue Jan 14 20:50:50.317 1997
+  ending     Wed Jan 29 10:13:07.387 1997
+network.interface.out.bytes ["xpi0"] 202831.3 202062.5 20618.7 \
         1235067.7 971 [&lt;=425435.0] 912 [&lt;=830251.4] 42 [&lt;=1235067.7] \
         17 byte / sec
- network.interface.out.bytes ["xpi1"] 0.0 0.0 0.0 0.0 1033 [&lt;=0.0] \
+network.interface.out.bytes ["xpi1"] 0.0 0.0 0.0 0.0 1033 [&lt;=0.0] \
         1033 [] 0 [] 0 byte / sec
- network.interface.out.bytes ["et0"] 0.0 0.0 0.0 0.0 1033 [&lt;=0.0] \
+network.interface.out.bytes ["et0"] 0.0 0.0 0.0 0.0 1033 [&lt;=0.0] \
         1033 [] 0 [] 0 byte / sec
- network.interface.out.bytes ["lo0"] 899.0 895.2 142.6 9583.1 1031 \
+network.interface.out.bytes ["lo0"] 899.0 895.2 142.6 9583.1 1031 \
         [&lt;=3289.4] 1027 [&lt;=6436.2] 3 [&lt;=9583.1] 1 byte / sec</pre>
   <p>A description of each field in the first line of statistical output, which describes one instance of the network.interface.out.bytes metric, follows:
   <table class="tbl">

@@ -17,15 +17,15 @@
   <p>The input files must have a supported <em>format</em>, specified with the <em>--format</em> option.
   <p>The <em>.tree</em> and <em>.zip</em> files are copied into <strong>monodoc</strong>'s <em>sources</em> directory, alongside a <em>.source</em> file which is used by <strong>monodoc</strong>(1) to specify where the documentation should be displayed.
   <p>The <em>.source</em> file has the following format:
-  <pre>   &lt;?xml version="1.0"?&gt;
-   &lt;monodoc&gt;
-     &lt;node label="LABEL" name="PATH" parent="PARENT"&gt;
-       &lt;node label="LABEL2" name="PATH2" /&gt;
-       &lt;!-- ... --&gt;
-     &lt;/node&gt;
-     &lt;source provider="PROVIDER" basefile="BASEFILE" path="PATH" /&gt;
-     &lt;!-- other &lt;source/&gt; elements --&gt;
-   &lt;/monodoc&gt;</pre>
+  <pre>  &lt;?xml version="1.0"?&gt;
+  &lt;monodoc&gt;
+    &lt;node label="LABEL" name="PATH" parent="PARENT"&gt;
+      &lt;node label="LABEL2" name="PATH2" /&gt;
+      &lt;!-- ... --&gt;
+    &lt;/node&gt;
+    &lt;source provider="PROVIDER" basefile="BASEFILE" path="PATH" /&gt;
+    &lt;!-- other &lt;source/&gt; elements --&gt;
+  &lt;/monodoc&gt;</pre>
   <p>The <em>/monodoc/node</em> node is an optional node that specifies where in the monodoc tree the documentation should be displayed, and <em>//node</em> elements may be nested to any depth to create trees. <em>//node/@label</em> is the label that will be displayed within the monodoc tree.
   <p><em>//node/@name</em> is the name of the monodoc tree node, and may be used as the value of the <em>/monodoc/source/@path</em> value.
   <p><em>//node/@parent</em> is the node name to use as the parent node. <em>$MONO_INSTALL_PREFIX/lib/monodoc/monodoc.xml</em> contains a list of such names, and this can be any <em>//node/@name</em> value. If the <em>//node/@parent</em> value isn't found, then it's inserted under the “Various” tree node.
@@ -33,8 +33,8 @@
   <p>The <em>/monodoc/source/@basefile</em> attribute specifies the filename prefix for the documentation files. This must be the same prefix as used with the <em>--out</em> parameter. There should be <em>no</em> filename extension on this value.
   <p>The <em>/monodoc/source/@path</em> attribute specifies the parent node in <strong>monodoc</strong>(1)'s tree view where the documentation will be inserted. See the <em>$MONO_INSTALL_PREFIX/lib/monodoc/monodoc.xml</em> file for a list of <em>PATH</em> values (the <em>//node/@name</em> values), or it may be a <em>//node/@name</em> value in the same <em>.source</em> file.
   <p>Once the <em>BASEFILE.source</em> has been written, the documentation can be installed so that <strong>monodoc</strong>(1) will display the documentation with the command:
-  <pre>   cp BASEFILE.source BASEFILE.tree BASEFILE.zip \
-     `pkg-config monodoc --variable=sourcesdir`</pre>
+  <pre>  cp BASEFILE.source BASEFILE.tree BASEFILE.zip \
+    `pkg-config monodoc --variable=sourcesdir`</pre>
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -48,7 +48,7 @@
       The default format (if none is specifed) is <em>ecma</em>.<br>
       <br>
       The <em>--format</em> option may be interleaved with <em>PATHS</em> to change the format used for the remaining parameters (until the next <em>--format</em> option is seen), e.g.:
-      <pre>   mdoc assemble -o PREFIX A B --format=man C D --format=xhtml E</pre>
+      <pre>  mdoc assemble -o PREFIX A B --format=man C D --format=xhtml E</pre>
       <p>will assemble directories <em>A</em> and <em>B</em> with the <em>ecma</em> format, files <em>C</em> and <em>D</em> with the <em>man</em> formt, and directory <em>E</em> with the <em>xhtml</em> format.
     <dt><strong>-o</strong>, <strong>--out</strong>=<em>PREFIX</em>
     <dd>
@@ -74,13 +74,13 @@
     <h3>error</h3>
     <p>The <em>Error Documentation Format</em> is used to present detailed error messages, and is used in <strong>monodoc</strong>(1)'s “C# Compiler Error Reference” tree.
     <p>In this format, <em>PATHS</em> is a configuration file, containing the XML:
-    <pre>     &lt;ErrorProviderConfig&gt;
-         &lt;FilesPath&gt;../../mcs/errors&lt;/FilesPath&gt;
-         &lt;Match&gt;cs????*.cs&lt;/Match&gt;
-         &lt;ErrorNumSubstringStart&gt;2&lt;/ErrorNumSubstringStart&gt;
-         &lt;ErrorNumSubstringLength&gt;4&lt;/ErrorNumSubstringLength&gt;
-         &lt;FriendlyFormatString&gt;CS{0:0###}&lt;/FriendlyFormatString&gt;
-     &lt;/ErrorProviderConfig&gt;</pre>
+    <pre>    &lt;ErrorProviderConfig&gt;
+        &lt;FilesPath&gt;../../mcs/errors&lt;/FilesPath&gt;
+        &lt;Match&gt;cs????*.cs&lt;/Match&gt;
+        &lt;ErrorNumSubstringStart&gt;2&lt;/ErrorNumSubstringStart&gt;
+        &lt;ErrorNumSubstringLength&gt;4&lt;/ErrorNumSubstringLength&gt;
+        &lt;FriendlyFormatString&gt;CS{0:0###}&lt;/FriendlyFormatString&gt;
+    &lt;/ErrorProviderConfig&gt;</pre>
     <p>The elements mean:
     <dl>
       <dt><em>/ErrorProviderConfig/FilesPath</em>
@@ -109,10 +109,10 @@
     <h3>man</h3>
     <p>The <em>Man Page Documentation Format</em> displays groff man pages. (This is <em>not</em> a full groff parser, and only handles the man page constructs used within the mono man pages.)
     <p><em>PATHS</em> is a set of XML files containing:
-    <pre>   &lt;?xml version="1.0"?&gt;
-   &lt;manpages&gt;
-     &lt;manpage name="NAME" page="FILE" /&gt;
-   &lt;/manpages&gt;</pre>
+    <pre>  &lt;?xml version="1.0"?&gt;
+  &lt;manpages&gt;
+    &lt;manpage name="NAME" page="FILE" /&gt;
+  &lt;/manpages&gt;</pre>
     <p>There may be multiple <em>//manpage</em> elements within the root <em>/manpage</em> element.
     <p>The <em>/manpages/manpage/@name</em> attribute contains the display name for the tree view node, which is also the URL of the man page when using <strong>monodoc</strong>(1)'s <em>Lookup URL</em> command (before prefixing with a <em>man:</em> prefix). Thus, if <em>/manpages/manpage/@name</em> contains <em>mono(1)</em>, then <em>man:mono(1)</em> can be used in the <em>Lookup URL</em> command to view the <em>mono(1)</em> man page.
     <p>The <em>/manpages/manpage/@page</em> attribute is the filename that contains the man page. If this file does not exist, then <em>/manpages/manpage/@name</em> will not be displayed within the tree view.

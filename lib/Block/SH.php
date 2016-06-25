@@ -21,16 +21,16 @@ class Block_SH
                 return $i;
             }
             // Text for subheading is on next line.
-            $subsectionHeading = $lines[++$i];
-            TextContent::interpretAndAppendCommand($headingNode, $subsectionHeading);
+            $sectionHeading = $lines[++$i];
+            Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $subsectionHeading = trim($matches[1]);
-            $subsectionHeading = trim($subsectionHeading, '"');
-            TextContent::interpretAndAppendText($headingNode, $subsectionHeading);
+            $sectionHeading = trim($matches[1]);
+            $sectionHeading = trim($sectionHeading, '"');
+            TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SH macros
-        if (empty($subsectionHeading)) {
+        if (empty($sectionHeading)) {
             return $i;
         }
 

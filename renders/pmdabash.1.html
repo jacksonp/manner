@@ -38,67 +38,67 @@
 <div class="section">
   <h2>INSTALLATION</h2>
   <p>In order for a host to export the names, help text and values for the bash performance metrics, do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/bash
- # ./Install</pre>
+  <pre># cd $PCP_PMDAS_DIR/bash
+# ./Install</pre>
   <p>As soon as an instrumented shell script (see INSTRUMENTATION selection below) is run, with tracing enabled, new metric values will appear - no further setup of the agent is required.
   <p>If you want to undo the installation, do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/bash
- # ./Remove</pre>
+  <pre># cd $PCP_PMDAS_DIR/bash
+# ./Remove</pre>
   <p><strong>pmdabash</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
 </div>
 <div class="section">
   <h2>INSTRUMENTATION</h2>
   <p>In order to allow the flow of event data between a <strong>bash</strong>(1) script and <strong>pmdabash</strong>, the script should take the following actions:
-  <pre> #!/bin/sh
- source $PCP_DIR/etc/pcp.sh
+  <pre>#!/bin/sh
+source $PCP_DIR/etc/pcp.sh
 
- pcp_trace on $@       # enable tracing
- echo "awoke, $count"
+pcp_trace on $@       # enable tracing
+echo "awoke, $count"
 
- pcp_trace off         # disable tracing</pre>
+pcp_trace off         # disable tracing</pre>
   <p>The tracing can be enabled and disabled any number of times by the script. On successful installation of the agent, several metrics will be available:
-  <pre> $ pminfo bash
- bash.xtrace.numclients
- bash.xtrace.maxmem
- bash.xtrace.queuemem
- bash.xtrace.count
- bash.xtrace.records
- bash.xtrace.parameters.pid
- bash.xtrace.parameters.parent
- bash.xtrace.parameters.lineno
- bash.xtrace.parameters.function
- bash.xtrace.parameters.command</pre>
+  <pre>$ pminfo bash
+bash.xtrace.numclients
+bash.xtrace.maxmem
+bash.xtrace.queuemem
+bash.xtrace.count
+bash.xtrace.records
+bash.xtrace.parameters.pid
+bash.xtrace.parameters.parent
+bash.xtrace.parameters.lineno
+bash.xtrace.parameters.function
+bash.xtrace.parameters.command</pre>
   <p>When an instrumented script is running, the generation of event records can be verified using the <strong>pmevent</strong>(1) command, as follows:
-  <pre> $ pmevent -t 1 -x '' bash.xtrace.records
- host:      localhost
- samples:   all
- bash.xtrace.records["4538 ./test-trace.sh 1 2 3"]: 5 event records
-   10:00:05.000 --- event record [0] flags 0x19 (point,id,parent) ---
-     bash.xtrace.parameters.pid 4538
-     bash.xtrace.parameters.parent 4432
-     bash.xtrace.parameters.lineno 43
-     bash.xtrace.parameters.command "true"
-   10:00:05.000 --- event record [1] flags 0x19 (point,id,parent) ---
-     bash.xtrace.parameters.pid 4538
-     bash.xtrace.parameters.parent 4432
-     bash.xtrace.parameters.lineno 45
-     bash.xtrace.parameters.command "((  count++  ))"
-   10:00:05.000 --- event record [2] flags 0x19 (point,id,parent) ---
-     bash.xtrace.parameters.pid 4538
-     bash.xtrace.parameters.parent 4432
-     bash.xtrace.parameters.lineno 46
-     bash.xtrace.parameters.command "echo 'awoke, 3'"
-   10:00:05.000 --- event record [3] flags 0x19 (point,id,parent) ---
-     bash.xtrace.parameters.pid 4538
-     bash.xtrace.parameters.parent 4432
-     bash.xtrace.parameters.lineno 47
-     bash.xtrace.parameters.command "tired 2"
-   10:00:05.000 --- event record [4] flags 0x19 (point,id,parent) ---
-     bash.xtrace.parameters.pid 4538
-     bash.xtrace.parameters.parent 4432
-     bash.xtrace.parameters.lineno 38
-     bash.xtrace.parameters.function "tired"
-     bash.xtrace.parameters.command "sleep 2"</pre>
+  <pre>$ pmevent -t 1 -x '' bash.xtrace.records
+host:      localhost
+samples:   all
+bash.xtrace.records["4538 ./test-trace.sh 1 2 3"]: 5 event records
+  10:00:05.000 --- event record [0] flags 0x19 (point,id,parent) ---
+    bash.xtrace.parameters.pid 4538
+    bash.xtrace.parameters.parent 4432
+    bash.xtrace.parameters.lineno 43
+    bash.xtrace.parameters.command "true"
+  10:00:05.000 --- event record [1] flags 0x19 (point,id,parent) ---
+    bash.xtrace.parameters.pid 4538
+    bash.xtrace.parameters.parent 4432
+    bash.xtrace.parameters.lineno 45
+    bash.xtrace.parameters.command "((  count++  ))"
+  10:00:05.000 --- event record [2] flags 0x19 (point,id,parent) ---
+    bash.xtrace.parameters.pid 4538
+    bash.xtrace.parameters.parent 4432
+    bash.xtrace.parameters.lineno 46
+    bash.xtrace.parameters.command "echo 'awoke, 3'"
+  10:00:05.000 --- event record [3] flags 0x19 (point,id,parent) ---
+    bash.xtrace.parameters.pid 4538
+    bash.xtrace.parameters.parent 4432
+    bash.xtrace.parameters.lineno 47
+    bash.xtrace.parameters.command "tired 2"
+  10:00:05.000 --- event record [4] flags 0x19 (point,id,parent) ---
+    bash.xtrace.parameters.pid 4538
+    bash.xtrace.parameters.parent 4432
+    bash.xtrace.parameters.lineno 38
+    bash.xtrace.parameters.function "tired"
+    bash.xtrace.parameters.command "sleep 2"</pre>
 </div>
 <div class="section">
   <h2>FILES</h2>

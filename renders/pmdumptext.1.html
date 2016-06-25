@@ -18,11 +18,11 @@
   <p><strong>pmdumptext</strong> may be run in interactive mode with the <strong>-i</strong> option which displays the values in equal width columns. Without this option, no attempt is made to line up any values allowing the output to be easily parsed by other applications.
   <p>The format of the output can be further controlled by changing the precision of the values with <strong>-P</strong>, the width of the columns with <strong>-w</strong>, and the format of the values with the <strong>-G</strong> and <strong>-F</strong> options for the shortest of scientific or fixed digits, and a fixed width format, respectively.
   <p>The <em>metrics</em> to be dumped can be listed on the command line, in a <em>config</em> file, or piped to <strong>pmdumptext</strong> on <em>stdin</em>. A metric consists of an optional source (host or archive), the metric name, and an optional instance list immediately after the name. A colon is used to separate a host name from the metric, and a forward slash (“/”) to separate an archive name from the metric. Instances are enclosed in square brackets and a comma is used between each instance if more than one is stated. For example, some legal metrics are:
-  <pre> kernel.all.cpu.idle
- myhost:kernel.all.cpu.idle[cpu0,cpu3]
- /path/to/myarchive/kernel.all.cpu.idle[cpu1]</pre>
+  <pre>kernel.all.cpu.idle
+myhost:kernel.all.cpu.idle[cpu0,cpu3]
+/path/to/myarchive/kernel.all.cpu.idle[cpu1]</pre>
   <p>The format of a metric is further described in <strong>PCPIntro</strong>(1). A normalization value may optionally follow a metric name in a <em>config</em> file or on <em>stdin</em>. The metric value will be scaled by this value. For example, if the file system “/dev/root” has a capacity of 1965437 bytes, then the percentage of the file system that is used could be dumped with this <em>config</em>:
-  <pre> filesys.used[/dev/root] 19654.37</pre>
+  <pre>filesys.used[/dev/root] 19654.37</pre>
   <p>A normalization value may not be used with <em>metrics</em> specified as command line arguments.
   <p>A metric name is not required to be a leaf node in the Performance Metrics Name Space (PMNS), except when one or more instances are specified. For example, to dump all file system metrics, only <em>filesys</em> is required to dump <em>filesys.capacity</em>, <em>filesys.used</em>, <em>filesys.free</em> etc.
 </div>
@@ -135,22 +135,22 @@
 <div class="section">
   <h2>EXAMPLES</h2>
   <p>o To examine the load on two hosts foo and bar, simultaneously:
-  <pre> $ pmdumptext -il 'foo:kernel.all.load[1]' 'bar:kernel.all.load[1]'
-              Source        foo     bar
- Wed Jul 30 11:37:53      0.309   0.409
- Wed Jul 30 11:37:54      0.309   0.409
- Wed Jul 30 11:37:55      0.309   0.409</pre>
+  <pre>$ pmdumptext -il 'foo:kernel.all.load[1]' 'bar:kernel.all.load[1]'
+             Source        foo     bar
+Wed Jul 30 11:37:53      0.309   0.409
+Wed Jul 30 11:37:54      0.309   0.409
+Wed Jul 30 11:37:55      0.309   0.409</pre>
   <p>o To output the memory utilization on a remote host called bong with a simpler timestamp:
-  <pre> $ pmdumptext -imu -h bong -f '%H:%M:%S' mem.util
-   Metric        kernel  fs_ctl  _dirty  _clean    free    user
-    Units             b       b       b       b       b       b
- 09:32:28         8.98M   0.97M   0.00    3.90M   7.13M  46.13M
- 09:32:29         8.99M   0.98M   0.00    5.71M   5.39M  46.03M
- 09:32:30         8.99M   1.07M   0.00    5.81M   4.55M  46.69M
- 09:32:31         9.03M   1.16M   0.00    6.45M   3.48M  47.00M
- 09:32:32         9.09M   1.18M  20.48K   6.23M   3.29M  47.30M</pre>
+  <pre>$ pmdumptext -imu -h bong -f '%H:%M:%S' mem.util
+  Metric        kernel  fs_ctl  _dirty  _clean    free    user
+   Units             b       b       b       b       b       b
+09:32:28         8.98M   0.97M   0.00    3.90M   7.13M  46.13M
+09:32:29         8.99M   0.98M   0.00    5.71M   5.39M  46.03M
+09:32:30         8.99M   1.07M   0.00    5.81M   4.55M  46.69M
+09:32:31         9.03M   1.16M   0.00    6.45M   3.48M  47.00M
+09:32:32         9.09M   1.18M  20.48K   6.23M   3.29M  47.30M</pre>
   <p>o To dump all metrics collected in an archive at a 30 second interval to a file for processing by another tool:
-  <pre> $ pminfo -a archive | pmdumptext -t 30s -m -a archive &gt; outfile</pre>
+  <pre>$ pminfo -a archive | pmdumptext -t 30s -m -a archive &gt; outfile</pre>
 </div>
 <div class="section">
   <h2>FILES</h2>

@@ -94,13 +94,13 @@
   <pre>      $ monodocer -assembly:MyWidgets -path:generated_docs
         $ mdassembler --ecma generated_docs -out:MyWidgets</pre>
   <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
-  <pre> &lt;?xml version="1.0"?&gt;
- &lt;monodoc&gt;
-   &lt;source provider="ecma" basefile="MyWidgets" path="classlib-gnome"/&gt;
- &lt;/monodoc&gt;</pre>
+  <pre>&lt;?xml version="1.0"?&gt;
+&lt;monodoc&gt;
+  &lt;source provider="ecma" basefile="MyWidgets" path="classlib-gnome"/&gt;
+&lt;/monodoc&gt;</pre>
   <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the “classlib-gnome” part of the tree. If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml.
   <p>Once you have all of your files (.zip, .tree and .sources) you can install them into the system with the following command:
-  <pre>         $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`</pre>
+  <pre>        $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`</pre>
   <p>The above will copy the files into the directory that Monodoc has registered (you might need root permissions to do this). The actual directory is returned by the <em>pkg-config</em> invocation.
 </div>
 <div class="section">
@@ -136,7 +136,7 @@
   <p><strong>Bound:</strong> <em>T:System.Collections.Generic.List{System.Int32} T:System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Predicate{System.String}}}</em> .
   <p>As you can see, bound variants can be arbitrarily complex (just like generics).
   <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the “index” of the type/method's generic parameter is used as the binding, so given
-  <pre>   class FooType {
+  <pre>     class FooType {
           public static void Foo&lt;T&gt; (System.Predicate&lt;T&gt; predicate) {}
         }</pre>
   <p>The String ID for this method is <em>M:FooType.Foo``1(System.Predicate{``0})</em> , as <em>``0</em> is the 0th generic parameter index which is bound to <em>System.Predicate&lt;T&gt;</em> .
@@ -213,13 +213,13 @@
       <p>Create a list or table of items. <em>&lt;list/&gt;</em> makes use of nested <em>&lt;item&gt;XML&lt;/item&gt;</em> , <em>&lt;listheader&gt;XML&lt;/listheader&gt;</em> , <em>&lt;term&gt;XML_TEXT&lt;/term&gt;</em> , and <em>&lt;description&gt;XML_TEXT&lt;/description&gt;</em> elements.<br>
       <br>
       <em>Lists</em> have the syntax:
-      <pre>         &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
+      <pre> &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
           &lt;item&gt;&lt;term&gt;Bullet 1&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 2&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 3&lt;/term&gt;&lt;/item&gt;
         &lt;/list&gt;</pre>
       <p><em>Tables</em> have the syntax:
-      <pre>         &lt;list type="table"&gt;
+      <pre> &lt;list type="table"&gt;
           &lt;listheader&gt; &lt;!-- listheader bolds this row --&gt;
             &lt;term&gt;Column 1&lt;/term&gt;
             &lt;description&gt;Column 2&lt;/description&gt;
@@ -264,7 +264,7 @@
       <em>&lt;permission/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       <em>CREF</em> is a type reference to the security permission required, while <em>XML_TEXT</em> is a description of why the permission is required.
-      <pre>         &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
+      <pre> &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
           Requires permission for reading and writing files. See
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /&gt;,
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /&gt;.
@@ -274,7 +274,7 @@
       <p>Contains detailed information about a member.<br>
       <br>
       <em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
-      <pre>         &lt;remarks&gt;Insert detailed information here.&lt;/remarks&gt;</pre>
+      <pre> &lt;remarks&gt;Insert detailed information here.&lt;/remarks&gt;</pre>
     <dt><em>&lt;returns&gt;XML_TEXT&lt;/returns&gt;</em>
     <dd>
       <p><em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>

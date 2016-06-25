@@ -33,19 +33,19 @@
   <p>Firstly, a security model for interprocess communication between instrumented applications and <strong>pmdammv</strong> (running as a shared library inside <strong>pmcd</strong>) must be chosen and established.
   <p>This communication occurs through memory mapped files in a location known to both <strong>pmdammv</strong> and the instrumented applications. That location is <em>$PCP_TMP_DIR/mmv</em>, although that is often hidden behind application APIs such as “Parfait” and <strong>mmv_stats_init</strong>(3). The permissions set on this directory indicate the security model in use.
   <p>The more secure method is to use an existing unprivileged group which is shared by instrumented applications, <strong>pmcd</strong> and <strong>pmdammv</strong> such as the “pcp” group.
-  <pre> # . /etc/pcp.env
- # mkdir -m 775 $PCP_TMP_DIR/mmv
- # chgrp pcp $PCP_TMP_DIR/mmv</pre>
+  <pre># . /etc/pcp.env
+# mkdir -m 775 $PCP_TMP_DIR/mmv
+# chgrp pcp $PCP_TMP_DIR/mmv</pre>
   <p>Since this method requires instrumented applications to use this non-default group (see <strong>newgrp</strong>(1) and <strong>setgid</strong>(2)) a common alternative involves the use of a world-writeable <em>$PCP_TMP_DIR/mmv</em> directory with the sticky-bit set (similar to <em>/tmp</em> and <em>/var/tmp</em>, for example).
   <p>This allows any application, running under any user account, to communicate with the PMDA (which runs under the “pcp” account by default). This may not be desirable for all environments and one should consider the security implications of any directory setup like this (similar classes of issues exist as those that affect the system temporary file directories).
   <p><strong>pmdammv</strong> is enabled by default on all modern PCP installations, and thus the names, help text and values for the mmv performance metrics are available without the usual PMDA ./Install process.
   <p>If no explicit security model has been selected (as described above), the ./Install script will create a world-writeable sticky-bit-set mmv directory for communication. This is for backwards compatibility, as well as ease of use - to use this, do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/mmv
- # ./Install</pre>
+  <pre># cd $PCP_PMDAS_DIR/mmv
+# ./Install</pre>
   <p>This installation process will not overwrite any existing <em>$PCP_TMP_DIR/mmv</em> directory.
   <p>If you want to undo the installation, do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/mmv
- # ./Remove</pre>
+  <pre># cd $PCP_PMDAS_DIR/mmv
+# ./Remove</pre>
   <p><strong>pmdammv</strong> is launched by <strong>pmcd</strong> and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong> when the agent is installed or removed.
 </div>
 <div class="section">

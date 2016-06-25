@@ -19,34 +19,34 @@
   <p>A typical Nmap scan is shown in Example&nbsp;1. The only Nmap arguments used in this example are <strong>-A</strong>, to enable OS and version detection, script scanning, and traceroute; <strong>-T4</strong> for faster execution; and then the hostname.
   <p><strong>Example&nbsp;1.&nbsp;A representative Nmap scan</strong>
   <div class="indent-4">
-    <pre> # <strong>nmap -A -T4 scanme.nmap.org</strong>
+    <pre># <strong>nmap -A -T4 scanme.nmap.org</strong>
 
- Nmap scan report for scanme.nmap.org (74.207.244.221)
- Host is up (0.029s latency).
- rDNS record for 74.207.244.221: li86-221.members.linode.com
- Not shown: 995 closed ports
- PORT     STATE    SERVICE     VERSION
- 22/tcp   open     ssh         OpenSSH 5.3p1 Debian 3ubuntu7 (protocol 2.0)
- | ssh-hostkey: 1024 8d:60:f1:7c:ca:b7:3d:0a:d6:67:54:9d:69:d9:b9:dd (DSA)
- |_2048 79:f8:09:ac:d4:e2:32:42:10:49:d3:bd:20:82:85:ec (RSA)
- 80/tcp   open     http        Apache httpd 2.2.14 ((Ubuntu))
- |_http-title: Go ahead and ScanMe!
- 646/tcp  filtered ldp
- 1720/tcp filtered H.323/Q.931
- 9929/tcp open     nping-echo  Nping echo
- Device type: general purpose
- Running: Linux 2.6.X
- OS CPE: cpe:/o:linux:linux_kernel:2.6.39
- OS details: Linux 2.6.39
- Network Distance: 11 hops
- Service Info: OS: Linux; CPE: cpe:/o:linux:kernel
+Nmap scan report for scanme.nmap.org (74.207.244.221)
+Host is up (0.029s latency).
+rDNS record for 74.207.244.221: li86-221.members.linode.com
+Not shown: 995 closed ports
+PORT     STATE    SERVICE     VERSION
+22/tcp   open     ssh         OpenSSH 5.3p1 Debian 3ubuntu7 (protocol 2.0)
+| ssh-hostkey: 1024 8d:60:f1:7c:ca:b7:3d:0a:d6:67:54:9d:69:d9:b9:dd (DSA)
+|_2048 79:f8:09:ac:d4:e2:32:42:10:49:d3:bd:20:82:85:ec (RSA)
+80/tcp   open     http        Apache httpd 2.2.14 ((Ubuntu))
+|_http-title: Go ahead and ScanMe!
+646/tcp  filtered ldp
+1720/tcp filtered H.323/Q.931
+9929/tcp open     nping-echo  Nping echo
+Device type: general purpose
+Running: Linux 2.6.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6.39
+OS details: Linux 2.6.39
+Network Distance: 11 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:kernel
 
- TRACEROUTE (using port 53/tcp)
- HOP RTT      ADDRESS
- [Cut first 10 hops for brevity]
- 11  17.65 ms li86-221.members.linode.com (74.207.244.221)
+TRACEROUTE (using port 53/tcp)
+HOP RTT      ADDRESS
+[Cut first 10 hops for brevity]
+11  17.65 ms li86-221.members.linode.com (74.207.244.221)
 
- Nmap done: 1 IP address (1 host up) scanned in 14.40 seconds</pre>
+Nmap done: 1 IP address (1 host up) scanned in 14.40 seconds</pre>
   </div>
   <p>The newest version of Nmap can be obtained from <strong>https://nmap.org</strong>. The newest version of this man page is available at <strong>https://nmap.org/book/man.html</strong>. It is also included as a chapter of Nmap Network Scanning: The Official Nmap Project Guide to Network Discovery and Security Scanning (see <strong>https://nmap.org/book/</strong>).
 </div>
@@ -54,120 +54,120 @@
   <h2>OPTIONS SUMMARY</h2>
   <p>This options summary is printed when Nmap is run with no arguments, and the latest version is always available at <strong>https://svn.nmap.org/nmap/docs/nmap.usage.txt</strong>. It helps people remember the most common options, but is no substitute for the in-depth documentation in the rest of this manual. Some obscure options aren't even included here.
   <div class="indent-4">
-    <pre> Nmap 7.12SVN ( https://nmap.org )
- Usage: nmap [Scan Type(s)] [Options] {target specification}
- TARGET SPECIFICATION:
-   Can pass hostnames, IP addresses, networks, etc.
-   Ex: scanme.nmap.org, microsoft.com/24, 192.168.0.1; 10.0.0-255.1-254
-   -iL &lt;inputfilename&gt;: Input from list of hosts/networks
-   -iR &lt;num hosts&gt;: Choose random targets
-   --exclude &lt;host1[,host2][,host3],...&gt;: Exclude hosts/networks
-   --excludefile &lt;exclude_file&gt;: Exclude list from file
- HOST DISCOVERY:
-   -sL: List Scan - simply list targets to scan
-   -sn: Ping Scan - disable port scan
-   -Pn: Treat all hosts as online -- skip host discovery
-   -PS/PA/PU/PY[portlist]: TCP SYN/ACK, UDP or SCTP discovery to given ports
-   -PE/PP/PM: ICMP echo, timestamp, and netmask request discovery probes
-   -PO[protocol list]: IP Protocol Ping
-   -n/-R: Never do DNS resolution/Always resolve [default: sometimes]
-   --dns-servers &lt;serv1[,serv2],...&gt;: Specify custom DNS servers
-   --system-dns: Use OS's DNS resolver
-   --traceroute: Trace hop path to each host
- SCAN TECHNIQUES:
-   -sS/sT/sA/sW/sM: TCP SYN/Connect()/ACK/Window/Maimon scans
-   -sU: UDP Scan
-   -sN/sF/sX: TCP Null, FIN, and Xmas scans
-   --scanflags &lt;flags&gt;: Customize TCP scan flags
-   -sI &lt;zombie host[:probeport]&gt;: Idle scan
-   -sY/sZ: SCTP INIT/COOKIE-ECHO scans
-   -sO: IP protocol scan
-   -b &lt;FTP relay host&gt;: FTP bounce scan
- PORT SPECIFICATION AND SCAN ORDER:
-   -p &lt;port ranges&gt;: Only scan specified ports
-     Ex: -p22; -p1-65535; -p U:53,111,137,T:21-25,80,139,8080,S:9
-   --exclude-ports &lt;port ranges&gt;: Exclude the specified ports from scanning
-   -F: Fast mode - Scan fewer ports than the default scan
-   -r: Scan ports consecutively - don't randomize
-   --top-ports &lt;number&gt;: Scan &lt;number&gt; most common ports
-   --port-ratio &lt;ratio&gt;: Scan ports more common than &lt;ratio&gt;
- SERVICE/VERSION DETECTION:
-   -sV: Probe open ports to determine service/version info
-   --version-intensity &lt;level&gt;: Set from 0 (light) to 9 (try all probes)
-   --version-light: Limit to most likely probes (intensity 2)
-   --version-all: Try every single probe (intensity 9)
-   --version-trace: Show detailed version scan activity (for debugging)
- SCRIPT SCAN:
-   -sC: equivalent to --script=default
-   --script=&lt;Lua scripts&gt;: &lt;Lua scripts&gt; is a comma separated list of
-            directories, script-files or script-categories
-   --script-args=&lt;n1=v1,[n2=v2,...]&gt;: provide arguments to scripts
-   --script-args-file=filename: provide NSE script args in a file
-   --script-trace: Show all data sent and received
-   --script-updatedb: Update the script database.
-   --script-help=&lt;Lua scripts&gt;: Show help about scripts.
-            &lt;Lua scripts&gt; is a comma-separated list of script-files or
-            script-categories.
- OS DETECTION:
-   -O: Enable OS detection
-   --osscan-limit: Limit OS detection to promising targets
-   --osscan-guess: Guess OS more aggressively
- TIMING AND PERFORMANCE:
-   Options which take &lt;time&gt; are in seconds, or append 'ms' (milliseconds),
-   's' (seconds), 'm' (minutes), or 'h' (hours) to the value (e.g. 30m).
-   -T&lt;0-5&gt;: Set timing template (higher is faster)
-   --min-hostgroup/max-hostgroup &lt;size&gt;: Parallel host scan group sizes
-   --min-parallelism/max-parallelism &lt;numprobes&gt;: Probe parallelization
-   --min-rtt-timeout/max-rtt-timeout/initial-rtt-timeout &lt;time&gt;: Specifies
-       probe round trip time.
-   --max-retries &lt;tries&gt;: Caps number of port scan probe retransmissions.
-   --host-timeout &lt;time&gt;: Give up on target after this long
-   --scan-delay/--max-scan-delay &lt;time&gt;: Adjust delay between probes
-   --min-rate &lt;number&gt;: Send packets no slower than &lt;number&gt; per second
-   --max-rate &lt;number&gt;: Send packets no faster than &lt;number&gt; per second
- FIREWALL/IDS EVASION AND SPOOFING:
-   -f; --mtu &lt;val&gt;: fragment packets (optionally w/given MTU)
-   -D &lt;decoy1,decoy2[,ME],...&gt;: Cloak a scan with decoys
-   -S &lt;IP_Address&gt;: Spoof source address
-   -e &lt;iface&gt;: Use specified interface
-   -g/--source-port &lt;portnum&gt;: Use given port number
-   --proxies &lt;url1,[url2],...&gt;: Relay connections through HTTP/SOCKS4 proxies
-   --data &lt;hex string&gt;: Append a custom payload to sent packets
-   --data-string &lt;string&gt;: Append a custom ASCII string to sent packets
-   --data-length &lt;num&gt;: Append random data to sent packets
-   --ip-options &lt;options&gt;: Send packets with specified ip options
-   --ttl &lt;val&gt;: Set IP time-to-live field
-   --spoof-mac &lt;mac address/prefix/vendor name&gt;: Spoof your MAC address
-   --badsum: Send packets with a bogus TCP/UDP/SCTP checksum
- OUTPUT:
-   -oN/-oX/-oS/-oG &lt;file&gt;: Output scan in normal, XML, s|&lt;rIpt kIddi3,
-      and Grepable format, respectively, to the given filename.
-   -oA &lt;basename&gt;: Output in the three major formats at once
-   -v: Increase verbosity level (use -vv or more for greater effect)
-   -d: Increase debugging level (use -dd or more for greater effect)
-   --reason: Display the reason a port is in a particular state
-   --open: Only show open (or possibly open) ports
-   --packet-trace: Show all packets sent and received
-   --iflist: Print host interfaces and routes (for debugging)
-   --append-output: Append to rather than clobber specified output files
-   --resume &lt;filename&gt;: Resume an aborted scan
-   --stylesheet &lt;path/URL&gt;: XSL stylesheet to transform XML output to HTML
-   --webxml: Reference stylesheet from Nmap.Org for more portable XML
-   --no-stylesheet: Prevent associating of XSL stylesheet w/XML output
- MISC:
-   -6: Enable IPv6 scanning
-   -A: Enable OS detection, version detection, script scanning, and traceroute
-   --datadir &lt;dirname&gt;: Specify custom Nmap data file location
-   --send-eth/--send-ip: Send using raw ethernet frames or IP packets
-   --privileged: Assume that the user is fully privileged
-   --unprivileged: Assume the user lacks raw socket privileges
-   -V: Print version number
-   -h: Print this help summary page.
- EXAMPLES:
-   nmap -v -A scanme.nmap.org
-   nmap -v -sn 192.168.0.0/16 10.0.0.0/8
-   nmap -v -iR 10000 -Pn -p 80
- SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES</pre>
+    <pre>Nmap 7.12SVN ( https://nmap.org )
+Usage: nmap [Scan Type(s)] [Options] {target specification}
+TARGET SPECIFICATION:
+  Can pass hostnames, IP addresses, networks, etc.
+  Ex: scanme.nmap.org, microsoft.com/24, 192.168.0.1; 10.0.0-255.1-254
+  -iL &lt;inputfilename&gt;: Input from list of hosts/networks
+  -iR &lt;num hosts&gt;: Choose random targets
+  --exclude &lt;host1[,host2][,host3],...&gt;: Exclude hosts/networks
+  --excludefile &lt;exclude_file&gt;: Exclude list from file
+HOST DISCOVERY:
+  -sL: List Scan - simply list targets to scan
+  -sn: Ping Scan - disable port scan
+  -Pn: Treat all hosts as online -- skip host discovery
+  -PS/PA/PU/PY[portlist]: TCP SYN/ACK, UDP or SCTP discovery to given ports
+  -PE/PP/PM: ICMP echo, timestamp, and netmask request discovery probes
+  -PO[protocol list]: IP Protocol Ping
+  -n/-R: Never do DNS resolution/Always resolve [default: sometimes]
+  --dns-servers &lt;serv1[,serv2],...&gt;: Specify custom DNS servers
+  --system-dns: Use OS's DNS resolver
+  --traceroute: Trace hop path to each host
+SCAN TECHNIQUES:
+  -sS/sT/sA/sW/sM: TCP SYN/Connect()/ACK/Window/Maimon scans
+  -sU: UDP Scan
+  -sN/sF/sX: TCP Null, FIN, and Xmas scans
+  --scanflags &lt;flags&gt;: Customize TCP scan flags
+  -sI &lt;zombie host[:probeport]&gt;: Idle scan
+  -sY/sZ: SCTP INIT/COOKIE-ECHO scans
+  -sO: IP protocol scan
+  -b &lt;FTP relay host&gt;: FTP bounce scan
+PORT SPECIFICATION AND SCAN ORDER:
+  -p &lt;port ranges&gt;: Only scan specified ports
+    Ex: -p22; -p1-65535; -p U:53,111,137,T:21-25,80,139,8080,S:9
+  --exclude-ports &lt;port ranges&gt;: Exclude the specified ports from scanning
+  -F: Fast mode - Scan fewer ports than the default scan
+  -r: Scan ports consecutively - don't randomize
+  --top-ports &lt;number&gt;: Scan &lt;number&gt; most common ports
+  --port-ratio &lt;ratio&gt;: Scan ports more common than &lt;ratio&gt;
+SERVICE/VERSION DETECTION:
+  -sV: Probe open ports to determine service/version info
+  --version-intensity &lt;level&gt;: Set from 0 (light) to 9 (try all probes)
+  --version-light: Limit to most likely probes (intensity 2)
+  --version-all: Try every single probe (intensity 9)
+  --version-trace: Show detailed version scan activity (for debugging)
+SCRIPT SCAN:
+  -sC: equivalent to --script=default
+  --script=&lt;Lua scripts&gt;: &lt;Lua scripts&gt; is a comma separated list of
+           directories, script-files or script-categories
+  --script-args=&lt;n1=v1,[n2=v2,...]&gt;: provide arguments to scripts
+  --script-args-file=filename: provide NSE script args in a file
+  --script-trace: Show all data sent and received
+  --script-updatedb: Update the script database.
+  --script-help=&lt;Lua scripts&gt;: Show help about scripts.
+           &lt;Lua scripts&gt; is a comma-separated list of script-files or
+           script-categories.
+OS DETECTION:
+  -O: Enable OS detection
+  --osscan-limit: Limit OS detection to promising targets
+  --osscan-guess: Guess OS more aggressively
+TIMING AND PERFORMANCE:
+  Options which take &lt;time&gt; are in seconds, or append 'ms' (milliseconds),
+  's' (seconds), 'm' (minutes), or 'h' (hours) to the value (e.g. 30m).
+  -T&lt;0-5&gt;: Set timing template (higher is faster)
+  --min-hostgroup/max-hostgroup &lt;size&gt;: Parallel host scan group sizes
+  --min-parallelism/max-parallelism &lt;numprobes&gt;: Probe parallelization
+  --min-rtt-timeout/max-rtt-timeout/initial-rtt-timeout &lt;time&gt;: Specifies
+      probe round trip time.
+  --max-retries &lt;tries&gt;: Caps number of port scan probe retransmissions.
+  --host-timeout &lt;time&gt;: Give up on target after this long
+  --scan-delay/--max-scan-delay &lt;time&gt;: Adjust delay between probes
+  --min-rate &lt;number&gt;: Send packets no slower than &lt;number&gt; per second
+  --max-rate &lt;number&gt;: Send packets no faster than &lt;number&gt; per second
+FIREWALL/IDS EVASION AND SPOOFING:
+  -f; --mtu &lt;val&gt;: fragment packets (optionally w/given MTU)
+  -D &lt;decoy1,decoy2[,ME],...&gt;: Cloak a scan with decoys
+  -S &lt;IP_Address&gt;: Spoof source address
+  -e &lt;iface&gt;: Use specified interface
+  -g/--source-port &lt;portnum&gt;: Use given port number
+  --proxies &lt;url1,[url2],...&gt;: Relay connections through HTTP/SOCKS4 proxies
+  --data &lt;hex string&gt;: Append a custom payload to sent packets
+  --data-string &lt;string&gt;: Append a custom ASCII string to sent packets
+  --data-length &lt;num&gt;: Append random data to sent packets
+  --ip-options &lt;options&gt;: Send packets with specified ip options
+  --ttl &lt;val&gt;: Set IP time-to-live field
+  --spoof-mac &lt;mac address/prefix/vendor name&gt;: Spoof your MAC address
+  --badsum: Send packets with a bogus TCP/UDP/SCTP checksum
+OUTPUT:
+  -oN/-oX/-oS/-oG &lt;file&gt;: Output scan in normal, XML, s|&lt;rIpt kIddi3,
+     and Grepable format, respectively, to the given filename.
+  -oA &lt;basename&gt;: Output in the three major formats at once
+  -v: Increase verbosity level (use -vv or more for greater effect)
+  -d: Increase debugging level (use -dd or more for greater effect)
+  --reason: Display the reason a port is in a particular state
+  --open: Only show open (or possibly open) ports
+  --packet-trace: Show all packets sent and received
+  --iflist: Print host interfaces and routes (for debugging)
+  --append-output: Append to rather than clobber specified output files
+  --resume &lt;filename&gt;: Resume an aborted scan
+  --stylesheet &lt;path/URL&gt;: XSL stylesheet to transform XML output to HTML
+  --webxml: Reference stylesheet from Nmap.Org for more portable XML
+  --no-stylesheet: Prevent associating of XSL stylesheet w/XML output
+MISC:
+  -6: Enable IPv6 scanning
+  -A: Enable OS detection, version detection, script scanning, and traceroute
+  --datadir &lt;dirname&gt;: Specify custom Nmap data file location
+  --send-eth/--send-ip: Send using raw ethernet frames or IP packets
+  --privileged: Assume that the user is fully privileged
+  --unprivileged: Assume the user lacks raw socket privileges
+  -V: Print version number
+  -h: Print this help summary page.
+EXAMPLES:
+  nmap -v -A scanme.nmap.org
+  nmap -v -sn 192.168.0.0/16 10.0.0.0/8
+  nmap -v -iR 10000 -Pn -p 80
+SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES</pre>
   </div>
 </div>
 <div class="section">
@@ -992,8 +992,8 @@
   <div class="indent-4">
     <p>Print out a status message like this:<br>
     <br>
-    <pre> Stats: 0:00:07 elapsed; 20 hosts completed (1 up), 1 undergoing Service Scan
- Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
+    <pre>Stats: 0:00:07 elapsed; 20 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
   </div>
 </div>
 <div class="section">

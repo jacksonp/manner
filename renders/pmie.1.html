@@ -96,76 +96,76 @@
   <p>The following example expressions demonstrate some of the capabilities of the inference engine.
   <p>The directory <em>$PCP_DEMOS_DIR/pmie</em> contains a number of other annotated examples of <strong>pmie</strong> expressions.
   <p>The variable <code>delta</code> controls expression evaluation frequency. Specify that subsequent expressions be evaluated once a second, until further notice:
-  <pre> delta = 1 sec;</pre>
+  <pre>delta = 1 sec;</pre>
   <p>If the total context switch rate exceeds 10000 per second per CPU, then display an alarm notifier:
-  <pre> kernel.all.pswitch / hinv.ncpu &gt; 10000 count/sec
- -&gt; alarm "high context switch rate %v";</pre>
+  <pre>kernel.all.pswitch / hinv.ncpu &gt; 10000 count/sec
+-&gt; alarm "high context switch rate %v";</pre>
   <p>If the high context switch rate is sustained for 10 consecutive samples, then launch <strong>top</strong>(1) in an <strong>xterm</strong>(1) window to monitor processes, but do this at most once every 5 minutes:
-  <pre> all_sample (
-     kernel.all.pswitch @0..9 &gt; 10 Kcount/sec * hinv.ncpu
- ) -&gt; shell 5 min "xterm -e 'top'";</pre>
+  <pre>all_sample (
+    kernel.all.pswitch @0..9 &gt; 10 Kcount/sec * hinv.ncpu
+) -&gt; shell 5 min "xterm -e 'top'";</pre>
   <p>The following rules are evaluated once every 20 seconds:
-  <pre> delta = 20 sec;</pre>
+  <pre>delta = 20 sec;</pre>
   <p>If any disk is performing more than 60 I/Os per second, then print a message identifying the busy disk to standard output and launch <strong>dkvis</strong>(1):
-  <pre> some_inst (
-     disk.dev.total &gt; 60 count/sec
- ) -&gt; print "busy disks:" " %i" &
-      shell 5 min "dkvis";</pre>
+  <pre>some_inst (
+    disk.dev.total &gt; 60 count/sec
+) -&gt; print "busy disks:" " %i" &
+     shell 5 min "dkvis";</pre>
   <p>Refine the preceding rule to apply only between the hours of 9am and 5pm, and to require 3 of 4 consecutive samples to exceed the threshold before executing the action:
-  <pre> $hour &gt;= 9 &amp;& $hour &lt;= 17 &amp;&
- some_inst (
-   75 %_sample (
-     disk.dev.total @0..3 &gt; 60 count/sec
-   )
- ) -&gt; print "disks busy for 20 sec:" " [%h]%i";</pre>
+  <pre>$hour &gt;= 9 &amp;& $hour &lt;= 17 &amp;&
+some_inst (
+  75 %_sample (
+    disk.dev.total @0..3 &gt; 60 count/sec
+  )
+) -&gt; print "disks busy for 20 sec:" " [%h]%i";</pre>
   <p>The following two rules are evaluated once every 10 minutes:
-  <pre> delta = 10 min;</pre>
+  <pre>delta = 10 min;</pre>
   <p>If either the / or the /usr filesystem is more than 95% full, display an alarm popup, but not if it has already been displayed during the last 4 hours:
-  <pre> filesys.free #'/dev/root' /
-     filesys.capacity #'/dev/root' &lt; 0.05
- -&gt; alarm 4 hour "root filesystem (almost) full";
+  <pre>filesys.free #'/dev/root' /
+    filesys.capacity #'/dev/root' &lt; 0.05
+-&gt; alarm 4 hour "root filesystem (almost) full";
 
- filesys.free #'/dev/usr' /
-     filesys.capacity #'/dev/usr' &lt; 0.05
- -&gt; alarm 4 hour "/usr filesystem (almost) full";</pre>
+filesys.free #'/dev/usr' /
+    filesys.capacity #'/dev/usr' &lt; 0.05
+-&gt; alarm 4 hour "/usr filesystem (almost) full";</pre>
   <p>The following rule requires a machine that supports the PCP environment metrics. If the machine environment temperature rises more than 2 degrees over a 10 minute interval, write an entry in the system log:
-  <pre> environ.temp @0 - environ.temp @1 &gt; 2
- -&gt; alarm "temperature rising fast" &
-    syslog "machine room temperature rise alarm";</pre>
+  <pre>environ.temp @0 - environ.temp @1 &gt; 2
+-&gt; alarm "temperature rising fast" &
+   syslog "machine room temperature rise alarm";</pre>
   <p>And something interesting if you have performance problems with your Oracle database:
-  <pre> // back to 30sec evaluations
- delta = 30 sec;
- sid = "ptg1";          # $ORACLE_SID setting
- lid = "223";           # latch ID from v$latch
- lru = "#'$sid/$lid cache buffers lru chain'";
- host = ":moomba.melbourne.sgi.com";
- gets = "oracle.latch.gets $host $lru";
- total = "oracle.latch.gets $host $lru +
-          oracle.latch.misses $host $lru +
-          oracle.latch.immisses $host $lru";
+  <pre>// back to 30sec evaluations
+delta = 30 sec;
+sid = "ptg1";           # $ORACLE_SID setting
+lid = "223";            # latch ID from v$latch
+lru = "#'$sid/$lid cache buffers lru chain'";
+host = ":moomba.melbourne.sgi.com";
+gets = "oracle.latch.gets $host $lru";
+total = "oracle.latch.gets $host $lru +
+         oracle.latch.misses $host $lru +
+         oracle.latch.immisses $host $lru";
 
- $total &gt; 100 &amp;& $gets / $total &lt; 0.2
- -&gt; alarm "high lru latch contention in database $sid";</pre>
+$total &gt; 100 &amp;& $gets / $total &lt; 0.2
+-&gt; alarm "high lru latch contention in database $sid";</pre>
   <p>The following <code><strong>ruleset</strong></code> will emit exactly one message depending on the availability and value of the 1-minute load average.
-  <pre> delta = 1 minute;
- ruleset
-      kernel.all.load #'1 minute' &gt; 10 * hinv.ncpu -&gt;
-          print "extreme load average %v"
- else kernel.all.load #'1 minute' &gt; 2 * hinv.ncpu -&gt;
-          print "moderate load average %v"
- unknown -&gt;
-          print "load average unavailable"
- otherwise -&gt;
-          print "load average OK"
- ;</pre>
+  <pre>delta = 1 minute;
+ruleset
+     kernel.all.load #'1 minute' &gt; 10 * hinv.ncpu -&gt;
+         print "extreme load average %v"
+else kernel.all.load #'1 minute' &gt; 2 * hinv.ncpu -&gt;
+         print "moderate load average %v"
+unknown -&gt;
+         print "load average unavailable"
+otherwise -&gt;
+         print "load average OK"
+;</pre>
   <p>The following rule will emit a message when some filesystem is more than 75% full and is filling at a rate that if sustained would fill the filesystem to 100% in less than 30 minutes.
-  <pre> some_inst (
-     100 * filesys.used / filesys.capacity &gt; 75 &amp;&
-     filesys.used + 30min * (rate filesys.used) &gt; filesys.capacity
- ) -&gt; print "filesystem will be full within 30 mins:" " %i";</pre>
+  <pre>some_inst (
+    100 * filesys.used / filesys.capacity &gt; 75 &amp;&
+    filesys.used + 30min * (rate filesys.used) &gt; filesys.capacity
+) -&gt; print "filesystem will be full within 30 mins:" " %i";</pre>
   <p>If the metric <code>mypmda.errors</code> counts errors then the following rule will emit a message if the rate of errors exceeds 1 per second provided the error count is less than 100.
-  <pre> mypmda.errors &gt; 1 &amp;& instant mypmda.errors &lt; 100
- -&gt; print "high error rate: %v";</pre>
+  <pre>mypmda.errors &gt; 1 &amp;& instant mypmda.errors &lt; 100
+-&gt; print "high error rate: %v";</pre>
 </div>
 <div class="section">
   <h2>QUICK START</h2>
@@ -223,29 +223,23 @@
       <td class="c">Type
       <td class="cw(2.4i)">Explanation
     <tr class="border-bottom">
-      <td class="f(C) bold">
-        <p>some_inst<br>
-        some_host<br>
-        some_sample
+      <td class="f(C) bold">some_inst<br>
+      some_host<br>
+      some_sample
       <td>Existential
-      <td>
-        <p>True if at least one set member is true in the associated dimension
+      <td>True if at least one set member is true in the associated dimension
     <tr class="border-bottom">
-      <td class="f(C) bold">
-        <p>all_inst<br>
-        all_host<br>
-        all_sample
+      <td class="f(C) bold">all_inst<br>
+      all_host<br>
+      all_sample
       <td>Universal
-      <td>
-        <p>True if all set members are true in the associated dimension
+      <td>True if all set members are true in the associated dimension
     <tr>
-      <td class="f(C) bold">
-        <p><code>N</code><code><strong>%_inst</strong></code><br>
-        <code>N</code><code><strong>%_host</strong></code><br>
-        <code>N</code><code><strong>%_sample</strong></code>
+      <td class="f(C) bold"><code>N</code><code><strong>%_inst</strong></code><br>
+      <code>N</code><code><strong>%_host</strong></code><br>
+      <code>N</code><code><strong>%_sample</strong></code>
       <td>Percentile
-      <td>
-        <p>True if at least <em>N</em> percent of set members are true in the associated dimension
+      <td>True if at least <em>N</em> percent of set members are true in the associated dimension
   </table>
   <p>The following instantial operators may be used to filter or limit a set-valued logical expression, based on regular expression matching of instance names. The logical expression must be a set involving the dimension of instances, and the regular expression is of the form used by <strong>egrep</strong>(1) or the Extended Regular Expressions of <strong>regcomp</strong>(3).
   <table class="tbl">
@@ -254,15 +248,13 @@
       <td class="cw(4i)">Explanation
     <tr class="border-bottom">
       <td class="f(C) bold">match_inst
-      <td>
-        <p>For each value of the logical expression that is “true”, the result is “true” if the associated instance name matches the regular expression. Otherwise the result is “false”.
+      <td>For each value of the logical expression that is “true”, the result is “true” if the associated instance name matches the regular expression. Otherwise the result is “false”.
     <tr>
       <td class="f(C) bold">nomatch_inst
-      <td>
-        <p>For each value of the logical expression that is “true”, the result is “true” if the associated instance name does <strong>not</strong> match the regular expression. Otherwise the result is “false”.
+      <td>For each value of the logical expression that is “true”, the result is “true” if the associated instance name does <strong>not</strong> match the regular expression. Otherwise the result is “false”.
   </table>
   <p>For example, the expression below will be “true” for disks attached to controllers 2 or 3 performing more than 20 operations per second:
-  <pre> match_inst "^dks[23]d" disk.dev.total &gt; 20;</pre>
+  <pre>match_inst "^dks[23]d" disk.dev.total &gt; 20;</pre>
   <p>The following aggregate operators map from an arithmetic expression to an arithmetic expression of lower dimension.
   <table class="tbl">
     <tr class="border-bottom">
@@ -270,37 +262,29 @@
       <td class="c">Type
       <td class="cw(2.4i)">Explanation
     <tr class="border-bottom">
-      <td class="f(C) bold">
-        <p>min_inst<br>
-        min_host<br>
-        min_sample
+      <td class="f(C) bold">min_inst<br>
+      min_host<br>
+      min_sample
       <td>Extrema
-      <td>
-        <p>Minimum value across all set members in the associated dimension
+      <td>Minimum value across all set members in the associated dimension
     <tr class="border-bottom">
-      <td class="f(C) bold">
-        <p>max_inst<br>
-        max_host<br>
-        max_sample
+      <td class="f(C) bold">max_inst<br>
+      max_host<br>
+      max_sample
       <td>Extrema
-      <td>
-        <p>Maximum value across all set members in the associated dimension
+      <td>Maximum value across all set members in the associated dimension
     <tr class="border-bottom">
-      <td class="f(C) bold">
-        <p>sum_inst<br>
-        sum_host<br>
-        sum_sample
+      <td class="f(C) bold">sum_inst<br>
+      sum_host<br>
+      sum_sample
       <td>Aggregate
-      <td>
-        <p>Sum of values across all set members in the associated dimension
+      <td>Sum of values across all set members in the associated dimension
     <tr>
-      <td class="f(C) bold">
-        <p>avg_inst<br>
-        avg_host<br>
-        avg_sample
+      <td class="f(C) bold">avg_inst<br>
+      avg_host<br>
+      avg_sample
       <td>Aggregate
-      <td>
-        <p>Average value across all set members in the associated dimension
+      <td>Average value across all set members in the associated dimension
   </table>
   <p>The aggregate operators <code>count_inst</code>, <code>count_host</code> and <code>count_sample</code> map from a logical expression to an arithmetic expression of lower dimension by counting the number of set members for which the expression is true in the associated dimension.
   <p>For action rules, the following actions are defined:
@@ -341,12 +325,12 @@
       <p>One value from the left-most top-level expression in the condition for each host and instance pair that makes the condition true.
   </dl>
   <p>Note that expansion of the special selectors is done by repeating the whole argument once for each unique binding to any of the qualifying special selectors. For example if a rule were true for the host <strong>mumble</strong> with instances <strong>grunt</strong> and <strong>snort</strong>, and for host <strong>fumble</strong> the instance <strong>puff</strong> makes the rule true, then the action
-  <pre> ...
- -&gt; shell myscript "Warning: %h:%i busy ";</pre>
+  <pre>...
+-&gt; shell myscript "Warning: %h:%i busy ";</pre>
   <p>will execute <strong>myscript</strong> with the argument string “Warning: mumble:grunt busy Warning: mumble:snort busy Warning: fumble:puff busy”.
   <p>By comparison, if the action
-  <pre> ...
- -&gt; shell myscript "Warning! busy:" " %h:%i";</pre>
+  <pre>...
+-&gt; shell myscript "Warning! busy:" " %h:%i";</pre>
   <p>were executed under the same circumstances, then <strong>myscript</strong> would be executed with the argument string “Warning! busy: mumble:grunt mumble:snort fumble:puff”.
   <p>The semantics of the expansion of the special selectors leads to a common usage pattern in an action, where one argument is a constant (contains no special selectors) the second argument contains the desired special selectors with minimal separator characters, and an optional third argument provides a constant postscript (e.g. to terminate any argument quoting from the first argument). If necessary post-processing (eg. in <strong>myscript</strong>) can provide the necessary enumeration over each unique expansion of the string containing just the special selectors.
   <p>For complex conditions, the bindings to these selectors is not obvious. It is strongly recommended that <strong>pmie</strong> be used in the debugging mode (specify the <strong>-W</strong> command line option in particular) during rule development.
@@ -534,12 +518,12 @@
   <p>However, it is common to have other event monitoring frameworks also, into which you may wish to incorporate performance events from <strong>pmie</strong>. You can often use the <em>shell</em> action to send events to these frameworks, as they usually provide their a program for injecting events into the framework from external sources.
   <p>A final option is use of the <em>stomp</em> (Streaming Text Oriented Messaging Protocol) action, which allows <strong>pmie</strong> to connect to a central JMS (Java Messaging System) server and send events to the PMIE topic. Tools can be written to extract these text messages and present them to operations people (via desktop popup windows, etc). Use of the <em>stomp</em> action requires a stomp configuration file to be setup, which specifies the location of the JMS server host, port number, and username/password.
   <p>The format of this file is as follows:
-  <pre> host=messages.sgi.com   # this is the JMS server (required)
- port=61616              # and its listening here (required)
- timeout=2               # seconds to wait for server (optional)
- username=joe            # (required)
- password=j03ST0MP       # (required)
- topic=PMIE              # JMS topic for pmie messages (optional)</pre>
+  <pre>host=messages.sgi.com   # this is the JMS server (required)
+port=61616              # and its listening here (required)
+timeout=2               # seconds to wait for server (optional)
+username=joe            # (required)
+password=j03ST0MP       # (required)
+topic=PMIE              # JMS topic for pmie messages (optional)</pre>
   <p>The timeout value specifies the time (in seconds) that <strong>pmie</strong> should wait for acknowledgements from the JMS server after sending a message (as required by the STOMP protocol). Note that on startup, <strong>pmie</strong> will wait indefinitely for a connection, and will not begin rule evaluation until that initial connection has been established. Should the connection to the JMS server be lost at any time while <strong>pmie</strong> is running, <strong>pmie</strong> will attempt to reconnect on each subsequent truthful evaluation of a rule with a <em>stomp</em> action, but not more than once per minute. This is to avoid contributing to network congestion. In this situation, where the STOMP connection to the JMS server has been severed, the <em>stomp</em> action will return a non-zero error value.
 </div>
 <div class="section">
@@ -584,6 +568,6 @@
 <div class="section">
   <h2>USER GUIDE</h2>
   <p>For a more complete description of the <strong>pmie</strong> language, refer to the <strong>Performance Co-Pilot Users and Administrators Guide</strong>. This is available online from:
-  <pre> http://www.pcp.io/doc/pcp-users-and-administrators-guide.pdf</pre>
+  <pre>http://www.pcp.io/doc/pcp-users-and-administrators-guide.pdf</pre>
 </div>
 

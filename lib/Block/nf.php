@@ -68,7 +68,7 @@ class Block_nf
                         if (empty($request)) {
                             TextContent::interpretAndAppendText($codeNode, $tdLine);
                         } else {
-                            TextContent::interpretAndAppendCommand($codeNode, $request . $tdLine);
+                            Blocks::handle($codeNode, [$request . $tdLine]);
                         }
                         $tr->appendChild($cell);
                     }

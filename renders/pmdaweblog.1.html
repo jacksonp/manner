@@ -60,12 +60,12 @@
   <p>The PCP framework allows metrics to be collected on one host and monitored from another. These hosts are referred to as <em>collector</em> and <em>monitor</em> hosts, respectively. A host may be both a collector and a monitor.
   <p>Collector hosts require the installation of the agent, while monitoring hosts require no agent installation at all.
   <p>For collector hosts do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/weblog
- # ./Install</pre>
+  <pre># cd $PCP_PMDAS_DIR/weblog
+# ./Install</pre>
   <p>The installation procedure prompts for a default or non-default installation. A default installation will search for known server configurations and automatically configure the PMDA for any server log files that are found. A non-default installation will step through each server, prompting the user for other server configurations and arguments to <strong>pmdaweblog</strong>. The end result of a collector installation is to build a configuration file that is passed to <strong>pmdaweblog</strong> via the <em>configfile</em> argument.
   <p>If you want to undo the installation, do the following as root:
-  <pre> # cd $PCP_PMDAS_DIR/weblog
- # ./Remove</pre>
+  <pre># cd $PCP_PMDAS_DIR/weblog
+# ./Remove</pre>
   <p><strong>pmdaweblog</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The <strong>Install</strong> and <strong>Remove</strong> scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
 </div>
 <div class="section">
@@ -80,26 +80,26 @@
   <p>The second argument, <em>$1</em>, should contain the size of the request. A size of ``<strong>-</strong>'' or “ ” is treated as unknown.
   <p>Argument <em>$3</em> should contain the status code returned to the client browser and argument <em>$4</em> should contain the status code returned to the server from a remote host. These latter two arguments are used for caching servers and must be specified as a pair (or <em>$3</em> will be ignored). For further information on status codes, refer to the web site <strong>http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</strong>
   <p>Some legal non- <strong>Posix</strong> regex expression specifications for monitoring an access log are:
-  <pre> # pattern for CERN, NCSA, Netscape etc Access Logs
- regex CERN ] "([A-Za-z][-A-Za-z]+)$0 .*" [-0-9]+ ([-0-9]+)$1
+  <pre># pattern for CERN, NCSA, Netscape etc Access Logs
+regex CERN ] "([A-Za-z][-A-Za-z]+)$0 .*" [-0-9]+ ([-0-9]+)$1
 
- # pattern for FTP Server access logs (normally in SYSLOG)
- regex SYSLOG_FTP ftpd[.*]: ([gp][-A-Za-z]+)$0( )$1</pre>
+# pattern for FTP Server access logs (normally in SYSLOG)
+regex SYSLOG_FTP ftpd[.*]: ([gp][-A-Za-z]+)$0( )$1</pre>
   <p>There is 1 special types of access logs with the <em>RegexName SQUID.</em> This formats extract 4 parameters but since the <strong>Squid</strong> log file uses text-based status codes, it is handled as a special case.
   <p>In the examples below, <em>NS_PROXY</em> parses the Netscape/W3C <em>Common Extended Log Format</em> and <em>SQUID</em> parses the default Squid Object Cache format log file.
-  <pre> # pattern for Netscape Proxy Server Extended Logs
- regex NS_PROXY ] "([A-Za-z][-A-Za-z]+)$0 .*" ([-0-9]+)$2 \
- ([-0-9]+)$1 ([-0-9]+)$3
+  <pre># pattern for Netscape Proxy Server Extended Logs
+regex NS_PROXY ] "([A-Za-z][-A-Za-z]+)$0 .*" ([-0-9]+)$2 \
+([-0-9]+)$1 ([-0-9]+)$3
 
- # pattern for Squid Cache logs
- regex SQUID [0-9]+.[0-9]+[ ]+[0-9]+ [a-zA-Z0-9.]+ \
- ([_A-Z]+)$3([0-9]+)$2 ([0-9]+)$1 ([A-Z]+)$0</pre>
+# pattern for Squid Cache logs
+regex SQUID [0-9]+.[0-9]+[ ]+[0-9]+ [a-zA-Z0-9.]+ \
+([_A-Z]+)$3([0-9]+)$2 ([0-9]+)$1 ([A-Z]+)$0</pre>
   <p>The <em>regexp</em> for the error logs does not require any arguments, only a match. Some legal expressions are:
-  <pre> # pattern for CERN, NCSA, Netscape etc Error Logs
- regex CERN_err .
+  <pre># pattern for CERN, NCSA, Netscape etc Error Logs
+regex CERN_err .
 
- # pattern for FTP Server error logs (normally in SYSLOG)
- regex SYSLOG_FTP_err FTP LOGIN FAILED</pre>
+# pattern for FTP Server error logs (normally in SYSLOG)
+regex SYSLOG_FTP_err FTP LOGIN FAILED</pre>
   <p>If <strong>POSIX</strong> compliant regular expressions are used, additional information is required since the order of parameters cannot be specified in the regular expression. For backwards compatibility, the common case of two parameters the order may be specified as <em>method,size</em> or <em>size,method</em> In the general case, the ordering is specified by one of the following methods:
   <dl class="indent-0.5in">
     <dt>n1,n2,n3,n4
@@ -111,40 +111,40 @@
   </dl>
   <p>As for the non- <strong>Posix</strong> format, the <em>SQUID</em> RegexName is treated as a special case to match the non-numerical status codes.
   <p>Some legal <strong>Posix</strong> regex expression specifications for monitoring an access log are:
-  <pre> # pattern for CERN, NCSA, Netscape, Apache etc Access Logs
- regex_posix CERN method,size ][ \]+"([A-Za-z][-A-Za-z]+) \
- [^"]*" [-0-9]+ ([-0-9]+)
+  <pre># pattern for CERN, NCSA, Netscape, Apache etc Access Logs
+regex_posix CERN method,size ][ \]+"([A-Za-z][-A-Za-z]+) \
+[^"]*" [-0-9]+ ([-0-9]+)
 
- # pattern for CERN, NCSA, Netscape, Apache etc Access Logs
- regex_posix CERN 1,2 ][ \]+"([A-Za-z][-A-Za-z]+) \
- [^"]*" [-0-9]+ ([-0-9]+)
+# pattern for CERN, NCSA, Netscape, Apache etc Access Logs
+regex_posix CERN 1,2 ][ \]+"([A-Za-z][-A-Za-z]+) \
+[^"]*" [-0-9]+ ([-0-9]+)
 
- # pattern for FTP Server access logs (normally in SYSLOG)
- regex_posix SYSLOG_FTP method,size ftpd[.*]: \
- ([gp][-A-Za-z]+)( )
+# pattern for FTP Server access logs (normally in SYSLOG)
+regex_posix SYSLOG_FTP method,size ftpd[.*]: \
+([gp][-A-Za-z]+)( )
 
- # pattern for Netscape Proxy Server Extended Logs
- regex_posix NS_PROXY 1,3,2,4 ][ ]+"([A-Za-z][-A-Za-z]+) \
- [^"]*" ([-0-9]+) ([-0-9]+) ([-0-9]+)
+# pattern for Netscape Proxy Server Extended Logs
+regex_posix NS_PROXY 1,3,2,4 ][ ]+"([A-Za-z][-A-Za-z]+) \
+[^"]*" ([-0-9]+) ([-0-9]+) ([-0-9]+)
 
- # pattern for Squid Cache logs
- regex_posix SQUID 4,3,2,1 [0-9]+.[0-9]+[ ]+[0-9]+ \
- [a-zA-Z0-9.]+ ([_A-Z]+)([0-9]+) ([0-9]+) ([A-Z]+)
+# pattern for Squid Cache logs
+regex_posix SQUID 4,3,2,1 [0-9]+.[0-9]+[ ]+[0-9]+ \
+[a-zA-Z0-9.]+ ([_A-Z]+)([0-9]+) ([0-9]+) ([A-Z]+)
 
- # pattern for CERN, NCSA, Netscape etc Error Logs
- regex_posix CERN_err - .
+# pattern for CERN, NCSA, Netscape etc Error Logs
+regex_posix CERN_err - .
 
- # pattern for FTP Server error logs (normally in SYSLOG)
- regex_posix SYSLOG_FTP_err - FTP LOGIN FAILED</pre>
+# pattern for FTP Server error logs (normally in SYSLOG)
+regex_posix SYSLOG_FTP_err - FTP LOGIN FAILED</pre>
   <p>A Web server can be specified using this syntax:
-  <pre> <strong>server </strong><em>serverName </em><strong>on</strong><em>|</em><strong>off </strong><em>accessRegex accessFile errorRegex errorFile</em></pre>
+  <pre><strong>server </strong><em>serverName </em><strong>on</strong><em>|</em><strong>off </strong><em>accessRegex accessFile errorRegex errorFile</em></pre>
   <p>The <em>serverName</em> must be unique for each server, and is the name given to the instance for the associated performance metrics. See <strong>PMAPI</strong>(3) for a discussion of PCP instance domains. The <strong>on</strong> or <strong>off</strong> flag indicates whether the server is to be monitored when the PMDA is installed. This can altered dynamically using <strong>pmstore</strong>(1) for the metric <strong>web.perserver.watched</strong>, which has one instance for each Web server named in <em>configfile</em>.
   <p>Two files are monitored for each Web server, the access and the error log. Each file requires the name of a previously declared regular expression, and a file name. The log files specified for each server do not have to exist when the weblog PMDA is installed. The PMDA will continue to check for non-existent log files and open them when possible. Some legal server specifications are:
-  <pre> # Netscape Server on Port 80 at IP address 127.55.555.555
- server 127.55.555.555:80 on CERN /logs/access CERN_err /logs/errors
+  <pre># Netscape Server on Port 80 at IP address 127.55.555.555
+server 127.55.555.555:80 on CERN /logs/access CERN_err /logs/errors
 
- # FTP Server.
- server ftpd on SYSLOG_FTP /var/log/messages SYSLOG_FTP_err /var/log/messages</pre>
+# FTP Server.
+server ftpd on SYSLOG_FTP /var/log/messages SYSLOG_FTP_err /var/log/messages</pre>
 </div>
 <div class="section">
   <h2>CAVEATS</h2>

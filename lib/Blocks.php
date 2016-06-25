@@ -6,6 +6,21 @@ class Blocks
 
     const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH)~u';
 
+    static function isSkippable(string $line)
+    {
+        // Ignore:
+        // stray .RE and .EE macros,
+        // .ad macros that haven't been trimmed as in middle of $lines
+        // empty .BR macros
+        // .R: man page trying to set font to Regular? (not an actual macro, not needed)
+        // .BB: ???
+        // .sp,, .sp2, .br.: man page bugs
+        // .pp: spurious, in *_selinux.8 pages
+        return
+          preg_match('~^\.(RE|fi)~u', $line) or
+          in_array($line, ['.ad', '.ad n', '.ad b', '.ad l', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2', '.br.', '.pp']);
+    }
+
     static function handle(DOMElement $parentNode, array $lines)
     {
 
@@ -32,24 +47,16 @@ class Blocks
                 }
             }
 
-            // Ignore:
-            // stray .RE and .EE macros,
-            // .ad macros that haven't been trimmed as in middle of $lines
-            // empty .BR macros
-            // .R: man page trying to set font to Regular? (not an actual macro, not needed)
-            // .BB: ???
-            // .sp,, .sp2, .br.: man page bugs
-            // .pp: spurious, in *_selinux.8 pages
-            if (preg_match('~^\.RE~u', $line) or
-              in_array($line, ['.ad', '.ad n', '.ad b', '.EE', '.BR', '.R', '.BB', '.sp,', '.sp2', '.br.', '.pp'])
-            ) {
+            if (self::isSkippable($line)) {
                 continue;
             }
 
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName, ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code'])) {
+                if (in_array($parentNode->tagName,
+                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'pre', 'a'])
+                ) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
@@ -99,7 +106,16 @@ class Blocks
                 $parentForLine->appendChild($dom->createElement('br'));
             }
 
-            TextContent::interpretAndAppendCommand($parentForLine, $line);
+            if (in_array($line, ['', '.'])) {
+                continue;
+            }
+
+            // FAIL on unknown command
+            if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
+                throw new Exception($line . ' unexpected command in Blocks::handle().');
+            }
+
+            TextContent::interpretAndAppendText($parentForLine, $line, true);
 
 
         }

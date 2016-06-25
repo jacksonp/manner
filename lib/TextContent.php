@@ -8,30 +8,6 @@ class TextContent
 
     private static $canAddWhitespace = true;
 
-    /**
-     * Interpret a line inside a block - could be a macro or text.
-     *
-     * @param DOMElement $parentNode
-     * @param string $line
-     * @throws Exception
-     */
-    static function interpretAndAppendCommand(DOMElement $parentNode, string $line)
-    {
-
-        if (in_array($line, ['', '.']) || preg_match('~^\.(ad|fi)~u', $line)) {
-            return;
-        }
-
-        // FAIL on unknown command
-        if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
-            throw new Exception($line . ' unexpected command in interpretAndAppendCommand().');
-        }
-
-        TextContent::interpretAndAppendText($parentNode, $line, true);
-
-
-    }
-
     static function interpretAndAppendText(DOMElement $parentNode, string $line, $addSpacing = false)
     {
 

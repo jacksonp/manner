@@ -26,7 +26,7 @@ class Inline_UR
             if (preg_match('~^\.UE~u', $line)) {
                 return $i;
             }
-            TextContent::interpretAndAppendCommand($anchor, $line);
+            Blocks::handle($anchor, [$line]);
         }
         throw new Exception('.UR with no corresponding .UE');
 

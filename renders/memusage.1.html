@@ -97,59 +97,59 @@
 <div class="section">
   <h2>EXAMPLE</h2>
   <p>Below is a simple program that reallocates a block of memory in cycles that rise to a peak before then cyclically reallocating the memory in smaller blocks that return to zero. After compiling the program and running the following commands, a graph of the memory usage of the program can be found in the file <em>memusage.png</em>:
-  <pre> $ <strong>memusage --data=memusage.dat ./a.out</strong>
- ...
- Memory usage summary: heap total: 45200, heap peak: 6440, stack peak: 224
-         total calls  total memory  failed calls
-  malloc|         1           400             0
- realloc|        40         44800             0  (nomove:40, dec:19, free:0)
-  calloc|         0             0             0
-    free|         1           440
- Histogram for block sizes:
-   192-207             1   2% ================
- ...
-  2192-2207            1   2% ================
-  2240-2255            2   4% =================================
-  2832-2847            2   4% =================================
-  3440-3455            2   4% =================================
-  4032-4047            2   4% =================================
-  4640-4655            2   4% =================================
-  5232-5247            2   4% =================================
-  5840-5855            2   4% =================================
-  6432-6447            1   2% ================
- $ <strong>memusagestat memusage.dat memusage.png</strong></pre>
+  <pre>$ <strong>memusage --data=memusage.dat ./a.out</strong>
+...
+Memory usage summary: heap total: 45200, heap peak: 6440, stack peak: 224
+        total calls  total memory  failed calls
+ malloc|         1           400             0
+realloc|        40         44800             0  (nomove:40, dec:19, free:0)
+ calloc|         0             0             0
+   free|         1           440
+Histogram for block sizes:
+  192-207             1   2% ================
+...
+ 2192-2207            1   2% ================
+ 2240-2255            2   4% =================================
+ 2832-2847            2   4% =================================
+ 3440-3455            2   4% =================================
+ 4032-4047            2   4% =================================
+ 4640-4655            2   4% =================================
+ 5232-5247            2   4% =================================
+ 5840-5855            2   4% =================================
+ 6432-6447            1   2% ================
+$ <strong>memusagestat memusage.dat memusage.png</strong></pre>
   <div class="subsection">
     <h3>Program source</h3>
-    <pre> #include &lt;stdio.h&gt;
- #include &lt;stdlib.h&gt;
+    <pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
- #define CYCLES 20
+#define CYCLES 20
 
- int
- main(int argc, char *argv[])
- {
-      int i, j;
-      int *p;
+int
+main(int argc, char *argv[])
+{
+     int i, j;
+     int *p;
 
-      printf("malloc: %zd\n", sizeof(int) * 100);
-      p = malloc(sizeof(int) * 100);
+     printf("malloc: %zd\n", sizeof(int) * 100);
+     p = malloc(sizeof(int) * 100);
 
-      for (i = 0; i &lt; CYCLES; i++) {
-          if (i &lt; CYCLES / 2)
-              j = i;
-          else
-              j--;
+     for (i = 0; i &lt; CYCLES; i++) {
+         if (i &lt; CYCLES / 2)
+             j = i;
+         else
+             j--;
 
-          printf("realloc: %zd\n", sizeof(int) * (j * 50 + 110));
-          p = realloc(p, sizeof(int) * (j * 50 + 100));
+         printf("realloc: %zd\n", sizeof(int) * (j * 50 + 110));
+         p = realloc(p, sizeof(int) * (j * 50 + 100));
 
-          printf("realloc: %zd\n", sizeof(int) * ((j+1) * 150 + 110));
-          p = realloc(p, sizeof(int) * ((j + 1) * 150 + 110));
-      }
+         printf("realloc: %zd\n", sizeof(int) * ((j+1) * 150 + 110));
+         p = realloc(p, sizeof(int) * ((j + 1) * 150 + 110));
+     }
 
-      free(p);
-      exit(EXIT_SUCCESS);
- }</pre>
+     free(p);
+     exit(EXIT_SUCCESS);
+}</pre>
   </div>
 </div>
 <div class="section">

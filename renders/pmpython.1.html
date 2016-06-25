@@ -17,14 +17,14 @@
   <p>This can be useful as it allows version-independent python code to be run anywhere. All python modules shipped with PCP support versions 2.6 and later (in the python2 series), and 3.3 and later (in the python3 release series).
   <p>Due to python monitoring and collecting scripts being relatively simple in PCP (not requiring new modules, language features, etc), it has been possible to ensure they work for all of the above python versions.
   <p>However, the name of the python interpreter is not always the same, thus, it is common for PCP python scripts to use a “shebang” line that launches the <strong>python</strong> interpreter indirectly as follows:
-  <pre> #!/usr/bin/env pmpython</pre>
+  <pre>#!/usr/bin/env pmpython</pre>
   <p><strong>env</strong>(1) is used to find the correct path for the <strong>pmpython</strong> executable from the user's <strong>$PATH</strong>.
   <p>By default the name of the python interpreter is found from the the value of <strong>$PCP_PYTHON_PROG</strong> from the environment (if set) else from <em>/etc/pcp.conf</em>. The latter is the more typical case where this value is based on some heuristics about the platform at the time the PCP packages were build and favour the use of <em>python3</em> in all recent releases of PCP (for those platforms that support it).
   <p>This allows an appropriate name to be used for the python interpreter instead of a hard-coded python version name, while still allowing the user to override the python interpreter as follows:
-  <pre> $ PCP_PYTHON_PROG=python3 pmpython --version
- Python 3.4.2
- $ PCP_PYTHON_PROG=python2 pmpython --version
- Python 2.7.9</pre>
+  <pre>$ PCP_PYTHON_PROG=python3 pmpython --version
+Python 3.4.2
+$ PCP_PYTHON_PROG=python2 pmpython --version
+Python 2.7.9</pre>
   <p>This is convenient for shipping identical scripts on multiple platforms, and for testing different python versions with the one script (e.g. in the case where multiple versions of python are installed, PCP_PYTHON_PROG can be set in the local environment to override the global setting).
   <p><strong>pmpython</strong> is a replacement for an earlier tool with similar function, namely <strong>pcp-python</strong>(1).
 </div>

@@ -14,33 +14,33 @@ class Block_SS
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
-        $h3 = $dom->createElement('h3');
+        $headingNode = $dom->createElement('h3');
 
         if ($matches[1] === '') {
             if ($i === $numLines - 1) {
                 return $i;
             }
             // Text for subheading is on next line.
-            $subsectionHeading = $lines[++$i];
-            if ($subsectionHeading === '.br') {
+            $sectionHeading = $lines[++$i];
+            if ($sectionHeading === '.br') {
                 // Skip this to work around bugs in man pages, e.g. xorrecord.1
                 return $i;
             }
-            TextContent::interpretAndAppendCommand($h3, $subsectionHeading);
+            Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $subsectionHeading = trim($matches[1]);
-            $subsectionHeading = trim($subsectionHeading, '"');
-            TextContent::interpretAndAppendText($h3, $subsectionHeading);
+            $sectionHeading = trim($matches[1]);
+            $sectionHeading = trim($sectionHeading, '"');
+            TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SS macros
-        if (empty($subsectionHeading)) {
+        if (empty($sectionHeading)) {
             return $i;
         }
 
         $subsection = $dom->createElement('div');
         $subsection->setAttribute('class', 'subsection');
-        $subsection->appendChild($h3);
+        $subsection->appendChild($headingNode);
 
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {

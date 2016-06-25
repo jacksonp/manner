@@ -135,7 +135,7 @@ class Block_TS
                         }
 
                     } else {
-                        TextContent::interpretAndAppendCommand($cell, $tdContents);
+                        Blocks::handle($cell, [$tdContents]);
                     }
                     $tr->appendChild($cell);
                 }
