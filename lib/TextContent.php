@@ -25,10 +25,9 @@ class TextContent
         }
 
         // NB: these are also used for preformatted blocks, have to handle there as well before removing:
-        if (preg_match('~^\.(?:([RBI][RBI]?)|ft ([RBI]))\s(?<text>.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.ft ([RBI])\s(?<text>.*)$~u', $line, $matches)) {
 
-            // See why (?J) setting with named <command> didn't work sometime instead of this:
-            $command = $matches[1] ?: $matches[2];
+            $command = $matches[1];
 
             $bits = Macro::parseArgString($matches['text']);
             if (is_null($bits)) {

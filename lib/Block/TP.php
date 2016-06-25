@@ -56,7 +56,7 @@ class Block_TP
                     if (preg_match('~^\.TQ$~u', $line)) {
                         $dtLine = $lines[++$i];
                         $dt     = $dom->createElement('dt');
-                        TextContent::interpretAndAppendCommand($dt, $dtLine);
+                        Blocks::handle($dt, [$dtLine]);
                         $dl->appendChild($dt);
                     } else {
                         --$i;
