@@ -27,8 +27,9 @@ class Block_nf
                     ++$i;
                 }
                 break;
+            } elseif ($line !== '.ad l') {
+                $preLines[] = $line;
             }
-            $preLines[] = $line;
             ++$i;
         }
 

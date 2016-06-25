@@ -7,7 +7,7 @@ class Inline_FontOneInputLine
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.(I|B|SB|SM)(\s.*)?$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.(R|I|B|SB|SM)(\s.*)?$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -15,6 +15,10 @@ class Inline_FontOneInputLine
         $dom      = $parentNode->ownerDocument;
 
         switch ($matches[1]) {
+            case 'R':
+                $appendToParentNode = false;
+                $innerNode          = $parentNode;
+                break;
             case 'I':
                 $appendToParentNode = $dom->createElement('em');
                 $innerNode          = $appendToParentNode;
