@@ -81,7 +81,7 @@ class BlockPreformatted
                 throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line);
+            TextContent::interpretAndAppendText($parentForLine, $line, false, false);
             if ($i !== $numLines - 1) {
                 $parentNode->appendChild(new DOMText("\n"));
             }

@@ -8,8 +8,12 @@ class TextContent
 
     private static $canAddWhitespace = true;
 
-    static function interpretAndAppendText(DOMElement $parentNode, string $line, $addSpacing = false)
-    {
+    static function interpretAndAppendText(
+      DOMElement $parentNode,
+      string $line,
+      $addSpacing = false,
+      bool $replaceQuotes = null
+    ) {
 
         $dom = $parentNode->ownerDocument;
 
@@ -17,6 +21,10 @@ class TextContent
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
+
+        if (is_null($replaceQuotes)) {
+            $replaceQuotes = !$parentNode->isOrInTag(['pre', 'code']);
+        }
 
         $textSegments = preg_split(
           '~(?<!\\\\)(\\\\f(?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',
@@ -36,7 +44,8 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         if ($i < $numTextSegments - 2 and $textSegments[$i + 2] === '\d') {
                             $sup = $parentNode->appendChild($dom->createElement('sup'));
-                            $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $sup->appendChild(new DOMText(
+                              self::interpretString($textSegments[++$i], false, $replaceQuotes)));
                             ++$i;
                         } else {
                             throw new Exception('\u followed by unexpected pattern: ' . $line);
@@ -47,7 +56,8 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         if ($i < $numTextSegments - 2 and $textSegments[$i + 2] === '\u') {
                             $sub = $parentNode->appendChild($dom->createElement('sub'));
-                            $sub->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                            $sub->appendChild(new DOMText(
+                              self::interpretString($textSegments[++$i], false, $replaceQuotes)));
                             ++$i;
                         } else {
                             throw new Exception('\d followed by unexpected pattern: ' . $line);
@@ -59,12 +69,12 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->isOrInTag('strong') || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
-                              $addSpacing)));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing, $replaceQuotes));
+                        if ($parentNode->isOrInTag('strong') || trim($textSegments[$i]) === '') {
+                            $parentNode->appendChild($domText);
                         } else {
                             $strong = $parentNode->appendChild($dom->createElement('strong'));
-                            $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                            $strong->appendChild($domText);
                         }
                     }
                     break;
@@ -73,12 +83,12 @@ class TextContent
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->isOrInTag('em') || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
-                              $addSpacing)));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing, $replaceQuotes));
+                        if ($parentNode->isOrInTag('em') or trim($textSegments[$i]) === '') {
+                            $parentNode->appendChild($domText);
                         } else {
                             $em = $parentNode->appendChild($dom->createElement('em'));
-                            $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                            $em->appendChild($domText);
                         }
                     }
                     break;
@@ -88,7 +98,8 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $strong = $parentNode->appendChild($dom->createElement('strong'));
                         $em     = $strong->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        $em->appendChild(new DOMText(
+                          self::interpretString($textSegments[++$i], $addSpacing, $replaceQuotes)));
                     }
                     break;
                 case '\f':
@@ -114,13 +125,12 @@ class TextContent
                 case '\f[CW]':
                 case '\f[CO]':
                     if ($i < $numTextSegments - 1) {
-                        if ($parentNode->tagName === 'code' || trim($textSegments[$i + 1]) === '') {
-                            $parentNode->appendChild(new DOMText(self::interpretString($textSegments[++$i],
-                              $addSpacing)));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing, false));
+                        if ($parentNode->tagName === 'code' || trim($textSegments[$i]) === '') {
+                            $parentNode->appendChild($domText);
                         } else {
                             $code = $dom->createElement('code');
-                            $code->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing,
-                              false)));
+                            $code->appendChild($domText);
                             $parentNode->appendChild($code);
                         }
                     }
@@ -156,13 +166,17 @@ class TextContent
                 case '\f(SM':
                     if ($i < $numTextSegments - 1) {
                         $small = $parentNode->appendChild($dom->createElement('small'));
-                        $small->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        $small->appendChild(new DOMText(
+                          self::interpretString($textSegments[++$i], $addSpacing, $replaceQuotes)));
                     }
                     break;
                 default:
                     if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
-                        $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i], $addSpacing,
-                          !$parentNode->isOrInTag(['pre', 'code']))));
+                        $parentNode->appendChild(new DOMText(self::interpretString(
+                          $textSegments[$i],
+                          $addSpacing,
+                          $replaceQuotes
+                        )));
                     }
             }
 
