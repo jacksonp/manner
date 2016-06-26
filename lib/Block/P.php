@@ -9,7 +9,7 @@ class Block_P
 
         // empty lines cause a new para also, see sar.1
         // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-        if ($lines[$i] !== '' and !preg_match('~^\.([LP]?P$|HP)~u', $lines[$i])) {
+        if ($lines[$i] !== '' and !preg_match('~^\.([LP]?P(?:\s|$)|HP)~u', $lines[$i])) {
             return false;
         }
 

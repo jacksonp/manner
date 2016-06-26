@@ -13,10 +13,10 @@ class Blocks
         // .ad macros that haven't been trimmed as in middle of $lines
         // empty .BR macros
         // .R: man page trying to set font to Regular? (not an actual macro, not needed)
-        // .RH, .sp,, .sp2, .br.: man page bugs
+        // .RH, .sp,, .sp2, .br., .Sh: man page bugs
         // .pp: spurious, in *_selinux.8 pages
         return
-          preg_match('~^\.(RE|fi|ad)~u', $line) or
+          preg_match('~^\.(RE|fi|ad|Sh)~u', $line) or
           in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp', '.RH']);
     }
 
