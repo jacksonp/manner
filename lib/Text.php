@@ -216,7 +216,7 @@ class Text
                 }
             }
 
-            if (preg_match('~\.de1? ([^\s"]+)\s*$~u', $line, $matches)) {
+            if (preg_match('~^\.de1? ([^\s"]+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
@@ -375,28 +375,6 @@ class Text
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
             $line = $firstPassLines[$i];
-
-            // Don't care about .UR without an argument or with an invalid URL
-            if (preg_match('~^\.UR\s*<?(?<url>.*?)>?$~', $line, $matchesUR)) {
-                if ($i === $numFirstPassLines - 1) {
-                    continue;
-                }
-                $lineAfterUR = $firstPassLines[$i + 1];
-                if (preg_match('~^\.UE ?(.*)$~', $lineAfterUR, $matchesUE)) {
-                    $line = $matchesUR['url'] . $matchesUE[1];
-                    ++$i;
-                } else {
-                    if (empty($matchesUR['url']) || mb_substr($matchesUR['url'], 0, 1) === '#') {
-                        $line = $lineAfterUR;
-                        if (preg_match('~^\.UE ?(.*)$~', $firstPassLines[$i + 2], $matches)) {
-                            $line .= $matches[1];
-                            $i += 2;
-                        } else {
-                            throw new Exception('.UR (empty) with no corresponding .UE');
-                        }
-                    }
-                }
-            }
 
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {

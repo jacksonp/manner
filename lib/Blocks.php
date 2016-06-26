@@ -13,11 +13,11 @@ class Blocks
         // .ad macros that haven't been trimmed as in middle of $lines
         // empty .BR macros
         // .R: man page trying to set font to Regular? (not an actual macro, not needed)
-        // .sp,, .sp2, .br.: man page bugs
+        // .RH, .sp,, .sp2, .br.: man page bugs
         // .pp: spurious, in *_selinux.8 pages
         return
           preg_match('~^\.(RE|fi|ad)~u', $line) or
-          in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp']);
+          in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp', '.RH']);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
@@ -69,7 +69,7 @@ class Blocks
                 }
             }
 
-            $inlineClasses = ['MT', 'UR', 'FontOneInputLine', 'AlternatingFont', 'ft', 'VerticalSpace'];
+            $inlineClasses = ['Link', 'FontOneInputLine', 'AlternatingFont', 'ft', 'VerticalSpace'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
@@ -114,7 +114,8 @@ class Blocks
                 throw new Exception($line . ' unexpected command in Blocks::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line, !in_array($parentForLine->tagName, ['h2', 'h3']));
+            TextContent::interpretAndAppendText($parentForLine, $line,
+              !in_array($parentForLine->tagName, ['h2', 'h3']));
 
         }
 
