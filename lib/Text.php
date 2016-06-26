@@ -315,8 +315,9 @@ class Text
             // .so: ignore for now so we can build builtins.1
             // .bd: "Embolden font by N-1 units."
             // .BB: looks like a color setting, e.g. skipfish.1
+            // .BY: looks like it sets the authors, e.g. as86.1
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY)(\s|$)~u',
               $line)
             ) {
                 continue;
