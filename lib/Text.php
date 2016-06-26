@@ -216,7 +216,7 @@ class Text
                 }
             }
 
-            if (preg_match('~\.de1? ([!\w]+)\s*$~u', $line, $matches)) {
+            if (preg_match('~\.de1? ([^\s"]+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
@@ -316,8 +316,10 @@ class Text
             // .bd: "Embolden font by N-1 units."
             // .BB: looks like a color setting, e.g. skipfish.1
             // .BY: looks like it sets the authors, e.g. as86.1
+            // .mk: Mark current vertical position in register.
+            // .rt: Return (upward only) to marked vertical place (default scaling indicator v).
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt)(\s|$)~u',
               $line)
             ) {
                 continue;
