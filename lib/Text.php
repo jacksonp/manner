@@ -318,8 +318,11 @@ class Text
             // .BY: looks like it sets the authors, e.g. as86.1
             // .mk: Mark current vertical position in register.
             // .rt: Return (upward only) to marked vertical place (default scaling indicator v).
+            // .ss: Set space glyph size to N/12 of the space width in the current font.
+            // .cs font N M: Set constant character width mode for font to N/36 ems with em M.
+            // .vs: Change to previous vertical base line spacing.
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs)(\s|$)~u',
               $line)
             ) {
                 continue;
