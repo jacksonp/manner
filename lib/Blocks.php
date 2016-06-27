@@ -17,7 +17,7 @@ class Blocks
         // .pp: spurious, in *_selinux.8 pages
         return
           preg_match('~^\.(RE|fi|ad|Sh)~u', $line) or
-          in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp', '.RH', '.Sp', '.TH', '.TC']);
+          in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp', '.RH', '.Sp', '.TH', '.TC', '.TR']);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
