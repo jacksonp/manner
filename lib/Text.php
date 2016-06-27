@@ -119,8 +119,8 @@ class Text
                 $className = 'Roff_' . $roffClass;
                 $result    = $className::checkEvaluate($linesNoComments, $i);
                 if ($result !== false) {
-                    $linesNoCond = array_merge($linesNoCond, $result[0]);
-                    $i           = $result[1];
+                    $linesNoCond = array_merge($linesNoCond, $result['lines']);
+                    $i           = $result['i'];
                     continue 2;
                 }
             }

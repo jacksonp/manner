@@ -7,13 +7,43 @@ class Roff_Condition
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (preg_match('~^\.if ([^\s]+) \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (
+          preg_match('~^\.if ([^\s]+) \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches) or
+          preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)
+        ) {
             // TODO: fix. Just skipping 2nd .if for now
-            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
-        } elseif (preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
-            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
-        } elseif (preg_match('~^\.if ([^\s]+) (.*)$~u', $lines[$i], $matches)) {
-            return [self::ifLine($matches[1], $matches[2]), $i];
+            $if = self::ifBlock($lines, $i, $matches[2]);
+            if (self::test($matches[1])) {
+                return $if;
+            } else {
+                return ['lines' => [], $i => $if['i']];
+            }
+        }
+
+        if (preg_match('~^\.if ([^\s]+) (.*)$~u', $lines[$i], $matches)) {
+            if (self::test($matches[1])) {
+                return ['lines' => [$matches[2]], 'i' => $i];
+            } else {
+                return ['lines' => [], 'i' => $i];
+            }
+        }
+
+        if (preg_match('~^\.ie ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
+            $condition = $matches[1];
+            $if        = self::ifBlock($lines, $i, $matches[2]);
+            $i         = $if[1] + 1;
+
+            $line = $lines[$i];
+
+            if (!preg_match('~^\.el \\\\{(.*)$~', $line, $matches)) {
+                throw new Exception('.ie - not followed by expected .el on line ' . $i . '.');
+            }
+
+            $else     = self::ifBlock($lines, $i, $matches[1]);
+            $newLines = self::test($condition) ? $if['lines'] : $else['lines'];
+
+            return ['lines' => $newLines, $else['i']];
+
         }
 
         return false;
@@ -50,7 +80,7 @@ class Roff_Condition
 
     }
 
-    private static function ifBlock(array $lines, int $i, string $condition, string $firstLine)
+    private static function ifBlock(array $lines, int $i, string $firstLine)
     {
 
         $numLines         = count($lines);
@@ -87,10 +117,6 @@ class Roff_Condition
             throw new Exception('.if condition \\{ - not followed by expected pattern on line ' . $i . '.');
         }
 
-        if (!self::test($condition)) {
-            return [[], $i];
-        }
-
         if ($recurse) {
             $recurseLines = [];
             for ($j = 0; $j < count($replacementLines); ++$j) {
@@ -105,17 +131,7 @@ class Roff_Condition
             $replacementLines = $recurseLines;
         }
 
-        return [$replacementLines, $i];
-
-    }
-
-    private static function ifLine(string $condition, string $restOfLine):array
-    {
-        if (self::test($condition)) {
-            return [$restOfLine];
-        } else {
-            return [];
-        }
+        return ['lines' => $replacementLines, 'i' => $i];
 
     }
 
