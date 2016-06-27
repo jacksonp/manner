@@ -14,7 +14,7 @@ class Block_RS
         }
 
         $thisIndent = trim($matches[1]);
-        $className = 'indent';
+        $className  = 'indent';
         if ($thisIndent !== '') {
             $className .= '-' . $thisIndent;
         }
@@ -61,7 +61,15 @@ class Block_RS
                 $rsBlock->setAttribute('class', $className);
             }
             Blocks::handle($rsBlock, $blockLines);
-            $parentNode->appendBlockIfHasContent($rsBlock);
+            if ($className === 'indent' and
+              $rsBlock->childNodes->length === 1 and
+              $rsBlock->firstChild instanceof DOMElement and
+              $rsBlock->firstChild->tagName === 'dl'
+            ) {
+                $parentNode->appendChild($rsBlock->firstChild);
+            } else {
+                $parentNode->appendBlockIfHasContent($rsBlock);
+            }
         }
 
         return $i;
