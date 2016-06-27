@@ -99,6 +99,8 @@ class Roff_Condition
           '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
           '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
           'require_index',
+          '\\\\n(.$>=3', // revisit, see gnugo.6
+          '\\\\n(.$=0:((0\\\\$1)*2u>(\\\\n(.lu-\\\\n(.iu))', // revisit, see urls_txt.5
         ];
 
         if (in_array($condition, $alwaysFalse)) {
