@@ -66,36 +66,15 @@ class Text
 
             $line = $linesNoComments[$i];
 
-            //            .ie n \{ USE
-            //            THIS
-            //            .\}
-            //            .el \{ DISCARD
-            //            THIS
-            //            .\}
-            if (preg_match('~^\.ie n \\\\{(.*)$~', $line, $matches)) {
-                $line = $matches[1];
-                while ($i < $numNoCommentLines) {
+            $roffClasses = ['Condition'];
 
-                    if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
-                        if (!empty($matches[1]) && $matches[1] !== '\'br') {
-                            $linesNoCond[] = Macro::massageLine($matches[1]);
-                        }
-                        if (!preg_match('~^\.el\s*\\\\{~', $linesNoComments[++$i])) {
-                            throw new Exception('.ie n \\{ - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
-                        }
-                        for ($i = $i + 1; $i < $numNoCommentLines; ++$i) {
-                            $line = $linesNoComments[$i];
-                            if (preg_match('~\\\\}$~', $line)) {
-                                continue 3;
-                            }
-                        }
-                        throw new Exception('.el \\{ - not followed by expected pattern on line ' . $i . '.');
-                    } elseif (!empty($line)) {
-                        $linesNoCond[] = Macro::massageLine($line);
-                    }
-
-                    $line = $linesNoComments[++$i];
-
+            foreach ($roffClasses as $roffClass) {
+                $className = 'Roff_' . $roffClass;
+                $result    = $className::checkEvaluate($linesNoComments, $i);
+                if ($result !== false) {
+                    $linesNoCond = array_merge($linesNoCond, $result['lines']);
+                    $i           = $result['i'];
+                    continue 2;
                 }
             }
 
@@ -113,18 +92,6 @@ class Text
                 }
             }
 
-            $roffClasses = ['Condition'];
-
-            foreach ($roffClasses as $roffClass) {
-                $className = 'Roff_' . $roffClass;
-                $result    = $className::checkEvaluate($linesNoComments, $i);
-                if ($result !== false) {
-                    $linesNoCond = array_merge($linesNoCond, $result['lines']);
-                    $i           = $result['i'];
-                    continue 2;
-                }
-            }
-
             if (mb_strpos($line, '.if require_index') === 0) {
                 $openBraces = 0;
                 while ($i < $numNoCommentLines) {
@@ -136,32 +103,6 @@ class Text
                     $line = $linesNoComments[++$i];
                 }
                 throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
-            }
-
-            if (mb_strpos($line, '.ie \\nF \\{') === 0) {
-                $openBraces = 0;
-                while ($i < $numNoCommentLines) {
-                    $openBraces += substr_count($line, '\\{');
-                    $openBraces -= substr_count($line, '\\}');
-                    $line = $linesNoComments[++$i];
-                    if ($openBraces < 1) {
-                        break;
-                    }
-                }
-                if (mb_strpos($line, '.el \{') !== 0) {
-                    throw new Exception('.ie - not followed by expected .el on line ' . $i . '.');
-                }
-                $openBraces = 0;
-                while ($i < $numNoCommentLines) {
-                    $openBraces += substr_count($line, '\\{');
-                    $openBraces -= substr_count($line, '\\}');
-                    if ($openBraces < 1) {
-                        continue 2;
-                    }
-                    $line = $linesNoComments[++$i];
-                }
-
-                throw new Exception('.ie - not followed by expected pattern on line ' . $i . '.');
             }
 
             if (preg_match('~\.if [tv] ~', $line)) {
