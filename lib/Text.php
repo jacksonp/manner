@@ -92,33 +92,6 @@ class Text
                 }
             }
 
-            if (mb_strpos($line, '.if require_index') === 0) {
-                $openBraces = 0;
-                while ($i < $numNoCommentLines) {
-                    $openBraces += substr_count($line, '\\{');
-                    $openBraces -= substr_count($line, '\\}');
-                    if ($openBraces < 1) {
-                        continue 2;
-                    }
-                    $line = $linesNoComments[++$i];
-                }
-                throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
-            }
-
-            if (preg_match('~\.if [tv] ~', $line)) {
-                continue;
-            }
-
-            if (preg_match('~\.if n (.*)~', $line, $matches)) {
-                $line = $matches[1];
-            }
-
-            // construct for "hiding text from po4a", we don't need:
-            $line = Replace::preg('~^\.if !\'po4a\'hide\' ~u', '', $line);
-
-            // part of indexing we don't care about
-            $line = Replace::preg('~^\.if !\\\\nF \.nr F 0~u', '', $line);
-
             $linesNoCond[] = $line;
 
         }
