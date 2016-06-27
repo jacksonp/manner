@@ -24,9 +24,10 @@ class Roff_Condition
 
         if (
         preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' (.*)$~u',
-          $lines[$i], $matches)) {
+          $lines[$i], $matches)
+        ) {
             if (self::test($matches[1]) and self::test($matches[2])) {
-                return ['lines' => [$matches[3]], 'i' => $i];
+                return ['lines' => [Macro::massageLine($matches[3])], 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
@@ -34,7 +35,7 @@ class Roff_Condition
 
         if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $matches)) {
             if (self::test($matches[1])) {
-                return ['lines' => [$matches[2]], 'i' => $i];
+                return ['lines' => [Macro::massageLine($matches[2])], 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
@@ -67,9 +68,9 @@ class Roff_Condition
             }
 
             if (self::test($ifMatches[1])) {
-                return ['lines' => [$ifMatches[2]], 'i' => $i];
+                return ['lines' => [Macro::massageLine($ifMatches[2])], 'i' => $i];
             } else {
-                return ['lines' => [$elseMatches[1]], 'i' => $i];
+                return ['lines' => [Macro::massageLine($elseMatches[1])], 'i' => $i];
             }
 
         }
@@ -120,6 +121,7 @@ class Roff_Condition
           '\'\\*[.T]\'utf8\'',
           '\'\\*[.T]\'cp1047\'',
           '\'\\*[pts-dev]\'tty\'',
+          'c \\[shc]' // see man.1
         ];
 
         if (in_array($condition, $alwaysFalse)) {

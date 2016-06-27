@@ -105,7 +105,7 @@ class Blocks
                 $parentForLine->appendChild($dom->createElement('br'));
             }
 
-            if (in_array($line, ['', '.'])) {
+            if (in_array($line, ['', '.', '\''])) {
                 continue;
             }
 
