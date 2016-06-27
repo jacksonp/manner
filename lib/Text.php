@@ -78,20 +78,6 @@ class Text
                 }
             }
 
-            if (mb_strpos($line, '~^\.ie t $~') === 0) {
-                if (!preg_match('~^\.el (.*)$~', $linesNoComments[++$i], $matches)) {
-                    throw new Exception('.ie t - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
-                }
-                $line = $matches[1];
-            }
-
-            if (preg_match('~^\.ie n (.*)$~', $line, $matches)) {
-                $line = $matches[1];
-                if (!preg_match('~^\.el ~', $linesNoComments[++$i])) {
-                    throw new Exception('.ie n - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
-                }
-            }
-
             $linesNoCond[] = $line;
 
         }

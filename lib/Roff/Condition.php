@@ -54,6 +54,20 @@ class Roff_Condition
 
         }
 
+        if (preg_match('~^\.ie ([^\s]+) (.*)$~u', $lines[$i], $ifMatches)) {
+            ++$i;
+            if (!preg_match('~^\.el (.*)$~', $lines[$i], $elseMatches)) {
+                throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
+            }
+
+            if (self::test($ifMatches[1])) {
+                return ['lines' => [$ifMatches[2]], 'i' => $i];
+            } else {
+                return ['lines' => [$elseMatches[1]], 'i' => $i];
+            }
+
+        }
+
         return false;
 
     }
