@@ -125,11 +125,8 @@ class Text
                 }
             }
 
-            if (preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
-              || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
-              || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
-              || mb_strpos($line, '.if require_index') === 0
-              || mb_strpos($line, '.if \\nF \\{') === 0
+            if (preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
+              or mb_strpos($line, '.if require_index') === 0
             ) {
                 $openBraces = 0;
                 while ($i < $numNoCommentLines) {

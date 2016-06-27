@@ -4,14 +4,40 @@
 class Roff_Condition
 {
 
-    private static function test (string $condition) {
-        return $condition === 'n';
+    private static function test(string $condition)
+    {
+
+        $alwaysTrue = [
+          'n',       // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
+          '\\n[.g]', // Always 1 in GNU troff.  Macros should use it to test if running under groff.
+          '\\n(.g',  // as above
+        ];
+
+        if (in_array($condition, $alwaysTrue)) {
+            return true;
+        }
+
+        // Previously explicitly skipped:
+        $alwaysFalse = [
+          't', // "Formatter is troff."
+          'v', // vroff
+          '\\nF>0',
+          '\\nF',
+          '(\\n(rF:(\\n(.g==0))',
+        ];
+
+        if (in_array($condition, $alwaysFalse)) {
+            return false;
+        }
+
+        throw new Exception('Unhandled condition: ' . $condition);
+
     }
 
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.if (.) \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
 
