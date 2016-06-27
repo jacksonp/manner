@@ -102,7 +102,9 @@ class Text
                 if (isset($macroReplacements[$macro])) {
                     foreach ($macroReplacements[$macro] as $macroLine) {
 
-                        $macroLine = str_replace('\\$1', @$bits[0] ?: '', $macroLine);
+                        for ($n = 0; $n < 10; ++$n) {
+                            $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
+                        }
 
                         // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
                         // Other \$ things are also arguments...
@@ -168,7 +170,6 @@ class Text
             $skipLines = [
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
               '\\&',
-              '.so man.macros',
                 // Empty requests:
               '...',
               '.',
