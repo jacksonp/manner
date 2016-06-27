@@ -4,12 +4,14 @@
 class Roff_Condition
 {
 
+    const CONDITION_REGEX = '(c\s?[^\s]+|[^\s]+)';
+
     static function checkEvaluate(array $lines, int $i)
     {
 
         if (
-          preg_match('~^\.if ([^\s]+) \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches) or
-          preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)
+          preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches) or
+          preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)
         ) {
             // TODO: fix. Just skipping 2nd .if for now
             $if = self::ifBlock($lines, $i, $matches[2]);
@@ -20,7 +22,9 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.if ([^\s]+) \.if ([^\s]+) (.*)$~u', $lines[$i], $matches)) {
+        if (
+        preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' (.*)$~u',
+          $lines[$i], $matches)) {
             if (self::test($matches[1]) and self::test($matches[2])) {
                 return ['lines' => [$matches[3]], 'i' => $i];
             } else {
@@ -28,7 +32,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.if ([^\s]+) (.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $matches)) {
             if (self::test($matches[1])) {
                 return ['lines' => [$matches[2]], 'i' => $i];
             } else {
@@ -36,7 +40,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.ie ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             $condition = $matches[1];
             $if        = self::ifBlock($lines, $i, $matches[2]);
             $i         = $if['i'] + 1;
@@ -54,7 +58,7 @@ class Roff_Condition
 
         }
 
-        if (preg_match('~^\.ie ([^\s]+) (.*)$~u', $lines[$i], $ifMatches)) {
+        if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $ifMatches)) {
             ++$i;
             if (!preg_match('~^\.el (.*)$~', $lines[$i], $elseMatches)) {
                 //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
