@@ -57,7 +57,9 @@ class Roff_Condition
         if (preg_match('~^\.ie ([^\s]+) (.*)$~u', $lines[$i], $ifMatches)) {
             ++$i;
             if (!preg_match('~^\.el (.*)$~', $lines[$i], $elseMatches)) {
-                throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
+                //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
+                // Just skip the ie and el lines:
+                return ['lines' => [], 'i' => $i];
             }
 
             if (self::test($ifMatches[1])) {
@@ -107,6 +109,13 @@ class Roff_Condition
           'require_index',
           '\\\\n(.$>=3', // revisit, see gnugo.6
           '\\\\n(.$=0:((0\\\\$1)*2u>(\\\\n(.lu-\\\\n(.iu))', // revisit, see urls_txt.5
+          '\'\\*[.T]\'ascii\'',
+          '\'\\*[.T]\'ascii8\'',
+          '\'\\*[.T]\'latin1\'',
+          '\'\\*[.T]\'nippon\'',
+          '\'\\*[.T]\'utf8\'',
+          '\'\\*[.T]\'cp1047\'',
+          '\'\\*[pts-dev]\'tty\'',
         ];
 
         if (in_array($condition, $alwaysFalse)) {
