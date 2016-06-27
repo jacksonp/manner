@@ -223,7 +223,7 @@ class Text
             // .ev: Switch to previous environment and pop it off the stack.
             // .evc: Copy the contents of environment env to the current environment. No pushing or popping.
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw)(\s|$)~u',
               $line)
             ) {
                 continue;
