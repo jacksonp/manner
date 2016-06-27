@@ -118,18 +118,16 @@ class Roff_Condition
         $foundEnd         = false;
         $replacementLines = [];
 
-        if ($firstLine !== '') {
-            $replacementLines[] = Macro::massageLine($firstLine);
-        }
+        $line = $firstLine;
 
-        ++$i;
         $openBraces = 1;
         $recurse    = false;
 
-        for (; $i < $numLines; ++$i) {
-            $line = $lines[$i];
+        for ($ifIndex = $i; $ifIndex < $numLines;) {
             $openBraces += substr_count($line, '\\{');
-            if ($openBraces > 1 or preg_match('~\.\s+i[fe] ~u', $line)) {
+            if ($openBraces > 1 or
+              ($i !== $ifIndex and preg_match('~^\.\s*i[fe] ~u', $line))
+            ) {
                 $recurse = true;
             }
             $openBraces -= substr_count($line, '\\}');
@@ -142,10 +140,11 @@ class Roff_Condition
             } elseif ($line !== '') {
                 $replacementLines[] = Macro::massageLine($line);
             }
+            $line = $lines[++$ifIndex];
         }
 
         if (!$foundEnd) {
-            throw new Exception('.if condition \\{ - not followed by expected pattern on line ' . $i . '.');
+            throw new Exception('.if condition \\{ - not followed by expected pattern on line ' . $ifIndex . '.');
         }
 
         if ($recurse) {
@@ -162,7 +161,7 @@ class Roff_Condition
             $replacementLines = $recurseLines;
         }
 
-        return ['lines' => $replacementLines, 'i' => $i];
+        return ['lines' => $replacementLines, 'i' => $ifIndex];
 
     }
 
