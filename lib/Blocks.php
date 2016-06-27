@@ -61,7 +61,7 @@ class Blocks
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
                 }
             } else {
-                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3'])) {
+                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])) {
                     // Start a new paragraph after certain blocks
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));
                 } else {
