@@ -9,11 +9,20 @@ class Roff_Condition
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (
-          preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches) or
-          preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)
+        if (preg_match(
+          '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
+          $lines[$i], $matches)
         ) {
-            // TODO: fix. Just skipping 2nd .if for now
+
+            $if = self::ifBlock($lines, $i, $matches[3]);
+            if (self::test($matches[1]) and self::test($matches[2])) {
+                return $if;
+            } else {
+                return ['lines' => [], 'i' => $if['i']];
+            }
+        }
+
+        if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             $if = self::ifBlock($lines, $i, $matches[2]);
             if (self::test($matches[1])) {
                 return $if;
