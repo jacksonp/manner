@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="March 12, 1999" data-package="Linux" data-section-name="Linux User's Manual">
+<title>SKILL</title>
+<h1>SKILL</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>skill, snice - send a signal or report process status
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <pre>skill [signal to send] [options] process selection criteria
+snice [new priority] [options] process selection criteria</pre>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>These tools are probably obsolete and unportable. The command syntax is poorly defined. Consider using the killall, pkill, and pgrep commands instead.
+  <p>The default signal for skill is TERM. Use -l or -L to list available signals. Particularly useful signals include HUP, INT, KILL, STOP, CONT, and 0. Alternate signals may be specified in three ways: -9 -SIGKILL -KILL.
+  <p>The default priority for snice is +4. (snice +4 ...) Priority numbers range from +20 (slowest) to -20 (fastest). Negative priority numbers are restricted to administrative users.
+</div>
+<div class="section">
+  <h2>GENERAL OPTIONS</h2>
+  <table class="tbl">
+    <tr>
+      <td>-f
+      <td>fast mode
+      <td>This is not currently useful.
+    <tr>
+      <td>-i
+      <td>interactive use
+      <td>You will be asked to approve each action.
+    <tr>
+      <td>-v
+      <td>verbose output
+      <td>Display information about selected processes.
+    <tr>
+      <td>-w
+      <td>warnings enabled
+      <td>This is not currently useful.
+    <tr>
+      <td>-n
+      <td>no action
+      <td>This only displays the process ID.
+    <tr>
+      <td>-V
+      <td>show version
+      <td>Displays version of program.
+  </table>
+</div>
+<div class="section">
+  <h2>PROCESS SELECTION OPTIONS</h2>
+  <p>Selection criteria can be: terminal, user, pid, command. The options below may be used to ensure correct interpretation. Do not blame Albert for this interesting interface.
+  <table class="tbl">
+    <tr>
+      <td>-t
+      <td>The next argument is a terminal (tty or pty).
+    <tr>
+      <td>-u
+      <td>The next argument is a username.
+    <tr>
+      <td>-p
+      <td>The next argument is a process ID number.
+    <tr>
+      <td>-c
+      <td>The next argument is a command name.
+  </table>
+</div>
+<div class="section">
+  <h2>SIGNALS</h2>
+  <p>The signals listed below may be available for use with skill. When known, numbers and default behavior are shown.
+  <table class="tbl">
+    <tr>
+      <th>Name
+      <th class="r">Num
+      <th>Action
+      <th>Description
+    <tr>
+      <td class="fCW">
+    <tr>
+      <td class="fCW">0
+      <td class="r">0
+      <td>n/a
+      <td>exit code indicates if a signal may be sent
+    <tr>
+      <td class="fCW">ALRM
+      <td class="r">14
+      <td>exit
+    <tr>
+      <td class="fCW">HUP
+      <td class="r">1
+      <td>exit
+    <tr>
+      <td class="fCW">INT
+      <td class="r">2
+      <td>exit
+    <tr>
+      <td class="fCW">KILL
+      <td class="r">9
+      <td>exit
+      <td>this signal may not be blocked
+    <tr>
+      <td class="fCW">PIPE
+      <td class="r">13
+      <td>exit
+    <tr>
+      <td class="fCW">POLL
+      <td class="r">
+      <td>exit
+    <tr>
+      <td class="fCW">PROF
+      <td class="r">
+      <td>exit
+    <tr>
+      <td class="fCW">TERM
+      <td class="r">15
+      <td>exit
+    <tr>
+      <td class="fCW">USR1
+      <td class="r">
+      <td>exit
+    <tr>
+      <td class="fCW">USR2
+      <td class="r">
+      <td>exit
+    <tr>
+      <td class="fCW">VTALRM
+      <td class="r">
+      <td>exit
+    <tr>
+      <td class="fCW">STKFLT
+      <td class="r">
+      <td>exit
+      <td>may not be implemented
+    <tr>
+      <td class="fCW">PWR
+      <td class="r">
+      <td>ignore
+      <td>may exit on some systems
+    <tr>
+      <td class="fCW">WINCH
+      <td class="r">
+      <td>ignore
+    <tr>
+      <td class="fCW">CHLD
+      <td class="r">
+      <td>ignore
+    <tr>
+      <td class="fCW">URG
+      <td class="r">
+      <td>ignore
+    <tr>
+      <td class="fCW">TSTP
+      <td class="r">
+      <td>stop
+      <td>may interact with the shell
+    <tr>
+      <td class="fCW">TTIN
+      <td class="r">
+      <td>stop
+      <td>may interact with the shell
+    <tr>
+      <td class="fCW">TTOU
+      <td class="r">
+      <td>stop
+      <td>may interact with the shell
+    <tr>
+      <td class="fCW">STOP
+      <td class="r">
+      <td>stop
+      <td>this signal may not be blocked
+    <tr>
+      <td class="fCW">CONT
+      <td class="r">
+      <td>restart
+      <td>continue if stopped, otherwise ignore
+    <tr>
+      <td class="fCW">ABRT
+      <td class="r">6
+      <td>core
+    <tr>
+      <td class="fCW">FPE
+      <td class="r">8
+      <td>core
+    <tr>
+      <td class="fCW">ILL
+      <td class="r">4
+      <td>core
+    <tr>
+      <td class="fCW">QUIT
+      <td class="r">3
+      <td>core
+    <tr>
+      <td class="fCW">SEGV
+      <td class="r">11
+      <td>core
+    <tr>
+      <td class="fCW">TRAP
+      <td class="r">5
+      <td>core
+    <tr>
+      <td class="fCW">SYS
+      <td class="r">
+      <td>core
+      <td>may not be implemented
+    <tr>
+      <td class="fCW">EMT
+      <td class="r">
+      <td>core
+      <td>may not be implemented
+    <tr>
+      <td class="fCW">BUS
+      <td class="r">
+      <td>core
+      <td>core dump may fail
+    <tr>
+      <td class="fCW">XCPU
+      <td class="r">
+      <td>core
+      <td>core dump may fail
+    <tr>
+      <td class="fCW">XFSZ
+      <td class="r">
+      <td>core
+      <td>core dump may fail
+  </table>
+</div>
+<div class="section">
+  <h2>EXAMPLES</h2>
+  <table class="tbl">
+    <tr>
+      <th>Command
+      <th>Description
+    <tr>
+      <td class="fCW">
+    <tr>
+      <td class="fCW">snice seti crack +7
+      <td>Slow down seti and crack
+    <tr>
+      <td class="fCW">skill -KILL -v /dev/pts/*
+      <td>Kill users on new-style PTY devices
+    <tr>
+      <td class="fCW">skill -STOP viro lm davem
+      <td>Stop 3 users
+    <tr>
+      <td class="fCW">snice -17 root bash
+      <td>Give priority to root's shell
+  </table>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>killall(1) pkill(1) kill(1) renice(1) nice(1) signal(7) kill(2)
+</div>
+<div class="section">
+  <h2>STANDARDS</h2>
+  <p>No standards apply.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Albert Cahalan &lt;albert@users.sf.net&gt; wrote skill and snice in 1999 as a replacement for a non-free version, and is the current maintainer of the procps collection. Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;.
+</div>
+
