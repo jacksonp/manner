@@ -10,9 +10,9 @@ class Text
     static function preprocessLines($rawLines)
     {
 
-        $numRawLines = count($rawLines);
-        $linesNoCond = [];
-        $linePrefix  = '';
+        $numRawLines     = count($rawLines);
+        $linesNoComments = [];
+        $linePrefix      = '';
 
         for ($i = 0; $i < $numRawLines; ++$i) {
 
@@ -55,6 +55,17 @@ class Text
             // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
             $line = Replace::preg('~^\.do ~u', '.', $line);
 
+            $linesNoComments[] = $line;
+
+        }
+
+        $numNoCommentLines = count($linesNoComments);
+        $linesNoCond       = [];
+
+        for ($i = 0; $i < $numNoCommentLines; ++$i) {
+
+            $line = $linesNoComments[$i];
+
             //            .ie n \{ USE
             //            THIS
             //            .\}
@@ -63,17 +74,17 @@ class Text
             //            .\}
             if (preg_match('~^\.ie n \\\\{(.*)$~', $line, $matches)) {
                 $line = $matches[1];
-                while ($i < $numRawLines) {
+                while ($i < $numNoCommentLines) {
 
                     if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
                         if (!empty($matches[1]) && $matches[1] !== '\'br') {
                             $linesNoCond[] = Macro::massageLine($matches[1]);
                         }
-                        if (!preg_match('~^\.el\s*\\\\{~', $rawLines[++$i])) {
-                            throw new Exception('.ie n \\{ - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
+                        if (!preg_match('~^\.el\s*\\\\{~', $linesNoComments[++$i])) {
+                            throw new Exception('.ie n \\{ - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
                         }
-                        for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                            $line = $rawLines[$i];
+                        for ($i = $i + 1; $i < $numNoCommentLines; ++$i) {
+                            $line = $linesNoComments[$i];
                             if (preg_match('~\\\\}$~', $line)) {
                                 continue 3;
                             }
@@ -83,40 +94,35 @@ class Text
                         $linesNoCond[] = Macro::massageLine($line);
                     }
 
-                    $line = $rawLines[++$i];
+                    $line = $linesNoComments[++$i];
 
                 }
             }
 
             if (mb_strpos($line, '~^\.ie t $~') === 0) {
-                if (!preg_match('~^\.el (.*)$~', $rawLines[++$i], $matches)) {
-                    throw new Exception('.ie t - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
+                if (!preg_match('~^\.el (.*)$~', $linesNoComments[++$i], $matches)) {
+                    throw new Exception('.ie t - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
                 }
                 $line = $matches[1];
             }
 
             if (preg_match('~^\.ie n (.*)$~', $line, $matches)) {
                 $line = $matches[1];
-                if (!preg_match('~^\.el ~', $rawLines[++$i])) {
-                    throw new Exception('.ie n - not followed by expected pattern on line ' . $i . ' (got "' . $rawLines[$i] . '").');
+                if (!preg_match('~^\.el ~', $linesNoComments[++$i])) {
+                    throw new Exception('.ie n - not followed by expected pattern on line ' . $i . ' (got "' . $linesNoComments[$i] . '").');
                 }
             }
 
-            if (preg_match('~^\.if n \\\\{(.*)$~', $line, $matches)) {
-                $line = $matches[1];
-                while ($i < $numRawLines) {
-                    if (preg_match('~^(.*)\\\\}$~', $line, $matches)) {
-                        if (!empty($matches[1]) && $matches[1] !== '\'br') {
-                            $linesNoCond[] = Macro::massageLine($matches[1]);
-                        }
-                        continue 2;
-                    } elseif (!empty($line)) {
-                        $linesNoCond[] = Macro::massageLine($line);
-                    }
+            $roffClasses = ['Condition'];
 
-                    $line = $rawLines[++$i];
+            foreach ($roffClasses as $roffClass) {
+                $className = 'Roff_' . $roffClass;
+                $result    = $className::checkEvaluate($linesNoComments, $i);
+                if ($result !== false) {
+                    $linesNoCond = array_merge($linesNoCond, $result[0]);
+                    $i           = $result[1];
+                    continue 2;
                 }
-                throw new Exception('.if n \\{ - not followed by expected pattern on line ' . $i . '.');
             }
 
             if (preg_match('~^\.if [tv] \\\\{~', $line)
@@ -127,23 +133,23 @@ class Text
               || mb_strpos($line, '.if \\nF \\{') === 0
             ) {
                 $openBraces = 0;
-                while ($i < $numRawLines) {
+                while ($i < $numNoCommentLines) {
                     $openBraces += substr_count($line, '\\{');
                     $openBraces -= substr_count($line, '\\}');
                     if ($openBraces < 1) {
                         continue 2;
                     }
-                    $line = $rawLines[++$i];
+                    $line = $linesNoComments[++$i];
                 }
                 throw new Exception('.if - not followed by expected pattern on line ' . $i . '.');
             }
 
             if (mb_strpos($line, '.ie \\nF \\{') === 0) {
                 $openBraces = 0;
-                while ($i < $numRawLines) {
+                while ($i < $numNoCommentLines) {
                     $openBraces += substr_count($line, '\\{');
                     $openBraces -= substr_count($line, '\\}');
-                    $line = $rawLines[++$i];
+                    $line = $linesNoComments[++$i];
                     if ($openBraces < 1) {
                         break;
                     }
@@ -152,13 +158,13 @@ class Text
                     throw new Exception('.ie - not followed by expected .el on line ' . $i . '.');
                 }
                 $openBraces = 0;
-                while ($i < $numRawLines) {
+                while ($i < $numNoCommentLines) {
                     $openBraces += substr_count($line, '\\{');
                     $openBraces -= substr_count($line, '\\}');
                     if ($openBraces < 1) {
                         continue 2;
                     }
-                    $line = $rawLines[++$i];
+                    $line = $linesNoComments[++$i];
                 }
 
                 throw new Exception('.ie - not followed by expected pattern on line ' . $i . '.');
