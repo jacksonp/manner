@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="JANUARY 2014" data-package="Linux" data-section-name="Linux User's Manual">
+<title>NFSIOSTAT-SYSSTAT</title>
+<h1>NFSIOSTAT-SYSSTAT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>nfsiostat-sysstat (the nfsiostat command from the sysstat package) - Report input/output statistics for network filesystems (NFS).
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>nfsiostat-sysstat [ -h ] [ -k | -m ] [ -t ] [ -V ] [</strong> <em>interval</em> <strong>[</strong> <em>count</em> <strong>] ]</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>nfsiostat-sysstat</strong> command displays statistics about read and write operations on NFS filesystems.
+  <p>The <em>interval</em> parameter specifies the amount of time in seconds between each report. The first report contains statistics for the time since system startup (boot). Each subsequent report contains statistics collected during the interval since the previous report. A report consists of an NFS header row followed by a line of statistics for each network filesystem that is mounted. The <em>count</em> parameter can be specified in conjunction with the <em>interval</em> parameter. If the <em>count</em> parameter is specified, the value of <em>count</em> determines the number of reports generated at <em>interval</em> seconds apart. If the <em>interval</em> parameter is specified without the <em>count</em> parameter, the <strong>nfsiostat-sysstat</strong> command generates reports continuously.
+</div>
+<div class="section">
+  <h2>REPORT</h2>
+  <p>The Network Filesystem (NFS) report provides statistics for each mounted network filesystem. Transfer rates are shown in 1K blocks by default, unless the environment variable POSIXLY_CORRECT is set, in which case 512-byte blocks are used. The report shows the following fields:
+  <p><strong>Filesystem:</strong>
+  <p>This columns shows the hostname of the NFS server followed by a colon and by the directory name where the network filesystem is mounted. <strong>rBlk_nor/s (rkB_nor/s, rMB_nor)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) read by applications via the read(2) system call interface. A block has a size of 512 bytes. <strong>wBlk_nor/s (wkB_nor/s, wMB_nor/s)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) written by applications via the write(2) system call interface. <strong>rBlk_dir/s (rkB_dir/s, rMB_dir/s)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) read from files opened with the O_DIRECT flag. <strong>wBlk_dir/s (wkB_dir/s, wMB_dir/s)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) written to files opened with the O_DIRECT flag. <strong>rBlk_svr/s (rkB_svr/s, rMB_svr/s)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) read from the server by the NFS client via an NFS READ request. <strong>wBlk_svr/s (wkB_svr/s, wMB_svr/s)</strong>
+  <p>Indicate the number of blocks (kilobytes, megabytes) written to the server by the NFS client via an NFS WRITE request. <strong>ops/s</strong>
+  <p>Indicate the number of operations that were issued to the filesystem per second. <strong>rops/s</strong>
+  <p>Indicate the number of 'read' operations that were issued to the filesystem per second. <strong>wops/s</strong>
+  <p>Indicate the number of 'write' operations that were issued to the filesystem per second.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt>-h
+    <dd>
+      <p>Make the NFS report easier to read by a human.
+    <dt>-k
+    <dd>
+      <p>Display statistics in kilobytes per second.
+    <dt>-m
+    <dd>
+      <p>Display statistics in megabytes per second.
+    <dt>-t
+    <dd>
+      <p>Print the time for each report displayed. The timestamp format may depend on the value of the S_TIME_FORMAT environment variable (see below).
+    <dt>-V
+    <dd>
+      <p>Print version number then exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>The <strong>nfsiostat-sysstat</strong> command takes into account the following environment variables:
+  <dl>
+    <dt>S_TIME_FORMAT
+    <dd>
+      <p>If this variable exists and its value is <strong>ISO</strong> then the current locale will be ignored when printing the date in the report header. The <strong>nfsiostat-sysstat</strong> command will use the ISO 8601 format (YYYY-MM-DD) instead. The timestamp displayed with option -t will also be compliant with ISO 8601 format.
+    <dt>POSIXLY_CORRECT
+    <dd>
+      <p>When this variable is set, transfer rates are shown in 512-byte blocks instead of the default 1K blocks.
+  </dl>
+</div>
+<div class="section">
+  <h2>BUG</h2>
+  <p><em>/proc</em> filesystem must be mounted for <strong>nfsiostat-sysstat</strong> to work.
+</div>
+<div class="section">
+  <h2>FILE</h2>
+  <p><em>/proc/self/mountstats</em> contains statistics for network filesystems.
+</div>
+<div class="section">
+  <h2>WARNING</h2>
+  <p>The nfsiostat command from the sysstat package (nfsiostat-sysstat) is now obsolete and is no longer maintained. It will be removed in a future sysstat version. Please use now the <strong>nfsiostat</strong> command from the <em>nfs-utils</em> package.
+</div>
+<div class="section">
+  <h2>AUTHOR</h2>
+  <p>Written by Ivana Varekova (varekova &lt;at&gt; redhat.com)
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>nfsiostat</strong>(8), <strong>sar</strong>(1), <strong>pidstat</strong>(1), <strong>mpstat</strong>(1), <strong>vmstat</strong>(8), <strong>iostat</strong>(1), <strong>cifsiostat</strong>(1)
+</div>
+

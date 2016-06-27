@@ -173,10 +173,6 @@ class Text
               '...',
               '.',
               '\\.',
-                // hmm
-              '.if (\n(.H=4u)&(1m=24u) .ds -- \(*W\h\'-12u\'\(*W\h\'-12u\'-\" diablo 10 pitch', // e.g. lmmin.3
-              '.if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h\'-12u\'\(*W\h\'-8u\'-\"  diablo 12 pitch', // e.g. lmmin.3
-              '.if \n(.g .if rF .nr rF 1',
               '.rr rF',
             ];
 
@@ -289,17 +285,6 @@ class Text
 
             if (count($stringReplacements) > 0) {
                 $line = strtr($line, $stringReplacements);
-            }
-
-            // Handle stuff like:
-            // .ie \n(.g .ds Aq \(aq
-            // .el       .ds Aq '
-            if (preg_match('~^\.ie \\\\n\(\.g \.ds (.+?) (.+)$~u', $line, $matches)) {
-                if (!preg_match('~^\.el~u', $firstPassLines[++$i])) {
-                    throw new Exception('.ie not followed by .el');
-                }
-                Macro::addStringDefToReplacementArray($matches[1], $matches[2], $macroReplacements);
-                continue;
             }
 
             if (count($macroReplacements) > 0) {

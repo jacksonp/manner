@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="OCTOBER 2015" data-package="Linux" data-section-name="Linux User's Manual">
+<title>CIFSIOSTAT</title>
+<h1>CIFSIOSTAT</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>cifsiostat - Report CIFS statistics.
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>cifsiostat [ -h ] [ -k | -m ] [ -t ] [ -V ] [</strong> <em>interval</em> <strong>[</strong> <em>count</em> <strong>] ]</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>The <strong>cifsiostat</strong> command displays statistics about read and write operations on CIFS filesystems.
+  <p>The <em>interval</em> parameter specifies the amount of time in seconds between each report. The first report contains statistics for the time since system startup (boot). Each subsequent report contains statistics collected during the interval since the previous report. A report consists of a CIFS header row followed by a line of statistics for each CIFS filesystem that is mounted. The <em>count</em> parameter can be specified in conjunction with the <em>interval</em> parameter. If the <em>count</em> parameter is specified, the value of <em>count</em> determines the number of reports generated at <em>interval</em> seconds apart. If the <em>interval</em> parameter is specified without the <em>count</em> parameter, the <strong>cifsiostat</strong> command generates reports continuously.
+</div>
+<div class="section">
+  <h2>REPORT</h2>
+  <p>The CIFS report provides statistics for each mounted CIFS filesystem. The report shows the following fields:
+  <p><strong>Filesystem:</strong>
+  <p>This columns shows the mount point of the CIFS filesystem. <strong>rB/s (rkB/s, rMB/s)</strong>
+  <p>Indicate the average number of bytes (kilobytes, megabytes) read per second. <strong>wB/s (wkB/s, wMB/s)</strong>
+  <p>Indicate the average number of bytes (kilobytes, megabytes) written per second. <strong>rop/s</strong>
+  <p>Indicate the number of 'read' operations that were issued to the filesystem per second. <strong>wop/s</strong>
+  <p>Indicate the number of 'write' operations that were issued to the filesystem per second. <strong>fo/s</strong>
+  <p>Indicate the number of open files per second. <strong>fc/s</strong>
+  <p>Indicate the number of closed files per second. <strong>fd/s</strong>
+  <p>Indicate the number of deleted files per second.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt>-h
+    <dd>
+      <p>Make the CIFS report easier to read by a human.
+    <dt>-k
+    <dd>
+      <p>Display statistics in kilobytes per second.
+    <dt>-m
+    <dd>
+      <p>Display statistics in megabytes per second.
+    <dt>-t
+    <dd>
+      <p>Print the time for each report displayed. The timestamp format may depend on the value of the S_TIME_FORMAT environment variable (see below).
+    <dt>-V
+    <dd>
+      <p>Print version number then exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>ENVIRONMENT</h2>
+  <p>The <strong>cifsiostat</strong> command takes into account the following environment variables:
+  <dl>
+    <dt>S_COLORS
+    <dd>
+      <p>When this variable is set, display statistics in color on the terminal. Possible values for this variable are <em>never</em>, <em>always</em> or <em>auto</em> (the latter is the default).
+      <p>Please note that the color (being red, yellow, or some other color) used to display a value is not indicative of any kind of issue simply because of the color. It only indicates different ranges of values.
+    <dt>S_COLORS_SGR
+    <dd>
+      <p>Specify the colors and other attributes used to display statistics on the terminal. Its value is a colon-separated list of capabilities that defaults to <strong>I=32;22:N=33;1:Z=33;22</strong>. Supported capabilities are:
+      <dl>
+        <dt><strong>I=</strong>
+        <dd>
+          <p>SGR substring for filesystem names.
+        <dt><strong>N=</strong>
+        <dd>
+          <p>SGR substring for non-zero statistics values.
+        <dt><strong>Z=</strong>
+        <dd>
+          <p>SGR substring for zero values.
+      </dl>
+    <dt>S_TIME_FORMAT
+    <dd>
+      <p>If this variable exists and its value is <strong>ISO</strong> then the current locale will be ignored when printing the date in the report header. The <strong>cifsiostat</strong> command will use the ISO 8601 format (YYYY-MM-DD) instead. The timestamp displayed with option -t will also be compliant with ISO 8601 format.
+  </dl>
+</div>
+<div class="section">
+  <h2>BUG</h2>
+  <p><em>/proc</em> filesystem must be mounted for <strong>cifsiostat</strong> to work.
+</div>
+<div class="section">
+  <h2>FILE</h2>
+  <p><em>/proc/fs/cifs/Stats</em> contains CIFS statistics.
+</div>
+<div class="section">
+  <h2>AUTHORS</h2>
+  <p>Written by Ivana Varekova (varekova &lt;at&gt; redhat.com)
+  <p>Maintained by Sebastien Godard (sysstat &lt;at&gt; orange.fr)
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>sar</strong>(1), <strong>pidstat</strong>(1), <strong>mpstat</strong>(1), <strong>vmstat</strong>(8), <strong>iostat</strong>(1), <strong>tapestat</strong>(1), <strong>nfsiostat</strong>(1)
+  <p><em>http://pagesperso-orange.fr/sebastien.godard/</em>
+</div>
+

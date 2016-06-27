@@ -75,13 +75,18 @@ class Roff_Condition
     private static function test(string $condition)
     {
 
+        if (mb_strpos($condition, '!') === 0) {
+            return !self::test(mb_substr($condition, 1));
+        }
+
+        if (preg_match('~^\'(\w+)\'(\w+)\'$~u', $condition, $matches)) {
+            return $matches[1] === $matches[2];
+        }
+
         $alwaysTrue = [
           'n',       // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           '\\n[.g]', // Always 1 in GNU troff.  Macros should use it to test if running under groff.
           '\\n(.g',  // as above
-          '!\\nF',
-          '!\\nF==2', // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
-          '!\'po4a\'hide\'', // construct for "hiding text from po4a"
         ];
 
         if (in_array($condition, $alwaysTrue)) {
@@ -94,6 +99,7 @@ class Roff_Condition
           'rF',
           '\\nF>0',
           '\\nF',
+          '\\nF==2', // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
           '(\\n(rF:(\\n(.g==0))',
           '\\n(.H>23', // part of a check for low resolution devices, e.g. frogatto.6
           '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
