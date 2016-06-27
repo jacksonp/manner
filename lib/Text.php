@@ -154,7 +154,7 @@ class Text
             }
 
             // Do registers after .de -see e.g. yum-copr.8
-            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>\d+)$~u', $line, $matches)) {
+            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>.+)$~u', $line, $matches)) {
                 $registerName = $matches['name'];
                 $registerVal  = $matches['val'];
                 if (mb_strlen($registerName) === 1) {
