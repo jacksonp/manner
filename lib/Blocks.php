@@ -35,7 +35,7 @@ class Blocks
 
             $line = $lines[$i];
 
-            $blockClasses = ['SH', 'SS', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['SH', 'SS', 'SY', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'ce', 'nf', 'TS', 'TabTable'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
@@ -106,6 +106,11 @@ class Blocks
             }
 
             if (in_array($line, ['', '.', '\''])) {
+                continue;
+            }
+
+            if (in_array($line, ['.ns'])) {
+                // Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
                 continue;
             }
 

@@ -7,6 +7,8 @@ class BlockPreformatted
     public static function handle(HybridNode $parentNode, array $lines)
     {
 
+        $dom = $parentNode->ownerDocument;
+
         $addIndent  = 0;
         $nextIndent = 0;
         $numLines   = count($lines);
@@ -52,6 +54,18 @@ class BlockPreformatted
                 $addIndent = 4;
             } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line)) {
                 continue;
+            } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
+                $parentNode->appendChild(new DOMText(' ['));
+                $arguments = Macro::parseArgString($matches[1]);
+                $strong = $parentNode->appendChild($dom->createElement('strong'));
+                TextContent::interpretAndAppendText($strong, $arguments[0]);
+                if (count($arguments) > 1) {
+                    $parentNode->appendChild(new DOMText(' '));
+                    $em = $parentNode->appendChild($dom->createElement('em'));
+                    TextContent::interpretAndAppendText($em, $arguments[1]);
+                }
+                $parentNode->appendChild(new DOMText('] '));
+                continue;
             }
 
             $inlineClasses = ['FontOneInputLine', 'AlternatingFont', 'ft'];
@@ -83,7 +97,11 @@ class BlockPreformatted
 
             TextContent::interpretAndAppendText($parentForLine, $line, false, false);
             if ($i !== $numLines - 1) {
-                $parentNode->appendChild(new DOMText("\n"));
+                if ($parentNode->getAttribute('class') === 'synopsis') {
+                    $parentNode->appendChild(new DOMText(' '));
+                } else {
+                    $parentNode->appendChild(new DOMText("\n"));
+                }
             }
 
         }

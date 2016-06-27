@@ -120,15 +120,19 @@ class Text
                 }
             }
 
+            // TODO: fix this hack, see groff_mom.7
+            $line = preg_replace('~\.FONT ~u', '.', $line);
+
             if (preg_match('~^\.de1? ([^\s"]+)\s*$~u', $line, $matches)) {
                 $newMacro   = '.' . $matches[1];
                 $macroLines = [];
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
                     $macroLine = $linesNoCond[$i];
                     if ($macroLine === '..') {
-                        if (in_array($newMacro, ['.SS', '.EX', '.EE'])) {
+                        if (in_array($newMacro, ['.SS', '.EX', '.EE', '.FONT'])) {
                             // Don't override these macros.
                             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
+                            // TODO: .FONT see hack above
                             continue 2;
                         } elseif ($newMacro === '.INDENT') {
                             $aliases['INDENT'] = 'RS';
@@ -222,8 +226,9 @@ class Text
             // .vs: Change to previous vertical base line spacing.
             // .ev: Switch to previous environment and pop it off the stack.
             // .evc: Copy the contents of environment env to the current environment. No pushing or popping.
+            // .ns: Turn on no-space mode.
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns)(\s|$)~u',
               $line)
             ) {
                 continue;

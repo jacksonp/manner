@@ -47,8 +47,21 @@ class Block_TP
                     break; // i.e. skip the .TP line
                 }
 
+                if (preg_match('~^\.UR~u', $dtLine)) {
+                    $dtLines = [$dtLine];
+                    while ($i < $numLines) {
+                        $dtLine = $lines[++$i];
+                        if ($dtLine === '.UE') {
+                            break;
+                        }
+                        $dtLines[] = $dtLine;
+                    }
+                } else {
+                    $dtLines = [$dtLine];
+                }
+
                 $dt = $dom->createElement('dt');
-                Blocks::handle($dt, [$dtLine]);
+                Blocks::handle($dt, $dtLines);
                 $dl->appendChild($dt);
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {
