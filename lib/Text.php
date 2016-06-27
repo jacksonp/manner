@@ -321,8 +321,10 @@ class Text
             // .ss: Set space glyph size to N/12 of the space width in the current font.
             // .cs font N M: Set constant character width mode for font to N/36 ems with em M.
             // .vs: Change to previous vertical base line spacing.
+            // .ev: Switch to previous environment and pop it off the stack.
+            // .evc: Copy the contents of environment env to the current environment. No pushing or popping.
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc)(\s|$)~u',
               $line)
             ) {
                 continue;
