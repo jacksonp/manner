@@ -107,6 +107,8 @@ class Text
                         }
 
                         // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                        $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
+
                         // Other \$ things are also arguments...
                         if (mb_strpos($macroLine, '\\$') !== false) {
                             throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
