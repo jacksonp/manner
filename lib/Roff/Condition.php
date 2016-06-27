@@ -4,19 +4,25 @@
 class Roff_Condition
 {
 
+    private static function test (string $condition) {
+        return $condition === 'n';
+    }
+
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.if n \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.if (.) \\\\{(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
+
+        $condition = $matches[1];
 
         $numLines         = count($lines);
         $foundEnd         = false;
         $replacementLines = [];
 
-        if ($matches[1] !== '') {
-            $replacementLines[] = Macro::massageLine($matches[1]);
+        if ($matches[2] !== '') {
+            $replacementLines[] = Macro::massageLine($matches[2]);
         }
 
         ++$i;
@@ -42,7 +48,11 @@ class Roff_Condition
         }
 
         if (!$foundEnd) {
-            throw new Exception('.if n \\{ - not followed by expected pattern on line ' . $i . '.');
+            throw new Exception('.if condition \\{ - not followed by expected pattern on line ' . $i . '.');
+        }
+
+        if (!self::test($condition)) {
+            return [[], $i];
         }
 
         if ($recurse) {

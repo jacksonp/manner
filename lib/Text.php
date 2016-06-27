@@ -125,8 +125,7 @@ class Text
                 }
             }
 
-            if (preg_match('~^\.if [tv] \\\\{~', $line)
-              || preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
+            if (preg_match('~^\.if \(\\\\n\(rF:\(\\\\n\(\.g==0\)\) \\\\{~', $line)
               || preg_match('~^\.if \\\\nF>0 \\\\{~', $line)
               || preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
               || mb_strpos($line, '.if require_index') === 0
