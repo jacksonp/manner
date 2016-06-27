@@ -23,7 +23,7 @@ if (!empty($arv[2])) {
 $fileLines = file($filePath, FILE_IGNORE_NEW_LINES);
 
 try {
-    Manner::roffToHTML($fileLines);
+    Manner::roffToHTML($fileLines, $filePath);
 } catch (Exception $e) {
     file_put_contents($errorLog, $e->getMessage() . ' (' . basename($filePath) . ')' . PHP_EOL, FILE_APPEND);
     echo PHP_EOL, PHP_EOL, $e->getMessage(), PHP_EOL;

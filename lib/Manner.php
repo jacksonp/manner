@@ -4,7 +4,7 @@
 class Manner
 {
 
-    static function roffToHTML(array $fileLines, string $outputFile = null)
+    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null)
     {
 
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -20,12 +20,14 @@ class Manner
         $lines = Text::preprocessLines($fileLines);
 
         if (isset($man->title)) {
-            $h1 = $dom->createElement('h1');
-            $h1->appendChild(new DOMText($man->title));
-            $manPageContainer->appendChild($h1);
+            $title = $man->title;
         } else {
-            throw new Exception('No $man->title.');
+            $title = pathinfo($filePath, PATHINFO_FILENAME);
         }
+
+        $h1 = $dom->createElement('h1');
+        $h1->appendChild(new DOMText($title));
+        $manPageContainer->appendChild($h1);
 
         Blocks::handle($manPageContainer, $lines);
 
