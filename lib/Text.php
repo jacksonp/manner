@@ -125,9 +125,7 @@ class Text
                 }
             }
 
-            if (preg_match('~^\.if \\\\n\(\.H>23 \.if \\\\n\(\.V>19 ~', $line)
-              or mb_strpos($line, '.if require_index') === 0
-            ) {
+            if (mb_strpos($line, '.if require_index') === 0) {
                 $openBraces = 0;
                 while ($i < $numNoCommentLines) {
                     $openBraces += substr_count($line, '\\{');

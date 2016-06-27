@@ -4,6 +4,22 @@
 class Roff_Condition
 {
 
+    static function checkEvaluate(array $lines, int $i)
+    {
+
+        if (preg_match('~^\.if ([^\s]+) \.if [^\s]+ \\\\{(.*)$~u', $lines[$i], $matches)) {
+            // TODO: fix. Just skipping 2nd .if for now
+            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
+        } elseif (preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
+            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
+        } elseif (preg_match('~^\.if ([^\s]+) (.*)$~u', $lines[$i], $matches)) {
+            return [self::ifLine($matches[1], $matches[2]), $i];
+        }
+
+        return false;
+
+    }
+
     private static function test(string $condition)
     {
 
@@ -17,13 +33,13 @@ class Roff_Condition
             return true;
         }
 
-        // Previously explicitly skipped:
         $alwaysFalse = [
           't', // "Formatter is troff."
           'v', // vroff
           '\\nF>0',
           '\\nF',
           '(\\n(rF:(\\n(.g==0))',
+          '\\n(.H>23', // part of a check for low resolution devices, e.g. frogatto.6
         ];
 
         if (in_array($condition, $alwaysFalse)) {
@@ -93,14 +109,13 @@ class Roff_Condition
 
     }
 
-    static function checkEvaluate(array $lines, int $i)
+    private static function ifLine(string $condition, string $restOfLine):array
     {
-
-        if (preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
-            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
+        if (self::test($condition)) {
+            return [$restOfLine];
+        } else {
+            return [];
         }
-
-        return false;
 
     }
 
