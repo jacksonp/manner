@@ -6,7 +6,7 @@ class Blocks
 
     const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH)~u';
 
-    static function isSkippable(string $line)
+    static function canSkip(string $line)
     {
         // Ignore:
         // stray .RE and .EE macros,
@@ -46,7 +46,7 @@ class Blocks
                 }
             }
 
-            if (self::isSkippable($line)) {
+            if (self::canSkip($line)) {
                 continue;
             }
 
@@ -81,13 +81,13 @@ class Blocks
             }
 
             if (!in_array(mb_substr($line, 0, 1), ['.', ' '])
-              && (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.')
-              && !preg_match('~\\\\c$~', $line)
+              and (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.')
+              and !preg_match('~\\\\c$~', $line)
             ) {
                 while ($i < $numLines - 1) {
                     $nextLine = $lines[$i + 1];
-                    if (mb_strlen($nextLine) === 0 || in_array(mb_substr($nextLine, 0, 1), ['.', ' '])
-                      || (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
+                    if (mb_strlen($nextLine) === 0 or in_array(mb_substr($nextLine, 0, 1), ['.', ' '])
+                      or (mb_strlen($nextLine) > 1 and mb_substr($nextLine, 0, 2) === '\\.')
                     ) {
                         break;
                     }
@@ -99,8 +99,8 @@ class Blocks
 
             // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
             if (mb_substr($line, 0, 1) === ' '
-              && $parentForLine->hasChildNodes()
-              && ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE || $parentForLine->lastChild->tagName !== 'br')
+              and $parentForLine->hasChildNodes()
+              and ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE or $parentForLine->lastChild->tagName !== 'br')
             ) {
                 $parentForLine->appendChild($dom->createElement('br'));
             }
@@ -110,12 +110,12 @@ class Blocks
             }
 
             if (in_array($line, ['.ns'])) {
-                // Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
+                // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
                 continue;
             }
 
             // FAIL on unknown command
-            if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
+            if (mb_strlen($line) > 0 and in_array(mb_substr($line, 0, 1), ['.', '\''])) {
                 throw new Exception($line . ' unexpected command in Blocks::handle().');
             }
 
