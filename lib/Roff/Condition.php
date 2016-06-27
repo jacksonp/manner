@@ -34,21 +34,15 @@ class Roff_Condition
 
     }
 
-    static function checkEvaluate(array $lines, int $i)
+    private static function ifBlock(array $lines, int $i, string $condition, string $firstLine)
     {
-
-        if (!preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
-            return false;
-        }
-
-        $condition = $matches[1];
 
         $numLines         = count($lines);
         $foundEnd         = false;
         $replacementLines = [];
 
-        if ($matches[2] !== '') {
-            $replacementLines[] = Macro::massageLine($matches[2]);
+        if ($firstLine !== '') {
+            $replacementLines[] = Macro::massageLine($firstLine);
         }
 
         ++$i;
@@ -96,6 +90,17 @@ class Roff_Condition
         }
 
         return [$replacementLines, $i];
+
+    }
+
+    static function checkEvaluate(array $lines, int $i)
+    {
+
+        if (preg_match('~^\.if ([^\s]+) \\\\{(.*)$~u', $lines[$i], $matches)) {
+            return self::ifBlock($lines, $i, $matches[1], $matches[2]);
+        }
+
+        return false;
 
     }
 
