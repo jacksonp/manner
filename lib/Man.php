@@ -91,13 +91,7 @@ class Man
 
     public function addRegister(string $name, string $value)
     {
-        if (mb_strlen($name) === 1) {
-            $this->registers['~(?<!\\\\)\\\\n' . preg_quote($name, '~') . '~u'] = $value;
-        }
-        if (mb_strlen($name) === 2) {
-            $this->registers['~(?<!\\\\)\\\\n\(' . preg_quote($name, '~') . '~u'] = $value;
-        }
-        $this->registers['~(?<!\\\\)\\\\n\[' . preg_quote($name, '~') . '\]~u'] = $value;
+        $this->registers[$name] = $value;
     }
 
     public function getRegisters(): array
@@ -131,8 +125,21 @@ class Man
 
     public function applyAllReplacements(string $line)
     {
+
         $line = Replace::preg(array_keys($this->strings), $this->strings, $line);
-        $line = Replace::preg(array_keys($this->registers), $this->registers, $line);
+
+        $line = Replace::pregCallback(
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
+          function ($matches) {
+              if (isset($this->registers[$matches['reg']])) {
+                  return $matches['bspairs'] . $this->registers[$matches['reg']];
+              } else {
+                  //throw new Exception($matches['reg'] . ' - unavailable register: ' . $matches[0]);
+                  return $matches[0];
+              }
+          },
+          $line);
+
 //        $line = Replace::preg('~\\\\n\[[^]]+\]~u', '0', $line);
 //        $line = Replace::preg('~\\\\n\(..~u', '0', $line);
 //        $line = Replace::preg('~\\\\n.~u', '0', $line);

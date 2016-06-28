@@ -24,7 +24,7 @@ class Macro
         if (mb_strlen($string) === 1) {
             $replacements['\*' . $string] = $val;
         }
-        if (mb_strlen($string) <= 2) {
+        if (mb_strlen($string) === 2) {
             $replacements['\\(' . $string]  = $val;
             $replacements['\\*(' . $string] = $val;
         }
