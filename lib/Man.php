@@ -37,7 +37,6 @@ class Man
      */
     protected function __construct()
     {
-        $this->addString('.T', 'ps');
     }
 
     public function reset()
@@ -48,6 +47,7 @@ class Man
         $this->registers = [];
         $this->strings   = [];
         $this->addString('.T', 'ps');
+        $this->addRegister('.g', '1');
     }
 
     public function __set($name, $value)
