@@ -95,7 +95,7 @@ class Roff_Condition
             return !self::test(mb_substr($condition, 1));
         }
 
-        if (preg_match('~^\'(\w+)\'(\w+)\'$~u', $condition, $matches)) {
+        if (preg_match('~^\'([\w\.]*)\'([\w\.]*)\'$~u', $condition, $matches)) {
             return $matches[1] === $matches[2];
         }
 
@@ -103,6 +103,8 @@ class Roff_Condition
           'n',       // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           '\\n[.g]', // Always 1 in GNU troff.  Macros should use it to test if running under groff.
           '\\n(.g',  // as above
+          'dURL',
+          'dTS',
         ];
 
         if (in_array($condition, $alwaysTrue)) {
@@ -110,6 +112,7 @@ class Roff_Condition
         }
 
         $alwaysFalse = [
+          '0',
           't', // "Formatter is troff."
           'v', // vroff
           'rF',
@@ -130,7 +133,8 @@ class Roff_Condition
           '\'\\*[.T]\'utf8\'',
           '\'\\*[.T]\'cp1047\'',
           '\'\\*[pts-dev]\'tty\'',
-          'c \\[shc]' // see man.1
+          'c \\[shc]', // see man.1
+          '\'po4a.hide\'',
         ];
 
         if (in_array($condition, $alwaysFalse)) {
