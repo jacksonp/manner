@@ -102,6 +102,8 @@ class Man
 
     public function addString(string $string, string $value)
     {
+        $this->strings[$string] = $value;
+        /*
         if (mb_strlen($string) === 1) {
             $this->strings['~(?<!\\\\)\\\\\*' . preg_quote($string, '~') . '~u'] = $value;
         }
@@ -111,6 +113,7 @@ class Man
         }
         $this->strings['~(?<!\\\\)\\\\\[' . preg_quote($string, '~') . '\]~u']   = $value;
         $this->strings['~(?<!\\\\)\\\\\*\[' . preg_quote($string, '~') . '\]~u'] = $value;
+        */
     }
 
     public function getStrings(): array
@@ -126,7 +129,18 @@ class Man
     public function applyAllReplacements(string $line)
     {
 
-        $line = Replace::preg(array_keys($this->strings), $this->strings, $line);
+        // Want to match any of: \*. \(.. \*(.. \[....] \*[....]
+        $line = Replace::pregCallback(
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*(?<str>.))~u',
+          function ($matches) {
+              if (isset($this->strings[$matches['str']])) {
+                  return $matches['bspairs'] . $this->strings[$matches['str']];
+              } else {
+                  //throw new Exception($matches['str'] . ' - unavailable string: ' . $matches[0]);
+                  return $matches[0];
+              }
+          },
+          $line);
 
         $line = Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
