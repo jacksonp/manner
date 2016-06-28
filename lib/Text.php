@@ -62,22 +62,21 @@ class Text
 
     }
 
-    static function preprocessLines(array $lines): array
+    private static function applyRoffClasses(array $lines): array
     {
-        $linesNoComments = self::stripComments($lines);
 
-        $numNoCommentLines = count($linesNoComments);
+        $numNoCommentLines = count($lines);
         $linesNoCond       = [];
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
-            $line = $linesNoComments[$i];
+            $line = $lines[$i];
 
             $roffClasses = ['Condition'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
-                $result    = $className::checkEvaluate($linesNoComments, $i);
+                $result    = $className::checkEvaluate($lines, $i);
                 if ($result !== false) {
                     $linesNoCond = array_merge($linesNoCond, $result['lines']);
                     $i           = $result['i'];
@@ -88,6 +87,15 @@ class Text
             $linesNoCond[] = $line;
 
         }
+
+        return $linesNoCond;
+
+    }
+
+    static function preprocessLines(array $lines): array
+    {
+        $linesNoComments = self::stripComments($lines);
+        $linesNoCond     = self::applyRoffClasses($linesNoComments);
 
         $macroReplacements  = [];
         $numNoCondLines     = count($linesNoCond);
