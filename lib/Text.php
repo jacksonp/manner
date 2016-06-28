@@ -4,26 +4,25 @@
 class Text
 {
 
-    /**
-     * Strip comments, handle title, stick rest in $lines
-     */
-    static function preprocessLines($rawLines)
+    private static function stripComments(array $lines): array
     {
 
-        $numRawLines     = count($rawLines);
+        $numLines        = count($lines);
         $linesNoComments = [];
         $linePrefix      = '';
 
-        for ($i = 0; $i < $numRawLines; ++$i) {
+        for ($i = 0; $i < $numLines; ++$i) {
 
-            $line       = $linePrefix . $rawLines[$i];
+            $line       = $linePrefix . $lines[$i];
             $linePrefix = '';
 
             // Continuations
             // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
-            while ($i < $numRawLines - 1 && mb_substr($line, -1, 1) === '\\'
-              && (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
-                $line = mb_substr($line, 0, -1) . $rawLines[++$i];
+            while (
+              $i < $numLines - 1 and
+              mb_substr($line, -1, 1) === '\\' and
+              (mb_strlen($line) === 1 or mb_substr($line, -2, 1) !== '\\')) {
+                $line = mb_substr($line, 0, -1) . $lines[++$i];
             }
 
             // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
@@ -44,8 +43,8 @@ class Text
             $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $line);
 
             if (preg_match('~^\.ig(\s|$)~u', $line)) {
-                for ($i = $i + 1; $i < $numRawLines; ++$i) {
-                    if ($rawLines[$i] === '..') {
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    if ($lines[$i] === '..') {
                         continue 2;
                     }
                 }
@@ -58,6 +57,14 @@ class Text
             $linesNoComments[] = $line;
 
         }
+
+        return $linesNoComments;
+
+    }
+
+    static function preprocessLines(array $lines): array
+    {
+        $linesNoComments = self::stripComments($lines);
 
         $numNoCommentLines = count($linesNoComments);
         $linesNoCond       = [];
@@ -320,10 +327,10 @@ class Text
             }
 
             //<editor-fold desc="Handle man title macro">
-            if (!$foundTitle && preg_match('~^\.TH\s(.*)$~u', $line, $matches)) {
+            if (!$foundTitle and preg_match('~^\.TH\s(.*)$~u', $line, $matches)) {
                 $foundTitle   = true;
                 $titleDetails = Macro::parseArgString($matches[1]);
-                if (is_null($titleDetails) || count($titleDetails) < 2) {
+                if (is_null($titleDetails) or count($titleDetails) < 2) {
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.
@@ -338,7 +345,7 @@ class Text
             //</editor-fold>
 
             if (count($lines) > 0 ||
-              (mb_strlen($line) > 0 && $line !== '.PP')
+              (mb_strlen($line) > 0 and $line !== '.PP')
             ) { // Exclude leading blank lines, and .PP
                 $lines[] = $line;
             }
