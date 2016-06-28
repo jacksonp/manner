@@ -130,14 +130,15 @@ class Text
         $linesNoCond     = self::applyRoffClasses($linesNoComments);
 
         $numNoCondLines = count($linesNoCond);
-        $firstPassLines = [];
         $foundTitle     = false;
+        $charSwaps         = [];
+        $lines             = [];
 
         $man = Man::instance();
 
         for ($i = 0; $i < $numNoCondLines; ++$i) {
 
-            $line = $linesNoCond[$i];
+            $line = $man->applyAllReplacements($linesNoCond[$i]);
 
             $skipLines = [
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
@@ -201,18 +202,6 @@ class Text
             ) {
                 continue;
             }
-
-            $firstPassLines[] = $line;
-
-        }
-
-        $numFirstPassLines = count($firstPassLines);
-        $lines             = [];
-        $charSwaps         = [];
-
-        for ($i = 0; $i < $numFirstPassLines; ++$i) {
-
-            $line = $man->applyAllReplacements($firstPassLines[$i]);
 
             $line = Text::translateCharacters($line);
 
