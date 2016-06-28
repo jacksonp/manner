@@ -77,6 +77,8 @@ class Text
             // TODO: fix this hack, see groff_mom.7
             $line = preg_replace('~^\.FONT ~u', '.', $line);
 
+            $line = $man->applyStringReplacement($line);
+
             $registers = $man->getRegisters();
             $line      = strtr($line, $registers);
 
@@ -105,7 +107,7 @@ class Text
                 }
             }
 
-            $roffClasses = ['Condition', 'Macro', 'Register'];
+            $roffClasses = ['Condition', 'Macro', 'Register', 'String'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
@@ -210,37 +212,6 @@ class Text
                 continue;
             }
 
-            if (preg_match('~^\.ds (.*?) (.*)$~u', $line, $matches)) {
-                if (empty($matches[2])) {
-                    continue;
-                }
-                $newRequest = $matches[1];
-                $requestVal = Macro::simplifyRequest($matches[2]);
-
-                // Q and U are special cases for when replacement is in a macro argument, which are separated by double
-                // quotes and otherwise get messed up.
-                if (in_array($newRequest, ['C\'', 'C`'])) {
-                    $requestVal = '"';
-                } elseif (in_array($newRequest, ['L"', 'R"'])) {
-                    continue;
-                } elseif ($newRequest === 'Q' and $requestVal === '\&"') {
-                    $requestVal = '“';
-                } elseif ($newRequest === 'U' and $requestVal === '\&"') {
-                    $requestVal = '”';
-                }
-
-                // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
-                $requestVal = $man->applyStringReplacement($requestVal);
-
-                $man->addString($newRequest, $requestVal);
-
-                continue;
-            }
-
-            if (preg_match('~^\.ds~u', $line, $matches)) {
-                continue; // ignore any that didn't match above.
-            }
-
             $firstPassLines[] = $line;
 
         }
@@ -259,8 +230,6 @@ class Text
                     $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
                 }
             }
-
-            $line = $man->applyStringReplacement($line);
 
             $line = Text::translateCharacters($line);
 

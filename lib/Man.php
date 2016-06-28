@@ -37,6 +37,7 @@ class Man
      */
     protected function __construct()
     {
+        $this->addString('.T', 'ps');
     }
 
     public function reset()
@@ -118,11 +119,7 @@ class Man
 
     public function applyStringReplacement(string $line)
     {
-        if (count($this->strings) === 0) {
-            return $line;
-        } else {
-            return strtr($line, $this->strings);
-        }
+        return strtr($line, $this->strings);
     }
 
 

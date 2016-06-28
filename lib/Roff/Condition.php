@@ -151,6 +151,7 @@ class Roff_Condition
         $numLines         = count($lines);
         $foundEnd         = false;
         $replacementLines = [];
+        $man              = Man::instance();
 
         $line = $firstLine;
 
@@ -158,6 +159,10 @@ class Roff_Condition
         $recurse    = false;
 
         for ($ifIndex = $i; $ifIndex < $numLines;) {
+            $line = $man->applyStringReplacement($line);
+            $registers = $man->getRegisters();
+            $line      = strtr($line, $registers);
+
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 or
               ($i !== $ifIndex and preg_match('~^\.\s*i[fe] ~u', $line))
