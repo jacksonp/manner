@@ -217,7 +217,7 @@ class Text
 
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
-            $line = $firstPassLines[$i];
+            $line = $man->applyAllReplacements($firstPassLines[$i]);
 
             $aliases = $man->getAliases();
             if (count($aliases) > 0) {

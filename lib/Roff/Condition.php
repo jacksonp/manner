@@ -13,22 +13,11 @@ class Roff_Condition
           '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
           $lines[$i], $matches)
         ) {
-
-            $if = self::ifBlock($lines, $i, $matches[3]);
-            if (self::test($matches[1]) and self::test($matches[2])) {
-                return $if;
-            } else {
-                return ['lines' => [], 'i' => $if['i']];
-            }
+            return self::ifBlock($lines, $i, $matches[3], self::test($matches[1]) and self::test($matches[2]));
         }
 
         if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
-            $if = self::ifBlock($lines, $i, $matches[2]);
-            if (self::test($matches[1])) {
-                return $if;
-            } else {
-                return ['lines' => [], 'i' => $if['i']];
-            }
+            return self::ifBlock($lines, $i, $matches[2], self::test($matches[1]));
         }
 
         if (
@@ -51,8 +40,8 @@ class Roff_Condition
         }
 
         if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
-            $condition = $matches[1];
-            $if        = self::ifBlock($lines, $i, $matches[2]);
+            $useIf = self::test($matches[1]);
+            $if        = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i         = $if['i'] + 1;
 
             $line = $lines[$i];
@@ -61,8 +50,8 @@ class Roff_Condition
                 throw new Exception('.ie - not followed by expected .el on line: "' . $line . '".');
             }
 
-            $else     = self::ifBlock($lines, $i, $matches[1]);
-            $newLines = self::test($condition) ? $if['lines'] : $else['lines'];
+            $else     = self::ifBlock($lines, $i, $matches[1], !$useIf);
+            $newLines = $useIf ? $if['lines'] : $else['lines'];
 
             return ['lines' => $newLines, 'i' => $else['i']];
 
@@ -104,7 +93,7 @@ class Roff_Condition
 //            $condition = $matches[1];
 //        }
 
-        if (preg_match('~^\(([^)])([:&])(.*)\)$~u', $condition, $matches)) {
+        if (preg_match('~^\(([^)]+)([:&])(.+)\)$~u', $condition, $matches)) {
             if ($matches[2] === ':') {
                 return self::test($matches[1]) or self::test($matches[3]);
             } else {
@@ -119,11 +108,12 @@ class Roff_Condition
           'dTS',
         ];
 
-        if (in_array($condition, $alwaysTrue)) {
+        if (in_array($condition, $alwaysTrue, true)) {
             return true;
         }
 
         $alwaysFalse = [
+          '\n()P',
           '0',
           '0>0',
           '(1==0)',
@@ -144,7 +134,7 @@ class Roff_Condition
           '\\n(.$>=3', // hack for gnugo.6, isag.1
         ];
 
-        if (in_array($condition, $alwaysFalse)) {
+        if (in_array($condition, $alwaysFalse, true)) {
             return false;
         }
 
@@ -152,7 +142,7 @@ class Roff_Condition
 
     }
 
-    private static function ifBlock(array $lines, int $i, string $firstLine)
+    private static function ifBlock(array $lines, int $i, string $firstLine, bool $processContents = true)
     {
 
         $numLines         = count($lines);
@@ -188,6 +178,10 @@ class Roff_Condition
 
         if (!$foundEnd) {
             throw new Exception('.if condition \\{ - not followed by expected pattern on line ' . $ifIndex . '.');
+        }
+
+        if (!$processContents) {
+            return ['lines' => [], 'i' => $ifIndex];
         }
 
         if ($recurse) {
