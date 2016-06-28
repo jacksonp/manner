@@ -62,8 +62,10 @@ class Text
 
     }
 
-    private static function applyRoffClasses(array $lines): array
+    static function applyRoffClasses(array $lines): array
     {
+
+        $man = Man::instance();
 
         $numNoCommentLines = count($lines);
         $linesNoCond       = [];
@@ -72,14 +74,41 @@ class Text
 
             $line = $lines[$i];
 
-            $roffClasses = ['Condition'];
+            $bits = Macro::parseArgString($line);
+            if (count($bits) > 0) {
+                $macro  = array_shift($bits);
+                $macros = $man->getMacros();
+                if (isset($macros[$macro])) {
+                    foreach ($macros[$macro] as $macroLine) {
+
+                        for ($n = 0; $n < 10; ++$n) {
+                            $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
+                        }
+
+                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                        $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
+
+                        // Other \$ things are also arguments...
+                        if (mb_strpos($macroLine, '\\$') !== false) {
+                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
+                        }
+
+                        $linesNoCond[] = $macroLine;
+                    }
+                    continue;
+                }
+            }
+
+            $roffClasses = ['Condition', 'Macro'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
                 $result    = $className::checkEvaluate($lines, $i);
                 if ($result !== false) {
-                    $linesNoCond = array_merge($linesNoCond, $result['lines']);
-                    $i           = $result['i'];
+                    if (isset($result['lines'])) {
+                        $linesNoCond = array_merge($linesNoCond, $result['lines']);
+                    }
+                    $i = $result['i'];
                     continue 2;
                 }
             }
@@ -97,10 +126,8 @@ class Text
         $linesNoComments = self::stripComments($lines);
         $linesNoCond     = self::applyRoffClasses($linesNoComments);
 
-        $macroReplacements  = [];
         $numNoCondLines     = count($linesNoCond);
         $firstPassLines     = [];
-        $aliases            = [];
         $registers          = [];
         $stringReplacements = [];
         $foundTitle         = false;
@@ -111,67 +138,8 @@ class Text
 
             $line = $linesNoCond[$i];
 
-            $bits = Macro::parseArgString($line);
-            if (count($bits) > 0) {
-                $macro = array_shift($bits);
-                if (isset($macroReplacements[$macro])) {
-                    foreach ($macroReplacements[$macro] as $macroLine) {
-
-                        for ($n = 0; $n < 10; ++$n) {
-                            $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
-                        }
-
-                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                        $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
-
-                        // Other \$ things are also arguments...
-                        if (mb_strpos($macroLine, '\\$') !== false) {
-                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
-                        }
-
-                        $firstPassLines[] = $macroLine;
-                    }
-                    continue;
-                }
-            }
-
             // TODO: fix this hack, see groff_mom.7
             $line = preg_replace('~\.FONT ~u', '.', $line);
-
-            if (preg_match('~^\.de1? ([^\s"]+)\s*$~u', $line, $matches)) {
-                $newMacro   = '.' . $matches[1];
-                $macroLines = [];
-                for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
-                    $macroLine = $linesNoCond[$i];
-                    if ($macroLine === '..') {
-                        if (in_array($newMacro, ['.SS', '.EX', '.EE', '.FONT', '.URL'])) {
-                            // Don't override these macros.
-                            // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
-                            // TODO: .FONT see hack above
-                            // .URL: we can do a better job with the semantic info.
-                            continue 2;
-                        } elseif ($newMacro === '.INDENT') {
-                            $aliases['INDENT'] = 'RS';
-                            continue 2;
-                        } elseif ($newMacro === '.UNINDENT') {
-                            $aliases['UNINDENT'] = 'RE';
-                            continue 2;
-                        }
-                        $macroReplacements[$newMacro] = $macroLines;
-                        continue 2;
-                    } else {
-                        $macroLine = Macro::massageLine($macroLine);
-                        if (isset($macroReplacements[$macroLine])) {
-                            foreach ($macroReplacements[$macroLine] as $subMacroLine) {
-                                $macroLines[] = $subMacroLine;
-                            }
-                        } else {
-                            $macroLines[] = $macroLine;
-                        }
-                    }
-                }
-                throw new Exception($matches[0] . ' - not followed by expected pattern on line ' . $i . '.');
-            }
 
             // Do registers after .de -see e.g. yum-copr.8
             if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>.+)$~u', $line, $matches)) {
@@ -252,7 +220,7 @@ class Text
             }
 
             if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
-                $aliases[$matches['new']] = $matches['old'];
+                $man->addAlias($matches['new'], $matches['old']);
                 continue;
             }
 
@@ -295,13 +263,13 @@ class Text
 
         $numFirstPassLines = count($firstPassLines);
         $lines             = [];
-        $macroReplacements = []; // Resetting this
         $charSwaps         = [];
 
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
             $line = $firstPassLines[$i];
 
+            $aliases = $man->getAliases();
             if (count($aliases) > 0) {
                 foreach ($aliases as $new => $old) {
                     $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
@@ -310,10 +278,6 @@ class Text
 
             if (count($stringReplacements) > 0) {
                 $line = strtr($line, $stringReplacements);
-            }
-
-            if (count($macroReplacements) > 0) {
-                $line = strtr($line, $macroReplacements);
             }
 
             $line = Text::translateCharacters($line);

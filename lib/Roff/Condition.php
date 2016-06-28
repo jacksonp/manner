@@ -195,7 +195,7 @@ class Roff_Condition
             $replacementLines = $recurseLines;
         }
 
-        return ['lines' => $replacementLines, 'i' => $ifIndex];
+        return ['lines' => Text::applyRoffClasses($replacementLines), 'i' => $ifIndex];
 
     }
 
