@@ -110,7 +110,6 @@ class Roff_Condition
             } else {
                 return self::test($matches[1]) and self::test($matches[3]);
             }
-
         }
 
         $alwaysTrue = [
@@ -126,7 +125,9 @@ class Roff_Condition
 
         $alwaysFalse = [
           '0',
+          '0>0',
           '(1==0)',
+          '0==2',
           't', // "Formatter is troff."
           'v', // vroff
           'rF',
