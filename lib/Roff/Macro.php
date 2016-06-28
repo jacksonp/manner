@@ -18,7 +18,10 @@ class Roff_Macro
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $macroLine = $lines[$i];
-            if ($macroLine === '..') {
+            if (
+              $macroLine === '..' or
+              ($newMacro === '.P!' and $macroLine === '.') // work around bug in Xm*.3 man pages
+            ) {
                 $foundEnd = true;
                 break;
             }
