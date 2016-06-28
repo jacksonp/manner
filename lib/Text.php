@@ -74,6 +74,12 @@ class Text
 
             $line = $lines[$i];
 
+            // TODO: fix this hack, see groff_mom.7
+            $line = preg_replace('~^\.FONT ~u', '.', $line);
+
+            $registers = $man->getRegisters();
+            $line = strtr($line, $registers);
+
             $bits = Macro::parseArgString($line);
             if (count($bits) > 0) {
                 $macro  = array_shift($bits);
@@ -99,7 +105,7 @@ class Text
                 }
             }
 
-            $roffClasses = ['Condition', 'Macro'];
+            $roffClasses = ['Condition', 'Macro', 'Register'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
@@ -128,7 +134,6 @@ class Text
 
         $numNoCondLines     = count($linesNoCond);
         $firstPassLines     = [];
-        $registers          = [];
         $stringReplacements = [];
         $foundTitle         = false;
 
@@ -137,25 +142,6 @@ class Text
         for ($i = 0; $i < $numNoCondLines; ++$i) {
 
             $line = $linesNoCond[$i];
-
-            // TODO: fix this hack, see groff_mom.7
-            $line = preg_replace('~\.FONT ~u', '.', $line);
-
-            // Do registers after .de -see e.g. yum-copr.8
-            if (preg_match('~^\.nr (?<name>[-\w]+) (?<val>.+)$~u', $line, $matches)) {
-                $registerName = $matches['name'];
-                $registerVal  = $matches['val'];
-                if (mb_strlen($registerName) === 1) {
-                    $registers['\\n' . $registerName] = $registerVal;
-                }
-                if (mb_strlen($registerName) === 2) {
-                    $registers['\\n(' . $registerName] = $registerVal;
-                }
-                $registers['\\n[' . $registerName . ']'] = $registerVal;
-                continue;
-            }
-
-            $line = strtr($line, $registers);
 
             $skipLines = [
                 // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():

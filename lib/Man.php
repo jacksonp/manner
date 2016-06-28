@@ -9,6 +9,7 @@ class Man
     private $data;
     private $aliases;
     private $macros;
+    private $registers;
 
     /**
      * @var Man The reference to *Singleton* instance of this class
@@ -39,9 +40,10 @@ class Man
 
     public function reset()
     {
-        $this->data    = [];
-        $this->aliases = [];
-        $this->macros  = [];
+        $this->data      = [];
+        $this->aliases   = [];
+        $this->macros    = [];
+        $this->registers = [];
     }
 
     public function __set($name, $value)
@@ -81,6 +83,16 @@ class Man
     public function getMacros(): array
     {
         return $this->macros;
+    }
+
+    public function addRegister(string $name, string $value)
+    {
+        $this->registers[$name] = $value;
+    }
+
+    public function getRegisters(): array
+    {
+        return $this->registers;
     }
 
 

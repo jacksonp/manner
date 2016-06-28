@@ -36,7 +36,7 @@ class Roff_Condition
           $lines[$i], $matches)
         ) {
             if (self::test($matches[1]) and self::test($matches[2])) {
-                return ['lines' => [Macro::massageLine($matches[3])], 'i' => $i];
+                return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[3])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
@@ -44,7 +44,7 @@ class Roff_Condition
 
         if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $matches)) {
             if (self::test($matches[1])) {
-                return ['lines' => [Macro::massageLine($matches[2])], 'i' => $i];
+                return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[2])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
@@ -77,9 +77,9 @@ class Roff_Condition
             }
 
             if (self::test($ifMatches[1])) {
-                return ['lines' => [Macro::massageLine($ifMatches[2])], 'i' => $i];
+                return ['lines' => Text::applyRoffClasses([Macro::massageLine($ifMatches[2])]), 'i' => $i];
             } else {
-                return ['lines' => [Macro::massageLine($elseMatches[1])], 'i' => $i];
+                return ['lines' => Text::applyRoffClasses([Macro::massageLine($elseMatches[1])]), 'i' => $i];
             }
 
         }
