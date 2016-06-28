@@ -102,7 +102,7 @@ class Text
                 }
             }
 
-            $roffClasses = ['Condition', 'Macro', 'Register', 'String'];
+            $roffClasses = ['Condition', 'Macro', 'Register', 'String', 'Alias'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
@@ -202,11 +202,6 @@ class Text
                 continue;
             }
 
-            if (preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $line, $matches)) {
-                $man->addAlias($matches['new'], $matches['old']);
-                continue;
-            }
-
             $firstPassLines[] = $line;
 
         }
@@ -218,13 +213,6 @@ class Text
         for ($i = 0; $i < $numFirstPassLines; ++$i) {
 
             $line = $man->applyAllReplacements($firstPassLines[$i]);
-
-            $aliases = $man->getAliases();
-            if (count($aliases) > 0) {
-                foreach ($aliases as $new => $old) {
-                    $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
-                }
-            }
 
             $line = Text::translateCharacters($line);
 

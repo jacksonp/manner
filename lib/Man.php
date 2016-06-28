@@ -112,10 +112,10 @@ class Man
             $this->strings['~(?<!\\\\)\\\\\*' . preg_quote($string, '~') . '~u'] = $value;
         }
         if (mb_strlen($string) === 2) {
-            $this->strings['~(?<!\\\\)\\\\\(' . preg_quote($string, '~') . '~u']  = $value;
+            $this->strings['~(?<!\\\\)\\\\\(' . preg_quote($string, '~') . '~u']   = $value;
             $this->strings['~(?<!\\\\)\\\\\*\(' . preg_quote($string, '~') . '~u'] = $value;
         }
-        $this->strings['~(?<!\\\\)\\\\\[' . preg_quote($string, '~') . '\]~u']  = $value;
+        $this->strings['~(?<!\\\\)\\\\\[' . preg_quote($string, '~') . '\]~u']   = $value;
         $this->strings['~(?<!\\\\)\\\\\*\[' . preg_quote($string, '~') . '\]~u'] = $value;
     }
 
@@ -136,6 +136,10 @@ class Man
 //        $line = Replace::preg('~\\\\n\[[^]]+\]~u', '0', $line);
 //        $line = Replace::preg('~\\\\n\(..~u', '0', $line);
 //        $line = Replace::preg('~\\\\n.~u', '0', $line);
+
+        foreach ($this->aliases as $new => $old) {
+            $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
+        }
 
         return $line;
     }
