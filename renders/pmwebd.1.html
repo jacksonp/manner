@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="PCP" data-package="Performance Co-Pilot" data-section-name="">
+<title>PMWEBD</title>
+<h1>PMWEBD</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p><strong>pmwebd</strong> - web access to PCP
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>pmwebd</strong> [<strong>-p</strong> <em>port</em>] [<strong>-4</strong>] [<strong>-6</strong>] [<strong>-t</strong> <em>timeout</em>] [<strong>-R</strong> <em>resdir</em>] [<strong>-c</strong> <em>number</em>] [<strong>-h</strong> <em>hostname</em>] [<strong>-a</strong> <em>archive</em>] [<strong>-P</strong>] [<strong>-L</strong>] [<strong>-N</strong>] [<strong>-G</strong>] [<strong>-X</strong>] [<strong>-i</strong> <em>min-interval</em>] [<strong>-I</strong> [<strong>-K</strong> <em>spec</em>] [<strong>-A</strong> <em>archivesdir</em>] [<strong>-S</strong>] [<strong>-l</strong> <em>logfile</em>] [<strong>-U</strong> <em>username</em>] [<strong>-x</strong> <em>file</em>] [<strong>-v</strong>] [<strong>-?</strong>]
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>pmwebd</strong> is a network daemon that binds a subset of the Performance Co-Pilot (PCP) client API ( <strong>PMAPI</strong>(3)) to RESTful web applications using the HTTP ( <strong>PMWEBAPI</strong>(3)) protocol. Web clients request a URI with the prefix <strong>/pmapi</strong> to access the bindings. <strong>pmwebd</strong> creates PCP contexts as requested by a dynamic pool of remote clients, and maintains them as long as the clients regularly reconnect to request PMAPI operations. Otherwise, PCP contexts are closed after a timeout. Permanent contexts may be requested on the command line.
+  <p>In addition to the API binding, <strong>pmwebd</strong> may be optionally configured as a simple HTTP file server, in order to feed the web application itself to a web browser. URIs not matching the <strong>/pmapi</strong> prefix are mapped to files under the configured resource directory, if the <strong>-R</strong> option was given.
+  <p>In addition, <strong>pmwebd</strong> may be optionally configured as a server of a subset of the graphite 0.9.12 web API, for URLs with the <strong>/graphite</strong> prefix, in order to expose PCP archives to interactive data-graphing web applications.
+  <p>The options to <strong>pmwebd</strong> are as follows.
+  <dl>
+    <dt><strong>-p</strong> <em>port</em>
+    <dd>
+      <p>Set the TCP port number on which <strong>pmwebd</strong> will listen for HTTP requests. The default is 44323.
+    <dt><strong>-4</strong> or <strong>-6</strong>
+    <dd>
+      <p>Listen only on IPv4 or IPv6. By default, <strong>pmwebd</strong> will listen on both protocols, if possible.
+    <dt><strong>-A</strong> <em>archdir</em>
+    <dd>
+      <p>Limit remote access to archives to only those beneath the given directory. By default, only files beneath the initial <strong>pmwebd</strong> working directory may be accessed.
+    <dt><strong>-R</strong> <em>resdir</em>
+    <dd>
+      <p>Activate file serving beneath the given resource directory. All regular files there may be read and transcribed to remote clients. By default, file serving is disabled.
+    <dt><strong>-G</strong>
+    <dd>
+      <p>Activate servicing of a subset of the graphite webapi. This exposes all PCP archives under the <strong>-A</strong> directory to remote clients. By default, graphite webapi serving is disabled. To use the graphite and/or grafana web applications included with <strong>pmwebd</strong>, use both <strong>-G</strong> and <strong>-R</strong>, and connect your web browser to <strong>http://127.0.0.1:43323/</strong>
+    <dt><strong>-X</strong>
+    <dd>
+      <p>Disable encoding of common characters for metric names, which allows shorter graphite metric names.
+    <dt><strong>-i</strong> <em>min-interval</em>
+    <dd>
+      <p>Set the minimum sampling interval for graphite time series in seconds. The default is 60. Smaller values give higher precision (but not necessarily accuracy) data, but may cost extra processing time at <strong>pmwebd</strong> or the web browser; and vice versa.
+    <dt><strong>-I</strong>
+    <dd>
+      <p>Attempt to open an entire directory as an archive when traversing the <strong>-A</strong> DIR paths to serve graphite-api metrics. If successful, it can make the metric names much shorter (omitting individual encoded file names) and span across time. If the attempt fails, <strong>pmwebd</strong> will recurse to each individual archive file, just as though <strong>-I</strong> were not given. The difference is that if the <strong>-I</strong> attempt succeeds, a subdirectory is not recursed further, so if any other archives or subdirectories are present, they won't be exposed to graphite-api clients.
+    <dt><strong>-t</strong> <em>timeout</em>
+    <dd>
+      <p>Set the maximum timeout (in seconds) after the last operation on a pmapi web context, before it is closed by <strong>pmwebd</strong>. A smaller timeout may be requested by the web client. The default is 300.
+    <dt><strong>-c</strong> <em>number</em>
+    <dd>
+      <p>Reset the next PMWEBAPI permanent context identifier as given. The default is 1.
+    <dt><strong>-h</strong> <em>hostname</em> or <strong>-a</strong> <em>archive</em> or <strong>-L</strong>
+    <dd>
+      <p>Assign the next permanent PMWEBAPI context identifier to a PMAPI connection to the given host (with an extended syntax as given in <strong>PCPIntro</strong>(1)), or archive file, or the PM_CONTEXT_LOCAL.
+    <dt><strong>-P</strong>
+    <dd>
+      <p>Run in permissive mode, allowing Unix domain socket connections and/or local PMDA contexts. By default these are not allowed due to the automatic authentication that is performed on the server in these modes. Only enable this option if you understand the risks involved, and are sure that all remote <strong>pmwebd</strong> accesses will be from benevolent users. If enabled, unauthenticated remote <strong>PMWEBAPI</strong>(3) clients will be able to access potentially sensitive performance metric values which an unauthenticated <strong>PMAPI</strong>(3) client usually would not be able to.
+    <dt><strong>-N</strong>
+    <dd>
+      <p>Disable creation of new PMWEBAPI contexts via HTTP requests, leaving only permanent ones accessible.
+    <dt><strong>-K</strong> <em>spec</em>
+    <dd>
+      <p>When fetching metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
+    <dt><strong>-l</strong> <em>logfile</em>
+    <dd>
+      <p>By default, logging goes to standard output/error file handles. The verbosity flag <strong>-v</strong> affects the amount of traffic. The <strong>-l</strong> option causes the log file to be written to <em>logfile</em> instead. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dt><strong>-U</strong> <em>username</em>
+    <dd>
+      <p>If invoked as root, assume the identity of <em>username</em> before starting to accept incoming requests from web clients.
+    <dt><strong>-S</strong>
+    <dd>
+      <p>Disable service advertisement. By default, <strong>pmwebd</strong> will advertise its presence on the network using any available mechanisms (such as Avahi/DNS-SD), assisting remote monitoring tools with finding it. These mechanisms are disabled with this option.
+    <dt><strong>-x</strong> <em>file</em>
+    <dd>
+      <p>Before the <strong>pmwebd</strong> <em>logfile</em> can be opened, <strong>pmwebd</strong> may encounter a fatal error which prevents it from starting. By default, the output describing this error is sent to <strong>/dev/tty</strong> but it may redirected to <em>file</em>.
+    <dt><strong>-v</strong>
+    <dd>
+      <p>Increase the verbosity of the <strong>pmwebd</strong> program as it logs to its standard output/error.
+    <dt><strong>-?</strong>
+    <dd>
+      <p>Show <strong>pmwebd</strong> invocation help and exit.
+  </dl>
+</div>
+<div class="section">
+  <h2>SECURITY</h2>
+  <p>The current release of <strong>pmwebd</strong> is suitable for direct exposure to trusted networks only, due to several security limitations. Most or all of these limitations may be worked around by use of a web application firewall (for example, an Apache HTTPD proxy), which would add the constraints and capabilities absent within <strong>pmwebd</strong>. Such configuration is beyond the scope of this document.
+  <dl>
+    <dt>encryption/confidentiality
+    <dd>
+      <p>The <strong>pmwebd</strong> program is does not currently support HTTPS (SSL/TLS), so the HTTP traffic is not protected against network-level attacks.
+    <dt>authentication
+    <dd>
+      <p>The PMAPI layer does not possess a mandatory authentication mechanism, so any remote connection can access any metric exposed by suchly connected PMAPI contexts. However, a new host-context string may use authentication clauses of the longer host URLs, for example <em>pcps://hostname?method=plain&amp;user=userid&amp;pass=password</em>. Use of resulting pmwebapi contexts later requires matching HTTP PLAIN authentication; see below.
+    <dt>inbound admission control
+    <dd>
+      <p>The <strong>pmwebd</strong> program does not impose access control on the origin or rate of its incoming requests. It may be possible for some clients to starve others.
+    <dt>outbound admission control
+    <dd>
+      <p>The <strong>pmwebd</strong> program does not impose access control on outbound connections when a new PMAPI context is created for a PMCD. (Without the <strong>-P</strong> option, connections to UNIX-domain / local PMCDs are blocked.) This enables hypothetical use of a <strong>pmwebd</strong> instance to be used as a network proxy/scanner. For an archive type context, the files must be located under the <strong>pmwebd</strong> current directory, or another directory specified by <strong>-A</strong>. One may entirely disable remotely specified PMAPI context creation using the <strong>-N</strong> option; in this case, specify a static set of contexts using the <strong>-h</strong>, <strong>-a</strong>, and/or <strong>-L</strong> options. You may assign them arbitrary context numbers with the <strong>-c</strong> option.
+    <dt>context ownership
+    <dd>
+      <p>Authenticated PCP contexts are protected by requiring the same HTTP PLAIN/simple userid/password credentials for related /pmapi requests. However, unauthenticated contexts for different web clients are kept distinct only by the assignment of large pseudorandom identifiers. It may be possible to find these by brute-force search or other techniques, thereby letting a web client impersonate another. For more privacy of the permanent contexts, use the <strong>-c</strong> option to reset their starting web context identifiers to a number much different from 1. On the other hand, context ownership is not that precious, since there exist no state-destructive operations for them, except perhaps metric store or instance profile settings.
+  </dl>
+</div>
+<div class="section">
+  <h2>STARTING AND STOPPING PMWEBD</h2>
+  <p>The <strong>pmwebd</strong> server may be started automatically at boot time and stopped when the system is being brought down. Users may also run customized <strong>pmwebd</strong> instances (under separate <strong>-p</strong> PORT numbers), for example for their own archive farms. <strong>For management fo the system</strong> <strong>pmwebd</strong>, become superuser and type
+  <p><code># $PCP_RC_DIR/pmwebd start</code>
+  <p>to start <strong>pmwebd</strong>, or
+  <p><code># $PCP_RC_DIR/pmwebd stop</code>
+  <p>to stop <strong>pmwebd</strong>. Starting <strong>pmwebd</strong> when it is already running is the same as stopping it and then starting it again.
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl>
+    <dt><strong>$PCP_PMWEBDOPTIONS_PATH</strong>
+    <dd>
+      <p>command line options and environment variable settings for <strong>pmwebd</strong> when launched from <strong>$PCP_RC_DIR/pmwebd</strong> This file is interpreted as a Bourne Shell script, expecting variable settings of the form “OPTIONS=value” and possibly others.
+    <dt><strong>$PCP_LOG_DIR/pmwebd/pmwebd.log</strong>
+    <dd>
+      <p>Log file for system <strong>pmwebd</strong> service.
+    <dt><strong>$PCP_LOG_DIR</strong>
+    <dd>
+      <p>Default directory for <strong>-A</strong> option: a base directory containing PCP archives.
+    <dt><strong>$PCP_SHARE_DIR/webapps</strong>
+    <dd>
+      <p>Default directory for <strong>-R</strong> option: a base directory containing web applications.
+  </dl>
+</div>
+<div class="section">
+  <h2>PCP ENVIRONMENT</h2>
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>PCPIntro</strong>(1), <strong>PMAPI</strong>(3), <strong>PMWEBAPI</strong>(3), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5) <strong>http://graphite.readthedocs.org/</strong> and <strong>pmns</strong>(5).
+</div>
+

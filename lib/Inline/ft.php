@@ -58,6 +58,7 @@ class Inline_ft
                 case 'CW':
                 case '4':
                 case 'tt':
+                case 'CS': // e.g. pmwebd.1
                     $node = $dom->createElement('code');
                     break;
                 default:
