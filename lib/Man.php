@@ -10,6 +10,7 @@ class Man
     private $aliases;
     private $macros;
     private $registers;
+    private $strings;
 
     /**
      * @var Man The reference to *Singleton* instance of this class
@@ -44,6 +45,8 @@ class Man
         $this->aliases   = [];
         $this->macros    = [];
         $this->registers = [];
+        $this->strings   = [];
+        $this->addString('.T', 'ps');
     }
 
     public function __set($name, $value)
@@ -93,6 +96,33 @@ class Man
     public function getRegisters(): array
     {
         return $this->registers;
+    }
+
+    public function addString(string $string, string $value)
+    {
+        if (mb_strlen($string) === 1) {
+            $this->strings['\*' . $string] = $value;
+        }
+        if (mb_strlen($string) <= 2) {
+            $this->strings['\\(' . $string]  = $value;
+            $this->strings['\\*(' . $string] = $value;
+        }
+        $this->strings['\\[' . $string . ']']  = $value;
+        $this->strings['\\*[' . $string . ']'] = $value;
+    }
+
+    public function getStrings(): array
+    {
+        return $this->strings;
+    }
+
+    public function applyStringReplacement(string $line)
+    {
+        if (count($this->strings) === 0) {
+            return $line;
+        } else {
+            return strtr($line, $this->strings);
+        }
     }
 
 

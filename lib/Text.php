@@ -78,7 +78,7 @@ class Text
             $line = preg_replace('~^\.FONT ~u', '.', $line);
 
             $registers = $man->getRegisters();
-            $line = strtr($line, $registers);
+            $line      = strtr($line, $registers);
 
             $bits = Macro::parseArgString($line);
             if (count($bits) > 0) {
@@ -132,10 +132,9 @@ class Text
         $linesNoComments = self::stripComments($lines);
         $linesNoCond     = self::applyRoffClasses($linesNoComments);
 
-        $numNoCondLines     = count($linesNoCond);
-        $firstPassLines     = [];
-        $stringReplacements = [];
-        $foundTitle         = false;
+        $numNoCondLines = count($linesNoCond);
+        $firstPassLines = [];
+        $foundTitle     = false;
 
         $man = Man::instance();
 
@@ -231,11 +230,9 @@ class Text
                 }
 
                 // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
-                if (count($stringReplacements) > 0) {
-                    $requestVal = strtr($requestVal, $stringReplacements);
-                }
+                $requestVal = $man->applyStringReplacement($requestVal);
 
-                Macro::addStringDefToReplacementArray($newRequest, $requestVal, $stringReplacements);
+                $man->addString($newRequest, $requestVal);
 
                 continue;
             }
@@ -263,9 +260,7 @@ class Text
                 }
             }
 
-            if (count($stringReplacements) > 0) {
-                $line = strtr($line, $stringReplacements);
-            }
+            $line = $man->applyStringReplacement($line);
 
             $line = Text::translateCharacters($line);
 
