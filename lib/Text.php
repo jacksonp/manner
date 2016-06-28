@@ -72,17 +72,12 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
-            $line = $lines[$i];
-
             // TODO: fix this hack, see groff_mom.7
-            $line = preg_replace('~^\.FONT ~u', '.', $line);
+            $lines[$i] = preg_replace('~^\.FONT ~u', '.', $lines[$i]);
 
-            $line = $man->applyStringReplacement($line);
+            $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
-            $registers = $man->getRegisters();
-            $line      = strtr($line, $registers);
-
-            $bits = Macro::parseArgString($line);
+            $bits = Macro::parseArgString($lines[$i]);
             if (count($bits) > 0) {
                 $macro  = array_shift($bits);
                 $macros = $man->getMacros();
@@ -121,7 +116,7 @@ class Text
                 }
             }
 
-            $linesNoCond[] = $line;
+            $linesNoCond[] = $lines[$i];
 
         }
 

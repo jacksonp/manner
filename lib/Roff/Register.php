@@ -12,16 +12,7 @@ class Roff_Register
         }
 
         $man = Man::instance();
-
-        $registerName = $matches['name'];
-        $registerVal  = $matches['val'];
-        if (mb_strlen($registerName) === 1) {
-            $man->addRegister('\\n' . $registerName, $registerVal);
-        }
-        if (mb_strlen($registerName) === 2) {
-            $man->addRegister('\\n(' . $registerName, $registerVal);
-        }
-        $man->addRegister('\\n[' . $registerName . ']', $registerVal);
+        $man->addRegister($matches['name'], $matches['val']);
 
         return ['i' => $i];
 

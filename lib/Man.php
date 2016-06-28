@@ -91,11 +91,18 @@ class Man
 
     public function addRegister(string $name, string $value)
     {
-        $this->registers[$name] = $value;
+        if (mb_strlen($name) === 1) {
+            $this->registers['\\n' . $name] = $value;
+        }
+        if (mb_strlen($name) === 2) {
+            $this->registers['\\n(' . $name] = $value;
+        }
+        $this->registers['\\n[' . $name . ']'] = $value;
     }
 
     public function getRegisters(): array
     {
+
         return $this->registers;
     }
 
@@ -120,6 +127,17 @@ class Man
     public function applyStringReplacement(string $line)
     {
         return strtr($line, $this->strings);
+    }
+
+    public function applyAllReplacements(string $line)
+    {
+        $line = strtr($line, $this->strings);
+        $line = strtr($line, $this->registers);
+//        $line = Replace::preg('~\\\\n\[[^]]+\]~u', '0', $line);
+//        $line = Replace::preg('~\\\\n\(..~u', '0', $line);
+//        $line = Replace::preg('~\\\\n.~u', '0', $line);
+
+        return $line;
     }
 
 
