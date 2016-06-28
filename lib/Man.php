@@ -103,17 +103,6 @@ class Man
     public function addString(string $string, string $value)
     {
         $this->strings[$string] = $value;
-        /*
-        if (mb_strlen($string) === 1) {
-            $this->strings['~(?<!\\\\)\\\\\*' . preg_quote($string, '~') . '~u'] = $value;
-        }
-        if (mb_strlen($string) === 2) {
-            $this->strings['~(?<!\\\\)\\\\\(' . preg_quote($string, '~') . '~u']   = $value;
-            $this->strings['~(?<!\\\\)\\\\\*\(' . preg_quote($string, '~') . '~u'] = $value;
-        }
-        $this->strings['~(?<!\\\\)\\\\\[' . preg_quote($string, '~') . '\]~u']   = $value;
-        $this->strings['~(?<!\\\\)\\\\\*\[' . preg_quote($string, '~') . '\]~u'] = $value;
-        */
     }
 
     public function getStrings(): array
@@ -123,7 +112,17 @@ class Man
 
     public function applyStringReplacement(string $line)
     {
-        return strtr($line, $this->strings);
+        return Replace::pregCallback(
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
+          function ($matches) {
+              if (isset($this->registers[$matches['reg']])) {
+                  return $matches['bspairs'] . $this->registers[$matches['reg']];
+              } else {
+                  //throw new Exception($matches['reg'] . ' - unavailable register: ' . $matches[0]);
+                  return $matches[0];
+              }
+          },
+          $line);
     }
 
     public function applyAllReplacements(string $line)
@@ -142,21 +141,7 @@ class Man
           },
           $line);
 
-        $line = Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
-          function ($matches) {
-              if (isset($this->registers[$matches['reg']])) {
-                  return $matches['bspairs'] . $this->registers[$matches['reg']];
-              } else {
-                  //throw new Exception($matches['reg'] . ' - unavailable register: ' . $matches[0]);
-                  return $matches[0];
-              }
-          },
-          $line);
-
-//        $line = Replace::preg('~\\\\n\[[^]]+\]~u', '0', $line);
-//        $line = Replace::preg('~\\\\n\(..~u', '0', $line);
-//        $line = Replace::preg('~\\\\n.~u', '0', $line);
+        $line = $this->applyStringReplacement($line);
 
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
