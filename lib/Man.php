@@ -92,12 +92,12 @@ class Man
     public function addRegister(string $name, string $value)
     {
         if (mb_strlen($name) === 1) {
-            $this->registers['\\n' . $name] = $value;
+            $this->registers['~(?<!\\\\)\\\\n' . preg_quote($name, '~') . '~u'] = $value;
         }
         if (mb_strlen($name) === 2) {
-            $this->registers['\\n(' . $name] = $value;
+            $this->registers['~(?<!\\\\)\\\\n\(' . preg_quote($name, '~') . '~u'] = $value;
         }
-        $this->registers['\\n[' . $name . ']'] = $value;
+        $this->registers['~(?<!\\\\)\\\\n\[' . preg_quote($name, '~') . '\]~u'] = $value;
     }
 
     public function getRegisters(): array
@@ -109,14 +109,14 @@ class Man
     public function addString(string $string, string $value)
     {
         if (mb_strlen($string) === 1) {
-            $this->strings['\*' . $string] = $value;
+            $this->strings['~(?<!\\\\)\\\\\*' . preg_quote($string, '~') . '~u'] = $value;
         }
-        if (mb_strlen($string) <= 2) {
-            $this->strings['\\(' . $string]  = $value;
-            $this->strings['\\*(' . $string] = $value;
+        if (mb_strlen($string) === 2) {
+            $this->strings['~(?<!\\\\)\\\\\(' . preg_quote($string, '~') . '~u']  = $value;
+            $this->strings['~(?<!\\\\)\\\\\*\(' . preg_quote($string, '~') . '~u'] = $value;
         }
-        $this->strings['\\[' . $string . ']']  = $value;
-        $this->strings['\\*[' . $string . ']'] = $value;
+        $this->strings['~(?<!\\\\)\\\\\[' . preg_quote($string, '~') . '\]~u']  = $value;
+        $this->strings['~(?<!\\\\)\\\\\*\[' . preg_quote($string, '~') . '\]~u'] = $value;
     }
 
     public function getStrings(): array
@@ -131,8 +131,8 @@ class Man
 
     public function applyAllReplacements(string $line)
     {
-        $line = strtr($line, $this->strings);
-        $line = strtr($line, $this->registers);
+        $line = Replace::preg(array_keys($this->strings), $this->strings, $line);
+        $line = Replace::preg(array_keys($this->registers), $this->registers, $line);
 //        $line = Replace::preg('~\\\\n\[[^]]+\]~u', '0', $line);
 //        $line = Replace::preg('~\\\\n\(..~u', '0', $line);
 //        $line = Replace::preg('~\\\\n.~u', '0', $line);
