@@ -198,8 +198,9 @@ class Text
             // .evc: Copy the contents of environment env to the current environment. No pushing or popping.
             // .ns: Turn on no-space mode.
             // .mso
+            // .tm, .tm1, .tmc: printing to stdout
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc)(\s|$)~u',
               $line)
             ) {
                 continue;

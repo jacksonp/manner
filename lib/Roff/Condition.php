@@ -135,6 +135,7 @@ class Roff_Condition
           '\'\\*[pts-dev]\'tty\'',
           'c \\[shc]', // see man.1
           '\'po4a.hide\'',
+          '\\n(.$>=3', // hack for isag.1
         ];
 
         if (in_array($condition, $alwaysFalse)) {
