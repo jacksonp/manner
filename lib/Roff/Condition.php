@@ -99,6 +99,20 @@ class Roff_Condition
             return $matches[1] === $matches[2];
         }
 
+        // This doesn't work - first and last might not be a pair
+//        if (preg_match('~^\((.*)\)$~u', $condition, $matches)) {
+//            $condition = $matches[1];
+//        }
+
+        if (preg_match('~^\(([^)])([:&])(.*)\)$~u', $condition, $matches)) {
+            if ($matches[2] === ':') {
+                return self::test($matches[1]) or self::test($matches[3]);
+            } else {
+                return self::test($matches[1]) and self::test($matches[3]);
+            }
+
+        }
+
         $alwaysTrue = [
           'n',       // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           '1',
@@ -112,13 +126,13 @@ class Roff_Condition
 
         $alwaysFalse = [
           '0',
+          '(1==0)',
           't', // "Formatter is troff."
           'v', // vroff
           'rF',
           '\\nF>0',
           '\\nF',
           '\\nF==2', // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
-          '(0:(1==0))',
           '\\n(.H>23', // part of a check for low resolution devices, e.g. frogatto.6
           '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
           '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
