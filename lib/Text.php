@@ -129,10 +129,11 @@ class Text
                 for ($i = $i + 1; $i < $numNoCondLines; ++$i) {
                     $macroLine = $linesNoCond[$i];
                     if ($macroLine === '..') {
-                        if (in_array($newMacro, ['.SS', '.EX', '.EE', '.FONT'])) {
+                        if (in_array($newMacro, ['.SS', '.EX', '.EE', '.FONT', '.URL'])) {
                             // Don't override these macros.
                             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
                             // TODO: .FONT see hack above
+                            // .URL: we can do a better job with the semantic info.
                             continue 2;
                         } elseif ($newMacro === '.INDENT') {
                             $aliases['INDENT'] = 'RS';
@@ -227,8 +228,9 @@ class Text
             // .ev: Switch to previous environment and pop it off the stack.
             // .evc: Copy the contents of environment env to the current environment. No pushing or popping.
             // .ns: Turn on no-space mode.
+            // .mso
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso)(\s|$)~u',
               $line)
             ) {
                 continue;

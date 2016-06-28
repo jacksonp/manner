@@ -47,7 +47,7 @@ class Block_TP
                     break; // i.e. skip the .TP line
                 }
 
-                if (preg_match('~^\.UR~u', $dtLine)) {
+                if (preg_match('~^\.UR(\s|$)~u', $dtLine)) {
                     $dtLines = [$dtLine];
                     while ($i < $numLines) {
                         $dtLine = $lines[++$i];

@@ -7,12 +7,38 @@ class Inline_Link
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.(?:UR|MT)\s?<?(.*?)>?$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.URL\s(.*)$~u', $lines[$i], $matches)) {
+            $dom       = $parentNode->ownerDocument;
+            $arguments = Macro::parseArgString($matches[1]);
+            if (is_null($arguments)) {
+                throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
+            }
+            $anchor = $dom->createElement('a');
+            $anchor->setAttribute('href', $arguments[0]);
+
+            if (count($arguments) > 1) {
+                TextContent::interpretAndAppendText($anchor, $arguments[1], false, false);
+            } else {
+                Blocks::handle($anchor, [$lines[++$i]]);
+            }
+
+            if ($parentNode->hasContent()) {
+                $parentNode->appendChild(new DOMText(' '));
+            }
+            $parentNode->appendChild($anchor);
+            if (count($arguments) === 3) {
+                $parentNode->appendChild(new DOMText($arguments[2]));
+            }
+
+            return $i;
+        }
+
+        if (!preg_match('~^\.(?:UR|MT)(?:$|\s<?(.*?)>?$)~u', $lines[$i], $matches)) {
             return false;
         }
 
-        $numLines    = count($lines);
         $dom         = $parentNode->ownerDocument;
+        $numLines    = count($lines);
         $arguments   = Macro::parseArgString($matches[1]);
         $punctuation = '';
         $blockLines  = [];
