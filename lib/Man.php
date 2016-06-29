@@ -474,39 +474,15 @@ class Man
         return $this->strings;
     }
 
-    public function applyStringReplacement(string $line)
+    public function applyStringReplacement(string $line):string
     {
-        return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
-          function ($matches) {
-              if (isset($this->registers[$matches['reg']])) {
-                  return $matches['bspairs'] . $this->registers[$matches['reg']];
-              } else {
-                  //throw new Exception($matches['reg'] . ' - unavailable register: ' . $matches[0]);
-                  return $matches[0];
-              }
-          },
-          $line);
+        return Roff_String::substitute($line, $this->strings);
     }
 
-    public function applyAllReplacements(string $line)
+    public function applyAllReplacements(string $line):string
     {
-
-        // Want to match any of: \*. \(.. \*(.. \[....] \*[....]
-        $line = Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*(?<str>.))~u',
-          function ($matches) {
-              if (isset($this->strings[$matches['str']])) {
-                  return $matches['bspairs'] . $this->strings[$matches['str']];
-              } else {
-                  //throw new Exception($matches['str'] . ' - unavailable string: ' . $matches[0]);
-                  return $matches[0];
-              }
-          },
-          $line);
-
+        $line = Roff_Register::substitute($line, $this->registers);
         $line = $this->applyStringReplacement($line);
-
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
         }

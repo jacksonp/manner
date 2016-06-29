@@ -46,4 +46,23 @@ class Roff_String
 
     }
 
+    static function substitute(string $string, array &$replacements) :string
+    {
+
+        // Want to match any of: \*. \(.. \*(.. \[....] \*[....]
+        return Replace::pregCallback(
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*(?<str>.))~u',
+          function ($matches) use (&$replacements) {
+              if (isset($replacements[$matches['str']])) {
+                  return $matches['bspairs'] . $replacements[$matches['str']];
+              } else {
+                  //throw new Exception($matches['str'] . ' - unavailable string: ' . $matches[0]);
+                  return $matches[0];
+              }
+          },
+          $string);
+
+
+    }
+
 }
