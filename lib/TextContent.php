@@ -195,40 +195,36 @@ class TextContent
             $string = ' ' . $string;
         }
 
+        // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $backslashEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
-          'e' => '\\',
+          'e'  => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
-          '|' => '',
+          '|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
-          '^' => '',
+          '^'  => '',
             // Default optional hyphenation character. Just remove for now.
-          '%' => '',
+          '%'  => '',
             // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
-          ':' => '',
+          ':'  => '',
             // Digit-width space.
-          '0' => ' ',
-        ];
-
-        $string = Replace::pregCallback(
-          '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\([^\\\\])~u',
-          function ($matches) use (&$backslashEscapes) {
-              if (isset($backslashEscapes[$matches[2]])) {
-                  return $matches['bspairs'] . $backslashEscapes[$matches[2]];
-              } else {
-                  return $matches[0];
-              }
-          },
-          $string);
-
-        $lastMinuteStringSubs = [
+          '0'  => ' ',
+            // Last minute string subs:
           'rs' => '\\',
           'dq' => '"',
           'aq' => '\'',
         ];
 
-        $string = Roff_String::substitute($string, $lastMinuteStringSubs);
-
+        $string = Replace::pregCallback(
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*?(?<str>[^\\\\]))~u',
+          function ($matches) use (&$backslashEscapes) {
+              if (isset($backslashEscapes[$matches['str']])) {
+                  return $matches['bspairs'] . $backslashEscapes[$matches['str']];
+              } else {
+                  return $matches[0];
+              }
+          },
+          $string);
 
         // Prettier double quotes:
         $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);
