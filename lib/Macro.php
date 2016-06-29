@@ -32,15 +32,15 @@ ROFF;
 ROFF;
 
         $known['a'] = <<<'ROFF'
-\\k:\h'-(\\n(.wu+\w'\(de'u-\*(#H)/2u'\v'-.3n'\f1\z\(de\v'.3n'\h'|\\n:u'\fP
+\\k:\h'-(\\n(.wu+\w'°'u-\*(#H)/2u'\v'-.3n'\f1\z°\v'.3n'\h'|\\n:u'\fP
 ROFF;
 
         $known['ð'] = <<<'ROFF'
-\h'\*(#H'\(pd\h'-\w'~'u'\v'-.25m'\f2\(hy\fP\v'.25m'\h'-\*(#H'
+\h'\*(#H'∂\h'-\w'~'u'\v'-.25m'\f2‐\fP\v'.25m'\h'-\*(#H'
 ROFF;
 
         $known['Ð'] = <<<'ROFF'
-D\\k:\h'-\w'D'u'\v'-.11m'\z\(hy\v'.11m'\h'|\\n:u'
+D\\k:\h'-\w'D'u'\v'-.11m'\z‐\v'.11m'\h'|\\n:u'
 ROFF;
 
         $known['Æ'] = <<<'ROFF'
