@@ -195,14 +195,6 @@ class TextContent
             $string = ' ' . $string;
         }
 
-        $lastMinuteStringSubs = [
-          'rs' => '\\',
-          'dq' => '"',
-          'aq' => '\'',
-        ];
-
-        $string = Roff_String::substitute($string, $lastMinuteStringSubs);
-
         $backslashEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           'e' => '\\',
@@ -228,6 +220,14 @@ class TextContent
               }
           },
           $string);
+
+        $lastMinuteStringSubs = [
+          'rs' => '\\',
+          'dq' => '"',
+          'aq' => '\'',
+        ];
+
+        $string = Roff_String::substitute($string, $lastMinuteStringSubs);
 
 
         // Prettier double quotes:
