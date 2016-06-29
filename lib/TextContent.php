@@ -195,6 +195,14 @@ class TextContent
             $string = ' ' . $string;
         }
 
+        $lastMinuteStringSubs = [
+          'rs' => '\\',
+          'dq' => '"',
+          'aq' => '\'',
+        ];
+
+        $string = Roff_String::substitute($string, $lastMinuteStringSubs);
+
         $replacements = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           '\\e' => '\\',
@@ -209,12 +217,8 @@ class TextContent
             // Digit-width space.
           '\\0' => ' ',
         ];
+        $string       = strtr($string, $replacements);
 
-        Macro::addStringDefToReplacementArray('rs', '\\', $replacements);
-        Macro::addStringDefToReplacementArray('dq', '"', $replacements);
-        Macro::addStringDefToReplacementArray('aq', '\'', $replacements);
-
-        $string = strtr($string, $replacements);
 
         // Prettier double quotes:
         $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);

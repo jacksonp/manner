@@ -18,21 +18,6 @@ class Macro
         }
     }
 
-    static function addStringDefToReplacementArray(string $string, string $val, array &$replacements)
-    {
-
-        if (mb_strlen($string) === 1) {
-            $replacements['\*' . $string] = $val;
-        }
-        if (mb_strlen($string) === 2) {
-            $replacements['\\(' . $string]  = $val;
-            $replacements['\\*(' . $string] = $val;
-        }
-        $replacements['\\[' . $string . ']']  = $val;
-        $replacements['\\*[' . $string . ']'] = $val;
-
-    }
-
     static function simplifyRequest(string $string)
     {
 
