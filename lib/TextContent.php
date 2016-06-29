@@ -203,21 +203,31 @@ class TextContent
 
         $string = Roff_String::substitute($string, $lastMinuteStringSubs);
 
-        $replacements = [
+        $backslashEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
-          '\\e' => '\\',
+          'e' => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
-          '\\|' => '',
+          '|' => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
-          '\\^' => '',
+          '^' => '',
             // Default optional hyphenation character. Just remove for now.
-          '\\%' => '',
+          '%' => '',
             // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
-          '\\:' => '',
+          ':' => '',
             // Digit-width space.
-          '\\0' => ' ',
+          '0' => ' ',
         ];
-        $string       = strtr($string, $replacements);
+
+        $string = Replace::pregCallback(
+          '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\([^\\\\])~u',
+          function ($matches) use (&$backslashEscapes) {
+              if (isset($backslashEscapes[$matches[2]])) {
+                  return $matches['bspairs'] . $backslashEscapes[$matches[2]];
+              } else {
+                  return $matches[0];
+              }
+          },
+          $string);
 
 
         // Prettier double quotes:
