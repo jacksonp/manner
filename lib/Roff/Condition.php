@@ -41,8 +41,8 @@ class Roff_Condition
 
         if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             $useIf = self::test($matches[1]);
-            $if        = self::ifBlock($lines, $i, $matches[2], $useIf);
-            $i         = $if['i'] + 1;
+            $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
+            $i     = $if['i'] + 1;
 
             $line = $lines[$i];
 
@@ -84,12 +84,16 @@ class Roff_Condition
             return !self::test(mb_substr($condition, 1));
         }
 
-        if (preg_match('~^\'([\w\.]*)\'([\w\.]*)\'$~u', $condition, $matches)) {
+        if (preg_match('~^\'([-\/\w\.\\\\]*)\'([-\/\w\.\\\\]*)\'$~u', $condition, $matches)) {
             return $matches[1] === $matches[2];
         }
 
-        if (preg_match('~^m\w+$~u', $condition)) {
+        if (preg_match('~^m\s*\w+$~u', $condition)) {
             return false; // No colours for now.
+        }
+
+        if (preg_match('~^[-\+\*/\d\(\)><=]+$~u', $condition)) {
+            return eval('return ' . $condition . ';');
         }
 
         // This doesn't work - first and last might not be a pair
@@ -177,7 +181,10 @@ class Roff_Condition
             } elseif ($line !== '') {
                 $replacementLines[] = Macro::massageLine($line);
             }
-            $line = $lines[++$ifIndex];
+            ++$ifIndex;
+            if ($ifIndex < $numLines) {
+                $line = $lines[$ifIndex];
+            }
         }
 
         if (!$foundEnd) {

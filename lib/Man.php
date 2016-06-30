@@ -46,7 +46,10 @@ class Man
         $this->macros    = [];
         $this->registers = [
           '.g' => '1',
-          'Pb' => '0', // Used by openpbs to specify -ms formatting
+            // Used by openpbs to specify -ms formatting (could remove and use 0 as fallback for undefined registers maybe):
+          'Pb' => '0',
+          'x'  => '0', // horizontal position?
+          '.l' => '70' // current line length
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
