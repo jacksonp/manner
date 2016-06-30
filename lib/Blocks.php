@@ -25,15 +25,28 @@ class Blocks
     static function canSkip(string $line)
     {
         // Ignore:
-        // stray .RE and .EE macros,
-        // .ad macros that haven't been trimmed as in middle of $lines
-        // empty .BR macros
-        // .R: man page trying to set font to Regular? (not an actual macro, not needed)
-        // .RH, .sp,, .sp2, .br., .Sh, .Sp, .TH: man page bugs
-        // .pp: spurious, in *_selinux.8 pages
+        // stray .RE macros,
+        // .ad macros that haven't been trimmed as in middle of $lines...
         return
           preg_match('~^\.(RE|fi|ad|Sh)~u', $line) or
-          in_array($line, ['.EE', '.BR', '.R', '.sp,', '.sp2', '.br.', '.pp', '.RH', '.Sp', '.TH', '.TC', '.TR']);
+          in_array($line, [
+            '.',    // empty request
+            '\'',   // empty request
+            '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
+            '.EE',  // strays
+            '.BR',  // empty
+            '.R',   // man page trying to set font to Regular? (not an actual macro, not needed)
+              // .man page bugs:
+            '.sp,',
+            '.sp2',
+            '.br.',
+            '.pp', // spurious, in *_selinux.8 pages
+            '.RH',
+            '.Sp',
+            '.TH',
+            '.TC',
+            '.TR',
+          ]);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
@@ -51,7 +64,23 @@ class Blocks
 
             $line = $lines[$i];
 
-            $blockClasses = ['SH', 'SS', 'SY', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'Vb', 'ce', 'nf', 'TS', 'TabTable', 'Text'];
+            $blockClasses = [
+              'SH',
+              'SS',
+              'SY',
+              'P',
+              'IP',
+              'TP',
+              'ti',
+              'RS',
+              'EX',
+              'Vb',
+              'ce',
+              'nf',
+              'TS',
+              'TabTable',
+              'Text',
+            ];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
@@ -93,23 +122,6 @@ class Blocks
                     continue 2;
                 }
             }
-
-            if (in_array($line, ['', '.', '\''])) {
-                continue;
-            }
-
-            if (in_array($line, ['.ns'])) {
-                // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
-                continue;
-            }
-
-            // FAIL on unknown command
-            if (mb_strlen($line) > 0 and in_array(mb_substr($line, 0, 1), ['.', '\''])) {
-                throw new Exception($line . ' unexpected command in Blocks::handle().');
-            }
-
-//            TextContent::interpretAndAppendText($parentForLine, $line,
-//              !in_array($parentForLine->tagName, ['h2', 'h3']));
 
             throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
 
