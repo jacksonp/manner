@@ -79,31 +79,32 @@ class Text
 
             $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
-            // TODO: only do the following if first character is . or ' ?
-            $bits = Macro::parseArgString($lines[$i]);
-            if (count($bits) > 0) {
-                $macro  = array_shift($bits);
-                $macros = $man->getMacros();
-                if (isset($macros[$macro])) {
-                    $man->addRegister('.$', count($bits));
-                    $macroLines = Text::applyRoffClasses($macros[$macro]);
-                    foreach ($macroLines as $macroLine) {
+            if (mb_substr($lines[$i], 0, 1) === '.') {
+                $bits = Macro::parseArgString($lines[$i]);
+                if (count($bits) > 0) {
+                    $macro  = array_shift($bits);
+                    $macros = $man->getMacros();
+                    if (isset($macros[$macro])) {
+                        $man->addRegister('.$', count($bits));
+                        $macroLines = Text::applyRoffClasses($macros[$macro]);
+                        foreach ($macroLines as $macroLine) {
 
-                        for ($n = 0; $n < 10; ++$n) {
-                            $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
+                            for ($n = 0; $n < 10; ++$n) {
+                                $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
+                            }
+
+                            // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
+                            $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
+
+                            // Other \$ things are also arguments...
+                            if (mb_strpos($macroLine, '\\$') !== false) {
+                                throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
+                            }
+
+                            $linesNoCond[] = $macroLine;
                         }
-
-                        // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                        $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
-
-                        // Other \$ things are also arguments...
-                        if (mb_strpos($macroLine, '\\$') !== false) {
-                            throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
-                        }
-
-                        $linesNoCond[] = $macroLine;
+                        continue;
                     }
-                    continue;
                 }
             }
 
