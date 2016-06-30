@@ -125,31 +125,29 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       <p>This instructs the Mono runtime to start a debugging agent inside the Mono runtime and connect it to a client user interface will control the Mono process. This option is typically used by IDEs, like the MonoDevelop IDE.
   </dl>
   <p>The configuration is specified using one of more of the following options:
-  <div class="indent">
-    <dl>
-      <dt><em>address=host:port</em>
-      <dd>
-        <p>Use this option to specify the IP address where your debugger client is listening to.
-      <dt><em>loglevel=LEVEL</em>
-      <dd>
-        <p>Specifies the diagnostics log level for
-      <dt><em>logfile=filename</em>
-      <dd>
-        <p>Used to specify the file where the log will be stored, it defaults to standard output.
-      <dt><em>server=[y/n]</em>
-      <dd>
-        <p>Defaults to no, with the default option Mono will actively connect to the host/port configured with the <strong>address</strong> option. If you set it to 'y', it instructs the Mono runtime to start debugging in server mode, where Mono actively waits for the debugger front end to connect to the Mono process. Mono will print out to stdout the IP address and port where it is listening.
-      <dt><em>setpgid=[y/n]</em>
-      <dd>
-        <p>If set to yes, Mono will call <strong>setpgid(0, 0) on startup, if that function is available on the system. This is useful for ensuring that signals delivered to a process that is executing the debuggee are not propagated to the debuggee, e.g. when Ctrl-C sends SIGINT to the sdb tool.</strong>
-      <dt><em>suspend=[y/n]</em>
-      <dd>
-        <p>Defaults to yes, with the default option Mono will suspend the vm on startup until it connects successfully to a debugger front end. If you set it to 'n', in conjunction with <strong>server=y</strong>, it instructs the Mono runtime to run as normal, while caching metadata to send to the debugger front end on connection..
-      <dt><em>transport=transport_name</em>
-      <dd>
-        <p>This is used to specify the transport that the debugger will use to communicate. It must be specified and currently requires this to be 'dt_socket'.
-    </dl>
-  </div>
+  <dl>
+    <dt><em>address=host:port</em>
+    <dd>
+      <p>Use this option to specify the IP address where your debugger client is listening to.
+    <dt><em>loglevel=LEVEL</em>
+    <dd>
+      <p>Specifies the diagnostics log level for
+    <dt><em>logfile=filename</em>
+    <dd>
+      <p>Used to specify the file where the log will be stored, it defaults to standard output.
+    <dt><em>server=[y/n]</em>
+    <dd>
+      <p>Defaults to no, with the default option Mono will actively connect to the host/port configured with the <strong>address</strong> option. If you set it to 'y', it instructs the Mono runtime to start debugging in server mode, where Mono actively waits for the debugger front end to connect to the Mono process. Mono will print out to stdout the IP address and port where it is listening.
+    <dt><em>setpgid=[y/n]</em>
+    <dd>
+      <p>If set to yes, Mono will call <strong>setpgid(0, 0) on startup, if that function is available on the system. This is useful for ensuring that signals delivered to a process that is executing the debuggee are not propagated to the debuggee, e.g. when Ctrl-C sends SIGINT to the sdb tool.</strong>
+    <dt><em>suspend=[y/n]</em>
+    <dd>
+      <p>Defaults to yes, with the default option Mono will suspend the vm on startup until it connects successfully to a debugger front end. If you set it to 'n', in conjunction with <strong>server=y</strong>, it instructs the Mono runtime to run as normal, while caching metadata to send to the debugger front end on connection..
+    <dt><em>transport=transport_name</em>
+    <dd>
+      <p>This is used to specify the transport that the debugger will use to communicate. It must be specified and currently requires this to be 'dt_socket'.
+  </dl>
   <dl>
     <dt><strong>--desktop</strong>
     <dd>
@@ -278,7 +276,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. The words `program', `all' and `disabled' have special meaning. `program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>      mono --trace=System app.exe</pre>
+      <pre>   mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. For example, to trace all calls to the System.String class, use:
       <pre>        mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -529,140 +527,136 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_GC_PARAMS</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this variable controls several parameters of the collector. The variable's value is a comma separated list of words.
-      <div class="indent">
-        <dl>
-          <dt><strong>max-heap-size=</strong><em>size</em>
-          <dd>
-            <p>Sets the maximum size of the heap. The size is specified in bytes and must be a power of two. The suffixes `k', `m' and `g' can be used to specify kilo-, mega- and gigabytes, respectively. The limit is the sum of the nursery, major heap and large object heap. Once the limit is reached the application will receive OutOfMemoryExceptions when trying to allocate. Not the full extent of memory set in max-heap-size could be available to satisfy a single allocation due to internal fragmentation. By default heap limits is disabled and the GC will try to use all available memory.
-          <dt><strong>nursery-size=</strong><em>size</em>
-          <dd>
-            <p>Sets the size of the nursery. The size is specified in bytes and must be a power of two. The suffixes `k', `m' and `g' can be used to specify kilo-, mega- and gigabytes, respectively. The nursery is the first generation (of two). A larger nursery will usually speed up the program but will obviously use more memory. The default nursery size 4 MB.
-          <dt><strong>major=</strong><em>collector</em> Specifies which major collector to use.
-          <dd>
-            <p>Options are `marksweep' for the Mark&amp;Sweep collector, and `marksweep-conc' for concurrent Mark&amp;Sweep. The non-concurrent Mark&amp;Sweep collector is the default.
-          <dt><strong>soft-heap-limit=</strong><em>size</em>
-          <dd>
-            <p>Once the heap size gets larger than this size, ignore what the default major collection trigger metric says and only allow four nursery size's of major heap growth between major collections.
-          <dt><strong>evacuation-threshold=</strong><em>threshold</em>
-          <dd>
-            <p>Sets the evacuation threshold in percent. This option is only available on the Mark&amp;Sweep major collectors. The value must be an integer in the range 0 to 100. The default is 66. If the sweep phase of the collection finds that the occupancy of a specific heap block type is less than this percentage, it will do a copying collection for that block type in the next major collection, thereby restoring occupancy to close to 100 percent. A value of 0 turns evacuation off.
-          <dt><strong>(no-)lazy-sweep</strong>
-          <dd>
-            <p>Enables or disables lazy sweep for the Mark&amp;Sweep collector. If enabled, the sweeping of individual major heap blocks is done piecemeal whenever the need arises, typically during nursery collections. Lazy sweeping is enabled by default.
-          <dt><strong>(no-)concurrent-sweep</strong>
-          <dd>
-            <p>Enables or disables concurrent sweep for the Mark&amp;Sweep collector. If enabled, the iteration of all major blocks to determine which ones can be freed and which ones have to be kept and swept, is done concurrently with the running program. Concurrent sweeping is enabled by default.
-          <dt><strong>stack-mark=</strong><em>mark-mode</em>
-          <dd>
-            <p>Specifies how application threads should be scanned. Options are `precise` and `conservative`. Precise marking allow the collector to know what values on stack are references and what are not. Conservative marking threats all values as potentially references and leave them untouched. Precise marking reduces floating garbage and can speed up nursery collection and allocation rate, it has the downside of requiring a significant extra memory per compiled method. The right option, unfortunately, requires experimentation.
-          <dt><strong>save-target-ratio=</strong><em>ratio</em>
-          <dd>
-            <p>Specifies the target save ratio for the major collector. The collector lets a given amount of memory to be promoted from the nursery due to minor collections before it triggers a major collection. This amount is based on how much memory it expects to free. It is represented as a ratio of the size of the heap after a major collection. Valid values are between 0.1 and 2.0. The default is 0.5. Smaller values will keep the major heap size smaller but will trigger more major collections. Likewise, bigger values will use more memory and result in less frequent major collections. This option is EXPERIMENTAL, so it might disappear in later versions of mono.
-          <dt><strong>default-allowance-ratio=</strong><em>ratio</em>
-          <dd>
-            <p>Specifies the default allocation allowance when the calculated size is too small. The allocation allowance is how much memory the collector let be promoted before triggered a major collection. It is a ratio of the nursery size. Valid values are between 1.0 and 10.0. The default is 4.0. Smaller values lead to smaller heaps and more frequent major collections. Likewise, bigger values will allow the heap to grow faster but use more memory when it reaches a stable size. This option is EXPERIMENTAL, so it might disappear in later versions of mono.
-          <dt><strong>minor=</strong><em>minor-collector</em>
-          <dd>
-            <p>Specifies which minor collector to use. Options are 'simple' which promotes all objects from the nursery directly to the old generation and 'split' which lets object stay longer on the nursery before promoting.
-          <dt><strong>alloc-ratio=</strong><em>ratio</em>
-          <dd>
-            <p>Specifies the ratio of memory from the nursery to be use by the alloc space. This only can only be used with the split minor collector. Valid values are integers between 1 and 100. Default is 60.
-          <dt><strong>promotion-age=</strong><em>age</em>
-          <dd>
-            <p>Specifies the required age of an object must reach inside the nursery before been promoted to the old generation. This only can only be used with the split minor collector. Valid values are integers between 1 and 14. Default is 2.
-          <dt><strong>(no-)cementing</strong>
-          <dd>
-            <p>Enables or disables cementing. This can dramatically shorten nursery collection times on some benchmarks where pinned objects are referred to from the major heap.
-          <dt><strong>allow-synchronous-major</strong>
-          <dd>
-            <p>This forbids the major collector from performing synchronous major collections. The major collector might want to do a synchronous collection due to excessive fragmentation. Disabling this might trigger OutOfMemory error in situations that would otherwise not happen.
-        </dl>
-      </div>
+      <dl>
+        <dt><strong>max-heap-size=</strong><em>size</em>
+        <dd>
+          <p>Sets the maximum size of the heap. The size is specified in bytes and must be a power of two. The suffixes `k', `m' and `g' can be used to specify kilo-, mega- and gigabytes, respectively. The limit is the sum of the nursery, major heap and large object heap. Once the limit is reached the application will receive OutOfMemoryExceptions when trying to allocate. Not the full extent of memory set in max-heap-size could be available to satisfy a single allocation due to internal fragmentation. By default heap limits is disabled and the GC will try to use all available memory.
+        <dt><strong>nursery-size=</strong><em>size</em>
+        <dd>
+          <p>Sets the size of the nursery. The size is specified in bytes and must be a power of two. The suffixes `k', `m' and `g' can be used to specify kilo-, mega- and gigabytes, respectively. The nursery is the first generation (of two). A larger nursery will usually speed up the program but will obviously use more memory. The default nursery size 4 MB.
+        <dt><strong>major=</strong><em>collector</em> Specifies which major collector to use.
+        <dd>
+          <p>Options are `marksweep' for the Mark&amp;Sweep collector, and `marksweep-conc' for concurrent Mark&amp;Sweep. The non-concurrent Mark&amp;Sweep collector is the default.
+        <dt><strong>soft-heap-limit=</strong><em>size</em>
+        <dd>
+          <p>Once the heap size gets larger than this size, ignore what the default major collection trigger metric says and only allow four nursery size's of major heap growth between major collections.
+        <dt><strong>evacuation-threshold=</strong><em>threshold</em>
+        <dd>
+          <p>Sets the evacuation threshold in percent. This option is only available on the Mark&amp;Sweep major collectors. The value must be an integer in the range 0 to 100. The default is 66. If the sweep phase of the collection finds that the occupancy of a specific heap block type is less than this percentage, it will do a copying collection for that block type in the next major collection, thereby restoring occupancy to close to 100 percent. A value of 0 turns evacuation off.
+        <dt><strong>(no-)lazy-sweep</strong>
+        <dd>
+          <p>Enables or disables lazy sweep for the Mark&amp;Sweep collector. If enabled, the sweeping of individual major heap blocks is done piecemeal whenever the need arises, typically during nursery collections. Lazy sweeping is enabled by default.
+        <dt><strong>(no-)concurrent-sweep</strong>
+        <dd>
+          <p>Enables or disables concurrent sweep for the Mark&amp;Sweep collector. If enabled, the iteration of all major blocks to determine which ones can be freed and which ones have to be kept and swept, is done concurrently with the running program. Concurrent sweeping is enabled by default.
+        <dt><strong>stack-mark=</strong><em>mark-mode</em>
+        <dd>
+          <p>Specifies how application threads should be scanned. Options are `precise` and `conservative`. Precise marking allow the collector to know what values on stack are references and what are not. Conservative marking threats all values as potentially references and leave them untouched. Precise marking reduces floating garbage and can speed up nursery collection and allocation rate, it has the downside of requiring a significant extra memory per compiled method. The right option, unfortunately, requires experimentation.
+        <dt><strong>save-target-ratio=</strong><em>ratio</em>
+        <dd>
+          <p>Specifies the target save ratio for the major collector. The collector lets a given amount of memory to be promoted from the nursery due to minor collections before it triggers a major collection. This amount is based on how much memory it expects to free. It is represented as a ratio of the size of the heap after a major collection. Valid values are between 0.1 and 2.0. The default is 0.5. Smaller values will keep the major heap size smaller but will trigger more major collections. Likewise, bigger values will use more memory and result in less frequent major collections. This option is EXPERIMENTAL, so it might disappear in later versions of mono.
+        <dt><strong>default-allowance-ratio=</strong><em>ratio</em>
+        <dd>
+          <p>Specifies the default allocation allowance when the calculated size is too small. The allocation allowance is how much memory the collector let be promoted before triggered a major collection. It is a ratio of the nursery size. Valid values are between 1.0 and 10.0. The default is 4.0. Smaller values lead to smaller heaps and more frequent major collections. Likewise, bigger values will allow the heap to grow faster but use more memory when it reaches a stable size. This option is EXPERIMENTAL, so it might disappear in later versions of mono.
+        <dt><strong>minor=</strong><em>minor-collector</em>
+        <dd>
+          <p>Specifies which minor collector to use. Options are 'simple' which promotes all objects from the nursery directly to the old generation and 'split' which lets object stay longer on the nursery before promoting.
+        <dt><strong>alloc-ratio=</strong><em>ratio</em>
+        <dd>
+          <p>Specifies the ratio of memory from the nursery to be use by the alloc space. This only can only be used with the split minor collector. Valid values are integers between 1 and 100. Default is 60.
+        <dt><strong>promotion-age=</strong><em>age</em>
+        <dd>
+          <p>Specifies the required age of an object must reach inside the nursery before been promoted to the old generation. This only can only be used with the split minor collector. Valid values are integers between 1 and 14. Default is 2.
+        <dt><strong>(no-)cementing</strong>
+        <dd>
+          <p>Enables or disables cementing. This can dramatically shorten nursery collection times on some benchmarks where pinned objects are referred to from the major heap.
+        <dt><strong>allow-synchronous-major</strong>
+        <dd>
+          <p>This forbids the major collector from performing synchronous major collections. The major collector might want to do a synchronous collection due to excessive fragmentation. Disabling this might trigger OutOfMemory error in situations that would otherwise not happen.
+      </dl>
     <dt><strong>MONO_GC_DEBUG</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this environment variable can be used to turn on various debugging features of the collector. The value of this variable is a comma separated list of words. Do not use these options in production.
-      <div class="indent">
-        <dl>
-          <dt><em>number</em>
-          <dd>
-            <p>Sets the debug level to the specified number.
-          <dt><strong>print-allowance</strong>
-          <dd>
-            <p>After each major collection prints memory consumption for before and after the collection and the allowance for the minor collector, i.e. how much the heap is allowed to grow from minor collections before the next major collection is triggered.
-          <dt><strong>print-pinning</strong>
-          <dd>
-            <p>Gathers statistics on the classes whose objects are pinned in the nursery and for which global remset entries are added. Prints those statistics when shutting down.
-          <dt><strong>collect-before-allocs</strong>
-          <dt><strong>check-at-minor-collections</strong>
-          <dd>
-            <p>This performs a consistency check on minor collections and also clears the nursery at collection time, instead of the default, when buffers are allocated (clear-at-gc). The consistency check ensures that there are no major to minor references that are not on the remembered sets.
-          <dt><strong>mod-union-consistency-check</strong>
-          <dd>
-            <p>Checks that the mod-union cardtable is consistent before each finishing major collection pause. This check is only applicable to concurrent major collectors.
-          <dt><strong>check-mark-bits</strong>
-          <dd>
-            <p>Checks that mark bits in the major heap are consistent at the end of each major collection. Consistent mark bits mean that if an object is marked, all objects that it had references to must also be marked.
-          <dt><strong>check-nursery-pinned</strong>
-          <dd>
-            <p>After nursery collections, and before starting concurrent collections, check whether all nursery objects are pinned, or not pinned - depending on context. Does nothing when the split nursery collector is used.
-          <dt><strong>xdomain-checks</strong>
-          <dd>
-            <p>Performs a check to make sure that no references are left to an unloaded AppDomain.
-          <dt><strong>clear-at-tlab-creation</strong>
-          <dd>
-            <p>Clears the nursery incrementally when the thread local allocation buffers (TLAB) are created. The default setting clears the whole nursery at GC time.
-          <dt><strong>debug-clear-at-tlab-creation</strong>
-          <dd>
-            <p>Clears the nursery incrementally when the thread local allocation buffers (TLAB) are created, but at GC time fills it with the byte `0xff`, which should result in a crash more quickly if `clear-at-tlab-creation` doesn't work properly.
-          <dt><strong>clear-at-gc</strong>
-          <dd>
-            <p>This clears the nursery at GC time instead of doing it when the thread local allocation buffer (TLAB) is created. The default is to clear the nursery at TLAB creation time.
-          <dt><strong>disable-minor</strong>
-          <dd>
-            <p>Don't do minor collections. If the nursery is full, a major collection is triggered instead, unless it, too, is disabled.
-          <dt><strong>disable-major</strong>
-          <dd>
-            <p>Don't do major collections.
-          <dt><strong>conservative-stack-mark</strong>
-          <dd>
-            <p>Forces the GC to scan the stack conservatively, even if precise scanning is available.
-          <dt><strong>no-managed-allocator</strong>
-          <dd>
-            <p>Disables the managed allocator.
-          <dt><strong>check-scan-starts</strong>
-          <dd>
-            <p>If set, does a plausibility check on the scan_starts before and after each collection
-          <dt><strong>verify-nursery-at-minor-gc</strong>
-          <dd>
-            <p>If set, does a complete object walk of the nursery at the start of each minor collection.
-          <dt><strong>dump-nursery-at-minor-gc</strong>
-          <dd>
-            <p>If set, dumps the contents of the nursery at the start of each minor collection. Requires verify-nursery-at-minor-gc to be set.
-          <dt><strong>heap-dump=</strong><em>file</em>
-          <dd>
-            <p>Dumps the heap contents to the specified file. To visualize the information, use the mono-heapviz tool.
-          <dt><strong>binary-protocol=</strong><em>file</em>
-          <dd>
-            <p>Outputs the debugging output to the specified file. For this to work, Mono needs to be compiled with the BINARY_PROTOCOL define on sgen-gc.c. You can then use this command to explore the output
-            <pre>                sgen-grep-binprot 0x1234 0x5678 &lt; file</pre>
-          <dt><strong>nursery-canaries</strong>
-          <dd>
-            <p>If set, objects allocated in the nursery are suffixed with a canary (guard) word, which is checked on each minor collection. Can be used to detect/debug heap corruption issues.
-          <dt><strong>do-not-finalize(=</strong><em>classes</em><strong>)</strong>
-          <dd>
-            <p>If enabled, finalizers will not be run. Everything else will be unaffected: finalizable objects will still be put into the finalization queue where they survive until they're scheduled to finalize. Once they're not in the queue anymore they will be collected regularly. If a list of comma-separated class names is given, only objects from those classes will not be finalized.
-          <dt><strong>log-finalizers</strong>
-          <dd>
-            <p>Log verbosely around the finalization process to aid debugging.
-        </dl>
-      </div>
+      <dl>
+        <dt><em>number</em>
+        <dd>
+          <p>Sets the debug level to the specified number.
+        <dt><strong>print-allowance</strong>
+        <dd>
+          <p>After each major collection prints memory consumption for before and after the collection and the allowance for the minor collector, i.e. how much the heap is allowed to grow from minor collections before the next major collection is triggered.
+        <dt><strong>print-pinning</strong>
+        <dd>
+          <p>Gathers statistics on the classes whose objects are pinned in the nursery and for which global remset entries are added. Prints those statistics when shutting down.
+        <dt><strong>collect-before-allocs</strong>
+        <dt><strong>check-at-minor-collections</strong>
+        <dd>
+          <p>This performs a consistency check on minor collections and also clears the nursery at collection time, instead of the default, when buffers are allocated (clear-at-gc). The consistency check ensures that there are no major to minor references that are not on the remembered sets.
+        <dt><strong>mod-union-consistency-check</strong>
+        <dd>
+          <p>Checks that the mod-union cardtable is consistent before each finishing major collection pause. This check is only applicable to concurrent major collectors.
+        <dt><strong>check-mark-bits</strong>
+        <dd>
+          <p>Checks that mark bits in the major heap are consistent at the end of each major collection. Consistent mark bits mean that if an object is marked, all objects that it had references to must also be marked.
+        <dt><strong>check-nursery-pinned</strong>
+        <dd>
+          <p>After nursery collections, and before starting concurrent collections, check whether all nursery objects are pinned, or not pinned - depending on context. Does nothing when the split nursery collector is used.
+        <dt><strong>xdomain-checks</strong>
+        <dd>
+          <p>Performs a check to make sure that no references are left to an unloaded AppDomain.
+        <dt><strong>clear-at-tlab-creation</strong>
+        <dd>
+          <p>Clears the nursery incrementally when the thread local allocation buffers (TLAB) are created. The default setting clears the whole nursery at GC time.
+        <dt><strong>debug-clear-at-tlab-creation</strong>
+        <dd>
+          <p>Clears the nursery incrementally when the thread local allocation buffers (TLAB) are created, but at GC time fills it with the byte `0xff`, which should result in a crash more quickly if `clear-at-tlab-creation` doesn't work properly.
+        <dt><strong>clear-at-gc</strong>
+        <dd>
+          <p>This clears the nursery at GC time instead of doing it when the thread local allocation buffer (TLAB) is created. The default is to clear the nursery at TLAB creation time.
+        <dt><strong>disable-minor</strong>
+        <dd>
+          <p>Don't do minor collections. If the nursery is full, a major collection is triggered instead, unless it, too, is disabled.
+        <dt><strong>disable-major</strong>
+        <dd>
+          <p>Don't do major collections.
+        <dt><strong>conservative-stack-mark</strong>
+        <dd>
+          <p>Forces the GC to scan the stack conservatively, even if precise scanning is available.
+        <dt><strong>no-managed-allocator</strong>
+        <dd>
+          <p>Disables the managed allocator.
+        <dt><strong>check-scan-starts</strong>
+        <dd>
+          <p>If set, does a plausibility check on the scan_starts before and after each collection
+        <dt><strong>verify-nursery-at-minor-gc</strong>
+        <dd>
+          <p>If set, does a complete object walk of the nursery at the start of each minor collection.
+        <dt><strong>dump-nursery-at-minor-gc</strong>
+        <dd>
+          <p>If set, dumps the contents of the nursery at the start of each minor collection. Requires verify-nursery-at-minor-gc to be set.
+        <dt><strong>heap-dump=</strong><em>file</em>
+        <dd>
+          <p>Dumps the heap contents to the specified file. To visualize the information, use the mono-heapviz tool.
+        <dt><strong>binary-protocol=</strong><em>file</em>
+        <dd>
+          <p>Outputs the debugging output to the specified file. For this to work, Mono needs to be compiled with the BINARY_PROTOCOL define on sgen-gc.c. You can then use this command to explore the output
+          <pre>                sgen-grep-binprot 0x1234 0x5678 &lt; file</pre>
+        <dt><strong>nursery-canaries</strong>
+        <dd>
+          <p>If set, objects allocated in the nursery are suffixed with a canary (guard) word, which is checked on each minor collection. Can be used to detect/debug heap corruption issues.
+        <dt><strong>do-not-finalize(=</strong><em>classes</em><strong>)</strong>
+        <dd>
+          <p>If enabled, finalizers will not be run. Everything else will be unaffected: finalizable objects will still be put into the finalization queue where they survive until they're scheduled to finalize. Once they're not in the queue anymore they will be collected regularly. If a list of comma-separated class names is given, only objects from those classes will not be finalized.
+        <dt><strong>log-finalizers</strong>
+        <dd>
+          <p>Log verbosely around the finalization process to aid debugging.
+      </dl>
     <dt><strong>MONO_GAC_PREFIX</strong>
     <dd>
       <p>Provides a prefix the runtime uses to look for Global Assembly Caches. Directories are separated by the platform path separator (colons on unix). MONO_GAC_PREFIX should point to the top directory of a prefixed install. Or to the directory provided in the gacutil /gacdir command. Example: <strong>/home/username/.mono:/usr/local/mono/</strong>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. Set to a colon-separated list of “drive” to strip drive letters, or “case” to do case-insensitive file matching in every directory in a path. “all” enables all rewriting methods. (Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre> MONO_IOMAP=drive:case
+      <pre>   MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
       <pre>    MonoIOMAP &lt;appalias&gt; all</pre>
@@ -727,85 +721,83 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_DEBUG</strong>
     <dd>
       <p>If set, enables some features of the runtime useful for debugging. This variable should contain a comma separated list of debugging options. Currently, the following options are supported:
-      <div class="indent">
-        <dl>
-          <dt><strong>align-small-structs</strong>
-          <dd>
-            <p>Enables small structs alignment to 4/8 bytes.
-          <dt><strong>arm-use-fallback-tls</strong>
-          <dd>
-            <p>When this option is set on ARM, a fallback TLS will be used instead of the default fast TLS.
-          <dt><strong>break-on-unverified</strong>
-          <dd>
-            <p>If this variable is set, when the Mono VM runs into a verification problem, instead of throwing an exception it will break into the debugger. This is useful when debugging verifier problems
-          <dt><strong>casts</strong>
-          <dd>
-            <p>This option can be used to get more detailed information from InvalidCast exceptions, it will provide information about the types involved.
-          <dt><strong>check-pinvoke-callconv</strong>
-          <dd>
-            <p>This option causes the runtime to check for calling convention mismatches when using pinvoke, i.e. mixing cdecl/stdcall. It only works on windows. If a mismatch is detected, an ExecutionEngineException is thrown.
-          <dt><strong>collect-pagefault-stats</strong>
-          <dd>
-            <p>Collects information about pagefaults. This is used internally to track the number of page faults produced to load metadata. To display this information you must use this option with “--stats” command line option.
-          <dt><strong>debug-domain-unload</strong>
-          <dd>
-            <p>When this option is set, the runtime will invalidate the domain memory pool instead of destroying it.
-          <dt><strong>disable_omit_fp</strong>
-          <dd>
-            <p>Disables a compiler optimization where the frame pointer is omitted from the stack. This optimization can interact badly with debuggers.
-          <dt><strong>dont-free-domains</strong>
-          <dd>
-            <p>This is an Optimization for multi-AppDomain applications (most commonly ASP.NET applications). Due to internal limitations Mono, Mono by default does not use typed allocations on multi-appDomain applications as they could leak memory when a domain is unloaded. Although this is a fine default, for applications that use more than on AppDomain heavily (for example, ASP.NET applications) it is worth trading off the small leaks for the increased performance (additionally, since ASP.NET applications are not likely going to unload the application domains on production systems, it is worth using this feature).
-          <dt><strong>dyn-runtime-invoke</strong>
-          <dd>
-            <p>Instructs the runtime to try to use a generic runtime-invoke wrapper instead of creating one invoke wrapper.
-          <dt><strong>explicit-null-checks</strong>
-          <dd>
-            <p>Makes the JIT generate an explicit NULL check on variable dereferences instead of depending on the operating system to raise a SIGSEGV or another form of trap event when an invalid memory location is accessed.
-          <dt><strong>gdb</strong>
-          <dd>
-            <p>Equivalent to setting the <strong>MONO_XDEBUG</strong> variable, this emits symbols into a shared library as the code is JITed that can be loaded into GDB to inspect symbols.
-          <dt><strong>gen-seq-points</strong>
-          <dd>
-            <p>Automatically generates sequence points where the IL stack is empty. These are places where the debugger can set a breakpoint.
-          <dt><strong>gen-compact-seq-points</strong>
-          <dd>
-            <p>This option generates sequence points data that maps native offsets to IL offsets. Sequence point data is used to display IL offset in stacktraces. Stacktraces with IL offsets can be symbolicated using mono-symbolicate tool.
-          <dt><strong>handle-sigint</strong>
-          <dd>
-            <p>Captures the interrupt signal (Control-C) and displays a stack trace when pressed. Useful to find out where the program is executing at a given point. This only displays the stack trace of a single thread.
-          <dt><strong>init-stacks\FR</strong>
-          <dd>
-            <p>Instructs the runtime to initialize the stack with some known values (0x2a on x86-64) at the start of a method to assist in debuggin the JIT engine.
-          <dt><strong>keep-delegates</strong>
-          <dd>
-            <p>This option will leak delegate trampolines that are no longer referenced as to present the user with more information about a delegate misuse. Basically a delegate instance might be created, passed to unmanaged code, and no references kept in managed code, which will garbage collect the code. With this option it is possible to track down the source of the problems.
-          <dt><strong>no-gdb-backtrace</strong>
-          <dd>
-            <p>This option will disable the GDB backtrace emitted by the runtime after a SIGSEGV or SIGABRT in unmanaged code.
-          <dt><strong>partial-sharing</strong>
-          <dd>
-            <p>When this option is set, the runtime can share generated code between generic types effectively reducing the amount of code generated.
-          <dt><strong>reverse-pinvoke-exceptions</strong>
-          <dd>
-            <p>This option will cause mono to abort with a descriptive message when during stack unwinding after an exception it reaches a native stack frame. This happens when a managed delegate is passed to native code, and the managed delegate throws an exception. Mono will normally try to unwind the stack to the first (managed) exception handler, and it will skip any native stack frames in the process. This leads to undefined behaviour (since mono doesn't know how to process native frames), leaks, and possibly crashes too.
-          <dt><strong>single-imm-size</strong>
-          <dd>
-            <p>This guarantees that each time managed code is compiled the same instructions and registers are used, regardless of the size of used values.
-          <dt><strong>soft-breakpoints</strong>
-          <dd>
-            <p>This option allows using single-steps and breakpoints in hardware where we cannot do it with signals.
-          <dt><strong>suspend-on-sigsegv</strong>
-          <dd>
-            <p>This option will suspend the program when a native SIGSEGV is received. This is useful for debugging crashes which do not happen under gdb, since a live process contains more information than a core file.
-          <dt><strong>suspend-on-exception</strong>
-          <dd>
-            <p>This option will suspend the program when an exception occurs.
-          <dt><strong>suspend-on-unhandled</strong>
-          <dd>
-            <p>This option will suspend the program when an unhandled exception occurs.
-        </dl>
-      </div>
+      <dl>
+        <dt><strong>align-small-structs</strong>
+        <dd>
+          <p>Enables small structs alignment to 4/8 bytes.
+        <dt><strong>arm-use-fallback-tls</strong>
+        <dd>
+          <p>When this option is set on ARM, a fallback TLS will be used instead of the default fast TLS.
+        <dt><strong>break-on-unverified</strong>
+        <dd>
+          <p>If this variable is set, when the Mono VM runs into a verification problem, instead of throwing an exception it will break into the debugger. This is useful when debugging verifier problems
+        <dt><strong>casts</strong>
+        <dd>
+          <p>This option can be used to get more detailed information from InvalidCast exceptions, it will provide information about the types involved.
+        <dt><strong>check-pinvoke-callconv</strong>
+        <dd>
+          <p>This option causes the runtime to check for calling convention mismatches when using pinvoke, i.e. mixing cdecl/stdcall. It only works on windows. If a mismatch is detected, an ExecutionEngineException is thrown.
+        <dt><strong>collect-pagefault-stats</strong>
+        <dd>
+          <p>Collects information about pagefaults. This is used internally to track the number of page faults produced to load metadata. To display this information you must use this option with “--stats” command line option.
+        <dt><strong>debug-domain-unload</strong>
+        <dd>
+          <p>When this option is set, the runtime will invalidate the domain memory pool instead of destroying it.
+        <dt><strong>disable_omit_fp</strong>
+        <dd>
+          <p>Disables a compiler optimization where the frame pointer is omitted from the stack. This optimization can interact badly with debuggers.
+        <dt><strong>dont-free-domains</strong>
+        <dd>
+          <p>This is an Optimization for multi-AppDomain applications (most commonly ASP.NET applications). Due to internal limitations Mono, Mono by default does not use typed allocations on multi-appDomain applications as they could leak memory when a domain is unloaded. Although this is a fine default, for applications that use more than on AppDomain heavily (for example, ASP.NET applications) it is worth trading off the small leaks for the increased performance (additionally, since ASP.NET applications are not likely going to unload the application domains on production systems, it is worth using this feature).
+        <dt><strong>dyn-runtime-invoke</strong>
+        <dd>
+          <p>Instructs the runtime to try to use a generic runtime-invoke wrapper instead of creating one invoke wrapper.
+        <dt><strong>explicit-null-checks</strong>
+        <dd>
+          <p>Makes the JIT generate an explicit NULL check on variable dereferences instead of depending on the operating system to raise a SIGSEGV or another form of trap event when an invalid memory location is accessed.
+        <dt><strong>gdb</strong>
+        <dd>
+          <p>Equivalent to setting the <strong>MONO_XDEBUG</strong> variable, this emits symbols into a shared library as the code is JITed that can be loaded into GDB to inspect symbols.
+        <dt><strong>gen-seq-points</strong>
+        <dd>
+          <p>Automatically generates sequence points where the IL stack is empty. These are places where the debugger can set a breakpoint.
+        <dt><strong>gen-compact-seq-points</strong>
+        <dd>
+          <p>This option generates sequence points data that maps native offsets to IL offsets. Sequence point data is used to display IL offset in stacktraces. Stacktraces with IL offsets can be symbolicated using mono-symbolicate tool.
+        <dt><strong>handle-sigint</strong>
+        <dd>
+          <p>Captures the interrupt signal (Control-C) and displays a stack trace when pressed. Useful to find out where the program is executing at a given point. This only displays the stack trace of a single thread.
+        <dt><strong>init-stacks\FR</strong>
+        <dd>
+          <p>Instructs the runtime to initialize the stack with some known values (0x2a on x86-64) at the start of a method to assist in debuggin the JIT engine.
+        <dt><strong>keep-delegates</strong>
+        <dd>
+          <p>This option will leak delegate trampolines that are no longer referenced as to present the user with more information about a delegate misuse. Basically a delegate instance might be created, passed to unmanaged code, and no references kept in managed code, which will garbage collect the code. With this option it is possible to track down the source of the problems.
+        <dt><strong>no-gdb-backtrace</strong>
+        <dd>
+          <p>This option will disable the GDB backtrace emitted by the runtime after a SIGSEGV or SIGABRT in unmanaged code.
+        <dt><strong>partial-sharing</strong>
+        <dd>
+          <p>When this option is set, the runtime can share generated code between generic types effectively reducing the amount of code generated.
+        <dt><strong>reverse-pinvoke-exceptions</strong>
+        <dd>
+          <p>This option will cause mono to abort with a descriptive message when during stack unwinding after an exception it reaches a native stack frame. This happens when a managed delegate is passed to native code, and the managed delegate throws an exception. Mono will normally try to unwind the stack to the first (managed) exception handler, and it will skip any native stack frames in the process. This leads to undefined behaviour (since mono doesn't know how to process native frames), leaks, and possibly crashes too.
+        <dt><strong>single-imm-size</strong>
+        <dd>
+          <p>This guarantees that each time managed code is compiled the same instructions and registers are used, regardless of the size of used values.
+        <dt><strong>soft-breakpoints</strong>
+        <dd>
+          <p>This option allows using single-steps and breakpoints in hardware where we cannot do it with signals.
+        <dt><strong>suspend-on-sigsegv</strong>
+        <dd>
+          <p>This option will suspend the program when a native SIGSEGV is received. This is useful for debugging crashes which do not happen under gdb, since a live process contains more information than a core file.
+        <dt><strong>suspend-on-exception</strong>
+        <dd>
+          <p>This option will suspend the program when an exception occurs.
+        <dt><strong>suspend-on-unhandled</strong>
+        <dd>
+          <p>This option will suspend the program when an unhandled exception occurs.
+      </dl>
     <dt><strong>MONO_LOG_LEVEL</strong>
     <dd>
       <p>The logging level, possible values are `error', `critical', `warning', `message', `info' and `debug'. See the DEBUGGING section for more details.
@@ -818,7 +810,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_TRACE</strong>
     <dd>
       <p>Used for runtime tracing of method calls. The format of the comma separated trace options is:
-      <pre>        [-]M:method name
+      <pre> [-]M:method name
         [-]N:namespace
         [-]T:class name
         [-]all

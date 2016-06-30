@@ -11,6 +11,7 @@ class Inline_AlternatingFont
             return false;
         }
 
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $arguments = Macro::parseArgString(@$matches[2]);
 
@@ -20,10 +21,10 @@ class Inline_AlternatingFont
 
         $command = $matches[1];
 
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
-        if ($parentNode->hasContent()) {
-            $parentNode->appendChild(new DOMText(' '));
+        if ($textParent->hasContent()) {
+            $textParent->appendChild(new DOMText(' '));
         }
 
         foreach ($arguments as $bi => $bit) {
@@ -32,30 +33,34 @@ class Inline_AlternatingFont
                 throw new Exception($lines[$i] . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
             }
             if (trim($bit) === '') {
-                TextContent::interpretAndAppendText($parentNode, $bit);
+                TextContent::interpretAndAppendText($textParent, $bit);
                 continue;
             }
             switch ($command[$commandCharIndex]) {
                 case 'R':
-                    TextContent::interpretAndAppendText($parentNode, $bit);
+                    TextContent::interpretAndAppendText($textParent, $bit);
                     break;
                 case 'B':
                     $strongNode = $dom->createElement('strong');
                     TextContent::interpretAndAppendText($strongNode, $bit);
                     if ($strongNode->hasContent()) {
-                        $parentNode->appendChild($strongNode);
+                        $textParent->appendChild($strongNode);
                     }
                     break;
                 case 'I':
                     $emNode = $dom->createElement('em');
                     TextContent::interpretAndAppendText($emNode, $bit);
                     if ($emNode->hasContent()) {
-                        $parentNode->appendChild($emNode);
+                        $textParent->appendChild($emNode);
                     }
                     break;
                 default:
                     throw new Exception($lines[$i] . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
             }
+        }
+
+        if ($shouldAppend) {
+            $parentNode->appendBlockIfHasContent($textParent);
         }
 
         return $i;

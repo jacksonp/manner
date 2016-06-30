@@ -59,7 +59,8 @@ class Block_RS
             Blocks::handle($rsBlock, $blockLines);
             if ($className === 'indent' and
               $rsBlock->childNodes->length === 1 and
-              $rsBlock->firstChild instanceof DOMElement
+              $rsBlock->firstChild instanceof DOMElement and
+              !in_array($rsBlock->firstChild->tagName, ['strong', 'em', 'small', 'a', 'code'])
             ) {
                 $parentNode->appendChild($rsBlock->firstChild);
             } else {

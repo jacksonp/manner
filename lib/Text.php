@@ -33,7 +33,8 @@ class Text
 
             // Skip full-line comments
             // See mscore.1 for full-line comments starting with '."
-            if (preg_match('~^([\'\.]?\\\\"|\'\."\')~u', $line, $matches)) {
+            // See cal3d_converter.1 for full-line comments starting with '''
+            if (preg_match('~^([\'\.]?\\\\"|\'\."\'|\'\'\')~u', $line, $matches)) {
                 continue;
             }
 

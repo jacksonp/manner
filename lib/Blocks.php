@@ -53,11 +53,12 @@ class Blocks
     {
 
         // Trim $lines
-        $trimVals = ['', '.ad', '.ad n', '.ad b'];
+        $trimVals = ['', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
         ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
 
-        $dom = $parentNode->ownerDocument;
+//        var_dump($parentNode->tagName);
+//        var_dump($lines);
 
         $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
@@ -95,28 +96,11 @@ class Blocks
                 continue;
             }
 
-            $parentNodeLastBlock = $parentNode->getLastBlock();
-
-            if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName, self::TEXT_CONTAINERS)) {
-                    $parentForLine = $parentNode;
-                } else {
-                    $parentForLine = $parentNode->appendChild($dom->createElement('p'));
-                }
-            } else {
-                if (in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])) {
-                    // Start a new paragraph after certain blocks
-                    $parentForLine = $parentNode->appendChild($dom->createElement('p'));
-                } else {
-                    $parentForLine = $parentNodeLastBlock;
-                }
-            }
-
             $inlineClasses = ['Link', 'FontOneInputLine', 'AlternatingFont', 'ft', 'VerticalSpace'];
 
             foreach ($inlineClasses as $inlineClass) {
                 $className = 'Inline_' . $inlineClass;
-                $newI      = $className::checkAppend($parentForLine, $lines, $i);
+                $newI      = $className::checkAppend($parentNode, $lines, $i);
                 if ($newI !== false) {
                     $i = $newI;
                     continue 2;
@@ -127,6 +111,22 @@ class Blocks
 
         }
 
+    }
+
+    static function getTextParent(DOMElement $parentNode)
+    {
+        if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
+            return [$parentNode, false];
+        } else {
+            $parentNodeLastBlock = $parentNode->getLastBlock();
+            if (is_null($parentNodeLastBlock) or
+              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
+            ) {
+                return [$parentNode->ownerDocument->createElement('p'), true];
+            } else {
+                return [$parentNodeLastBlock, false];
+            }
+        }
     }
 
 }

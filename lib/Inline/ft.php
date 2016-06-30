@@ -31,6 +31,7 @@ class Inline_ft
         }
 
         $dom = $parentNode->ownerDocument;
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
@@ -45,9 +46,10 @@ class Inline_ft
         }
 
         if (count($blockLines) > 0) {
+
             switch ($fontAbbreviation) {
-                case '2':
                 case 'I':
+                case '2':
                     $node = $dom->createElement('em');
                     break;
                 case 'B':
@@ -65,12 +67,16 @@ class Inline_ft
                     throw new Exception($fontAbbreviation . ': Unhandled font abbreviation.');
 
             }
-            if ($parentNode->isOrInTag('pre')) {
+            if ($textParent->isOrInTag('pre')) {
                 BlockPreformatted::handle($node, $blockLines);
             } else {
                 Blocks::handle($node, $blockLines);
             }
-            $parentNode->appendBlockIfHasContent($node);
+            $textParent->appendBlockIfHasContent($node);
+        }
+
+        if ($shouldAppend) {
+            $parentNode->appendBlockIfHasContent($textParent);
         }
 
 

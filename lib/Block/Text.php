@@ -42,40 +42,24 @@ class Block_Text
 
     }
 
-    static function addLine(DOMElement $parentNode, string $line, bool $prefixBR)
+    static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
     {
 
-        if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-            if ($prefixBR) {
-                self::addImplicitBreak($parentNode);
-            }
+        if ($prefixBR) {
+            self::addImplicitBreak($textParent);
+        }
 
-            TextContent::interpretAndAppendText($parentNode, $line, $parentNode->hasContent(),
-              !in_array($parentNode->tagName, ['h2', 'h3']));
+        TextContent::interpretAndAppendText(
+          $textParent,
+          $line,
+          $textParent->hasContent(),
+          !in_array($textParent->tagName, ['h2', 'h3'])
+        );
 
-        } else {
-
-            $parentNodeLastBlock = $parentNode->getLastBlock();
-
-            if (is_null($parentNodeLastBlock) or
-              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
-            ) {
-
-                $p = $parentNode->ownerDocument->createElement('p');
-                TextContent::interpretAndAppendText($p, $line);
-                $parentNode->appendBlockIfHasContent($p);
-
-            } else {
-
-                if ($prefixBR) {
-                    self::addImplicitBreak($parentNodeLastBlock);
-                }
-
-                TextContent::interpretAndAppendText($parentNodeLastBlock, $line, $parentNode->hasContent());
-
-            }
-
+        if ($shouldAppend) {
+            $parentNode->appendBlockIfHasContent($textParent);
         }
 
     }

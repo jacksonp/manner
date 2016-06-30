@@ -14,19 +14,21 @@ class Inline_FontOneInputLine
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+
         switch ($matches[1]) {
             case 'R':
                 $appendToParentNode = false;
-                $innerNode          = $parentNode;
+                $innerNode          = $textParent;
                 break;
             case 'I':
                 $appendToParentNode = $dom->createElement('em');
                 $innerNode          = $appendToParentNode;
                 break;
             case 'B':
-                if ($parentNode->tagName === 'strong') {
+                if ($textParent->tagName === 'strong') {
                     $appendToParentNode = false;
-                    $innerNode          = $parentNode;
+                    $innerNode          = $textParent;
                 } else {
                     $appendToParentNode = $dom->createElement('strong');
                     $innerNode          = $appendToParentNode;
@@ -58,16 +60,20 @@ class Inline_FontOneInputLine
                 // Workaround for man page bugs, see e.g. tcpdump.1
                 return $i - 1;
             }
-            if ($parentNode->hasContent()) {
-                $parentNode->appendChild(new DOMText(' '));
+            if ($textParent->hasContent()) {
+                $textParent->appendChild(new DOMText(' '));
             }
             Blocks::handle($innerNode, [$nextLine]);
         } else {
-            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments), $parentNode->hasContent());
+            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments), $textParent->hasContent());
         }
 
         if ($appendToParentNode) {
-            $parentNode->appendChild($appendToParentNode);
+            $textParent->appendChild($appendToParentNode);
+        }
+
+        if ($shouldAppend) {
+            $parentNode->appendBlockIfHasContent($textParent);
         }
 
         return $i;

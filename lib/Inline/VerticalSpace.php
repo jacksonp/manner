@@ -11,10 +11,11 @@ class Inline_VerticalSpace
             return false;
         }
 
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
-        if (!in_array($parentNode->tagName, [
+        if (!in_array($textParent->tagName, [
             'p',
             'blockquote',
             'dt',
@@ -25,11 +26,23 @@ class Inline_VerticalSpace
             'h3',
             'code',
           ]) or
-          ($parentNode->hasChildNodes() and $i !== $numLines - 1)
+          (
+            $textParent->hasChildNodes() and
+            (
+              !($textParent->lastChild instanceof DOMElement) or
+              $textParent->lastChild->tagName !== 'pre'
+            ) and
+            $i !== $numLines - 1
+          )
         ) {
-            $parentNode->appendChild($dom->createElement('br'));
+
+            $textParent->appendChild($dom->createElement('br'));
             if (in_array($matches[1], ['sp', 'ne'])) {
-                $parentNode->appendChild($dom->createElement('br'));
+                $textParent->appendChild($dom->createElement('br'));
+            }
+
+            if ($shouldAppend) {
+                $parentNode->appendBlockIfHasContent($textParent);
             }
         }
 

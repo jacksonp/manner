@@ -7,6 +7,8 @@ class Inline_Link
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+
         if (preg_match('~^\.URL\s(.*)$~u', $lines[$i], $matches)) {
             $dom       = $parentNode->ownerDocument;
             $arguments = Macro::parseArgString($matches[1]);
@@ -22,12 +24,16 @@ class Inline_Link
                 Blocks::handle($anchor, [$lines[++$i]]);
             }
 
-            if ($parentNode->hasContent()) {
-                $parentNode->appendChild(new DOMText(' '));
+            if ($textParent->hasContent()) {
+                $textParent->appendChild(new DOMText(' '));
             }
-            $parentNode->appendChild($anchor);
+            $textParent->appendChild($anchor);
             if (count($arguments) === 3) {
-                $parentNode->appendChild(new DOMText($arguments[2]));
+                $textParent->appendChild(new DOMText($arguments[2]));
+            }
+
+            if ($shouldAppend) {
+                $parentNode->appendBlockIfHasContent($textParent);
             }
 
             return $i;
@@ -75,13 +81,17 @@ class Inline_Link
             Blocks::handle($anchor, $blockLines);
         }
         if ($anchor->hasContent()) {
-            if ($parentNode->hasContent()) {
-                $parentNode->appendChild(new DOMText(' '));
+            if ($textParent->hasContent()) {
+                $textParent->appendChild(new DOMText(' '));
             }
-            $parentNode->appendChild($anchor);
+            $textParent->appendChild($anchor);
         }
         if ($punctuation !== '') {
-            $parentNode->appendChild(new DOMText($punctuation));
+            $textParent->appendChild(new DOMText($punctuation));
+        }
+
+        if ($shouldAppend) {
+            $parentNode->appendBlockIfHasContent($textParent);
         }
 
         return $i;
