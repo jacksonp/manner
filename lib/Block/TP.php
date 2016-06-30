@@ -42,7 +42,7 @@ class Block_TP
                 }
 
                 // e.g. albumart-qt.1, ipmitool.1:
-                if (in_array($dtLine, ['.br', '.sp']) or preg_match(Blocks::BLOCK_END_REGEX, $dtLine)) {
+                if (in_array($dtLine, ['.br', '.sp']) or Blocks::lineEndsBlock($lines, $i)) {
                     --$i;
                     break; // i.e. skip the .TP line
                 }
