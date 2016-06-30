@@ -88,6 +88,10 @@ class Roff_Condition
             return $matches[1] === $matches[2];
         }
 
+        if (preg_match('~^m\w+$~u', $condition)) {
+            return false; // No colours for now.
+        }
+
         // This doesn't work - first and last might not be a pair
 //        if (preg_match('~^\((.*)\)$~u', $condition, $matches)) {
 //            $condition = $matches[1];
