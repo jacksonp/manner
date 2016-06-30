@@ -81,7 +81,7 @@
   <p>The rationale behind <em>&lt;mark&gt;</em> records may be demonstrated with an example. Consider one input archive log that starts at 00:10 and ends at 09:15 on the same day, and another input archive log that starts at 09:20 on the same day and ends at 00:10 the following morning. This would be a very common case for archives managed and rotated by <strong>pmlogger_check</strong>(1) and <strong>pmlogger_daily</strong>(1).
   <p>The output archive log created by <strong>pmlogextract</strong> would contain:<br>
   00:10.000 first record from first input archive log<br>
-  ...<br>
+  ...
   <table>
     <tr>
       <td>09:15.000
@@ -92,8 +92,12 @@
     <tr>
       <td>09:20.000
       <td>first record from second input archive log
-  </table>...<br>
-  01:10.000 last record from second input archive log
+    <tr>
+      <td>...
+    <tr>
+      <td>01:10.000
+      <td>last record from second input archive log
+  </table>
   <p>The time period where the performance data is missing starts just after 09:15 and ends just before 09:20. When the output archive log is processed with any of the PCP reporting tools, the <em>&lt;mark&gt;</em> record is used to indicate a period of missing data. For example using the output archive above, imagine one was reporting the average I/O rate at 30 minute intervals aligned on the hour and half-hour. The I/O count metric is a counter, so the average I/O rate requires two valid values from consecutive sample times. There would be values for all the intervals ending at 09:00, then no values at 09:30 because of the <em>&lt;mark&gt;</em> record, then no values at 10:00 because the “prior” value at 09:30 is not available, then the rate would be reported again at 10:30 and continue every 30 minutes until the last reported value at 01:00.
   <p>The presence of <em>&lt;mark&gt;</em> records in a PCP archive log can be established using <strong>pmdumplog</strong>(1) where a timestamp and the annotation <strong>&lt;mark&gt;</strong> is used to indicate a <em>&lt;mark&gt;</em> record.
 </div>

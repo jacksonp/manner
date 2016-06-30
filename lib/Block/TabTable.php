@@ -6,25 +6,25 @@
 class Block_TabTable
 {
 
+    static function isStart($lines, $i)
+    {
+        // mb_strpos() > 0: avoid indented stuff
+        return
+          $i < count($lines) - 2 and
+          !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) and
+          mb_strpos($lines[$i], "\t") > 0 and
+          (mb_strpos($lines[$i + 1], "\t") > 0 or in_array($lines[$i + 1], ['.br', '', '\\&...'])) and
+          mb_strpos($lines[$i + 2], "\t") > 0;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
         $numLines = count($lines);
         $line     = $lines[$i];
 
-        // mb_strpos() > 0: avoid indented stuff
-        if ($i === $numLines - 1 or $line === '' or $line[0] === '.' or !(mb_strpos($line, "\t") > 0)) {
-            return false;
-        }
-
-        if (
-          !(mb_strpos($lines[$i + 1], "\t") > 0) and
-          (
-            !in_array($lines[$i + 1], ['.br', '']) or
-            $i === $numLines - 2 or
-            !(mb_strpos($lines[$i + 2], "\t") > 0)
-          )
-        ) {
+        $isStart = self::isStart($lines, $i);
+        if (!$isStart) {
             return false;
         }
 
@@ -32,6 +32,7 @@ class Block_TabTable
 
         $table = $dom->createElement('table');
         $parentNode->appendChild($table);
+
         for (; ; ++$i) {
 
             $tds = preg_split('~\t+~u', $line);
@@ -56,7 +57,7 @@ class Block_TabTable
                 $line = $lines[$i + 1];
             }
 
-            if (mb_strpos($line, "\t") === false) {
+            if (mb_strpos($line, "\t") === false and $line !== '\\&...') { // \&... see pmlogextract.1
                 return $i;
             }
 

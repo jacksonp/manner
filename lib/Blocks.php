@@ -22,6 +22,16 @@ class Blocks
       'h3',
     ];
 
+    static function lineEndsBlock(array $lines, int $i)
+    {
+        $line = $lines[$i];
+
+        return
+          $line === '' or
+          preg_match(Blocks::BLOCK_END_REGEX, $line) or
+          Block_TabTable::isStart($lines, $i);
+    }
+
     static function canSkip(string $line)
     {
         // Ignore:
