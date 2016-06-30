@@ -17,11 +17,6 @@ class Block_P
 
         $dom = $parentNode->ownerDocument;
 
-        // Looks like a table next, we detect that elsewhere, don't create a paragraph.
-        if (Block_TabTable::isStart($lines, $i + 1)) {
-            return false;
-        }
-
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
             if (Blocks::lineEndsBlock($lines, $i + 1)) {
