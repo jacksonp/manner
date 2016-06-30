@@ -6,6 +6,22 @@ class Blocks
 
     const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH)~u';
 
+    const TEXT_CONTAINERS = [
+      'p',
+      'blockquote',
+      'dt',
+      'strong',
+      'em',
+      'small',
+      'code',
+      'td',
+      'th',
+      'pre',
+      'a',
+      'h2',
+      'h3',
+    ];
+
     static function canSkip(string $line)
     {
         // Ignore:
@@ -53,9 +69,7 @@ class Blocks
             $parentNodeLastBlock = $parentNode->getLastBlock();
 
             if (is_null($parentNodeLastBlock)) {
-                if (in_array($parentNode->tagName,
-                  ['p', 'blockquote', 'dt', 'strong', 'em', 'small', 'code', 'td', 'th', 'pre', 'a', 'h2', 'h3'])
-                ) {
+                if (in_array($parentNode->tagName, self::TEXT_CONTAINERS)) {
                     $parentForLine = $parentNode;
                 } else {
                     $parentForLine = $parentNode->appendChild($dom->createElement('p'));

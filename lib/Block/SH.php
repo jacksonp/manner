@@ -22,6 +22,9 @@ class Block_SH
             }
             // Text for subheading is on next line.
             $sectionHeading = $lines[++$i];
+            if (in_array($sectionHeading, ['.br', '.sp', '.ne'])) {
+                return $i;
+            }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
             $sectionHeading = trim($matches[1]);
@@ -41,7 +44,10 @@ class Block_SH
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.SH~u', $line)) {
+            if (preg_match('~^\.SH(.*)~u', $line, $matches)) {
+                if ($matches[1] === '' and $i < $numLines - 1 and in_array($lines[$i + 1], ['.br', '.sp', '.ne'])) {
+                    continue;
+                }
                 --$i;
                 break;
             } else {

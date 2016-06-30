@@ -14,6 +14,7 @@ class Block_P
         }
 
         $numLines = count($lines);
+
         $dom      = $parentNode->ownerDocument;
 
         if ($lines[$i] === '' and $i < $numLines - 3 and mb_strpos($lines[$i + 1], "\t") > 0 and

@@ -14,8 +14,17 @@ class Inline_VerticalSpace
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
-        // Only bother if this isn't the first node.
-        if (!in_array($parentNode->tagName, ['p', 'blockquote']) or
+        if (!in_array($parentNode->tagName, [
+            'p',
+            'blockquote',
+            'dt',
+            'td',
+            'th',
+            'pre',
+            'h2',
+            'h3',
+            'code',
+          ]) or
           ($parentNode->hasChildNodes() and $i !== $numLines - 1)
         ) {
             $parentNode->appendChild($dom->createElement('br'));

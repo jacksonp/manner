@@ -321,17 +321,13 @@
   <p>You can save people a lot of grief by keeping a <strong>patchlevel.h</strong> file which is patched to increment the patch level as the first diff in the patch file you send out. If you put a <strong>Prereq:</strong> line in with the patch, it won't let them apply patches out of order without some warning.
   <p>You can create a file by sending out a diff that compares <strong>/dev/null</strong> or an empty file dated the Epoch (1970-01-01 00:00:00 UTC) to the file you want to create. This only works if the file you want to create doesn't exist already in the target directory. Conversely, you can remove a file by sending out a context diff that compares the file to be deleted with an empty file dated the Epoch. The file will be removed unless <strong>patch</strong> is conforming to POSIX and the <strong>-E</strong> or <strong>--remove-empty-files</strong> option is not given. An easy way to generate patches that create and remove files is to use GNU <strong>diff</strong>'s <strong>-N</strong> or <strong>--new-file</strong> option.
   <p>If the recipient is supposed to use the <strong>-p</strong><em>N</em> option, do not send output that looks like this:
-  <p><code><br>
-  <br>
-  diff -Naur v2.0.29/prog/README prog/README<br>
+  <p><code>diff -Naur v2.0.29/prog/README prog/README<br>
   --- v2.0.29/prog/README Mon Mar 10 15:13:12 1997<br>
   +++ prog/README Mon Mar 17 14:58:22 1997</code><br>
   <br>
   because the two file names have different numbers of slashes, and different versions of <strong>patch</strong> interpret the file names differently. To avoid confusion, send output that looks like this instead:<br>
   <br>
-  <p><code><br>
-  <br>
-  diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>
+  <p><code>diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>
   --- v2.0.29/prog/README Mon Mar 10 15:13:12 1997<br>
   +++ v2.0.30/prog/README Mon Mar 17 14:58:22 1997</code><br>
   <br>
