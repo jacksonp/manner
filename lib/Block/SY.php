@@ -26,6 +26,9 @@ class Block_SY
         for ($i = $i + 1; $i < $numLines; ++$i) {
             if (in_array($lines[$i], $blockEnds)) {
                 break;
+            } elseif (preg_match('~^\.SY~u', $lines[$i])) {
+                --$i;
+                break;
             }
             $preLines[] = $lines[$i];
         }
