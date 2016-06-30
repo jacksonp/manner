@@ -44,7 +44,10 @@ class Man
         $this->data      = [];
         $this->aliases   = [];
         $this->macros    = [];
-        $this->registers = ['.g' => '1'];
+        $this->registers = [
+          '.g' => '1',
+          'Pb' => '0', // Used by openpbs to specify -ms formatting
+        ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
           '.T'             => 'ps',
