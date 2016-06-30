@@ -295,28 +295,28 @@
   <p>To print all IP packets between <em>ace</em> and any host except <em>helios</em>:
   <pre><strong>tcpdump ip host ace and not helios</strong></pre>
   <p>To print all traffic between local hosts and hosts at Berkeley:
-  <pre><strong> tcpdump net ucb-ether</strong>
+  <pre><strong>tcpdump net ucb-ether</strong>
 </pre>
   <p>To print all ftp traffic through internet gateway <em>snup</em>: (note that the expression is quoted to prevent the shell from (mis-)interpreting the parentheses):
-  <pre><strong> tcpdump 'gateway snup and (port ftp or ftp-data)'</strong>
+  <pre><strong>tcpdump 'gateway snup and (port ftp or ftp-data)'</strong>
 </pre>
   <p>To print traffic neither sourced from nor destined for local hosts (if you gateway to one other net, this stuff should never make it onto your local net).
-  <pre><strong> tcpdump ip and not net <em>localnet</em></strong>
+  <pre><strong>tcpdump ip and not net <em>localnet</em></strong>
 </pre>
   <p>To print the start and end packets (the SYN and FIN packets) of each TCP conversation that involves a non-local host.
-  <pre><strong> tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net <em>localnet</em>'</strong>
+  <pre><strong>tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net <em>localnet</em>'</strong>
 </pre>
   <p>To print all IPv4 HTTP packets to and from port 80, i.e. print only packets that contain data, not, for example, SYN and FIN packets and ACK-only packets. (IPv6 is left as an exercise for the reader.)
-  <pre><strong> tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2)) - ((tcp[12]&amp;0xf0)&gt;&gt;2)) != 0)'</strong>
+  <pre><strong>tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2)) - ((tcp[12]&amp;0xf0)&gt;&gt;2)) != 0)'</strong>
 </pre>
   <p>To print IP packets longer than 576 bytes sent through gateway <em>snup</em>:
-  <pre><strong> tcpdump 'gateway snup and ip[2:2] &gt; 576'</strong>
+  <pre><strong>tcpdump 'gateway snup and ip[2:2] &gt; 576'</strong>
 </pre>
   <p>To print IP broadcast or multicast packets that were <em>not</em> sent via Ethernet broadcast or multicast:
-  <pre><strong> tcpdump 'ether[0] & 1 = 0 and ip[16] &gt;= 224'</strong>
+  <pre><strong>tcpdump 'ether[0] & 1 = 0 and ip[16] &gt;= 224'</strong>
 </pre>
   <p>To print all ICMP packets that are not echo requests/replies (i.e., not ping packets):
-  <pre><strong> tcpdump 'icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply'</strong>
+  <pre><strong>tcpdump 'icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply'</strong>
 </pre>
 </div>
 <div class="section">
@@ -547,7 +547,7 @@ pike.afsfs &gt; elvis.7001: rx data fs reply rename
   <p>AFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of “recent” requests, and matches them to the replies using the call number and service ID. If a reply does not closely follow the corresponding request, it might not be parsable.
   <p><strong>KIP AppleTalk (DDP in UDP)</strong>
   <p>AppleTalk DDP packets encapsulated in UDP datagrams are de-encapsulated and dumped as DDP packets (i.e., all the UDP header information is discarded). The file <em>/etc/atalk.names</em> is used to translate AppleTalk net and node numbers to names. Lines in this file have the form
-  <pre><em>number      name</em>
+  <pre><em>number name</em>
 
 <code>1.254             ether</code>
 16.1            icsd-net

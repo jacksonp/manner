@@ -528,19 +528,19 @@
         <p>Bind a command to a key. By default, most of the commands provided by <em>screen</em> are bound to one or more keys as indicated in the “DEFAULT KEY BINDINGS” section, e.g. the command to create a new window is bound to “C-c” and “c”. The “bind” command can be used to redefine the key bindings and to define new bindings. The <em>key</em> argument is either a single character, a two-character sequence of the form “^x” (meaning “C-x”), a backslash followed by an octal number (specifying the ASCII code of the character), or a backslash followed by a second character, such as “\^” or “\\”. The argument can also be quoted, if you like. If no further argument is given, any previously established binding for this key is removed. The <em>command</em> argument can be any command listed in this section.
         <p>If a command class is specified via the “-c” option, the key is bound for the specified class. Use the “command” command to activate a class. Command classes can be used to create multiple command keys or multi-character bindings.
         <p>Some examples:
-        <pre>    bind ' ' windows
+        <pre>       bind ' ' windows
         bind ^k
         bind k
         bind K kill
         bind ^f screen telnet foobar
         bind \033 screen -ln -t root -h 1000 9 su</pre>
         <p>would bind the space key to the command that displays a list of windows (so that the command usually invoked by “C-a C-w” would also be available as “C-a space”). The next three lines remove the default kill binding from “C-a C-k” and “C-a k”. “C-a K” is then bound to the kill command. Then it binds “C-f” to the command “create a window with a TELNET connection to foobar”, and bind “escape” to the command that creates an non-login window with a.k.a. “root” in slot #9, with a superuser shell and a scrollback buffer of 1000 lines.
-        <pre>  bind -c demo1 0 select 10
+        <pre>   bind -c demo1 0 select 10
         bind -c demo1 1 select 11
         bind -c demo1 2 select 12
         bindkey "^B" command -c demo1</pre>
         <p>makes “C-b 0” select window 10, “C-b 1” window 11, etc.
-        <pre> bind -c demo2 0 select 10
+        <pre>  bind -c demo2 0 select 10
         bind -c demo2 1 select 11
         bind -c demo2 2 select 12
         bind - command -c demo2</pre>
@@ -595,7 +595,7 @@
     <dd>
       <div class="indent-0">
         <p>Change the filename used for reading and writing with the paste buffer. If the optional argument to the “bufferfile” command is omitted, the default setting (“/tmp/screen-exchange”) is reactivated. The following example will paste the system's password file into the <em>screen</em> window (using the paste buffer, where a copy remains):
-        <pre>    C-a : bufferfile /etc/passwd
+        <pre>     C-a : bufferfile /etc/passwd
         C-a &lt; C-a ]
         C-a : bufferfile</pre>
         <p><strong>bumpleft</strong>
@@ -1496,7 +1496,7 @@ C-a : paste p</pre>
               <div class="indent-0">
                 <p>Establish a new window. The flow-control options (<strong>-f</strong>, <strong>-fn</strong> and <strong>-fa</strong>), title (a.k.a.) option (<strong>-t</strong>), login options (<strong>-l</strong> and <strong>-ln</strong>) , terminal type option (<strong>-T</strong> &lt;term&gt;), the all-capability-flag (<strong>-a</strong>) and scrollback option (<strong>-h</strong> &lt;num&gt;) may be specified with each command. The option (<strong>-M</strong>) turns monitoring on for this window. The option (<strong>-L</strong>) turns output logging on for this window. If an optional number <em>n</em> in the range 0..MAXWIN-1 is given, the window number <em>n</em> is assigned to the newly created window (or, if this number is already in-use, the next available number). If a command is specified after “screen”, this command (with the given arguments) is started in the window; otherwise, a shell is created. If <strong>//group</strong> is supplied, a container-type window is created in which other windows may be created inside it.
                 <p>Thus, if your “.screenrc” contains the lines
-                <pre>   # example for .screenrc:
+                <pre>        # example for .screenrc:
         screen 1
         screen -fn -t foobar -L 2 telnet foobar</pre>
                 <p><em>screen</em> creates a shell window (in window #1) and a window with a TELNET connection to the machine foobar (with no flow-control using the title “foobar” in window #2) and will write a logfile (“screenlog.2”) of the telnet session. Note, that unlike previous versions of <em>screen</em> no additional default window is created when “screen” commands are included in your “.screenrc” file. When the initialization is completed, <em>screen</em> switches to the last window specified in your .screenrc file or, if none, opens a default window #0.
@@ -2095,7 +2095,7 @@ C-a : paste p</pre>
     bind R screen -t '% |root:' su
   </blockquote>
   <p>Having this command in your .screenrc would bind the key sequence “C-a R” to the “su” command and give it an auto-title name of “root:”. For this auto-title to work, the screen could look something like this:
-  <pre>  % !em
+  <pre>      % !em
         emacs file.c</pre>
   <p>Here the user typed the csh history command “!em” which ran the previously entered “emacs” command. The window status would show “root:emacs” during the execution of the command, and revert to simply “root:” at its completion.
   <pre>       bind o title

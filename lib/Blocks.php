@@ -51,7 +51,7 @@ class Blocks
 
             $line = $lines[$i];
 
-            $blockClasses = ['SH', 'SS', 'SY', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'Vb', 'ce', 'nf', 'TS', 'TabTable'];
+            $blockClasses = ['SH', 'SS', 'SY', 'P', 'IP', 'TP', 'ti', 'RS', 'EX', 'Vb', 'ce', 'nf', 'TS', 'TabTable', 'Text'];
 
             foreach ($blockClasses as $blockClass) {
                 $className = 'Block_' . $blockClass;
@@ -94,31 +94,6 @@ class Blocks
                 }
             }
 
-            if (!in_array(mb_substr($line, 0, 1), ['.', ' '])
-              and (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.')
-              and !preg_match('~\\\\c$~', $line)
-            ) {
-                while ($i < $numLines - 1) {
-                    $nextLine = $lines[$i + 1];
-                    if (mb_strlen($nextLine) === 0 or in_array(mb_substr($nextLine, 0, 1), ['.', ' '])
-                      or (mb_strlen($nextLine) > 1 and mb_substr($nextLine, 0, 2) === '\\.')
-                    ) {
-                        break;
-                    }
-                    $line .= ' ' . $nextLine;
-                    ++$i;
-                }
-            }
-
-
-            // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
-            if (mb_substr($line, 0, 1) === ' '
-              and $parentForLine->hasChildNodes()
-              and ($parentForLine->lastChild->nodeType !== XML_ELEMENT_NODE or $parentForLine->lastChild->tagName !== 'br')
-            ) {
-                $parentForLine->appendChild($dom->createElement('br'));
-            }
-
             if (in_array($line, ['', '.', '\''])) {
                 continue;
             }
@@ -133,8 +108,10 @@ class Blocks
                 throw new Exception($line . ' unexpected command in Blocks::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line,
-              !in_array($parentForLine->tagName, ['h2', 'h3']));
+//            TextContent::interpretAndAppendText($parentForLine, $line,
+//              !in_array($parentForLine->tagName, ['h2', 'h3']));
+
+            throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
 
         }
 
