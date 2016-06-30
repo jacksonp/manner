@@ -38,34 +38,52 @@ class Block_Text
         }
 
         if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
-            if ($implicitBreak and
-              $parentNode->hasChildNodes() and
-              ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE or $parentNode->lastChild->tagName !== 'br')
-            ) {
-                $parentNode->appendChild($dom->createElement('br'));
+
+            if ($implicitBreak) {
+                self::addImplicitBreak($parentNode);
             }
+
             TextContent::interpretAndAppendText($parentNode, $line, $parentNode->hasContent(),
               !in_array($parentNode->tagName, ['h2', 'h3']));
+
         } else {
+
             $parentNodeLastBlock = $parentNode->getLastBlock();
+
             if (is_null($parentNodeLastBlock) or
               in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
             ) {
+
                 $p = $parentNode->appendChild($dom->createElement('p'));
                 TextContent::interpretAndAppendText($p, $line);
+
             } else {
-                if ($implicitBreak and
-                  $parentNodeLastBlock->hasChildNodes() and
-                  ($parentNodeLastBlock->lastChild->nodeType !== XML_ELEMENT_NODE or $parentNodeLastBlock->lastChild->tagName !== 'br')
-                ) {
-                    $parentNodeLastBlock->appendChild($dom->createElement('br'));
+
+                if ($implicitBreak) {
+                    self::addImplicitBreak($parentNodeLastBlock);
                 }
+
                 TextContent::interpretAndAppendText($parentNodeLastBlock, $line, $parentNode->hasContent());
+
             }
+
         }
 
         return $i;
 
+    }
+
+    private static function addImplicitBreak($parentNode)
+    {
+        if (
+          $parentNode->hasChildNodes() and
+          (
+            $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE or
+            $parentNode->lastChild->tagName !== 'br'
+          )
+        ) {
+            $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
+        }
     }
 
 }
