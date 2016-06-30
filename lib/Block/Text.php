@@ -12,7 +12,6 @@ class Block_Text
         }
 
         $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
 
         $line = $lines[$i];
 
@@ -37,9 +36,18 @@ class Block_Text
             }
         }
 
+        self::addLine($parentNode, $line, $implicitBreak);
+
+        return $i;
+
+    }
+
+    static function addLine(DOMElement $parentNode, string $line, bool $prefixBR)
+    {
+
         if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
 
-            if ($implicitBreak) {
+            if ($prefixBR) {
                 self::addImplicitBreak($parentNode);
             }
 
@@ -54,13 +62,13 @@ class Block_Text
               in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
             ) {
 
-                $p = $dom->createElement('p');
+                $p = $parentNode->ownerDocument->createElement('p');
                 TextContent::interpretAndAppendText($p, $line);
                 $parentNode->appendBlockIfHasContent($p);
 
             } else {
 
-                if ($implicitBreak) {
+                if ($prefixBR) {
                     self::addImplicitBreak($parentNodeLastBlock);
                 }
 
@@ -69,8 +77,6 @@ class Block_Text
             }
 
         }
-
-        return $i;
 
     }
 
