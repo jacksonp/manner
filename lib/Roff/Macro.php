@@ -44,7 +44,7 @@ class Roff_Macro
         } elseif ($newMacro === '.UNINDENT') {
             $man->addAlias('UNINDENT', 'RE');
         } else {
-            $man->addMacro($newMacro, Text::applyRoffClasses($macroLines));
+            $man->addMacro($newMacro, $macroLines);
         }
 
         return ['i' => $i];

@@ -117,6 +117,7 @@ class TextContent
                     break;
                 case '\f':
                 case '\fP':
+                case '\FP':
                 case '\fp':
                     // \fP: "Switch back to previous font." - groff(7)
                     // Assume back to normal text for now, so do nothing so next line passes thru to default.

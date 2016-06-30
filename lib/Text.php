@@ -43,13 +43,14 @@ class Text
             // but this behaviour is consistent with what the man command renders:
             $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $line);
 
-            if (preg_match('~^\.ig(\s|$)~u', $line)) {
+            if (preg_match('~^\.ig(?:\s+(?<delim>.*)|$)~u', $line, $matches)) {
+                $delim = empty($matches['delim']) ? '..' : $matches['delim'];
                 for ($i = $i + 1; $i < $numLines; ++$i) {
-                    if ($lines[$i] === '..') {
+                    if ($lines[$i] === $delim) {
                         continue 2;
                     }
                 }
-                throw new Exception('.ig with no corresponding ..');
+                throw new Exception('.ig with no corresponding ' . $delim);
             }
 
             // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
@@ -78,12 +79,15 @@ class Text
 
             $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
+            // TODO: only do the following if first character is . or ' ?
             $bits = Macro::parseArgString($lines[$i]);
             if (count($bits) > 0) {
                 $macro  = array_shift($bits);
                 $macros = $man->getMacros();
                 if (isset($macros[$macro])) {
-                    foreach ($macros[$macro] as $macroLine) {
+                    $man->addRegister('.$', count($bits));
+                    $macroLines = Text::applyRoffClasses($macros[$macro]);
+                    foreach ($macroLines as $macroLine) {
 
                         for ($n = 0; $n < 10; ++$n) {
                             $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
@@ -132,8 +136,8 @@ class Text
 
         $numNoCondLines = count($linesNoCond);
         $foundTitle     = false;
-        $charSwaps         = [];
-        $lines             = [];
+        $charSwaps      = [];
+        $lines          = [];
 
         $man = Man::instance();
 

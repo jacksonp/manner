@@ -123,7 +123,7 @@ class Roff_Condition
           '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
           '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
           'require_index',
-          '\\n(.$=0:((0\\$1)*2u>(70u-\\n(.iu))', // revisit, see urls_txt.5
+          '1=0:((0\\$1)*2u>(70u-\\n(.iu))', // revisit, see urls_txt.5
           'c \\[shc]', // see man.1
           '\'po4a.hide\'',
           '\\n(.$>=3', // hack for gnugo.6, isag.1

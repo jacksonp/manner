@@ -117,6 +117,8 @@ class Blocks
                 }
             }
 
+//            var_dump(array_slice($lines, $i - 5, 10));
+//            var_dump($lines);
             throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
 
         }
