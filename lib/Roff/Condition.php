@@ -84,7 +84,7 @@ class Roff_Condition
             return !self::test(mb_substr($condition, 1));
         }
 
-        if (preg_match('~^\'([-\/\w\.\\\\]*)\'([-\/\w\.\\\\]*)\'$~u', $condition, $matches)) {
+        if (preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches)) {
             return $matches[1] === $matches[2];
         }
 
@@ -95,11 +95,6 @@ class Roff_Condition
         if (preg_match('~^[-\+\*/\d\(\)><=]+$~u', $condition)) {
             return eval('return ' . $condition . ';');
         }
-
-        // This doesn't work - first and last might not be a pair
-//        if (preg_match('~^\((.*)\)$~u', $condition, $matches)) {
-//            $condition = $matches[1];
-//        }
 
         if (preg_match('~^\(([^)]+)([:&])(.+)\)$~u', $condition, $matches)) {
             if ($matches[2] === ':') {
@@ -136,7 +131,7 @@ class Roff_Condition
           '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
           '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
           'require_index',
-          '\\n(.$=0:((0\\$1)*2u>(\\n(.lu-\\n(.iu))', // revisit, see urls_txt.5
+          '\\n(.$=0:((0\\$1)*2u>(70u-\\n(.iu))', // revisit, see urls_txt.5
           'c \\[shc]', // see man.1
           '\'po4a.hide\'',
           '\\n(.$>=3', // hack for gnugo.6, isag.1
