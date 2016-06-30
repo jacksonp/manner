@@ -16,6 +16,7 @@ class TextContent
     ) {
 
         $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
 
         self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
@@ -27,17 +28,29 @@ class TextContent
         }
 
         $textSegments = preg_split(
-          '~(?<!\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',
+          '~(?<!\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
         );
 
-        $numTextSegments = count($textSegments);
+        $numTextSegments    = count($textSegments);
+        $horizontalPosition = 0; //TODO: could be worth setting this to characters in output so far from $line?
 
         for ($i = 0; $i < $numTextSegments; ++$i) {
             if ($addSpacing) {
                 $addSpacing = $i === 0;
+            }
+            if (mb_substr($textSegments[$i], 0, 2) === '\\k') {
+                $registerName = mb_substr($textSegments[$i], 2);
+                if (mb_strlen($registerName) === 1) {
+                } elseif (mb_substr($registerName, 0, 1) === '(') {
+                    $registerName = mb_substr($registerName, 1);
+                } else {
+                    $registerName = trim($registerName, '[]');
+                }
+                $man->addRegister($registerName, $horizontalPosition);
+                continue;
             }
             switch ($textSegments[$i]) {
                 case '\u':
