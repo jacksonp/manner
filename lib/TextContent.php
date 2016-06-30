@@ -27,7 +27,7 @@ class TextContent
         }
 
         $textSegments = preg_split(
-          '~(?<!\\\\)(\\\\f(?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',
+          '~(?<!\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud])~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
@@ -110,9 +110,12 @@ class TextContent
                 case '\fR':
                 case '\fr':
                 case '\f[]':
+                case '\FR':
+                case '\F[R]':
                 case '\f1':
                     break;
                 case '\fC':
+                case '\FC':
                 case '\fc':
                 case '\fV':
                 case '\fv':

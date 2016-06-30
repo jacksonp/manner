@@ -45,16 +45,18 @@ class Man
         $this->aliases   = [];
         $this->macros    = [];
         $this->registers = [
-          '.g' => '1',
+          '.g'   => '1',
+            //The current font family (string-valued).
+          '.fam' => 'R',
             // Used by openpbs to specify -ms formatting (could remove and use 0 as fallback for undefined registers maybe):
-          'Pb' => '0',
-          'BD' => '0',
+          'Pb'   => '0',
+          'BD'   => '0',
             // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
-          'F'  => '0',
+          'F'    => '0',
             // horizontal position?
-          'x'  => '0',
+          'x'    => '0',
             // current line length
-          '.l' => '70',
+          '.l'   => '70',
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
