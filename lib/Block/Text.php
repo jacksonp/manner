@@ -54,8 +54,9 @@ class Block_Text
               in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
             ) {
 
-                $p = $parentNode->appendChild($dom->createElement('p'));
+                $p = $dom->createElement('p');
                 TextContent::interpretAndAppendText($p, $line);
+                $parentNode->appendBlockIfHasContent($p);
 
             } else {
 
@@ -73,7 +74,7 @@ class Block_Text
 
     }
 
-    private static function addImplicitBreak($parentNode)
+    private static function addImplicitBreak(DOMElement $parentNode)
     {
         if (
           $parentNode->hasChildNodes() and
