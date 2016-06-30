@@ -4,7 +4,7 @@
 class Blocks
 {
 
-    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH)~u';
+    const BLOCK_END_REGEX = '~^\.([LP]?P$|HP|TP|IP|ti|RS|EX|ce|nf|TS|SS|SH|Vb)~u';
 
     const TEXT_CONTAINERS = [
       'p',
