@@ -101,30 +101,36 @@
       <dt><strong>c++</strong>
       <dd>
         <p>This pattern is denoted by the <em>c++</em> tag. It matches only C++ symbols by their demangled symbol name (as emitted by <strong>c++filt</strong>(1) utility). This pattern is very handy for matching symbols which mangled names might vary across different architectures while their demangled names remain the same. One group of such symbols is <em>non-virtual thunks</em> which have architecture specific offsets embedded in their mangled names. A common instance of this case is a virtual destructor which under diamond inheritance needs a non-virtual thunk symbol. For example, even if _ZThn8_N3NSB6ClassDD1Ev@Base on 32bit architectures will probably be _ZThn16_N3NSB6ClassDD1Ev@Base on 64bit ones, it can be matched with a single <em>c++</em> pattern:
-        <p>libdummy.so.1 libdummy1 #MINVER#<br>
-        [...]<br>
-        (c++)“non-virtual thunk to NSB::ClassD::~ClassD()@Base” 1.0<br>
-        [...]
-        <p>The demangled name above can be obtained by executing the following command:
-        <p>$ echo '_ZThn8_N3NSB6ClassDD1Ev@Base' | c++filt
-        <p>Please note that while mangled name is unique in the library by definition, this is not necessarily true for demangled names. A couple of distinct real symbols may have the same demangled name. For example, that's the case with non-virtual thunk symbols in complex inheritance configurations or with most constructors and destructors (since g++ typically generates two real symbols for them). However, as these collisions happen on the ABI level, they should not degrade quality of the symbol file.
+        <div class="indent">
+          <p>libdummy.so.1 libdummy1 #MINVER#<br>
+          [...]<br>
+          (c++)“non-virtual thunk to NSB::ClassD::~ClassD()@Base” 1.0<br>
+          [...]
+          <p>The demangled name above can be obtained by executing the following command:
+          <p>$ echo '_ZThn8_N3NSB6ClassDD1Ev@Base' | c++filt
+          <p>Please note that while mangled name is unique in the library by definition, this is not necessarily true for demangled names. A couple of distinct real symbols may have the same demangled name. For example, that's the case with non-virtual thunk symbols in complex inheritance configurations or with most constructors and destructors (since g++ typically generates two real symbols for them). However, as these collisions happen on the ABI level, they should not degrade quality of the symbol file.
+        </div>
       <dt><strong>symver</strong>
       <dd>
         <p>This pattern is denoted by the <em>symver</em> tag. Well maintained libraries have versioned symbols where each version corresponds to the upstream version where the symbol got added. If that's the case, you can use a <em>symver</em> pattern to match any symbol associated to the specific version. For example:
-        <p>libc.so.6 libc6 #MINVER#<br>
-        (symver)GLIBC_2.0 2.0<br>
-        [...]<br>
-        (symver)GLIBC_2.7 2.7<br>
-        access@GLIBC_2.0 2.2
-        <p>All symbols associated with versions GLIBC_2.0 and GLIBC_2.7 will lead to minimal version of 2.0 and 2.7 respectively with the exception of the symbol access@GLIBC_2.0. The latter will lead to a minimal dependency on libc6 version 2.2 despite being in the scope of the “(symver)GLIBC_2.0” pattern because specific symbols take precedence over patterns.
-        <p>Please note that while old style wildcard patterns (denoted by “*@version” in the symbol name field) are still supported, they have been deprecated by new style syntax “(symver|optional)version”. For example, “*@GLIBC_2.0 2.0” should be written as “(symver|optional)GLIBC_2.0 2.0” if the same behaviour is needed.
+        <div class="indent">
+          <p>libc.so.6 libc6 #MINVER#<br>
+          (symver)GLIBC_2.0 2.0<br>
+          [...]<br>
+          (symver)GLIBC_2.7 2.7<br>
+          access@GLIBC_2.0 2.2
+          <p>All symbols associated with versions GLIBC_2.0 and GLIBC_2.7 will lead to minimal version of 2.0 and 2.7 respectively with the exception of the symbol access@GLIBC_2.0. The latter will lead to a minimal dependency on libc6 version 2.2 despite being in the scope of the “(symver)GLIBC_2.0” pattern because specific symbols take precedence over patterns.
+          <p>Please note that while old style wildcard patterns (denoted by “*@version” in the symbol name field) are still supported, they have been deprecated by new style syntax “(symver|optional)version”. For example, “*@GLIBC_2.0 2.0” should be written as “(symver|optional)GLIBC_2.0 2.0” if the same behaviour is needed.
+        </div>
       <dt><strong>regex</strong>
       <dd>
         <p>Regular expression patterns are denoted by the <em>regex</em> tag. They match by the perl regular expression specified in the symbol name field. A regular expression is matched as it is, therefore do not forget to start it with the <em>^</em> character or it may match any part of the real symbol <em>name@version</em> string. For example:
-        <p>libdummy.so.1 libdummy1 #MINVER#<br>
-        (regex)“^mystack_.*@Base$” 1.0<br>
-        (regex|optional)“private” 1.0
-        <p>Symbols like “mystack_new@Base”, “mystack_push@Base”, “mystack_pop@Base” etc. will be matched by the first pattern while e.g. “ng_mystack_new@Base” won't. The second pattern will match all symbols having the string “private” in their names and matches will inherit <em>optional</em> tag from the pattern.
+        <div class="indent">
+          <p>libdummy.so.1 libdummy1 #MINVER#<br>
+          (regex)“^mystack_.*@Base$” 1.0<br>
+          (regex|optional)“private” 1.0
+          <p>Symbols like “mystack_new@Base”, “mystack_push@Base”, “mystack_pop@Base” etc. will be matched by the first pattern while e.g. “ng_mystack_new@Base” won't. The second pattern will match all symbols having the string “private” in their names and matches will inherit <em>optional</em> tag from the pattern.
+        </div>
     </dl>
     <p>Basic patterns listed above can be combined where it makes sense. In that case, they are processed in the order in which the tags are specified. For example, both
     <p>(c++|regex)“^NSA::ClassA::Private::privmethod\d\(int\)@Base” 1.0<br>

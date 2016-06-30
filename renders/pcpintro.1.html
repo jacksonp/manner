@@ -98,18 +98,22 @@
   <dl>
     <dt><strong>-t</strong> <em>interval</em>
     <dd>
-      <p>Set the update or reporting interval.
-      <p>The <em>interval</em> argument is specified as a sequence of one or more elements of the form
-      <pre><em>number</em>[<em>units</em>]</pre>
-      <p>where <em>number</em> is an integer or floating point constant (parsed using <strong>strtod</strong>(3)) and the optional <em>units</em> is one of: <strong>seconds</strong>, <strong>second</strong>, <strong>secs</strong>, <strong>sec</strong>, <strong>s</strong>, <strong>minutes</strong>, <strong>minute</strong>, <strong>mins</strong>, <strong>min</strong>, <strong>m</strong>, <strong>hours</strong>, <strong>hour</strong>, <strong>h</strong>, <strong>days</strong>, <strong>day</strong> and <strong>d</strong>. If the <em>unit</em> is empty, <strong>second</strong> is assumed.
-      <p>In addition, the upper case (or mixed case) version of any of the above is also acceptable.
-      <p>Spaces anywhere in the <em>interval</em> are ignored, so <strong>4 days 6 hours 30 minutes</strong>, <strong>4day6hour30min</strong>, <strong>4d6h30m</strong> and <strong>4d6.5h</strong> are all equivalent.
-      <p>Multiple specifications are additive, e.g. ``<strong>1hour 15mins 30secs</strong>'' is interpreted as 3600+900+30 seconds.
+      <div class="indent">
+        <p>Set the update or reporting interval.
+        <p>The <em>interval</em> argument is specified as a sequence of one or more elements of the form
+        <pre><em>number</em>[<em>units</em>]</pre>
+        <p>where <em>number</em> is an integer or floating point constant (parsed using <strong>strtod</strong>(3)) and the optional <em>units</em> is one of: <strong>seconds</strong>, <strong>second</strong>, <strong>secs</strong>, <strong>sec</strong>, <strong>s</strong>, <strong>minutes</strong>, <strong>minute</strong>, <strong>mins</strong>, <strong>min</strong>, <strong>m</strong>, <strong>hours</strong>, <strong>hour</strong>, <strong>h</strong>, <strong>days</strong>, <strong>day</strong> and <strong>d</strong>. If the <em>unit</em> is empty, <strong>second</strong> is assumed.
+        <p>In addition, the upper case (or mixed case) version of any of the above is also acceptable.
+        <p>Spaces anywhere in the <em>interval</em> are ignored, so <strong>4 days 6 hours 30 minutes</strong>, <strong>4day6hour30min</strong>, <strong>4d6h30m</strong> and <strong>4d6.5h</strong> are all equivalent.
+        <p>Multiple specifications are additive, e.g. ``<strong>1hour 15mins 30secs</strong>'' is interpreted as 3600+900+30 seconds.
+      </div>
     <dt><strong>-A</strong> <em>align</em>
     <dd>
-      <p>By default samples are not necessarily aligned on any natural unit of time. The <strong>-A</strong> option may be used to force the initial sample to be aligned on the boundary of a natural time unit. For example <strong>-A 1sec</strong>, <strong>-A 30min</strong> and <strong>-A 1hour</strong> specify alignment on whole seconds, half and whole hours respectively.
-      <p>The <em>align</em> argument follows the syntax for an <em>interval</em> argument described above for the <strong>-t</strong> option.
-      <p>Note that alignment occurs by advancing the time as required, and that <strong>-A</strong> acts as a modifier to advance both the start of the time window (see the next section) and the origin time (if the <strong>-O</strong> option is specified).
+      <div class="indent">
+        <p>By default samples are not necessarily aligned on any natural unit of time. The <strong>-A</strong> option may be used to force the initial sample to be aligned on the boundary of a natural time unit. For example <strong>-A 1sec</strong>, <strong>-A 30min</strong> and <strong>-A 1hour</strong> specify alignment on whole seconds, half and whole hours respectively.
+        <p>The <em>align</em> argument follows the syntax for an <em>interval</em> argument described above for the <strong>-t</strong> option.
+        <p>Note that alignment occurs by advancing the time as required, and that <strong>-A</strong> acts as a modifier to advance both the start of the time window (see the next section) and the origin time (if the <strong>-O</strong> option is specified).
+      </div>
   </dl>
 </div>
 <div class="section">
@@ -120,39 +124,45 @@
   <dl>
     <dt><strong>-S</strong> <em>starttime</em>
     <dd>
-      <p>By default the time window commences immediately in real-time mode, or coincides with time at the start of the set of PCP archive logs in archive mode. The <strong>-S</strong> option may be used to specify a later time for the start of the time window.
-      <p>The <em>starttime</em> parameter may be given in one of three forms (<em>interval</em> is the same as for the <strong>-t</strong> option as described above, <em>datetime</em> is described below):
-      <dl>
-        <dt><em>interval</em>
-        <dd>
-          <p>To specify an offset from the current time (in real-time mode) or the beginning of a set of PCP archives (in archive mode) simply specify the interval of time as the argument. For example <strong>-S 30min</strong> will set the start of the time window to be exactly 30 minutes from now in real-time mode, or exactly 30 minutes from the start of a set of PCP archives.
-        <dt>-<em>interval</em>
-        <dd>
-          <p>To specify an offset from the end of a set of PCP archive logs, prefix the <em>interval</em> argument with a minus sign. In this case, the start of the time window precedes the time at the end of the set of archives by the given interval. For example <strong>-S -1hour</strong> will set the start of the time window to be exactly one hour before the time of the last sample in a set of PCP archive logs.
-        <dt>@<em>datetime</em>
-        <dd>
-          <p>To specify the calendar date and time (local time in the reporting timezone) for the start of the time window, use the datetime syntax preceded by an at sign. Refer to the datetime description below for detailed information.
-      </dl>
+      <div class="indent">
+        <p>By default the time window commences immediately in real-time mode, or coincides with time at the start of the set of PCP archive logs in archive mode. The <strong>-S</strong> option may be used to specify a later time for the start of the time window.
+        <p>The <em>starttime</em> parameter may be given in one of three forms (<em>interval</em> is the same as for the <strong>-t</strong> option as described above, <em>datetime</em> is described below):
+        <dl>
+          <dt><em>interval</em>
+          <dd>
+            <p>To specify an offset from the current time (in real-time mode) or the beginning of a set of PCP archives (in archive mode) simply specify the interval of time as the argument. For example <strong>-S 30min</strong> will set the start of the time window to be exactly 30 minutes from now in real-time mode, or exactly 30 minutes from the start of a set of PCP archives.
+          <dt>-<em>interval</em>
+          <dd>
+            <p>To specify an offset from the end of a set of PCP archive logs, prefix the <em>interval</em> argument with a minus sign. In this case, the start of the time window precedes the time at the end of the set of archives by the given interval. For example <strong>-S -1hour</strong> will set the start of the time window to be exactly one hour before the time of the last sample in a set of PCP archive logs.
+          <dt>@<em>datetime</em>
+          <dd>
+            <p>To specify the calendar date and time (local time in the reporting timezone) for the start of the time window, use the datetime syntax preceded by an at sign. Refer to the datetime description below for detailed information.
+        </dl>
+      </div>
     <dt><strong>-T</strong> <em>endtime</em>
     <dd>
-      <p>By default the end of the time window is unbounded (in real-time mode) or aligned with the time at the end of a set of PCP archive logs (in archive mode). The <strong>-T</strong> option may be used to specify an earlier time for the end of the time window.
-      <p>The <em>endtime</em> parameter may be given in one of three forms (<em>interval</em> is the same as for the <strong>-t</strong> option as described above, <em>datetime</em> is described below):
-      <dl>
-        <dt><em>interval</em>
-        <dd>
-          <p>To specify an offset from the start of the time window simply use the interval of time as the argument. For example <strong>-T 2h30m</strong> will set the end of the time window to be 2 hours and 30 minutes after the start of the time window.
-        <dt>-<em>interval</em>
-        <dd>
-          <p>To specify an offset back from the time at the end of a set of PCP archive logs, prefix the <em>interval</em> argument with a minus sign. For example <strong>-T -90m</strong> will set the end of the time window to be 90 minutes before the time of the last sample in a set of PCP archive logs.
-        <dt>@<em>datetime</em>
-        <dd>
-          <p>To specify the calendar date and time (local time in the reporting timezone) for the end of the time window, use the datetime syntax preceded by an at sign. Refer to the datetime description below for detailed information.
-      </dl>
+      <div class="indent">
+        <p>By default the end of the time window is unbounded (in real-time mode) or aligned with the time at the end of a set of PCP archive logs (in archive mode). The <strong>-T</strong> option may be used to specify an earlier time for the end of the time window.
+        <p>The <em>endtime</em> parameter may be given in one of three forms (<em>interval</em> is the same as for the <strong>-t</strong> option as described above, <em>datetime</em> is described below):
+        <dl>
+          <dt><em>interval</em>
+          <dd>
+            <p>To specify an offset from the start of the time window simply use the interval of time as the argument. For example <strong>-T 2h30m</strong> will set the end of the time window to be 2 hours and 30 minutes after the start of the time window.
+          <dt>-<em>interval</em>
+          <dd>
+            <p>To specify an offset back from the time at the end of a set of PCP archive logs, prefix the <em>interval</em> argument with a minus sign. For example <strong>-T -90m</strong> will set the end of the time window to be 90 minutes before the time of the last sample in a set of PCP archive logs.
+          <dt>@<em>datetime</em>
+          <dd>
+            <p>To specify the calendar date and time (local time in the reporting timezone) for the end of the time window, use the datetime syntax preceded by an at sign. Refer to the datetime description below for detailed information.
+        </dl>
+      </div>
     <dt><strong>-O</strong> <em>origin</em>
     <dd>
-      <p>By default samples are fetched from the start of the time window (see description of <strong>-S</strong> option) to the end of the time window (see description of <strong>-T</strong> option). The <strong>-O</strong> option allows the specification of an origin within the time window to be used as the initial sample time. This is useful for interactive use of a PCP tool with the <strong>pmtime</strong>(1) VCR replay facility.
-      <p>The <em>origin</em> argument accepted by <strong>-O</strong> conforms to the same syntax and semantics as the <em>starttime</em> argument for the <strong>-T</strong> option.
-      <p>For example <strong>-O -0</strong> specifies that the initial position should be at the end of the time window; this is most useful when wishing to replay “backwards” within the time window.
+      <div class="indent">
+        <p>By default samples are fetched from the start of the time window (see description of <strong>-S</strong> option) to the end of the time window (see description of <strong>-T</strong> option). The <strong>-O</strong> option allows the specification of an origin within the time window to be used as the initial sample time. This is useful for interactive use of a PCP tool with the <strong>pmtime</strong>(1) VCR replay facility.
+        <p>The <em>origin</em> argument accepted by <strong>-O</strong> conforms to the same syntax and semantics as the <em>starttime</em> argument for the <strong>-T</strong> option.
+        <p>For example <strong>-O -0</strong> specifies that the initial position should be at the end of the time window; this is most useful when wishing to replay “backwards” within the time window.
+      </div>
   </dl>
   <p>The <em>datetime</em> argument for the <strong>-O</strong>, <strong>-S</strong> and <strong>-T</strong> options consists of:
   <blockquote>
@@ -247,10 +257,12 @@ $ pcp -h local:</code>
     <dt><strong>PCP_DERIVED_CONFIG</strong>
     <dd>
       <p>When set, this variable defines a colon separated list of files and/or directories (the syntax is the same as for the <strong>$PATH</strong> variable for <strong>sh</strong>(1)). The components are expanded into a list of files as follows: if a component of <strong>$PCP_DERIVED_CONFIG</strong> is a file, then that file is added to the list, else if a component is a directory then recursive descent is used to enumerate all files below that directory and these are added to the list.
-      <p>Each file in the resulting list is assumed to contain definitions of derived metrics as per the syntax described in <strong>pmLoadDerivedConfig</strong>(3), and these are loaded in order.
-      <p>Derived metrics may be used to extend the available metrics with new (derived) metrics using simple arithmetic expressions.
-      <p>If <strong>PCP_DERIVED_CONFIG</strong> is set, the derived metric definitions are processed automatically as each new source of performance metrics is established (i.e. each time a <strong>pmNewContext</strong>(3) is called) or when requests are made against the PMNS.
-      <p>Any component in the <strong>$PCP_DERIVED_CONFIG</strong> list or the expanded list of files that is not a file, or is not a directory or is not accessible (due to permissions or a bad symbolic link) will be silently ignored.
+      <div class="indent">
+        <p>Each file in the resulting list is assumed to contain definitions of derived metrics as per the syntax described in <strong>pmLoadDerivedConfig</strong>(3), and these are loaded in order.
+        <p>Derived metrics may be used to extend the available metrics with new (derived) metrics using simple arithmetic expressions.
+        <p>If <strong>PCP_DERIVED_CONFIG</strong> is set, the derived metric definitions are processed automatically as each new source of performance metrics is established (i.e. each time a <strong>pmNewContext</strong>(3) is called) or when requests are made against the PMNS.
+        <p>Any component in the <strong>$PCP_DERIVED_CONFIG</strong> list or the expanded list of files that is not a file, or is not a directory or is not accessible (due to permissions or a bad symbolic link) will be silently ignored.
+      </div>
     <dt><strong>PCP_SECURE_SOCKETS</strong>
     <dd>
       <p>When set, this variable forces any monitor tool connections to be established using the certificate-based secure sockets feature. If the connections cannot be established securely, they will fail.
@@ -263,8 +275,10 @@ $ pcp -h local:</code>
     <dt><strong>PCP_STDERR</strong>
     <dd>
       <p>Many PCP tools support the environment variable <strong>PCP_STDERR</strong>, which can be used to control where error messages are sent. When unset, the default behavior is that “usage” messages and option parsing errors are reported on standard error, other messages after initial startup are sent to the default destination for the tool, i.e. standard error for ASCII tools, or a dialog for GUI tools.
-      <p>If <strong>PCP_STDERR</strong> is set to the literal value <strong>DISPLAY</strong> then all messages will be displayed in a dialog. This is used for any tools launched from the a Desktop environment.
-      <p>If <strong>PCP_STDERR</strong> is set to any other value, the value is assumed to be a filename, and all messages will be written there.
+      <div class="indent">
+        <p>If <strong>PCP_STDERR</strong> is set to the literal value <strong>DISPLAY</strong> then all messages will be displayed in a dialog. This is used for any tools launched from the a Desktop environment.
+        <p>If <strong>PCP_STDERR</strong> is set to any other value, the value is assumed to be a filename, and all messages will be written there.
+      </div>
     <dt><strong>PMCD_CONNECT_TIMEOUT</strong>
     <dd>
       <p>When attempting to connect to a remote <strong>pmcd</strong>(1) on a machine that is booting, the connection attempt could potentially block for a long time until the remote machine finishes its initialization. Most PCP applications and some of the PCP library routines will abort and return an error if the connection has not been established after some specified interval has elapsed. The default interval is 5 seconds. This may be modified by setting <strong>PMCD_CONNECT_TIMEOUT</strong> in the environment to a real number of seconds for the desired timeout. This is most useful in cases where the remote host is at the end of a slow network, requiring longer latencies to establish the connection correctly.

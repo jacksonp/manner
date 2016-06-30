@@ -20,22 +20,17 @@ class Block_P
           (mb_strpos($lines[$i + 2], "\t") > 0 or $lines[$i + 2] === '') and
           mb_strpos($lines[$i + 3], "\t") > 0
         ) {
-            // Looks like a table next, we detect that lower down, do nothing for now
+            // Looks like a table next, we detect that elsewhere, don't create a paragraph.
             return false;
         }
 
-
         $blockLines = [];
-        while ($i < $numLines) {
-            if ($i === $numLines - 1) {
-                break;
-            }
+        for (; $i < $numLines - 1; ++$i) {
             $nextLine = $lines[$i + 1];
             if ($nextLine === '' or preg_match(Blocks::BLOCK_END_REGEX, $nextLine)) {
                 break;
             }
             $blockLines[] = $nextLine;
-            ++$i;
         }
 
         if (count($blockLines) > 0) {

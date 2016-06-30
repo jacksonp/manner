@@ -278,113 +278,115 @@
       <dt><strong>PROCINFO</strong>
       <dd>
         <p>The elements of this array provide access to information about the running AWK program. On some systems, there may be elements in the array, <strong>“group1”</strong> through <strong>"group</strong><em>n</em><strong>"</strong> for some <em>n</em>, which is the number of supplementary groups that the process has. Use the <strong>in</strong> operator to test for these elements. The following elements are guaranteed to be available:
-        <dl class="indent-\w'\fBPROCINFO[&quot;strftime&quot;]\fR'u+1n">
-          <dt><strong>PROCINFO[“egid”]</strong>
-          <dd>
-            <p>The value of the <em>getegid</em>(2) system call.
-          <dt><strong>PROCINFO[“errno”]</strong>
-          <dd>
-            <p>The value of <em>errno</em>(3) when <strong>ERRNO</strong> is set to the associated error message.
-          <dt><strong>PROCINFO[“euid”]</strong>
-          <dd>
-            <p>The value of the <em>geteuid</em>(2) system call.
-          <dt><strong>PROCINFO[“FS”]</strong>
-          <dd>
-            <p><strong>“FS”</strong> if field splitting with <strong>FS</strong> is in effect, <strong>“FPAT”</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>“FIELDWIDTHS”</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
-          <dt><strong>PROCINFO[“gid”]</strong>
-          <dd>
-            <p>The value of the <em>getgid</em>(2) system call.
-          <dt><strong>PROCINFO[“identifiers”]</strong>
-          <dd>
-            <p>A subarray, indexed by the names of all identifiers used in the text of the AWK program. The values indicate what <em>gawk</em> knows about the identifiers after it has finished parsing the program; they are <em>not</em> updated while the program runs. For each identifier, the value of the element is one of the following:
-            <dl class="indent-\w'\fB&quot;extension&quot;\fR'u+1n">
-              <dt><strong>“array”</strong>
-              <dd>
-                <p>The identifier is an array.
-              <dt><strong>“builtin”</strong>
-              <dd>
-                <p>The identifier is a built-in function.
-              <dt><strong>“extension”</strong>
-              <dd>
-                <p>The identifier is an extension function loaded via <strong>@load</strong> or <strong>-l</strong>.
-              <dt><strong>“scalar”</strong>
-              <dd>
-                <p>The identifier is a scalar.
-              <dt><strong>“untyped”</strong>
-              <dd>
-                <p>The identifier is untyped (could be used as a scalar or array, <em>gawk</em> doesn't know yet).
-              <dt><strong>“user”</strong>
-              <dd>
-                <p>The identifier is a user-defined function.
-            </dl>
-          <dt><strong>PROCINFO[“pgrpid”]</strong>
-          <dd>
-            <p>The process group ID of the current process.
-          <dt><strong>PROCINFO[“pid”]</strong>
-          <dd>
-            <p>The process ID of the current process.
-          <dt><strong>PROCINFO[“ppid”]</strong>
-          <dd>
-            <p>The parent process ID of the current process.
-          <dt><strong>PROCINFO[“strftime”]</strong>
-          <dd>
-            <p>The default time format string for <strong>strftime()</strong>.
-          <dt><strong>PROCINFO[“uid”]</strong>
-          <dd>
-            <p>The value of the <em>getuid</em>(2) system call.
-          <dt><strong>PROCINFO[“version”]</strong>
-          <dd>
-            <p>the version of <em>gawk</em>.
-        </dl>
-        <p>The following elements are present if loading dynamic extensions is available:
-        <dl>
-          <dt><strong>PROCINFO[“api_major”]</strong>
-          <dd>
-            <p>The major version of the extension API.
-          <dt><strong>PROCINFO[“api_minor”]</strong>
-          <dd>
-            <p>The minor version of the extension API.
-        </dl>
-        <p>The following elements are available if MPFR support is compiled into <em>gawk</em>:
-        <dl>
-          <dt><strong>PROCINFO[“gmp_version”]</strong>
-          <dd>
-            <p>The version of the GNU MP library used for arbitrary precision number support in <em>gawk</em>.
-          <dt><strong>PROCINFO[“mpfr_version”]</strong>
-          <dd>
-            <p>The version of the GNU MPFR library used for arbitrary precision number support in <em>gawk</em>.
-          <dt><strong>PROCINFO[“prec_max”]</strong>
-          <dd>
-            <p>The maximum precision supported by the GNU MPFR library for arbitrary precision floating-point numbers.
-          <dt><strong>PROCINFO[“prec_min”]</strong>
-          <dd>
-            <p>The minimum precision allowed by the GNU MPFR library for arbitrary precision floating-point numbers.
-        </dl>
-        <p>The following elements may set by a program to change <em>gawk</em>'s behavior:
-        <dl>
-          <dt><strong>PROCINFO[“NONFATAL”]</strong>
-          <dd>
-            <p>If this exists, then I/O errors for all output redirections become nonfatal.
-          <dt><strong>PROCINFO["</strong><em>output_command</em><strong>“, ”NONFATAL"]</strong>
-          <dd>
-            <p>Make output errors for <em>output_name</em> be nonfatal.
-          <dt><strong>PROCINFO["</strong><em>command</em><strong>“, ”pty"]</strong>
-          <dd>
-            <p>Use a pseudo-tty for two-way communication with <em>command</em> instead of setting up two one-way pipes.
-          <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong>
-          <dd>
-            <p>The timeout in milliseconds for reading data from <em>input</em>, where <em>input</em> is a redirection string or a filename. A value of zero or less than zero means no timeout.
-          <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”RETRY"]</strong>
-          <dd>
-            <p>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
-          <dt><strong>PROCINFO[“sorted_in”]</strong>
-          <dd>
-            <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>“@ind_str_asc”</strong>, <strong>“@ind_num_asc”</strong>, <strong>“@val_type_asc”</strong>, <strong>“@val_str_asc”</strong>, <strong>“@val_num_asc”</strong>, <strong>“@ind_str_desc”</strong>, <strong>“@ind_num_desc”</strong>, <strong>“@val_type_desc”</strong>, <strong>“@val_str_desc”</strong>, <strong>“@val_num_desc”</strong>, and <strong>“@unsorted”</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
-            <br>
-            <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
-            <br>
-            where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
-        </dl>
+        <div class="indent">
+          <dl class="indent-\w'\fBPROCINFO[&quot;strftime&quot;]\fR'u+1n">
+            <dt><strong>PROCINFO[“egid”]</strong>
+            <dd>
+              <p>The value of the <em>getegid</em>(2) system call.
+            <dt><strong>PROCINFO[“errno”]</strong>
+            <dd>
+              <p>The value of <em>errno</em>(3) when <strong>ERRNO</strong> is set to the associated error message.
+            <dt><strong>PROCINFO[“euid”]</strong>
+            <dd>
+              <p>The value of the <em>geteuid</em>(2) system call.
+            <dt><strong>PROCINFO[“FS”]</strong>
+            <dd>
+              <p><strong>“FS”</strong> if field splitting with <strong>FS</strong> is in effect, <strong>“FPAT”</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>“FIELDWIDTHS”</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
+            <dt><strong>PROCINFO[“gid”]</strong>
+            <dd>
+              <p>The value of the <em>getgid</em>(2) system call.
+            <dt><strong>PROCINFO[“identifiers”]</strong>
+            <dd>
+              <p>A subarray, indexed by the names of all identifiers used in the text of the AWK program. The values indicate what <em>gawk</em> knows about the identifiers after it has finished parsing the program; they are <em>not</em> updated while the program runs. For each identifier, the value of the element is one of the following:
+              <dl class="indent-\w'\fB&quot;extension&quot;\fR'u+1n">
+                <dt><strong>“array”</strong>
+                <dd>
+                  <p>The identifier is an array.
+                <dt><strong>“builtin”</strong>
+                <dd>
+                  <p>The identifier is a built-in function.
+                <dt><strong>“extension”</strong>
+                <dd>
+                  <p>The identifier is an extension function loaded via <strong>@load</strong> or <strong>-l</strong>.
+                <dt><strong>“scalar”</strong>
+                <dd>
+                  <p>The identifier is a scalar.
+                <dt><strong>“untyped”</strong>
+                <dd>
+                  <p>The identifier is untyped (could be used as a scalar or array, <em>gawk</em> doesn't know yet).
+                <dt><strong>“user”</strong>
+                <dd>
+                  <p>The identifier is a user-defined function.
+              </dl>
+            <dt><strong>PROCINFO[“pgrpid”]</strong>
+            <dd>
+              <p>The process group ID of the current process.
+            <dt><strong>PROCINFO[“pid”]</strong>
+            <dd>
+              <p>The process ID of the current process.
+            <dt><strong>PROCINFO[“ppid”]</strong>
+            <dd>
+              <p>The parent process ID of the current process.
+            <dt><strong>PROCINFO[“strftime”]</strong>
+            <dd>
+              <p>The default time format string for <strong>strftime()</strong>.
+            <dt><strong>PROCINFO[“uid”]</strong>
+            <dd>
+              <p>The value of the <em>getuid</em>(2) system call.
+            <dt><strong>PROCINFO[“version”]</strong>
+            <dd>
+              <p>the version of <em>gawk</em>.
+          </dl>
+          <p>The following elements are present if loading dynamic extensions is available:
+          <dl>
+            <dt><strong>PROCINFO[“api_major”]</strong>
+            <dd>
+              <p>The major version of the extension API.
+            <dt><strong>PROCINFO[“api_minor”]</strong>
+            <dd>
+              <p>The minor version of the extension API.
+          </dl>
+          <p>The following elements are available if MPFR support is compiled into <em>gawk</em>:
+          <dl>
+            <dt><strong>PROCINFO[“gmp_version”]</strong>
+            <dd>
+              <p>The version of the GNU MP library used for arbitrary precision number support in <em>gawk</em>.
+            <dt><strong>PROCINFO[“mpfr_version”]</strong>
+            <dd>
+              <p>The version of the GNU MPFR library used for arbitrary precision number support in <em>gawk</em>.
+            <dt><strong>PROCINFO[“prec_max”]</strong>
+            <dd>
+              <p>The maximum precision supported by the GNU MPFR library for arbitrary precision floating-point numbers.
+            <dt><strong>PROCINFO[“prec_min”]</strong>
+            <dd>
+              <p>The minimum precision allowed by the GNU MPFR library for arbitrary precision floating-point numbers.
+          </dl>
+          <p>The following elements may set by a program to change <em>gawk</em>'s behavior:
+          <dl>
+            <dt><strong>PROCINFO[“NONFATAL”]</strong>
+            <dd>
+              <p>If this exists, then I/O errors for all output redirections become nonfatal.
+            <dt><strong>PROCINFO["</strong><em>output_command</em><strong>“, ”NONFATAL"]</strong>
+            <dd>
+              <p>Make output errors for <em>output_name</em> be nonfatal.
+            <dt><strong>PROCINFO["</strong><em>command</em><strong>“, ”pty"]</strong>
+            <dd>
+              <p>Use a pseudo-tty for two-way communication with <em>command</em> instead of setting up two one-way pipes.
+            <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong>
+            <dd>
+              <p>The timeout in milliseconds for reading data from <em>input</em>, where <em>input</em> is a redirection string or a filename. A value of zero or less than zero means no timeout.
+            <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”RETRY"]</strong>
+            <dd>
+              <p>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
+            <dt><strong>PROCINFO[“sorted_in”]</strong>
+            <dd>
+              <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>“@ind_str_asc”</strong>, <strong>“@ind_num_asc”</strong>, <strong>“@val_type_asc”</strong>, <strong>“@val_str_asc”</strong>, <strong>“@val_num_asc”</strong>, <strong>“@ind_str_desc”</strong>, <strong>“@ind_num_desc”</strong>, <strong>“@val_type_desc”</strong>, <strong>“@val_str_desc”</strong>, <strong>“@val_num_desc”</strong>, and <strong>“@unsorted”</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
+              <br>
+              <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
+              <br>
+              where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
+          </dl>
+        </div>
       <dt><strong>ROUNDMODE</strong>
       <dd>
         <p>The rounding mode to use for arbitrary precision arithmetic on numbers, by default <strong>“N”</strong> (IEEE-754 roundTiesToEven mode). The accepted values are <strong>“N”</strong> or <strong>“n”</strong> for roundTiesToEven, <strong>“U”</strong> or <strong>“u”</strong> for roundTowardPositive, <strong>“D”</strong> or <strong>“d”</strong> for roundTowardNegative, <strong>“Z”</strong> or <strong>“z”</strong> for roundTowardZero, and if your version of GNU MPFR library supports it, <strong>“A”</strong> or <strong>“a”</strong> for roundTiesToAway.
@@ -423,15 +425,19 @@ print foo    # prints 4</pre>
     x[i, j, k] = “hello, world\n”</strong>
     <p>assigns the string <strong>“hello, world\n”</strong> to the element of the array <strong>x</strong> which is indexed by the string <strong>“A\034B\034C”</strong>. All arrays in AWK are associative, i.e., indexed by string values.
     <p>The special operator <strong>in</strong> may be used to test if an array has an index consisting of a particular value:
-    <pre>if (val in array)
+    <div class="indent">
+      <pre>if (val in array)
         print array[val]</pre>
+    </div>
     <p>If the array has multiple subscripts, use <strong>(i, j) in array</strong>.
     <p>The <strong>in</strong> construct may also be used in a <strong>for</strong> loop to iterate over all the elements of an array. However, the <strong>(i, j) in array</strong> construct only works in tests, not in <strong>for</strong> loops.
     <p>An element may be deleted from an array using the <strong>delete</strong> statement. The <strong>delete</strong> statement may also be used to delete the entire contents of an array, just by specifying the array name without a subscript.
     <p><em>gawk</em> supports true multidimensional arrays. It does not require that such arrays be “rectangular” as in C or C++. For example:
-    <pre>a[1] = 5
+    <div class="indent">
+      <pre>a[1] = 5
 a[2][1] = 6
 a[2][2] = 7</pre>
+    </div>
     <p><strong>NOTE</strong>: You may need to tell <em>gawk</em> that an array element is really a subarray in order to use it where <em>gawk</em> expects an array (such as in the second argument to <strong>split()</strong>). You can do this by creating an element in the subarray and then deleting it with the <strong>delete</strong> statement.
   </div>
   <div class="subsection">
@@ -440,9 +446,11 @@ a[2][2] = 7</pre>
     <p>To force a variable to be treated as a number, add 0 to it; to force it to be treated as a string, concatenate it with the null string.
     <p>Uninitialized variables have the numeric value 0 and the string value “” (the null, or empty, string).
     <p>When a string must be converted to a number, the conversion is accomplished using <em>strtod</em>(3). A number is converted to a string by using the value of <strong>CONVFMT</strong> as a format string for <em>sprintf</em>(3), with the numeric value of the variable as the argument. However, even though all numbers in AWK are floating-point, integral values are <em>always</em> converted as integers. Thus, given
-    <pre>CONVFMT = "%2.2f"
+    <div class="indent">
+      <pre>CONVFMT = "%2.2f"
 a = 12
 b = a ""</pre>
+    </div>
     <p>the variable <strong>b</strong> has a string value of <strong>“12”</strong> and not <strong>“12.00”</strong>.
     <p><strong>NOTE</strong>: When operating in POSIX mode (such as with the <strong>--posix</strong> option), beware that locale settings may interfere with the way decimal numbers are treated: the decimal separator of the numbers you are feeding to <em>gawk</em> must conform to what your locale would expect, be it a comma (,) or a period (.).
     <p><em>Gawk</em> performs comparisons as follows: If two variables are numeric, they are compared numerically. If one value is numeric and the other has a string value that is a “numeric string,” then comparisons are also done numerically. Otherwise, the numeric value is converted to a string and a string comparison is performed. Two strings are compared, of course, as strings.
@@ -1093,17 +1101,20 @@ b = a ""</pre>
   <p><strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. The convention is to separate local variables from real parameters by extra spaces in the parameter list. For example:
-  <pre>function  f(p, q,     a, b)      # a and b are local
+  <div class="indent">
+    <pre>function  f(p, q,     a, b)  # a and b are local
 {
         ...
 }
 
 /abc/   { ... ; f(1, 2) ; ... }</pre>
+  </div>
   <p>The left parenthesis in a function call is required to immediately follow the function name, without any intervening whitespace. This avoids a syntactic ambiguity with the concatenation operator. This restriction does not apply to the built-in functions listed above.
   <p>Functions may call each other and may be recursive. Function parameters used as local variables are initialized to the null string and the number zero upon function invocation.
   <p>Use <strong>return</strong> <em>expr</em> to return a value from a function. The return value is undefined if no value is provided, or if the function returns by “falling off” the end.
   <p>As a <em>gawk</em> extension, functions may be called indirectly. To do this, assign the name of the function to be called, as a string, to a variable. Then use the variable as if it were the name of a function, prefixed with an <strong>@</strong> sign, like so:
-  <pre>function myfunc()
+  <div class="indent">
+    <pre>function myfunc()
 {
         print "myfunc called"
         ...
@@ -1113,7 +1124,9 @@ b = a ""</pre>
         the_func = "myfunc"
         @the_func()     # call through the_func to myfunc
         ...
-}</pre>As of version 4.1.2, this works with user-defined functions, built-in functions, and extension functions.
+}</pre>
+  </div>
+  <p>As of version 4.1.2, this works with user-defined functions, built-in functions, and extension functions.
   <p>If <strong>--lint</strong> has been provided, <em>gawk</em> warns about calls to undefined functions at parse time, instead of at run time. Calling an undefined function at run time is a fatal error.
   <p>The word <strong>func</strong> may be used in place of <strong>function</strong>, although this is deprecated.
 </div>
