@@ -232,16 +232,19 @@ class Text
             if (!$foundTitle and preg_match('~^\.TH\s(.*)$~u', $line, $matches)) {
                 $foundTitle   = true;
                 $titleDetails = Macro::parseArgString($matches[1]);
-                if (is_null($titleDetails) or count($titleDetails) < 2) {
+                if (is_null($titleDetails) or count($titleDetails) < 1) {
                     throw new Exception($line . ' - missing title info');
                 }
                 // See amor.6 for \FB \FR nonsense.
-                $man->title        = TextContent::interpretString(Replace::preg('~\\\\F[BR]~', '',
-                  $titleDetails[0]));
-                $man->section      = TextContent::interpretString($titleDetails[1]);
-                $man->date         = TextContent::interpretString(@$titleDetails[2] ?: '');
-                $man->package      = TextContent::interpretString(@$titleDetails[3] ?: '');
-                $man->section_name = TextContent::interpretString(@$titleDetails[4] ?: '');
+                $man->title = TextContent::interpretString(
+                  Replace::preg('~\\\\F[BR]~', '', $titleDetails[0])
+                );
+                if (count($titleDetails) > 1) {
+                    $man->section      = TextContent::interpretString($titleDetails[1]);
+                    $man->date         = TextContent::interpretString(@$titleDetails[2] ?: '');
+                    $man->package      = TextContent::interpretString(@$titleDetails[3] ?: '');
+                    $man->section_name = TextContent::interpretString(@$titleDetails[4] ?: '');
+                }
                 continue;
             }
             //</editor-fold>
