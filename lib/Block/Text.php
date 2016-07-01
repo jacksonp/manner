@@ -9,7 +9,8 @@ class Block_Text
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (preg_match('~^[\.\']~u', $lines[$i])) {
+        // TODO: accept \' for now, see e.g. tar.0p .TS with cell '0'
+        if (preg_match('~^[\.]~u', $lines[$i])) {
             return false;
         }
 
