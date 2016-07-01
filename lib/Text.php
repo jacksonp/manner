@@ -17,6 +17,8 @@ class Text
             $linePrefix = '';
 
             // Continuations
+            // Can't do these in applyRoffClasses() loop: a continuation could e.g. been in the middle of a conditional
+            // picked up Roff_Condition, e.g. man.1
             // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
             while (
               $i < $numLines - 1 and
