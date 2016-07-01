@@ -8,7 +8,6 @@ class Roff_Condition
 
     static function checkEvaluate(array $lines, int $i)
     {
-//        var_dump($lines[$i]);
 
         if (preg_match(
           '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
