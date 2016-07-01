@@ -96,17 +96,52 @@ class Roff_Condition
             return false; // No colours for now.
         }
 
-        if (preg_match('~^[-\+\*/\d\(\)><=]+$~u', $condition)) {
-            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
-            return eval('return ' . $condition . ';');
-        }
+        $condition = Replace::pregCallback('~(\d+(?:\.\d+)?)([uicpPszfmnvM])~u', function ($matches) {
+            $unitMultipliers = [
+                // device dependent measurement, quite small, ranging from 1/75th to 1/72000th of an inch
+              'u' => 1,
+                // inch
+              'i' => 75,
+                // One inch is equal to 2.54cm.
+              'c' => 75 * 2.54,
+                // Points. This is a typesetter’s measurement used for measure type size. It is 72 points to an inch.
+              'p' => 75 / 72,
+                // Pica. Another typesetting measurement. 6 Picas to an inch (and 12 points to a pica).
+              'P' => 75 / 6,
+                // https://www.gnu.org/software/groff/manual/html_node/Fractional-Type-Sizes.html#Fractional-Type-Sizes
+              's' => 1,
+                // https://www.gnu.org/software/groff/manual/html_node/Fractional-Type-Sizes.html#Fractional-Type-Sizes
+              'z' => 1,
+                // https://www.gnu.org/software/groff/manual/html_node/Colors.html#Colors
+              'f' => 65536,
+                // em = 11/64 inch
+              'm' => 75 * 11 / 64,
+                // en = 1/2 inch
+              'n' => (75 * 11 / 64) / 2,
+                // By default, gtroff uses 10 point type on 12 point spacing. https://www.gnu.org/software/groff/manual/html_node/Sizes.html#Sizes
+              'v' => 75 * 10 / 72,
+                // 100ths of an em.
+              'M' => (75 * 11 / 64) / 100,
+            ];
 
-        if (preg_match('~^\(([^)]+)([:&])(.+)\)$~u', $condition, $matches)) {
-            if ($matches[2] === ':') {
-                return self::test($matches[1]) or self::test($matches[3]);
-            } else {
-                return self::test($matches[1]) and self::test($matches[3]);
-            }
+            return $unitMultipliers[$matches[2]] * $matches[1];
+        }, $condition);
+
+        $condition = Replace::preg('~:~u', ' or ', $condition);
+        $condition = Replace::preg('~&~u', ' and ', $condition);
+
+//        if (preg_match('~^\(([^)]+)([:&])(.+)\)$~u', $condition, $matches)) {
+//            if ($matches[2] === ':') {
+//                return self::test($matches[1]) or self::test($matches[3]);
+//            } else {
+//                return self::test($matches[1]) and self::test($matches[3]);
+//            }
+//        }
+
+        if (preg_match('~^([-\+\*/\d\(\)><=\.]| or | and )+$~u', $condition)) {
+            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
+
+            return eval('return ' . $condition . ';');
         }
 
         $alwaysTrue = [
@@ -124,13 +159,7 @@ class Roff_Condition
           't', // "Formatter is troff."
           'v', // vroff
           'rF',
-          '\\n(.H>23', // part of a check for low resolution devices, e.g. frogatto.6
-          '(\\n(.H=4u)&(1m=24u)', // ? e.g. frogatto.6
-          '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
           'require_index',
-          '1=0:((0\\$1)*2u>(70u-\\n(.iu))', // revisit, see urls_txt.5
-          '1=0:((0\w\'/usr/share/groff/1.22.3/font/devname/DESC\'u+3n)*2u>(70u-\n(.iu))',
-          '1=0:((0\w\'\fB/usr/share/groff/1.22.3/font/devlj4/DESC\'u+2n)*2u>(70u-\n(.iu))',
           'c \\[shc]', // see man.1
           '\'po4a.hide\'',
         ];

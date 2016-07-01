@@ -54,12 +54,13 @@ class Man
           'BD'   => '0',
             // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
           'F'    => '0',
-            // horizontal position?
-          'x'    => '0',
+            // Current indentation.
+          '.i'    => '0',
             // current line length
           '.l'   => '70',
           '.v'   => '1',
-          '.V'   => '1',
+          '.H'   => '1500',
+          '.V'   => '1500',
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
