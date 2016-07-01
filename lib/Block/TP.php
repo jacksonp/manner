@@ -33,7 +33,7 @@ class Block_TP
                 }
 
                 $dtLine = $lines[++$i];
-                while (in_array($dtLine, ['.fi', '.B'])) { // cutter.1, blackbox.1
+                while (in_array($dtLine, ['.fi', '.B', '.'])) { // cutter.1, blackbox.1
                     if ($i < $numLines - 1) {
                         $dtLine = $lines[++$i];
                     } else {
