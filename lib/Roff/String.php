@@ -25,6 +25,11 @@ class Roff_String
         $newRequest = $matches[1];
         $requestVal = Macro::simplifyRequest($matches[2]);
 
+//        var_dump($newRequest);
+//        var_dump($matches[2]);
+//        var_dump($requestVal);
+//        echo '----------------------', PHP_EOL;
+
         // Q and U are special cases for when replacement is in a macro argument, which are separated by double
         // quotes and otherwise get messed up.
         if (in_array($newRequest, ['C\'', 'C`'])) {

@@ -32,28 +32,19 @@ class Macro
 C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
 ROFF;
 
-        $known['e'] = <<<'ROFF'
-\\k:\h'-(\\n(.wu*8/10-\*(#H+.1m+.3m)'\v'-.8m'\z.\h'.2m+.3m'.\h'|\\n:u'\v'.8m'
-ROFF;
-
-        $known['a'] = <<<'ROFF'
-\\k:\h'-(\\n(.wu+\w'°'u-\*(#H)/2u'\v'-.3n'\f1\z°\v'.3n'\h'|\\n:u'\fP
-ROFF;
-
         $known['ð'] = <<<'ROFF'
-\h'\*(#H'∂\h'-\w'~'u'\v'-.25m'\f2‐\fP\v'.25m'\h'-\*(#H'
+d\h'-1'`
 ROFF;
 
         $known['Ð'] = <<<'ROFF'
-D\\k:\h'-\w'D'u'\v'-.11m'\z‐\v'.11m'\h'|\\n:u'
+D\h'-1'‐
+ROFF;
+        $known['Þ'] = <<<'ROFF'
+\o'bp'
 ROFF;
 
-        $known['Æ'] = <<<'ROFF'
-A\h'-(\w'A'u*4/10)'E
-ROFF;
-
-        $known['æ'] = <<<'ROFF'
-a\h'-(\w'a'u*4/10)'e
+        $known['þ'] = <<<'ROFF'
+\o'LP'
 ROFF;
 
         return array_search($string, $known) ?: $string;
