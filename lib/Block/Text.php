@@ -31,6 +31,10 @@ class Block_Text
                 ) {
                     break;
                 }
+                if ($nextLine === '\\&') {
+                    // Skip this, not otherwise they can mess up continuations
+                    continue;
+                }
 
 
                 $line .= ' ' . $nextLine;
