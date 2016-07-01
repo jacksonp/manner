@@ -33,10 +33,6 @@ class Manner
 
         $html = $dom->saveHTML();
 
-        $hacks = ['</strong><strong>' => '', '</em><em>' => ''];
-
-        $html = strtr($html, $hacks);
-
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',
             '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',

@@ -72,11 +72,11 @@
   <h2>CONFIGURATION</h2>
   <p>The configuration file for the weblog PMDA is an ASCII file that can be easily modified. Empty lines and lines beginning with '<strong>#</strong>' are ignored. All other lines must be either a regular expression or server specification.
   <p>Regular expressions, which are used on both the access and error log files, must be of the form:
-  <p><strong>regex</strong> <em>regexName regexp or</em>
+  <p><strong>regex</strong> <em>regexName regexp</em> <em>or</em>
   <p><strong>regex_posix</strong> <em>regexName ordering regexp_posix</em>
   <p>The <em>regexName</em> is a word which uniquely identifies the regular expression. This is the reference used in the server specification. The <em>regexp</em> for access logs is in the format described for <strong>regcmp</strong>(3). The <em>regexp_posix</em> for access logs is in the format described for <strong>regcomp</strong>(3). The argument <em>ordering</em> is explained below. The <strong>Posix</strong> form should be available on all platforms.
   <p>The regular expression requires the specification of up to four arguments to be extracted from each line of a Web server access log, depending on the type of server. In the most common case there are two arguments representing the method and the size.
-  <p>For the non- <strong>Posix</strong> version, argument <em>$0</em> should contain the method: <strong>GET</strong>, <strong>HEAD , POST</strong> or <strong>PUT</strong>. The method <strong>PUT</strong> is treated as a synonym for <strong>POST</strong>, and anything else is categorized as <strong>OTHER</strong>.
+  <p>For the non- <strong>Posix</strong> version, argument <em>$0</em> should contain the method: <strong>GET</strong>, <strong>HEAD ,</strong> <strong>POST</strong> or <strong>PUT</strong>. The method <strong>PUT</strong> is treated as a synonym for <strong>POST</strong>, and anything else is categorized as <strong>OTHER</strong>.
   <p>The second argument, <em>$1</em>, should contain the size of the request. A size of ``<strong>-</strong>'' or “ ” is treated as unknown.
   <p>Argument <em>$3</em> should contain the status code returned to the client browser and argument <em>$4</em> should contain the status code returned to the server from a remote host. These latter two arguments are used for caching servers and must be specified as a pair (or <em>$3</em> will be ignored). For further information on status codes, refer to the web site <strong>http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</strong>
   <p>Some legal non- <strong>Posix</strong> regex expression specifications for monitoring an access log are:
@@ -85,7 +85,7 @@ regex CERN ] "([A-Za-z][-A-Za-z]+)$0 .*" [-0-9]+ ([-0-9]+)$1
 
 # pattern for FTP Server access logs (normally in SYSLOG)
 regex SYSLOG_FTP ftpd[.*]: ([gp][-A-Za-z]+)$0( )$1</pre>
-  <p>There is 1 special types of access logs with the <em>RegexName SQUID.</em> This formats extract 4 parameters but since the <strong>Squid</strong> log file uses text-based status codes, it is handled as a special case.
+  <p>There is 1 special types of access logs with the <em>RegexName</em> <em>SQUID.</em> This formats extract 4 parameters but since the <strong>Squid</strong> log file uses text-based status codes, it is handled as a special case.
   <p>In the examples below, <em>NS_PROXY</em> parses the Netscape/W3C <em>Common Extended Log Format</em> and <em>SQUID</em> parses the default Squid Object Cache format log file.
   <pre># pattern for Netscape Proxy Server Extended Logs
 regex NS_PROXY ] "([A-Za-z][-A-Za-z]+)$0 .*" ([-0-9]+)$2 \
