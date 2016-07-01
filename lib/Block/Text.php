@@ -4,47 +4,64 @@
 class Block_Text
 {
 
+    private static $continuation = false;
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (preg_match('~^\.~u', $lines[$i])) {
+        if (preg_match('~^[\.\']~u', $lines[$i])) {
             return false;
         }
 
         $numLines = count($lines);
 
-        $line = $lines[$i];
+        $line = self::removeContinuation($lines[$i]);
 
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
-        if (
-          (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.') and
-          !preg_match('~\\\\c$~', $line)
-        ) {
+        // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
+        if (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.') {
             for (; $i < $numLines - 1; ++$i) {
                 $nextLine = $lines[$i + 1];
                 if ($nextLine === '' or
-                  in_array(mb_substr($nextLine, 0, 1), ['\'', '.', ' ']) or
+                  in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) or
                   mb_strpos($nextLine, "\t") > 0 or // Could be TabTable
                   (mb_strlen($nextLine) > 1 and mb_substr($nextLine, 0, 2) === '\\.')
                 ) {
                     break;
                 }
+
+
                 if ($nextLine === '\\&') {
-                    // Skip this, not otherwise they can mess up continuations
+                    if (self::$continuation) {
+                        $line .= ' ';
+                    }
                     continue;
                 }
 
-
-                $line .= ' ' . $nextLine;
+                $line .= (self::$continuation ? '' : ' ') . self::removeContinuation($nextLine);
             }
+        }
+
+        // Re-add continuation if present to last line for TextContent::interpretAndAppendText:
+        if (self::$continuation) {
+            self::$continuation = false;
+            $line .= '\\c';
         }
 
         self::addLine($parentNode, $line, $implicitBreak);
 
         return $i;
 
+    }
+
+    static private function removeContinuation(string $line)
+    {
+        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
+        self::$continuation = $replacements > 0;
+
+        return $line;
     }
 
     static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
