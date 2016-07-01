@@ -62,7 +62,7 @@ class Block_TP
 
                 $dt = $dom->createElement('dt');
                 Blocks::handle($dt, $dtLines);
-                $dl->appendChild($dt);
+                $dl->appendBlockIfHasContent($dt);
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $lines[$i];
