@@ -74,8 +74,6 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
-            $lines[$i] = Text::translateCharacters($lines[$i]);
-
             // TODO: fix this hack, see groff_mom.7
             $lines[$i] = preg_replace('~^\.FONT ~u', '.', $lines[$i]);
 
@@ -104,7 +102,7 @@ class Text
                                 throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
                             }
 
-                            $evaluatedMacroLines[] = $macroLine;
+                            $evaluatedMacroLines[] = Text::translateCharacters($macroLine);
                         }
                         $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($evaluatedMacroLines));
 
@@ -126,6 +124,9 @@ class Text
                     continue 2;
                 }
             }
+
+
+            $lines[$i] = Text::translateCharacters($lines[$i]);
 
             $linesNoCond[] = $lines[$i];
 
@@ -156,7 +157,6 @@ class Text
               '\\&',
                 // Empty requests:
               '...',
-              '.',
               '\\.',
               '.rr rF',
             ];
@@ -260,7 +260,7 @@ class Text
 
     }
 
-    private static function translateCharacters($line)
+    static function translateCharacters($line)
     {
 
         // See http://man7.org/linux/man-pages/man7/groff_char.7.html

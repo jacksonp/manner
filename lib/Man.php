@@ -55,12 +55,13 @@ class Man
             // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
           'F'    => '0',
             // Current indentation.
-          '.i'    => '0',
+          '.i'   => '0',
             // current line length
           '.l'   => '70',
           '.v'   => '1',
           '.H'   => '1500',
           '.V'   => '1500',
+          'x'    => '0', // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)

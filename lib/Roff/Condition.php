@@ -14,7 +14,9 @@ class Roff_Condition
           '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
           $lines[$i], $matches)
         ) {
-            return self::ifBlock($lines, $i, $matches[3], self::test($matches[1]) and self::test($matches[2]));
+            $cond1 = Text::translateCharacters($matches[1]);
+            $cond2 = Text::translateCharacters($matches[2]);
+            return self::ifBlock($lines, $i, $matches[3], self::test($cond1) and self::test($cond2));
         }
 
         if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
@@ -25,7 +27,9 @@ class Roff_Condition
         preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' (.*)$~u',
           $lines[$i], $matches)
         ) {
-            if (self::test($matches[1]) and self::test($matches[2])) {
+            $cond1 = Text::translateCharacters($matches[1]);
+            $cond2 = Text::translateCharacters($matches[2]);
+            if (self::test($cond1) and self::test($cond2)) {
                 return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[3])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
@@ -33,7 +37,7 @@ class Roff_Condition
         }
 
         if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $matches)) {
-            if (self::test($matches[1])) {
+            if (self::test(Text::translateCharacters($matches[1]))) {
                 return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[2])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
@@ -41,7 +45,7 @@ class Roff_Condition
         }
 
         if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
-            $useIf = self::test($matches[1]);
+            $useIf = self::test(Text::translateCharacters($matches[1]));
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i     = $if['i'] + 1;
 

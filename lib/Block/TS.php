@@ -71,9 +71,11 @@ class Block_TS
         $tableRowNum = 0;
         $tr          = false;
 
-        while ($i < $numLines - 1) {
+        for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if ($line === '.T&') {
+            if (preg_match('~^\.TE~u', $line)) {
+                return $i;
+            } elseif ($line === '.T&') {
                 list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
                 continue;
             } elseif ($line === '_') {
@@ -162,13 +164,9 @@ class Block_TS
                 ++$tableRowNum;
             }
 
-            $line = $lines[++$i];
-            if (preg_match('~^\.TE~u', $line)) {
-                return $i;
-            }
         }
 
-        throw new Exception($line . ' - .TS without .TE in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
+        throw new Exception('.TS without .TE in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
 
     }
 
