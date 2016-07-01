@@ -4,10 +4,11 @@
 class Roff_Condition
 {
 
-    const CONDITION_REGEX = '(c\s?[^\s]+|[^\s]+)';
+    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|[^\s]+)';
 
     static function checkEvaluate(array $lines, int $i)
     {
+//        var_dump($lines[$i]);
 
         if (preg_match(
           '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
@@ -84,7 +85,10 @@ class Roff_Condition
             return !self::test(mb_substr($condition, 1));
         }
 
-        if (preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches)) {
+        if (
+          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) or
+          preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
+        ) {
             return $matches[1] === $matches[2];
         }
 
@@ -93,6 +97,7 @@ class Roff_Condition
         }
 
         if (preg_match('~^[-\+\*/\d\(\)><=]+$~u', $condition)) {
+            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
             return eval('return ' . $condition . ';');
         }
 
@@ -124,9 +129,10 @@ class Roff_Condition
           '(\\n(.H=4u)&(1m=20u)', // ? e.g. frogatto.6
           'require_index',
           '1=0:((0\\$1)*2u>(70u-\\n(.iu))', // revisit, see urls_txt.5
+          '1=0:((0\w\'/usr/share/groff/1.22.3/font/devname/DESC\'u+3n)*2u>(70u-\n(.iu))',
+          '1=0:((0\w\'\fB/usr/share/groff/1.22.3/font/devlj4/DESC\'u+2n)*2u>(70u-\n(.iu))',
           'c \\[shc]', // see man.1
           '\'po4a.hide\'',
-          '\\n(.$>=3', // hack for gnugo.6, isag.1
         ];
 
         if (in_array($condition, $alwaysFalse, true)) {

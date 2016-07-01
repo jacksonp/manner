@@ -26,7 +26,7 @@ class Inline_ft
         $fontAbbreviation = $arguments[0];
 
         // Skip stray regular font settings:
-        if (in_array($fontAbbreviation, ['1', 'R', 'P', 'CR'])) {
+        if (in_array($fontAbbreviation, ['1', 'R', 'P', 'CR', 'AR'])) {
             return $i;
         }
 
@@ -59,7 +59,9 @@ class Inline_ft
                 case 'C':
                 case 'CW':
                 case '4':
+                case '5':
                 case 'tt':
+                case 'CB':
                 case 'CS': // e.g. pmwebd.1
                     $node = $dom->createElement('code');
                     break;

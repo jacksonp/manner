@@ -41,9 +41,10 @@ class Man
 
     public function reset()
     {
-        $this->data      = [];
-        $this->aliases   = [];
-        $this->macros    = [];
+        $this->data    = [];
+        $this->aliases = [];
+        $this->macros  = [];
+        // See https://www.mankier.com/7/groff#Registers
         $this->registers = [
           '.g'   => '1',
             //The current font family (string-valued).
@@ -57,6 +58,8 @@ class Man
           'x'    => '0',
             // current line length
           '.l'   => '70',
+          '.v'   => '1',
+          '.V'   => '1',
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)

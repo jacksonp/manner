@@ -156,7 +156,7 @@
     <pre>   set AUDIODEV=hw:soundwave,1,2
    play ...
    sox ... -t alsa</pre>
-    <p>Note that the way of setting environment variables varies from system to system" - for some specific examples, see `SOX_OPTS' below.<br>
+    <p>Note that the way of setting environment variables varies from system to system" -for some specific examples, see `SOX_OPTS' below.<br>
     <br>
     When playing a file with a sample rate that is not supported by the audio output device, SoX will automatically invoke the <strong>rate</strong> effect to perform the necessary sample rate conversion. For compatibility with old hardware, the default <strong>rate</strong> quality level is set to `low'. This can be changed by explicitly specifying the <strong>rate</strong> effect with a different quality level, e.g.
     <pre>   play ... rate -m</pre>
@@ -183,7 +183,7 @@
     <br>
     <strong>N.B.</strong> SoX converts all audio files to an internal uncompressed format before performing any audio processing. This means that manipulating a file that is stored in a lossy format can cause further losses in audio fidelity. E.g. with
     <pre>   sox long.mp3 short.mp3 trim 10</pre>
-    <p>SoX first decompresses the input MP3 file, then applies the <strong>trim</strong> effect, and finally creates the output MP3 file by re-compressing the audio" - with a possible reduction in fidelity above that which occurred when the input file was created. Hence, if what is ultimately desired is lossily compressed audio, it is highly recommended to perform all audio processing using lossless file formats and then convert to the lossy format only at the final stage.<br>
+    <p>SoX first decompresses the input MP3 file, then applies the <strong>trim</strong> effect, and finally creates the output MP3 file by re-compressing the audio" -with a possible reduction in fidelity above that which occurred when the input file was created. Hence, if what is ultimately desired is lossily compressed audio, it is highly recommended to perform all audio processing using lossless file formats and then convert to the lossy format only at the final stage.<br>
     <br>
     <strong>N.B.</strong> Applying multiple effects with a single SoX invocation will, in general, produce more accurate results than those produced using multiple SoX invocations.
   </div>
@@ -251,7 +251,7 @@
     <br>
     Unlike the other methods, `mix' combining has the potential to cause clipping in the combiner if no balancing is performed. In this case, if manual volume adjustments are not given, SoX will try to ensure that clipping does not occur by automatically adjusting the volume (amplitude) of each input signal by a factor of ¹/n, where n is the number of input files. If this results in audio that is too quiet or otherwise unbalanced then the input file volumes can be set manually as described above. Using the <strong>norm</strong> effect on the mix is another alternative.<br>
     <br>
-    If mixed audio seems loud enough at some points but too quiet in others then dynamic range compression should be applied to correct this" - see the <strong>compand</strong> effect.<br>
+    If mixed audio seems loud enough at some points but too quiet in others then dynamic range compression should be applied to correct this" -see the <strong>compand</strong> effect.<br>
     <br>
     With the `mix-power' combine method, the mixed volume is approximately equal to that of one of the input signals. This is achieved by balancing using a factor of ¹/√n instead of ¹/n. Note that this balancing factor does not guarantee that clipping will not occur, but the number of clips will usually be low and the resultant distortion is generally imperceptible.
   </div>
@@ -367,7 +367,7 @@
         See <strong>Input File Combining</strong> above for a description of the different combining methods.
       <dt><strong>-D</strong>, <strong>--no-dither</strong>
       <dd>
-        <p>Disable automatic dither" - see `Dithering' above. An example of why this might occasionally be useful is if a file has been converted from 16 to 24 bit with the intention of doing some processing on it, but in fact no processing is needed after all and the original 16 bit file has been lost, then, strictly speaking, no dither is needed if converting the file back to 16 bit. See also the <strong>stats</strong> effect for how to determine the actual bit depth of the audio within a file.
+        <p>Disable automatic dither" -see `Dithering' above. An example of why this might occasionally be useful is if a file has been converted from 16 to 24 bit with the intention of doing some processing on it, but in fact no processing is needed after all and the original 16 bit file has been lost, then, strictly speaking, no dither is needed if converting the file back to 16 bit. See also the <strong>stats</strong> effect for how to determine the actual bit depth of the audio within a file.
       <dt><strong>--effects-file</strong> <em>FILENAME</em>
       <dd>
         <p>Use FILENAME to obtain all effects and their arguments. The file is parsed as if the values were specified on the command line. A new line can be used in place of the special <strong>:</strong> marker to separate effect chains. For convenience, such markers at the end of the file are normally ignored; if you want to specify an empty last effects chain, use an explicit <strong>:</strong> by itself on the last line of the file. This option causes any effects specified on the command line to be discarded.
@@ -550,7 +550,7 @@
       <dd>
         <p>The number of audio channels in the audio file. This can be any number greater than zero.<br>
         <br>
-        For an input file, the most common use for this option is to inform SoX of the number of channels in a `raw' (`headerless') audio file. Occasionally, it may be useful to use this option with a `headered' file, in order to override the (presumably incorrect) value in the header" - note that this is only supported with certain file types. Examples:
+        For an input file, the most common use for this option is to inform SoX of the number of channels in a `raw' (`headerless') audio file. Occasionally, it may be useful to use this option with a `headered' file, in order to override the (presumably incorrect) value in the header" -note that this is only supported with certain file types. Examples:
         <pre>   sox -r 48k -e float -b 32 -c 2 input.raw output.wav</pre>
         <p>converts a particular `raw' file to a self-describing `WAV' file.
         <pre>   play -c 1 music.wav</pre>
@@ -614,7 +614,7 @@
       <dd>
         <p>Gives the sample rate in Hz (or kHz if appended with `k') of the file.<br>
         <br>
-        For an input file, the most common use for this option is to inform SoX of the sample rate of a `raw' (`headerless') audio file (see the examples in <strong>-b</strong> and <strong>-c</strong> above). Occasionally it may be useful to use this option with a `headered' file, in order to override the (presumably incorrect) value in the header" - note that this is only supported with certain file types. For example, if audio was recorded with a sample-rate of say 48k from a source that played back a little, say 1.5%, too slowly, then
+        For an input file, the most common use for this option is to inform SoX of the sample rate of a `raw' (`headerless') audio file (see the examples in <strong>-b</strong> and <strong>-c</strong> above). Occasionally it may be useful to use this option with a `headered' file, in order to override the (presumably incorrect) value in the header" -note that this is only supported with certain file types. For example, if audio was recorded with a sample-rate of say 48k from a source that played back a little, say 1.5%, too slowly, then
         <pre>   sox -r 48720 input.wav output.wav</pre>
         <p>effectively corrects the speed by changing only the file header (but see also the <strong>speed</strong> effect for the more usual solution to this problem).<br>
         <br>
@@ -1084,7 +1084,7 @@
         <br>
         <strong>-b</strong> is similar to <strong>-B</strong> but has clipping protection, i.e. if necessary to prevent clipping whilst balancing, attenuation is applied to all channels. Note, however, that in conjunction with <strong>-n</strong>, <strong>-B</strong> and <strong>-b</strong> are synonymous.<br>
         <br>
-        The <strong>-r</strong> option is used in conjunction with a prior invocation of <strong>gain</strong> with the <strong>-h</strong> option" - see below for details.<br>
+        The <strong>-r</strong> option is used in conjunction with a prior invocation of <strong>gain</strong> with the <strong>-h</strong> option" -see below for details.<br>
         <br>
         The <strong>-n</strong> option normalises the audio to 0dB FSD; it is often used in conjunction with a negative <em>gain-dB</em> to the effect that the audio is normalised to a given level below 0dB. For example,
         <pre>   sox infile outfile gain -n</pre>
@@ -1134,7 +1134,7 @@
         If found, the environment variable LADSPA_PATH will be used as search path for plugins.
       <dt><strong>loudness</strong> [<em>gain</em> [<em>reference</em>]]
       <dd>
-        <p>Loudness control" - similar to the <strong>gain</strong> effect, but provides equalisation for the human auditory system. See http://en.wikipedia.org/wiki/Loudness for a detailed description of loudness. The gain is adjusted by the given <em>gain</em> parameter (usually negative) and the signal equalised according to ISO 226 w.r.t. a reference level of 65dB, though an alternative <em>reference</em> level may be given if the original audio has been equalised for some other optimal level. A default gain of -10dB is used if a <em>gain</em> value is not given.<br>
+        <p>Loudness control" -similar to the <strong>gain</strong> effect, but provides equalisation for the human auditory system. See http://en.wikipedia.org/wiki/Loudness for a detailed description of loudness. The gain is adjusted by the given <em>gain</em> parameter (usually negative) and the signal equalised according to ISO 226 w.r.t. a reference level of 65dB, though an alternative <em>reference</em> level may be given if the original audio has been equalised for some other optimal level. A default gain of -10dB is used if a <em>gain</em> value is not given.<br>
         <br>
         See also the <strong>gain</strong> effect.
       <dt><strong>lowpass</strong> [<strong>-1</strong>|<strong>-2</strong>] <em>frequency</em>[<strong>k</strong>] [width[<strong>q</strong>|<strong>o</strong>|<strong>h</strong>|<strong>k</strong>]]
@@ -1164,13 +1164,13 @@
         <p>Calculate a profile of the audio for use in noise reduction. See the description of the <strong>noisered</strong> effect for details.
       <dt><strong>noisered</strong> [<em>profile-file</em> [<em>amount</em>]]
       <dd>
-        <p>Reduce noise in the audio signal by profiling and filtering. This effect is moderately effective at removing consistent background noise such as hiss or hum. To use it, first run SoX with the <strong>noiseprof</strong> effect on a section of audio that ideally would contain silence but in fact contains noise" - such sections are typically found at the beginning or the end of a recording. <strong>noiseprof</strong> will write out a noise profile to <em>profile-file</em>, or to stdout if no <em>profile-file</em> or if `-' is given. E.g.
+        <p>Reduce noise in the audio signal by profiling and filtering. This effect is moderately effective at removing consistent background noise such as hiss or hum. To use it, first run SoX with the <strong>noiseprof</strong> effect on a section of audio that ideally would contain silence but in fact contains noise" -such sections are typically found at the beginning or the end of a recording. <strong>noiseprof</strong> will write out a noise profile to <em>profile-file</em>, or to stdout if no <em>profile-file</em> or if `-' is given. E.g.
         <pre>   sox speech.wav -n trim 0 1.5 noiseprof speech.noise-profile</pre>
         <p>To actually remove the noise, run SoX again, this time with the <strong>noisered</strong> effect; <strong>noisered</strong> will reduce noise according to a noise profile (which was generated by <strong>noiseprof</strong>), from <em>profile-file</em>, or from stdin if no <em>profile-file</em> or if `-' is given. E.g.
         <pre>   sox speech.wav cleaned.wav noisered speech.noise-profile 0.3</pre>
-        <p>How much noise should be removed is specified by <em>amount</em> - a number between 0 and 1 with a default of 0.5. Higher numbers will remove more noise but present a greater likelihood of removing wanted components of the audio signal. Before replacing an original recording with a noise-reduced version, experiment with different <em>amount</em> values to find the optimal one for your audio; use headphones to check that you are happy with the results, paying particular attention to quieter sections of the audio.<br>
+        <p>How much noise should be removed is specified by <em>amount</em> -a number between 0 and 1 with a default of 0.5. Higher numbers will remove more noise but present a greater likelihood of removing wanted components of the audio signal. Before replacing an original recording with a noise-reduced version, experiment with different <em>amount</em> values to find the optimal one for your audio; use headphones to check that you are happy with the results, paying particular attention to quieter sections of the audio.<br>
         <br>
-        On most systems, the two stages“ - profiling and reduction” - can be combined using a pipe, e.g.
+        On most systems, the two stages“ -profiling and reduction” -can be combined using a pipe, e.g.
         <pre>   sox noisy.wav -n trim 0 1 noiseprof | play noisy.wav noisered</pre>
       <dt><strong>norm</strong> [<em>dB-level</em>]
       <dd>
@@ -1190,7 +1190,7 @@
       <dd>
         <p>Add a phasing effect to the audio. See [3] for a detailed description of phasing.<br>
         <br>
-        delay/decay/speed gives the delay in milliseconds and the decay (relative to gain-in) with a modulation speed in Hz. The modulation is either sinusoidal (<strong>-s</strong>) " - preferable for multiple instruments, or triangular (<strong>-t</strong>) " - gives single instruments a sharper phasing effect. The decay should be less than 0.5 to avoid feedback, and usually no less than 0.1. Gain-out is the volume of the output.<br>
+        delay/decay/speed gives the delay in milliseconds and the decay (relative to gain-in) with a modulation speed in Hz. The modulation is either sinusoidal (<strong>-s</strong>) " -preferable for multiple instruments, or triangular (<strong>-t</strong>) " -gives single instruments a sharper phasing effect. The decay should be less than 0.5 to avoid feedback, and usually no less than 0.1. Gain-out is the volume of the output.<br>
         <br>
         For example:
         <pre>   play snare.flac phaser 0.8 0.74 3 0.4 0.5 -t</pre>
@@ -1460,7 +1460,7 @@ done</pre>
         This effect supports the <strong>--plot</strong> global option.
       <dt><strong>spectrogram</strong> [<em>options</em>]
       <dd>
-        <p>Create a spectrogram of the audio; the audio is passed unmodified through the SoX processing chain. This effect is optional" - type <strong>sox --help</strong> and check the list of supported effects to see if it has been included.<br>
+        <p>Create a spectrogram of the audio; the audio is passed unmodified through the SoX processing chain. This effect is optional" -type <strong>sox --help</strong> and check the list of supported effects to see if it has been included.<br>
         <br>
         The spectrogram is rendered in a Portable Network Graphic (PNG) file, and shows time in the X-axis, frequency in the Y-axis, and audio signal magnitude in the Z-axis. Z-axis values are represented by the colour (or optionally the intensity) of the pixels in the X-Y plane. If the audio signal contains multiple channels then these are shown from top to bottom starting from channel 1 (which is the left channel for stereo audio).<br>
         <br>
@@ -1517,7 +1517,7 @@ done</pre>
             <p>Creates a monochrome spectrogram (the default is colour).
           <dt><strong>-h</strong>
           <dd>
-            <p>Selects a high-colour palette" - less visually pleasing than the default colour palette, but it may make it easier to differentiate different levels. If this option is used in conjunction with <strong>-m</strong>, the result will be a hybrid monochrome/colour palette.
+            <p>Selects a high-colour palette" -less visually pleasing than the default colour palette, but it may make it easier to differentiate different levels. If this option is used in conjunction with <strong>-m</strong>, the result will be a hybrid monochrome/colour palette.
           <dt><strong>-p&nbsp;</strong><em>num</em>
           <dd>
             <p>Permute the colours in a colour or hybrid palette. The <em>num</em> parameter, from 1 (the default) to 6, selects the permutation.
@@ -1535,10 +1535,10 @@ done</pre>
             <p>Selects an alternative, fixed colour-set. This is provided only for compatibility with spectrograms produced by another package. It should not normally be used as it has some problems, not least, a lack of differentiation at the bottom end which results in masking of low-level artefacts.
           <dt><strong>-t&nbsp;</strong><em>text</em>
           <dd>
-            <p>Set the image title" - text to display above the spectrogram.
+            <p>Set the image title" -text to display above the spectrogram.
           <dt><strong>-c&nbsp;</strong><em>text</em>
           <dd>
-            <p>Set (or clear) the image comment" - text to display below and to the left of the spectrogram.
+            <p>Set (or clear) the image comment" -text to display below and to the left of the spectrogram.
           <dt><strong>-o&nbsp;</strong><em>file</em>
           <dd>
             <p>Name of the spectrogram output PNG file, default `spectrogram.png'. If `-' is given, the spectrogram will be sent to standard output (stdout).
@@ -1598,7 +1598,7 @@ done</pre>
             <td>constant power
             <td>smooth
         </table>
-        <p>To perform a splice, first use the <strong>trim</strong> effect to select the audio sections to be joined together. As when performing a tape splice, the end of the section to be spliced onto should be trimmed with a small <em>excess</em> (default 0.005 seconds) of audio after the ideal joining point. The beginning of the audio section to splice on should be trimmed with the same <em>excess</em> (before the ideal joining point), plus an additional <em>leeway</em> (default 0.005 seconds). Any time specification may be used for these parameters. SoX should then be invoked with the two audio sections as input files and the <strong>splice</strong> effect given with the position at which to perform the splice" - this is length of the first audio section (including the excess).<br>
+        <p>To perform a splice, first use the <strong>trim</strong> effect to select the audio sections to be joined together. As when performing a tape splice, the end of the section to be spliced onto should be trimmed with a small <em>excess</em> (default 0.005 seconds) of audio after the ideal joining point. The beginning of the audio section to splice on should be trimmed with the same <em>excess</em> (before the ideal joining point), plus an additional <em>leeway</em> (default 0.005 seconds). Any time specification may be used for these parameters. SoX should then be invoked with the two audio sections as input files and the <strong>splice</strong> effect given with the position at which to perform the splice" -this is length of the first audio section (including the excess).<br>
         <br>
         The following diagram uses the tape analogy to illustrate the splice operation. The effect simulates the diagonal cuts and joins the two pieces:
         <pre>      length1   excess

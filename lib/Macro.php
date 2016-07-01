@@ -4,7 +4,7 @@
 class Macro
 {
 
-    static function parseArgString($argString)
+    static function parseArgString($argString, $csv = true)
     {
         // sometimes get double spaces, see e.g. samba_selinux.8:
         $argString = Replace::preg('~\s+~', ' ', $argString);
@@ -14,7 +14,12 @@ class Macro
         if ($argString === '') {
             return null;
         } else {
-            return str_getcsv($argString, ' ');
+            if ($csv) {
+                return str_getcsv($argString, ' ');
+            } else {
+                // TODO: revisit using this for rc.1
+                return explode(' ', $argString);
+            }
         }
     }
 

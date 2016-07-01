@@ -74,6 +74,8 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
+            $lines[$i] = Text::translateCharacters($lines[$i]);
+
             // TODO: fix this hack, see groff_mom.7
             $lines[$i] = preg_replace('~^\.FONT ~u', '.', $lines[$i]);
 
@@ -84,10 +86,11 @@ class Text
                 if (count($bits) > 0) {
                     $macro  = array_shift($bits);
                     $macros = $man->getMacros();
+//                    var_dump($macros);
                     if (isset($macros[$macro])) {
                         $man->addRegister('.$', count($bits));
-                        $macroLines = Text::applyRoffClasses($macros[$macro]);
-                        foreach ($macroLines as $macroLine) {
+                        $evaluatedMacroLines = [];
+                        foreach ($macros[$macro] as $macroLine) {
 
                             for ($n = 0; $n < 10; ++$n) {
                                 $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
@@ -101,8 +104,10 @@ class Text
                                 throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
                             }
 
-                            $linesNoCond[] = $macroLine;
+                            $evaluatedMacroLines[] = $macroLine;
                         }
+                        $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($evaluatedMacroLines));
+
                         continue;
                     }
                 }
@@ -209,8 +214,6 @@ class Text
                 continue;
             }
 
-            $line = Text::translateCharacters($line);
-
             // Do this after translating characters:
             if (preg_match('~^\.tr (.+)$~u', $line, $matches)) {
                 $chrArray = preg_split('~~u', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
@@ -313,6 +316,11 @@ class Text
 
         // Don't worry about this: "Local vertical/horizontal motion"
         $line = Replace::preg('~\\\\[vh]\'.*?\'~u', ' ', $line);
+
+        // \w’string’: The width of the glyph sequence string.
+        $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
+            return mb_strlen($matches[0]);
+        }, $line);
 
         // Don't worry colour changes:
         $line = Replace::preg('~\\\\m(\(..|\[.*?\])~u', '', $line);
