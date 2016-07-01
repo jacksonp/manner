@@ -31,28 +31,6 @@ class Text
                 continue;
             }
 
-            // Skip full-line comments
-            // See mscore.1 for full-line comments starting with '."
-            // See cal3d_converter.1 for full-line comments starting with '''
-            if (preg_match('~^([\'\.]?\\\\"|\'\."\'|\'\'\')~u', $line, $matches)) {
-                continue;
-            }
-
-            // \" is start of a comment. Everything up to the end of the line is ignored.
-            // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
-            // but this behaviour is consistent with what the man command renders:
-            $line = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $line);
-
-            if (preg_match('~^\.ig(?:\s+(?<delim>.*)|$)~u', $line, $matches)) {
-                $delim = empty($matches['delim']) ? '..' : $matches['delim'];
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    if ($lines[$i] === $delim) {
-                        continue 2;
-                    }
-                }
-                throw new Exception('.ig with no corresponding ' . $delim);
-            }
-
             // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
             $line = Replace::preg('~^\.do ~u', '.', $line);
 
@@ -84,7 +62,6 @@ class Text
                 if (count($bits) > 0) {
                     $macro  = array_shift($bits);
                     $macros = $man->getMacros();
-//                    var_dump($macros);
                     if (isset($macros[$macro])) {
                         $man->addRegister('.$', count($bits));
                         $evaluatedMacroLines = [];
@@ -111,7 +88,7 @@ class Text
                 }
             }
 
-            $roffClasses = ['Condition', 'Macro', 'Register', 'String', 'Alias'];
+            $roffClasses = ['Comment', 'Condition', 'Macro', 'Register', 'String', 'Alias'];
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
