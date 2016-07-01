@@ -4,7 +4,7 @@
 class TextContent
 {
 
-    private static $continuation = false;
+    static $continuation = false;
 
     private static $canAddWhitespace = true;
 
@@ -204,7 +204,10 @@ class TextContent
     static function interpretString(string $string, bool $addSpacing = false, bool $replaceDoubleQuotes = true):string
     {
 
-        // Get rid of this as no longer needed: "To begin a line with a control character without it being interpreted, precede it with \&. This represents a zero width space, which means it does not affect the output." (also remove tho if not at start of line)
+        // Get rid of this as no longer needed:
+        // "To begin a line with a control character without it being interpreted, precede it with \&.
+        // This represents a zero width space, which means it does not affect the output."
+        // (also remove tho if not at start of line.)
         $string = Replace::preg('~\\\\&~u', '', $string);
 
         if (self::$canAddWhitespace and $addSpacing) {
@@ -216,6 +219,8 @@ class TextContent
         $backslashEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
           'e'  => '\\',
+            // Do *after* we check for registers (e.g. \nF) so we keep the \n
+          '\\en' => '\n',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
           '|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.

@@ -153,8 +153,6 @@ class Text
             $line = $man->applyAllReplacements($linesNoCond[$i]);
 
             $skipLines = [
-                // We don't care about this if there's nothing after it, otherwise it's handled in interpretAndAppendText():
-              '\\&',
                 // Empty requests:
               '...',
               '\\.',
@@ -282,7 +280,6 @@ class Text
           '\\-'  => '-',
             // The same as \(ul, the underline character.
           '\\_'  => '_',
-          '\\en' => '\n',
           '\\t'  => "\t",
             // Unpaddable space size space glyph (no line break). See enigma.6:
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),

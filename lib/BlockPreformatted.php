@@ -52,12 +52,12 @@ class BlockPreformatted
                 }
                 $line      = $lines[++$i];
                 $addIndent = 4;
-            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line)) {
+            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or $line === '\\&') {
                 continue;
             } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
                 $parentNode->appendChild(new DOMText(' ['));
                 $arguments = Macro::parseArgString($matches[1]);
-                $strong = $parentNode->appendChild($dom->createElement('strong'));
+                $strong    = $parentNode->appendChild($dom->createElement('strong'));
                 TextContent::interpretAndAppendText($strong, $arguments[0]);
                 if (count($arguments) > 1) {
                     $parentNode->appendChild(new DOMText(' '));
@@ -75,7 +75,7 @@ class BlockPreformatted
                 $newI      = $className::checkAppend($parentNode, $lines, $i);
                 if ($newI !== false) {
                     if ($i !== $numLines - 1) {
-                        $parentNode->appendChild(new DOMText("\n"));
+                        self::endInputLine($parentNode);
                     }
                     $i = $newI;
                     continue 2;
@@ -97,14 +97,20 @@ class BlockPreformatted
 
             TextContent::interpretAndAppendText($parentForLine, $line, false, false);
             if ($i !== $numLines - 1) {
-                if ($parentNode->getAttribute('class') === 'synopsis') {
-                    $parentNode->appendChild(new DOMText(' '));
-                } else {
-                    $parentNode->appendChild(new DOMText("\n"));
-                }
+                self::endInputLine($parentNode);
             }
 
         }
 
     }
+
+    private static function endInputLine(DOMElement $parentNode)
+    {
+        if (TextContent::$continuation or $parentNode->getAttribute('class') === 'synopsis') {
+            $parentNode->appendChild(new DOMText(' '));
+        } else {
+            $parentNode->appendChild(new DOMText("\n"));
+        }
+    }
+
 }
