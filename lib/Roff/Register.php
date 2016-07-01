@@ -7,7 +7,7 @@ class Roff_Register
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.nr (?<name>[-\w]+) (?<val>.+)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.nr (?<name>\S+) (?<val>.+)$~u', $lines[$i], $matches)) {
             return false;
         }
 
