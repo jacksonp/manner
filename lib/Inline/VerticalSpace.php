@@ -4,6 +4,23 @@
 class Inline_VerticalSpace
 {
 
+    private static function addBR(DOMElement $parentNode)
+    {
+        $prevBRs   = 0;
+        $nodeCheck = $parentNode->lastChild;
+        while ($nodeCheck) {
+            if ($nodeCheck instanceof DOMElement and $nodeCheck->tagName === 'br') {
+                ++$prevBRs;
+            } else {
+                break;
+            }
+            $nodeCheck = $nodeCheck->previousSibling;
+        }
+        if ($prevBRs < 2) {
+            $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
+        }
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
@@ -12,7 +29,6 @@ class Inline_VerticalSpace
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-        $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
         if (!in_array($textParent->tagName, [
@@ -36,9 +52,9 @@ class Inline_VerticalSpace
           )
         ) {
 
-            $textParent->appendChild($dom->createElement('br'));
+            self::addBR($textParent);
             if (in_array($matches[1], ['sp', 'ne'])) {
-                $textParent->appendChild($dom->createElement('br'));
+                self::addBR($textParent);
             }
 
             if ($shouldAppend) {
