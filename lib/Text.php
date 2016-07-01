@@ -314,8 +314,11 @@ class Text
         // Don't worry about changes in point size for now:
         $line = Replace::preg('~\\\\s[-+]?\d~u', '', $line);
 
-        // Don't worry about this: "Local vertical/horizontal motion"
-        $line = Replace::preg('~\\\\[vh]\'.*?\'~u', ' ', $line);
+        // Don't worry about this:
+        // \v, \h: "Local vertical/horizontal motion"
+        // \l: Horizontal line drawing function (optionally using character c).
+        // \L: Vertical line drawing function (optionally using character c).
+        $line = Replace::preg('~\\\\[vhLl]\'.*?\'~u', ' ', $line);
 
         // \w’string’: The width of the glyph sequence string.
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {

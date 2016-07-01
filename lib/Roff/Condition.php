@@ -36,7 +36,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.if ' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test(Text::translateCharacters($matches[1]))) {
                 return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[2])]), 'i' => $i];
             } else {
