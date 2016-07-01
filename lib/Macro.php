@@ -55,7 +55,7 @@ ROFF;
     public static function massageLine(string $macroLine)
     {
         $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-        $macroLine = Replace::preg('~^\.\s+~', '.', $macroLine);
+        $macroLine = Replace::preg('~^\.\s+~u', '.', $macroLine);
 
         return Replace::preg('~^\.nop ~u', '', $macroLine);
     }
