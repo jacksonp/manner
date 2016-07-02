@@ -4,6 +4,11 @@
 class Block_SS
 {
 
+    private static function endSubsection($line)
+    {
+        return preg_match('~^\.S[SH]~u', $line);
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
@@ -17,13 +22,13 @@ class Block_SS
         $headingNode = $dom->createElement('h3');
 
         if ($matches[1] === '') {
-            if ($i === $numLines - 1) {
+            if ($i === $numLines - 1 or self::endSubsection($lines[$i + 1])) {
                 return $i;
             }
             // Text for subheading is on next line.
             $sectionHeading = $lines[++$i];
             if ($sectionHeading === '.br') {
-                // Skip this to work around bugs in man pages, e.g. xorrecord.1
+                // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
                 return $i;
             }
             Blocks::handle($headingNode, [$sectionHeading]);
@@ -45,7 +50,7 @@ class Block_SS
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.S[SH]~u', $line)) {
+            if (self::endSubsection($line)) {
                 break;
             } else {
                 $blockLines[] = $line;

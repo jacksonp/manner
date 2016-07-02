@@ -4,6 +4,12 @@
 class Block_SH
 {
 
+    private static function endSection($line)
+    {
+        return preg_match('~^\.SH~u', $line);
+    }
+
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
@@ -17,7 +23,7 @@ class Block_SH
         $headingNode = $dom->createElement('h2');
 
         if ($matches[1] === '') {
-            if ($i === $numLines - 1) {
+            if ($i === $numLines - 1 or self::endSection($lines[$i + 1])) {
                 return $i;
             }
             // Text for subheading is on next line.
