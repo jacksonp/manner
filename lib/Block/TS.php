@@ -38,7 +38,7 @@ class Block_TS
 
         }
 
-        return [$i + 1, $rowFormats];
+        return [$i, $rowFormats];
 
     }
 
@@ -52,10 +52,6 @@ class Block_TS
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
-        $table = $dom->createElement('table');
-        $table->setAttribute('class', 'tbl');
-        $table = $parentNode->appendChild($table);
-
         $columnSeparator = "\t";
 
         $line = $lines[++$i];
@@ -68,12 +64,18 @@ class Block_TS
 
         list($i, $rowFormats) = self::parseRowFormats($lines, $i);
 
+        $table = $dom->createElement('table');
+        $table->setAttribute('class', 'tbl');
         $tableRowNum = 0;
         $tr          = false;
 
-        while ($i < $numLines - 1) {
+        for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if ($line === '.T&') {
+            if (preg_match('~^\.TE~u', $line)) {
+                $parentNode->appendBlockIfHasContent($table);
+
+                return $i;
+            } elseif ($line === '.T&') {
                 list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
                 continue;
             } elseif ($line === '_') {
@@ -162,10 +164,6 @@ class Block_TS
                 ++$tableRowNum;
             }
 
-            $line = $lines[++$i];
-            if (preg_match('~^\.TE~u', $line)) {
-                return $i;
-            }
         }
 
         throw new Exception('.TS without .TE in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
