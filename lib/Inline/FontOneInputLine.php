@@ -48,6 +48,10 @@ class Inline_FontOneInputLine
 
         $arguments = Macro::parseArgString(@$matches[2]);
 
+        if ($parentNode->tagName !== 'pre' and !$shouldAppend and !TextContent::$continuation and $textParent->hasContent()) {
+            $textParent->appendChild(new DOMText(' '));
+        }
+
         if (is_null($arguments)) {
             if ($i === $numLines - 1) {
                 return $i;
@@ -60,12 +64,9 @@ class Inline_FontOneInputLine
                 // Workaround for man page bugs, see e.g. tcpdump.1
                 return $i - 1;
             }
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
             Blocks::handle($innerNode, [$nextLine]);
         } else {
-            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments), $textParent->hasContent());
+            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
         }
 
         if ($appendToParentNode) {

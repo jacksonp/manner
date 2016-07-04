@@ -29,13 +29,13 @@
   <p>By default all diagnostics and errors from <strong>pmlogger</strong> are written to the file <em>pmlogger.log</em> in the directory where <strong>pmlogger</strong> is launched. The <strong>-l</strong> option may be used to override the default behavior. If the log file cannot be created or is not writable, output is written to standard error instead.
   <p>If specified, the <strong>-s</strong> option instructs <strong>pmlogger</strong> to terminate after a certain size in records, bytes or time units has been accumulated. If <em>endsize</em> is an integer then <em>endsize</em> records will be written to the log. If <em>endsize</em> is an integer suffixed by <strong>b</strong> or <strong>bytes</strong> then <em>endsize</em> bytes of the archive data will be written out (note, however, that archive log record boundaries will not be broken and so this limit may be slightly surpassed). Other viable file size units include: <strong>K</strong>, <strong>Kb</strong>, <strong>Kbyte</strong>, <strong>Kilobyte</strong> for kilobytes and <strong>M</strong>, <strong>Mb</strong>, <strong>Mbyte</strong>, <strong>Megabyte</strong> for megabytes and <strong>G</strong>, <strong>Gb</strong>, <strong>Gbyte</strong>, <strong>Gigabyte</strong> for gigabytes. These units may be optionally suffixed by an <strong>s</strong> and may be of mixed case. Alternatively <em>endsize</em> may be an integer or a floating point number suffixed using a time unit as described in <strong>PCPIntro</strong>(1) for the <em>interval</em> argument (to the standard PCP <strong>-t</strong> command line option).
   <pre>Some examples of different formats:
-<strong> -s 100</strong>
-<strong> -s 100bytes</strong>
-<strong> -s 100K</strong>
-<strong> -s 100Mb</strong>
-<strong> -s 10Gbyte</strong>
-<strong> -s 10mins</strong>
-<strong> -s 1.5hours</strong></pre>
+<strong>-s 100</strong>
+<strong>-s 100bytes</strong>
+<strong>-s 100K</strong>
+<strong>-s 100Mb</strong>
+<strong>-s 10Gbyte</strong>
+<strong>-s 10mins</strong>
+<strong>-s 1.5hours</strong></pre>
   <p>The default is for <strong>pmlogger</strong> to run forever.
   <p>The <strong>-r</strong> option causes the size of the physical record(s) for each group of metrics and the expected contribution of the group to the size of the PCP archive for one full day of collection to be reported in the log file. This information is reported the first time each group is successfully written to the archive.
   <p>The <strong>-U</strong> option specifies the user account under which to run <strong>pmlogger</strong>. The default is the current user account for interactive use. When run as a daemon, the unprivileged “pcp” account is used in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
@@ -44,8 +44,8 @@
   <p>Normally <strong>pmlogger</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile.</em>
   <p>Under normal circumstances, <strong>pmlogger</strong> will run forever (except for a <strong>-s</strong> option or a termination signal). The <strong>-T</strong> option may be used to limit the execution time using the format of time as prescribed by <strong>PCPIntro</strong>(1). The time is interpreted within the time zone of the PMCD server, unless the <strong>-y</strong> option is given, within which case the time zone at this logger host is used.
   <pre>Some examples of different formats:
-<strong> -T 10mins</strong>
-<strong> -T '@ 11:30'</strong></pre>
+<strong>-T 10mins</strong>
+<strong>-T '@ 11:30'</strong></pre>
   <p>From this it can be seen that <strong>-T 10mins</strong> and <strong>-s 10mins</strong> perform identical actions.
   <p>Alternatively, <strong>pmlogger</strong> runtime may be limited to the lifetime of another process by using the <strong>-p</strong> or <strong>--PID</strong> option to nominate the PID of the process of interest. In this case the <strong>pmlogger</strong> will exit when the other process no longer exists.
   <p>When <strong>pmlogger</strong> receives a SIGHUP signal, the current volume of the log is closed, and a new volume is opened. This mechanism (or the alternative mechanism via <strong>pmlc</strong>(1)) may be used to manage the growth of the log files - once a log volume is closed, that file may be archived without ill-effect on the continued operation of <strong>pmlogger</strong>. See also the <strong>-v</strong> option above.
