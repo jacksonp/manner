@@ -10,7 +10,7 @@ class Block_SY
         // These get swallowed:
         $blockEnds = ['.YS'];
 
-        if (!preg_match('~^\.SY\s(.+)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.SY\s?(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -19,8 +19,10 @@ class Block_SY
         $commandName = trim($matches[1]);
 
         $pre = $dom->createElement('pre');
-        $pre->setAttribute('class', 'synopsis');
-        $pre->appendChild(new DOMText($commandName));
+        if ($commandName !== '') {
+            $pre->setAttribute('class', 'synopsis');
+            $pre->appendChild(new DOMText($commandName));
+        }
 
         $preLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
