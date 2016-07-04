@@ -4,9 +4,8 @@
 class Manner
 {
 
-    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null)
+    static function roffToDOM(array $fileLines, string $filePath):DOMDocument
     {
-
         $dom = new DOMDocument('1.0', 'utf-8');
         $dom->registerNodeClass('DOMElement', 'HybridNode');
 
@@ -31,7 +30,17 @@ class Manner
 
         Blocks::handle($manPageContainer, $lines);
 
+        return $dom;
+    }
+
+
+    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null)
+    {
+
+        $dom = self::roffToDOM($fileLines, $filePath);
         $html = $dom->saveHTML();
+
+        $man = Man::instance();
 
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',
