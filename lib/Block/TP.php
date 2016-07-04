@@ -8,7 +8,7 @@ class Block_TP
     {
 
         // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-        if (!preg_match('~^\.TP ?(.*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.T[PQ] ?(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -20,7 +20,7 @@ class Block_TP
 
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
+            if (preg_match('~^\.T[PQ] ?(.*)$~u', $line, $matches)) {
                 if ($i === $numLines - 1 or preg_match('~^\.TP ?(.*)$~u', $lines[$i + 1])) {
                     // a bug in the man page, just skip:
                     continue;
