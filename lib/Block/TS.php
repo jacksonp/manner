@@ -86,10 +86,10 @@ class Block_TS
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom-double');
                 }
-            } elseif (in_array($line, ['.ft CW', '.ft R'])) {
+            } elseif (in_array($line, ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
             } else {
-                $tr   = $table->appendChild($dom->createElement('tr'));
+                $tr   = $dom->createElement('tr');
                 $cols = explode($columnSeparator, $line);
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
@@ -137,6 +137,8 @@ class Block_TS
 
                     if ($tdContents === '_') {
                         $cell->appendChild($dom->createElement('hr'));
+                    } elseif (in_array($tdContents, ['.TH', '.TC'])) {
+                        continue; //  Material up to the ".TH" is placed at the top of each page of table; the remaining lines in the table are placed on several pages as required. Note that this is not a feature of tbl, but of the ms layout macros.
                     } elseif (mb_strpos($tdContents, 'T{') === 0) {
                         $tBlockLines = [];
                         if ($tdContents !== 'T{') {
@@ -157,11 +159,16 @@ class Block_TS
                         }
 
                     } else {
-                        Blocks::handle($cell, [$tdContents]);
+                        // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
+                        //Blocks::handle($cell, [$tdContents]);
+                        if (Inline_VerticalSpace::check($tdContents) === false) {
+                            TextContent::interpretAndAppendText($cell, $tdContents);
+                        }
                     }
                     $tr->appendChild($cell);
                 }
                 ++$tableRowNum;
+                $table->appendBlockIfHasContent($tr);
             }
 
         }

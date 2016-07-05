@@ -21,10 +21,20 @@ class Inline_VerticalSpace
         }
     }
 
+    static function check($string)
+    {
+        if (preg_match('~^\\\\?\.(br|sp|ne)(\s|$)~u', $string, $matches)) {
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\\\\?\.(br|sp|ne)(\s|$)~u', $lines[$i], $matches)) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 
