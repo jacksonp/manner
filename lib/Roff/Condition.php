@@ -98,7 +98,13 @@ class Roff_Condition
         }
 
         if (preg_match('~^m\s*\w+$~u', $condition)) {
+            // mname: True if there is a color called name.
             return false; // No colours for now.
+        }
+
+        if (preg_match('~^c\s*\w+$~u', $condition)) {
+            // cch: True if there is a glyph ch available.
+            return true; // Assume we have all the glyphs
         }
 
         if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
