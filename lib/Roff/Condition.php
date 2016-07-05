@@ -99,6 +99,12 @@ class Roff_Condition
             return false; // No colours for now.
         }
 
+        if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
+            // dname: True if there is a string, macro, diversion, or request called name.
+            // Hack (all other checks are against "d pdfmarks", hopefully that's should be false.
+            return $matches[1] === 'TE';
+        }
+
         $condition = Replace::pregCallback('~(\d+(?:\.\d+)?)([uicpPszfmnvM])~u', function ($matches) {
             $unitMultipliers = [
                 // device dependent measurement, quite small, ranging from 1/75th to 1/72000th of an inch
@@ -132,14 +138,6 @@ class Roff_Condition
 
         $condition = Replace::preg('~:~u', ' or ', $condition);
         $condition = Replace::preg('~&~u', ' and ', $condition);
-
-//        if (preg_match('~^\(([^)]+)([:&])(.+)\)$~u', $condition, $matches)) {
-//            if ($matches[2] === ':') {
-//                return self::test($matches[1]) or self::test($matches[3]);
-//            } else {
-//                return self::test($matches[1]) and self::test($matches[3]);
-//            }
-//        }
 
         if (preg_match('~^([-\+\*/\d\(\)><=\.]| or | and )+$~u', $condition)) {
             $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
