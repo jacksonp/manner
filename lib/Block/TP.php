@@ -87,7 +87,7 @@ class Block_TP
             }
         }
 
-        $parentNode->appendBlockIfHasContent($dl);
+        Block_DefinitionList::appendDL($parentNode, $dl);
 
         return $i;
 

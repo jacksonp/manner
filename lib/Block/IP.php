@@ -55,7 +55,7 @@ class Block_IP
             }
         }
 
-        $parentNode->appendBlockIfHasContent($dl);
+        Block_DefinitionList::appendDL($parentNode, $dl);
 
         return $i;
 

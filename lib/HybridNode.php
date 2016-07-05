@@ -35,9 +35,11 @@ class HybridNode extends DOMElement
     {
         if ($block->hasChildNodes()) {
             if ($block->childNodes->length > 1 or trim($block->firstChild->textContent) !== '') {
-                $this->appendChild($block);
+                return $this->appendChild($block);
             }
         }
+
+        return $block;
     }
 
     function getLastBlock()
