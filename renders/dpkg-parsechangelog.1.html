@@ -26,7 +26,7 @@
       <p>Specifies the format of the changelog. By default the format is read from a special line near the bottom of the changelog or failing that defaults to the <strong>debian</strong> standard format. See also <strong>CHANGELOG FORMATS</strong>.
     <dt><strong>-L</strong> <em>libdir</em>
     <dd>
-      <p>Specify an additional directory to search for parser scripts. This directory is searched before the default directories which are currently <strong>/usr/local/lib/dpkg/parsechangelog</strong> and <strong>/usr/lib/dpkg/parsechangelog</strong>.
+      <p>Obsolete option without effect (since dpkg 1.18.8). Setting the perl environment variables <strong>PERL5LIB</strong> or <strong>PERLLIB</strong> has a similar effect when looking for the parser perl modules.
     <dt><strong>-S</strong>, <strong>--show-field</strong> <em>field</em>
     <dd>
       <p>Specifies the name of the field to show (since dpkg 1.17.0). The field name is not printed, only its value.
@@ -39,7 +39,7 @@
   </dl>
   <div class="subsection">
     <h3>Parser Options</h3>
-    <p>The following options can be used to influence the output of the changelog parser, e.g. the range of entries or the format of the output. They need to be supported by the parser script in question. See also <strong>NOTES</strong>.
+    <p>The following options can be used to influence the output of the changelog parser, e.g. the range of entries or the format of the output.
     <dl>
       <dt><strong>--file</strong> <em>file</em>
       <dd>
@@ -59,6 +59,11 @@
             <p>The highest urgency of all included entries is used, followed by the concatenated (space-separated) comments from all the versions requested.
           <dt><strong>Maintainer:</strong> <em>author</em>
           <dt><strong>Date:</strong> <em>date</em>
+          <dd>
+            <p>The date of the entry as a string, as it appears in the changelog. With a <strong>strptime</strong>(3) format "<strong>%a, %d %b %Y %T %z</strong>", but where the day of the week might not actually correspond to the real day obtained from the rest of the date string. If you need a more accurate representation of the date, use the <strong>Timestamp</strong> field, but take into account it might not be possible to map it back to the exact value in this field.
+          <dt><strong>Timestamp:</strong> <em>timestamp</em>
+          <dd>
+            <p>The date of the entry as a timestamp in seconds since the epoch (since dpkg 1.18.8).
           <dt><strong>Closes:</strong> <em>bug-number</em>
           <dd>
             <p>The Closes fields of all included entries are merged.
@@ -101,16 +106,16 @@
   <p>In order to have <strong>dpkg-parsechangelog</strong> run the new parser, a line must be included within the last 40 lines of the changelog file, matching the Perl regular expression: “<strong>\schangelog-format:\s+([0-9a-z]+)\W</strong>”. The part in parentheses should be the name of the format. For example:
   <p>@@@ changelog-format: <em>otherformat</em> @@@
   <p>Changelog format names are non-empty strings of alphanumerics.
-  <p>If such a line exists then <strong>dpkg-parsechangelog</strong> will look for the parser as <strong>/usr/lib/dpkg/parsechangelog/</strong><em>otherformat</em> or <strong>/usr/local/lib/dpkg/parsechangelog/</strong><em>otherformat</em>; it is an error for it not being present or not being an executable program. The default changelog format is <strong>debian</strong>, and a parser for it is provided by default.
-  <p>The parser will be invoked with the changelog open on standard input at the start of the file. It should read the file (it may seek if it wishes) to determine the information required and return the parsed information to standard output in the format specified by the <strong>--format</strong> option. It should accept all <strong>Parser Options</strong>.
+  <p>If such a line exists then <strong>dpkg-parsechangelog</strong> will look for the parser as a <strong>Dpkg::Changelog::</strong><em>Otherformat</em> perl module; it is an error for it not being present. The parser name in the perl module will be automatically capitalized. The default changelog format is <strong>debian</strong>, and a parser for it is provided by default.
+  <p>The parser should be derived from the Dpkg::Changelog class and implement the required documented interface.
   <p>If the changelog format which is being parsed always or almost always leaves a blank line between individual change notes, these blank lines should be stripped out, so as to make the resulting output compact.
   <p>If the changelog format does not contain date or package name information this information should be omitted from the output. The parser should not attempt to synthesize it or find it from other sources.
-  <p>If the changelog does not have the expected format the parser should exit with a nonzero exit status, rather than trying to muddle through and possibly generating incorrect output.
+  <p>If the changelog does not have the expected format the parser should error out, rather than trying to muddle through and possibly generating incorrect output.
   <p>A changelog parser may not interact with the user at all.
 </div>
 <div class="section">
   <h2>NOTES</h2>
-  <p>All <strong>Parser Options</strong> except for <strong>-v</strong> are only supported since dpkg 1.14.16. Third party parsers for changelog formats other than <strong>debian</strong> might not support all options.
+  <p>All <strong>Parser Options</strong> except for <strong>-v</strong> are only supported since dpkg 1.14.16.
   <p>Short option parsing with non-bundled values available only since dpkg 1.18.0.
 </div>
 <div class="section">

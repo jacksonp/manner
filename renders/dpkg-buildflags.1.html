@@ -211,6 +211,19 @@
       <dd>
         <p>This setting (disabled by default) adds <strong>-fPIE</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>, and <strong>-fPIE -pie</strong> to <strong>LDFLAGS</strong>. Position Independent Executable are needed to take advantage of Address Space Layout Randomization, supported by some kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this (-fPIC), so they gain ASLR automatically, but binary .text regions need to be build PIE to gain ASLR. When this happens, ROP (Return Oriented Programming) attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
         <p>This is not compatible with <strong>-fPIC</strong> so care must be taken when building shared objects.
+        <p>Static libraries can be used by programs or other shared libraries. Depending on the flags used to compile all the objects within a static library, these libraries will be usable by different sets of objects:
+        <dl>
+          <dt>none
+          <dd>
+            <p>Cannot be linked into a PIE program, nor a shared library.
+          <dt><strong>-fPIE</strong>
+          <dd>
+            <p>Can be linked into any program, but not a shared library.
+          <dt><strong>-fPIC</strong>
+          <dd>
+            <p>Can be linked into any program and shared library.
+        </dl>
+        <p>Unconditionally passing <strong>-fPIE</strong>, <strong>-fpie</strong> or <strong>-pie</strong> to a build-system using libtool is safe as these flags will get stripped when building shared libraries. Otherwise on projects that build both programs and shared libraries you might need to make sure that when building the shared libraries <strong>-fPIC</strong> is always passed last (so that it overrides any previous <strong>-PIE</strong>) to compilation flags such as <strong>CFLAGS</strong>, and <strong>-shared</strong> is passed last (so that it overrides any previous <strong>-pie</strong>) to linking flags such as <strong>LDFLAGS</strong>.
         <p>Additionally, since PIE is implemented via a general register, some register starved architectures (but not including i386 anymore since optimizations implemented in gcc &gt;= 5) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
     </dl>
   </div>
@@ -223,7 +236,7 @@
         <p>This setting (enabled by default) adds <strong>-Wdate-time</strong> to <strong>CPPFLAGS</strong>. This will cause warnings when the <strong>__TIME__</strong>, <strong>__DATE__</strong> and <strong>__TIMESTAMP__</strong> macros are used.
       <dt><strong>fixdebugpath</strong>
       <dd>
-        <p>This setting (disabled by default) adds <strong>%-fdebug-path-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
+        <p>This setting (disabled by default) adds <strong>-fdebug-path-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
     </dl>
   </div>
 </div>
@@ -251,6 +264,12 @@
     <dt><strong>DEB_BUILD_MAINT_OPTIONS</strong>
     <dd>
       <p>These variables can be used by a user or maintainer to disable/enable various area features that affect build flags. The <strong>DEB_BUILD_MAINT_OPTIONS</strong> variable overrides any setting in the <strong>DEB_BUILD_OPTIONS</strong> feature areas. See the <strong>FEATURE AREAS</strong> section for details.
+    <dt><strong>DEB_VENDOR</strong>
+    <dd>
+      <p>This setting defines the current vendor. If not set, it will discover the current vendor by reading <strong>/etc/dpkg/origins/default</strong>.
+    <dt><strong>DEB_BUILD_PATH</strong>
+    <dd>
+      <p>This variable sets the build path (since dpkg 1.18.8) to use in features such as <strong>fixdebugpath</strong> so that they can be controlled by the caller. This variable is currently Debian and derivatives-specific.
   </dl>
 </div>
 <div class="section">
@@ -275,14 +294,6 @@
         <p>Makefile snippet that will load (and optionally export) all flags supported by <strong>dpkg-buildflags</strong> into variables (since dpkg 1.16.1).
     </dl>
   </div>
-</div>
-<div class="section">
-  <h2>ENVIRONMENT</h2>
-  <dl>
-    <dt><strong>DEB_VENDOR</strong>
-    <dd>
-      <p>This setting defines the current vendor. If not set, it will discover the current vendor by reading <strong>/etc/dpkg/origins/default</strong>.
-  </dl>
 </div>
 <div class="section">
   <h2>EXAMPLES</h2>
