@@ -184,8 +184,11 @@ class Text
             // .ns: Turn on no-space mode.
             // .mso
             // .tm, .tm1, .tmc: printing to stdout
+            // .defcolor: Define color, see https://www.gnu.org/software/groff/manual/html_node/Colors.html
+            // .pdfdest: hack for error in foo2lava.1
+            // .em macro: The macro is run after the end of input.
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc)(\s|$)~u',
+              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc|defcolor|pdfdest|em)(\s|$)~u',
               $line)
             ) {
                 continue;

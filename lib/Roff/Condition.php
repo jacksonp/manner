@@ -6,24 +6,25 @@ class Roff_Condition
 
     const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|[^\s]+)';
 
-    static function checkEvaluate(array $lines, int $i)
+    static function checkEvaluate(array &$lines, int $i)
     {
 
         if (preg_match(
-          '~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
+          '~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
           $lines[$i], $matches)
         ) {
             $cond1 = Text::translateCharacters($matches[1]);
             $cond2 = Text::translateCharacters($matches[2]);
+
             return self::ifBlock($lines, $i, $matches[3], self::test($cond1) and self::test($cond2));
         }
 
-        if (preg_match('~^\.if ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             return self::ifBlock($lines, $i, $matches[2], self::test($matches[1]));
         }
 
         if (
-        preg_match('~^\.if ' . self::CONDITION_REGEX . ' \.if ' . self::CONDITION_REGEX . ' (.*)$~u',
+        preg_match('~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
           $lines[$i], $matches)
         ) {
             $cond1 = Text::translateCharacters($matches[1]);
@@ -35,9 +36,10 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.if ' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test(Text::translateCharacters($matches[1]))) {
-                return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[2])]), 'i' => $i];
+                $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
+                return ['i' => $i - 1];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
