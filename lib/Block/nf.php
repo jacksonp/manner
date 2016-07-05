@@ -33,6 +33,14 @@ class Block_nf
             ++$i;
         }
 
+        if (
+          $i < $numLines - 1 and
+          preg_match('~\.RS~u', $preLines[0]) and
+          $lines[$i + 1] === '.RE'
+        ) {
+            $preLines[] = $lines[++$i];
+        }
+
         ArrayHelper::rtrim($preLines, array_merge($blockEnds, ['', '.br', '.sp']));
 
         if (count($preLines) === 0) {
@@ -86,6 +94,7 @@ class Block_nf
                 throw new Exception('.nf block contains initial .RS but not final .RE');
             }
             array_shift($preLines);
+            ArrayHelper::trim($preLines, ['', '.br', '.sp']);
             $className = 'indent';
             if (!empty($matches[1])) {
                 $className .= '-' . trim($matches[1]);

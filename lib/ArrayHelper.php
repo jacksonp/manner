@@ -4,6 +4,12 @@
 class ArrayHelper
 {
 
+    static function trim(array &$arrayToTrim, array $unwantedValues)
+    {
+        self::ltrim($arrayToTrim, $unwantedValues);
+        self::rtrim($arrayToTrim, $unwantedValues);
+    }
+
     static function ltrim(array &$arrayToTrim, array $unwantedValues)
     {
 
