@@ -27,7 +27,7 @@ class Block_SS
             }
             // Text for subheading is on next line.
             $sectionHeading = $lines[++$i];
-            if ($sectionHeading === '.br') {
+            if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
                 return $i;
             }

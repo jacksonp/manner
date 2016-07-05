@@ -11,6 +11,12 @@ class Inline_FontOneInputLine
             return false;
         }
 
+        $arguments = Macro::parseArgString(@$matches[2]);
+
+        if (is_null($arguments) and $i < count($lines) - 1 and preg_match('~\.IP~u', $lines[$i + 1])) {
+            return $i; // TODO: not sure how to handle this, just skip the font setting for now.
+        }
+
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
@@ -45,8 +51,6 @@ class Inline_FontOneInputLine
             default:
                 throw new Exception('switch is exhaustive.');
         }
-
-        $arguments = Macro::parseArgString(@$matches[2]);
 
         if ($parentNode->tagName !== 'pre' and !$shouldAppend and !TextContent::$continuation and $textParent->hasContent()) {
             $textParent->appendChild(new DOMText(' '));

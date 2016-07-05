@@ -4,16 +4,21 @@
 class Block_SH
 {
 
-    private static function endSection($line)
+    static function check($line)
     {
-        return preg_match('~^\.SH~u', $line);
+        if (preg_match('~^\.SH(.*)$~u', $line, $matches)) {
+            return $matches;
+        }
+
+        return false;
     }
 
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.SH(.*)$~u', $lines[$i], $matches)) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 
@@ -23,12 +28,12 @@ class Block_SH
         $headingNode = $dom->createElement('h2');
 
         if ($matches[1] === '') {
-            if ($i === $numLines - 1 or self::endSection($lines[$i + 1])) {
+            if ($i === $numLines - 1 or self::check($lines[$i + 1])) {
                 return $i;
             }
             // Text for subheading is on next line.
             $sectionHeading = $lines[++$i];
-            if (in_array($sectionHeading, ['.br', '.sp', '.ne'])) {
+            if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 return $i;
             }
             Blocks::handle($headingNode, [$sectionHeading]);
@@ -49,9 +54,14 @@ class Block_SH
 
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match('~^\.SH(.*)~u', $line, $matches)) {
-                if ($matches[1] === '' and $i < $numLines - 1 and in_array($lines[$i + 1], ['.br', '.sp', '.ne'])) {
+            $line    = $lines[$i];
+            $matches = self::check($lines[$i]);
+            if ($matches !== false) {
+                if (
+                  $matches[1] === '' and
+                  $i < $numLines - 1 and
+                  in_array($lines[$i + 1], Block_Section::skipSectionNameLines)
+                ) {
                     continue;
                 }
                 --$i;
