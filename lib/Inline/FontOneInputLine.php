@@ -70,15 +70,16 @@ class Inline_FontOneInputLine
             if ($i === $numLines - 1) {
                 return $i;
             }
-            $nextLine = $lines[++$i];
-            if ($nextLine === '') {
+            ++$i;
+            if ($lines[$i] === '') {
                 return $i;
             }
-            if (in_array($nextLine, ['.B', '.I', '.SM', '.SB'])) {
-                // Workaround for man page bugs, see e.g. tcpdump.1
-                return $i - 1;
+            $result     = Block_Text::getNextInputLine($lines, $i);
+            $i          = $result['i'];
+            if (count($result['lines']) === 0) {
+                return $i;
             }
-            Blocks::handle($innerNode, [$nextLine]);
+            Blocks::handle($innerNode, $result['lines']);
         } else {
             TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
         }

@@ -4,17 +4,21 @@
 class Block_P
 {
 
+    static function check(string $string)
+    {
+        // empty lines cause a new para also, see sar.1
+        // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
+        return $string === '' or preg_match('~^\.([LP]?P(?:\s|$)|HP)~u', $string);
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        // empty lines cause a new para also, see sar.1
-        // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-        if ($lines[$i] !== '' and !preg_match('~^\.([LP]?P(?:\s|$)|HP)~u', $lines[$i])) {
+        if (!self::check($lines[$i])) {
             return false;
         }
 
         $numLines = count($lines);
-
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];

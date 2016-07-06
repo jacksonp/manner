@@ -4,11 +4,21 @@
 class Block_IP
 {
 
+    static function check(string $string)
+    {
+        if (preg_match('~^\.IP ?(.*)$~u', $string, $matches)) {
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(DOMElement $parentNode, array $lines, int $i)
     {
 
-        // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-        if (!preg_match('~^\.IP ?(.*)$~u', $lines[$i], $matches)) {
+        // TODO $matches will contain the indentation level, try to use this to handle nested dls?
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 

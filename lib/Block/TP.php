@@ -4,11 +4,21 @@
 class Block_TP
 {
 
+    static function check(string $string)
+    {
+        if (preg_match('~^\.T[PQ] ?(.*)$~u', $string, $matches)) {
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
         // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-        if (!preg_match('~^\.T[PQ] ?(.*)$~u', $lines[$i], $matches)) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 
@@ -32,68 +42,20 @@ class Block_TP
                     $dl->setAttribute('class', $firstIndent);
                 }
 
-                $dtLines = [];
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $dtLines[] = $lines[$i];
-                    if (
-                      mb_substr($lines[$i], 0, 1) !== '.' or
-                      (
-                        $matches = Inline_FontOneInputLine::check($lines[$i]) and
-                        @$matches[2] != '' // NB: not !==, might not be set
-                      ) or
-                      (
-                        $matches = Inline_AlternatingFont::check($lines[$i]) and
-                        @$matches[2] != '' // NB: not !==, might not be set
-                      )
-                    ) {
-                        break;
-                    }
-                }
-                if ($i < $numLines - 1 and $lines[$i + 1] === '.UE') {
-                    $dtLines[] = $lines[++$i];
-                }
-
-                /*
-                $dtLine = $lines[++$i];
-                while (in_array($dtLine, ['.fi', '.B', '.'])) { // cutter.1, blackbox.1
-                    if ($i < $numLines - 1) {
-                        $dtLine = $lines[++$i];
-                    } else {
-                        break 2;
-                    }
-                }
-
-                // e.g. albumart-qt.1, ipmitool.1:
-                if (in_array($dtLine, ['.br', '.sp']) or Blocks::lineEndsBlock($lines, $i)) {
-                    --$i;
-                    break; // i.e. skip the .TP line
-                }
-
-                if (preg_match('~^\.UR(\s|$)~u', $dtLine)) {
-                    $dtLines = [$dtLine];
-                    while ($i < $numLines) {
-                        $dtLine = $lines[++$i];
-                        if ($dtLine === '.UE') {
-                            break;
-                        }
-                        $dtLines[] = $dtLine;
-                    }
-                } else {
-                    $dtLines = [$dtLine];
-                }
-                */
-
-                $dt = $dom->createElement('dt');
-                Blocks::handle($dt, $dtLines);
+                $result = Block_Text::getNextInputLine($lines, $i + 1);
+                $i      = $result['i'];
+                $dt     = $dom->createElement('dt');
+                Blocks::handle($dt, $result['lines']);
                 $dl->appendBlockIfHasContent($dt);
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $lines[$i];
                     if (preg_match('~^\.TQ$~u', $line)) {
-                        $dtLine = $lines[++$i];
+                        $result = Block_Text::getNextInputLine($lines, $i + 1);
+                        $i      = $result['i'];
                         $dt     = $dom->createElement('dt');
-                        Blocks::handle($dt, [$dtLine]);
-                        $dl->appendChild($dt);
+                        Blocks::handle($dt, $result['lines']);
+                        $dl->appendBlockIfHasContent($dt);
                     } else {
                         --$i;
                         break;

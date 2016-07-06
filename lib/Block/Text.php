@@ -6,6 +6,50 @@ class Block_Text
 
     private static $continuation = false;
 
+    static function getNextInputLine(array $lines, int $i): array
+    {
+
+        $blockLines = []; // Could be .B on one line, then some text on next line for example.
+        $numLines   = count($lines);
+        for (; $i < $numLines; ++$i) {
+
+            if (
+              Block_P::check($lines[$i]) or
+              Block_TP::check($lines[$i]) or
+              Block_IP::check($lines[$i]) or
+              Block_SH::check($lines[$i]) or
+              Block_SS::check($lines[$i]) or
+              Inline_VerticalSpace::check($lines[$i])
+            ) {
+                --$i;
+                break;
+            }
+
+            $blockLines[] = $lines[$i];
+
+            if (
+              mb_substr($lines[$i], 0, 1) !== '.' or
+              (
+                $matches = Inline_FontOneInputLine::check($lines[$i]) and
+                @$matches[2] != '' // NB: not !==, might not be set
+              ) or
+              (
+                $matches = Inline_AlternatingFont::check($lines[$i]) and
+                @$matches[2] != '' // NB: not !==, might not be set
+              )
+            ) {
+                break;
+            }
+
+        }
+        if ($i < $numLines - 1 and $lines[$i + 1] === '.UE') {
+            $blockLines[] = $lines[++$i];
+        }
+
+        return ['i' => $i, 'lines' => $blockLines];
+
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
