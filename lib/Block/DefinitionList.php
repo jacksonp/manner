@@ -11,16 +11,24 @@ class Block_DefinitionList
 
         // See pmdapipe.1:
         if ($dl->childNodes->length === 1 and $dl->firstChild->tagName === 'dd') {
-            $blockquote = $dom->createElement('blockquote');
-            $class      = $dl->getAttribute('class');
-            if (!in_array($class, ['', 'indent'])) {
-                $blockquote->setAttribute('class', $class);
+            $dd    = $dl->firstChild;
+            $class = $dl->getAttribute('class');
+            if ($dd->childNodes->length === 1 and $dd->firstChild->tagName === 'pre') {
+                if (!in_array($class, ['', 'indent'])) {
+                    $dd->firstChild->setAttribute('class', $class);
+                }
+                $parentNode->appendBlockIfHasContent($dd->firstChild);
+            } else {
+                $blockquote = $dom->createElement('blockquote');
+                if (!in_array($class, ['', 'indent'])) {
+                    $blockquote->setAttribute('class', $class);
+                }
+                $strayDD = $dl->firstChild;
+                while ($strayDD->firstChild) {
+                    $blockquote->appendChild($strayDD->firstChild);
+                }
+                $parentNode->appendBlockIfHasContent($blockquote);
             }
-            $strayDD = $dl->firstChild;
-            while ($strayDD->firstChild) {
-                $blockquote->appendChild($strayDD->firstChild);
-            }
-            $parentNode->appendBlockIfHasContent($blockquote);
 
             return;
         }

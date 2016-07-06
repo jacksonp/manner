@@ -18,7 +18,8 @@ class Block_Text
               Block_TP::check($lines[$i]) or
               Block_IP::check($lines[$i]) or
               Block_SH::check($lines[$i]) or
-              Block_SS::check($lines[$i])
+              Block_SS::check($lines[$i]) or
+              Block_nf::check($lines[$i])
             ) {
                 --$i;
                 break;

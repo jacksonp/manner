@@ -4,18 +4,28 @@
 class Block_nf
 {
 
+    static function check(string $string)
+    {
+        if (preg_match('~^\.nf\s?(.*)$~u', $string, $matches)) {
+            // Don't actually expect anything in $matches[1]
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        // These get swallowed:
-        $blockEnds = ['.fi', '.ad', '.ad n', '.ad b'];
-
-        if (!preg_match('~^\.nf~u', $lines[$i])) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        // These get swallowed:
+        $blockEnds = ['.fi', '.ad', '.ad n', '.ad b'];
+        $numLines  = count($lines);
+        $dom       = $parentNode->ownerDocument;
 
         $preLines = [];
         while ($i < $numLines - 1) {
