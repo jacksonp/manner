@@ -14,7 +14,7 @@ class Block_Text
         for (; $i < $numLines; ++$i) {
 
             if (
-              Block_P::check($lines[$i]) or
+              Block_RS::check($lines[$i]) or
               Block_TP::check($lines[$i]) or
               Block_IP::check($lines[$i]) or
               Block_SH::check($lines[$i]) or
@@ -25,20 +25,22 @@ class Block_Text
                 break;
             }
 
-            $blockLines[] = $lines[$i];
+            if (!Block_P::check($lines[$i])) {
+                $blockLines[] = $lines[$i];
+                if (
+                  mb_substr($lines[$i], 0, 1) !== '.' or
+                  (
+                    $matches = Inline_FontOneInputLine::check($lines[$i]) and
+                    @$matches[2] != '' // NB: not !==, might not be set
+                  ) or
+                  (
+                    $matches = Inline_AlternatingFont::check($lines[$i]) and
+                    @$matches[2] != '' // NB: not !==, might not be set
+                  )
+                ) {
+                    break;
+                }
 
-            if (
-              mb_substr($lines[$i], 0, 1) !== '.' or
-              (
-                $matches = Inline_FontOneInputLine::check($lines[$i]) and
-                @$matches[2] != '' // NB: not !==, might not be set
-              ) or
-              (
-                $matches = Inline_AlternatingFont::check($lines[$i]) and
-                @$matches[2] != '' // NB: not !==, might not be set
-              )
-            ) {
-                break;
             }
 
         }
