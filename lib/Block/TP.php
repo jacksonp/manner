@@ -13,7 +13,7 @@ class Block_TP
         return false;
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array &$lines, int $i)
     {
 
         // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
@@ -23,7 +23,16 @@ class Block_TP
         }
 
         $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+
+        if ($i < $numLines - 1 and $lines[$i + 1] === '.nf') {
+            // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
+            $lines[$i + 1] = $lines[$i];
+            $lines[$i]     = '.nf';
+
+            return $i - 1;
+        }
+
+        $dom = $parentNode->ownerDocument;
 
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
