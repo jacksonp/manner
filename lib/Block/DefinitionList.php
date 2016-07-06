@@ -9,6 +9,22 @@ class Block_DefinitionList
 
         $dom = $parentNode->ownerDocument;
 
+        // See pmdapipe.1:
+        if ($dl->childNodes->length === 1 and $dl->firstChild->tagName === 'dd') {
+            $blockquote = $dom->createElement('blockquote');
+            $class      = $dl->getAttribute('class');
+            if (!in_array($class, ['', 'indent'])) {
+                $blockquote->setAttribute('class', $class);
+            }
+            $strayDD = $dl->firstChild;
+            while ($strayDD->firstChild) {
+                $blockquote->appendChild($strayDD->firstChild);
+            }
+            $parentNode->appendBlockIfHasContent($blockquote);
+
+            return;
+        }
+
         $everyChildIsDT = true;
         for ($j = 0; $j < $dl->childNodes->length; ++$j) {
             if ($dl->childNodes->item($j)->tagName !== 'dt') {
