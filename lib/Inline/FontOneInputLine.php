@@ -4,10 +4,20 @@
 class Inline_FontOneInputLine
 {
 
+    static function check(string $string)
+    {
+        if (preg_match('~^\.(R|I|B|SB|SM)(\s.*)?$~u', $string, $matches)) {
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.(R|I|B|SB|SM)(\s.*)?$~u', $lines[$i], $matches)) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 

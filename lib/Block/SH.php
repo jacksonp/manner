@@ -13,7 +13,6 @@ class Block_SH
         return false;
     }
 
-
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 

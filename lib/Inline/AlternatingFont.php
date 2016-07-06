@@ -4,10 +4,20 @@
 class Inline_AlternatingFont
 {
 
+    static function check(string $string)
+    {
+        if (preg_match('~^\.(BI|BR|IB|IR|RB|RI)(\s.*)?$~u', $string, $matches)) {
+            return $matches;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.(BI|BR|IB|IR|RB|RI)(\s.*)?$~u', $lines[$i], $matches)) {
+        $matches = self::check($lines[$i]);
+        if ($matches === false) {
             return false;
         }
 

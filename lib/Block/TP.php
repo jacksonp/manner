@@ -21,7 +21,7 @@ class Block_TP
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (preg_match('~^\.T[PQ] ?(.*)$~u', $line, $matches)) {
-                if ($i === $numLines - 1 or preg_match('~^\.TP ?(.*)$~u', $lines[$i + 1])) {
+                if ($i === $numLines - 1 or preg_match('~^\.[IT]P ?(.*)$~u', $lines[$i + 1])) {
                     // a bug in the man page, just skip:
                     continue;
                 }
@@ -32,6 +32,28 @@ class Block_TP
                     $dl->setAttribute('class', $firstIndent);
                 }
 
+                $dtLines = [];
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    $dtLines[] = $lines[$i];
+                    if (
+                      mb_substr($lines[$i], 0, 1) !== '.' or
+                      (
+                        $matches = Inline_FontOneInputLine::check($lines[$i]) and
+                        @$matches[2] != '' // NB: not !==, might not be set
+                      ) or
+                      (
+                        $matches = Inline_AlternatingFont::check($lines[$i]) and
+                        @$matches[2] != '' // NB: not !==, might not be set
+                      )
+                    ) {
+                        break;
+                    }
+                }
+                if ($i < $numLines - 1 and $lines[$i + 1] === '.UE') {
+                    $dtLines[] = $lines[++$i];
+                }
+
+                /*
                 $dtLine = $lines[++$i];
                 while (in_array($dtLine, ['.fi', '.B', '.'])) { // cutter.1, blackbox.1
                     if ($i < $numLines - 1) {
@@ -59,6 +81,7 @@ class Block_TP
                 } else {
                     $dtLines = [$dtLine];
                 }
+                */
 
                 $dt = $dom->createElement('dt');
                 Blocks::handle($dt, $dtLines);
