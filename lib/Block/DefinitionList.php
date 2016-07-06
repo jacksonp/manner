@@ -9,9 +9,8 @@ class Block_DefinitionList
 
         $dom = $parentNode->ownerDocument;
 
-        // See pmdapipe.1:
-        if ($dl->childNodes->length === 1 and $dl->firstChild->tagName === 'dd') {
-            $dd    = $dl->firstChild;
+        // See pmdapipe.1, pmcd.1:
+        while ($dd = $dl->firstChild and $dd->tagName === 'dd') {
             $class = $dl->getAttribute('class');
             if ($dd->childNodes->length === 1 and $dd->firstChild->tagName === 'pre') {
                 if (!in_array($class, ['', 'indent'])) {
@@ -29,7 +28,10 @@ class Block_DefinitionList
                 }
                 $parentNode->appendBlockIfHasContent($blockquote);
             }
+            $dl->removeChild($dl->firstChild);
+        }
 
+        if ($dl->childNodes->length === 0) {
             return;
         }
 
