@@ -50,32 +50,38 @@ class Inline_Link
         $blockLines  = [];
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (preg_match('~^\.(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
+            if (preg_match('~^\.(?:UR|MT)~u', $lines[$i])) {
+                --$i;
+                break;
+            } elseif (preg_match('~^\.(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
                 $punctuation = trim($matches[1]);
                 break;
             }
             $blockLines[] = $lines[$i];
         }
 
-        if (is_null($arguments)) {
-            if (count($blockLines) === 1) {
-                $url = $blockLines[0];
-            } else {
-                throw new Exception('Missing URL for Link.');
-            }
-        } else {
-            $url = $arguments[0];
+        $href = false;
+        if (!is_null($arguments)) {
+            $url  = $arguments[0];
+            $href = self::getValidHREF($url);
         }
-
-        $href = TextContent::interpretString($url);
-        if (filter_var($href, FILTER_VALIDATE_EMAIL)) {
-            $href = 'mailto:' . $href;
+        if ($href === false and count($blockLines) === 1) {
+            $url  = $blockLines[0];
+            $href = self::getValidHREF($url);
+        }
+        if ($href === false) {
+            // No valid URL, output any content as text and bail.
+            if (count($blockLines) > 0) {
+                Blocks::handle($parentNode, $blockLines);
+            }
+            return $i;
         }
 
         $anchor = $dom->createElement('a');
         $anchor->setAttribute('href', $href);
 
         if (count($blockLines) === 0) {
+
             TextContent::interpretAndAppendText($anchor, $url, false, false);
         } else {
             Blocks::handle($anchor, $blockLines);
@@ -96,6 +102,20 @@ class Inline_Link
 
         return $i;
 
+    }
+
+    private
+    static function getValidHREF(
+      string $url
+    ) {
+        $href = TextContent::interpretString($url);
+        if (filter_var($href, FILTER_VALIDATE_URL)) {
+            return $href;
+        } elseif (filter_var($href, FILTER_VALIDATE_EMAIL)) {
+            return 'mailto:' . $href;
+        } else {
+            return false;
+        }
     }
 
 }
