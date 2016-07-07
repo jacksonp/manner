@@ -43,6 +43,10 @@ class Block_nf
             ++$i;
         }
 
+        if (count($preLines) === 0) {
+            return $i;
+        }
+
         if (
           $i < $numLines - 1 and
           preg_match('~\.RS~u', $preLines[0]) and

@@ -66,17 +66,20 @@ class Block_TS
 
         $table = $dom->createElement('table');
         $table->setAttribute('class', 'tbl');
-        $tableRowNum = 0;
-        $tr          = false;
+        $tableRowNum  = 0;
+        $formatRowNum = 0;
+        $tr           = false;
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
+
             if (preg_match('~^\.TE~u', $line)) {
                 $parentNode->appendBlockIfHasContent($table);
 
                 return $i;
             } elseif ($line === '.T&') {
                 list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
+                $formatRowNum = 0;
                 continue;
             } elseif ($line === '_') {
                 if ($tr) {
@@ -94,11 +97,11 @@ class Block_TS
                 $totalColSpan = 0;
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
-                    if (isset($rowFormats[$tableRowNum])) {
-                        $thisRowFormat = $rowFormats[$tableRowNum];
+                    if (isset($rowFormats[$formatRowNum])) {
+                        $thisRowFormat = $rowFormats[$formatRowNum];
                         if (is_string($thisRowFormat) && $thisRowFormat === '---') {
                             $tr->setAttribute('class', 'border-top');
-                            $thisRowFormat = @$rowFormats[$tableRowNum + 1];
+                            $thisRowFormat = @$rowFormats[$formatRowNum + 1];
                         }
                     }
 
@@ -170,6 +173,7 @@ class Block_TS
                     $tr->appendChild($cell);
                 }
                 ++$tableRowNum;
+                ++$formatRowNum;
                 $table->appendBlockIfHasContent($tr);
             }
 
