@@ -89,8 +89,9 @@ class Block_TS
             } elseif (in_array($line, ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
             } else {
-                $tr   = $dom->createElement('tr');
-                $cols = explode($columnSeparator, $line);
+                $tr           = $dom->createElement('tr');
+                $cols         = explode($columnSeparator, $line);
+                $totalColSpan = 0;
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
                     if (isset($rowFormats[$tableRowNum])) {
@@ -101,7 +102,7 @@ class Block_TS
                         }
                     }
 
-                    $tdClass = @$thisRowFormat[$j];
+                    $tdClass = @$thisRowFormat[$totalColSpan];
 
                     // Ignore for now:
                     // * equal-width columns
@@ -122,7 +123,7 @@ class Block_TS
                         $cell->setAttribute('class', $tdClass);
                     }
                     $colspan = 1;
-                    for ($k = $j + 1; $k < count($thisRowFormat); ++$k) {
+                    for ($k = $totalColSpan + 1; $k < count($thisRowFormat); ++$k) {
                         if (@$thisRowFormat[$k] === 's') {
                             ++$colspan;
                         } else {
@@ -132,6 +133,7 @@ class Block_TS
                     if ($colspan > 1) {
                         $cell->setAttribute('colspan', $colspan);
                     }
+                    $totalColSpan += $colspan;
 
                     $tdContents = $cols[$j];
 
