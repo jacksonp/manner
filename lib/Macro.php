@@ -4,8 +4,9 @@
 class Macro
 {
 
-    static function parseArgString($argString, $csv = true)
+    static function parseArgString($argString)
     {
+
         // sometimes get double spaces, see e.g. samba_selinux.8:
         $argString = Replace::preg('~\s+~', ' ', $argString);
 
@@ -13,14 +14,48 @@ class Macro
 
         if ($argString === '') {
             return null;
-        } else {
-            if ($csv) {
-                return str_getcsv($argString, ' ');
-            } else {
-                // TODO: revisit using this for rc.1
-                return explode(' ', $argString);
-            }
         }
+
+        $args         = [];
+        $thisArg      = '';
+        $inQuotes     = false;
+        $stringLength = mb_strlen($argString);
+        $lastChar     = '';
+        for ($i = 0; $i < $stringLength; ++$i) {
+            $char = mb_substr($argString, $i, 1);
+            if ($char === '\\') {
+                // Take this char and the next
+                $thisArg .= $char . mb_substr($argString, ++$i, 1);
+            } elseif ($char === ' ' and !$inQuotes) {
+                // New arg
+                $args[]  = $thisArg;
+                $thisArg = '';
+            } elseif ($char === '"') {
+                if ($inQuotes and $i < $stringLength - 1 and mb_substr($argString, $i + 1, 1) === '"') {
+                    // When in quotes, "" produces a quote.
+                    $thisArg .= '"';
+                    ++$i;
+                } elseif (($i === 0 or $lastChar === ' ') and !$inQuotes) {
+                    $inQuotes = true;
+                } elseif ($inQuotes) {
+                    $inQuotes = false;
+                } else {
+                    $thisArg .= '"';
+                }
+            } else {
+                $thisArg .= $char;
+            }
+            $lastChar = $char;
+        }
+
+        $args[] = $thisArg;
+
+        if (count($args) === 0) {
+            return null;
+        }
+
+        return $args;
+
     }
 
     static function simplifyRequest(string $string)

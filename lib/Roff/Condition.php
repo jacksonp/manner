@@ -38,7 +38,6 @@ class Roff_Condition
 
         if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test(Text::translateCharacters($matches[1]))) {
-                var_dump(Macro::massageLine($matches[2]));
                 $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
                 return ['i' => $i - 1];
             } else {
