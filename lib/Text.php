@@ -217,6 +217,8 @@ class Text
                 if (is_null($titleDetails) or count($titleDetails) < 1) {
                     throw new Exception($line . ' - missing title info');
                 }
+                // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
+                $titleDetails = array_map('trim', $titleDetails);
                 // See amor.6 for \FB \FR nonsense.
                 $man->title = TextContent::interpretString(
                   Replace::preg('~\\\\F[BR]~', '', $titleDetails[0])
