@@ -24,7 +24,7 @@ class Roff_Comment
         }
 
         if (preg_match('~^\.ig(?:\s+(?<delimiter>.*)|$)~u', $lines[$i], $matches)) {
-            $delimiter = empty($matches['$delimiter']) ? '..' : $matches['$delimiter'];
+            $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
             $numLines  = count($lines);
             for ($i = $i + 1; $i < $numLines; ++$i) {
                 if ($lines[$i] === $delimiter) {
