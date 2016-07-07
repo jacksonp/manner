@@ -38,6 +38,7 @@ class Roff_Condition
 
         if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test(Text::translateCharacters($matches[1]))) {
+                var_dump(Macro::massageLine($matches[2]));
                 $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
                 return ['i' => $i - 1];
             } else {
@@ -49,6 +50,11 @@ class Roff_Condition
             $useIf = self::test(Text::translateCharacters($matches[1]));
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i     = $if['i'] + 1;
+
+            $result = Roff_Comment::checkEvaluate($lines, $i);
+            if ($result !== false) {
+                $i = $result['i'] + 1;
+            }
 
             $line = $lines[$i];
 
@@ -64,6 +70,10 @@ class Roff_Condition
         }
 
         if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $ifMatches)) {
+            $result = Roff_Comment::checkEvaluate($lines, $i + 1);
+            if ($result !== false) {
+                $i = $result['i'];
+            }
             ++$i;
             if (!preg_match('~^\.el (.*)$~', $lines[$i], $elseMatches)) {
                 //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
