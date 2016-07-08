@@ -49,7 +49,7 @@ class TextContent
                 } else {
                     $registerName = trim($registerName, '[]');
                 }
-                $man->addRegister($registerName, $horizontalPosition);
+                $man->setRegister($registerName, $horizontalPosition);
                 continue;
             }
             switch ($textSegments[$i]) {

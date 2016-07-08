@@ -61,7 +61,8 @@ class Man
           '.v'   => '1',
           '.H'   => '1500',
           '.V'   => '1500',
-          'x'    => '0', // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
+          'x'    => '0',
+            // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
         ];
         $this->strings   = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
@@ -471,7 +472,7 @@ class Man
         return $this->macros;
     }
 
-    public function addRegister(string $name, string $value)
+    public function setRegister(string $name, string $value)
     {
         $this->registers[$name] = $value;
     }

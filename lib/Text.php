@@ -65,12 +65,13 @@ class Text
                     $macro  = array_shift($bits);
                     $macros = $man->getMacros();
                     if (isset($macros[$macro])) {
-                        $man->addRegister('.$', count($bits));
+                        $man->setRegister('.$', count($bits));
                         $evaluatedMacroLines = [];
                         foreach ($macros[$macro] as $macroLine) {
 
-                            for ($n = 0; $n < 10; ++$n) {
-                                $macroLine = str_replace('\\$' . ($n + 1), @$bits[$n] ?: '', $macroLine);
+                            // \$x - Macro or string argument with one-digit number x in the range 1 to 9.
+                            for ($n = 1; $n < 10; ++$n) {
+                                $macroLine = str_replace('\\$' . $n, @$bits[$n - 1] ?: '', $macroLine);
                             }
 
                             // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.

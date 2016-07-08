@@ -12,7 +12,7 @@ class Roff_Register
         }
 
         $man = Man::instance();
-        $man->addRegister($matches['name'], $matches['val']);
+        $man->setRegister($matches['name'], $matches['val']);
 
         return ['i' => $i];
 

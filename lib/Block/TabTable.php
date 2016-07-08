@@ -62,6 +62,9 @@ class Block_TabTable
             }
 
         }
+
+        throw new Exception('Should not get to the end of this function.');
+
     }
 
 
