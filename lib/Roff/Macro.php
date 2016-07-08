@@ -34,7 +34,7 @@ class Roff_Macro
 
         $man = Man::instance();
 
-        if (in_array($newMacro, ['.SS', '.EX', '.EE', '.FONT', '.URL', '.SY', '.YS'])) {
+        if (in_array($newMacro, ['.SS', '.FONT', '.URL', '.SY', '.YS'])) {
             // Do nothing: don't override these macros.
             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
             // TODO: .FONT see hack in Text::preprocessLines
