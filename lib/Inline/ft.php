@@ -47,6 +47,10 @@ class Inline_ft
 
         if (count($blockLines) > 0) {
 
+            if ($textParent->hasContent()) {
+                $textParent->appendChild(new DOMText(' '));
+            }
+
             switch ($fontAbbreviation) {
                 case 'I':
                 case '2':
