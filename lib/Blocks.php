@@ -42,6 +42,7 @@ class Blocks
           in_array($line, [
             '.',    // empty request
             '\'',   // empty request
+            '..',   // Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
             '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
             '.EE',  // strays
             '.BR',  // empty
