@@ -208,7 +208,7 @@ class TextContent
         // "To begin a line with a control character without it being interpreted, precede it with \&.
         // This represents a zero width space, which means it does not affect the output."
         // (also remove tho if not at start of line.)
-        $string = Replace::preg('~\\\\&~u', '', $string);
+        $string = Replace::preg('~\\\\[&\)]~u', '', $string);
 
         if (self::$canAddWhitespace and $addSpacing) {
             // Do this after regex above

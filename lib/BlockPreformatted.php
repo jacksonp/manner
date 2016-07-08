@@ -52,7 +52,7 @@ class BlockPreformatted
                 }
                 $line      = $lines[++$i];
                 $addIndent = 4;
-            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or $line === '\\&') {
+            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or in_array($line, ['\\&', '\\)'])) {
                 continue;
             } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
                 $parentNode->appendChild(new DOMText(' ['));

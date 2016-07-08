@@ -92,7 +92,7 @@ class Block_Text
                 }
 
 
-                if ($nextLine === '\\&') {
+                if (in_array($nextLine, ['\\&', '\\)'])) {
                     if (self::$continuation) {
                         $line .= ' ';
                     }
