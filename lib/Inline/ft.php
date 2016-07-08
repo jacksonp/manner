@@ -45,6 +45,7 @@ class Inline_ft
             $blockLines[] = $nextLine;
 
             if (preg_match('~\\\\f1$~u', $nextLine)) {
+                ++$i; // We include $nextLine, swallow it.
                 break;
             }
 
