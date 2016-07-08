@@ -10,7 +10,7 @@ class Block_SY
         // These get swallowed:
         $blockEnds = ['.YS'];
 
-        if (!preg_match('~^\.SY\s?(.*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*SY\s?(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -28,7 +28,7 @@ class Block_SY
         for ($i = $i + 1; $i < $numLines; ++$i) {
             if (in_array($lines[$i], $blockEnds)) {
                 break;
-            } elseif (preg_match('~^\.SY~u', $lines[$i])) {
+            } elseif (preg_match('~^\.\s*SY~u', $lines[$i])) {
                 --$i;
                 break;
             }

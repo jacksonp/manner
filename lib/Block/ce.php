@@ -7,7 +7,7 @@ class Block_ce
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.ce ?(\d*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*ce ?(\d*)$~u', $lines[$i], $matches)) {
             return false;
         }
 

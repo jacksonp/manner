@@ -9,7 +9,7 @@ class Inline_Link
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        if (preg_match('~^\.URL\s(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*URL\s(.*)$~u', $lines[$i], $matches)) {
             $dom       = $parentNode->ownerDocument;
             $arguments = Macro::parseArgString($matches[1]);
             if (is_null($arguments)) {
@@ -39,7 +39,7 @@ class Inline_Link
             return $i;
         }
 
-        if (!preg_match('~^\.(?:UR|MT)(?:$|\s<?(.*?)>?$)~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*(?:UR|MT)(?:$|\s<?(.*?)>?$)~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -50,10 +50,10 @@ class Inline_Link
         $blockLines  = [];
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (preg_match('~^\.(?:UR|MT)~u', $lines[$i])) {
+            if (preg_match('~^\.\s*(?:UR|MT)~u', $lines[$i])) {
                 --$i;
                 break;
-            } elseif (preg_match('~^\.(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
+            } elseif (preg_match('~^\.\s*(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
                 $punctuation = trim($matches[1]);
                 break;
             }

@@ -6,7 +6,7 @@ class Block_TP
 
     static function check(string $string)
     {
-        if (preg_match('~^\.T[PQ] ?(.*)$~u', $string, $matches)) {
+        if (preg_match('~^\.\s*T[PQ] ?(.*)$~u', $string, $matches)) {
             return $matches;
         }
 
@@ -39,8 +39,8 @@ class Block_TP
 
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.T[PQ] ?(.*)$~u', $line, $matches)) {
-                if ($i === $numLines - 1 or preg_match('~^\.[IT]P ?(.*)$~u', $lines[$i + 1])) {
+            if (preg_match('~^\.\s*T[PQ] ?(.*)$~u', $line, $matches)) {
+                if ($i === $numLines - 1 or preg_match('~^\.\s*[IT]P ?(.*)$~u', $lines[$i + 1])) {
                     // a bug in the man page, just skip:
                     continue;
                 }
@@ -59,7 +59,7 @@ class Block_TP
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $lines[$i];
-                    if (preg_match('~^\.TQ$~u', $line)) {
+                    if (preg_match('~^\.\s*TQ$~u', $line)) {
                         $result = Block_Text::getNextInputLine($lines, $i + 1);
                         $i      = $result['i'];
                         $dt     = $dom->createElement('dt');

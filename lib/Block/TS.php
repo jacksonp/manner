@@ -45,7 +45,7 @@ class Block_TS
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.TS~u', $lines[$i])) {
+        if (!preg_match('~^\.\s*TS~u', $lines[$i])) {
             return false;
         }
 
@@ -73,7 +73,7 @@ class Block_TS
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (preg_match('~^\.TE~u', $line)) {
+            if (preg_match('~^\.\s*TE~u', $line)) {
                 $parentNode->appendBlockIfHasContent($table);
 
                 return $i;

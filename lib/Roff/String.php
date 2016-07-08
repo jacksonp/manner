@@ -7,8 +7,8 @@ class Roff_String
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.ds1? (.*?) (.*)$~u', $lines[$i], $matches)) {
-            if (preg_match('~^\.ds~u', $lines[$i])) {
+        if (!preg_match('~^\.\s*ds1? (.*?) (.*)$~u', $lines[$i], $matches)) {
+            if (preg_match('~^\.\s*ds~u', $lines[$i])) {
                 return ['i' => $i]; // ignore any .ds that didn't match first preg_match.
             }
 

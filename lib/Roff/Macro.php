@@ -7,7 +7,7 @@ class Roff_Macro
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.de1? ([^\s"]+)\s*$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*de1? ([^\s"]+)\s*$~u', $lines[$i], $matches)) {
             return false;
         }
 

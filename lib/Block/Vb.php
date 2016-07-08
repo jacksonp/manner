@@ -6,7 +6,7 @@ class Block_Vb
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
-        if (!preg_match('~^\.Vb~u', $lines[$i])) {
+        if (!preg_match('~^\.\s*Vb~u', $lines[$i])) {
             return false;
         }
 
@@ -17,7 +17,7 @@ class Block_Vb
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.Ve~u', $line)) {
+            if (preg_match('~^\.\s*Ve~u', $line)) {
                 break;
             } else {
                 $blockLines[] = $line;

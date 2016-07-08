@@ -19,12 +19,12 @@ class Roff_Condition
             return self::ifBlock($lines, $i, $matches[3], self::test($cond1) and self::test($cond2));
         }
 
-        if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             return self::ifBlock($lines, $i, $matches[2], self::test($matches[1]));
         }
 
         if (
-        preg_match('~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
+        preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
           $lines[$i], $matches)
         ) {
             $cond1 = Text::translateCharacters($matches[1]);
@@ -36,7 +36,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test(Text::translateCharacters($matches[1]))) {
                 $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
                 return ['i' => $i - 1];
@@ -45,7 +45,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
             $useIf = self::test(Text::translateCharacters($matches[1]));
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i     = $if['i'] + 1;
@@ -57,7 +57,7 @@ class Roff_Condition
 
             $line = $lines[$i];
 
-            if (!preg_match('~^\.el\s?\\\\{(.*)$~', $line, $matches)) {
+            if (!preg_match('~^\.\s*el\s?\\\\{(.*)$~', $line, $matches)) {
                 throw new Exception('.ie - not followed by expected .el on line: "' . $line . '".');
             }
 
@@ -68,13 +68,13 @@ class Roff_Condition
 
         }
 
-        if (preg_match('~^\.ie ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $ifMatches)) {
+        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $ifMatches)) {
             $result = Roff_Comment::checkEvaluate($lines, $i + 1);
             if ($result !== false) {
                 $i = $result['i'];
             }
             ++$i;
-            if (!preg_match('~^\.el (.*)$~', $lines[$i], $elseMatches)) {
+            if (!preg_match('~^\.\s*el (.*)$~', $lines[$i], $elseMatches)) {
                 //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
                 // Just skip the ie and el lines:
                 return ['lines' => [], 'i' => $i];

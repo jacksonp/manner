@@ -6,7 +6,7 @@ class Inline_AlternatingFont
 
     static function check(string $string)
     {
-        if (preg_match('~^\.(BI|BR|IB|IR|RB|RI)(\s.*)?$~u', $string, $matches)) {
+        if (preg_match('~^\.\s*(BI|BR|IB|IR|RB|RI)(\s.*)?$~u', $string, $matches)) {
             return $matches;
         }
 

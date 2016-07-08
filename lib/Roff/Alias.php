@@ -7,7 +7,7 @@ class Roff_Alias
     static function checkEvaluate(array $lines, int $i)
     {
 
-        if (!preg_match('~^\.als (?<new>\w+) (?<old>\w+)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*als (?<new>\w+) (?<old>\w+)$~u', $lines[$i], $matches)) {
             return false;
         }
 

@@ -6,7 +6,7 @@ class Block_SS
 
     static function check($line)
     {
-        if (preg_match('~^\.SS(.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.\s*SS(.*)$~u', $line, $matches)) {
             return $matches;
         }
 
@@ -15,7 +15,7 @@ class Block_SS
 
     private static function endSubsection($line)
     {
-        return preg_match('~^\.S[SH]~u', $line);
+        return preg_match('~^\.\s*S[SH]~u', $line);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)

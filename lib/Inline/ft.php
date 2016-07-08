@@ -7,7 +7,7 @@ class Inline_ft
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.ft(\s.*)?$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*ft(\s.*)?$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -37,7 +37,7 @@ class Inline_ft
         for (; $i < $numLines - 1; ++$i) {
             $nextLine = $lines[$i + 1];
             if (
-              preg_match('~^\.((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) or
+              preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) or
               Blocks::lineEndsBlock($lines, $i + 1)
             ) {
                 break;

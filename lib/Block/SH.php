@@ -6,7 +6,7 @@ class Block_SH
 
     static function check($line)
     {
-        if (preg_match('~^\.SH(.*)$~u', $line, $matches)) {
+        if (preg_match('~^\.\s*SH(.*)$~u', $line, $matches)) {
             return $matches;
         }
 

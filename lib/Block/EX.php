@@ -6,7 +6,7 @@ class Block_EX
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
-        if (!preg_match('~^\.EX~u', $lines[$i])) {
+        if (!preg_match('~^\.\s*EX~u', $lines[$i])) {
             return false;
         }
 
@@ -17,9 +17,9 @@ class Block_EX
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.EE~u', $line)) {
+            if (preg_match('~^\.\s*EE~u', $line)) {
                 break;
-            } elseif (preg_match('~^\.(nf|fi)~u', $line)) {
+            } elseif (preg_match('~^\.\s*(nf|fi)~u', $line)) {
                 // .EX already marks block as preformatted, just ignore
                 continue;
             } else {

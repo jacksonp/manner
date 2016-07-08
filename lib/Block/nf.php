@@ -6,7 +6,7 @@ class Block_nf
 
     static function check(string $string)
     {
-        if (preg_match('~^\.nf\s?(.*)$~u', $string, $matches)) {
+        if (preg_match('~^\.\s*nf\s?(.*)$~u', $string, $matches)) {
             // Don't actually expect anything in $matches[1]
             return $matches;
         }
@@ -30,7 +30,7 @@ class Block_nf
         $preLines = [];
         while ($i < $numLines - 1) {
             $line = $lines[$i + 1];
-            if (preg_match('~^\.S[SH]~u', $line)) {
+            if (preg_match('~^\.\s*S[SH]~u', $line)) {
                 break;
             } elseif (in_array($line, $blockEnds)) {
                 while ($i < $numLines - 1 and in_array($lines[$i + 1], $blockEnds)) {
@@ -103,8 +103,8 @@ class Block_nf
 
         $pre = $dom->createElement('pre');
 
-        if (preg_match('~^\.RS ?(.*)$~u', $preLines[0], $matches)) {
-            if (!preg_match('~^\.RE~u', array_pop($preLines))) {
+        if (preg_match('~^\.\s*RS ?(.*)$~u', $preLines[0], $matches)) {
+            if (!preg_match('~^\.\s*RE~u', array_pop($preLines))) {
                 throw new Exception('.nf block contains initial .RS but not final .RE');
             }
             array_shift($preLines);

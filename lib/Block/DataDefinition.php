@@ -15,15 +15,15 @@ class Block_DataDefinition
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (preg_match('~^\.RS~u', $line)) {
+            if (preg_match('~^\.\s*RS~u', $line)) {
                 ++$rsLevel;
-            } elseif (preg_match('~^\.RE~u', $line)) {
+            } elseif (preg_match('~^\.\s*RE~u', $line)) {
                 --$rsLevel;
             }
 
             $hitIP      = false;
             $hitBlankIP = false;
-            if (preg_match('~^\.IP ?(.*)$~u', $line, $nextIPMatches)) {
+            if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $nextIPMatches)) {
                 $hitIP      = true;
                 $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
                 $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
@@ -31,10 +31,10 @@ class Block_DataDefinition
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (preg_match('~^\.[LP]?P$~u', $line) and $i < $numLines - 1 and mb_substr($lines[$i + 1], 0, 3) === '.TP') {
+                if (preg_match('~^\.\s*[LP]?P$~u', $line) and $i < $numLines - 1 and mb_substr($lines[$i + 1], 0, 3) === '.TP') {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
-                } elseif (preg_match('~^\.([HTLP]?P|SS|SH|TQ)~u', $line) or ($hitIP && !$hitBlankIP)) {
+                } elseif (preg_match('~^\.\s*([HTLP]?P|SS|SH|TQ)~u', $line) or ($hitIP && !$hitBlankIP)) {
                     --$i;
                     break;
                 }

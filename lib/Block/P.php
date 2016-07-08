@@ -8,7 +8,7 @@ class Block_P
     {
         // empty lines cause a new para also, see sar.1
         // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-        return $string === '' or preg_match('~^\.([LP]?P(?:\s|$)|HP)~u', $string);
+        return $string === '' or preg_match('~^\.\s*([LP]?P(?:\s|$)|HP)~u', $string);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)

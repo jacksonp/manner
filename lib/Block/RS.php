@@ -6,7 +6,7 @@ class Block_RS
 
     static function check(string $string)
     {
-        if (preg_match('~^\.RS ?(.*)$~u', $string, $matches)) {
+        if (preg_match('~^\.\s*RS ?(.*)$~u', $string, $matches)) {
             return $matches;
         }
 
@@ -35,7 +35,7 @@ class Block_RS
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.RS ?(.*)$~u', $line, $matches)) {
+            if (preg_match('~^\.\s*RS ?(.*)$~u', $line, $matches)) {
                 if (trim($matches[1]) === $thisIndent) {
                     if (count($blockLines) > 0 and !in_array($blockLines[count($blockLines) - 1], ['.sp', '.br'])) {
                         $blockLines[] = '.br';
@@ -45,7 +45,7 @@ class Block_RS
                 } else {
                     ++$rsLevel;
                 }
-            } elseif (preg_match('~^\.RE~u', $line)) {
+            } elseif (preg_match('~^\.\s*RE~u', $line)) {
                 if ($skippedRSs > 0) {
                     --$skippedRSs;
                     continue;
@@ -55,7 +55,7 @@ class Block_RS
                         break;
                     }
                 }
-            } elseif (preg_match('~^\.TP~u', $line)) {
+            } elseif (preg_match('~^\.\s*TP~u', $line)) {
                 // prevent skipping
                 $thisIndent = 'GARBAGE';
             }

@@ -6,7 +6,7 @@ class Inline_FontOneInputLine
 
     static function check(string $string)
     {
-        if (preg_match('~^\.(R|I|B|SB|SM)(\s.*)?$~u', $string, $matches)) {
+        if (preg_match('~^\.\s*(R|I|B|SB|SM)(\s.*)?$~u', $string, $matches)) {
             return $matches;
         }
 

@@ -8,7 +8,7 @@ class Block_ti
     {
 
         // .ti = temporary indent
-        if (!preg_match('~^\.ti ?(.*)$~u', $lines[$i], $matches)) {
+        if (!preg_match('~^\.\s*ti ?(.*)$~u', $lines[$i], $matches)) {
             return false;
         }
 
@@ -22,7 +22,7 @@ class Block_ti
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
             $line = $lines[$i + 1];
-            if (preg_match('~^\.ti~u', $line)) {
+            if (preg_match('~^\.\s*ti~u', $line)) {
                 // Could be a change in indentation, just add a break for now
                 $blockLines[] = '.br';
                 continue;
