@@ -4,7 +4,8 @@
 class Roff_Condition
 {
 
-    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|[^\s]+)';
+    // Tcl_RegisterObjType.3 condition: ""with whitespace"
+    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|[^"][^\s]*)';
 
     static function checkEvaluate(array &$lines, int $i)
     {
@@ -57,7 +58,8 @@ class Roff_Condition
 
             $line = $lines[$i];
 
-            if (!preg_match('~^\.\s*el\s?\\\\{(.*)$~', $line, $matches)) {
+            // NB: we accept .el \} here as a workaround for lots of broken tcl man pages (section n, maybe others)
+            if (!preg_match('~^\.\s*el\s?\\\\[{}](.*)$~', $line, $matches)) {
                 throw new Exception('.ie - not followed by expected .el on line: "' . $line . '".');
             }
 
