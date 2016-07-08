@@ -33,9 +33,7 @@ class Inline_AlternatingFont
 
         $dom = $parentNode->ownerDocument;
 
-        if ($textParent->hasContent()) {
-            $textParent->appendChild(new DOMText(' '));
-        }
+        Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
         foreach ($arguments as $bi => $bit) {
             $commandCharIndex = $bi % 2;

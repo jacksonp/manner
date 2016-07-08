@@ -510,14 +510,14 @@ b = a ""</pre>
 <strong>END</strong>
 <strong>BEGINFILE</strong>
 <strong>ENDFILE</strong>
- <strong>/</strong><em>regular expression</em><strong>/</strong>
+<strong>/</strong><em>regular expression</em><strong>/</strong>
 <em>relational expression</em>
- <em>pattern</em><strong> &amp;& </strong><em>pattern</em>
- <em>pattern</em><strong> || </strong><em>pattern</em>
- <em>pattern</em><strong> ? </strong><em>pattern</em><strong> : </strong><em>pattern</em>
- <strong>(</strong><em>pattern</em><strong>)</strong>
- <strong>!</strong><em> pattern</em>
- <em>pattern1</em><strong>, </strong><em>pattern2</em></pre>
+<em>pattern</em><strong> &amp;& </strong><em>pattern</em>
+<em>pattern</em><strong> || </strong><em>pattern</em>
+<em>pattern</em><strong> ? </strong><em>pattern</em><strong> : </strong><em>pattern</em>
+<strong>(</strong><em>pattern</em><strong>)</strong>
+<strong>!</strong><em> pattern</em>
+<em>pattern1</em><strong>, </strong><em>pattern2</em></pre>
     <p><strong>BEGIN</strong> and <strong>END</strong> are two special kinds of patterns which are not tested against the input. The action parts of all <strong>BEGIN</strong> patterns are merged as if all the statements had been written in a single <strong>BEGIN</strong> rule. They are executed before any of the input is read. Similarly, all the <strong>END</strong> rules are merged, and executed when all the input is exhausted (or when an <strong>exit</strong> statement is executed). <strong>BEGIN</strong> and <strong>END</strong> patterns cannot be combined with other patterns in pattern expressions. <strong>BEGIN</strong> and <strong>END</strong> patterns cannot have missing action parts.
     <p><strong>BEGINFILE</strong> and <strong>ENDFILE</strong> are additional special patterns whose bodies are executed before reading the first record of each command line input file and after reading the last record of each file. Inside the <strong>BEGINFILE</strong> rule, the value of <strong>ERRNO</strong> will be the empty string if the file was opened successfully. Otherwise, there is some problem with the file and the code should use <strong>nextfile</strong> to skip it. If that is not done, <em>gawk</em> produces its usual fatal error for files that cannot be opened.
     <p>For <strong>/</strong><em>regular expression</em><strong>/</strong> patterns, the associated statement is executed for each input record that matches the regular expression. Regular expressions are the same as those in <em>egrep</em>(1), and are summarized below.

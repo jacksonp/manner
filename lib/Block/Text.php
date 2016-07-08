@@ -6,6 +6,18 @@ class Block_Text
 
     private static $continuation = false;
 
+    static function addSpace(DOMElement $parentNode, DOMElement $textParent, bool $shouldAppend)
+    {
+        if (
+          $parentNode->tagName !== 'pre' and
+          !$shouldAppend and
+          !TextContent::$continuation and
+          $textParent->hasContent()
+        ) {
+            $textParent->appendChild(new DOMText(' '));
+        }
+    }
+
     static function getNextInputLine(array $lines, int $i): array
     {
 

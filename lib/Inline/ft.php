@@ -43,13 +43,16 @@ class Inline_ft
                 break;
             }
             $blockLines[] = $nextLine;
+
+            if (preg_match('~\\\\f1$~u', $nextLine)) {
+                break;
+            }
+
         }
 
         if (count($blockLines) > 0) {
 
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
+            Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
             switch ($fontAbbreviation) {
                 case 'I':

@@ -62,9 +62,7 @@ class Inline_FontOneInputLine
                 throw new Exception('switch is exhaustive.');
         }
 
-        if ($parentNode->tagName !== 'pre' and !$shouldAppend and !TextContent::$continuation and $textParent->hasContent()) {
-            $textParent->appendChild(new DOMText(' '));
-        }
+        Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
         if (is_null($arguments)) {
             if ($i === $numLines - 1) {
