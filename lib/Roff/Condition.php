@@ -46,51 +46,62 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{(.*)$~u', $lines[$i], $matches)) {
             $useIf = self::test(Text::translateCharacters($matches[1]));
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
-            $i     = $if['i'] + 1;
+            $i     = $if['i'];
 
             $result = Roff_Comment::checkEvaluate($lines, $i);
             if ($result !== false) {
-                $i = $result['i'] + 1;
+                $i = $result['i'];
             }
 
-            $line = $lines[$i];
-
-            // NB: we accept .el \} here as a workaround for lots of broken tcl man pages (section n, maybe others)
-            if (!preg_match('~^\.\s*el\s?\\\\[{}](.*)$~', $line, $matches)) {
-                throw new Exception('.ie - not followed by expected .el on line: "' . $line . '".');
-            }
-
-            $else     = self::ifBlock($lines, $i, $matches[1], !$useIf);
-            $newLines = $useIf ? $if['lines'] : $else['lines'];
-
-            return ['lines' => $newLines, 'i' => $else['i']];
+            return self::handleElse($lines, $i + 1, $useIf, $if['lines']);
 
         }
 
-        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . ' (.*)$~u', $lines[$i], $ifMatches)) {
+        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?(.*)$~u', $lines[$i], $ifMatches)) {
+            $useIf  = self::test(Text::translateCharacters($ifMatches[1]));
             $result = Roff_Comment::checkEvaluate($lines, $i + 1);
             if ($result !== false) {
                 $i = $result['i'];
             }
-            ++$i;
-            if (!preg_match('~^\.\s*el (.*)$~', $lines[$i], $elseMatches)) {
-                //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
-                // Just skip the ie and el lines:
-                return ['lines' => [], 'i' => $i];
-            }
 
-            if (self::test($ifMatches[1])) {
-                return ['lines' => Text::applyRoffClasses([Macro::massageLine($ifMatches[2])]), 'i' => $i];
-            } else {
-                return ['lines' => Text::applyRoffClasses([Macro::massageLine($elseMatches[1])]), 'i' => $i];
-            }
+            return self::handleElse($lines, $i + 1, $useIf,
+              Text::applyRoffClasses([Macro::massageLine($ifMatches[2])]));
 
         }
 
         return false;
+
+    }
+
+    private static function handleElse(array $lines, int $i, bool $useIf, array $ifLines): array
+    {
+
+        $line = $lines[$i];
+
+        // NB: we accept .el \} here as a workaround for lots of broken tcl man pages (section n, maybe others)
+        $line = preg_replace('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
+        if (preg_match('~^\.\s*el\s?\\\\{(.*)$~u', $line, $matches)) {
+            $else     = self::ifBlock($lines, $i, $matches[1], !$useIf);
+            $newLines = $useIf ? $ifLines : $else['lines'];
+
+            return ['lines' => $newLines, 'i' => $else['i']];
+        }
+
+        if (!preg_match('~^\.\s*el (.*)$~u', $line, $elseMatches)) {
+            //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
+            // Just skip the ie and el lines:
+            return ['lines' => [], 'i' => $i];
+        }
+
+        if ($useIf) {
+            return ['lines' => $ifLines, 'i' => $i];
+        } else {
+            return ['lines' => Text::applyRoffClasses([Macro::massageLine($elseMatches[1])]), 'i' => $i];
+        }
+
 
     }
 
@@ -207,6 +218,10 @@ class Roff_Condition
 
         for ($ifIndex = $i; $ifIndex < $numLines;) {
             $line = $man->applyAllReplacements($line);
+
+            // NB: Workaround for lots of broken tcl man pages (section n, maybe others):
+            $line = preg_replace('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
+
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 or
               ($i !== $ifIndex and preg_match('~^\.\s*i[fe] ~u', $line))
@@ -216,7 +231,7 @@ class Roff_Condition
             $openBraces -= substr_count($line, '\\}');
             if (preg_match('~^(.*)\\\\}$~u', $line, $matches) and $openBraces === 0) {
                 $foundEnd = true;
-                if (!empty($matches[1]) && $matches[1] !== '\'br') {
+                if (!empty($matches[1]) and $matches[1] !== '\'br') {
                     $replacementLines[] = Macro::massageLine($matches[1]);
                 }
                 break;
