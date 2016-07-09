@@ -147,6 +147,7 @@ class Text
             }
 
             // Skip stuff we don't care about:
+            // . : empty request followed by space followed by comment
             // .iX, .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
             // .nh: No hyphenation
             // .na: "No output-line adjusting."
@@ -193,8 +194,10 @@ class Text
             // .em macro: The macro is run after the end of input.
             // .Iq: ?
             // .XX: looks like some kind of indexing
+            // .fp: mount font at position
+            // .l: ?
             if (preg_match(
-              '~^[\.\'](iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc|defcolor|pdfdest|em|Iq|XX)(\s|$)~u',
+              '~^[\.\'](\s|iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc|defcolor|pdfdest|em|Iq|XX|fp|l)(\s|$)~u',
               $line)
             ) {
                 continue;
