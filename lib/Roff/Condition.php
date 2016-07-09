@@ -5,7 +5,7 @@ class Roff_Condition
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
-    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|[^"][^\s]*)';
+    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
     static function checkEvaluate(array &$lines, int $i)
     {
