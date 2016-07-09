@@ -11,7 +11,7 @@ class Roff_Condition
     {
 
         if (preg_match(
-          '~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u',
+          '~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
           $lines[$i], $matches)
         ) {
             $cond1 = Text::translateCharacters($matches[1]);
@@ -20,7 +20,7 @@ class Roff_Condition
             return self::ifBlock($lines, $i, $matches[3], self::test($cond1) and self::test($cond2));
         }
 
-        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $lines[$i], $matches)) {
             return self::ifBlock($lines, $i, $matches[2], self::test($matches[1]));
         }
 
@@ -46,7 +46,7 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $lines[$i], $matches)) {
             $useIf = self::test(Text::translateCharacters($matches[1]));
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i     = $if['i'];
