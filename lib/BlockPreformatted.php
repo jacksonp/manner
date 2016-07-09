@@ -22,9 +22,9 @@ class BlockPreformatted
 
             $parentForLine = $parentNode;
 
-            if (mb_strlen($line) === 0
-              || preg_match('~^\.([LP]?P$|HP|br|sp|ne)~u', $line)
-              || preg_match('~^\\\\?\.$~u', $line) // empty requests
+            if (mb_strlen($line) === 0 or
+              preg_match('~^\.([LP]?P$|HP|br|sp|ne)~u', $line) or
+              preg_match('~^\\\\?\.$~u', $line) // empty requests
             ) {
                 if ($i > 0 && $i !== $numLines - 1) {
                     $parentNode->appendChild(new DOMText("\n"));
@@ -47,11 +47,8 @@ class BlockPreformatted
                 $addIndent  = 0;
                 $nextIndent = 4;
             } elseif (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
-                if ($i === $numLines - 1) {
-                    continue;
-                }
-                $line      = $lines[++$i];
-                $addIndent = 4;
+                $nextIndent = 4;
+                continue;
             } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or in_array($line, ['\\&', '\\)'])) {
                 continue;
             } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
