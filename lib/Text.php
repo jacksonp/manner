@@ -36,6 +36,9 @@ class Text
             // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
             $line = Replace::preg('~^\.do ~u', '.', $line);
 
+            // NB: Workaround for lots of broken tcl man pages (section n, Tk_*, Tcl_*, others...):
+            $line = Replace::preg('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
+
             $linesNoComments[] = $line;
 
         }

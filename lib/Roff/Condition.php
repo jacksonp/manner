@@ -81,8 +81,6 @@ class Roff_Condition
 
         $line = $lines[$i];
 
-        // NB: we accept .el \} here as a workaround for lots of broken tcl man pages (section n, maybe others)
-        $line = preg_replace('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
         if (preg_match('~^\.\s*el\s?\\\\{(.*)$~u', $line, $matches)) {
             $else     = self::ifBlock($lines, $i, $matches[1], !$useIf);
             $newLines = $useIf ? $ifLines : $else['lines'];
@@ -218,9 +216,6 @@ class Roff_Condition
 
         for ($ifIndex = $i; $ifIndex < $numLines;) {
             $line = $man->applyAllReplacements($line);
-
-            // NB: Workaround for lots of broken tcl man pages (section n, maybe others):
-            $line = preg_replace('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
 
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 or
