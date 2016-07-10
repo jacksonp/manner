@@ -153,7 +153,7 @@ class Roff_Condition
               'f' => 65536,
                 // em = 11/64 inch
               'm' => 75 * 11 / 64,
-                // en = 1/2 inch
+                // en = 1/2 em:
               'n' => (75 * 11 / 64) / 2,
                 // By default, gtroff uses 10 point type on 12 point spacing. https://www.gnu.org/software/groff/manual/html_node/Sizes.html#Sizes
               'v' => 75 * 10 / 72,
