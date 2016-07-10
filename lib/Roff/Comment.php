@@ -11,7 +11,8 @@ class Roff_Comment
         // See mscore.1 for full-line comments starting with '."
         // See cal3d_converter.1 for full-line comments starting with '''
         // See e.g. flow-import.1 for comment starting with .\\"
-        if (preg_match('~^([\'\.]?\\\\\\\\?"|\'\."\'|\'\'\')~u', $lines[$i], $matches)) {
+        // See e.g. card.1 for comment starting with ."
+        if (preg_match('~^([\'\.]?\\\\?\\\\"|\'\."\'|\'\'\'|\.")~u', $lines[$i], $matches)) {
             return ['i' => $i];
         }
 
