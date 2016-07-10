@@ -47,8 +47,11 @@ class Block_TP
 
                 $requestArgs = Macro::parseArgString($matches[1]);
                 if (is_null($firstIndent) and count($requestArgs) > 0) {
-                    $firstIndent = 'indent-' . $requestArgs[0];
-                    $dl->setAttribute('class', $firstIndent);
+                    $firstIndent = 'indent';
+                    if ($indentVal = Roff_Unit::normalize($requestArgs[0])) { // note: filters out 0s
+                        $firstIndent = 'indent-' . $indentVal;
+                        $dl->setAttribute('class', $firstIndent);
+                    }
                 }
 
                 $result = Block_Text::getNextInputLine($lines, $i + 1);

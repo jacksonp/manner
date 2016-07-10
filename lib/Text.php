@@ -313,7 +313,7 @@ class Text
         // \L: Vertical line drawing function (optionally using character c).
         $line = Replace::preg('~\\\\[vhLl]\'.*?\'~u', ' ', $line);
 
-        // \w’string’: The width of the glyph sequence string.
+        // \w’string’: The width of the glyph sequence string. We approximate with ens.
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
             return mb_strlen($matches[0]);
         }, $line);

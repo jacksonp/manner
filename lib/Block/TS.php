@@ -179,7 +179,7 @@ class Block_TS
 
         }
 
-        throw new Exception('.TS without .TE in ' . $parentNode->lastChild->tagName . ' at line ' . $i . '. Last line was "' . $lines[$i - 1] . '"');
+        throw new Exception('.TS without .TE in ' . $parentNode->lastChild->tagName);
 
     }
 

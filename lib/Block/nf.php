@@ -110,8 +110,11 @@ class Block_nf
             array_shift($preLines);
             ArrayHelper::trim($preLines, ['', '.br', '.sp']);
             $className = 'indent';
-            if (!empty($matches[1])) {
-                $className .= '-' . trim($matches[1]);
+            if (
+              !empty($matches[1]) and
+              $indentVal = Roff_Unit::normalize(trim($matches[1])) // note this filters out 0s
+            ) {
+                $className .= '-' . $indentVal;
             }
             $pre->setAttribute('class', $className);
         }

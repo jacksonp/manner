@@ -48,8 +48,12 @@ class Block_IP
                 $ipArgs = Macro::parseArgString($matches[1]);
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
-                    if (is_null($firstIndent) and count($ipArgs) > 1) {
-                        $firstIndent = 'indent-' . $ipArgs[1];
+                    if (
+                      is_null($firstIndent) and
+                      count($ipArgs) > 1 and
+                      $indentVal = Roff_Unit::normalize($ipArgs[1]) // note this filters out 0s
+                    ) {
+                        $firstIndent = 'indent-' . $indentVal;
                         $dl->setAttribute('class', $firstIndent);
                     }
                     $dt = $dom->createElement('dt');

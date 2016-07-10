@@ -22,9 +22,9 @@ class Block_RS
             return false;
         }
 
-        $thisIndent = trim($matches[1]);
+        $thisIndent = Roff_Unit::normalize(trim($matches[1]));
         $className  = 'indent';
-        if ($thisIndent !== '') {
+        if ($thisIndent) { // note this filters out 0s
             $className .= '-' . $thisIndent;
         }
         $numLines   = count($lines);
@@ -36,7 +36,8 @@ class Block_RS
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (preg_match('~^\.\s*RS ?(.*)$~u', $line, $matches)) {
-                if (trim($matches[1]) === $thisIndent) {
+                $indent = Roff_Unit::normalize(trim($matches[1]));
+                if ($indent === $thisIndent) {
                     if (count($blockLines) > 0 and !in_array($blockLines[count($blockLines) - 1], ['.sp', '.br'])) {
                         $blockLines[] = '.br';
                     }

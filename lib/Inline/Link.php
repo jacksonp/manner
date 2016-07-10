@@ -45,7 +45,7 @@ class Inline_Link
 
         $dom         = $parentNode->ownerDocument;
         $numLines    = count($lines);
-        $arguments   = Macro::parseArgString($matches[1]);
+        $arguments   = Macro::parseArgString(@$matches[1]);
         $punctuation = '';
         $blockLines  = [];
 

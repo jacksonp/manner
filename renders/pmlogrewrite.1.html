@@ -59,7 +59,7 @@
   <p>A <strong>global</strong> rewriting rule has the form:
   <p><strong><em>GLOBAL</em></strong> <strong><em>{</em></strong> <em>globalspec</em> ... <strong><em>}</em></strong>
   <p>where <em>globalspec</em> is zero or more of the following clauses:
-  <div class="indent-+4n">
+  <div class="indent-26">
     <p><strong><em>HOSTNAME</em></strong> <strong><em>-&gt;</em></strong> <em>hostname</em>
     <p>Modifies the label records in the <em>outlog</em> PCP archive, so that the metrics will appear to have been collected from the host <em>hostname</em>.
     <p><strong><em>TIME</em></strong> <strong><em>-&gt;</em></strong> <em>delta</em>
@@ -73,17 +73,17 @@
   <p>As a special case <em>serial</em> could be an asterisk “*” which means the rule applies to every instance domain with a domain number of <em>domain</em>.
   <p>If a designated instance domain is not in <em>inlog</em> the rule has no effect.
   <p>The <em>indomspec</em> is zero or more of the following clauses:
-  <div class="indent-+4n">
+  <div class="indent-26">
     <p><strong><em>INAME</em></strong> "<em>oldname</em>" <strong><em>-&gt;</em></strong> "<em>newname</em>"
     <p>The instance identified by the external instance name <em>oldname</em> is renamed to <em>newname</em>. Both <em>oldname</em> and <em>newname</em> must be enclosed in quotes.
     <p>As a special case, the new name may be the keyword <strong><em>DELETE</em></strong> (with no quotes), and then the instance <em>oldname</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
     <p>If the instance names contain any embedded spaces then special care needs to be taken in respect of the PCP instance naming rule that treats the leading non-space part of the instance name as the unique portion of the name for the purposes of matching and ensuring uniqueness within an instance domain, refer to <strong>pmdaInstance</strong>(3) for a discussion of this issue.
     <p>As an illustration, consider the hypothetical instance domain for a metric which contains 2 instances with the following names:
-    <div class="indent-+4">
+    <div class="indent-4">
       <pre>red
 eek urk</pre>
       <p>Then some possible <strong><em>INAME</em></strong> clauses might be:
-      <dl class="indent-+10n">
+      <dl class="indent-64">
         <dt><code>"eek" -&gt; "yellow like a flower"</code>
         <dd>
           <p>Acceptable, <em>oldname</em> “eek” matches the “eek urk” instance.
@@ -96,18 +96,18 @@ eek urk</pre>
       </dl>
     </div>
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>Modifies the metadata for the instance domain and every metric associated with the instance domain. As a special case, <em>newserial</em> could be an asterisk “*” which means use <em>serial</em> from the <strong>indom</strong> rewriting rule, although this is most useful when <em>serial</em> is also an asterisk. So for example:<br>
       <code>indom 29.* { indom -&gt; 109.* }</code> will move all instance domains from domain 29 to domain 109.
     </div>
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>DUPLICATE</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>A special case of the previous <strong><em>INDOM</em></strong> clause where the instance domain is a duplicate copy of the <em>domain</em><strong><em>.</em></strong><em>serial</em> instance domain from the <em>indom</em> rewriting rule, and then any mapping rules are applied to the copied <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> instance domain. This is useful when a PMDA is split and the same instance domain needs to be replicated for domain <em>domain</em> and domain <em>newdomain</em>. So for example if the metrics <em>foo.one</em> and <em>foo.two</em> are both defined over instance domain 12.34, and <em>foo.two</em> is moved to another PMDA using domain 27, then the following rewriting rules could be used:<br>
       <code>indom 12.34 { indom -&gt; duplicate 27.34 }<br>
       metric foo.two { indom -&gt; 27.34 pmid -&gt; 27.*.* }</code>
     </div>
     <p><strong><em>INST</em></strong> <em>oldid</em> <strong><em>-&gt;</em></strong> <em>newid</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>The instance identified by the internal instance identifier <em>oldid</em> is renumbered to <em>newid</em>. Both <em>oldid</em> and <em>newid</em> are integers in the range 0 to 2<sup>31</sup>-1.
       <p>As a special case, <em>newid</em> may be the keyword <strong><em>DELETE</em></strong> and then the instance <em>oldid</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
     </div>
@@ -118,14 +118,14 @@ eek urk</pre>
   <p>As special cases <em>item</em> could be an asterisk “*” which means the rule applies to every metric with a domain number of <em>domain</em> and a cluster number of <em>cluster</em>, or <em>cluster</em> could be an asterisk which means the rule applies to every metric with a domain number of <em>domain</em> and an item number of <em>item</em>, or both <em>cluster</em> and <em>item</em> could be asterisks, and rule applies to every metric with a domain number of <em>domain</em>.
   <p>If a designated metric is not in <em>inlog</em> the rule has no effect.
   <p>The <em>metricspec</em> is zero or more of the following clauses:
-  <div class="indent-+4n">
+  <div class="indent-26">
     <p><strong><em>DELETE</em></strong>
     <p>The metric is completely removed from <em>outlog</em>, both the metadata and all values in results are expunged.
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> [ <em>pick</em> ]
     <p>Modifies the metadata to change the instance domain for this metric. The new instance domain must exist in <em>outlog</em>.
     <p>The optional <em>pick</em> clause may be used to select one input value, or compute an aggregate value from the instances in an input result, or assign an internal instance identifier to a single output value. If no <em>pick</em> clause is specified, the default behaviour is to copy all input values from each input result to an output result, however if the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then the one output value must be assigned an internal instance identifier, which is 0 by default, unless over-ridden by a <strong><em>INST</em></strong> or <strong><em>INAME</em></strong> clause as defined below.
     <p>The choices for <em>pick</em> are as follows:
-    <dl class="indent-+12n">
+    <dl class="indent-77">
       <dt><strong><em>OUTPUT FIRST</em></strong>
       <dd>
         <p>choose the value of the first instance from each input result
@@ -153,7 +153,7 @@ eek urk</pre>
     </dl>
     <p>If the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then independent of any <em>pick</em> specifications, there is at most one value in each input result and so <strong><em>FIRST</em></strong>, <strong><em>LAST</em></strong>, <strong><em>MIN</em></strong>, <strong><em>MAX</em></strong>, <strong><em>SUM</em></strong> and <strong><em>AVG</em></strong> are all equivalent and the output instance identifier will be 0.
     <p>In general it is an error to specify a rewriting action for the same metadata or result values more than once, e.g. more than one <strong><em>INDOM</em></strong> clause for the same instance domain. The one exception is the possible interaction between the <strong><em>INDOM</em></strong> clauses in the <strong>indom</strong> and <strong>metric</strong> rules. For example the metric <em>sample.bin</em> is defined over the instance domain 29.2 in <em>inlog</em> and the following is acceptable (albeit redundant):
-    <div class="indent-+4n">
+    <div class="indent-26">
       <pre>indom 29.* { indom -&gt; 109.* }
 metric sample.bin { indom -&gt; 109.2 }</pre>
       <p>However the following is an error, because the instance domain for <em>sample.bin</em> has two conflicting definitions:<br>
@@ -161,32 +161,32 @@ metric sample.bin { indom -&gt; 109.2 }</pre>
 metric sample.bin { indom -&gt; 123.2 }</pre>
     </div>
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>NULL</em></strong>[ <em>pick</em> ]
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>The metric (which must have been previously defined over an instance domain) is being modified to be a singular metric. This involves a metadata change and collapsing all results for this metric so that multiple values become one value.
       <p>The optional <em>pick</em> part of the clause defines how the one value for each result should be calculated and follows the same rules as described for the non-NULL <strong><em>INDOM</em></strong> case above.
       <p>In the absence of <em>pick</em>, the default is <strong><em>OUTPUT FIRST</em></strong>.
     </div>
     <p><strong><em>NAME</em></strong> <strong><em>-&gt;</em></strong> <em>newname</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>Renames the metric in the PCP archive's metadata that supports the Performance Metrics Name Space (PMNS). <em>newname</em> should not match any existing name in the archive's PMNS and must follow the syntactic rules for valid metric names as outlined in <strong>pmns</strong>(5).
     </div>
     <p><strong><em>PMID</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newcluster</em><strong><em>.</em></strong><em>newitem</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>Modifies the metadata and results to renumber the metric's PMID. As special cases, <em>newcluster</em> could be an asterisk “*” which means use <em>cluster</em> from the <strong>metric</strong> rewriting rule and/or <em>item</em> could be an asterisk which means use <em>item</em> from the <strong>metric</strong> rewriting rule. This is most useful when <em>cluster</em> and/or <em>item</em> is also an asterisk. So for example:<br>
       <code>metric 30.*.* { pmid -&gt; 123.*.* }</code> will move all metrics from domain 30 to domain 123.
     </div>
     <p><strong><em>SEM</em></strong> <strong><em>-&gt;</em></strong> <em>newsem</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>Change the semantics of the metric. <em>newsem</em> should be the XXX part of the name of one of the <strong>PM_SEM_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>COUNTER</em></strong> for <strong>PM_TYPE_COUNTER</strong>.
       <p>No data value rewriting is performed as a result of the <strong><em>SEM</em></strong> clause, so the usefulness is limited to cases where a version of the associated PMDA was exporting incorrect semantics for the metric. <strong>pmlogreduce</strong>(1) may provide an alternative in cases where re-computation of result values is desired.
     </div>
     <p><strong><em>TYPE</em></strong> <strong><em>-&gt;</em></strong> <em>newtype</em>
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p>Change the type of the metric which alters the metadata and may change the encoding of values in results. <em>newtype</em> should be the XXX part of the name of one of the <strong>PM_TYPE_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>FLOAT</em></strong> for <strong>PM_TYPE_FLOAT</strong>.
       <p>Type conversion is only supported for cases where the old and new metric type is numeric, so <strong>PM_TYPE_STRING</strong>, <strong>PM_TYPE_AGGREGATE</strong> and <strong>PM_TYPE_EVENT</strong> are not allowed. Even for the numeric cases, some conversions may produce run-time errors, e.g. integer overflow, or attempting to rewrite a negative value into an unsigned type.
     </div>
     <p><strong><em>UNITS</em></strong> <strong><em>-&gt;</em></strong> <em>newunits</em> [ <strong><em>RESCALE</em></strong> ]
-    <div class="indent-+4n">
+    <div class="indent-26">
       <p><em>newunits</em> is six values separated by commas. The first 3 values describe the dimension of the metric along the dimensions of space, time and count; these are integer values, usually 0, 1 or -1. The remaining 3 values describe the scale of the metric's values in the dimensions of space, time and count. Space scale values should be 0 (if the space dimension is 0), else the XXX part of the name of one of the <strong>PM_SPACE_XXX</strong> macros, e.g. <strong><em>KBYTE</em></strong> for <strong>PM_TYPE_KBYTE</strong>. Time scale values should be 0 (if the time dimension is 0), else the XXX part of the name of one of the <strong>PM_TIME_XXX</strong> macros, e.g. <strong><em>SEC</em></strong> for <strong>PM_TIME_SEC</strong>. Count scale values should be 0 (if the time dimension is 0), else <strong><em>ONE</em></strong> for <strong>PM_COUNT_ONE</strong>.
       <p>The <strong>PM_SPACE_XXX</strong>, <strong>PM_TIME_XXX</strong> and <strong>PM_COUNT_XXX</strong> macros are defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3).
       <p>When the scale is changed (but the dimension is unaltered) the optional keyword <strong><em>RESCALE</em></strong> may be used to chose value rescaling as per the <strong>-s</strong> command line option, but applied to just this metric.
@@ -197,13 +197,13 @@ metric sample.bin { indom -&gt; 123.2 }</pre>
 <div class="section">
   <h2>EXAMPLES</h2>
   <p>To promote the values of the per-disk IOPS metrics to 64-bit to allow aggregation over a long time period for capacity planning, or because the PMDA has changed to export 64-bit counters and we want to convert old archives so they can be processed alongside new archives.
-  <div class="indent-+4">
+  <div class="indent-4">
     <pre>metric disk.dev.read { type -&gt; U64 }
 metric disk.dev.write { type -&gt; U64 }
 metric disk.dev.total { type -&gt; U64 }</pre>
   </div>
   <p>The instances associated with the load average metric <strong>kernel.all.load</strong> could be renamed and renumbered by the rules below.
-  <div class="indent-+4">
+  <div class="indent-4">
     <pre># for the Linux PMDA, the kernel.all.load metric is defined
 # over instance domain 60.2
 indom 60.2 {
@@ -213,7 +213,7 @@ indom 60.2 {
 }</pre>
   </div>
   <p>If we decide to split the “proc” metrics out of the Linux PMDA, this will involve changing the domain number for the PMID of these metrics and the associated instance domains. The rules below would rewrite an old archive to match the changes after the PMDA split.
-  <div class="indent-+4">
+  <div class="indent-4">
     <pre># all Linux proc metrics are in 7 clusters
 metric 60.8.* { pmid -&gt; 123.*.* }
 metric 60.9.* { pmid -&gt; 123.*.* }
