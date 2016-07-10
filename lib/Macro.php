@@ -10,7 +10,7 @@ class Macro
         // sometimes get double spaces, see e.g. samba_selinux.8:
         $argString = Replace::preg('~\s+~', ' ', $argString);
 
-        $argString = trim($argString);
+        $argString = ltrim($argString);
 
         if ($argString === '') {
             return null;
@@ -64,15 +64,15 @@ class Macro
         $known = [];
 
         $known['C++'] = <<<'ROFF'
-C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
+C  + +  
 ROFF;
 
         $known['ð'] = <<<'ROFF'
-d\h'-1'`
+d \(ga
 ROFF;
 
         $known['Ð'] = <<<'ROFF'
-D\h'-1'‐
+D \(hy
 ROFF;
         $known['Þ'] = <<<'ROFF'
 \o'bp'

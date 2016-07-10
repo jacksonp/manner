@@ -505,6 +505,7 @@ class Man
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
         }
+        $line = Text::translateCharacters($line);
 
         return $line;
     }

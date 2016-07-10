@@ -11,34 +11,29 @@ class Roff_Condition
     {
 
         if (preg_match(
-          '~^\.if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
+          '~^[\.\']if\s+' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
           $lines[$i], $matches)
         ) {
-            $cond1 = Text::translateCharacters($matches[1]);
-            $cond2 = Text::translateCharacters($matches[2]);
-
-            return self::ifBlock($lines, $i, $matches[3], self::test($cond1) and self::test($cond2));
+            return self::ifBlock($lines, $i, $matches[3], self::test($matches[1]) and self::test($matches[2]));
         }
 
-        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $lines[$i], $matches)) {
+        if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $lines[$i], $matches)) {
             return self::ifBlock($lines, $i, $matches[2], self::test($matches[1]));
         }
 
         if (
-        preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . ' \.if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
+        preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
           $lines[$i], $matches)
         ) {
-            $cond1 = Text::translateCharacters($matches[1]);
-            $cond2 = Text::translateCharacters($matches[2]);
-            if (self::test($cond1) and self::test($cond2)) {
+            if (self::test($matches[1]) and self::test($matches[2])) {
                 return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[3])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
         }
 
-        if (preg_match('~^\.\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
-            if (self::test(Text::translateCharacters($matches[1]))) {
+        if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
+            if (self::test($matches[1])) {
                 $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
                 return ['i' => $i - 1];
             } else {
@@ -46,8 +41,8 @@ class Roff_Condition
             }
         }
 
-        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $lines[$i], $matches)) {
-            $useIf = self::test(Text::translateCharacters($matches[1]));
+        if (preg_match('~^[\.\']\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $lines[$i], $matches)) {
+            $useIf = self::test($matches[1]);
             $if    = self::ifBlock($lines, $i, $matches[2], $useIf);
             $i     = $if['i'];
 
@@ -60,8 +55,8 @@ class Roff_Condition
 
         }
 
-        if (preg_match('~^\.\s*ie ' . self::CONDITION_REGEX . '\s?(.*)$~u', $lines[$i], $ifMatches)) {
-            $useIf  = self::test(Text::translateCharacters($ifMatches[1]));
+        if (preg_match('~^[\.\']\s*ie ' . self::CONDITION_REGEX . '\s?(.*)$~u', $lines[$i], $ifMatches)) {
+            $useIf  = self::test($ifMatches[1]);
             $result = Roff_Comment::checkEvaluate($lines, $i + 1);
             if ($result !== false) {
                 $i = $result['i'];
@@ -81,14 +76,14 @@ class Roff_Condition
 
         $line = $lines[$i];
 
-        if (preg_match('~^\.\s*el\s?\\\\{(.*)$~u', $line, $matches)) {
+        if (preg_match('~^[\.\']\s*el\s?\\\\{(.*)$~u', $line, $matches)) {
             $else     = self::ifBlock($lines, $i, $matches[1], !$useIf);
             $newLines = $useIf ? $ifLines : $else['lines'];
 
             return ['lines' => $newLines, 'i' => $else['i']];
         }
 
-        if (!preg_match('~^\.\s*el (.*)$~u', $line, $elseMatches)) {
+        if (!preg_match('~^[\.\']\s*el (.*)$~u', $line, $elseMatches)) {
             //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
             // Just skip the ie and el lines:
             return ['lines' => [], 'i' => $i];
@@ -104,6 +99,14 @@ class Roff_Condition
     }
 
     private static function test(string $condition)
+    {
+        $man       = Man::instance();
+        $condition = $man->applyAllReplacements($condition);
+
+        return self::testRecursive($condition);
+    }
+
+    private static function testRecursive(string $condition)
     {
 
         if (mb_strpos($condition, '!') === 0) {
@@ -148,7 +151,8 @@ class Roff_Condition
         }
 
         $alwaysTrue = [
-          'n',       // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
+          'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
+          'n\h\'-\w\'',   // Hack for netchange.5
           'dURL',
           'dTS',
         ];
@@ -163,7 +167,7 @@ class Roff_Condition
           'v', // vroff
           'rF',
           'require_index',
-          'c \\[shc]', // see man.1
+          'c ', // see man.1
           '\'po4a.hide\'',
         ];
 
@@ -181,7 +185,6 @@ class Roff_Condition
         $numLines         = count($lines);
         $foundEnd         = false;
         $replacementLines = [];
-        $man              = Man::instance();
 
         $line = $firstLine;
 
@@ -189,7 +192,6 @@ class Roff_Condition
         $recurse    = false;
 
         for ($ifIndex = $i; $ifIndex < $numLines;) {
-            $line = $man->applyAllReplacements($line);
 
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 or

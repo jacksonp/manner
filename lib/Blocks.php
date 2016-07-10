@@ -54,6 +54,7 @@ class Blocks
             '.pp', // spurious, in *_selinux.8 pages
             '.RH',
             '.Sp',
+            '.Sp ',
             '.TH', // Empty .THs only
             '.TC',
             '.TR',

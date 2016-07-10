@@ -42,6 +42,26 @@ class Text
             // TODO: fix this hack, see groff_mom.7
             $line = preg_replace('~^\.FONT ~u', '.', $line);
 
+            $line = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
+                return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
+            }, $line);
+
+            $line = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
+                return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
+            }, $line);
+
+            // Don't worry about changes in point size for now:
+            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+]?\d~u', '$1', $line);
+
+            // Don't worry about this:
+            // \v, \h: "Local vertical/horizontal motion"
+            // \l: Horizontal line drawing function (optionally using character c).
+            // \L: Vertical line drawing function (optionally using character c).
+            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
+
+            // Don't worry colour changes:
+            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?\])~u', '$1', $line);
+
             $linesNoComments[] = $line;
 
         }
@@ -60,12 +80,10 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
-            $lines[$i] = $man->applyAllReplacements($lines[$i]);
-
             if (mb_substr($lines[$i], 0, 1) === '.') {
                 $bits = Macro::parseArgString($lines[$i]);
                 if (count($bits) > 0) {
-                    $macro  = array_shift($bits);
+                    $macro  = trim(array_shift($bits));
                     $macros = $man->getMacros();
                     if (isset($macros[$macro])) {
                         $man->setRegister('.$', count($bits));
@@ -85,7 +103,7 @@ class Text
                                 throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
                             }
 
-                            $evaluatedMacroLines[] = Text::translateCharacters($macroLine);
+                            $evaluatedMacroLines[] = $macroLine;
                         }
                         $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($evaluatedMacroLines));
 
@@ -108,10 +126,8 @@ class Text
                 }
             }
 
-
-            $lines[$i] = Text::translateCharacters($lines[$i]);
-
-            $linesNoCond[] = $lines[$i];
+            // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
+            $linesNoCond[] = $man->applyAllReplacements($lines[$i]);
 
         }
 
@@ -133,7 +149,8 @@ class Text
 
         for ($i = 0; $i < $numNoCondLines; ++$i) {
 
-            $line = $man->applyAllReplacements($linesNoCond[$i]);
+            $line = $linesNoCond[$i];
+            $line = rtrim($line);
 
             $skipLines = [
                 // Empty requests:
@@ -296,32 +313,12 @@ class Text
 
         $line = strtr($line, $replacements);
 
-        $line = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
-            return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
-        }, $line);
-
-        $line = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
-            return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
-        }, $line);
-
-        // Don't worry about changes in point size for now:
-        $line = Replace::preg('~\\\\s[-+]?\d~u', '', $line);
-
-        // Don't worry about this:
-        // \v, \h: "Local vertical/horizontal motion"
-        // \l: Horizontal line drawing function (optionally using character c).
-        // \L: Vertical line drawing function (optionally using character c).
-        $line = Replace::preg('~\\\\[vhLl]\'.*?\'~u', ' ', $line);
-
         // \w’string’: The width of the glyph sequence string. We approximate with ens.
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
             return mb_strlen($matches[0]);
         }, $line);
 
-        // Don't worry colour changes:
-        $line = Replace::preg('~\\\\m(\(..|\[.*?\])~u', '', $line);
-
-        return rtrim($line);
+        return $line;
 
     }
 

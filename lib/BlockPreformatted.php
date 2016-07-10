@@ -23,7 +23,8 @@ class BlockPreformatted
             $parentForLine = $parentNode;
 
             if (mb_strlen($line) === 0 or
-              preg_match('~^\.([LP]?P$|HP|br|sp|ne)~u', $line) or
+              Block_P::check($line) or
+              Inline_VerticalSpace::check($line) or
               preg_match('~^\\\\?\.$~u', $line) // empty requests
             ) {
                 if ($i > 0 && $i !== $numLines - 1) {

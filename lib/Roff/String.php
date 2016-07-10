@@ -24,6 +24,7 @@ class Roff_String
 
         $newRequest = $matches[1];
         $requestVal = Macro::simplifyRequest($matches[2]);
+        $requestVal = ltrim($requestVal, '"');
 
 //        var_dump($newRequest);
 //        var_dump($matches[2]);
@@ -43,7 +44,7 @@ class Roff_String
         }
 
         // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
-        $requestVal = $man->applyStringReplacement($requestVal);
+        $requestVal = $man->applyAllReplacements($requestVal);
 
         $man->addString($newRequest, $requestVal);
 
@@ -56,13 +57,17 @@ class Roff_String
 
         // Want to match any of: \*. \(.. \*(.. \[....] \*[....]
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*(?<str>.))~u',
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]\s]+)\]|\*?\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
           function ($matches) use (&$replacements) {
               if (isset($replacements[$matches['str']])) {
                   return $matches['bspairs'] . $replacements[$matches['str']];
               } else {
-                  //throw new Exception($matches['str'] . ' - unavailable string: ' . $matches[0]);
-                  return $matches[0];
+                  // TODO: bit of a hack try to combine all changes and do them all at last minute
+                  if (in_array($matches['str'], ['rs', 'dq', 'aq', 'R'])) {
+                      return $matches[0];
+                  } else {
+                      return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
+                  }
               }
           },
           $string);

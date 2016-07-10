@@ -11,8 +11,9 @@ class Roff_Register
             return false;
         }
 
-        $man = Man::instance();
-        $man->setRegister($matches['name'], $matches['val']);
+        $man           = Man::instance();
+        $registerValue = $man->applyAllReplacements($matches['val']);
+        $man->setRegister($matches['name'], $registerValue);
 
         return ['i' => $i];
 
