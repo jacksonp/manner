@@ -39,6 +39,9 @@ class Text
             // NB: Workaround for lots of broken tcl man pages (section n, Tk_*, Tcl_*, others...):
             $line = Replace::preg('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
 
+            // TODO: fix this hack, see groff_mom.7
+            $line = preg_replace('~^\.FONT ~u', '.', $line);
+
             $linesNoComments[] = $line;
 
         }
@@ -56,9 +59,6 @@ class Text
         $linesNoCond       = [];
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
-
-            // TODO: fix this hack, see groff_mom.7
-            $lines[$i] = preg_replace('~^\.FONT ~u', '.', $lines[$i]);
 
             $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
