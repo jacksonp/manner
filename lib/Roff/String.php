@@ -24,7 +24,9 @@ class Roff_String
 
         $newRequest = $matches[1];
         $requestVal = Macro::simplifyRequest($matches[2]);
-        $requestVal = ltrim($requestVal, '"');
+        if (mb_substr($requestVal, 0, 1) === '"') {
+            $requestVal = mb_substr($requestVal, 1);
+        }
 
 //        var_dump($newRequest);
 //        var_dump($matches[2]);
