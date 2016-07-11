@@ -22,23 +22,17 @@
   <p>The command line options for <strong>pmlogextract</strong> are as follows:
   <dl class="indent-7">
     <dt><strong>-c</strong> <em>configfile</em>
-    <dd>
-      <p>Extract only the metrics specified in <em>configfile</em> from the <em>input</em> PCP archive log(s). The <em>configfile</em> syntax accepted by <strong>pmlogextract</strong> is explained in more detail in the <strong>Configuration File Syntax</strong> section.
+    <dd>Extract only the metrics specified in <em>configfile</em> from the <em>input</em> PCP archive log(s). The <em>configfile</em> syntax accepted by <strong>pmlogextract</strong> is explained in more detail in the <strong>Configuration File Syntax</strong> section.
     <dt><strong>-d</strong>
-    <dd>
-      <p>Desperate mode. Normally if a fatal error occurs, all trace of the partially written PCP archive <em>output</em> is removed. With the <strong>-d</strong> option, the <em>output</em> archive log is not removed.
+    <dd>Desperate mode. Normally if a fatal error occurs, all trace of the partially written PCP archive <em>output</em> is removed. With the <strong>-d</strong> option, the <em>output</em> archive log is not removed.
     <dt><strong>-f</strong>
-    <dd>
-      <p>For most common uses, all of the input archive logs will have been collected in the same timezone. But if this is not the case, then <strong>pmlogextract</strong> must choose one of the timezones from the input archive logs to be used as the timezone for the output archive log. The default is to use the timezone from the <em>last</em> input archive log. The <strong>-f</strong> option forces the timezone from the <em>first</em> input archive log to be used.
+    <dd>For most common uses, all of the input archive logs will have been collected in the same timezone. But if this is not the case, then <strong>pmlogextract</strong> must choose one of the timezones from the input archive logs to be used as the timezone for the output archive log. The default is to use the timezone from the <em>last</em> input archive log. The <strong>-f</strong> option forces the timezone from the <em>first</em> input archive log to be used.
     <dt><strong>-S</strong> <em>starttime</em>
-    <dd>
-      <p>Define the start of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
+    <dd>Define the start of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
     <dt><strong>-s</strong> <em>samples</em>
-    <dd>
-      <p>The argument <em>samples</em> defines the number of samples to be written to <em>output</em>. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmlogextract</strong> will sample until the end of the PCP archive log, or the end of the time window as specified by <strong>-T</strong>, whichever comes first. The <strong>-s</strong> option will override the <strong>-T</strong> option if it occurs sooner.
+    <dd>The argument <em>samples</em> defines the number of samples to be written to <em>output</em>. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmlogextract</strong> will sample until the end of the PCP archive log, or the end of the time window as specified by <strong>-T</strong>, whichever comes first. The <strong>-s</strong> option will override the <strong>-T</strong> option if it occurs sooner.
     <dt><strong>-T</strong> <em>endtime</em>
-    <dd>
-      <p>Define the termination of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
+    <dd>Define the termination of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
     <dt><strong>-v</strong> <em>volsamples</em>
     <dd>
       <p>The <em>output</em> archive log is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogextract</strong> to start a new volume after <em>volsamples</em> log records have been written to the archive log.
@@ -46,14 +40,11 @@
         <p>Independent of any <strong>-v</strong> option, each volume of an archive is limited to no more than 2^31 bytes, so <em>pmlogextract</em> will automatically create a new volume for the archive before this limit is reached.
       </div>
     <dt><strong>-w</strong>
-    <dd>
-      <p>Where <strong>-S</strong> and <strong>-T</strong> specify a time window within the same day, the <strong>-w</strong> flag will cause the data within the time window to be extracted, for every day in the archive log. For example, the options <strong>-w -S @11:00 -T @15:00</strong> specify that <strong>pmlogextract</strong> should include archive log records only for the periods from 11am to 3pm on each day. When <strong>-w</strong> is used, the <em>output</em> archive log will contain <em>&lt;mark&gt;</em> records to indicate the temporal discontinuity between the end of one time window and the start of the next.
+    <dd>Where <strong>-S</strong> and <strong>-T</strong> specify a time window within the same day, the <strong>-w</strong> flag will cause the data within the time window to be extracted, for every day in the archive log. For example, the options <strong>-w -S @11:00 -T @15:00</strong> specify that <strong>pmlogextract</strong> should include archive log records only for the periods from 11am to 3pm on each day. When <strong>-w</strong> is used, the <em>output</em> archive log will contain <em>&lt;mark&gt;</em> records to indicate the temporal discontinuity between the end of one time window and the start of the next.
     <dt><strong>-Z</strong> <em>timezone</em>
-    <dd>
-      <p>Use <em>timezone</em> when displaying the date and time. <em>Timezone</em> is in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
+    <dd>Use <em>timezone</em> when displaying the date and time. <em>Timezone</em> is in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
     <dt><strong>-z</strong>
-    <dd>
-      <p>Use the local timezone of the host from the input archive logs. The default is to initially use the timezone of the local host.
+    <dd>Use the local timezone of the host from the input archive logs. The default is to initially use the timezone of the local host.
   </dl>
 </div>
 <div class="section">
@@ -106,23 +97,17 @@
   <p>When more than one <em>input</em> archive set is specified, <strong>pmlogextract</strong> performs a number of checks to ensure the metadata is consistent for metrics appearing in more than one of the <em>input</em> archive sets. These checks include:
   <dl class="indent-13">
     <dt>*
-    <dd>
-      <p>metric data type is the same
+    <dd>metric data type is the same
     <dt>*
-    <dd>
-      <p>metric semantics are the same
+    <dd>metric semantics are the same
     <dt>*
-    <dd>
-      <p>metric units are the same
+    <dd>metric units are the same
     <dt>*
-    <dd>
-      <p>metric is either always singular or always has the same instance domain
+    <dd>metric is either always singular or always has the same instance domain
     <dt>*
-    <dd>
-      <p>metrics with the same name have the same PMID
+    <dd>metrics with the same name have the same PMID
     <dt>*
-    <dd>
-      <p>metrics with the same PMID have the same name
+    <dd>metrics with the same PMID have the same name
   </dl>
   <p>If any of these checks fail, <strong>pmlogextract</strong> reports the details and aborts without creating the <em>output</em> archive.
   <p>To address these semantic issues, use <strong>pmlogrewrite</strong>(1) to translate the <em>input</em> archives into equivalent archives with consistent metdadata before using <strong>pmlogextract</strong>.
@@ -132,14 +117,11 @@
   <p>For each of the <em>input</em> and <em>output</em> archive logs, several physical files are used.
   <dl class="indent-10">
     <dt><em>archive</em><strong>.meta</strong>
-    <dd>
-      <p>metadata (metric descriptions, instance domains, etc.) for the archive log
+    <dd>metadata (metric descriptions, instance domains, etc.) for the archive log
     <dt><em>archive</em><strong>.0</strong>
-    <dd>
-      <p>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...) - for <em>input</em> these files may have been previously compressed with <strong>bzip2</strong>(1) or <strong>gzip</strong>(1) and thus may have an additional <strong>.bz2</strong> or <strong>.gz</strong> suffix.
+    <dd>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...) - for <em>input</em> these files may have been previously compressed with <strong>bzip2</strong>(1) or <strong>gzip</strong>(1) and thus may have an additional <strong>.bz2</strong> or <strong>.gz</strong> suffix.
     <dt><em>archive</em><strong>.index</strong>
-    <dd>
-      <p>temporal index to support rapid random access to the other files in the archive log.
+    <dd>temporal index to support rapid random access to the other files in the archive log.
   </dl>
 </div>
 <div class="section">

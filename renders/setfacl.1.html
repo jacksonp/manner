@@ -30,64 +30,46 @@
   <h2>OPTIONS</h2>
   <dl class="indent-4">
     <dt><em>-b, --remove-all</em>
-    <dd>
-      <p>Remove all extended ACL entries. The base ACL entries of the owner, group and others are retained.
+    <dd>Remove all extended ACL entries. The base ACL entries of the owner, group and others are retained.
     <dt><em>-k, --remove-default</em>
-    <dd>
-      <p>Remove the Default ACL. If no Default ACL exists, no warnings are issued.
+    <dd>Remove the Default ACL. If no Default ACL exists, no warnings are issued.
     <dt><em>-n, --no-mask</em>
-    <dd>
-      <p>Do not recalculate the effective rights mask. The default behavior of setfacl is to recalculate the ACL mask entry, unless a mask entry was explicitly given. The mask entry is set to the union of all permissions of the owning group, and all named user and group entries. (These are exactly the entries affected by the mask entry).
+    <dd>Do not recalculate the effective rights mask. The default behavior of setfacl is to recalculate the ACL mask entry, unless a mask entry was explicitly given. The mask entry is set to the union of all permissions of the owning group, and all named user and group entries. (These are exactly the entries affected by the mask entry).
     <dt><em>--mask</em>
-    <dd>
-      <p>Do recalculate the effective rights mask, even if an ACL mask entry was explicitly given. (See the <em>-n</em> option.)
+    <dd>Do recalculate the effective rights mask, even if an ACL mask entry was explicitly given. (See the <em>-n</em> option.)
     <dt><em>-d, --default</em>
-    <dd>
-      <p>All operations apply to the Default ACL. Regular ACL entries in the input set are promoted to Default ACL entries. Default ACL entries in the input set are discarded. (A warning is issued if that happens).
+    <dd>All operations apply to the Default ACL. Regular ACL entries in the input set are promoted to Default ACL entries. Default ACL entries in the input set are discarded. (A warning is issued if that happens).
     <dt><em>--restore=file</em>
-    <dd>
-      <p>Restore a permission backup created by `getfacl -R' or similar. All permissions of a complete directory subtree are restored using this mechanism. If the input contains owner comments or group comments, setfacl attempts to restore the owner and owning group. If the input contains flags comments (which define the setuid, setgid, and sticky bits), setfacl sets those three bits accordingly; otherwise, it clears them. This option cannot be mixed with other options except `--test'.
+    <dd>Restore a permission backup created by `getfacl -R' or similar. All permissions of a complete directory subtree are restored using this mechanism. If the input contains owner comments or group comments, setfacl attempts to restore the owner and owning group. If the input contains flags comments (which define the setuid, setgid, and sticky bits), setfacl sets those three bits accordingly; otherwise, it clears them. This option cannot be mixed with other options except `--test'.
     <dt><em>--test</em>
-    <dd>
-      <p>Test mode. Instead of changing the ACLs of any files, the resulting ACLs are listed.
+    <dd>Test mode. Instead of changing the ACLs of any files, the resulting ACLs are listed.
     <dt><em>-R, --recursive</em>
-    <dd>
-      <p>Apply operations to all files and directories recursively. This option cannot be mixed with `--restore'.
+    <dd>Apply operations to all files and directories recursively. This option cannot be mixed with `--restore'.
     <dt><em>-L, --logical</em>
-    <dd>
-      <p>Logical walk, follow symbolic links to directories. The default behavior is to follow symbolic link arguments, and skip symbolic links encountered in subdirectories. Only effective in combination with -R. This option cannot be mixed with `--restore'.
+    <dd>Logical walk, follow symbolic links to directories. The default behavior is to follow symbolic link arguments, and skip symbolic links encountered in subdirectories. Only effective in combination with -R. This option cannot be mixed with `--restore'.
     <dt><em>-P, --physical</em>
-    <dd>
-      <p>Physical walk, do not follow symbolic links to directories. This also skips symbolic link arguments. Only effective in combination with -R. This option cannot be mixed with `--restore'.
+    <dd>Physical walk, do not follow symbolic links to directories. This also skips symbolic link arguments. Only effective in combination with -R. This option cannot be mixed with `--restore'.
     <dt><em>-v, --version</em>
-    <dd>
-      <p>Print the version of setfacl and exit.
+    <dd>Print the version of setfacl and exit.
     <dt><em>-h, --help</em>
-    <dd>
-      <p>Print help explaining the command line options.
+    <dd>Print help explaining the command line options.
     <dt><em>--</em>
-    <dd>
-      <p>End of command line options. All remaining parameters are interpreted as file names, even if they start with a dash.
+    <dd>End of command line options. All remaining parameters are interpreted as file names, even if they start with a dash.
     <dt><em>-</em>
-    <dd>
-      <p>If the file name parameter is a single dash, setfacl reads a list of files from standard input.
+    <dd>If the file name parameter is a single dash, setfacl reads a list of files from standard input.
   </dl>
   <div class="subsection">
     <h3>ACL ENTRIES</h3>
     <p>The setfacl utility recognizes the following ACL entry formats (blanks inserted for clarity):
     <dl>
       <dt>[d[efault]:] [u[ser]:]<em>uid</em> [:<em>perms</em>]
-      <dd>
-        <p>Permissions of a named user. Permissions of the file owner if <em>uid</em> is empty.
+      <dd>Permissions of a named user. Permissions of the file owner if <em>uid</em> is empty.
       <dt>[d[efault]:] g[roup]:<em>gid</em> [:<em>perms</em>]
-      <dd>
-        <p>Permissions of a named group. Permissions of the owning group if <em>gid</em> is empty.
+      <dd>Permissions of a named group. Permissions of the owning group if <em>gid</em> is empty.
       <dt>[d[efault]:] m[ask][:] [:<em>perms</em>]
-      <dd>
-        <p>Effective rights mask
+      <dd>Effective rights mask
       <dt>[d[efault]:] o[ther][:] [:<em>perms</em>]
-      <dd>
-        <p>Permissions of others.
+      <dd>Permissions of others.
     </dl>
     <p>Whitespace between delimiter characters and non-delimiter characters is ignored.
     <p>Proper ACL entries including permissions are used in modify and set operations. (options <em>-m</em>, <em>-M</em>, <em>--set</em> and <em>--set-file</em>). Entries without the <em>perms</em> field are used for <em>deletion</em> of entries (options <em>-x</em> and <em>-X</em>).
@@ -99,29 +81,22 @@
     <p>Initially, files and directories contain only the three base ACL entries for the owner, the group, and others. There are some rules that need to be satisfied in order for an ACL to be valid:
     <dl class="indent-4">
       <dt>*
-      <dd>
-        <p>The three base entries cannot be removed. There must be exactly one entry of each of these base entry types.
+      <dd>The three base entries cannot be removed. There must be exactly one entry of each of these base entry types.
       <dt>*
-      <dd>
-        <p>Whenever an ACL contains named user entries or named group objects, it must also contain an effective rights mask.
+      <dd>Whenever an ACL contains named user entries or named group objects, it must also contain an effective rights mask.
       <dt>*
-      <dd>
-        <p>Whenever an ACL contains any Default ACL entries, the three Default ACL base entries (default owner, default group, and default others) must also exist.
+      <dd>Whenever an ACL contains any Default ACL entries, the three Default ACL base entries (default owner, default group, and default others) must also exist.
       <dt>*
-      <dd>
-        <p>Whenever a Default ACL contains named user entries or named group objects, it must also contain a default effective rights mask.
+      <dd>Whenever a Default ACL contains named user entries or named group objects, it must also contain a default effective rights mask.
     </dl>
     <p>To help the user ensure these rules, setfacl creates entries from existing entries under the following conditions:
     <dl class="indent-4">
       <dt>*
-      <dd>
-        <p>If an ACL contains named user or named group entries, and no mask entry exists, a mask entry containing the same permissions as the group entry is created. Unless the <em>-n</em> option is given, the permissions of the mask entry are further adjusted to include the union of all permissions affected by the mask entry. (See the <em>-n</em> option description).
+      <dd>If an ACL contains named user or named group entries, and no mask entry exists, a mask entry containing the same permissions as the group entry is created. Unless the <em>-n</em> option is given, the permissions of the mask entry are further adjusted to include the union of all permissions affected by the mask entry. (See the <em>-n</em> option description).
       <dt>*
-      <dd>
-        <p>If a Default ACL entry is created, and the Default ACL contains no owner, owning group, or others entry, a copy of the ACL owner, owning group, or others entry is added to the Default ACL.
+      <dd>If a Default ACL entry is created, and the Default ACL contains no owner, owning group, or others entry, a copy of the ACL owner, owning group, or others entry is added to the Default ACL.
       <dt>*
-      <dd>
-        <p>If a Default ACL contains named user entries or named group entries, and no mask entry exists, a mask entry containing the same permissions as the default Default ACL's group entry is added. Unless the <em>-n</em> option is given, the permissions of the mask entry are further adjusted to include the union of all permissions affected by the mask entry. (See the <em>-n</em> option description).
+      <dd>If a Default ACL contains named user entries or named group entries, and no mask entry exists, a mask entry containing the same permissions as the default Default ACL's group entry is added. Unless the <em>-n</em> option is given, the permissions of the mask entry are further adjusted to include the union of all permissions affected by the mask entry. (See the <em>-n</em> option description).
     </dl>
   </div>
 </div>

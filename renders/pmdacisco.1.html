@@ -19,29 +19,21 @@
   <p>A brief description of the <strong>pmdacisco</strong> command line options follows:
   <dl class="indent-5">
     <dt><strong>-d</strong>
-    <dd>
-      <p>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
+    <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>
-      <p>Location of the log file. By default, a log file named <em>cisco.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdacisco</strong> is started, i.e. <em>$PCP_LOG_DIR/pmcd</em>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>Location of the log file. By default, a log file named <em>cisco.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdacisco</strong> is started, i.e. <em>$PCP_LOG_DIR/pmcd</em>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-P</strong>
-    <dd>
-      <p>By default, it is assumed that no user-level password is required to access the Cisco's telnet port. If user-level passwords have been enabled on the Ciscos, then those passwords must be specified to <strong>pmdacisco</strong>. If specified with the <strong>-P</strong> option, <em>password</em> will be used as the default user-level password for all Ciscos. See also the INTERFACE IDENTIFICATION section below.
+    <dd>By default, it is assumed that no user-level password is required to access the Cisco's telnet port. If user-level passwords have been enabled on the Ciscos, then those passwords must be specified to <strong>pmdacisco</strong>. If specified with the <strong>-P</strong> option, <em>password</em> will be used as the default user-level password for all Ciscos. See also the INTERFACE IDENTIFICATION section below.
     <dt><strong>-r</strong>
-    <dd>
-      <p><strong>pmdacisco</strong> will refresh the current values for all performance metrics by contacting each Cisco router once every <em>refresh</em> seconds. The default <em>refresh</em> is 120 seconds.
+    <dd><strong>pmdacisco</strong> will refresh the current values for all performance metrics by contacting each Cisco router once every <em>refresh</em> seconds. The default <em>refresh</em> is 120 seconds.
     <dt><strong>-s</strong>
-    <dd>
-      <p>The Cisco command prompt ends with the string <em>prompt</em>. The default value is “&gt;”. The only way <strong>pmdacisco</strong> can synchronize the sending of commands and the parsing of output is by recognizing <em>prompt</em> as a unique string that comes at the end of all output, i.e. as the command prompt when waiting for the next command.
+    <dd>The Cisco command prompt ends with the string <em>prompt</em>. The default value is “&gt;”. The only way <strong>pmdacisco</strong> can synchronize the sending of commands and the parsing of output is by recognizing <em>prompt</em> as a unique string that comes at the end of all output, i.e. as the command prompt when waiting for the next command.
     <dt><strong>-U</strong>
-    <dd>
-      <p>By default, it is assumed that no username login is required to access the Cisco's telnet port. If username login has been enabled on the Ciscos, then the corresponding usernames must be specified to <strong>pmdacisco</strong>. If specified with the <strong>-U</strong> option, <em>username</em> will be used as the default username login for all Ciscos. See also the INTERFACE IDENTIFICATION section below.
+    <dd>By default, it is assumed that no username login is required to access the Cisco's telnet port. If username login has been enabled on the Ciscos, then the corresponding usernames must be specified to <strong>pmdacisco</strong>. If specified with the <strong>-U</strong> option, <em>username</em> will be used as the default username login for all Ciscos. See also the INTERFACE IDENTIFICATION section below.
     <dt><strong>-M</strong>
-    <dd>
-      <p>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
+    <dd>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-x</strong>
-    <dd>
-      <p>Connect to the Cisco via TCP port number <em>port</em> rather than the default 23 for a telnet connection.
+    <dd>Connect to the Cisco via TCP port number <em>port</em> rather than the default 23 for a telnet connection.
   </dl>
   <p>For each interface, once the telnet connection is established, <strong>pmdacisco</strong> is willing to wait up to 5 seconds for the Cisco to provide a new snapshot of the requested information. If this does not happen, the telnet connection is broken and no values are returned. This prevents <strong>pmdacisco</strong> tying up the Cisco's telnet ports waiting indefinitely when the response from the router is not what is expected, e.g. if the format of the “show int” output changes, or the command is in error because an interface is no longer configured on the router.
 </div>
@@ -51,8 +43,7 @@
   <p>The <em>host:interface-spec</em> arguments on the command line define a particular interface on a particular Cisco router. <em>host</em> should be a hostname or a “dot-notation” IP address that identifies the telnet port of a particular Cisco router. There are several components of the <em>interface-spec</em> as follows.
   <dl>
     <dt>protocol
-    <dd>
-      <p>One of the abbreviations <strong>a</strong>, <strong>B</strong>, <strong>E</strong>, <strong>e</strong>, <strong>f</strong>, <strong>G</strong>, <strong>h</strong>, <strong>s</strong> or <strong>Vl</strong> respectively for ATM, BRI (ISDN), FastEthernet, Ethernet, FDDI, GigabitEthernet, HSSI, serial or Vlan.
+    <dd>One of the abbreviations <strong>a</strong>, <strong>B</strong>, <strong>E</strong>, <strong>e</strong>, <strong>f</strong>, <strong>G</strong>, <strong>h</strong>, <strong>s</strong> or <strong>Vl</strong> respectively for ATM, BRI (ISDN), FastEthernet, Ethernet, FDDI, GigabitEthernet, HSSI, serial or Vlan.
     <dt>interface
     <dd>
       <p>Depending on the model of the Cisco, this will either be an integer, e.g. <strong>s0</strong>, or an integer followed by a slash (“/”) followed by a subinterface identification in one of a variety of syntactic forms, e.g. <strong>e1/0</strong>, <strong>G0/0/1</strong> or <strong>s4/2.1</strong>.
@@ -61,14 +52,11 @@
         <p>Alternatively run the <strong>probe</strong> command.
       </div>
     <dt>username
-    <dd>
-      <p>If there is a username login, and it is different to the default (see <strong>-U</strong> above), it may be optionally specified here by appending “@” and the username to the end of <em>interface-spec</em>.
+    <dd>If there is a username login, and it is different to the default (see <strong>-U</strong> above), it may be optionally specified here by appending “@” and the username to the end of <em>interface-spec</em>.
     <dt>password
-    <dd>
-      <p>If there is a user-level password, and it is different to the default (see <strong>-P</strong> above), it may be optionally specified here by appending a question mark (“?”) and the password to the end of <em>interface-spec</em>.
+    <dd>If there is a user-level password, and it is different to the default (see <strong>-P</strong> above), it may be optionally specified here by appending a question mark (“?”) and the password to the end of <em>interface-spec</em>.
     <dt>prompt
-    <dd>
-      <p>If the Cisco command prompt is different to the default (see <strong>-s</strong> above), it may be optionally specified here by appending an exclamation mark (“!”) and the prompt to the end of <em>interface-spec</em>.
+    <dd>If the Cisco command prompt is different to the default (see <strong>-s</strong> above), it may be optionally specified here by appending an exclamation mark (“!”) and the prompt to the end of <em>interface-spec</em>.
   </dl>
   <p>The following are examples of valid <em>interface-spec</em> arguments.
   <pre>my-router:e1/2
@@ -100,20 +88,15 @@ mycisco:E0/0@mylogin?mypassword!myprompt</pre>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
-    <dd>
-      <p>command line options used to launch <strong>pmdacisco</strong>
+    <dd>command line options used to launch <strong>pmdacisco</strong>
     <dt><strong>$PCP_PMDAS_DIR/cisco/help</strong>
-    <dd>
-      <p>default help text file for the Cisco metrics
+    <dd>default help text file for the Cisco metrics
     <dt><strong>$PCP_PMDAS_DIR/cisco/Install</strong>
-    <dd>
-      <p>installation script for the <strong>pmdacisco</strong> agent
+    <dd>installation script for the <strong>pmdacisco</strong> agent
     <dt><strong>$PCP_PMDAS_DIR/cisco/Remove</strong>
-    <dd>
-      <p>undo installation script for the <strong>pmdacisco</strong> agent
+    <dd>undo installation script for the <strong>pmdacisco</strong> agent
     <dt><strong>$PCP_LOG_DIR/pmcd/cisco.log</strong>
-    <dd>
-      <p>default log file for error messages and other information from <strong>pmdacisco</strong>
+    <dd>default log file for error messages and other information from <strong>pmdacisco</strong>
   </dl>
 </div>
 <div class="section">

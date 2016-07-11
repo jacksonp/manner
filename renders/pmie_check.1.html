@@ -24,8 +24,7 @@
   <p>The control file(s) should be customized according to the following rules that define for the current version (1.1) of the control file format.
   <dl class="indent-52">
     <dt>1.
-    <dd>
-      <p>Lines beginning with a “#” are comments.
+    <dd>Lines beginning with a “#” are comments.
     <dt>2.
     <dd>
       <p>Lines beginning with a “$” are assumed to be assignments to environment variables in the style of <strong>sh</strong>(1), and all text following the “$” will be <strong>eval</strong>'ed by the script reading the control file, and the corresponding variable exported into the environment. This is particularly useful to set and export variables into the environment of the administrative script, e.g.<br>
@@ -39,23 +38,17 @@
       <p>There should be one line in the control file(s) for each <strong>pmie</strong> instance of the form:
       <pre><em>host</em> <strong>y</strong>|<strong>n</strong> <strong>y</strong>|<strong>n</strong> <em>logfile</em> <em>args</em></pre>
     <dt>5.
-    <dd>
-      <p>Fields within a line of the control file(s) are separated by one or more spaces or tabs.
+    <dd>Fields within a line of the control file(s) are separated by one or more spaces or tabs.
     <dt>6.
-    <dd>
-      <p>The <em>first</em> field is the name of the host that is the default source of the performance metrics for this <strong>pmie</strong> instance.
+    <dd>The <em>first</em> field is the name of the host that is the default source of the performance metrics for this <strong>pmie</strong> instance.
     <dt>7.
-    <dd>
-      <p>The <em>second</em> field indicates if this is a <em>primary</em> <strong>pmie</strong> instance (<strong>y</strong>) or not (<strong>n</strong>). Since the primary inference engine must run on the local host, and there may be at most one primary for a particular host, this field can be <strong>y</strong> for at most one <strong>pmie</strong> instance, in which case the host name must be the name of the local host. When generating <strong>pmie</strong> configuration files, the primary clause indicates that <strong>pmieconf (1)</strong> should enable all rules in the primary group, in addition to all other default rules.
+    <dd>The <em>second</em> field indicates if this is a <em>primary</em> <strong>pmie</strong> instance (<strong>y</strong>) or not (<strong>n</strong>). Since the primary inference engine must run on the local host, and there may be at most one primary for a particular host, this field can be <strong>y</strong> for at most one <strong>pmie</strong> instance, in which case the host name must be the name of the local host. When generating <strong>pmie</strong> configuration files, the primary clause indicates that <strong>pmieconf (1)</strong> should enable all rules in the primary group, in addition to all other default rules.
     <dt>8.
-    <dd>
-      <p>The <em>third</em> field indicates whether this <strong>pmie</strong> instance needs to be started under the control of <strong>pmsocks</strong>(1) to connect to a <strong>pmcd</strong> through a firewall (<strong>y</strong> or <strong>n</strong>).
+    <dd>The <em>third</em> field indicates whether this <strong>pmie</strong> instance needs to be started under the control of <strong>pmsocks</strong>(1) to connect to a <strong>pmcd</strong> through a firewall (<strong>y</strong> or <strong>n</strong>).
     <dt>9.
-    <dd>
-      <p>The <em>fourth</em> field is the name of the <strong>pmie</strong> activity log file. A useful convention is that <strong>pmie</strong> instances monitoring the local host with hostname <em>myhost</em> are maintained in the directory <strong>$PCP_LOG_DIR/pmie/</strong><em>myhost,</em> while activity logs for the remote host <em>mumble</em> are maintained in <strong>$PCP_LOG_DIR/pmie/</strong><em>mumble.</em> This is consistent with the way <strong>pmlogger</strong>(1) maintains its activity logs and archive files.
+    <dd>The <em>fourth</em> field is the name of the <strong>pmie</strong> activity log file. A useful convention is that <strong>pmie</strong> instances monitoring the local host with hostname <em>myhost</em> are maintained in the directory <strong>$PCP_LOG_DIR/pmie/</strong><em>myhost,</em> while activity logs for the remote host <em>mumble</em> are maintained in <strong>$PCP_LOG_DIR/pmie/</strong><em>mumble.</em> This is consistent with the way <strong>pmlogger</strong>(1) maintains its activity logs and archive files.
     <dt>10.
-    <dd>
-      <p>All other fields are interpreted as arguments to be passed to <strong>pmie</strong>(1). Most typically this would be the <strong>-c</strong> option.
+    <dd>All other fields are interpreted as arguments to be passed to <strong>pmie</strong>(1). Most typically this would be the <strong>-c</strong> option.
   </dl>
   <p>The following sample control lines specify one <strong>pmie</strong> instance monitoring the local host (<em>wobbly</em>), and another monitoring performance metrics from the host <em>splat</em>.
   <pre><code>wobbly  n  PCP_LOG_DIR/pmie/wobbly  -c config.default
@@ -75,28 +68,21 @@ splat   n  PCP_LOG_DIR/pmie/splat   -c splat/cpu.conf</code>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMIECONTROL_PATH</strong>
-    <dd>
-      <p>the default PCP inference engine control file<br>
-      <strong>Warning</strong>: this file must not be writable by any user other than root.
+    <dd>the default PCP inference engine control file<br>
+    <strong>Warning</strong>: this file must not be writable by any user other than root.
     <dt><strong>$PCP_PMIECONTROL_PATH</strong>.d
-    <dd>
-      <p>optional directory containing additional PCP inference engine control files, typically one per host<br>
-      <strong>Warning</strong>: this files herein must not be writable by any user other than root.
+    <dd>optional directory containing additional PCP inference engine control files, typically one per host<br>
+    <strong>Warning</strong>: this files herein must not be writable by any user other than root.
     <dt><strong>$PCP_SYSCONF_DIR/pmie/crontab</strong>
-    <dd>
-      <p>sample crontab for automated script execution by $PCP_USER (or root) - exists only if the platform does not support the <em>/etc/cron.d</em> mechanism.
+    <dd>sample crontab for automated script execution by $PCP_USER (or root) - exists only if the platform does not support the <em>/etc/cron.d</em> mechanism.
     <dt><strong>$PCP_VAR_DIR/config/pmie/config.default</strong>
-    <dd>
-      <p>default <strong>pmlogger</strong> configuration file location for a localhost inference engine, typically generated automatically by <strong>pmieconf</strong>(1).
+    <dd>default <strong>pmlogger</strong> configuration file location for a localhost inference engine, typically generated automatically by <strong>pmieconf</strong>(1).
     <dt><strong>$PCP_LOG_DIR/pmie/</strong><em>hostname</em>
-    <dd>
-      <p>default location for the pmie log file for the host <em>hostname</em>
+    <dd>default location for the pmie log file for the host <em>hostname</em>
     <dt><strong>$PCP_LOG_DIR/pmie/</strong><em>hostname</em><strong>/lock</strong>
-    <dd>
-      <p>transient lock file to guarantee mutual exclusion during <strong>pmie</strong> administration for the host <em>hostname</em> - if present, can be safely removed if neither <strong>pmie_daily</strong> nor <strong>pmie_check</strong> are running
+    <dd>transient lock file to guarantee mutual exclusion during <strong>pmie</strong> administration for the host <em>hostname</em> - if present, can be safely removed if neither <strong>pmie_daily</strong> nor <strong>pmie_check</strong> are running
     <dt><strong>$PCP_LOG_DIR/NOTICES</strong>
-    <dd>
-      <p>PCP “notices” file used by <strong>pmie</strong>(1) and friends
+    <dd>PCP “notices” file used by <strong>pmie</strong>(1) and friends
   </dl>
 </div>
 <div class="section">

@@ -20,74 +20,56 @@
   <p>The <em>store</em> represents the certificate store to use. It can be one of the following:
   <dl>
     <dt><em>My</em>
-    <dd>
-      <p>This is the personal certificate store.
+    <dd>This is the personal certificate store.
     <dt><em>AddressBook</em>
-    <dd>
-      <p>This is the store for other people.
+    <dd>This is the store for other people.
     <dt><em>CA</em>
-    <dd>
-      <p>This is a store for intermediate certificate authorities.
+    <dd>This is a store for intermediate certificate authorities.
     <dt><em>Trust</em>
-    <dd>
-      <p>This is for trusted roots.
+    <dd>This is for trusted roots.
     <dt><em>Disallowed</em>
-    <dd>
-      <p>This is for untrusted roots
+    <dd>This is for untrusted roots
   </dl>
 </div>
 <div class="section">
   <h2>ACTIONS</h2>
   <dl>
     <dt><em>-list</em>
-    <dd>
-      <p>List the certificates, CTL or CTL in the specified store.
+    <dd>List the certificates, CTL or CTL in the specified store.
     <dt><em>-add</em>
-    <dd>
-      <p>Add a certificate, CRL or CTL to specified store. If filename it's a pkcs12 or pfx file, and it contains a private key, it will be imported to local key pair container.
+    <dd>Add a certificate, CRL or CTL to specified store. If filename it's a pkcs12 or pfx file, and it contains a private key, it will be imported to local key pair container.
     <dt><em>-del</em>
-    <dd>
-      <p>Remove a certificate, CRL or CTL from specified store. You must specify the object to be removed with it's hash value (and not a filename). This hash value is shown when doing a <strong>-list</strong> on the store.
+    <dd>Remove a certificate, CRL or CTL from specified store. You must specify the object to be removed with it's hash value (and not a filename). This hash value is shown when doing a <strong>-list</strong> on the store.
     <dt><em>-put</em>
-    <dd>
-      <p>Copy a certificate, CRL or CTL from a store to a file.
+    <dd>Copy a certificate, CRL or CTL from a store to a file.
     <dt><em>-ssl</em>
-    <dd>
-      <p>Download and add the certificates from a SSL session. You'll be asked to confirm the addition of every certificate received from the server. Note that SSL/TLS protocols do not requires a server to send the root certificate. This action assume an certificate (-c) object type and will import the certificates in appropriate stores (i.e. server certificate in the OtherPeople store, the root certificate in the Trust store, any other intermediate certificates in the IntermediateCA store).
+    <dd>Download and add the certificates from a SSL session. You'll be asked to confirm the addition of every certificate received from the server. Note that SSL/TLS protocols do not requires a server to send the root certificate. This action assume an certificate (-c) object type and will import the certificates in appropriate stores (i.e. server certificate in the OtherPeople store, the root certificate in the Trust store, any other intermediate certificates in the IntermediateCA store).
     <dt><em>-importKey</em>
-    <dd>
-      <p>Allows importing a private key from a pkcs12 file into a local key pair store. (Usefull when you already have the key's corresponding certificate installed at the specific store.)
+    <dd>Allows importing a private key from a pkcs12 file into a local key pair store. (Usefull when you already have the key's corresponding certificate installed at the specific store.)
   </dl>
 </div>
 <div class="section">
   <h2>OBJECT TYPES</h2>
   <dl>
     <dt><em>-c, -cert, -certificate</em>
-    <dd>
-      <p>Add, Delete or Put certificates. That is the specified file must/will contains X.509 certificates in DER binary encoding.
+    <dd>Add, Delete or Put certificates. That is the specified file must/will contains X.509 certificates in DER binary encoding.
     <dt><em>-crl</em>
-    <dd>
-      <p>Add, Delete or Put certificate revocation lists (CRL). That is the specified file must/will contains X.509 CRL in DER binary encoding.
+    <dd>Add, Delete or Put certificate revocation lists (CRL). That is the specified file must/will contains X.509 CRL in DER binary encoding.
     <dt><em>-ctl</em>
-    <dd>
-      <p>Add, Delete or Put certificate trust lists (CRL). UNSUPPORTED.
+    <dd>Add, Delete or Put certificate trust lists (CRL). UNSUPPORTED.
   </dl>
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
   <dl>
     <dt><em>-m</em>
-    <dd>
-      <p>Use the machine's certificate stores (instead of the default user's stores).
+    <dd>Use the machine's certificate stores (instead of the default user's stores).
     <dt><em>-v</em>
-    <dd>
-      <p>More details displayed on the console.
+    <dd>More details displayed on the console.
     <dt><em>-p password</em>
-    <dd>
-      <p>Use the specify password when accessing a pkcs12 file.
+    <dd>Use the specify password when accessing a pkcs12 file.
     <dt><em>-help, -h, -?, /?</em>
-    <dd>
-      <p>Display help about this tool.
+    <dd>Display help about this tool.
   </dl>
 </div>
 <div class="section">
@@ -95,33 +77,26 @@
   <p><strong>WARNING: This details the current behavior of Mono and could change between releases.</strong> The only safe way to interact with certificate stores is to use the certmgr tool. The current releases of Mono keeps all the user certificate stores in separates directories under <em>~/.config/.mono/certs/</em>
   <dl>
     <dt>For example the trusted root certificates for a user would be kept under
-    <dd>
-      <p><em>~/.config/.mono/certs/Trust/</em>
+    <dd><em>~/.config/.mono/certs/Trust/</em>
     <dt>Certificates files are kept in DER (binary) format (extension .cer).
     <dt>The filenames either starts with
-    <dd>
-      <p><em>tbp</em> (thumbprint) or <em>ski</em> (subject key identifier).
+    <dd><em>tbp</em> (thumbprint) or <em>ski</em> (subject key identifier).
     <dt>The rest of the filename is the base64-encoded value (tbp or ski).
     <dt>Private key data is stored under
-    <dd>
-      <p><em>~/.config/.mono/keypairs/</em>
+    <dd><em>~/.config/.mono/keypairs/</em>
   </dl>
 </div>
 <div class="section">
   <h2>EXAMPLES</h2>
   <dl>
     <dt><strong>mono certmgr.exe -list -c -m Trust</strong>
-    <dd>
-      <p>List all certificates in the machine Trust store. This will display the hash value for each certificate. This value can be used to identify uniquely a certificate for some operations (e.g. delete). E.g. <strong>Unique Hash: FFA3AC0084DA1673B5A031EBB2156B3E8FBBF6D8</strong>
+    <dd>List all certificates in the machine Trust store. This will display the hash value for each certificate. This value can be used to identify uniquely a certificate for some operations (e.g. delete). E.g. <strong>Unique Hash: FFA3AC0084DA1673B5A031EBB2156B3E8FBBF6D8</strong>
     <dt><strong>mono certmgr.exe -del -c -m Trust FFA3AC0084DA1673B5A031EBB2156B3E8FBBF6D8</strong>
-    <dd>
-      <p>Remove the certificate, represented by the hash value, from the machine Trust store. Note that the machine store is normally restricted. The following error message will appear if the current user doesn't have the minimum access rights to remove the certificate: <strong>Access to the machine 'Trust' certificate store has been denied.</strong>
+    <dd>Remove the certificate, represented by the hash value, from the machine Trust store. Note that the machine store is normally restricted. The following error message will appear if the current user doesn't have the minimum access rights to remove the certificate: <strong>Access to the machine 'Trust' certificate store has been denied.</strong>
     <dt><strong>certmgr -ssl https://www.verisign.com</strong>
-    <dd>
-      <p>Import certificates from www.verisign.com used for HTTP over SSL. See KNOWN ISSUES (MD2) if you're downloading from www.verisign.com.
+    <dd>Import certificates from www.verisign.com used for HTTP over SSL. See KNOWN ISSUES (MD2) if you're downloading from www.verisign.com.
     <dt><strong>certmgr -ssl ldaps://www.nldap.com:636</strong>
-    <dd>
-      <p>Import the certificates from www.nldap.com used for secure LDAP. This works even if we don't know how to speak LDAP because we stop the communication shortly after the SSL handshake (which gives us the certificate).
+    <dd>Import the certificates from www.nldap.com used for secure LDAP. This works even if we don't know how to speak LDAP because we stop the communication shortly after the SSL handshake (which gives us the certificate).
   </dl>
 </div>
 <div class="section">

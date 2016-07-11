@@ -38,53 +38,40 @@
   <p>A configuration file can have multiple "serializer" elements, each of which specifies the class for which to generate a serializer together with several generation options. The source class is specified in the following attributes:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>class</em> : name of the class (including namespace).
+    <dd><em>class</em> : name of the class (including namespace).
     <dt>*
-    <dd>
-      <p><em>assembly</em> : assembly name. It can include the complete path.
+    <dd><em>assembly</em> : assembly name. It can include the complete path.
   </dl>
   <p>Generation options are specified in child elements:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>reader</em> : name of the reader class.
+    <dd><em>reader</em> : name of the reader class.
     <dt>*
-    <dd>
-      <p><em>noReader</em> : if "true", it does not generate reader class.
+    <dd><em>noReader</em> : if "true", it does not generate reader class.
     <dt>*
-    <dd>
-      <p><em>writer</em> : name of the writer class.
+    <dd><em>writer</em> : name of the writer class.
     <dt>*
-    <dd>
-      <p><em>baseSerializer</em> : name of the base xml serializer class. This item is 2.0 only.
+    <dd><em>baseSerializer</em> : name of the base xml serializer class. This item is 2.0 only.
     <dt>*
-    <dd>
-      <p><em>implementation</em> : name of the serializer implementation class. This item is 2.0 only.
+    <dd><em>implementation</em> : name of the serializer implementation class. This item is 2.0 only.
     <dt>*
-    <dd>
-      <p><em>noWriter</em> : if "true", it does not generate writer class.
+    <dd><em>noWriter</em> : if "true", it does not generate writer class.
     <dt>*
-    <dd>
-      <p><em>namespace</em> : namespace of the reader and writer classes.
+    <dd><em>namespace</em> : namespace of the reader and writer classes.
     <dt>*
-    <dd>
-      <p><em>generateAsInternal</em> : if "true", it generates classes as internal.
+    <dd><em>generateAsInternal</em> : if "true", it generates classes as internal.
     <dt>*
-    <dd>
-      <p><em>outFileName</em> : name of the generated file.
+    <dd><em>outFileName</em> : name of the generated file.
     <dt>*
-    <dd>
-      <p><em>readerHooks</em> : a list of hooks to apply to the reader.
+    <dd><em>readerHooks</em> : a list of hooks to apply to the reader.
     <dt>*
-    <dd>
-      <p><em>writerHooks</em> : a list of hooks to apply to the writer.
+    <dd><em>writerHooks</em> : a list of hooks to apply to the writer.
   </dl>
 </div>
 <div class="section">
   <h2>SPECIFYING HOOKS</h2>
   <p>Using hooks you can customize the behavior of readers and writers. A hook specification follows this grammar:
-  <pre>   &lt;hook type="name"&gt;
+  <pre>      &lt;hook type="name"&gt;
                 &lt;select&gt; ?
                         &lt;typeName&gt;name&lt;/typeName&gt; ?
                         &lt;typeAttribute&gt;name&lt;/typeAttribute&gt; *
@@ -97,68 +84,50 @@
   <p>The "type" attribute specifies the context in which the hook is applied. It can be one of the following:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>attributes</em> : hook is applied where attributes are serialized/deserialized.
+    <dd><em>attributes</em> : hook is applied where attributes are serialized/deserialized.
     <dt>*
-    <dd>
-      <p><em>elements</em> : hook is applied where elements are serialized/deserialized.
+    <dd><em>elements</em> : hook is applied where elements are serialized/deserialized.
     <dt>*
-    <dd>
-      <p><em>unknownAttribute</em> : hook is applied where unknown attributes are processed.
+    <dd><em>unknownAttribute</em> : hook is applied where unknown attributes are processed.
     <dt>*
-    <dd>
-      <p><em>unknownElement</em> : hook is applied where unknown elements are processed.
+    <dd><em>unknownElement</em> : hook is applied where unknown elements are processed.
     <dt>*
-    <dd>
-      <p><em>member</em> : hook is applied where a member is serialized/deserialized.
+    <dd><em>member</em> : hook is applied where a member is serialized/deserialized.
     <dt>*
-    <dd>
-      <p><em>type</em> : hook is applied for the whole type.
+    <dd><em>type</em> : hook is applied for the whole type.
   </dl>
   <p>The "select" element specifies the classes and members to which the hook has to be added. It can contain the following elements:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>typeName</em> : the class with that name will be selected (must include namespace)
+    <dd><em>typeName</em> : the class with that name will be selected (must include namespace)
     <dt>*
-    <dd>
-      <p><em>typeAttribute</em> : all classes which have that attribute applied will be selected (specify the full attribute class name, including namespace). Several attribute names can be specified.
+    <dd><em>typeAttribute</em> : all classes which have that attribute applied will be selected (specify the full attribute class name, including namespace). Several attribute names can be specified.
     <dt>*
-    <dd>
-      <p><em>typeMember</em> : name of the class member for which the hook must be added.
+    <dd><em>typeMember</em> : name of the class member for which the hook must be added.
   </dl>
   <p>The hook source code can be specified using any of the following elements:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>replace</em> : the provided source code will replace all serialization/deserialization operations in the hook context.
+    <dd><em>replace</em> : the provided source code will replace all serialization/deserialization operations in the hook context.
     <dt>*
-    <dd>
-      <p><em>insertBefore</em> : the source code will be added before the hook context.
+    <dd><em>insertBefore</em> : the source code will be added before the hook context.
     <dt>*
-    <dd>
-      <p><em>insertAfter</em> : the source code will be added after the hook context.
+    <dd><em>insertAfter</em> : the source code will be added after the hook context.
   </dl>
   <p>When writing the code for a hook you can use some special variables that are defined during the code generation process. The variables are the following:
   <dl class="indent-5">
     <dt>*
-    <dd>
-      <p><em>$TYPE:</em> name of the class being generated, without namespace.
+    <dd><em>$TYPE:</em> name of the class being generated, without namespace.
     <dt>*
-    <dd>
-      <p><em>$FULLTYPE:</em> full name of the class being generated, including namespace.
+    <dd><em>$FULLTYPE:</em> full name of the class being generated, including namespace.
     <dt>*
-    <dd>
-      <p><em>$OBJECT:</em> the object being serialized or deserialized. When using a replace reader hook of type "type", the hook code must assign the deserialized object to this variable.
+    <dd><em>$OBJECT:</em> the object being serialized or deserialized. When using a replace reader hook of type "type", the hook code must assign the deserialized object to this variable.
     <dt>*
-    <dd>
-      <p>-I $ELEMENT: name of the element of the object being serialized/deserialized.
+    <dd>-I $ELEMENT: name of the element of the object being serialized/deserialized.
     <dt>*
-    <dd>
-      <p><em>$NAMESPACE:</em> namespace of the element of the object being serialized/deserialized.
+    <dd><em>$NAMESPACE:</em> namespace of the element of the object being serialized/deserialized.
     <dt>*
-    <dd>
-      <p><em>$MEMBER:</em> name of the member being serialized/deserialized. Only valid in the "member" context.
+    <dd><em>$MEMBER:</em> name of the member being serialized/deserialized. Only valid in the "member" context.
   </dl>
 </div>
 <div class="section">

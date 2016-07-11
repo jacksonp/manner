@@ -17,17 +17,13 @@
   <p>When generating those files, it uses as input some symbols files provided by the maintainer. It looks for the following files (and uses the first that is found):
   <dl class="indent-4">
     <dt>·
-    <dd>
-      <p>debian/<em>package</em>.symbols.<em>arch</em>
+    <dd>debian/<em>package</em>.symbols.<em>arch</em>
     <dt>·
-    <dd>
-      <p>debian/symbols.<em>arch</em>
+    <dd>debian/symbols.<em>arch</em>
     <dt>·
-    <dd>
-      <p>debian/<em>package</em>.symbols
+    <dd>debian/<em>package</em>.symbols
     <dt>·
-    <dd>
-      <p>debian/symbols
+    <dd>debian/symbols
   </dl>
   <p>The main interest of those files is to provide the minimal version associated to each symbol provided by the libraries. Usually it corresponds to the first version of that package that provided the symbol, but it can be manually incremented by the maintainer if the ABI of the symbol is extended without breaking backwards compatibility. It's the responsibility of the maintainer to keep those files up-to-date and accurate, but <strong>dpkg-gensymbols</strong> helps with that.
   <p>When the generated symbols files differ from the maintainer supplied one, <strong>dpkg-gensymbols</strong> will print a diff between the two versions. Furthermore if the difference is too significant, it will even fail (you can customize how much difference you can tolerate, see the <strong>-c</strong> option).
@@ -78,17 +74,13 @@
         <p>Multiple restrictions can be chained.
         <p>(arch-bits=32|arch-endian=little)32bit_le_symbol@Base 1.0
       <dt><strong>ignore-blacklist</strong>
-      <dd>
-        <p>dpkg-gensymbols has an internal blacklist of symbols that should not appear in symbols files as they are usually only side-effects of implementation details of the toolchain. If for some reason, you really want one of those symbols to be included in the symbols file, you should tag the symbol with <strong>ignore-blacklist</strong>. It can be necessary for some low level toolchain libraries like libgcc.
+      <dd>dpkg-gensymbols has an internal blacklist of symbols that should not appear in symbols files as they are usually only side-effects of implementation details of the toolchain. If for some reason, you really want one of those symbols to be included in the symbols file, you should tag the symbol with <strong>ignore-blacklist</strong>. It can be necessary for some low level toolchain libraries like libgcc.
       <dt><strong>c++</strong>
-      <dd>
-        <p>Denotes <em>c++</em> symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
+      <dd>Denotes <em>c++</em> symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
       <dt><strong>symver</strong>
-      <dd>
-        <p>Denotes <em>symver</em> (symbol version) symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
+      <dd>Denotes <em>symver</em> (symbol version) symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
       <dt><strong>regex</strong>
-      <dd>
-        <p>Denotes <em>regex</em> symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
+      <dd>Denotes <em>regex</em> symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
     </dl>
   </div>
   <div class="subsection">
@@ -167,14 +159,11 @@
     <p>A well-maintained library has the following features:
     <dl class="indent-4">
       <dt>·
-      <dd>
-        <p>its API is stable (public symbols are never dropped, only new public symbols are added) and changes in incompatible ways only when the SONAME changes;
+      <dd>its API is stable (public symbols are never dropped, only new public symbols are added) and changes in incompatible ways only when the SONAME changes;
       <dt>·
-      <dd>
-        <p>ideally, it uses symbol versioning to achieve ABI stability despite internal changes and API extension;
+      <dd>ideally, it uses symbol versioning to achieve ABI stability despite internal changes and API extension;
       <dt>·
-      <dd>
-        <p>it doesn't export private symbols (such symbols can be tagged optional as workaround).
+      <dd>it doesn't export private symbols (such symbols can be tagged optional as workaround).
     </dl>
     <p>While maintaining the symbols file, it's easy to notice appearance and disappearance of symbols. But it's more difficult to catch incompatible API and ABI change. Thus the maintainer should read thoroughly the upstream changelog looking for cases where the rules of good library management have been broken. If potential problems are discovered, the upstream author should be notified as an upstream fix is always better than a Debian specific work-around.
   </div>
@@ -183,48 +172,35 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-P</strong><em>package-build-dir</em>
-    <dd>
-      <p>Scan <em>package-build-dir</em> instead of debian/tmp.
+    <dd>Scan <em>package-build-dir</em> instead of debian/tmp.
     <dt><strong>-p</strong><em>package</em>
-    <dd>
-      <p>Define the package name. Required if more than one binary package is listed in debian/control (or if there's no debian/control file).
+    <dd>Define the package name. Required if more than one binary package is listed in debian/control (or if there's no debian/control file).
     <dt><strong>-v</strong><em>version</em>
-    <dd>
-      <p>Define the package version. Defaults to the version extracted from debian/changelog. Required if called outside of a source package tree.
+    <dd>Define the package version. Defaults to the version extracted from debian/changelog. Required if called outside of a source package tree.
     <dt><strong>-e</strong><em>library-file</em>
-    <dd>
-      <p>Only analyze libraries explicitly listed instead of finding all public libraries. You can use shell patterns used for pathname expansions (see the <strong>File::Glob</strong>(3perl) manual page for details) in <em>library-file</em> to match multiple libraries with a single argument (otherwise you need multiple <strong>-e</strong>).
+    <dd>Only analyze libraries explicitly listed instead of finding all public libraries. You can use shell patterns used for pathname expansions (see the <strong>File::Glob</strong>(3perl) manual page for details) in <em>library-file</em> to match multiple libraries with a single argument (otherwise you need multiple <strong>-e</strong>).
     <dt><strong>-I</strong><em>filename</em>
-    <dd>
-      <p>Use <em>filename</em> as reference file to generate the symbols file that is integrated in the package itself.
+    <dd>Use <em>filename</em> as reference file to generate the symbols file that is integrated in the package itself.
     <dt><strong>-O</strong>[<em>filename</em>]
-    <dd>
-      <p>Print the generated symbols file to standard output or to <em>filename</em> if specified, rather than to <strong>debian/tmp/DEBIAN/symbols</strong> (or <em>package-build-dir</em><strong>/DEBIAN/symbols</strong> if <strong>-P</strong> was used). If <em>filename</em> is pre-existing, its contents are used as basis for the generated symbols file. You can use this feature to update a symbols file so that it matches a newer upstream version of your library.
+    <dd>Print the generated symbols file to standard output or to <em>filename</em> if specified, rather than to <strong>debian/tmp/DEBIAN/symbols</strong> (or <em>package-build-dir</em><strong>/DEBIAN/symbols</strong> if <strong>-P</strong> was used). If <em>filename</em> is pre-existing, its contents are used as basis for the generated symbols file. You can use this feature to update a symbols file so that it matches a newer upstream version of your library.
     <dt><strong>-t</strong>
-    <dd>
-      <p>Write the symbol file in template mode rather than the format compatible with <strong>deb-symbols</strong>(5). The main difference is that in the template mode symbol names and tags are written in their original form contrary to the post-processed symbol names with tags stripped in the compatibility mode. Moreover, some symbols might be omitted when writing a standard <strong>deb-symbols</strong>(5) file (according to the tag processing rules) while all symbols are always written to the symbol file template.
+    <dd>Write the symbol file in template mode rather than the format compatible with <strong>deb-symbols</strong>(5). The main difference is that in the template mode symbol names and tags are written in their original form contrary to the post-processed symbol names with tags stripped in the compatibility mode. Moreover, some symbols might be omitted when writing a standard <strong>deb-symbols</strong>(5) file (according to the tag processing rules) while all symbols are always written to the symbol file template.
     <dt><strong>-c</strong><em>[0-4]</em>
     <dd>
       <p>Define the checks to do when comparing the generated symbols file with the template file used as starting point. By default the level is 1. Increasing levels do more checks and include all checks of lower levels. Level 0 never fails. Level 1 fails if some symbols have disappeared. Level 2 fails if some new symbols have been introduced. Level 3 fails if some libraries have disappeared. Level 4 fails if some libraries have been introduced.
       <p>This value can be overridden by the environment variable <strong>DPKG_GENSYMBOLS_CHECK_LEVEL</strong>.
     <dt><strong>-q</strong>
-    <dd>
-      <p>Keep quiet and never generate a diff between generated symbols file and the template file used as starting point or show any warnings about new/lost libraries or new/lost symbols. This option only disables informational output but not the checks themselves (see <strong>-c</strong> option).
+    <dd>Keep quiet and never generate a diff between generated symbols file and the template file used as starting point or show any warnings about new/lost libraries or new/lost symbols. This option only disables informational output but not the checks themselves (see <strong>-c</strong> option).
     <dt><strong>-a</strong><em>arch</em>
-    <dd>
-      <p>Assume <em>arch</em> as host architecture when processing symbol files. Use this option to generate a symbol file or diff for any architecture provided its binaries are already available.
+    <dd>Assume <em>arch</em> as host architecture when processing symbol files. Use this option to generate a symbol file or diff for any architecture provided its binaries are already available.
     <dt><strong>-d</strong>
-    <dd>
-      <p>Enable debug mode. Numerous messages are displayed to explain what <strong>dpkg-gensymbols</strong> does.
+    <dd>Enable debug mode. Numerous messages are displayed to explain what <strong>dpkg-gensymbols</strong> does.
     <dt><strong>-V</strong>
-    <dd>
-      <p>Enable verbose mode. The generated symbols file contains deprecated symbols as comments. Furthermore in template mode, pattern symbols are followed by comments listing real symbols that have matched the pattern.
+    <dd>Enable verbose mode. The generated symbols file contains deprecated symbols as comments. Furthermore in template mode, pattern symbols are followed by comments listing real symbols that have matched the pattern.
     <dt><strong>-?</strong>, <strong>--help</strong>
-    <dd>
-      <p>Show the usage message and exit.
+    <dd>Show the usage message and exit.
     <dt><strong>--version</strong>
-    <dd>
-      <p>Show the version and exit.
+    <dd>Show the version and exit.
   </dl>
 </div>
 <div class="section">

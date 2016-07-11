@@ -17,14 +17,11 @@
   <p>This version of <strong>ps</strong> accepts several kinds of options:
   <dl class="indent-4">
     <dt>1
-    <dd>
-      <p>UNIX options, which may be grouped and must be preceded by a dash.
+    <dd>UNIX options, which may be grouped and must be preceded by a dash.
     <dt>2
-    <dd>
-      <p>BSD options, which may be grouped and must not be used with a dash.
+    <dd>BSD options, which may be grouped and must not be used with a dash.
     <dt>3
-    <dd>
-      <p>GNU long options, which are preceded by two dashes.
+    <dd>GNU long options, which are preceded by two dashes.
   </dl>
   <p>Options of different types may be freely mixed, but conflicts can appear. There are some synonymous options, which are functionally identical, due to the many standards and <strong>ps</strong> implementations that this <strong>ps</strong> is compatible with.
   <p>Note that "<strong>ps&nbsp;-aux</strong>" is distinct from "<strong>ps&nbsp;aux</strong>". The POSIX and UNIX standards require that "<strong>ps&nbsp;-aux</strong>" print all processes owned by a user named "x", as well as printing all processes that would be selected by the <strong>-a</strong> option. If the user named "x" does not exist, this <strong>ps</strong> may interpret the command as "<strong>ps&nbsp;aux</strong>" instead and print a warning. This behavior is intended to aid in transitioning old scripts and habits. It is fragile, subject to change, and thus should not be relied upon.
@@ -36,80 +33,60 @@
   <h2>EXAMPLES</h2>
   <dl class="indent-3">
     <dt>To see every process on the system using standard syntax:
-    <dd>
-      <p><strong>ps&nbsp;-e</strong><br>
-      <strong>ps&nbsp;-ef</strong><br>
-      <strong>ps&nbsp;-eF</strong><br>
-      <strong>ps&nbsp;-ely</strong>
+    <dd><strong>ps&nbsp;-e</strong><br>
+    <strong>ps&nbsp;-ef</strong><br>
+    <strong>ps&nbsp;-eF</strong><br>
+    <strong>ps&nbsp;-ely</strong>
     <dt>To see every process on the system using BSD syntax:
-    <dd>
-      <p><strong>ps&nbsp;ax</strong><br>
-      <strong>ps&nbsp;axu</strong>
+    <dd><strong>ps&nbsp;ax</strong><br>
+    <strong>ps&nbsp;axu</strong>
     <dt>To print a process tree:
-    <dd>
-      <p><strong>ps&nbsp;-ejH</strong><br>
-      <strong>ps&nbsp;axjf</strong>
+    <dd><strong>ps&nbsp;-ejH</strong><br>
+    <strong>ps&nbsp;axjf</strong>
     <dt>To get info about threads:
-    <dd>
-      <p><strong>ps&nbsp;-eLf</strong><br>
-      <strong>ps&nbsp;axms</strong>
+    <dd><strong>ps&nbsp;-eLf</strong><br>
+    <strong>ps&nbsp;axms</strong>
     <dt>To get security info:
-    <dd>
-      <p><strong>ps&nbsp;-eo euser,ruser,suser,fuser,f,comm,label</strong><br>
-      <strong>ps&nbsp;axZ</strong><br>
-      <strong>ps&nbsp;-eM</strong>
+    <dd><strong>ps&nbsp;-eo euser,ruser,suser,fuser,f,comm,label</strong><br>
+    <strong>ps&nbsp;axZ</strong><br>
+    <strong>ps&nbsp;-eM</strong>
     <dt>To see every process running as root (real&nbsp;&amp;&nbsp;effective&nbsp;ID) in user format:
-    <dd>
-      <p><strong>ps&nbsp;-U&nbsp;root&nbsp;-u&nbsp;root&nbsp;u</strong>
+    <dd><strong>ps&nbsp;-U&nbsp;root&nbsp;-u&nbsp;root&nbsp;u</strong>
     <dt>To see every process with a user-defined format:
-    <dd>
-      <p><strong>ps&nbsp;-eo&nbsp;pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm</strong><br>
-      <strong>ps&nbsp;axo&nbsp;stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm</strong><br>
-      <strong>ps&nbsp;-eopid,tt,user,fname,tmout,f,wchan</strong>
+    <dd><strong>ps&nbsp;-eo&nbsp;pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm</strong><br>
+    <strong>ps&nbsp;axo&nbsp;stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm</strong><br>
+    <strong>ps&nbsp;-eopid,tt,user,fname,tmout,f,wchan</strong>
     <dt>Print only the process IDs of syslogd:
-    <dd>
-      <p><strong>ps&nbsp;-C&nbsp;syslogd&nbsp;-o&nbsp;pid=</strong>
+    <dd><strong>ps&nbsp;-C&nbsp;syslogd&nbsp;-o&nbsp;pid=</strong>
     <dt>Print only the name of PID 42:
-    <dd>
-      <p><strong>ps&nbsp;-p&nbsp;42&nbsp;-o&nbsp;comm=</strong>
+    <dd><strong>ps&nbsp;-p&nbsp;42&nbsp;-o&nbsp;comm=</strong>
   </dl>
 </div>
 <div class="section">
   <h2>SIMPLE PROCESS SELECTION</h2>
   <dl class="indent-16">
     <dt><strong>-A</strong>
-    <dd>
-      <p>Select all processes. Identical to <strong>-e</strong>.
+    <dd>Select all processes. Identical to <strong>-e</strong>.
     <dt><strong>-N</strong>
-    <dd>
-      <p>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>--deselect</strong>.
+    <dd>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>--deselect</strong>.
     <dt><strong>T</strong>
-    <dd>
-      <p>Select all processes associated with this terminal. Identical to the <strong>t</strong> option without any argument.
+    <dd>Select all processes associated with this terminal. Identical to the <strong>t</strong> option without any argument.
     <dt><strong>-a</strong>
-    <dd>
-      <p>Select all processes except both session leaders (see <em>getsid</em>(2)) and processes not associated with a terminal.
+    <dd>Select all processes except both session leaders (see <em>getsid</em>(2)) and processes not associated with a terminal.
     <dt><strong>a</strong>
-    <dd>
-      <p>Lift the BSD-style "only yourself" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes with a terminal (tty), or to list all processes when used together with the <strong>x</strong> option.
+    <dd>Lift the BSD-style "only yourself" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes with a terminal (tty), or to list all processes when used together with the <strong>x</strong> option.
     <dt><strong>-d</strong>
-    <dd>
-      <p>Select all processes except session leaders.
+    <dd>Select all processes except session leaders.
     <dt><strong>-e</strong>
-    <dd>
-      <p>Select all processes. Identical to <strong>-A</strong>.
+    <dd>Select all processes. Identical to <strong>-A</strong>.
     <dt><strong>g</strong>
-    <dd>
-      <p>Really all, even session leaders. This flag is obsolete and may be discontinued in a future release. It is normally implied by the <strong>a</strong> flag, and is only useful when operating in the sunos4 personality.
+    <dd>Really all, even session leaders. This flag is obsolete and may be discontinued in a future release. It is normally implied by the <strong>a</strong> flag, and is only useful when operating in the sunos4 personality.
     <dt><strong>r</strong>
-    <dd>
-      <p>Restrict the selection to only running processes.
+    <dd>Restrict the selection to only running processes.
     <dt><strong>x</strong>
-    <dd>
-      <p>Lift the BSD-style "must have a tty" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes owned by you (same EUID as <strong>ps</strong>), or to list all processes when used together with the <strong>a</strong> option.
+    <dd>Lift the BSD-style "must have a tty" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes owned by you (same EUID as <strong>ps</strong>), or to list all processes when used together with the <strong>a</strong> option.
     <dt><strong>--deselect</strong>
-    <dd>
-      <p>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>-N</strong>.
+    <dd>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>-N</strong>.
   </dl>
 </div>
 <div class="section">
@@ -117,78 +94,57 @@
   <p>These options accept a single argument in the form of a blank-separated or comma-separated list. They can be used multiple times. For&nbsp;example:&nbsp;<strong>ps&nbsp;-p&nbsp;"1&nbsp;2"&nbsp;-p&nbsp;3,4</strong>
   <dl class="indent-16">
     <dt><strong>-C</strong><em>&nbsp;cmdlist</em>
-    <dd>
-      <p>Select by command name.<br>
-      This selects the processes whose executable name is given in <em>cmdlist</em>.
+    <dd>Select by command name.<br>
+    This selects the processes whose executable name is given in <em>cmdlist</em>.
     <dt><strong>-G</strong><em>&nbsp;grplist</em>
-    <dd>
-      <p>Select by real group ID (RGID) or name.<br>
-      This selects the processes whose real group name or ID is in the <em>grplist</em> list. The real group ID identifies the group of the user who created the process, see <em>getgid</em>(2).
+    <dd>Select by real group ID (RGID) or name.<br>
+    This selects the processes whose real group name or ID is in the <em>grplist</em> list. The real group ID identifies the group of the user who created the process, see <em>getgid</em>(2).
     <dt><strong>U</strong><em>&nbsp;userlist</em>
-    <dd>
-      <p>Select by effective user ID (EUID) or name.<br>
-      This selects the processes whose effective user name or ID is in <em>userlist</em>. The effective user&nbsp;ID describes the user whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). Identical to <strong>-u</strong> and&nbsp;<strong>--user</strong>.
+    <dd>Select by effective user ID (EUID) or name.<br>
+    This selects the processes whose effective user name or ID is in <em>userlist</em>. The effective user&nbsp;ID describes the user whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). Identical to <strong>-u</strong> and&nbsp;<strong>--user</strong>.
     <dt><strong>-U</strong><em>&nbsp;userlist</em>
-    <dd>
-      <p>select by real user ID (RUID) or name.<br>
-      It selects the processes whose real user name or ID is in the <em>userlist</em> list. The real user ID identifies the user who created the process, see&nbsp;<em>getuid</em>(2).
+    <dd>select by real user ID (RUID) or name.<br>
+    It selects the processes whose real user name or ID is in the <em>userlist</em> list. The real user ID identifies the user who created the process, see&nbsp;<em>getuid</em>(2).
     <dt><strong>-g</strong><em>&nbsp;grplist</em>
-    <dd>
-      <p>Select by session OR by effective group name.<br>
-      Selection by session is specified by many standards, but selection by effective group is the logical behavior that several other operating systems use. This <strong>ps</strong> will select by session when the list is completely numeric (as&nbsp;sessions&nbsp;are). Group ID numbers will work only when some group names are also specified. See the <strong>-s</strong> and <strong>--group</strong> options.
+    <dd>Select by session OR by effective group name.<br>
+    Selection by session is specified by many standards, but selection by effective group is the logical behavior that several other operating systems use. This <strong>ps</strong> will select by session when the list is completely numeric (as&nbsp;sessions&nbsp;are). Group ID numbers will work only when some group names are also specified. See the <strong>-s</strong> and <strong>--group</strong> options.
     <dt><strong>p</strong><em>&nbsp;pidlist</em>
-    <dd>
-      <p>Select by process ID. Identical to <strong>-p</strong> and&nbsp;<strong>--pid</strong>.
+    <dd>Select by process ID. Identical to <strong>-p</strong> and&nbsp;<strong>--pid</strong>.
     <dt><strong>-p</strong><em>&nbsp;pidlist</em>
-    <dd>
-      <p>Select by PID.<br>
-      This selects the processes whose process ID numbers appear in <em>pidlist</em>. Identical to <strong>p</strong> and&nbsp;<strong>--pid</strong>.
+    <dd>Select by PID.<br>
+    This selects the processes whose process ID numbers appear in <em>pidlist</em>. Identical to <strong>p</strong> and&nbsp;<strong>--pid</strong>.
     <dt><strong>-s</strong><em>&nbsp;sesslist</em>
-    <dd>
-      <p>Select by session ID.<br>
-      This selects the processes with a session ID specified in&nbsp;<em>sesslist</em>.
+    <dd>Select by session ID.<br>
+    This selects the processes with a session ID specified in&nbsp;<em>sesslist</em>.
     <dt><strong>t</strong><em>&nbsp;ttylist</em>
-    <dd>
-      <p>Select by tty. Nearly identical to <strong>-t</strong> and <strong>--tty</strong>, but can also be used with an empty <em>ttylist</em> to indicate the terminal associated with <strong>ps</strong>. Using the <strong>T</strong> option is considered cleaner than using <strong>T</strong> with an&nbsp;empty&nbsp;<em>ttylist</em>.
+    <dd>Select by tty. Nearly identical to <strong>-t</strong> and <strong>--tty</strong>, but can also be used with an empty <em>ttylist</em> to indicate the terminal associated with <strong>ps</strong>. Using the <strong>T</strong> option is considered cleaner than using <strong>T</strong> with an&nbsp;empty&nbsp;<em>ttylist</em>.
     <dt><strong>-t</strong><em>&nbsp;ttylist</em>
-    <dd>
-      <p>Select by tty.<br>
-      This selects the processes associated with the terminals given in <em>ttylist</em>. Terminals (ttys, or screens for text output) can be specified in several forms: /dev/ttyS1, ttyS1, S1. A&nbsp;plain "-" may be used to select processes not attached to any terminal.
+    <dd>Select by tty.<br>
+    This selects the processes associated with the terminals given in <em>ttylist</em>. Terminals (ttys, or screens for text output) can be specified in several forms: /dev/ttyS1, ttyS1, S1. A&nbsp;plain "-" may be used to select processes not attached to any terminal.
     <dt><strong>-u</strong><em>&nbsp;userlist</em>
-    <dd>
-      <p>Select by effective user ID (EUID) or name.<br>
-      This selects the processes whose effective user name or ID is in <em>userlist</em>. The effective user ID describes the user whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). Identical to <strong>U</strong> and <strong>--user</strong>.
+    <dd>Select by effective user ID (EUID) or name.<br>
+    This selects the processes whose effective user name or ID is in <em>userlist</em>. The effective user ID describes the user whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). Identical to <strong>U</strong> and <strong>--user</strong>.
     <dt><strong>--Group</strong><em>&nbsp;grplist</em>
-    <dd>
-      <p>Select by real group ID (RGID) or name. Identical to <strong>-G</strong>.
+    <dd>Select by real group ID (RGID) or name. Identical to <strong>-G</strong>.
     <dt><strong>--User</strong><em>&nbsp;userlist</em>
-    <dd>
-      <p>Select by real user ID (RUID) or name. Identical to <strong>-U</strong>.
+    <dd>Select by real user ID (RUID) or name. Identical to <strong>-U</strong>.
     <dt><strong>--group</strong><em>&nbsp;grplist</em>
-    <dd>
-      <p>Select by effective group ID (EGID) or name.<br>
-      This selects the processes whose effective group name or ID is in <em>grouplist</em>. The effective group ID describes the group whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). The <strong>-g</strong> option is often an alternative to&nbsp;<strong>--group</strong>.
+    <dd>Select by effective group ID (EGID) or name.<br>
+    This selects the processes whose effective group name or ID is in <em>grouplist</em>. The effective group ID describes the group whose file access permissions are used by the process (see&nbsp;<em>geteuid</em>(2)). The <strong>-g</strong> option is often an alternative to&nbsp;<strong>--group</strong>.
     <dt><strong>--pid</strong><em>&nbsp;pidlist</em>
-    <dd>
-      <p>Select by process&nbsp;ID. Identical to <strong>-p</strong>&nbsp;and&nbsp;<strong>p</strong>.
+    <dd>Select by process&nbsp;ID. Identical to <strong>-p</strong>&nbsp;and&nbsp;<strong>p</strong>.
     <dt><strong>--ppid</strong><em>&nbsp;pidlist</em>
-    <dd>
-      <p>Select by parent process&nbsp;ID. This selects the processes with a parent&nbsp;process&nbsp;ID in pidlist. That&nbsp;is, it selects processes that are children of those listed in pidlist.
+    <dd>Select by parent process&nbsp;ID. This selects the processes with a parent&nbsp;process&nbsp;ID in pidlist. That&nbsp;is, it selects processes that are children of those listed in pidlist.
     <dt><strong>--sid</strong><em>&nbsp;sesslist</em>
-    <dd>
-      <p>Select by session&nbsp;ID. Identical to&nbsp;<strong>-s</strong>.
+    <dd>Select by session&nbsp;ID. Identical to&nbsp;<strong>-s</strong>.
     <dt><strong>--tty</strong><em>&nbsp;ttylist</em>
-    <dd>
-      <p>Select by terminal. Identical to <strong>-t</strong> and&nbsp;<strong>t</strong>.
+    <dd>Select by terminal. Identical to <strong>-t</strong> and&nbsp;<strong>t</strong>.
     <dt><strong>--user</strong><em>&nbsp;userlist</em>
-    <dd>
-      <p>Select by effective user ID (EUID) or name. Identical to <strong>-u</strong> and&nbsp;<strong>U</strong>.
+    <dd>Select by effective user ID (EUID) or name. Identical to <strong>-u</strong> and&nbsp;<strong>U</strong>.
     <dt><strong>-<em>123</em></strong>
-    <dd>
-      <p>Identical to <strong>--sid&nbsp;</strong><em>123</em>.
+    <dd>Identical to <strong>--sid&nbsp;</strong><em>123</em>.
     <dt><strong><em>123</em></strong>
-    <dd>
-      <p>Identical to <strong>--pid&nbsp;</strong><em>123</em>.
+    <dd>Identical to <strong>--pid&nbsp;</strong><em>123</em>.
   </dl>
 </div>
 <div class="section">
@@ -196,105 +152,77 @@
   <p>These options are used to choose the information displayed by <strong>ps</strong>. The output may differ by personality.
   <dl class="indent-16">
     <dt><strong>-F</strong>
-    <dd>
-      <p>extra full format. See the <strong>-f</strong> option, which <strong>-F</strong> implies.
+    <dd>extra full format. See the <strong>-f</strong> option, which <strong>-F</strong> implies.
     <dt><strong>-O</strong><em>&nbsp;format</em>
-    <dd>
-      <p>is like <strong>-o</strong>, but preloaded with some default columns. Identical to <strong>-o&nbsp;pid,</strong><em>format</em><strong>,state,tname,time,command</strong> or <strong>-o&nbsp;pid,</strong><em>format</em><strong>,tname,time,cmd</strong>, see&nbsp;<strong>-o</strong>&nbsp;below.
+    <dd>is like <strong>-o</strong>, but preloaded with some default columns. Identical to <strong>-o&nbsp;pid,</strong><em>format</em><strong>,state,tname,time,command</strong> or <strong>-o&nbsp;pid,</strong><em>format</em><strong>,tname,time,cmd</strong>, see&nbsp;<strong>-o</strong>&nbsp;below.
     <dt><strong>O</strong><em>&nbsp;format</em>
-    <dd>
-      <p>is preloaded <strong>o</strong> (overloaded).<br>
-      The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>). When used as a formatting option, it is identical to <strong>-O</strong>, with the BSD&nbsp;personality.
+    <dd>is preloaded <strong>o</strong> (overloaded).<br>
+    The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>). When used as a formatting option, it is identical to <strong>-O</strong>, with the BSD&nbsp;personality.
     <dt><strong>-M</strong>
-    <dd>
-      <p>Add a column of security data. Identical to <strong>Z</strong>. (for&nbsp;SE&nbsp;Linux)
+    <dd>Add a column of security data. Identical to <strong>Z</strong>. (for&nbsp;SE&nbsp;Linux)
     <dt><strong>X</strong>
-    <dd>
-      <p>Register format.
+    <dd>Register format.
     <dt><strong>Z</strong>
-    <dd>
-      <p>Add a column of security data. Identical to <strong>-M</strong>. (for&nbsp;SE&nbsp;Linux)
+    <dd>Add a column of security data. Identical to <strong>-M</strong>. (for&nbsp;SE&nbsp;Linux)
     <dt><strong>-c</strong>
-    <dd>
-      <p>Show different scheduler information for the <strong>-l</strong> option.
+    <dd>Show different scheduler information for the <strong>-l</strong> option.
     <dt><strong>-f</strong>
-    <dd>
-      <p>does full-format listing. This option can be combined with many other UNIX-style options to add additional columns. It also causes the command arguments to be printed. When used with <strong>-L</strong>, the NLWP (number of threads) and LWP (thread ID) columns will be added. See the <strong>c</strong> option, the format keyword <strong>args</strong>, and the format keyword <strong>comm</strong>.
+    <dd>does full-format listing. This option can be combined with many other UNIX-style options to add additional columns. It also causes the command arguments to be printed. When used with <strong>-L</strong>, the NLWP (number of threads) and LWP (thread ID) columns will be added. See the <strong>c</strong> option, the format keyword <strong>args</strong>, and the format keyword <strong>comm</strong>.
     <dt><strong>j</strong>
-    <dd>
-      <p>BSD job control format.
+    <dd>BSD job control format.
     <dt><strong>-j</strong>
-    <dd>
-      <p>jobs format
+    <dd>jobs format
     <dt><strong>l</strong>
-    <dd>
-      <p>display BSD long format.
+    <dd>display BSD long format.
     <dt><strong>-l</strong>
-    <dd>
-      <p>long format. The <strong>-y</strong> option is often useful with this.
+    <dd>long format. The <strong>-y</strong> option is often useful with this.
     <dt><strong>o</strong><em>&nbsp;format</em>
-    <dd>
-      <p>specify user-defined format. Identical to <strong>-o</strong> and <strong>--format</strong>.
+    <dd>specify user-defined format. Identical to <strong>-o</strong> and <strong>--format</strong>.
     <dt><strong>-o</strong><em>&nbsp;format</em>
-    <dd>
-      <p>user-defined format.<br>
-      <em>format</em> is a single argument in the form of a blank-separated or comma-separated list, which offers a way to specify individual output columns. The recognized keywords are described in the <strong>STANDARD FORMAT SPECIFIERS</strong> section below. Headers may be renamed (<strong>ps&nbsp;-o&nbsp;pid,ruser=RealUser&nbsp;-o&nbsp;comm=Command</strong>) as desired. If all column headers are empty (<strong>ps&nbsp;-o&nbsp;pid=&nbsp;-o&nbsp;comm=</strong>) then the header line will not be output. Column width will increase as needed for wide headers; this may be used to widen up columns such as WCHAN (<strong>ps&nbsp;-o&nbsp;pid,wchan=WIDE-WCHAN-COLUMN&nbsp;-o&nbsp;comm</strong>). Explicit width control (<strong>ps&nbsp;opid,wchan:42,cmd</strong>) is offered too. The behavior of <strong>ps&nbsp;-o&nbsp;pid=X,comm=Y</strong> varies with personality; output may be one column named "X,comm=Y" or two columns named "X" and "Y". Use multiple <strong>-o</strong> options when in doubt. Use the <strong>PS_FORMAT</strong> environment variable to specify a default as desired; DefSysV and DefBSD are macros that may be used to choose the default UNIX or BSD columns.
+    <dd>user-defined format.<br>
+    <em>format</em> is a single argument in the form of a blank-separated or comma-separated list, which offers a way to specify individual output columns. The recognized keywords are described in the <strong>STANDARD FORMAT SPECIFIERS</strong> section below. Headers may be renamed (<strong>ps&nbsp;-o&nbsp;pid,ruser=RealUser&nbsp;-o&nbsp;comm=Command</strong>) as desired. If all column headers are empty (<strong>ps&nbsp;-o&nbsp;pid=&nbsp;-o&nbsp;comm=</strong>) then the header line will not be output. Column width will increase as needed for wide headers; this may be used to widen up columns such as WCHAN (<strong>ps&nbsp;-o&nbsp;pid,wchan=WIDE-WCHAN-COLUMN&nbsp;-o&nbsp;comm</strong>). Explicit width control (<strong>ps&nbsp;opid,wchan:42,cmd</strong>) is offered too. The behavior of <strong>ps&nbsp;-o&nbsp;pid=X,comm=Y</strong> varies with personality; output may be one column named "X,comm=Y" or two columns named "X" and "Y". Use multiple <strong>-o</strong> options when in doubt. Use the <strong>PS_FORMAT</strong> environment variable to specify a default as desired; DefSysV and DefBSD are macros that may be used to choose the default UNIX or BSD columns.
     <dt><strong>s</strong>
-    <dd>
-      <p>display signal format
+    <dd>display signal format
     <dt><strong>u</strong>
-    <dd>
-      <p>display user-oriented format
+    <dd>display user-oriented format
     <dt><strong>v</strong>
-    <dd>
-      <p>display virtual memory format
+    <dd>display virtual memory format
     <dt><strong>-y</strong>
-    <dd>
-      <p>Do not show flags; show rss in place of addr. This option can only be used with <strong>-l</strong>.
+    <dd>Do not show flags; show rss in place of addr. This option can only be used with <strong>-l</strong>.
     <dt><strong>--format</strong><em>&nbsp;format</em>
-    <dd>
-      <p>user-defined format. Identical to <strong>-o</strong> and <strong>o</strong>.
+    <dd>user-defined format. Identical to <strong>-o</strong> and <strong>o</strong>.
     <dt><strong>--context</strong>
-    <dd>
-      <p>Display security context format. (for&nbsp;SE&nbsp;Linux)
+    <dd>Display security context format. (for&nbsp;SE&nbsp;Linux)
   </dl>
 </div>
 <div class="section">
   <h2>OUTPUT MODIFIERS</h2>
   <dl class="indent-16">
     <dt><strong>-H</strong>
-    <dd>
-      <p>show process hierarchy (forest)
+    <dd>show process hierarchy (forest)
     <dt><strong>N</strong><em>&nbsp;namelist</em>
-    <dd>
-      <p>Specify namelist file. Identical to <strong>-n</strong>, see <strong>-n</strong> above.
+    <dd>Specify namelist file. Identical to <strong>-n</strong>, see <strong>-n</strong> above.
     <dt><strong>O</strong><em>&nbsp;order</em>
     <dd>
       <p>Sorting order. (overloaded)<br>
       The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>).
       <p>For sorting, obsolete BSD <strong>O</strong> option syntax is <strong>O</strong>[<strong>+</strong>|<strong>-</strong>]<em>k1</em>[,[<strong>+</strong>|<strong>-</strong>]<em>k2</em>[,...]]. It orders the processes listing according to the multilevel sort specified by the sequence of one-letter short keys <em>k1</em>, <em>k2</em>, ... described in the <strong>OBSOLETE SORT KEYS</strong> section below. The&nbsp;"+" is currently optional, merely re-iterating the default direction on a key, but may help to distinguish an <strong>O</strong> sort from an <strong>O</strong> format. The&nbsp;"-" reverses direction only on the key it precedes.
     <dt><strong>S</strong>
-    <dd>
-      <p>Sum up some information, such as CPU usage, from dead child processes into their parent. This is useful for examining a system where a parent process repeatedly forks off short-lived children to do work.
+    <dd>Sum up some information, such as CPU usage, from dead child processes into their parent. This is useful for examining a system where a parent process repeatedly forks off short-lived children to do work.
     <dt><strong>c</strong>
-    <dd>
-      <p>Show the true command name. This is derived from the name of the executable file, rather than from the argv value. Command arguments and any modifications to them (see&nbsp;<em>setproctitle</em>(3)) are thus not shown. This option effectively turns the <strong>args</strong> format keyword into the <strong>comm</strong> format keyword; it is useful with the <strong>-f</strong> format option and with the various BSD-style format options, which all normally display the command arguments. See the <strong>-f</strong> option, the format keyword <strong>args</strong>, and the format keyword <strong>comm</strong>.
+    <dd>Show the true command name. This is derived from the name of the executable file, rather than from the argv value. Command arguments and any modifications to them (see&nbsp;<em>setproctitle</em>(3)) are thus not shown. This option effectively turns the <strong>args</strong> format keyword into the <strong>comm</strong> format keyword; it is useful with the <strong>-f</strong> format option and with the various BSD-style format options, which all normally display the command arguments. See the <strong>-f</strong> option, the format keyword <strong>args</strong>, and the format keyword <strong>comm</strong>.
     <dt><strong>e</strong>
-    <dd>
-      <p>Show the environment after the command.
+    <dd>Show the environment after the command.
     <dt><strong>f</strong>
-    <dd>
-      <p>ASCII-art process hierarchy (forest)
+    <dd>ASCII-art process hierarchy (forest)
     <dt><strong>h</strong>
-    <dd>
-      <p>No header. (or, one header per screen in the BSD personality)<br>
-      The <strong>h</strong> option is problematic. Standard BSD <strong>ps</strong> uses this option to print a header on each page of output, but older Linux <strong>ps</strong> uses this option to totally disable the header. This version of <strong>ps</strong> follows the Linux usage of not printing the header unless the BSD personality has been selected, in which case it prints a header on each page of output. Regardless of the current personality, you can use the long options <strong>--headers</strong> and <strong>--no-headers</strong> to enable printing headers each page or disable headers entirely, respectively.
+    <dd>No header. (or, one header per screen in the BSD personality)<br>
+    The <strong>h</strong> option is problematic. Standard BSD <strong>ps</strong> uses this option to print a header on each page of output, but older Linux <strong>ps</strong> uses this option to totally disable the header. This version of <strong>ps</strong> follows the Linux usage of not printing the header unless the BSD personality has been selected, in which case it prints a header on each page of output. Regardless of the current personality, you can use the long options <strong>--headers</strong> and <strong>--no-headers</strong> to enable printing headers each page or disable headers entirely, respectively.
     <dt><strong>k</strong><em>&nbsp;spec</em>
-    <dd>
-      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to <strong>--sort</strong>. Examples:<br>
-      <strong>ps&nbsp;jaxkuid,-ppid,+pid</strong><br>
-      <strong>ps&nbsp;axk&nbsp;comm&nbsp;o&nbsp;comm,args</strong><br>
-      <strong>ps&nbsp;kstart_time&nbsp;-ef</strong>
+    <dd>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to <strong>--sort</strong>. Examples:<br>
+    <strong>ps&nbsp;jaxkuid,-ppid,+pid</strong><br>
+    <strong>ps&nbsp;axk&nbsp;comm&nbsp;o&nbsp;comm,args</strong><br>
+    <strong>ps&nbsp;kstart_time&nbsp;-ef</strong>
     <dt><strong>-n</strong><em>&nbsp;namelist</em>
     <dd>
       <p>set namelist file. Identical to <strong>N</strong>.<br>
@@ -308,87 +236,63 @@
       /usr/src/linux/System.map<br>
       /System.map
     <dt><strong>n</strong>
-    <dd>
-      <p>Numeric output for WCHAN and USER. (including all types of UID and GID)
+    <dd>Numeric output for WCHAN and USER. (including all types of UID and GID)
     <dt><strong>-w</strong>
-    <dd>
-      <p>Wide output. Use this option twice for unlimited width.
+    <dd>Wide output. Use this option twice for unlimited width.
     <dt><strong>w</strong>
-    <dd>
-      <p>Wide output. Use this option twice for unlimited width.
+    <dd>Wide output. Use this option twice for unlimited width.
     <dt><strong>--cols</strong><em>&nbsp;n</em>
-    <dd>
-      <p>set screen width
+    <dd>set screen width
     <dt><strong>--columns</strong><em>&nbsp;n</em>
-    <dd>
-      <p>set screen width
+    <dd>set screen width
     <dt><strong>--cumulative</strong>
-    <dd>
-      <p>include some dead child process data (as a sum with the parent)
+    <dd>include some dead child process data (as a sum with the parent)
     <dt><strong>--forest</strong>
-    <dd>
-      <p>ASCII art process tree
+    <dd>ASCII art process tree
     <dt><strong>--headers</strong>
-    <dd>
-      <p>repeat header lines, one per page of output
+    <dd>repeat header lines, one per page of output
     <dt><strong>--no-headers</strong>
-    <dd>
-      <p>print no header line at all
+    <dd>print no header line at all
     <dt><strong>--lines</strong><em>&nbsp;n</em>
-    <dd>
-      <p>set screen height
+    <dd>set screen height
     <dt><strong>--rows</strong><em>&nbsp;n</em>
-    <dd>
-      <p>set screen height
+    <dd>set screen height
     <dt><strong>--sort</strong><em>&nbsp;spec</em>
-    <dd>
-      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to&nbsp;<strong>k</strong>. For example: <strong>ps&nbsp;jax&nbsp;--sort=uid,-ppid,+pid</strong>
+    <dd>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to&nbsp;<strong>k</strong>. For example: <strong>ps&nbsp;jax&nbsp;--sort=uid,-ppid,+pid</strong>
     <dt><strong>--width</strong><em>&nbsp;n</em>
-    <dd>
-      <p>set screen width
+    <dd>set screen width
   </dl>
 </div>
 <div class="section">
   <h2>THREAD DISPLAY</h2>
   <dl class="indent-16">
     <dt><strong>H</strong>
-    <dd>
-      <p>Show threads as if they were processes
+    <dd>Show threads as if they were processes
     <dt><strong>-L</strong>
-    <dd>
-      <p>Show threads, possibly with LWP and NLWP columns
+    <dd>Show threads, possibly with LWP and NLWP columns
     <dt><strong>-T</strong>
-    <dd>
-      <p>Show threads, possibly with SPID column
+    <dd>Show threads, possibly with SPID column
     <dt><strong>m</strong>
-    <dd>
-      <p>Show threads after processes
+    <dd>Show threads after processes
     <dt><strong>-m</strong>
-    <dd>
-      <p>Show threads after processes
+    <dd>Show threads after processes
   </dl>
 </div>
 <div class="section">
   <h2>OTHER INFORMATION</h2>
   <dl class="indent-16">
     <dt><strong>L</strong>
-    <dd>
-      <p>List all format specifiers.
+    <dd>List all format specifiers.
     <dt><strong>-V</strong>
-    <dd>
-      <p>Print the procps version.
+    <dd>Print the procps version.
     <dt><strong>V</strong>
-    <dd>
-      <p>Print the procps version.
+    <dd>Print the procps version.
     <dt><strong>--help</strong>
-    <dd>
-      <p>Print a help message.
+    <dd>Print a help message.
     <dt><strong>--info</strong>
-    <dd>
-      <p>Print debugging info.
+    <dd>Print debugging info.
     <dt><strong>--version</strong>
-    <dd>
-      <p>Print the procps version.
+    <dd>Print the procps version.
   </dl>
 </div>
 <div class="section">
@@ -404,11 +308,9 @@
   <p>The sum of these values is displayed in the "F" column, which is provided by the <strong>flags</strong> output specifier.
   <dl class="indent-5">
     <dt>1
-    <dd>
-      <p>forked but didn't exec
+    <dd>forked but didn't exec
     <dt>4
-    <dd>
-      <p>used super-user privileges
+    <dd>used super-user privileges
   </dl>
 </div>
 <div class="section">
@@ -416,47 +318,34 @@
   <p>Here are the different values that the <strong>s</strong>, <strong>stat</strong> and <strong>state</strong> output specifiers (header&nbsp;"STAT"&nbsp;or&nbsp;"S") will display to describe the state of a process.
   <dl class="indent-5">
     <dt>D
-    <dd>
-      <p>Uninterruptible sleep (usually&nbsp;IO)
+    <dd>Uninterruptible sleep (usually&nbsp;IO)
     <dt>R
-    <dd>
-      <p>Running or runnable (on&nbsp;run&nbsp;queue)
+    <dd>Running or runnable (on&nbsp;run&nbsp;queue)
     <dt>S
-    <dd>
-      <p>Interruptible sleep (waiting for an event to complete)
+    <dd>Interruptible sleep (waiting for an event to complete)
     <dt>T
-    <dd>
-      <p>Stopped, either by a job control signal or because it is being traced.
+    <dd>Stopped, either by a job control signal or because it is being traced.
     <dt>W
-    <dd>
-      <p>paging (not valid since the 2.6.xx kernel)
+    <dd>paging (not valid since the 2.6.xx kernel)
     <dt>X
-    <dd>
-      <p>dead (should never be seen)
+    <dd>dead (should never be seen)
     <dt>Z
-    <dd>
-      <p>Defunct ("zombie") process, terminated but not reaped by its parent.
+    <dd>Defunct ("zombie") process, terminated but not reaped by its parent.
   </dl>
   <p>For BSD formats and when the <strong>stat</strong> keyword is used, additional characters may be displayed:
   <dl class="indent-5">
     <dt>&lt;
-    <dd>
-      <p>high-priority (not nice to other users)
+    <dd>high-priority (not nice to other users)
     <dt>N
-    <dd>
-      <p>low-priority (nice to other users)
+    <dd>low-priority (nice to other users)
     <dt>L
-    <dd>
-      <p>has pages locked into memory (for real-time and custom&nbsp;IO)
+    <dd>has pages locked into memory (for real-time and custom&nbsp;IO)
     <dt>s
-    <dd>
-      <p>is a session leader
+    <dd>is a session leader
     <dt>l
-    <dd>
-      <p>is multi-threaded (using CLONE_THREAD, like NPTL pthreads&nbsp;do)
+    <dd>is multi-threaded (using CLONE_THREAD, like NPTL pthreads&nbsp;do)
     <dt>+
-    <dd>
-      <p>is in the foreground process group
+    <dd>is in the foreground process group
   </dl>
 </div>
 <div class="section">
@@ -1125,47 +1014,33 @@
   <p>The following environment variables could affect <strong>ps</strong>:
   <dl class="indent-3">
     <dt><strong>COLUMNS</strong>
-    <dd>
-      <p>Override default display width.
+    <dd>Override default display width.
     <dt><strong>LINES</strong>
-    <dd>
-      <p>Override default display height.
+    <dd>Override default display height.
     <dt><strong>PS_PERSONALITY</strong>
-    <dd>
-      <p>Set to one of posix, old, linux, bsd, sun, digital... (see&nbsp;section&nbsp;<strong>PERSONALITY</strong>&nbsp;below).
+    <dd>Set to one of posix, old, linux, bsd, sun, digital... (see&nbsp;section&nbsp;<strong>PERSONALITY</strong>&nbsp;below).
     <dt><strong>CMD_ENV</strong>
-    <dd>
-      <p>Set to one of posix, old, linux, bsd, sun, digital... (see&nbsp;section&nbsp;<strong>PERSONALITY</strong>&nbsp;below).
+    <dd>Set to one of posix, old, linux, bsd, sun, digital... (see&nbsp;section&nbsp;<strong>PERSONALITY</strong>&nbsp;below).
     <dt><strong>I_WANT_A_BROKEN_PS</strong>
-    <dd>
-      <p>Force obsolete command line interpretation.
+    <dd>Force obsolete command line interpretation.
     <dt><strong>LC_TIME</strong>
-    <dd>
-      <p>Date format.
+    <dd>Date format.
     <dt><strong>PS_COLORS</strong>
-    <dd>
-      <p>Not currently supported.
+    <dd>Not currently supported.
     <dt><strong>PS_FORMAT</strong>
-    <dd>
-      <p>Default output format override. You may set this to a format string of the type used for the <strong>-o</strong> option. The <strong>DefSysV</strong> and <strong>DefBSD</strong> values are particularly useful.
+    <dd>Default output format override. You may set this to a format string of the type used for the <strong>-o</strong> option. The <strong>DefSysV</strong> and <strong>DefBSD</strong> values are particularly useful.
     <dt><strong>PS_SYSMAP</strong>
-    <dd>
-      <p>Default namelist (System.map) location.
+    <dd>Default namelist (System.map) location.
     <dt><strong>PS_SYSTEM_MAP</strong>
-    <dd>
-      <p>Default namelist (System.map) location.
+    <dd>Default namelist (System.map) location.
     <dt><strong>POSIXLY_CORRECT</strong>
-    <dd>
-      <p>Don't find excuses to ignore bad "features".
+    <dd>Don't find excuses to ignore bad "features".
     <dt><strong>POSIX2</strong>
-    <dd>
-      <p>When set to "on", acts as <strong>POSIXLY_CORRECT</strong>.
+    <dd>When set to "on", acts as <strong>POSIXLY_CORRECT</strong>.
     <dt><strong>UNIX95</strong>
-    <dd>
-      <p>Don't find excuses to ignore bad "features".
+    <dd>Don't find excuses to ignore bad "features".
     <dt><strong>_XPG</strong>
-    <dd>
-      <p>Cancel <strong>CMD_ENV</strong><em>=irix</em> non-standard behavior.
+    <dd>Cancel <strong>CMD_ENV</strong><em>=irix</em> non-standard behavior.
   </dl>
   <p>In general, it&nbsp;is a bad idea to set these variables. The one exception is <strong>CMD_ENV</strong> or <strong>PS_PERSONALITY</strong>, which could be set to Linux for normal systems. Without that setting, <strong>ps</strong> follows the useless and bad parts of the Unix98 standard.
 </div>
@@ -1258,20 +1133,15 @@
   <p>This <strong>ps</strong> conforms to:
   <dl class="indent-4">
     <dt>1
-    <dd>
-      <p>Version 2 of the Single Unix Specification
+    <dd>Version 2 of the Single Unix Specification
     <dt>2
-    <dd>
-      <p>The Open Group Technical Standard Base Specifications, Issue&nbsp;6
+    <dd>The Open Group Technical Standard Base Specifications, Issue&nbsp;6
     <dt>3
-    <dd>
-      <p>IEEE Std 1003.1, 2004&nbsp;Edition
+    <dd>IEEE Std 1003.1, 2004&nbsp;Edition
     <dt>4
-    <dd>
-      <p>X/Open System Interfaces Extension [UP&nbsp;XSI]
+    <dd>X/Open System Interfaces Extension [UP&nbsp;XSI]
     <dt>5
-    <dd>
-      <p>ISO/IEC 9945:2003
+    <dd>ISO/IEC 9945:2003
   </dl>
 </div>
 <div class="section">

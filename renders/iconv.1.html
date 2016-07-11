@@ -20,37 +20,28 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-f</strong> <em>from-encoding</em><strong>, --from-code=</strong><em>from-encoding</em>
-    <dd>
-      <p>Use <em>from-encoding</em> for input characters.
+    <dd>Use <em>from-encoding</em> for input characters.
     <dt><strong>-t</strong> <em>to-encoding</em><strong>, --to-code=</strong><em>to-encoding</em>
     <dd>
       <p>Use <em>to-encoding</em> for output characters.
       <p>If the string <strong>//IGNORE</strong> is appended to <em>to-encoding</em>, characters that cannot be converted are discarded and an error is printed after conversion.
       <p>If the string <strong>//TRANSLIT</strong> is appended to <em>to-encoding</em>, characters being converted are transliterated when needed and possible. This means that when a character cannot be represented in the target character set, it can be approximated through one or several similar looking characters. Characters that are outside of the target character set and cannot be transliterated are replaced with a question mark (?) in the output.
     <dt><strong>-l</strong>, <strong>--list</strong>
-    <dd>
-      <p>List all known character set encodings.
+    <dd>List all known character set encodings.
     <dt><strong>-c</strong>
-    <dd>
-      <p>Silently discard characters that cannot be converted instead of terminating when encountering such characters.
+    <dd>Silently discard characters that cannot be converted instead of terminating when encountering such characters.
     <dt><strong>-o</strong> <em>outputfile</em><strong>, --output=</strong><em>outputfile</em>
-    <dd>
-      <p>Use <em>outputfile</em> for output.
+    <dd>Use <em>outputfile</em> for output.
     <dt><strong>-s</strong>, <strong>--silent</strong>
-    <dd>
-      <p>This option is ignored; it is provided only for compatibility.
+    <dd>This option is ignored; it is provided only for compatibility.
     <dt><strong>--verbose</strong>
-    <dd>
-      <p>Print progress information on standard error when processing multiple files.
+    <dd>Print progress information on standard error when processing multiple files.
     <dt><strong>-?</strong>, <strong>--help</strong>
-    <dd>
-      <p>Print a usage summary and exit.
+    <dd>Print a usage summary and exit.
     <dt><strong>--usage</strong>
-    <dd>
-      <p>Print a short usage summary and exit.
+    <dd>Print a short usage summary and exit.
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>
-      <p>Print the version number, license, and disclaimer of warranty for <strong>iconv</strong>.
+    <dd>Print the version number, license, and disclaimer of warranty for <strong>iconv</strong>.
   </dl>
 </div>
 <div class="section">
@@ -62,25 +53,20 @@
   <p>Internally, the <strong>iconv</strong> program uses the <strong>iconv</strong>(3) function which in turn uses <em>gconv</em> modules (dynamically loaded shared libraries) to convert to and from a character set. Before calling <strong>iconv</strong>(3), the <strong>iconv</strong> program must first allocate a conversion descriptor using <strong>iconv_open</strong>(3). The operation of the latter function is influenced by the setting of the <strong>GCONV_PATH</strong> environment variable:
   <dl class="indent-3">
     <dt>*
-    <dd>
-      <p>If <strong>GCONV_PATH</strong> is not set, <strong>iconv_open</strong>(3) loads the system gconv module configuration cache file created by <strong>iconvconfig</strong>(8) and then, based on the configuration, loads the gconv modules needed to perform the conversion. If the system gconv module configuration cache file is not available then the system gconv module configuration file is used.
+    <dd>If <strong>GCONV_PATH</strong> is not set, <strong>iconv_open</strong>(3) loads the system gconv module configuration cache file created by <strong>iconvconfig</strong>(8) and then, based on the configuration, loads the gconv modules needed to perform the conversion. If the system gconv module configuration cache file is not available then the system gconv module configuration file is used.
     <dt>*
-    <dd>
-      <p>If <strong>GCONV_PATH</strong> is defined (as a colon-separated list of pathnames), the system gconv module configuration cache is not used. Instead, <strong>iconv_open</strong>(3) first tries to load the configuration files by searching the directories in <strong>GCONV_PATH</strong> in order, followed by the system default gconv module configuration file. If a directory does not contain a gconv module configuration file, any gconv modules that it may contain are ignored. If a directory contains a gconv module configuration file and it is determined that a module needed for this conversion is available in the directory, then the needed module is loaded from that directory, the order being such that the first suitable module found in <strong>GCONV_PATH</strong> is used. This allows users to use custom modules and even replace system-provided modules by providing such modules in <strong>GCONV_PATH</strong> directories.
+    <dd>If <strong>GCONV_PATH</strong> is defined (as a colon-separated list of pathnames), the system gconv module configuration cache is not used. Instead, <strong>iconv_open</strong>(3) first tries to load the configuration files by searching the directories in <strong>GCONV_PATH</strong> in order, followed by the system default gconv module configuration file. If a directory does not contain a gconv module configuration file, any gconv modules that it may contain are ignored. If a directory contains a gconv module configuration file and it is determined that a module needed for this conversion is available in the directory, then the needed module is loaded from that directory, the order being such that the first suitable module found in <strong>GCONV_PATH</strong> is used. This allows users to use custom modules and even replace system-provided modules by providing such modules in <strong>GCONV_PATH</strong> directories.
   </dl>
 </div>
 <div class="section">
   <h2>FILES</h2>
   <dl>
     <dt><em>/usr/lib/gconv</em>
-    <dd>
-      <p>Usual default gconv module path.
+    <dd>Usual default gconv module path.
     <dt><em>/usr/lib/gconv/gconv-modules</em>
-    <dd>
-      <p>Usual system default gconv module configuration file.
+    <dd>Usual system default gconv module configuration file.
     <dt><em>/usr/lib/gconv/gconv-modules.cache</em>
-    <dd>
-      <p>Usual system gconv module configuration cache.
+    <dd>Usual system gconv module configuration cache.
   </dl>
 </div>
 <div class="section">

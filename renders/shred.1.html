@@ -18,39 +18,29 @@
   <p>Mandatory arguments to long options are mandatory for short options too.
   <dl>
     <dt><strong>-f</strong>, <strong>--force</strong>
-    <dd>
-      <p>change permissions to allow writing if necessary
+    <dd>change permissions to allow writing if necessary
     <dt><strong>-n</strong>, <strong>--iterations</strong>=<em>N</em>
-    <dd>
-      <p>overwrite N times instead of the default (3)
+    <dd>overwrite N times instead of the default (3)
     <dt><strong>--random-source</strong>=<em>FILE</em>
-    <dd>
-      <p>get random bytes from FILE
+    <dd>get random bytes from FILE
     <dt><strong>-s</strong>, <strong>--size</strong>=<em>N</em>
-    <dd>
-      <p>shred this many bytes (suffixes like K, M, G accepted)
+    <dd>shred this many bytes (suffixes like K, M, G accepted)
     <dt><strong>-u</strong>
-    <dd>
-      <p>truncate and remove file after overwriting
+    <dd>truncate and remove file after overwriting
     <dt><strong>--remove</strong>[=<em>HOW</em>]
-    <dd>
-      <p>like <strong>-u</strong> but give control on HOW to delete; See below
+    <dd>like <strong>-u</strong> but give control on HOW to delete; See below
     <dt><strong>-v</strong>, <strong>--verbose</strong>
-    <dd>
-      <p>show progress
+    <dd>show progress
     <dt><strong>-x</strong>, <strong>--exact</strong>
     <dd>
       <p>do not round file sizes up to the next full block;
       <p>this is the default for non-regular files
     <dt><strong>-z</strong>, <strong>--zero</strong>
-    <dd>
-      <p>add a final overwrite with zeros to hide shredding
+    <dd>add a final overwrite with zeros to hide shredding
     <dt><strong>--help</strong>
-    <dd>
-      <p>display this help and exit
+    <dd>display this help and exit
     <dt><strong>--version</strong>
-    <dd>
-      <p>output version information and exit
+    <dd>output version information and exit
   </dl>
   <p>Delete FILE(s) if <strong>--remove</strong> (<strong>-u</strong>) is specified. The default is not to remove the files because it is common to operate on device files like <em>/dev/hda</em>, and those files usually should not be removed. The optional HOW parameter indicates how to remove a directory entry: 'unlink' =&gt; use a standard unlink call. 'wipe' =&gt; also first obfuscate bytes in the name. 'wipesync' =&gt; also sync each obfuscated byte to disk. The default mode is 'wipesync', but note it can be expensive.
   <p>CAUTION: Note that shred relies on a very important assumption: that the file system overwrites data in place. This is the traditional way to do things, but many modern file system designs do not satisfy this assumption. The following are examples of file systems on which shred is not effective, or is not guaranteed to be effective in all file system modes:

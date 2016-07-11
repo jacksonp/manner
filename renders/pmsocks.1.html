@@ -46,27 +46,20 @@
   <p>There are several environment variables used by <strong>pmsocks</strong> as follows:
   <dl class="indent-10">
     <dt><strong>SOCKS_SERVER</strong>
-    <dd>
-      <p>Specifies the host name or IP address of the host running the <strong>sockd</strong> daemon. Usually this is the name of the firewall host.
+    <dd>Specifies the host name or IP address of the host running the <strong>sockd</strong> daemon. Usually this is the name of the firewall host.
     <dt><strong>SOCKS_PORT</strong>
-    <dd>
-      <p>The TCP/IP port to use when contacting <strong>sockd</strong> on the <strong>SOCKS_SERVER</strong> host. The default is <strong>1080</strong>.
+    <dd>The TCP/IP port to use when contacting <strong>sockd</strong> on the <strong>SOCKS_SERVER</strong> host. The default is <strong>1080</strong>.
     <dt><strong>SOCKS_NS</strong>
-    <dd>
-      <p>The host name of the name server to use, usually to resolve the IP address of <strong>SOCKS_SERVER</strong>.
+    <dd>The host name of the name server to use, usually to resolve the IP address of <strong>SOCKS_SERVER</strong>.
     <dt><strong>SOCKS_DEBUG</strong>
-    <dd>
-      <p>If present in the environment, <strong>libpcp_socks</strong> will print debugging information to the <em>stderr</em> stream. There are only two levels of debugging, on or off. This is only really useful for the developers because the debugging information assumes knowledge of the <strong>libpcp_socks</strong> source code.
+    <dd>If present in the environment, <strong>libpcp_socks</strong> will print debugging information to the <em>stderr</em> stream. There are only two levels of debugging, on or off. This is only really useful for the developers because the debugging information assumes knowledge of the <strong>libpcp_socks</strong> source code.
     <dt><strong>SOCKS_BANNER</strong>
-    <dd>
-      <p>If this is set, whenever a client calls <strong>libpcp_socks</strong> it will echo a message to <em>stdout</em> containing version information. This can be useful to check <strong>libpcp_socks</strong> is working in the absence of verbose logging.
+    <dd>If this is set, whenever a client calls <strong>libpcp_socks</strong> it will echo a message to <em>stdout</em> containing version information. This can be useful to check <strong>libpcp_socks</strong> is working in the absence of verbose logging.
     <dt><strong>_RLD_LIST</strong>
-    <dd>
-      <p><strong>pmsocks</strong> sets this to exactly <strong>/usr/pcp/lib/libpcp_socks.so:DEFAULT</strong><br>
-      It is strongly recommended this NOT be set in the environment of interactive shells.
+    <dd><strong>pmsocks</strong> sets this to exactly <strong>/usr/pcp/lib/libpcp_socks.so:DEFAULT</strong><br>
+    It is strongly recommended this NOT be set in the environment of interactive shells.
     <dt><strong>PMCD_CONNECT_TIMEOUT</strong>
-    <dd>
-      <p>Specifies the time-out, in seconds, for connections to <strong>pmcd</strong>(1). When using <strong>pmsocks</strong>, this may need to be increased from the default (5 seconds) due to the additional delays introduced as a result of using <strong>sockd</strong>. See <strong>PMAPI</strong>(3) for further details about this variable.
+    <dd>Specifies the time-out, in seconds, for connections to <strong>pmcd</strong>(1). When using <strong>pmsocks</strong>, this may need to be increased from the default (5 seconds) due to the additional delays introduced as a result of using <strong>sockd</strong>. See <strong>PMAPI</strong>(3) for further details about this variable.
   </dl>
 </div>
 <div class="section">
@@ -74,26 +67,19 @@
   <p>The following notes should be considered carefully:
   <dl class="indent-5">
     <dt>0)
-    <dd>
-      <p>Because <strong>sockd</strong> can only handle TCP/IP sockets, <strong>pmsocks</strong> never attempts to use <strong>sockd</strong> for sockets of type <strong>SOCK_DGRAM</strong> or if the <strong>domain</strong> parameter in a call to <strong>socket</strong>(2) is <strong>PF_UNIX</strong> (unix domain sockets should never need to use <strong>sockd</strong> anyway).
+    <dd>Because <strong>sockd</strong> can only handle TCP/IP sockets, <strong>pmsocks</strong> never attempts to use <strong>sockd</strong> for sockets of type <strong>SOCK_DGRAM</strong> or if the <strong>domain</strong> parameter in a call to <strong>socket</strong>(2) is <strong>PF_UNIX</strong> (unix domain sockets should never need to use <strong>sockd</strong> anyway).
     <dt>1)
-    <dd>
-      <p>Some firewall products do not support “socksified” applications, and in these cases, <strong>pmsocks</strong> cannot be used. In this case, it will be necessary to configure the firewall to allow connections through the firewall for the PMCD communications port, typically tcp/4321.
+    <dd>Some firewall products do not support “socksified” applications, and in these cases, <strong>pmsocks</strong> cannot be used. In this case, it will be necessary to configure the firewall to allow connections through the firewall for the PMCD communications port, typically tcp/4321.
     <dt>2)
-    <dd>
-      <p>The PCP protocol is TPC/IP-based and works with the socks protocol, but connections which use UDP/DATAGRAM sockets or remote X11 connections via <strong>sockd</strong> may not work. If the remote display host is on the same side of the firewall as the application, this may be circumvented by configuring the remote display host to use direct connections - see above. Also, using X11 display options which use shared memory may hang the X server when used with <strong>pmsocks</strong>.
+    <dd>The PCP protocol is TPC/IP-based and works with the socks protocol, but connections which use UDP/DATAGRAM sockets or remote X11 connections via <strong>sockd</strong> may not work. If the remote display host is on the same side of the firewall as the application, this may be circumvented by configuring the remote display host to use direct connections - see above. Also, using X11 display options which use shared memory may hang the X server when used with <strong>pmsocks</strong>.
     <dt>3)
-    <dd>
-      <p>If the <strong>pmsocks</strong> configuration file is not present, then <strong>pmsocks</strong> will exit with an error message.
+    <dd>If the <strong>pmsocks</strong> configuration file is not present, then <strong>pmsocks</strong> will exit with an error message.
     <dt>4)
-    <dd>
-      <p><strong>pmsocks</strong> uses the locally configured name server or resolver (see <strong>resolver</strong>(5)) to resolve host names to IP addresses. This may or may not be capable of resolving host names on the other side of the firewall.
+    <dd><strong>pmsocks</strong> uses the locally configured name server or resolver (see <strong>resolver</strong>(5)) to resolve host names to IP addresses. This may or may not be capable of resolving host names on the other side of the firewall.
     <dt>5)
-    <dd>
-      <p>When used over a WAN, often the <strong>sockd</strong> daemon will be a long way from the application. This may result in PCP client connections timing out before connecting to the remote <strong>pmcd</strong>. If this is occurring, set the environment variable <strong>PMCD_CONNECT_TIMEOUT</strong> to a higher value than the default (5 seconds). Refer to <strong>PMAPI</strong>(3) for further details about this variable.
+    <dd>When used over a WAN, often the <strong>sockd</strong> daemon will be a long way from the application. This may result in PCP client connections timing out before connecting to the remote <strong>pmcd</strong>. If this is occurring, set the environment variable <strong>PMCD_CONNECT_TIMEOUT</strong> to a higher value than the default (5 seconds). Refer to <strong>PMAPI</strong>(3) for further details about this variable.
     <dt>6)
-    <dd>
-      <p>When using <strong>pmsocks</strong> to connect to <strong>pmcd</strong>(1), but <em>“Connection Refused”</em> error messages are returned, it is not immediately obvious whether <strong>pmcd</strong>(1) is returning the error or <strong>sockd</strong>.
+    <dd>When using <strong>pmsocks</strong> to connect to <strong>pmcd</strong>(1), but <em>“Connection Refused”</em> error messages are returned, it is not immediately obvious whether <strong>pmcd</strong>(1) is returning the error or <strong>sockd</strong>.
   </dl>
 </div>
 <div class="section">
@@ -104,8 +90,7 @@
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>/etc/tsocks.conf</strong>
-    <dd>
-      <p>configuration file
+    <dd>configuration file
   </dl>
 </div>
 <div class="section">

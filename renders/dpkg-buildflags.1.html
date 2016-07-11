@@ -16,32 +16,24 @@
   <p><strong>dpkg-buildflags</strong> is a tool to retrieve compilation flags to use during build of Debian packages. The default flags are defined by the vendor but they can be extended/overriden in several ways:
   <dl>
     <dt>1.
-    <dd>
-      <p>system-wide with <strong>/etc/dpkg/buildflags.conf</strong>;
+    <dd>system-wide with <strong>/etc/dpkg/buildflags.conf</strong>;
     <dt>2.
-    <dd>
-      <p>for the current user with <strong>$XDG_CONFIG_HOME/dpkg/buildflags.conf</strong> where <strong>$XDG_CONFIG_HOME</strong> defaults to <strong>$HOME/.config</strong>;
+    <dd>for the current user with <strong>$XDG_CONFIG_HOME/dpkg/buildflags.conf</strong> where <strong>$XDG_CONFIG_HOME</strong> defaults to <strong>$HOME/.config</strong>;
     <dt>3.
-    <dd>
-      <p>temporarily by the user with environment variables (see section <strong>ENVIRONMENT</strong>);
+    <dd>temporarily by the user with environment variables (see section <strong>ENVIRONMENT</strong>);
     <dt>4.
-    <dd>
-      <p>dynamically by the package maintainer with environment variables set via <strong>debian/rules</strong> (see section <strong>ENVIRONMENT</strong>).
+    <dd>dynamically by the package maintainer with environment variables set via <strong>debian/rules</strong> (see section <strong>ENVIRONMENT</strong>).
   </dl>
   <p>The configuration files can contain two types of directives:
   <dl>
     <dt><strong>SET</strong> <em>flag value</em>
-    <dd>
-      <p>Override the flag named <em>flag</em> to have the value <em>value</em>.
+    <dd>Override the flag named <em>flag</em> to have the value <em>value</em>.
     <dt><strong>STRIP</strong> <em>flag value</em>
-    <dd>
-      <p>Strip from the flag named <em>flag</em> all the build flags listed in <em>value</em>.
+    <dd>Strip from the flag named <em>flag</em> all the build flags listed in <em>value</em>.
     <dt><strong>APPEND</strong> <em>flag value</em>
-    <dd>
-      <p>Extend the flag named <em>flag</em> by appending the options given in <em>value</em>. A space is prepended to the appended value if the flag's current value is non-empty.
+    <dd>Extend the flag named <em>flag</em> by appending the options given in <em>value</em>. A space is prepended to the appended value if the flag's current value is non-empty.
     <dt><strong>PREPEND</strong> <em>flag value</em>
-    <dd>
-      <p>Extend the flag named <em>flag</em> by prepending the options given in <em>value</em>. A space is appended to the prepended value if the flag's current value is non-empty.
+    <dd>Extend the flag named <em>flag</em> by prepending the options given in <em>value</em>. A space is appended to the prepended value if the flag's current value is non-empty.
   </dl>
   <p>The configuration files can contain comments on lines starting with a hash (#). Empty lines are also ignored.
 </div>
@@ -49,11 +41,9 @@
   <h2>COMMANDS</h2>
   <dl>
     <dt><strong>--dump</strong>
-    <dd>
-      <p>Print to standard output all compilation flags and their values. It prints one flag per line separated from its value by an equal sign (“<em>flag</em>=<em>value</em>”). This is the default action.
+    <dd>Print to standard output all compilation flags and their values. It prints one flag per line separated from its value by an equal sign (“<em>flag</em>=<em>value</em>”). This is the default action.
     <dt><strong>--list</strong>
-    <dd>
-      <p>Print the list of flags supported by the current vendor (one per line). See the <strong>SUPPORTED FLAGS</strong> section for more information about them.
+    <dd>Print the list of flags supported by the current vendor (one per line). See the <strong>SUPPORTED FLAGS</strong> section for more information about them.
     <dt><strong>--status</strong>
     <dd>
       <p>Display any information that can be useful to explain the behaviour of <strong>dpkg-buildflags</strong> (since dpkg 1.16.5): relevant environment variables, current vendor, state of all feature flags. Also print the resulting compiler flags with their origin.
@@ -63,37 +53,28 @@
       <p>Print to standard output commands that can be used to export all the compilation flags for some particular tool. If the <em>format</em> value is not given, <strong>sh</strong> is assumed. Only compilation flags starting with an upper case character are included, others are assumed to not be suitable for the environment. Supported formats:
       <dl>
         <dt><strong>sh</strong>
-        <dd>
-          <p>Shell commands to set and export all the compilation flags in the environment. The flag values are quoted so the output is ready for evaluation by a shell.
+        <dd>Shell commands to set and export all the compilation flags in the environment. The flag values are quoted so the output is ready for evaluation by a shell.
         <dt><strong>cmdline</strong>
-        <dd>
-          <p>Arguments to pass to a build program's command line to use all the compilation flags (since dpkg 1.17.0). The flag values are quoted in shell syntax.
+        <dd>Arguments to pass to a build program's command line to use all the compilation flags (since dpkg 1.17.0). The flag values are quoted in shell syntax.
         <dt><strong>configure</strong>
-        <dd>
-          <p>This is a legacy alias for <strong>cmdline</strong>.
+        <dd>This is a legacy alias for <strong>cmdline</strong>.
         <dt><strong>make</strong>
-        <dd>
-          <p>Make directives to set and export all the compilation flags in the environment. Output can be written to a makefile fragment and evaluated using an <strong>include</strong> directive.
+        <dd>Make directives to set and export all the compilation flags in the environment. Output can be written to a makefile fragment and evaluated using an <strong>include</strong> directive.
       </dl>
     <dt><strong>--get</strong> <em>flag</em>
-    <dd>
-      <p>Print the value of the flag on standard output. Exits with 0 if the flag is known otherwise exits with 1.
+    <dd>Print the value of the flag on standard output. Exits with 0 if the flag is known otherwise exits with 1.
     <dt><strong>--origin</strong> <em>flag</em>
     <dd>
       <p>Print the origin of the value that is returned by <strong>--get</strong>. Exits with 0 if the flag is known otherwise exits with 1. The origin can be one of the following values:
       <dl>
         <dt><strong>vendor</strong>
-        <dd>
-          <p>the original flag set by the vendor is returned;
+        <dd>the original flag set by the vendor is returned;
         <dt><strong>system</strong>
-        <dd>
-          <p>the flag is set/modified by a system-wide configuration;
+        <dd>the flag is set/modified by a system-wide configuration;
         <dt><strong>user</strong>
-        <dd>
-          <p>the flag is set/modified by a user-specific configuration;
+        <dd>the flag is set/modified by a user-specific configuration;
         <dt><strong>env</strong>
-        <dd>
-          <p>the flag is set/modified by an environment-specific configuration.
+        <dd>the flag is set/modified by an environment-specific configuration.
       </dl>
     <dt><strong>--query-features</strong> <em>area</em>
     <dd>
@@ -105,43 +86,32 @@
   Feature: stackprotector
   Enabled: yes</pre>
     <dt><strong>--help</strong>
-    <dd>
-      <p>Show the usage message and exit.
+    <dd>Show the usage message and exit.
     <dt><strong>--version</strong>
-    <dd>
-      <p>Show the version and exit.
+    <dd>Show the version and exit.
   </dl>
 </div>
 <div class="section">
   <h2>SUPPORTED FLAGS</h2>
   <dl>
     <dt><strong>CFLAGS</strong>
-    <dd>
-      <p>Options for the C compiler. The default value set by the vendor includes <strong>-g</strong> and the default optimization level (<strong>-O2</strong> usually, or <strong>-O0</strong> if the <strong>DEB_BUILD_OPTIONS</strong> environment variable defines <em>noopt</em>).
+    <dd>Options for the C compiler. The default value set by the vendor includes <strong>-g</strong> and the default optimization level (<strong>-O2</strong> usually, or <strong>-O0</strong> if the <strong>DEB_BUILD_OPTIONS</strong> environment variable defines <em>noopt</em>).
     <dt><strong>CPPFLAGS</strong>
-    <dd>
-      <p>Options for the C preprocessor. Default value: empty.
+    <dd>Options for the C preprocessor. Default value: empty.
     <dt><strong>CXXFLAGS</strong>
-    <dd>
-      <p>Options for the C++ compiler. Same as <strong>CFLAGS</strong>.
+    <dd>Options for the C++ compiler. Same as <strong>CFLAGS</strong>.
     <dt><strong>OBJCFLAGS</strong>
-    <dd>
-      <p>Options for the Objective C compiler. Same as <strong>CFLAGS</strong>.
+    <dd>Options for the Objective C compiler. Same as <strong>CFLAGS</strong>.
     <dt><strong>OBJCXXFLAGS</strong>
-    <dd>
-      <p>Options for the Objective C++ compiler. Same as <strong>CXXFLAGS</strong>.
+    <dd>Options for the Objective C++ compiler. Same as <strong>CXXFLAGS</strong>.
     <dt><strong>GCJFLAGS</strong>
-    <dd>
-      <p>Options for the GNU Java compiler (gcj). A subset of <strong>CFLAGS</strong>.
+    <dd>Options for the GNU Java compiler (gcj). A subset of <strong>CFLAGS</strong>.
     <dt><strong>FFLAGS</strong>
-    <dd>
-      <p>Options for the Fortran 77 compiler. A subset of <strong>CFLAGS</strong>.
+    <dd>Options for the Fortran 77 compiler. A subset of <strong>CFLAGS</strong>.
     <dt><strong>FCFLAGS</strong>
-    <dd>
-      <p>Options for the Fortran 9x compiler. Same as <strong>FFLAGS</strong>.
+    <dd>Options for the Fortran 9x compiler. Same as <strong>FFLAGS</strong>.
     <dt><strong>LDFLAGS</strong>
-    <dd>
-      <p>Options passed to the compiler when linking executables or shared objects (if the linker is called directly, then <strong>-Wl</strong> and <strong>,</strong> have to be stripped from these options). Default value: empty.
+    <dd>Options passed to the compiler when linking executables or shared objects (if the linker is called directly, then <strong>-Wl</strong> and <strong>,</strong> have to be stripped from these options). Default value: empty.
   </dl>
   <p>New flags might be added in the future if the need arises (for example to support other languages).
 </div>
@@ -156,11 +126,9 @@
     <p>Several compile-time options (detailed below) can be used to help detect problems in the source code or build system.
     <dl>
       <dt><strong>bug</strong>
-      <dd>
-        <p>This setting (disabled by default) adds any warning option that reliably detects problematic source code. The warnings are fatal. The only currently supported flags are <strong>CFLAGS</strong> and <strong>CXXFLAGS</strong> with flags set to <strong>-Werror=array-bounds</strong>, <strong>-Werror=clobbered</strong>, <strong>-Werror=implicit-function-declaration</strong> and <strong>-Werror=volatile-register-var</strong>.
+      <dd>This setting (disabled by default) adds any warning option that reliably detects problematic source code. The warnings are fatal. The only currently supported flags are <strong>CFLAGS</strong> and <strong>CXXFLAGS</strong> with flags set to <strong>-Werror=array-bounds</strong>, <strong>-Werror=clobbered</strong>, <strong>-Werror=implicit-function-declaration</strong> and <strong>-Werror=volatile-register-var</strong>.
       <dt><strong>canary</strong>
-      <dd>
-        <p>This setting (disabled by default) adds dummy canary options to the build flags, so that the build logs can be checked for how the build flags propagate and to allow finding any omission of normal build flag settings. The only currently supported flags are <strong>CPPFLAGS</strong>, <strong>CFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>OBJCXXFLAGS</strong> with flags set to <strong>-D__DEB_CANARY_</strong><em>flag</em>_<em>random-id</em><strong>__</strong>, and <strong>LDFLAGS</strong> set to <strong>-Wl,-z,deb-canary-</strong><em>random-id</em>.
+      <dd>This setting (disabled by default) adds dummy canary options to the build flags, so that the build logs can be checked for how the build flags propagate and to allow finding any omission of normal build flag settings. The only currently supported flags are <strong>CPPFLAGS</strong>, <strong>CFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>OBJCXXFLAGS</strong> with flags set to <strong>-D__DEB_CANARY_</strong><em>flag</em>_<em>random-id</em><strong>__</strong>, and <strong>LDFLAGS</strong> set to <strong>-Wl,-z,deb-canary-</strong><em>random-id</em>.
     </dl>
   </div>
   <div class="subsection">
@@ -168,17 +136,13 @@
     <p>Several compile-time options (detailed below) can be used to help sanitize a resulting binary against memory corruptions, memory leaks, use after free, threading data races and undefined behavior bugs.
     <dl>
       <dt><strong>address</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-fsanitize=address</strong> to <strong>LDFLAGS</strong> and <strong>-fsanitize=address -fno-omit-frame-pointer</strong> to <strong>CFLAGS</strong> and <strong>CXXFLAGS</strong>.
+      <dd>This setting (disabled by default) adds <strong>-fsanitize=address</strong> to <strong>LDFLAGS</strong> and <strong>-fsanitize=address -fno-omit-frame-pointer</strong> to <strong>CFLAGS</strong> and <strong>CXXFLAGS</strong>.
       <dt><strong>thread</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-fsanitize=thread</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>LDFLAGS</strong>.
+      <dd>This setting (disabled by default) adds <strong>-fsanitize=thread</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>LDFLAGS</strong>.
       <dt><strong>leak</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-fsanitize=leak</strong> to <strong>LDFLAGS</strong>. It gets automatically disabled if either the <strong>address</strong> or the <strong>thread</strong> features are enabled, as they imply it.
+      <dd>This setting (disabled by default) adds <strong>-fsanitize=leak</strong> to <strong>LDFLAGS</strong>. It gets automatically disabled if either the <strong>address</strong> or the <strong>thread</strong> features are enabled, as they imply it.
       <dt><strong>undefined</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-fsanitize=undefined</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>LDFLAGS</strong>.
+      <dd>This setting (disabled by default) adds <strong>-fsanitize=undefined</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>LDFLAGS</strong>.
     </dl>
   </div>
   <div class="subsection">
@@ -186,8 +150,7 @@
     <p>Several compile-time options (detailed below) can be used to help harden a resulting binary against memory corruption attacks, or provide additional warning messages during compilation. Except as noted below, these are enabled by default for architectures that support them.
     <dl>
       <dt><strong>format</strong>
-      <dd>
-        <p>This setting (enabled by default) adds <strong>-Wformat -Werror=format-security</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong> and <strong>OBJCXXFLAGS</strong>. This will warn about improper format string uses, and will fail when format functions are used in a way that represent possible security problems. At present, this warns about calls to <strong>printf</strong> and <strong>scanf</strong> functions where the format string is not a string literal and there are no format arguments, as in <strong>printf(foo);</strong> instead of printf("%s", foo); This may be a security hole if the format string came from untrusted input and contains ‘%n’.
+      <dd>This setting (enabled by default) adds <strong>-Wformat -Werror=format-security</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong> and <strong>OBJCXXFLAGS</strong>. This will warn about improper format string uses, and will fail when format functions are used in a way that represent possible security problems. At present, this warns about calls to <strong>printf</strong> and <strong>scanf</strong> functions where the format string is not a string literal and there are no format arguments, as in <strong>printf(foo);</strong> instead of printf("%s", foo); This may be a security hole if the format string came from untrusted input and contains ‘%n’.
       <dt><strong>fortify</strong>
       <dd>
         <p>This setting (enabled by default) adds <strong>-D_FORTIFY_SOURCE=2</strong> to <strong>CPPFLAGS</strong>. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain ‘%n’ are blocked. If an application depends on such a format string, it will need to be worked around.
@@ -202,11 +165,9 @@
         <p>Disabling <strong>stackprotector</strong> will also disable this setting.
         <p>This feature has the same requirements as <strong>stackprotector</strong>, and in addition also requires gcc 4.9 and later.
       <dt><strong>relro</strong>
-      <dd>
-        <p>This setting (enabled by default) adds <strong>-Wl,-z,relro</strong> to <strong>LDFLAGS</strong>. During program load, several ELF memory sections need to be written to by the linker. This flags the loader to turn these sections read-only before turning over control to the program. Most notably this prevents GOT overwrite attacks. If this option is disabled, <strong>bindnow</strong> will become disabled as well.
+      <dd>This setting (enabled by default) adds <strong>-Wl,-z,relro</strong> to <strong>LDFLAGS</strong>. During program load, several ELF memory sections need to be written to by the linker. This flags the loader to turn these sections read-only before turning over control to the program. Most notably this prevents GOT overwrite attacks. If this option is disabled, <strong>bindnow</strong> will become disabled as well.
       <dt><strong>bindnow</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-Wl,-z,now</strong> to <strong>LDFLAGS</strong>. During program load, all dynamic symbols are resolved, allowing for the entire PLT to be marked read-only (due to <strong>relro</strong> above). The option cannot become enabled if <strong>relro</strong> is not enabled.
+      <dd>This setting (disabled by default) adds <strong>-Wl,-z,now</strong> to <strong>LDFLAGS</strong>. During program load, all dynamic symbols are resolved, allowing for the entire PLT to be marked read-only (due to <strong>relro</strong> above). The option cannot become enabled if <strong>relro</strong> is not enabled.
       <dt><strong>pie</strong>
       <dd>
         <p>This setting (disabled by default) adds <strong>-fPIE</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong>, and <strong>-fPIE -pie</strong> to <strong>LDFLAGS</strong>. Position Independent Executable are needed to take advantage of Address Space Layout Randomization, supported by some kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this (-fPIC), so they gain ASLR automatically, but binary .text regions need to be build PIE to gain ASLR. When this happens, ROP (Return Oriented Programming) attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
@@ -214,14 +175,11 @@
         <p>Static libraries can be used by programs or other shared libraries. Depending on the flags used to compile all the objects within a static library, these libraries will be usable by different sets of objects:
         <dl>
           <dt>none
-          <dd>
-            <p>Cannot be linked into a PIE program, nor a shared library.
+          <dd>Cannot be linked into a PIE program, nor a shared library.
           <dt><strong>-fPIE</strong>
-          <dd>
-            <p>Can be linked into any program, but not a shared library.
+          <dd>Can be linked into any program, but not a shared library.
           <dt><strong>-fPIC</strong>
-          <dd>
-            <p>Can be linked into any program and shared library.
+          <dd>Can be linked into any program and shared library.
         </dl>
         <p>Unconditionally passing <strong>-fPIE</strong>, <strong>-fpie</strong> or <strong>-pie</strong> to a build-system using libtool is safe as these flags will get stripped when building shared libraries. Otherwise on projects that build both programs and shared libraries you might need to make sure that when building the shared libraries <strong>-fPIC</strong> is always passed last (so that it overrides any previous <strong>-PIE</strong>) to compilation flags such as <strong>CFLAGS</strong>, and <strong>-shared</strong> is passed last (so that it overrides any previous <strong>-pie</strong>) to linking flags such as <strong>LDFLAGS</strong>.
         <p>Additionally, since PIE is implemented via a general register, some register starved architectures (but not including i386 anymore since optimizations implemented in gcc &gt;= 5) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
@@ -232,11 +190,9 @@
     <p>The compile-time options detailed below can be used to help improve build reproducibility or provide additional warning messages during compilation. Except as noted below, these are enabled by default for architectures that support them.
     <dl>
       <dt><strong>timeless</strong>
-      <dd>
-        <p>This setting (enabled by default) adds <strong>-Wdate-time</strong> to <strong>CPPFLAGS</strong>. This will cause warnings when the <strong>__TIME__</strong>, <strong>__DATE__</strong> and <strong>__TIMESTAMP__</strong> macros are used.
+      <dd>This setting (enabled by default) adds <strong>-Wdate-time</strong> to <strong>CPPFLAGS</strong>. This will cause warnings when the <strong>__TIME__</strong>, <strong>__DATE__</strong> and <strong>__TIMESTAMP__</strong> macros are used.
       <dt><strong>fixdebugpath</strong>
-      <dd>
-        <p>This setting (disabled by default) adds <strong>-fdebug-path-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
+      <dd>This setting (disabled by default) adds <strong>-fdebug-path-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
     </dl>
   </div>
 </div>
@@ -246,30 +202,23 @@
   <dl>
     <dt><strong>DEB_</strong><em>flag</em><strong>_SET</strong>
     <dt><strong>DEB_</strong><em>flag</em><strong>_MAINT_SET</strong>
-    <dd>
-      <p>This variable can be used to force the value returned for the given <em>flag</em>.
+    <dd>This variable can be used to force the value returned for the given <em>flag</em>.
     <dt><strong>DEB_</strong><em>flag</em><strong>_STRIP</strong>
     <dt><strong>DEB_</strong><em>flag</em><strong>_MAINT_STRIP</strong>
-    <dd>
-      <p>This variable can be used to provide a space separated list of options that will be stripped from the set of flags returned for the given <em>flag</em>.
+    <dd>This variable can be used to provide a space separated list of options that will be stripped from the set of flags returned for the given <em>flag</em>.
     <dt><strong>DEB_</strong><em>flag</em><strong>_APPEND</strong>
     <dt><strong>DEB_</strong><em>flag</em><strong>_MAINT_APPEND</strong>
-    <dd>
-      <p>This variable can be used to append supplementary options to the value returned for the given <em>flag</em>.
+    <dd>This variable can be used to append supplementary options to the value returned for the given <em>flag</em>.
     <dt><strong>DEB_</strong><em>flag</em><strong>_PREPEND</strong>
     <dt><strong>DEB_</strong><em>flag</em><strong>_MAINT_PREPEND</strong>
-    <dd>
-      <p>This variable can be used to prepend supplementary options to the value returned for the given <em>flag</em>.
+    <dd>This variable can be used to prepend supplementary options to the value returned for the given <em>flag</em>.
     <dt><strong>DEB_BUILD_OPTIONS</strong>
     <dt><strong>DEB_BUILD_MAINT_OPTIONS</strong>
-    <dd>
-      <p>These variables can be used by a user or maintainer to disable/enable various area features that affect build flags. The <strong>DEB_BUILD_MAINT_OPTIONS</strong> variable overrides any setting in the <strong>DEB_BUILD_OPTIONS</strong> feature areas. See the <strong>FEATURE AREAS</strong> section for details.
+    <dd>These variables can be used by a user or maintainer to disable/enable various area features that affect build flags. The <strong>DEB_BUILD_MAINT_OPTIONS</strong> variable overrides any setting in the <strong>DEB_BUILD_OPTIONS</strong> feature areas. See the <strong>FEATURE AREAS</strong> section for details.
     <dt><strong>DEB_VENDOR</strong>
-    <dd>
-      <p>This setting defines the current vendor. If not set, it will discover the current vendor by reading <strong>/etc/dpkg/origins/default</strong>.
+    <dd>This setting defines the current vendor. If not set, it will discover the current vendor by reading <strong>/etc/dpkg/origins/default</strong>.
     <dt><strong>DEB_BUILD_PATH</strong>
-    <dd>
-      <p>This variable sets the build path (since dpkg 1.18.8) to use in features such as <strong>fixdebugpath</strong> so that they can be controlled by the caller. This variable is currently Debian and derivatives-specific.
+    <dd>This variable sets the build path (since dpkg 1.18.8) to use in features such as <strong>fixdebugpath</strong> so that they can be controlled by the caller. This variable is currently Debian and derivatives-specific.
   </dl>
 </div>
 <div class="section">
@@ -278,20 +227,17 @@
     <h3>Configuration files</h3>
     <dl>
       <dt><strong>/etc/dpkg/buildflags.conf</strong>
-      <dd>
-        <p>System wide configuration file.
+      <dd>System wide configuration file.
       <dt><strong>$XDG_CONFIG_HOME/dpkg/buildflags.conf</strong> or
       <dt><strong>$HOME/.config/dpkg/buildflags.conf</strong>
-      <dd>
-        <p>User configuration file.
+      <dd>User configuration file.
     </dl>
   </div>
   <div class="subsection">
     <h3>Packaging support</h3>
     <dl>
       <dt><strong>/usr/share/dpkg/buildflags.mk</strong>
-      <dd>
-        <p>Makefile snippet that will load (and optionally export) all flags supported by <strong>dpkg-buildflags</strong> into variables (since dpkg 1.16.1).
+      <dd>Makefile snippet that will load (and optionally export) all flags supported by <strong>dpkg-buildflags</strong> into variables (since dpkg 1.16.1).
     </dl>
   </div>
 </div>

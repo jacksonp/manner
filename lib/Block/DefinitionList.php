@@ -37,9 +37,19 @@ class Block_DefinitionList
 
         $everyChildIsDT = true;
         for ($j = 0; $j < $dl->childNodes->length; ++$j) {
-            if ($dl->childNodes->item($j)->tagName !== 'dt') {
+            $dlChild = $dl->childNodes->item($j);
+            if ($dlChild->tagName !== 'dt') {
                 $everyChildIsDT = false;
-                break;
+            }
+            if (
+              $dlChild->childNodes->length === 1 and
+              $dlChild->firstChild instanceof DOMElement and
+              $dlChild->firstChild->tagName === 'p'
+            ) {
+                while ($dlChild->firstChild->firstChild) {
+                    $dlChild->appendChild($dlChild->firstChild->firstChild);
+                }
+                $dlChild->removeChild($dlChild->firstChild);
             }
         }
 
