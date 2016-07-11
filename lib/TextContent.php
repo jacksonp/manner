@@ -213,32 +213,26 @@ class TextContent
         }
 
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
-        $backslashEscapes = [
+        $singleCharacterEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
-          'e'    => '\\',
-            // Do *after* we check for registers (e.g. \nF) so we keep the \n
-          '\\en' => '\n',
+          'e' => '\\',
             // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
-          '|'    => '',
+          '|' => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
-          '^'    => '',
+          '^' => '',
             // Default optional hyphenation character. Just remove for now.
-          '%'    => '',
+          '%' => '',
             // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
-          ':'    => '',
+          ':' => '',
             // Digit-width space.
-          '0'    => ' ',
-            // Last minute string subs:
-          'rs'   => '\\',
-          'dq'   => '"',
-          'aq'   => '\'',
+          '0' => ' ',
         ];
 
         $string = Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]]+)\]|\*?\((?<str>..)|\*?(?<str>[^\\\\]))~u',
-          function ($matches) use (&$backslashEscapes) {
-              if (isset($backslashEscapes[$matches['str']])) {
-                  return $matches['bspairs'] . $backslashEscapes[$matches['str']];
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?<str>[^\\\\])~u',
+          function ($matches) use (&$singleCharacterEscapes) {
+              if (isset($singleCharacterEscapes[$matches['str']])) {
+                  return $matches['bspairs'] . $singleCharacterEscapes[$matches['str']];
               } else {
                   return $matches[0];
               }

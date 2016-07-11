@@ -113,7 +113,8 @@ class Roff_Glyph
       'rq'             => '”',
       'oq'             => '‘',
       'cq'             => '’',
-        // NB: we do 'aq' and 'dq' in  interpretString()
+      'dq'             => '"',
+      'aq'             => '\'',
       'Fo'             => '«',
       'Fc'             => '»',
       'fo'             => '‹',
@@ -181,7 +182,7 @@ class Roff_Glyph
       'ru'             => '_',
       'bb'             => '¦',
       'sl'             => '/',
-        // Note we don't do "rs" line until interpretString() to avoid problems with adding backslashes
+      'rs'             => '\\',
         // Text Markers
       'ci'             => '○',
       'bu'             => '·',
