@@ -150,6 +150,11 @@ class Man
         $this->characterTranslations[$from] = $to;
     }
 
+    public function getCharTranslations()
+    {
+        return $this->characterTranslations;
+    }
+
     public function applyCharTranslations($line)
     {
         if (count($this->characterTranslations) > 0) {

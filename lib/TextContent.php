@@ -191,7 +191,7 @@ class TextContent
 
     }
 
-    static function interpretString(string $string, bool $addSpacing = false):string
+    static function interpretString(string $string, bool $addSpacing = false, bool $applyCharTranslations = true):string
     {
 
         // Get rid of this as no longer needed:
@@ -208,7 +208,9 @@ class TextContent
         $man = Man::instance();
 
         $string = Roff_Glyph::substitute($string);
-        $string = $man->applyCharTranslations($string);
+        if ($applyCharTranslations) {
+            $string = $man->applyCharTranslations($string);
+        }
 
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $backslashEscapes = [

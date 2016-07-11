@@ -113,48 +113,10 @@ class Roff_Condition
             return !self::test(mb_substr($condition, 1));
         }
 
-        if (
-          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) or
-          preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
-        ) {
-            return $matches[1] === $matches[2];
-        }
-
-        if (preg_match('~^m\s*\w+$~u', $condition)) {
-            // mname: True if there is a color called name.
-            return false; // No colours for now.
-        }
-
-        if (preg_match('~^c\s*\w+$~u', $condition)) {
-            // cch: True if there is a glyph ch available.
-            return true; // Assume we have all the glyphs
-        }
-
-        if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
-            // dname: True if there is a string, macro, diversion, or request called name.
-            // Hack (all other checks are against "d pdfmarks", hopefully that's should be false.
-            return $matches[1] === 'TE';
-        }
-
-        $condition = Roff_Unit::normalize($condition);
-
-        $condition = Replace::preg('~:~u', ' or ', $condition);
-        $condition = Replace::preg('~&~u', ' and ', $condition);
-
-        if (preg_match('~^([-\+\*/\d\(\)><=\.]| or | and )+$~u', $condition)) {
-            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
-            try {
-                return eval('return ' . $condition . ';');
-            } catch (ParseError $e) {
-                throw new Exception($e->getMessage());
-            }
-        }
 
         $alwaysTrue = [
           'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           'n\h\'-\w\'',   // Hack for netchange.5
-          'dURL', // TODO: incorporate this and next in d check above
-          'dTS',
         ];
 
         if (in_array($condition, $alwaysTrue, true)) {
@@ -173,6 +135,43 @@ class Roff_Condition
 
         if (in_array($condition, $alwaysFalse, true)) {
             return false;
+        }
+
+        if (
+          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) or
+          preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
+        ) {
+            return $matches[1] === $matches[2];
+        }
+
+        if (preg_match('~^m\s*\w+$~u', $condition)) {
+            // mname: True if there is a color called name.
+            return false; // No colours for now.
+        }
+
+        if (preg_match('~^c~u', $condition)) {
+            // cch: True if there is a glyph ch available.
+            return true; // Assume we have all the glyphs
+        }
+
+        if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
+            // dname: True if there is a string, macro, diversion, or request called name.
+            // Hack (all other checks are against "d pdfmarks", hopefully that's should be false.
+            return in_array($matches[1], ['TE', 'TS', 'URL']);
+        }
+
+        $condition = Roff_Unit::normalize($condition);
+
+        $condition = Replace::preg('~:~u', ' or ', $condition);
+        $condition = Replace::preg('~&~u', ' and ', $condition);
+
+        if (preg_match('~^([-\+\*/\d\(\)><=\.]| or | and )+$~u', $condition)) {
+            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
+            try {
+                return eval('return ' . $condition . ';');
+            } catch (ParseError $e) {
+                throw new Exception($e->getMessage());
+            }
         }
 
         throw new Exception('Unhandled condition: "' . $condition . '".');

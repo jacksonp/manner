@@ -16,7 +16,8 @@ class Manner
         $man = Man::instance();
         $man->reset();
 
-        $lines = Text::preprocessLines($fileLines);
+        $linesNoComments = Text::stripComments($fileLines);
+        $linesRoffed     = Text::applyRoffClasses($linesNoComments);
 
         if (isset($man->title)) {
             $title = $man->title;
@@ -28,7 +29,7 @@ class Manner
         $h1->appendChild(new DOMText($title));
         $manPageContainer->appendChild($h1);
 
-        Blocks::handle($manPageContainer, $lines);
+        Blocks::handle($manPageContainer, $linesRoffed);
 
         return $dom;
     }
@@ -37,7 +38,7 @@ class Manner
     static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null)
     {
 
-        $dom = self::roffToDOM($fileLines, $filePath);
+        $dom  = self::roffToDOM($fileLines, $filePath);
         $html = $dom->saveHTML();
 
         $man = Man::instance();
