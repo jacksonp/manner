@@ -15,8 +15,9 @@ class Roff_Translation
 
 
         $translate = TextContent::interpretString($matches[1], false, false);
-        $chrArray  = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);
-        var_dump($chrArray);
+
+        $chrArray = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);
+
         for ($j = 0; $j < count($chrArray); $j += 2) {
             //  "If there is an odd number of arguments, the last one is translated to an unstretchable space (‘\ ’)."
             $man->setCharTranslation($chrArray[$j], $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1]);
