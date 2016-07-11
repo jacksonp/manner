@@ -13,7 +13,7 @@ class Block_TS
         $formatsDone = false;
         for (; $i < $numLines - 1; ++$i) {
             $line = $lines[$i];
-            if (mb_substr($line, -1, 1) === '.') {
+            if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
             }
@@ -55,7 +55,7 @@ class Block_TS
         $columnSeparator = "\t";
 
         $line = $lines[++$i];
-        if (mb_substr($line, -1, 1) === ';') {
+        if (mb_substr(trim($line), -1, 1) === ';') {
             if (preg_match('~tab\s?\((.)\)~u', $line, $matches)) {
                 $columnSeparator = $matches[1];
             }

@@ -83,7 +83,7 @@ class Block_Text
         if (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.') {
             for (; $i < $numLines - 1; ++$i) {
                 $nextLine = $lines[$i + 1];
-                if ($nextLine === '' or
+                if (trim($nextLine) === '' or
                   in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) or
                   mb_strpos($nextLine, "\t") > 0 or // Could be TabTable
                   (mb_strlen($nextLine) > 1 and mb_substr($nextLine, 0, 2) === '\\.')

@@ -28,7 +28,7 @@ class Roff_Register
               if (isset($replacements[$matches['reg']])) {
                   return $matches['bspairs'] . $replacements[$matches['reg']];
               } else {
-                  //throw new Exception($matches['reg'] . ' - unavailable register: ' . $matches[0]);
+                  // TODO: Match groff's behaviour: unset registers are 0
                   return $matches[0];
               }
           },

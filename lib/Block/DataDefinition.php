@@ -31,7 +31,11 @@ class Block_DataDefinition
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (preg_match('~^\.\s*[LP]?P$~u', $line) and $i < $numLines - 1 and mb_substr($lines[$i + 1], 0, 3) === '.TP') {
+                if (
+                  preg_match('~^\.\s*[LP]?P$~u', $line) and
+                  $i < $numLines - 1 and
+                  mb_substr($lines[$i + 1], 0, 3) === '.TP'
+                ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
                 } elseif (preg_match('~^\.\s*([HTLP]?P|SS|SH|TQ)~u', $line) or ($hitIP && !$hitBlankIP)) {
@@ -43,7 +47,7 @@ class Block_DataDefinition
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < $numLines - 1 or $line !== '') {
+                if ($i < $numLines - 1 or trim($line) !== '') {
                     $blockLines[] = $line;
                 }
             }

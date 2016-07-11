@@ -28,18 +28,7 @@ class TextContent
           null,
           PREG_SPLIT_DELIM_CAPTURE
         );
-        /*
-                preg_match(
-                  '~^(.*?)(\\\\\\\\)*(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))?(.*?)$~u',
-                  $line,
-                  $textSegments
-                );
-                array_shift($textSegments);
-                $textSegments = array_filter($textSegments, function ($s) {
-                    return $s !== '';
-                });
-                $textSegments = array_values($textSegments);
-        */
+
         $textSegments = [];
         for ($i = 0; $i < count($textSegmentsS); ++$i) {
             if ($textSegmentsS[$i] === '\\\\' and
@@ -80,7 +69,7 @@ class TextContent
             }
 
             if ($i < $numTextSegments - 1 and in_array(mb_substr($textSegments[$i], 0, 2),
-                ['\f', '\F']) and in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F'])
+                ['\f', '\F']) and in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F', '\d', '\u'])
             ) {
                 continue;
             }

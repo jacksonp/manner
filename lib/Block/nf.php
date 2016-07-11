@@ -23,7 +23,7 @@ class Block_nf
         }
 
         // These get swallowed:
-        $blockEnds = ['.fi', '.ad', '.ad n', '.ad b'];
+        $blockEnds = '~^\.(fi|ad|ad n|ad b)(?:\s|$)~u';
         $numLines  = count($lines);
         $dom       = $parentNode->ownerDocument;
 
@@ -32,8 +32,8 @@ class Block_nf
             $line = $lines[$i + 1];
             if (preg_match('~^\.\s*S[SH]~u', $line)) {
                 break;
-            } elseif (in_array($line, $blockEnds)) {
-                while ($i < $numLines - 1 and in_array($lines[$i + 1], $blockEnds)) {
+            } elseif (preg_match($blockEnds, $line)) {
+                while ($i < $numLines - 1 and preg_match($blockEnds, $lines[$i + 1])) {
                     ++$i;
                 }
                 break;
@@ -55,7 +55,7 @@ class Block_nf
             $preLines[] = $lines[++$i];
         }
 
-        ArrayHelper::rtrim($preLines, array_merge($blockEnds, ['', '.br', '.sp']));
+        ArrayHelper::rtrim($preLines, ['.fi', '.ad', '.ad n', '.ad b', '', '.br', '.sp']);
 
         if (count($preLines) === 0) {
             return $i;

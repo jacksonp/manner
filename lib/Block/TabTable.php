@@ -13,7 +13,7 @@ class Block_TabTable
           $i < count($lines) - 2 and
           !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) and
           mb_strpos($lines[$i], "\t") > 0 and
-          (mb_strpos($lines[$i + 1], "\t") > 0 or in_array($lines[$i + 1], ['.br', '', '\\&...'])) and
+          (mb_strpos($lines[$i + 1], "\t") > 0 or in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])) and
           mb_strpos($lines[$i + 2], "\t") > 0;
     }
 
@@ -49,7 +49,7 @@ class Block_TabTable
 
             $line = $lines[$i + 1];
 
-            if (in_array($line, ['.br', ''])) {
+            if (in_array(trim($line), ['.br', ''])) {
                 ++$i;
                 if ($i === $numLines - 1) {
                     return $i;
