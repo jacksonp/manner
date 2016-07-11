@@ -142,7 +142,6 @@ class Text
 
         $numNoCondLines = count($linesNoCond);
         $foundTitle     = false;
-        $charSwaps      = [];
         $lines          = [];
 
         $man = Man::instance();
@@ -222,18 +221,13 @@ class Text
 
             // Do this after translating characters:
             if (preg_match('~^\.tr (.+)$~u', $line, $matches)) {
-                $chrArray = preg_split('~~u', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
+                $translate = TextContent::interpretString($matches[1]);
+                $chrArray  = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);
                 for ($j = 0; $j < count($chrArray); $j += 2) {
                     //  "If there is an odd number of arguments, the last one is translated to an unstretchable space (‘\ ’)."
-                    $charSwaps[$chrArray[$j]] = $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1];
+                    $man->setCharTranslation($chrArray[$j], $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1]);
                 }
                 continue;
-            }
-
-            if (count($charSwaps) > 0) {
-                $line = Replace::preg(array_map(function ($c) {
-                    return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
-                }, array_keys($charSwaps)), $charSwaps, $line);
             }
 
             //<editor-fold desc="Handle man title macro">
@@ -314,7 +308,7 @@ class Text
 
         // \w’string’: The width of the glyph sequence string. We approximate with ens.
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
-            return mb_strlen($matches[0]);
+            return mb_strlen(TextContent::interpretString($matches[0]));
         }, $line);
 
         return $line;

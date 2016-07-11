@@ -205,6 +205,11 @@ class TextContent
             $string = ' ' . $string;
         }
 
+        $man = Man::instance();
+
+        $string = Roff_Glyph::substitute($string);
+        $string = $man->applyCharTranslations($string);
+
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $backslashEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash

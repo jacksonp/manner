@@ -153,7 +153,7 @@ class Roff_Condition
         $alwaysTrue = [
           'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           'n\h\'-\w\'',   // Hack for netchange.5
-          'dURL',
+          'dURL', // TODO: incorporate this and next in d check above
           'dTS',
         ];
 
@@ -167,7 +167,7 @@ class Roff_Condition
           'v', // vroff
           'rF',
           'require_index',
-          'c ', // see man.1
+          'c \[shc]', // see man.1
           '\'po4a.hide\'',
         ];
 

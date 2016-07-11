@@ -11,6 +11,7 @@ class Man
     private $macros;
     private $registers;
     private $strings;
+    private $characterTranslations; // .tr
 
     /**
      * @var Man The reference to *Singleton* instance of this class
@@ -45,7 +46,7 @@ class Man
         $this->aliases = [];
         $this->macros  = [];
         // See https://www.mankier.com/7/groff#Registers
-        $this->registers = [
+        $this->registers             = [
           '.g'   => '1',
             //The current font family (string-valued).
           '.fam' => 'R',
@@ -64,11 +65,9 @@ class Man
           'x'    => '0',
             // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
         ];
-        $this->strings   = [
+        $this->strings               = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
           '.T' => 'ps',
-            // Hack for .tr (see e.g. myproxy-replicate.8):
-          'Tr' => '☃',
             // https://www.mankier.com/7/groff_man#Miscellaneous
             // The ‘registered’ sign.
           'R'  => '®',
@@ -82,6 +81,7 @@ class Man
             // The ‘trademark’ sign.
           'Tm' => '™',
         ];
+        $this->characterTranslations = [];
 
     }
 
@@ -145,15 +145,32 @@ class Man
         return $this->strings;
     }
 
+    public function setCharTranslation(string $from, string $to)
+    {
+        $this->characterTranslations[$from] = $to;
+    }
+
+    public function applyCharTranslations($line)
+    {
+        if (count($this->characterTranslations) > 0) {
+            $line = Replace::preg(array_map(function ($c) {
+                return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
+            }, array_keys($this->characterTranslations)), $this->characterTranslations, $line);
+        }
+
+        return $line;
+    }
+
     public function applyAllReplacements(string $line):string
     {
+
         $line = Roff_Register::substitute($line, $this->registers);
-        $line = Roff_Glyph::substitute($line);
         $line = Roff_String::substitute($line, $this->strings);
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
         }
         $line = Text::translateCharacters($line);
+
 
         return $line;
     }
