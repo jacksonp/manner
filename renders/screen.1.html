@@ -417,7 +417,7 @@
   <h2>CUSTOMIZATION</h2>
   <p>The “socket directory” defaults either to $HOME/.screen or simply to /tmp/screens or preferably to /usr/local/screens chosen at compile-time. If <em>screen</em> is installed setuid-root, then the administrator should compile <em>screen</em> with an adequate (not NFS mounted) socket directory. If <em>screen</em> is not running setuid-root, the user can specify any mode 700 directory in the environment variable $SCREENDIR.
   <p>When <em>screen</em> is invoked, it executes initialization commands from the files “/usr/local/etc/screenrc” and “.screenrc” in the user's home directory. These are the “programmer's defaults” that can be overridden in the following ways: for the global screenrc file <em>screen</em> searches for the environment variable $SYSSCREENRC (this override feature may be disabled at compile-time). The user specific screenrc file is searched in $SCREENRC, then $HOME/.screenrc. The command line option <strong>-c</strong> takes precedence over the above user screenrc files.
-  <p>Commands in these files are used to set options, bind functions to keys, and to automatically establish one or more windows at the beginning of your <em>screen</em> session. Commands are listed one per line, with empty lines being ignored. A command's arguments are separated by tabs or spaces, and may be surrounded by single or double quotes. A `#' turns the rest of the line into a comment, except in quotes. Unintelligible lines are warned about and ignored. Commands may contain references to environment variables. The syntax is the shell-like “$VAR ” or “${VAR}”. Note that this causes incompatibility with previous <em>screen</em> versions, as now the '$'-character has to be protected with '\' if no variable substitution shall be performed. A string in single-quotes is also protected from variable substitution.
+  <p>Commands in these files are used to set options, bind functions to keys, and to automatically establish one or more windows at the beginning of your <em>screen</em> session. Commands are listed one per line, with empty lines being ignored. A command's arguments are separated by tabs or spaces, and may be surrounded by single or double quotes. A `#' turns the rest of the line into a comment, except in quotes. Unintelligible lines are warned about and ignored. Commands may contain references to environment variables. The syntax is the shell-like "$VAR " or "${VAR}". Note that this causes incompatibility with previous <em>screen</em> versions, as now the '$'-character has to be protected with '\' if no variable substitution shall be performed. A string in single-quotes is also protected from variable substitution.
   <p>Two configuration files are shipped as examples with your screen distribution: “etc/screenrc” and “etc/etcscreenrc”. They contain a number of useful examples for various commands.
   <p>Customization can also be done 'on-line'. To enter the command mode type `C-a :'. Note that commands starting with “def” change default values, while others change current settings.
   <p>The following commands are available:
@@ -425,13 +425,13 @@
     <dt><strong>acladd</strong> <em>usernames</em> <strong>[</strong><em>crypted-pw</em><strong>]</strong>
     <dt><strong>addacl</strong> <em>usernames</em>
     <dd>
-      <p>Enable users to fully access this screen session. <em>Usernames</em> can be one user or a comma separated list of users. This command enables to attach to the <em>screen</em> session and performs the equivalent of `aclchg <em>usernames</em> +rwx “#?”'. executed. To add a user with restricted access, use the `aclchg' command below. If an optional second parameter is supplied, it should be a crypted password for the named user(s). `Addacl' is a synonym to `acladd'. Multi user mode only.
+      <p>Enable users to fully access this screen session. <em>Usernames</em> can be one user or a comma separated list of users. This command enables to attach to the <em>screen</em> session and performs the equivalent of `aclchg <em>usernames</em> +rwx "#?"'. executed. To add a user with restricted access, use the `aclchg' command below. If an optional second parameter is supplied, it should be a crypted password for the named user(s). `Addacl' is a synonym to `acladd'. Multi user mode only.
     <dt><strong>aclchg</strong> <em>usernames permbits list</em>
     <dt><strong>chacl</strong> <em>usernames permbits list</em>
     <dd>
       <div class="indent">
         <p>Change permissions for a comma separated list of users. Permission bits are represented as `r', `w' and `x'. Prefixing `+' grants the permission, `-' removes it. The third parameter is a comma separated list of commands and/or windows (specified either by number or title). The special list `#' refers to all windows, `?' to all commands. if <em>usernames</em> consists of a single `*', all known users are affected.
-        <p>A command can be executed when the user has the `x' bit for it. The user can type input to a window when he has its `w' bit set and no other user obtains a writelock for this window. Other bits are currently ignored. To withdraw the writelock from another user in window 2: `aclchg <em>username</em> -w+w 2'. To allow read-only access to the session: `aclchg <em>username</em> -w “#”'. As soon as a user's name is known to <em>screen</em> he can attach to the session and (per default) has full permissions for all command and windows. Execution permission for the acl commands, `at' and others should also be removed or the user may be able to regain write permission. Rights of the special username <strong>nobody</strong> cannot be changed (see the “su” command). `Chacl' is a synonym to `aclchg'. Multi user mode only.
+        <p>A command can be executed when the user has the `x' bit for it. The user can type input to a window when he has its `w' bit set and no other user obtains a writelock for this window. Other bits are currently ignored. To withdraw the writelock from another user in window 2: `aclchg <em>username</em> -w+w 2'. To allow read-only access to the session: `aclchg <em>username</em> -w "#"'. As soon as a user's name is known to <em>screen</em> he can attach to the session and (per default) has full permissions for all command and windows. Execution permission for the acl commands, `at' and others should also be removed or the user may be able to regain write permission. Rights of the special username <strong>nobody</strong> cannot be changed (see the “su” command). `Chacl' is a synonym to `aclchg'. Multi user mode only.
       </div>
     <dt><strong>acldel</strong> <em>username</em>
     <dd>
@@ -455,7 +455,7 @@
       <p>If set to on, only the current cursor line is refreshed on window change. This affects all windows and is useful for slow terminal lines. The previous setting of full/partial refresh for each window is restored with “allpartial off”. This is a global flag that immediately takes effect on all windows overriding the “partial” settings. It does not change the default redraw behavior of newly created windows.
     <dt><strong>altscreen on</strong>|<strong>off</strong>
     <dd>
-      <p>If set to on, “alternate screen” support is enabled in virtual terminals, just like in xterm. Initial setting is `off'.
+      <p>If set to on, "alternate screen" support is enabled in virtual terminals, just like in xterm. Initial setting is `off'.
     <dt><strong>at</strong> [<em>identifier</em>][<strong>#|*|%]</strong> command <strong>[</strong><em>args</em> <strong>… ]</strong>
     <dd>
       <div class="indent">
@@ -468,13 +468,13 @@
         <p>This command can be used to highlight attributes by changing the color of the text. If the attribute <em>attrib</em> is in use, the specified attribute/color modifier is also applied. If no modifier is given, the current one is deleted. See the “STRING ESCAPES” chapter for the syntax of the modifier. Screen understands two pseudo-attributes, “i” stands for high-intensity foreground color and “I” for high-intensity background color.<br>
         <br>
         Examples:
-        <p>attrcolor b “R”
+        <p>attrcolor b "R"
         <p>Change the color to bright red if bold text is to be printed.
-        <p>attrcolor u “-u b”
+        <p>attrcolor u "-u b"
         <p>Use blue text instead of underline.
-        <p>attrcolor b “.I”
+        <p>attrcolor b ".I"
         <p>Use bright colors for bold text. Most terminal emulators do this already.
-        <p>attrcolor i “+b”
+        <p>attrcolor i "+b"
         <p>Make bright colored text also bold.
       </div>
     <dt><strong>autodetach on</strong>|<strong>off</strong>
@@ -500,7 +500,7 @@
         <p>When a bell character is sent to a background window, <em>screen</em> displays a notification in the message line. The notification message can be re-defined by this command. Each occurrence of `%' in <em>message</em> is replaced by the number of the window to which a bell has been sent, and each occurrence of `^G' is replaced by the definition for bell in your termcap (usually an audible bell). The default message is
         <p>'Bell in window %n'<br>
         <br>
-        An empty message can be supplied to the “bell_msg” command to suppress output of a message line (bell_msg “”). Without parameter, the current message is shown.
+        An empty message can be supplied to the “bell_msg” command to suppress output of a message line (bell_msg ""). Without parameter, the current message is shown.
       </div>
     <dt><strong>bind</strong> [<strong><em>class</em></strong>] <strong><em>key</em></strong> [<strong><em>command</em></strong> [<strong><em>args</em></strong>]]
     <dd>
@@ -508,7 +508,7 @@
         <p>Bind a command to a key. By default, most of the commands provided by <em>screen</em> are bound to one or more keys as indicated in the “DEFAULT KEY BINDINGS” section, e.g. the command to create a new window is bound to “C-c” and “c”. The “bind” command can be used to redefine the key bindings and to define new bindings. The <em>key</em> argument is either a single character, a two-character sequence of the form “^x” (meaning “C-x”), a backslash followed by an octal number (specifying the ASCII code of the character), or a backslash followed by a second character, such as “\^” or “\\”. The argument can also be quoted, if you like. If no further argument is given, any previously established binding for this key is removed. The <em>command</em> argument can be any command listed in this section.
         <p>If a command class is specified via the “-c” option, the key is bound for the specified class. Use the “command” command to activate a class. Command classes can be used to create multiple command keys or multi-character bindings.
         <p>Some examples:
-        <pre> bind ' ' windows
+        <pre>     bind ' ' windows
         bind ^k
         bind k
         bind K kill
@@ -539,10 +539,10 @@
         <p>Show all of the default key bindings. The application mode entries are marked with [A].<br>
         <br>
         <pre>        bindkey -k k1 select 1</pre>
-        <p>Make the “F1” key switch to window one.<br>
+        <p>Make the "F1" key switch to window one.<br>
         <br>
         <pre>        bindkey -t foo stuff barfoo</pre>
-        <p>Make “foo” an abbreviation of the word “barfoo”. Timeout is disabled so that users can type slowly.<br>
+        <p>Make "foo" an abbreviation of the word "barfoo". Timeout is disabled so that users can type slowly.<br>
         <br>
         <pre>        bindkey "\024" mapdefault</pre>
         <p>This key-binding makes “^T” an escape character for key-bindings. If you did the above “stuff barfoo” binding, you can enter the word “foo” by typing “^Tfoo”. If you want to insert a “^T” you have to press the key twice (i.e., escape the escape binding).<br>
@@ -569,7 +569,7 @@
     <dd>
       <div class="indent">
         <p>Change the filename used for reading and writing with the paste buffer. If the optional argument to the “bufferfile” command is omitted, the default setting (“/tmp/screen-exchange”) is reactivated. The following example will paste the system's password file into the <em>screen</em> window (using the paste buffer, where a copy remains):
-        <pre>       C-a : bufferfile /etc/passwd
+        <pre>   C-a : bufferfile /etc/passwd
         C-a &lt; C-a ]
         C-a : bufferfile</pre>
         <p><strong>bumpleft</strong>
@@ -592,7 +592,7 @@
       </div>
     <dt><strong>charset</strong> <em>set</em>
     <dd>
-      <p>Change the current character set slot designation and charset mapping. The first four character of <em>set</em> are treated as charset designators while the fifth and sixth character must be in range '0' to '3' and set the GL/GR charset mapping. On every position a '.' may be used to indicate that the corresponding charset/mapping should not be changed (<em>set</em> is padded to six characters internally by appending '.' chars). New windows have “BBBB02” as default charset, unless a “encoding” command is active.<br>
+      <p>Change the current character set slot designation and charset mapping. The first four character of <em>set</em> are treated as charset designators while the fifth and sixth character must be in range '0' to '3' and set the GL/GR charset mapping. On every position a '.' may be used to indicate that the corresponding charset/mapping should not be changed (<em>set</em> is padded to six characters internally by appending '.' chars). New windows have "BBBB02" as default charset, unless a “encoding” command is active.<br>
       The current setting can be viewed with the “info” command.
     <dt><em><strong>chdir</strong></em> [<em>directory</em>]
     <dd>
@@ -692,7 +692,7 @@
             <td><strong>C-b</strong> and <strong>C-f</strong>
             <td>scroll the display up/down a full screen.
         </table>
-        <p>Note: Emacs style movement keys can be customized by a .screenrc command. (E.g. markkeys “h=^B:l=^F:$=^E”) There is no simple method for a full emacs-style keymap, as this involves multi-character codes.
+        <p>Note: Emacs style movement keys can be customized by a .screenrc command. (E.g. markkeys "h=^B:l=^F:$=^E") There is no simple method for a full emacs-style keymap, as this involves multi-character codes.
         <p>Some keys are defined to do mark and replace operations.
         <p>The copy range is specified by setting two marks. The text between these marks will be highlighted. Press:
         <p><strong>space</strong> or <strong>enter</strong> to set the first or second mark respectively. If <strong>mousetrack</strong> is set to `on', marks can also be set using left mouse click.
@@ -806,7 +806,7 @@
       <p>Same as the <strong>utf8</strong> command except that the default setting for new windows is changed. Initial setting is `on' if screen was started with “-U”, otherwise `off'.
     <dt><strong>defwrap on</strong>|<strong>off</strong>
     <dd>
-      <p>Same as the <strong>wrap</strong> command except that the default setting for new windows is changed. Initially line-wrap is on and can be toggled with the “wrap” command (“C-a r”) or by means of “C-a : wrap on|off”.
+      <p>Same as the <strong>wrap</strong> command except that the default setting for new windows is changed. Initially line-wrap is on and can be toggled with the “wrap” command (“C-a r”) or by means of "C-a : wrap on|off".
     <dt><strong>defwritelock on</strong>|<strong>off</strong>|<strong>auto</strong>
     <dd>
       <p>Same as the <strong>writelock</strong> command except that the default setting for new windows is changed. Initially writelocks will off.
@@ -868,7 +868,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
         <p>(B) Displays geometry as width x height.
         <p>(C) Username who is logged in at the display.
         <p>(D) Device name of the display or the attached device
-        <p>(E) Display is in blocking or nonblocking mode. The available modes are “nb”, “NB”, “Z&lt;”, “Z&gt;”, and “BL”.
+        <p>(E) Display is in blocking or nonblocking mode. The available modes are "nb", "NB", "Z&lt;", "Z&gt;", and "BL".
         <p>(F) Number of the window
         <p>(G) Name/title of window
         <p>(H) Whether the window is shared
@@ -890,7 +890,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
           <dl>
             <dt><em><strong>digraph</strong></em> [<em>preset</em>[<em>unicode-value</em>]]
             <dd>
-              <p>This command prompts the user for a digraph sequence. The next two characters typed are looked up in a builtin table and the resulting character is inserted in the input stream. For example, if the user enters 'a"', an a-umlaut will be inserted. If the first character entered is a 0 (zero), <em>screen</em> will treat the following characters (up to three) as an octal number instead. The optional argument <em>preset</em> is treated as user input, thus one can create an “umlaut” key. For example the command “bindkey ^K digraph '”'" enables the user to generate an a-umlaut by typing CTRL-K a. When a non-zero <em>unicode-value</em> is specified, a new digraph is created with the specified preset. The digraph is unset if a zero value is provided for the <em>unicode-value.</em>
+              <p>This command prompts the user for a digraph sequence. The next two characters typed are looked up in a builtin table and the resulting character is inserted in the input stream. For example, if the user enters 'a"', an a-umlaut will be inserted. If the first character entered is a 0 (zero), <em>screen</em> will treat the following characters (up to three) as an octal number instead. The optional argument <em>preset</em> is treated as user input, thus one can create an “umlaut” key. For example the command "bindkey ^K digraph '"'" enables the user to generate an a-umlaut by typing CTRL-K a. When a non-zero <em>unicode-value</em> is specified, a new digraph is created with the specified preset. The digraph is unset if a zero value is provided for the <em>unicode-value.</em>
             <dt><strong>dumptermcap</strong>
             <dd>
               <p>Write the termcap entry for the virtual terminal optimized for the currently active window to the file “.termcap” in the user's “$HOME/.screen” directory (or wherever <em>screen</em> stores its sockets. See the “FILES” section below). This termcap entry is identical to the value of the environment variable $TERMCAP that is set up by <em>screen</em> for each window. For terminfo based systems you will need to run a converter like <em>captoinfo</em> and then compile the entry with <em>tic</em>.
@@ -913,7 +913,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
             <dt><em><strong>exec</strong></em> [[<em>fdpat</em>]<em>newcommand</em> [<em>args …</em>]]
             <dd>
               <div class="indent">
-                <p>Run a unix subprocess (specified by an executable path <em>newcommand</em> and its optional arguments) in the current window. The flow of data between newcommands stdin/stdout/stderr, the process originally started in the window (let us call it “application-process”) and screen itself (window) is controlled by the file descriptor pattern fdpat. This pattern is basically a three character sequence representing stdin, stdout and stderr of newcommand. A dot (.) connects the file descriptor to <em>screen</em>. An exclamation mark (!) causes the file descriptor to be connected to the application-process. A colon (:) combines both. User input will go to newcommand unless newcommand receives the application-process' output (fdpats first character is `!' or `:') or a pipe symbol (|) is added (as a fourth character) to the end of fdpat.
+                <p>Run a unix subprocess (specified by an executable path <em>newcommand</em> and its optional arguments) in the current window. The flow of data between newcommands stdin/stdout/stderr, the process originally started in the window (let us call it "application-process") and screen itself (window) is controlled by the file descriptor pattern fdpat. This pattern is basically a three character sequence representing stdin, stdout and stderr of newcommand. A dot (.) connects the file descriptor to <em>screen</em>. An exclamation mark (!) causes the file descriptor to be connected to the application-process. A colon (:) combines both. User input will go to newcommand unless newcommand receives the application-process' output (fdpats first character is `!' or `:') or a pipe symbol (|) is added (as a fourth character) to the end of fdpat.
                 <p>Invoking `exec' without arguments shows name and arguments of the currently running subprocess in this window. Only one subprocess a time can be running in each window.
                 <p>When a subprocess is running the `kill' command will affect it instead of the windows process.
                 <p>Refer to the postscript file `doc/fdpat.ps' for a confusing illustration of all 21 possible combinations. Each drawing shows the digits 2,1,0 representing the three file descriptors of newcommand. The box marked `W' is the usual pty that has the application-process on its slave side. The box marked `P' is the secondary pty that now has <em>screen</em> at its master side.
@@ -936,7 +936,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
                     <p>This adds a pager to the window output. The special character `|' is needed to give the user control over the pager although it gets its input from the window's process. This works, because <em>less</em> listens on stderr (a behavior that <em>screen</em> would not expect without the `|') when its stdin is not a tty. <em>Less</em> versions newer than 177 fail miserably here; good old <em>pg</em> still works.
                   <dt>!:sed -n s/.*Error.*/\007/p
                   <dd>
-                    <p>Sends window output to both, the user and the sed command. The sed inserts an additional bell character (oct. 007) to the window output seen by <em>screen</em>. This will cause “Bell in window x” messages, whenever the string “Error” appears in the window.
+                    <p>Sends window output to both, the user and the sed command. The sed inserts an additional bell character (oct. 007) to the window output seen by <em>screen</em>. This will cause "Bell in window x" messages, whenever the string "Error" appears in the window.
                 </dl>
               </div>
             <dt><strong>fit</strong>
@@ -945,7 +945,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
             <dt><strong>flow</strong>
             <dd>
               <p>[<strong>on</strong>|<strong>off</strong>|<strong>auto]</strong>
-              <p>Sets the flow-control mode for this window. Without parameters it cycles the current window's flow-control setting from “automatic” to “on” to “off”. See the discussion on “FLOW-CONTROL” later on in this document for full details and note, that this is subject to change in future releases. Default is set by `defflow'.
+              <p>Sets the flow-control mode for this window. Without parameters it cycles the current window's flow-control setting from "automatic" to "on" to "off". See the discussion on “FLOW-CONTROL” later on in this document for full details and note, that this is subject to change in future releases. Default is set by `defflow'.
             <dt><strong>focus</strong> [<strong>up</strong>|<strong>down</strong>|<strong>top</strong>|<strong>bottom</strong>]
             <dd>
               <div class="indent">
@@ -970,7 +970,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
               <p>Writes out the currently displayed image to the file <em>file</em>, or, if no filename is specified, to <em>hardcopy.n</em> in the default directory, where <em>n</em> is the number of the current window. This either appends or overwrites the file if it exists. See below. If the option <strong>-h</strong> is specified, dump also the contents of the scrollback buffer.
             <dt><strong>hardcopy_append on</strong>|<strong>off</strong>
             <dd>
-              <p>If set to “on”, <em>screen</em> will append to the “hardcopy.n” files created by the command “C-a h”, otherwise these files are overwritten each time. Default is `off'.
+              <p>If set to "on", <em>screen</em> will append to the "hardcopy.n" files created by the command “C-a h”, otherwise these files are overwritten each time. Default is `off'.
             <dt><strong>hardcopydir directory</strong>
             <dd>
               <p>Defines a directory where hardcopy files will be placed. If unset, hardcopys are dumped in <em>screen</em>'s current working directory.
@@ -980,7 +980,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
             <dd>
               <div class="indent">
                 <p>This command configures the use and emulation of the terminal's hardstatus line. The first form toggles whether <em>screen</em> will use the hardware status line to display messages. If the flag is set to `off', these messages are overlaid in reverse video mode at the display line. The default setting is `on'.
-                <p>The second form tells <em>screen</em> what to do if the terminal doesn't have a hardstatus line (i.e. the termcap/terminfo capabilities “hs”, “ts”, “fs” and “ds” are not set). When “firstline/lastline” is used, <em>screen</em> will reserve the first/last line of the display for the hardstatus. “message” uses <em>screen's</em> message mechanism and “ignore” tells <em>screen</em> never to display the hardstatus. If you prepend the word “always” to the type (e.g., “alwayslastline”), <em>screen</em> will use the type even if the terminal supports a hardstatus.
+                <p>The second form tells <em>screen</em> what to do if the terminal doesn't have a hardstatus line (i.e. the termcap/terminfo capabilities "hs", "ts", "fs" and "ds" are not set). When “firstline/lastline” is used, <em>screen</em> will reserve the first/last line of the display for the hardstatus. “message” uses <em>screen's</em> message mechanism and “ignore” tells <em>screen</em> never to display the hardstatus. If you prepend the word “always” to the type (e.g., “alwayslastline”), <em>screen</em> will use the type even if the terminal supports a hardstatus.
                 <p>The third form specifies the contents of the hardstatus line. '%h' is used as default string, i.e., the stored hardstatus of the current window (settable via “ESC]0;&lt;string&gt;^G” or “ESC_&lt;string&gt;ESC\”) is displayed. You can customize this to any string you like including the escapes from the “STRING ESCAPES” chapter. If you leave out the argument <em>string</em>, the current string is displayed.
                 <p>You can mix the second and third form by providing the string as additional argument.
               </div>
@@ -1294,7 +1294,7 @@ C-a : paste p</pre>
                 <dl>
                   <dt><strong>slowpaste <em>msec</em></strong>
                   <dd>
-                    <p>Define the speed at which text is inserted into the current window by the paste (“C-a ]”) command. If the slowpaste value is nonzero text is written character by character. <em>screen</em> will make a pause of <em>msec</em> milliseconds after each single character write to allow the application to process its input. Only use slowpaste if your underlying system exposes flow control problems while pasting large amounts of text.
+                    <p>Define the speed at which text is inserted into the current window by the paste ("C-a ]") command. If the slowpaste value is nonzero text is written character by character. <em>screen</em> will make a pause of <em>msec</em> milliseconds after each single character write to allow the application to process its input. Only use slowpaste if your underlying system exposes flow control problems while pasting large amounts of text.
                   <dt><strong>sort</strong>
                   <dd>
                     <p>Sort the windows in alphabetical order of the window tiles.
@@ -1306,7 +1306,7 @@ C-a : paste p</pre>
                     </div>
                   <dt><em><strong>sorendition</strong></em> [<em>attr</em>[<em>color</em>]]
                   <dd>
-                    <p>This command is deprecated. See “rendition so” instead.
+                    <p>This command is deprecated. See "rendition so" instead.
                   <dt><strong>split</strong>[<strong>-v</strong>]
                   <dd>
                     <p>Split the current region into two new ones. All regions on the display are resized to make room for the new region. The blank window is displayed on the new region. Splits are made horizontally unless -v is used. Use the “remove” or the “only” command to delete regions. Use “focus” to toggle between regions.
@@ -1345,7 +1345,7 @@ C-a : paste p</pre>
                       <pre>termcap vt*  LP</pre>
                       <p>termcap vt102|vt220 Z0=\E[?3h:Z1=\E[?3l
                       <p>Specifies the firm-margined `LP' capability for all terminals that begin with `vt', and the second line will also add the escape-sequences to switch into (Z0) and back out of (Z1) 132-character-per-line mode if this is a VT102 or VT220. (You must specify Z0 and Z1 in your termcap to use the width-changing commands.)
-                      <p>termcap vt100 “” l0=PF1:l1=PF2:l2=PF3:l3=PF4
+                      <p>termcap vt100 "" l0=PF1:l1=PF2:l2=PF3:l3=PF4
                       <p>This leaves your vt100 termcap alone and adds the function key labels to each window's termcap entry.
                       <p>termcap h19|z19 am@:im=\E@:ei=\EO dc=\E[P
                       <p>Takes a h19 or z19 termcap and turns off auto-margins (am@) and enables the insert mode (im) and end-insert (ei) capabilities (the `@' in the `im' string is after the `=', so it is part of the string). Having the `im' and `ei' definitions put into your terminal's termcap will cause <em>screen</em> to automatically advertise the character-insert capability in each window's termcap. Each window will also get the delete-character capability (dc) added to its termcap, which <em>screen</em> will translate into a line-update for the terminal (we're pretending it doesn't support character deletion).
@@ -1356,7 +1356,7 @@ C-a : paste p</pre>
                     <p>[<em>string</em>]
                     <div class="indent">
                       <p>Uses the message line to display the time of day, the host name, and the load averages over 1, 5, and 15 minutes (if this is available on your system). For window specific information, use “info”.
-                      <p>If a string is specified, it changes the format of the time report like it is described in the “STRING ESCAPES” chapter. Screen uses a default of “%c:%s %M %d %H%? %l%?”.
+                      <p>If a string is specified, it changes the format of the time report like it is described in the “STRING ESCAPES” chapter. Screen uses a default of "%c:%s %M %d %H%? %l%?".
                     </div>
                   <dt><strong>title</strong> [<strong><em>windowtitle</em></strong>]
                   <dd>
@@ -1755,7 +1755,7 @@ C-a : paste p</pre>
 <div class="section">
   <h2>FLOW-CONTROL</h2>
   <p>Each window has a flow-control setting that determines how <em>screen</em> deals with the XON and XOFF characters (and perhaps the interrupt character). When flow-control is turned off, <em>screen</em> ignores the XON and XOFF characters, which allows the user to send them to the current program by simply typing them (useful for the <em>emacs</em> editor, for instance). The trade-off is that it will take longer for output from a “normal” program to pause in response to an XOFF. With flow-control turned on, XON and XOFF characters are used to immediately pause the output of the current window. You can still send these characters to the current program, but you must use the appropriate two-character <em>screen</em> commands (typically “C-a q” (xon) and “C-a s” (xoff)). The xon/xoff commands are also useful for typing C-s and C-q past a terminal that intercepts these characters.
-  <p>Each window has an initial flow-control value set with either the <strong>-f</strong> option or the “defflow” .screenrc command. Per default the windows are set to automatic flow-switching. It can then be toggled between the three states 'fixed on', 'fixed off' and 'automatic' interactively with the “flow” command bound to “C-a f”.
+  <p>Each window has an initial flow-control value set with either the <strong>-f</strong> option or the “defflow” .screenrc command. Per default the windows are set to automatic flow-switching. It can then be toggled between the three states 'fixed on', 'fixed off' and 'automatic' interactively with the “flow” command bound to "C-a f".
   <p>The automatic flow-switching mode deals with flow control using the TIOCPKT mode (like “rlogin” does). If the tty driver does not support TIOCPKT, <em>screen</em> tries to find out the right mode based on the current setting of the application keypad - when it is enabled, flow-control is turned off and visa versa. Of course, you can still manipulate flow-control manually when needed.
   <p>If you're running with flow-control enabled and find that pressing the interrupt key (usually C-c) does not interrupt the display until another 6-8 lines have scrolled by, try running <em>screen</em> with the “interrupt” option (add the “interrupt” flag to the “flow” command in your .screenrc, or use the <strong>-i</strong> command-line option). This causes the output that <em>screen</em> has accumulated from the interrupted program to be flushed. One disadvantage is that the virtual terminal's memory contains the non-flushed version of the output, which in rare cases can cause minor inaccuracies in the output. For example, if you switch screens and return, or update the screen with “C-a l” you would see the version of the output you would have gotten without “interrupt” being on. Also, you might need to turn off flow-control (or use auto-flow mode to turn it off automatically) when running a program that expects you to type the interrupt character as input, as it is possible to interrupt the output of the virtual terminal to your physical terminal when flow-control is enabled. If this happens, a simple refresh of the screen with “C-a l” will restore it. Give each mode a try, and use whichever mode you find more comfortable.
 </div>
@@ -1770,7 +1770,7 @@ C-a : paste p</pre>
     screen -t top 2 nice top
   </blockquote>
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre>  shelltitle '&gt; |csh'
+  <pre>      shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
   <blockquote>
@@ -1794,7 +1794,7 @@ C-a : paste p</pre>
   </blockquote>
   <p>The escape-sequence “&lt;esc&gt;[0000m” not only normalizes the character attributes, but all the zeros round the length of the invisible characters up to 8. Bash users will probably want to echo the escape sequence in the PROMPT_COMMAND:
   <blockquote>
-    PROMPT_COMMAND='printf “\033k\033\134”'
+    PROMPT_COMMAND='printf "\033k\033\134"'
   </blockquote>
   <p>(I used “\134” to output a `\' because of a bug in bash v1.04).
 </div>
@@ -1812,7 +1812,7 @@ C-a : paste p</pre>
   <p>When the `po' and `pf' capabilities are present in the terminal's termcap entry, applications running in a <em>screen</em> window can send output to the printer port of the terminal. This allows a user to have an application in one window sending output to a printer connected to the terminal, while all other windows are still active (the printer port is enabled and disabled again for each chunk of output). As a side-effect, programs running in different windows can send output to the printer simultaneously. Data sent to the printer is not displayed in the window. The <em>info</em> command displays a line starting `PRIN' while the printer is active.
   <p><em>Screen</em> maintains a hardstatus line for every window. If a window gets selected, the display's hardstatus will be updated to match the window's hardstatus line. If the display has no hardstatus the line will be displayed as a standard <em>screen</em> message. The hardstatus line can be changed with the ANSI Application Program Command (APC): “ESC_&lt;string&gt;ESC\”. As a convenience for xterm users the sequence “ESC]0..2;&lt;string&gt;^G” is also accepted.
   <p>Some capabilities are only put into the $TERMCAP variable of the virtual terminal if they can be efficiently implemented by the physical terminal. For instance, `dl' (delete line) is only put into the $TERMCAP variable if the terminal supports either delete line itself or scrolling regions. Note that this may provoke confusion, when the session is reattached on a different terminal, as the value of $TERMCAP cannot be modified by parent processes.
-  <p>The “alternate screen” capability is not enabled by default. Set the <strong>altscreen</strong> .screenrc command to enable it.
+  <p>The "alternate screen" capability is not enabled by default. Set the <strong>altscreen</strong> .screenrc command to enable it.
   <p>The following is a list of control sequences recognized by <em>screen</em>. “(V)” and “(A)” indicate VT100-specific and ANSI- or ISO-specific functions, respectively.
   <dl class="indent-27">
     <dt><strong>ESC E</strong>
@@ -2535,7 +2535,7 @@ C-a : paste p</pre>
       <p>Alternate socket directories.
     <dt>&lt;socket directory&gt;/.termcap
     <dd>
-      <p>Written by the “termcap” output function
+      <p>Written by the "termcap" output function
     <dt>/usr/tmp/screens/screen-exchange
     <dd>
       <p>or
@@ -2650,7 +2650,7 @@ Pablo Averbuj &lt;pablo@averbuj.com&gt;.</pre>
       <p><em>Screen</em> must be installed as set-uid with owner root on most systems in order to be able to correctly change the owner of the tty device file for each window. Special permission may also be required to write the file “/etc/utmp”.
     <dt>·
     <dd>
-      <p>Entries in “/etc/utmp” are not removed when <em>screen</em> is killed with SIGKILL. This will cause some programs (like “w” or “rwho”) to advertise that a user is logged on who really isn't.
+      <p>Entries in “/etc/utmp” are not removed when <em>screen</em> is killed with SIGKILL. This will cause some programs (like "w" or "rwho") to advertise that a user is logged on who really isn't.
     <dt>·
     <dd>
       <p><em>Screen</em> may give a strange warning when your tty has no utmp entry.

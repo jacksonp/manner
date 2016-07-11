@@ -170,11 +170,11 @@
   <p><em>Gawk</em> first reads the program source from the <em>program-file</em>(s) if specified, from arguments to <strong>--source</strong>, or from the first non-option argument on the command line. The <strong>-f</strong> and <strong>--source</strong> options may be used multiple times on the command line. <em>Gawk</em> reads the program text as if all the <em>program-file</em>s and command line source texts had been concatenated together. This is useful for building libraries of AWK functions, without having to include them in each new AWK program that uses them. It also provides the ability to mix library functions with command line programs.
   <p>In addition, lines beginning with <strong>@include</strong> may be used to include other source files into your program, making library use even easier. This is equivalent to using the <strong>-i</strong> option.
   <p>Lines beginning with <strong>@load</strong> may be used to load shared libraries into your program. This is equivalent to using the <strong>-l</strong> option.
-  <p>The environment variable <strong>AWKPATH</strong> specifies a search path to use when finding source files named with the <strong>-f</strong> and <strong>-i</strong> options. If this variable does not exist, the default path is <strong>“.:/usr/local/share/awk”</strong>. (The actual directory may vary, depending upon how <em>gawk</em> was built and installed.) If a file name given to the <strong>-f</strong> option contains a “/” character, no path search is performed.
-  <p>The environment variable <strong>AWKLIBPATH</strong> specifies a search path to use when finding source files named with the <strong>-l</strong> option. If this variable does not exist, the default path is <strong>“/usr/local/lib/gawk”</strong>. (The actual directory may vary, depending upon how <em>gawk</em> was built and installed.)
+  <p>The environment variable <strong>AWKPATH</strong> specifies a search path to use when finding source files named with the <strong>-f</strong> and <strong>-i</strong> options. If this variable does not exist, the default path is <strong>".:/usr/local/share/awk"</strong>. (The actual directory may vary, depending upon how <em>gawk</em> was built and installed.) If a file name given to the <strong>-f</strong> option contains a “/” character, no path search is performed.
+  <p>The environment variable <strong>AWKLIBPATH</strong> specifies a search path to use when finding source files named with the <strong>-l</strong> option. If this variable does not exist, the default path is <strong>"/usr/local/lib/gawk"</strong>. (The actual directory may vary, depending upon how <em>gawk</em> was built and installed.)
   <p><em>Gawk</em> executes AWK programs in the following order. First, all variable assignments specified via the <strong>-v</strong> option are performed. Next, <em>gawk</em> compiles the program into an internal form. Then, <em>gawk</em> executes the code in the <strong>BEGIN</strong> rule(s) (if any), and then proceeds to read each file named in the <strong>ARGV</strong> array (up to <strong>ARGV[ARGC]</strong>). If there are no files named on the command line, <em>gawk</em> reads the standard input.
   <p>If a filename on the command line has the form <em>var</em><strong>=</strong><em>val</em> it is treated as a variable assignment. The variable <em>var</em> will be assigned the value <em>val</em>. (This happens after any <strong>BEGIN</strong> rule(s) have been run.) Command line variable assignment is most useful for dynamically assigning values to the variables AWK uses to control how input is broken into fields and records. It is also useful for controlling state if multiple passes are needed over a single data file.
-  <p>If the value of a particular element of <strong>ARGV</strong> is empty (<strong>“”</strong>), <em>gawk</em> skips over it.
+  <p>If the value of a particular element of <strong>ARGV</strong> is empty (<strong>""</strong>), <em>gawk</em> skips over it.
   <p>For each input file, if a <strong>BEGINFILE</strong> rule exists, <em>gawk</em> executes the associated code before processing the contents of the file. Similarly, <em>gawk</em> executes the code associated with <strong>ENDFILE</strong> after processing the file.
   <p>For each record in the input, <em>gawk</em> tests to see if it matches any <em>pattern</em> in the AWK program. For each pattern that the record matches, <em>gawk</em> executes the associated <em>action</em>. The patterns are tested in the order they occur in the program.
   <p>Finally, after all the input is exhausted, <em>gawk</em> executes the code in the <strong>END</strong> rule(s) (if any).
@@ -219,18 +219,18 @@
         <p>Array of command line arguments. The array is indexed from 0 to <strong>ARGC</strong> - 1. Dynamically changing the contents of <strong>ARGV</strong> can control the files used for data.
       <dt><strong>BINMODE</strong>
       <dd>
-        <p>On non-POSIX systems, specifies use of “binary” mode for all file I/O. Numeric values of 1, 2, or 3, specify that input files, output files, or all files, respectively, should use binary I/O. String values of <strong>“r”</strong>, or <strong>“w”</strong> specify that input files, or output files, respectively, should use binary I/O. String values of <strong>“rw”</strong> or <strong>“wr”</strong> specify that all files should use binary I/O. Any other string value is treated as <strong>“rw”</strong>, but generates a warning message.
+        <p>On non-POSIX systems, specifies use of “binary” mode for all file I/O. Numeric values of 1, 2, or 3, specify that input files, output files, or all files, respectively, should use binary I/O. String values of <strong>"r"</strong>, or <strong>"w"</strong> specify that input files, or output files, respectively, should use binary I/O. String values of <strong>"rw"</strong> or <strong>"wr"</strong> specify that all files should use binary I/O. Any other string value is treated as <strong>"rw"</strong>, but generates a warning message.
       <dt><strong>CONVFMT</strong>
       <dd>
-        <p>The conversion format for numbers, <strong>“%.6g”</strong>, by default.
+        <p>The conversion format for numbers, <strong>"%.6g"</strong>, by default.
       <dt><strong>ENVIRON</strong>
       <dd>
-        <p>An array containing the values of the current environment. The array is indexed by the environment variables, each element being the value of that variable (e.g., <strong>ENVIRON[“HOME”]</strong> might be <strong>“/home/arnold”</strong>).<br>
+        <p>An array containing the values of the current environment. The array is indexed by the environment variables, each element being the value of that variable (e.g., <strong>ENVIRON["HOME"]</strong> might be <strong>"/home/arnold"</strong>).<br>
         <br>
         In POSIX mode, changing this array does not affect the environment seen by programs which <em>gawk</em> spawns via redirection or the <strong>system()</strong> function. Otherwise, <em>gawk</em> updates its real environment so that programs it spawns see the changes.
       <dt><strong>ERRNO</strong>
       <dd>
-        <p>If a system error occurs either doing a redirection for <strong>getline</strong>, during a read for <strong>getline</strong>, or during a <strong>close()</strong>, then <strong>ERRNO</strong> will contain a string describing the error. The value is subject to translation in non-English locales. If the string in <strong>ERRNO</strong> corresponds to a system error in the <em>errno</em>(3) variable, then the numeric value can be found in <strong>PROCINFO[“errno”].</strong> For non-system errors, <strong>PROCINFO[“errno”]</strong> will be zero.
+        <p>If a system error occurs either doing a redirection for <strong>getline</strong>, during a read for <strong>getline</strong>, or during a <strong>close()</strong>, then <strong>ERRNO</strong> will contain a string describing the error. The value is subject to translation in non-English locales. If the string in <strong>ERRNO</strong> corresponds to a system error in the <em>errno</em>(3) variable, then the numeric value can be found in <strong>PROCINFO["errno"].</strong> For non-system errors, <strong>PROCINFO["errno"]</strong> will be zero.
       <dt><strong>FIELDWIDTHS</strong>
       <dd>
         <p>A whitespace separated list of field widths. When set, <em>gawk</em> parses the input into fields of fixed width, instead of using the value of the <strong>FS</strong> variable as the field separator. See <strong>Fields</strong>, above.
@@ -253,10 +253,10 @@
       <dd>
         <p>Controls the case-sensitivity of all regular expression and string operations. If <strong>IGNORECASE</strong> has a non-zero value, then string comparisons and pattern matching in rules, field splitting with <strong>FS</strong> and <strong>FPAT</strong>, record separating with <strong>RS</strong>, regular expression matching with <strong>~</strong> and <strong>!~</strong>, and the <strong>gensub()</strong>, <strong>gsub()</strong>, <strong>index()</strong>, <strong>match()</strong>, <strong>patsplit()</strong>, <strong>split()</strong>, and <strong>sub()</strong> built-in functions all ignore case when doing regular expression operations. <strong>NOTE</strong>: Array subscripting is <em>not</em> affected. However, the <strong>asort()</strong> and <strong>asorti()</strong> functions are affected.<br>
         <br>
-        Thus, if <strong>IGNORECASE</strong> is not equal to zero, <strong>/aB/</strong> matches all of the strings <strong>“ab”</strong>, <strong>“aB”</strong>, <strong>“Ab”</strong>, and <strong>“AB”</strong>. As with all AWK variables, the initial value of <strong>IGNORECASE</strong> is zero, so all regular expression and string operations are normally case-sensitive.
+        Thus, if <strong>IGNORECASE</strong> is not equal to zero, <strong>/aB/</strong> matches all of the strings <strong>"ab"</strong>, <strong>"aB"</strong>, <strong>"Ab"</strong>, and <strong>"AB"</strong>. As with all AWK variables, the initial value of <strong>IGNORECASE</strong> is zero, so all regular expression and string operations are normally case-sensitive.
       <dt><strong>LINT</strong>
       <dd>
-        <p>Provides dynamic control of the <strong>--lint</strong> option from within an AWK program. When true, <em>gawk</em> prints lint warnings. When false, it does not. When assigned the string value <strong>“fatal”</strong>, lint warnings become fatal errors, exactly like <strong>--lint=fatal</strong>. Any other true value just prints warnings.
+        <p>Provides dynamic control of the <strong>--lint</strong> option from within an AWK program. When true, <em>gawk</em> prints lint warnings. When false, it does not. When assigned the string value <strong>"fatal"</strong>, lint warnings become fatal errors, exactly like <strong>--lint=fatal</strong>. Any other true value just prints warnings.
       <dt><strong>NF</strong>
       <dd>
         <p>The number of fields in the current input record.
@@ -265,7 +265,7 @@
         <p>The total number of input records seen so far.
       <dt><strong>OFMT</strong>
       <dd>
-        <p>The output format for numbers, <strong>“%.6g”</strong>, by default.
+        <p>The output format for numbers, <strong>"%.6g"</strong>, by default.
       <dt><strong>OFS</strong>
       <dd>
         <p>The output field separator, a space by default.
@@ -277,110 +277,110 @@
         <p>The working precision of arbitrary precision floating-point numbers, 53 by default.
       <dt><strong>PROCINFO</strong>
       <dd>
-        <p>The elements of this array provide access to information about the running AWK program. On some systems, there may be elements in the array, <strong>“group1”</strong> through <strong>"group</strong><em>n</em><strong>"</strong> for some <em>n</em>, which is the number of supplementary groups that the process has. Use the <strong>in</strong> operator to test for these elements. The following elements are guaranteed to be available:
+        <p>The elements of this array provide access to information about the running AWK program. On some systems, there may be elements in the array, <strong>"group1"</strong> through <strong>"group</strong><em>n</em><strong>"</strong> for some <em>n</em>, which is the number of supplementary groups that the process has. Use the <strong>in</strong> operator to test for these elements. The following elements are guaranteed to be available:
         <div class="indent">
           <dl class="indent-36">
-            <dt><strong>PROCINFO[“egid”]</strong>
+            <dt><strong>PROCINFO["egid"]</strong>
             <dd>
               <p>The value of the <em>getegid</em>(2) system call.
-            <dt><strong>PROCINFO[“errno”]</strong>
+            <dt><strong>PROCINFO["errno"]</strong>
             <dd>
               <p>The value of <em>errno</em>(3) when <strong>ERRNO</strong> is set to the associated error message.
-            <dt><strong>PROCINFO[“euid”]</strong>
+            <dt><strong>PROCINFO["euid"]</strong>
             <dd>
               <p>The value of the <em>geteuid</em>(2) system call.
-            <dt><strong>PROCINFO[“FS”]</strong>
+            <dt><strong>PROCINFO["FS"]</strong>
             <dd>
-              <p><strong>“FS”</strong> if field splitting with <strong>FS</strong> is in effect, <strong>“FPAT”</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>“FIELDWIDTHS”</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
-            <dt><strong>PROCINFO[“gid”]</strong>
+              <p><strong>"FS"</strong> if field splitting with <strong>FS</strong> is in effect, <strong>"FPAT"</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>"FIELDWIDTHS"</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
+            <dt><strong>PROCINFO["gid"]</strong>
             <dd>
               <p>The value of the <em>getgid</em>(2) system call.
-            <dt><strong>PROCINFO[“identifiers”]</strong>
+            <dt><strong>PROCINFO["identifiers"]</strong>
             <dd>
               <p>A subarray, indexed by the names of all identifiers used in the text of the AWK program. The values indicate what <em>gawk</em> knows about the identifiers after it has finished parsing the program; they are <em>not</em> updated while the program runs. For each identifier, the value of the element is one of the following:
               <dl class="indent-27">
-                <dt><strong>“array”</strong>
+                <dt><strong>"array"</strong>
                 <dd>
                   <p>The identifier is an array.
-                <dt><strong>“builtin”</strong>
+                <dt><strong>"builtin"</strong>
                 <dd>
                   <p>The identifier is a built-in function.
-                <dt><strong>“extension”</strong>
+                <dt><strong>"extension"</strong>
                 <dd>
                   <p>The identifier is an extension function loaded via <strong>@load</strong> or <strong>-l</strong>.
-                <dt><strong>“scalar”</strong>
+                <dt><strong>"scalar"</strong>
                 <dd>
                   <p>The identifier is a scalar.
-                <dt><strong>“untyped”</strong>
+                <dt><strong>"untyped"</strong>
                 <dd>
                   <p>The identifier is untyped (could be used as a scalar or array, <em>gawk</em> doesn't know yet).
-                <dt><strong>“user”</strong>
+                <dt><strong>"user"</strong>
                 <dd>
                   <p>The identifier is a user-defined function.
               </dl>
-            <dt><strong>PROCINFO[“pgrpid”]</strong>
+            <dt><strong>PROCINFO["pgrpid"]</strong>
             <dd>
               <p>The process group ID of the current process.
-            <dt><strong>PROCINFO[“pid”]</strong>
+            <dt><strong>PROCINFO["pid"]</strong>
             <dd>
               <p>The process ID of the current process.
-            <dt><strong>PROCINFO[“ppid”]</strong>
+            <dt><strong>PROCINFO["ppid"]</strong>
             <dd>
               <p>The parent process ID of the current process.
-            <dt><strong>PROCINFO[“strftime”]</strong>
+            <dt><strong>PROCINFO["strftime"]</strong>
             <dd>
               <p>The default time format string for <strong>strftime()</strong>.
-            <dt><strong>PROCINFO[“uid”]</strong>
+            <dt><strong>PROCINFO["uid"]</strong>
             <dd>
               <p>The value of the <em>getuid</em>(2) system call.
-            <dt><strong>PROCINFO[“version”]</strong>
+            <dt><strong>PROCINFO["version"]</strong>
             <dd>
               <p>the version of <em>gawk</em>.
           </dl>
           <p>The following elements are present if loading dynamic extensions is available:
           <dl>
-            <dt><strong>PROCINFO[“api_major”]</strong>
+            <dt><strong>PROCINFO["api_major"]</strong>
             <dd>
               <p>The major version of the extension API.
-            <dt><strong>PROCINFO[“api_minor”]</strong>
+            <dt><strong>PROCINFO["api_minor"]</strong>
             <dd>
               <p>The minor version of the extension API.
           </dl>
           <p>The following elements are available if MPFR support is compiled into <em>gawk</em>:
           <dl>
-            <dt><strong>PROCINFO[“gmp_version”]</strong>
+            <dt><strong>PROCINFO["gmp_version"]</strong>
             <dd>
               <p>The version of the GNU MP library used for arbitrary precision number support in <em>gawk</em>.
-            <dt><strong>PROCINFO[“mpfr_version”]</strong>
+            <dt><strong>PROCINFO["mpfr_version"]</strong>
             <dd>
               <p>The version of the GNU MPFR library used for arbitrary precision number support in <em>gawk</em>.
-            <dt><strong>PROCINFO[“prec_max”]</strong>
+            <dt><strong>PROCINFO["prec_max"]</strong>
             <dd>
               <p>The maximum precision supported by the GNU MPFR library for arbitrary precision floating-point numbers.
-            <dt><strong>PROCINFO[“prec_min”]</strong>
+            <dt><strong>PROCINFO["prec_min"]</strong>
             <dd>
               <p>The minimum precision allowed by the GNU MPFR library for arbitrary precision floating-point numbers.
           </dl>
           <p>The following elements may set by a program to change <em>gawk</em>'s behavior:
           <dl>
-            <dt><strong>PROCINFO[“NONFATAL”]</strong>
+            <dt><strong>PROCINFO["NONFATAL"]</strong>
             <dd>
               <p>If this exists, then I/O errors for all output redirections become nonfatal.
-            <dt><strong>PROCINFO["</strong><em>output_name</em><strong>“, ”NONFATAL"]</strong>
+            <dt><strong>PROCINFO["</strong><em>output_name</em><strong>", "NONFATAL"]</strong>
             <dd>
               <p>Make output errors for <em>output_name</em> be nonfatal.
-            <dt><strong>PROCINFO["</strong><em>command</em><strong>“, ”pty"]</strong>
+            <dt><strong>PROCINFO["</strong><em>command</em><strong>", "pty"]</strong>
             <dd>
               <p>Use a pseudo-tty for two-way communication with <em>command</em> instead of setting up two one-way pipes.
-            <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong>
+            <dt><strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong>
             <dd>
               <p>The timeout in milliseconds for reading data from <em>input</em>, where <em>input</em> is a redirection string or a filename. A value of zero or less than zero means no timeout.
-            <dt><strong>PROCINFO["</strong><em>input</em><strong>“, ”RETRY"]</strong>
+            <dt><strong>PROCINFO["</strong><em>input</em><strong>", "RETRY"]</strong>
             <dd>
-              <p>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>“, ”READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
-            <dt><strong>PROCINFO[“sorted_in”]</strong>
+              <p>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
+            <dt><strong>PROCINFO["sorted_in"]</strong>
             <dd>
-              <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>“@ind_str_asc”</strong>, <strong>“@ind_num_asc”</strong>, <strong>“@val_type_asc”</strong>, <strong>“@val_str_asc”</strong>, <strong>“@val_num_asc”</strong>, <strong>“@ind_str_desc”</strong>, <strong>“@ind_num_desc”</strong>, <strong>“@val_type_desc”</strong>, <strong>“@val_str_desc”</strong>, <strong>“@val_num_desc”</strong>, and <strong>“@unsorted”</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
+              <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>"@ind_str_asc"</strong>, <strong>"@ind_num_asc"</strong>, <strong>"@val_type_asc"</strong>, <strong>"@val_str_asc"</strong>, <strong>"@val_num_asc"</strong>, <strong>"@ind_str_desc"</strong>, <strong>"@ind_num_desc"</strong>, <strong>"@val_type_desc"</strong>, <strong>"@val_str_desc"</strong>, <strong>"@val_num_desc"</strong>, and <strong>"@unsorted"</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
               <br>
               <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
               <br>
@@ -389,7 +389,7 @@
         </div>
       <dt><strong>ROUNDMODE</strong>
       <dd>
-        <p>The rounding mode to use for arbitrary precision arithmetic on numbers, by default <strong>“N”</strong> (IEEE-754 roundTiesToEven mode). The accepted values are <strong>“N”</strong> or <strong>“n”</strong> for roundTiesToEven, <strong>“U”</strong> or <strong>“u”</strong> for roundTowardPositive, <strong>“D”</strong> or <strong>“d”</strong> for roundTowardNegative, <strong>“Z”</strong> or <strong>“z”</strong> for roundTowardZero, and if your version of GNU MPFR library supports it, <strong>“A”</strong> or <strong>“a”</strong> for roundTiesToAway.
+        <p>The rounding mode to use for arbitrary precision arithmetic on numbers, by default <strong>"N"</strong> (IEEE-754 roundTiesToEven mode). The accepted values are <strong>"N"</strong> or <strong>"n"</strong> for roundTiesToEven, <strong>"U"</strong> or <strong>"u"</strong> for roundTowardPositive, <strong>"D"</strong> or <strong>"d"</strong> for roundTowardNegative, <strong>"Z"</strong> or <strong>"z"</strong> for roundTowardZero, and if your version of GNU MPFR library supports it, <strong>"A"</strong> or <strong>"a"</strong> for roundTiesToAway.
       <dt><strong>RS</strong>
       <dd>
         <p>The input record separator, by default a newline.
@@ -404,7 +404,7 @@
         <p>The length of the string matched by <strong>match()</strong>; -1 if no match.
       <dt><strong>SUBSEP</strong>
       <dd>
-        <p>The character used to separate multiple subscripts in array elements, by default <strong>“\034”</strong>.
+        <p>The character used to separate multiple subscripts in array elements, by default <strong>"\034"</strong>.
       <dt><strong>SYMTAB</strong>
       <dd>
         <p>An array whose indices are the names of all currently defined global variables and arrays in the program. The array may be used for indirect access to read or write the value of a variable:<br>
@@ -421,9 +421,9 @@ print foo    # prints 4</pre>
   <div class="subsection">
     <h3>Arrays</h3>
     <p>Arrays are subscripted with an expression between square brackets (<strong>[</strong> and <strong>]</strong>). If the expression is an expression list (<em>expr</em>, <em>expr</em> ...) then the array subscript is a string consisting of the concatenation of the (string) value of each expression, separated by the value of the <strong>SUBSEP</strong> variable. This facility is used to simulate multiply dimensioned arrays. For example:
-    <p><strong>i = “A”; j = “B”; k = “C”<br>
-    x[i, j, k] = “hello, world\n”</strong>
-    <p>assigns the string <strong>“hello, world\n”</strong> to the element of the array <strong>x</strong> which is indexed by the string <strong>“A\034B\034C”</strong>. All arrays in AWK are associative, i.e., indexed by string values.
+    <p><strong>i = "A"; j = "B"; k = "C"<br>
+    x[i, j, k] = "hello, world\n"</strong>
+    <p>assigns the string <strong>"hello, world\n"</strong> to the element of the array <strong>x</strong> which is indexed by the string <strong>"A\034B\034C"</strong>. All arrays in AWK are associative, i.e., indexed by string values.
     <p>The special operator <strong>in</strong> may be used to test if an array has an index consisting of a particular value:
     <pre>if (val in array)
         print array[val]</pre>
@@ -440,15 +440,15 @@ a[2][2] = 7</pre>
     <h3>Variable Typing And Conversion</h3>
     <p>Variables and fields may be (floating point) numbers, or strings, or both. How the value of a variable is interpreted depends upon its context. If used in a numeric expression, it will be treated as a number; if used as a string it will be treated as a string.
     <p>To force a variable to be treated as a number, add 0 to it; to force it to be treated as a string, concatenate it with the null string.
-    <p>Uninitialized variables have the numeric value 0 and the string value “” (the null, or empty, string).
+    <p>Uninitialized variables have the numeric value 0 and the string value "" (the null, or empty, string).
     <p>When a string must be converted to a number, the conversion is accomplished using <em>strtod</em>(3). A number is converted to a string by using the value of <strong>CONVFMT</strong> as a format string for <em>sprintf</em>(3), with the numeric value of the variable as the argument. However, even though all numbers in AWK are floating-point, integral values are <em>always</em> converted as integers. Thus, given
     <pre>CONVFMT = "%2.2f"
 a = 12
 b = a ""</pre>
-    <p>the variable <strong>b</strong> has a string value of <strong>“12”</strong> and not <strong>“12.00”</strong>.
+    <p>the variable <strong>b</strong> has a string value of <strong>"12"</strong> and not <strong>"12.00"</strong>.
     <p><strong>NOTE</strong>: When operating in POSIX mode (such as with the <strong>--posix</strong> option), beware that locale settings may interfere with the way decimal numbers are treated: the decimal separator of the numbers you are feeding to <em>gawk</em> must conform to what your locale would expect, be it a comma (,) or a period (.).
     <p><em>Gawk</em> performs comparisons as follows: If two variables are numeric, they are compared numerically. If one value is numeric and the other has a string value that is a “numeric string,” then comparisons are also done numerically. Otherwise, the numeric value is converted to a string and a string comparison is performed. Two strings are compared, of course, as strings.
-    <p>Note that string constants, such as <strong>“57”</strong>, are <em>not</em> numeric strings, they are string constants. The idea of “numeric string” only applies to fields, <strong>getline</strong> input, <strong>FILENAME</strong>, <strong>ARGV</strong> elements, <strong>ENVIRON</strong> elements and the elements of an array created by <strong>split()</strong> or <strong>patsplit()</strong> that are numeric strings. The basic idea is that <em>user input</em>, and only user input, that looks numeric, should be treated that way.
+    <p>Note that string constants, such as <strong>"57"</strong>, are <em>not</em> numeric strings, they are string constants. The idea of “numeric string” only applies to fields, <strong>getline</strong> input, <strong>FILENAME</strong>, <strong>ARGV</strong> elements, <strong>ENVIRON</strong> elements and the elements of an array created by <strong>split()</strong> or <strong>patsplit()</strong> that are numeric strings. The basic idea is that <em>user input</em>, and only user input, that looks numeric, should be treated that way.
   </div>
   <div class="subsection">
     <h3>Octal and Hexadecimal Constants</h3>
@@ -456,7 +456,7 @@ b = a ""</pre>
   </div>
   <div class="subsection">
     <h3>String Constants</h3>
-    <p>String constants in AWK are sequences of characters enclosed between double quotes (like <strong>“value”</strong>). Within strings, certain <em>escape sequences</em> are recognized, as in C. These are:
+    <p>String constants in AWK are sequences of characters enclosed between double quotes (like <strong>"value"</strong>). Within strings, certain <em>escape sequences</em> are recognized, as in C. These are:
     <dl class="indent-26">
       <dt><strong>\\</strong>
       <dd>
@@ -484,10 +484,10 @@ b = a ""</pre>
         <p>Vertical tab.
       <dt><strong>\x</strong><em>hex digits</em>
       <dd>
-        <p>The character represented by the string of hexadecimal digits following the <strong>\x</strong>. Up to two following hexadecimal digits are considered part of the escape sequence. E.g., <strong>“\x1B”</strong> is the ASCII ESC (escape) character.
+        <p>The character represented by the string of hexadecimal digits following the <strong>\x</strong>. Up to two following hexadecimal digits are considered part of the escape sequence. E.g., <strong>"\x1B"</strong> is the ASCII ESC (escape) character.
       <dt><strong>\</strong><em>ddd</em>
       <dd>
-        <p>The character represented by the 1-, 2-, or 3-digit sequence of octal digits. E.g., <strong>“\033”</strong> is the ASCII ESC (escape) character.
+        <p>The character represented by the 1-, 2-, or 3-digit sequence of octal digits. E.g., <strong>"\033"</strong> is the ASCII ESC (escape) character.
       <dt><strong>\</strong><em>c</em>
       <dd>
         <p>The literal character <em>c</em>.
@@ -758,7 +758,7 @@ b = a ""</pre>
     <dl class="indent-40">
       <dt><strong>close(</strong><em>file</em> [<strong>,</strong> <em>how</em>]<strong>)</strong>
       <dd>
-        <p>Close file, pipe or co-process. The optional <em>how</em> should only be used when closing one end of a two-way pipe to a co-process. It must be a string value, either <strong>“to”</strong> or <strong>“from”</strong>.
+        <p>Close file, pipe or co-process. The optional <em>how</em> should only be used when closing one end of a two-way pipe to a co-process. It must be a string value, either <strong>"to"</strong> or <strong>"from"</strong>.
       <dt><strong>getline</strong>
       <dd>
         <p>Set <strong>$0</strong> from next input record; set <strong>NF</strong>, <strong>NR</strong>, <strong>FNR</strong>, <strong>RT</strong>.
@@ -817,7 +817,7 @@ b = a ""</pre>
       <dd>
         <p>Sends data to a co-process or socket. (See also the subsection <strong>Special File Names</strong>, below.)
     </dl>
-    <p>The <strong>getline</strong> command returns 1 on success, 0 on end of file, and -1 on an error. If the <em>errno</em>(3) value indicates that the I/O operation may be retried, and <strong>PROCINFO["</strong><em>input</em>“, ”RETRY"] is set, then -2 will be returned instead of -1, and further calls to <strong>getline</strong> may be attempted. Upon an error, <strong>ERRNO</strong> is set to a string describing the problem.
+    <p>The <strong>getline</strong> command returns 1 on success, 0 on end of file, and -1 on an error. If the <em>errno</em>(3) value indicates that the I/O operation may be retried, and <strong>PROCINFO["</strong><em>input</em>", "RETRY"] is set, then -2 will be returned instead of -1, and further calls to <strong>getline</strong> may be attempted. Upon an error, <strong>ERRNO</strong> is set to a string describing the problem.
     <p><strong>NOTE</strong>: Failure in opening a two-way socket results in a non-fatal error being returned to the calling function. If using a pipe, co-process, or socket to <strong>getline</strong>, or from <strong>print</strong> or <strong>printf</strong> within a loop, you <em>must</em> use <strong>close()</strong> to create new instances of the command or socket. AWK does not automatically close pipes, sockets, or co-processes when they return EOF.
   </div>
   <div class="subsection">
@@ -885,7 +885,7 @@ b = a ""</pre>
       <dd>
         <p>A number that specifies the precision to use when printing. For the <strong>%e</strong>, <strong>%E</strong>, <strong>%f</strong> and <strong>%F</strong>, formats, this specifies the number of digits you want printed to the right of the decimal point. For the <strong>%g</strong>, and <strong>%G</strong> formats, it specifies the maximum number of significant digits. For the <strong>%d</strong>, <strong>%i</strong>, <strong>%o</strong>, <strong>%u</strong>, <strong>%x</strong>, and <strong>%X</strong> formats, it specifies the minimum number of digits to print. For <strong>%s</strong>, it specifies the maximum number of characters from the string that should be printed.
     </dl>
-    <p>The dynamic <em>width</em> and <em>prec</em> capabilities of the ISO C <strong>printf()</strong> routines are supported. A <strong>*</strong> in place of either the <em>width</em> or <em>prec</em> specifications causes their values to be taken from the argument list to <strong>printf</strong> or <strong>sprintf()</strong>. To use a positional specifier with a dynamic width or precision, supply the <em>count</em><strong>$</strong> after the <strong>*</strong> in the format string. For example, <strong>“%3$*2$.*1$s”</strong>.
+    <p>The dynamic <em>width</em> and <em>prec</em> capabilities of the ISO C <strong>printf()</strong> routines are supported. A <strong>*</strong> in place of either the <em>width</em> or <em>prec</em> specifications causes their values to be taken from the argument list to <strong>printf</strong> or <strong>sprintf()</strong>. To use a positional specifier with a dynamic width or precision, supply the <em>count</em><strong>$</strong> after the <strong>*</strong> in the format string. For example, <strong>"%3$*2$.*1$s"</strong>.
   </div>
   <div class="subsection">
     <h3>Special File Names</h3>
@@ -908,9 +908,9 @@ b = a ""</pre>
         <p>The file associated with the open file descriptor <em>n</em>.
     </dl>
     <p>These are particularly useful for error messages. For example:
-    <p><strong>print “You blew it!” &gt; “/dev/stderr”</strong>
+    <p><strong>print "You blew it!" &gt; "/dev/stderr"</strong>
     <p>whereas you would otherwise have to use
-    <p><strong>print “You blew it!” | “cat 1&gt;&amp;2”</strong>
+    <p><strong>print "You blew it!" | "cat 1&gt;&amp;2"</strong>
     <p>The following special filenames may be used with the <strong>|&</strong> co-process operator for creating TCP/IP network connections:
     <dl>
       <dt><strong>/inet/tcp/</strong><em>lport</em><strong>/</strong><em>rhost</em><strong>/</strong><em>rport</em>
@@ -943,7 +943,7 @@ b = a ""</pre>
         <p>Truncate to integer.
       <dt><strong>intdiv(</strong><em>num</em><strong>,</strong> <em>denom</em><strong>,</strong> <em>result</em><strong>)</strong>
       <dd>
-        <p>Truncate <em>num</em> and <em>denom</em> to integers. Return the quotient of <em>num</em> divided by <em>denom</em> in <em>result</em><strong>[“quotient”]</strong> and the remainder in in <em>result</em><strong>[“remainder”]</strong>. This is a <em>gawk</em> extension, primarily of value when working with arbitrarily large integers.
+        <p>Truncate <em>num</em> and <em>denom</em> to integers. Return the quotient of <em>num</em> divided by <em>denom</em> in <em>result</em><strong>["quotient"]</strong> and the remainder in in <em>result</em><strong>["remainder"]</strong>. This is a <em>gawk</em> extension, primarily of value when working with arbitrarily large integers.
       <dt><strong>log(</strong><em>expr</em><strong>)</strong>
       <dd>
         <p>The natural logarithm function.
@@ -967,7 +967,7 @@ b = a ""</pre>
     <dl class="indent-57">
       <dt><strong>asort(</strong><em>s</em> [<strong>,</strong> <em>d</em> [<strong>,</strong> <em>how</em>] ]<strong>)</strong>
       <dd>
-        <p>Return the number of elements in the source array <em>s</em>. Sort the contents of <em>s</em> using <em>gawk</em>'s normal rules for comparing values, and replace the indices of the sorted values <em>s</em> with sequential integers starting with 1. If the optional destination array <em>d</em> is specified, first duplicate <em>s</em> into <em>d</em>, and then sort <em>d</em>, leaving the indices of the source array <em>s</em> unchanged. The optional string <em>how</em> controls the direction and the comparison mode. Valid values for <em>how</em> are any of the strings valid for <strong>PROCINFO[“sorted_in”]</strong>. It can also be the name of a user-defined comparison function as described in <strong>PROCINFO[“sorted_in”]</strong>.
+        <p>Return the number of elements in the source array <em>s</em>. Sort the contents of <em>s</em> using <em>gawk</em>'s normal rules for comparing values, and replace the indices of the sorted values <em>s</em> with sequential integers starting with 1. If the optional destination array <em>d</em> is specified, first duplicate <em>s</em> into <em>d</em>, and then sort <em>d</em>, leaving the indices of the source array <em>s</em> unchanged. The optional string <em>how</em> controls the direction and the comparison mode. Valid values for <em>how</em> are any of the strings valid for <strong>PROCINFO["sorted_in"]</strong>. It can also be the name of a user-defined comparison function as described in <strong>PROCINFO["sorted_in"]</strong>.
       <dt><strong>asorti(</strong><em>s</em> [<strong>,</strong> <em>d</em> [<strong>,</strong> <em>how</em>] ]<strong>)</strong>
       <dd>
         <p>Return the number of elements in the source array <em>s</em>. The behavior is the same as that of <strong>asort()</strong>, except that the array <em>indices</em> are used for sorting, not the array values. When done, the array is indexed numerically, and the values are those of the original indices. The original values are lost; thus provide a second array if you wish to preserve the original. The purpose of the optional string <em>how</em> is the same as described in <strong>asort()</strong> above.
@@ -976,7 +976,7 @@ b = a ""</pre>
         <p>Search the target string <em>t</em> for matches of the regular expression <em>r</em>. If <em>h</em> is a string beginning with <strong>g</strong> or <strong>G</strong>, then replace all matches of <em>r</em> with <em>s</em>. Otherwise, <em>h</em> is a number indicating which match of <em>r</em> to replace. If <em>t</em> is not supplied, use <strong>$0</strong> instead. Within the replacement text <em>s</em>, the sequence <strong>\</strong><em>n,</em> where <em>n</em> is a digit from 1 to 9, may be used to indicate just the text that matched the <em>n</em>'th parenthesized subexpression. The sequence <strong>\0</strong> represents the entire matched text, as does the character <strong>&</strong>. Unlike <strong>sub()</strong> and <strong>gsub()</strong>, the modified string is returned as the result of the function, and the original target string is <em>not</em> changed.
       <dt><strong>gsub(</strong><em>r</em><strong>,</strong> <em>s</em> [<strong>,</strong> <em>t</em>]<strong>)</strong>
       <dd>
-        <p>For each substring matching the regular expression <em>r</em> in the string <em>t</em>, substitute the string <em>s</em>, and return the number of substitutions. If <em>t</em> is not supplied, use <strong>$0</strong>. An <strong>&</strong> in the replacement text is replaced with the text that was actually matched. Use <strong>\&</strong> to get a literal <strong>&</strong>. (This must be typed as <strong>“\\&amp;”</strong>; see <em>GAWK: Effective AWK Programming</em> for a fuller discussion of the rules for <strong>&</strong>'s and backslashes in the replacement text of <strong>sub()</strong>, <strong>gsub()</strong>, and <strong>gensub()</strong>.)
+        <p>For each substring matching the regular expression <em>r</em> in the string <em>t</em>, substitute the string <em>s</em>, and return the number of substitutions. If <em>t</em> is not supplied, use <strong>$0</strong>. An <strong>&</strong> in the replacement text is replaced with the text that was actually matched. Use <strong>\&</strong> to get a literal <strong>&</strong>. (This must be typed as <strong>"\\&amp;"</strong>; see <em>GAWK: Effective AWK Programming</em> for a fuller discussion of the rules for <strong>&</strong>'s and backslashes in the replacement text of <strong>sub()</strong>, <strong>gsub()</strong>, and <strong>gensub()</strong>.)
       <dt><strong>index(</strong><em>s</em><strong>,</strong> <em>t</em><strong>)</strong>
       <dd>
         <p>Return the index of the string <em>t</em> in the string <em>s</em>, or 0 if <em>t</em> is not present. (This implies that character indices start at one.) It is a fatal error to use a regexp constant for <em>t</em>.
@@ -985,7 +985,7 @@ b = a ""</pre>
         <p>Return the length of the string <em>s</em>, or the length of <strong>$0</strong> if <em>s</em> is not supplied. As a non-standard extension, with an array argument, <strong>length()</strong> returns the number of elements in the array.
       <dt><strong>match(</strong><em>s</em><strong>,</strong> <em>r</em> [<strong>,</strong> <em>a</em>]<strong>)</strong>
       <dd>
-        <p>Return the position in <em>s</em> where the regular expression <em>r</em> occurs, or 0 if <em>r</em> is not present, and set the values of <strong>RSTART</strong> and <strong>RLENGTH</strong>. Note that the argument order is the same as for the <strong>~</strong> operator: <em>str</em> <strong>~</strong> <em>re</em>. If array <em>a</em> is provided, <em>a</em> is cleared and then elements 1 through <em>n</em> are filled with the portions of <em>s</em> that match the corresponding parenthesized subexpression in <em>r</em>. The 0'th element of <em>a</em> contains the portion of <em>s</em> matched by the entire regular expression <em>r</em>. Subscripts <strong>a[</strong><em>n</em><strong>, “start”]</strong>, and <strong>a[</strong><em>n</em><strong>, “length”]</strong> provide the starting index in the string and length respectively, of each matching substring.
+        <p>Return the position in <em>s</em> where the regular expression <em>r</em> occurs, or 0 if <em>r</em> is not present, and set the values of <strong>RSTART</strong> and <strong>RLENGTH</strong>. Note that the argument order is the same as for the <strong>~</strong> operator: <em>str</em> <strong>~</strong> <em>re</em>. If array <em>a</em> is provided, <em>a</em> is cleared and then elements 1 through <em>n</em> are filled with the portions of <em>s</em> that match the corresponding parenthesized subexpression in <em>r</em>. The 0'th element of <em>a</em> contains the portion of <em>s</em> matched by the entire regular expression <em>r</em>. Subscripts <strong>a[</strong><em>n</em><strong>, "start"]</strong>, and <strong>a[</strong><em>n</em><strong>, "length"]</strong> provide the starting index in the string and length respectively, of each matching substring.
       <dt><strong>patsplit(</strong><em>s</em><strong>,</strong> <em>a</em> [<strong>,</strong> <em>r</em> [<strong>,</strong> <em>seps</em>] ]<strong>)</strong>
       <dd>
         <p>Split the string <em>s</em> into the array <em>a</em> and the separators array <em>seps</em> on the regular expression <em>r</em>, and return the number of fields. Element values are the portions of <em>s</em> that matched <em>r</em>. The value of <strong>seps[</strong><em>i</em><strong>]</strong> is the separator that appeared in front of <strong>a[</strong><em>i</em><strong>+1].</strong> If <em>r</em> is omitted, <strong>FPAT</strong> is used instead. The arrays <em>a</em> and <em>seps</em> are cleared first. Splitting behaves identically to field splitting with <strong>FPAT</strong>, described above.
@@ -1022,7 +1022,7 @@ b = a ""</pre>
         <p>Turn <em>datespec</em> into a time stamp of the same form as returned by <strong>systime()</strong>, and return the result. The <em>datespec</em> is a string of the form <em>YYYY MM DD HH MM SS[ DST]</em>. The contents of the string are six or seven numbers representing respectively the full year including century, the month from 1 to 12, the day of the month from 1 to 31, the hour of the day from 0 to 23, the minute from 0 to 59, the second from 0 to 60, and an optional daylight saving flag. The values of these numbers need not be within the ranges specified; for example, an hour of -1 means 1 hour before midnight. The origin-zero Gregorian calendar is assumed, with year 0 preceding year 1 and year -1 preceding year 0. The time is assumed to be in the local timezone. If the daylight saving flag is positive, the time is assumed to be daylight saving time; if zero, the time is assumed to be standard time; and if negative (the default), <strong>mktime()</strong> attempts to determine whether daylight saving time is in effect for the specified time. If <em>datespec</em> does not contain enough elements or if the resulting time is out of range, <strong>mktime()</strong> returns -1.
       <dt><strong>strftime(</strong>[<em>format</em> [<strong>,</strong> <em>timestamp</em>[<strong>,</strong> <em>utc-flag</em>]]]<strong>)</strong>
       <dd>
-        <p>Format <em>timestamp</em> according to the specification in <em>format</em>. If <em>utc-flag</em> is present and is non-zero or non-null, the result is in UTC, otherwise the result is in local time. The <em>timestamp</em> should be of the same form as returned by <strong>systime()</strong>. If <em>timestamp</em> is missing, the current time of day is used. If <em>format</em> is missing, a default format equivalent to the output of <em>date</em>(1) is used. The default format is available in <strong>PROCINFO[“strftime”]</strong>. See the specification for the <strong>strftime()</strong> function in ISO C for the format conversions that are guaranteed to be available.
+        <p>Format <em>timestamp</em> according to the specification in <em>format</em>. If <em>utc-flag</em> is present and is non-zero or non-null, the result is in UTC, otherwise the result is in local time. The <em>timestamp</em> should be of the same form as returned by <strong>systime()</strong>. If <em>timestamp</em> is missing, the current time of day is used. If <em>format</em> is missing, a default format equivalent to the output of <em>date</em>(1) is used. The default format is available in <strong>PROCINFO["strftime"]</strong>. See the specification for the <strong>strftime()</strong> function in ISO C for the format conversions that are guaranteed to be available.
       <dt><strong>systime()</strong>
       <dd>
         <p>Return the current time of day as the number of seconds since the Epoch (1970-01-01 00:00:00 UTC on POSIX systems).
@@ -1064,7 +1064,7 @@ b = a ""</pre>
     <dl>
       <dt><strong>typeof(</strong><em>x</em><strong>)</strong>
       <dd>
-        <p>Return a string indicating the type of <em>x</em>. The string will be one of <strong>“array”</strong>, <strong>“number”</strong>, <strong>“regexp”</strong>, <strong>“string”</strong>, <strong>“strnum”</strong>, or <strong>“undefined”</strong>.
+        <p>Return a string indicating the type of <em>x</em>. The string will be one of <strong>"array"</strong>, <strong>"number"</strong>, <strong>"regexp"</strong>, <strong>"string"</strong>, <strong>"strnum"</strong>, or <strong>"undefined"</strong>.
     </dl>
   </div>
   <div class="subsection">
@@ -1075,15 +1075,15 @@ b = a ""</pre>
       <dd>
         <p>Specify the directory where <em>gawk</em> looks for the <strong>.gmo</strong> files, in case they will not or cannot be placed in the “standard” locations (e.g., during testing). It returns the directory where <em>domain</em> is “bound.”<br>
         <br>
-        The default <em>domain</em> is the value of <strong>TEXTDOMAIN</strong>. If <em>directory</em> is the null string (<strong>“”</strong>), then <strong>bindtextdomain()</strong> returns the current binding for the given <em>domain</em>.
+        The default <em>domain</em> is the value of <strong>TEXTDOMAIN</strong>. If <em>directory</em> is the null string (<strong>""</strong>), then <strong>bindtextdomain()</strong> returns the current binding for the given <em>domain</em>.
       <dt><strong>dcgettext(</strong><em>string</em> [<strong>,</strong> <em>domain</em> [<strong>,</strong> <em>category</em>]]<strong>)</strong>
       <dd>
-        <p>Return the translation of <em>string</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>“LC_MESSAGES”</strong>.<br>
+        <p>Return the translation of <em>string</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.<br>
         <br>
         If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
       <dt><strong>dcngettext(</strong><em>string1</em><strong>,</strong> <em>string2</em><strong>,</strong> <em>number</em> [<strong>,</strong> <em>domain</em> [<strong>,</strong> <em>category</em>]]<strong>)</strong>
       <dd>
-        <p>Return the plural form used for <em>number</em> of the translation of <em>string1</em> and <em>string2</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>“LC_MESSAGES”</strong>.<br>
+        <p>Return the plural form used for <em>number</em> of the translation of <em>string1</em> and <em>string2</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.<br>
         <br>
         If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
     </dl>
@@ -1095,7 +1095,7 @@ b = a ""</pre>
   <p><strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. The convention is to separate local variables from real parameters by extra spaces in the parameter list. For example:
-  <pre>function  f(p, q,     a, b)        # a and b are local
+  <pre>function  f(p, q,     a, b)    # a and b are local
 {
         ...
 }
@@ -1131,11 +1131,11 @@ b = a ""</pre>
 <div class="section">
   <h2>INTERNATIONALIZATION</h2>
   <p>String constants are sequences of characters enclosed in double quotes. In non-English speaking environments, it is possible to mark strings in the AWK program as requiring translation to the local natural language. Such strings are marked in the AWK program with a leading underscore (“_”). For example,
-  <p><strong>gawk 'BEGIN { print “hello, world” }'</strong><br>
+  <p><strong>gawk 'BEGIN { print "hello, world" }'</strong><br>
   <br>
   always prints <strong>hello, world</strong>. But,<br>
   <br>
-  <p><strong>gawk 'BEGIN { print _“hello, world” }'</strong><br>
+  <p><strong>gawk 'BEGIN { print _"hello, world" }'</strong><br>
   <br>
   might print <strong>bonjour, monde</strong> in France.
   <p>There are several steps involved in producing and running a localizable AWK program.
@@ -1144,7 +1144,7 @@ b = a ""</pre>
     <dd>
       <p>Add a <strong>BEGIN</strong> action to assign a value to the <strong>TEXTDOMAIN</strong> variable to set the text domain to a name associated with your program:<br>
       <br>
-      <strong>BEGIN { TEXTDOMAIN = “myprog” }</strong><br>
+      <strong>BEGIN { TEXTDOMAIN = "myprog" }</strong><br>
       <br>
       This allows <em>gawk</em> to find the <strong>.gmo</strong> file associated with your program. Without this step, <em>gawk</em> uses the <strong>messages</strong> text domain, which likely does not contain translations for your program.
     <dt>2.

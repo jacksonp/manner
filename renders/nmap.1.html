@@ -584,30 +584,30 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <p>the current directory.
   </div>
   <p>When a directory name is given, Nmap loads every file in the directory whose name ends with .nse. All other files are ignored and directories are not searched recursively. When a filename is given, it does not have to have the .nse extension; it will be added automatically if necessary. Nmap scripts are stored in a scripts subdirectory of the Nmap data directory by default (see <strong>https://nmap.org/book/data-files.html</strong>). For efficiency, scripts are indexed in a database stored in scripts/script.db, which lists the category or categories in which each script belongs. When referring to scripts from script.db by name, you can use a shell-style ‘*’ wildcard.
-  <p><strong>nmap --script “http-*”</strong>
+  <p><strong>nmap --script "http-*"</strong>
   <div class="indent-4">
     <p>Loads all scripts whose name starts with http-, such as http-auth and http-open-proxy. The argument to <strong>--script</strong> had to be in quotes to protect the wildcard from the shell.
   </div>
   <p>More complicated script selection can be done using the and, or, and not operators to build Boolean expressions. The operators have the same <strong>precedence</strong><sup>[12]</sup> as in Lua: not is the highest, followed by and and then or. You can alter precedence by using parentheses. Because expressions contain space characters it is necessary to quote them.
-  <p><strong>nmap --script “not intrusive”</strong>
+  <p><strong>nmap --script "not intrusive"</strong>
   <div class="indent-4">
     <p>Loads every script except for those in the intrusive category.
   </div>
-  <p><strong>nmap --script “default or safe”</strong>
+  <p><strong>nmap --script "default or safe"</strong>
   <div class="indent-4">
-    <p>This is functionally equivalent to <strong>nmap --script “default,safe”</strong>. It loads all scripts that are in the default category or the safe category or both.
+    <p>This is functionally equivalent to <strong>nmap --script "default,safe"</strong>. It loads all scripts that are in the default category or the safe category or both.
   </div>
-  <p><strong>nmap --script “default and safe”</strong>
+  <p><strong>nmap --script "default and safe"</strong>
   <div class="indent-4">
     <p>Loads those scripts that are in <em>both</em> the default and safe categories.
   </div>
-  <p><strong>nmap --script “(default or safe or intrusive) and not http-*”</strong>
+  <p><strong>nmap --script "(default or safe or intrusive) and not http-*"</strong>
   <div class="indent-4">
     <p>Loads scripts in the default, safe, or intrusive categories, except for those whose names start with http-.
   </div>
   <p><strong>--script-args</strong> <em>n1</em><strong>=</strong><em>v1</em><strong>,</strong><em>n2</em><strong>={</strong><em>n3</em><strong>=</strong><em>v3</em><strong>},</strong><em>n4</em><strong>={</strong><em>v4</em><strong>,</strong><em>v5</em><strong>}</strong>
   <div class="indent-4">
-    <p>Lets you provide arguments to NSE scripts. Arguments are a comma-separated list of name=value pairs. Names and values may be strings not containing whitespace or the characters ‘{’, ‘}’, ‘=’, or ‘,’. To include one of these characters in a string, enclose the string in single or double quotes. Within a quoted string, ‘\’ escapes a quote. A backslash is only used to escape quotation marks in this special case; in all other cases a backslash is interpreted literally. Values may also be tables enclosed in {}, just as in Lua. A table may contain simple string values or more name-value pairs, including nested tables. Many scripts qualify their arguments with the script name, as in xmpp-info.server_name. You may use that full qualified version to affect just the specified script, or you may pass the unqualified version (server_name in this case) to affect all scripts using that argument name. A script will first check for its fully qualified argument name (the name specified in its documentation) before it accepts an unqualified argument name. A complex example of script arguments is <strong>--script-args 'user=foo,pass=“,{}=bar”,whois={whodb=nofollow+ripe},xmpp-info.server_name=localhost'</strong>. The online NSE Documentation Portal at <strong>https://nmap.org/nsedoc/</strong> lists the arguments that each script accepts.
+    <p>Lets you provide arguments to NSE scripts. Arguments are a comma-separated list of name=value pairs. Names and values may be strings not containing whitespace or the characters ‘{’, ‘}’, ‘=’, or ‘,’. To include one of these characters in a string, enclose the string in single or double quotes. Within a quoted string, ‘\’ escapes a quote. A backslash is only used to escape quotation marks in this special case; in all other cases a backslash is interpreted literally. Values may also be tables enclosed in {}, just as in Lua. A table may contain simple string values or more name-value pairs, including nested tables. Many scripts qualify their arguments with the script name, as in xmpp-info.server_name. You may use that full qualified version to affect just the specified script, or you may pass the unqualified version (server_name in this case) to affect all scripts using that argument name. A script will first check for its fully qualified argument name (the name specified in its documentation) before it accepts an unqualified argument name. A complex example of script arguments is <strong>--script-args 'user=foo,pass=",{}=bar",whois={whodb=nofollow+ripe},xmpp-info.server_name=localhost'</strong>. The online NSE Documentation Portal at <strong>https://nmap.org/nsedoc/</strong> lists the arguments that each script accepts.
   </div>
   <p><strong>--script-args-file</strong> <em>filename</em>
   <div class="indent-4">
@@ -768,7 +768,7 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   </div>
   <p><strong>--data-string</strong> <em>string</em> (Append custom string to sent packets)
   <div class="indent-4">
-    <p>This option lets you include a regular string as payload in sent packets. <em>string</em> can contain any string. However, note that some characters may depend on your system's locale and the receiver may not see the same information. Also, make sure you enclose the string in double quotes and escape any special characters from the shell. Examples: <strong>--data-string “Scan conducted by Security Ops, extension 7192”</strong> or <strong>--data-string “Ph34r my l33t skills”</strong>. Keep in mind that nobody is likely to actually see any comments left by this option unless they are carefully monitoring the network with a sniffer or custom IDS rules.
+    <p>This option lets you include a regular string as payload in sent packets. <em>string</em> can contain any string. However, note that some characters may depend on your system's locale and the receiver may not see the same information. Also, make sure you enclose the string in double quotes and escape any special characters from the shell. Examples: <strong>--data-string "Scan conducted by Security Ops, extension 7192"</strong> or <strong>--data-string "Ph34r my l33t skills"</strong>. Keep in mind that nobody is likely to actually see any comments left by this option unless they are carefully monitoring the network with a sniffer or custom IDS rules.
   </div>
   <p><strong>--data-length</strong> <em>number</em> (Append random data to sent packets)
   <div class="indent-4">
@@ -1051,7 +1051,7 @@ Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
     </div>
     <p>This list is not exclusive, but is meant to clarify our interpretation of derived works with some common examples. Other people may interpret the plain GPL differently, so we consider this a special exception to the GPL that we apply to Covered Software. Works which meet any of these conditions must conform to all of the terms of this license, particularly including the GPL Section 3 requirements of providing source code and allowing free redistribution of the work as a whole.
     <p>As another special exception to the GPL terms, Insecure.Com LLC grants permission to link the code of this program with any version of the OpenSSL library which is distributed under a license identical to that listed in the included docs/licenses/OpenSSL.txt file, and distribute linked combinations including the two.
-    <p>Any redistribution of Covered Software, including any derived works, must obey and carry forward all of the terms of this license, including obeying all GPL rules and restrictions. For example, source code of the whole work must be provided and free redistribution must be allowed. All GPL references to “this License”, are to be treated as including the terms and conditions of this license text as well.
+    <p>Any redistribution of Covered Software, including any derived works, must obey and carry forward all of the terms of this license, including obeying all GPL rules and restrictions. For example, source code of the whole work must be provided and free redistribution must be allowed. All GPL references to "this License", are to be treated as including the terms and conditions of this license text as well.
     <p>Because this license imposes special exceptions to the GPL, Covered Work may not be combined (even as part of a larger work) with plain GPL software. The terms, conditions, and exceptions of this license must be included as well. This license is incompatible with some other open source licenses as well. In some cases we can relicense portions of Nmap or grant special permissions to use it in other open source software. Please contact fyodor@nmap.org with any such requests. Similarly, we don't incorporate incompatible open source software into Covered Software without special permission from the copyright holders.
     <p>If you have any questions about the licensing restrictions on using Nmap in other works, are happy to help. As mentioned above, we also offer alternative license to integrate Nmap into proprietary applications and appliances. These contracts have been sold to dozens of software vendors, and generally include a perpetual license as well as providing for priority support and updates. They also fund the continued development of Nmap. Please email &lt;sales@nmap.com&gt; for further information.
     <p>If you have received a written license agreement or contract for Covered Software stating terms other than these, you may choose to use and redistribute Covered Software under those terms instead of these.

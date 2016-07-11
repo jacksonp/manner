@@ -25,19 +25,19 @@
       <p>Location of the log file. By default, a log file named <em>mmv.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdammv</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-U</strong>
     <dd>
-      <p>User account under which to run the agent. The default is the unprivileged “pcp” account in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
+      <p>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
   </dl>
 </div>
 <div class="section">
   <h2>INSTALLATION</h2>
   <p>Firstly, a security model for interprocess communication between instrumented applications and <strong>pmdammv</strong> (running as a shared library inside <strong>pmcd</strong>) must be chosen and established.
   <p>This communication occurs through memory mapped files in a location known to both <strong>pmdammv</strong> and the instrumented applications. That location is <em>$PCP_TMP_DIR/mmv</em>, although that is often hidden behind application APIs such as “Parfait” and <strong>mmv_stats_init</strong>(3). The permissions set on this directory indicate the security model in use.
-  <p>The more secure method is to use an existing unprivileged group which is shared by instrumented applications, <strong>pmcd</strong> and <strong>pmdammv</strong> such as the “pcp” group.
+  <p>The more secure method is to use an existing unprivileged group which is shared by instrumented applications, <strong>pmcd</strong> and <strong>pmdammv</strong> such as the "pcp" group.
   <pre># . /etc/pcp.env
 # mkdir -m 775 $PCP_TMP_DIR/mmv
 # chgrp pcp $PCP_TMP_DIR/mmv</pre>
   <p>Since this method requires instrumented applications to use this non-default group (see <strong>newgrp</strong>(1) and <strong>setgid</strong>(2)) a common alternative involves the use of a world-writeable <em>$PCP_TMP_DIR/mmv</em> directory with the sticky-bit set (similar to <em>/tmp</em> and <em>/var/tmp</em>, for example).
-  <p>This allows any application, running under any user account, to communicate with the PMDA (which runs under the “pcp” account by default). This may not be desirable for all environments and one should consider the security implications of any directory setup like this (similar classes of issues exist as those that affect the system temporary file directories).
+  <p>This allows any application, running under any user account, to communicate with the PMDA (which runs under the "pcp" account by default). This may not be desirable for all environments and one should consider the security implications of any directory setup like this (similar classes of issues exist as those that affect the system temporary file directories).
   <p><strong>pmdammv</strong> is enabled by default on all modern PCP installations, and thus the names, help text and values for the mmv performance metrics are available without the usual PMDA ./Install process.
   <p>If no explicit security model has been selected (as described above), the ./Install script will create a world-writeable sticky-bit-set mmv directory for communication. This is for backwards compatibility, as well as ease of use - to use this, do the following as root:
   <pre># cd $PCP_PMDAS_DIR/mmv

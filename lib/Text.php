@@ -298,7 +298,6 @@ class Text
           '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
             // Unbreakable space that stretches like a normal inter-word space when a line is adjusted
           '\\~'  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
-          '\\*R' => '®',
         ];
 
         // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.

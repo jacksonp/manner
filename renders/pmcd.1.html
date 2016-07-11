@@ -53,7 +53,7 @@
       <p>Same function as <strong>-n</strong>, except for the handling of duplicate Performance Metric Identifiers (PMIDs) in <em>pmnsfile</em> - duplicate names are allowed with <strong>-n</strong> they are not allowed with <strong>-N</strong>.
     <dt><strong>-P</strong> <em>passfile</em>
     <dd>
-      <p>Specify the path to a file containing the Network Security Services certificate database password for (optional) secure connections, and for databases that are password protected. Refer also to the <strong>-C</strong> option. When using this option, great care should be exercised to ensure appropriate ownership (“pcp” user, typically) and permissions on this file (0400, so as to be unreadable by any user other than the user running the <strong>pmcd</strong> process).
+      <p>Specify the path to a file containing the Network Security Services certificate database password for (optional) secure connections, and for databases that are password protected. Refer also to the <strong>-C</strong> option. When using this option, great care should be exercised to ensure appropriate ownership ("pcp" user, typically) and permissions on this file (0400, so as to be unreadable by any user other than the user running the <strong>pmcd</strong> process).
     <dt><strong>-q</strong> <em>timeout</em>
     <dd>
       <p>The pmcd to agent version exchange protocol (new in PCP 2.0 - introduced to provide backward compatibility) uses this timeout to specify how long pmcd should wait before assuming that no version response is coming from an agent. If this timeout is reached, the agent is assumed to be an agent which does not understand the PCP 2.0 protocol. The default timeout interval is five seconds, but the <strong>-q</strong> option allows an alternative timeout interval (which must be greater than zero) to be specified. The unit of time is seconds.
@@ -68,7 +68,7 @@
       <p>Specify the path to a local unix domain socket (for platforms supporting this socket family only). The default value is <em>$PCP_RUN_DIR/pmcd.socket</em>.
     <dt><strong>-t</strong> <em>timeout</em>
     <dd>
-      <p>To prevent misbehaving clients or agents from hanging the entire Performance Metrics Collection System (PMCS), <strong>pmcd</strong> uses timeouts on PDU exchanges with clients and agents running as processes. By default the timeout interval is five seconds. The <strong>-t</strong> option allows an alternative timeout interval in seconds to be specified. If <em>timeout</em> is zero, timeouts are turned off. It is almost impossible to use the debugger interactively on an agent unless timeouts have been turned off for its “parent” <strong>pmcd</strong>.
+      <p>To prevent misbehaving clients or agents from hanging the entire Performance Metrics Collection System (PMCS), <strong>pmcd</strong> uses timeouts on PDU exchanges with clients and agents running as processes. By default the timeout interval is five seconds. The <strong>-t</strong> option allows an alternative timeout interval in seconds to be specified. If <em>timeout</em> is zero, timeouts are turned off. It is almost impossible to use the debugger interactively on an agent unless timeouts have been turned off for its "parent" <strong>pmcd</strong>.
       <p>Once <strong>pmcd</strong> is running, the timeout may be dynamically modified by storing an integer value (the timeout in seconds) into the metric <strong>pmcd.control.timeout</strong> via <strong>pmstore</strong>(1).
     <dt><strong>-T</strong> <em>traceflag</em>
     <dd>
@@ -92,7 +92,7 @@
       </div>
     <dt><strong>-U</strong> <em>username</em>
     <dd>
-      <p>User account under which to run <strong>pmcd</strong>. The default is the unprivileged “pcp” account in current versions of PCP, but in older versions the superuser account (“root”) was used by default.
+      <p>User account under which to run <strong>pmcd</strong>. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-v</strong>
     <dd>
       <p>Verify the <strong>pmcd</strong> configuration file, reporting on any errors then exiting with a status indicating verification success or failure.
@@ -197,9 +197,9 @@
   </dl>
   <p>Access to <strong>pmcd</strong> can be granted in three ways - by user, group of users, or at a host level. In the latter, all users on a host are granted the same level of access, unless the user or group access control mechanism is also in use.
   <p>User names and group names will be verified using the local <strong>/etc/passwd</strong> and <strong>/etc/groups</strong> files (or an alternative directory service), using the <strong>getpwent</strong>(3) and <strong>getgrent</strong>(3) routines.
-  <p>Hosts may be identified by name, IP address, IPv6 address or by the special host specifications ““unix:”” or ““local:””. ““unix:”” refers to <strong>pmcd's</strong> unix domain socket, on supported platforms. ““local:”” is equivalent to specifying ““unix:”” and ``localhost``.
-  <p>Wildcards may also be specified by ending the host identifier with the single wildcard character “*” as the last-given component of an address. The wildcard ““.*”” refers to all inet (IPv4) addresses. The wildcard ““:*”” refers to all IPv6 addresses. If an IPv6 wildcard contains a “::” component, then the final “*” refers to the final 16 bits of the address only, otherwise it refers to the remaining unspecified bits of the address.
-  <p>The wildcard “*” refers to all users, groups or host addresses, including ““unix:””. Names of users, groups or hosts may not be wildcarded.
+  <p>Hosts may be identified by name, IP address, IPv6 address or by the special host specifications “"unix:"” or “"local:"”. “"unix:"” refers to <strong>pmcd's</strong> unix domain socket, on supported platforms. “"local:"” is equivalent to specifying “"unix:"” and ``localhost``.
+  <p>Wildcards may also be specified by ending the host identifier with the single wildcard character “*” as the last-given component of an address. The wildcard “".*"” refers to all inet (IPv4) addresses. The wildcard “":*"” refers to all IPv6 addresses. If an IPv6 wildcard contains a “::” component, then the final “*” refers to the final 16 bits of the address only, otherwise it refers to the remaining unspecified bits of the address.
+  <p>The wildcard “*” refers to all users, groups or host addresses, including “"unix:"”. Names of users, groups or hosts may not be wildcarded.
   <p>The following are all valid host identifiers:
   <pre>boing
 localhost
@@ -269,8 +269,8 @@ disallow host 129.127.112.2 : all except fetch;</pre>
     allow host clank : all, maximum 5 connections;<br>
     allow host * : all except store, maximum 2 connections;
   </blockquote>
-  <p>This says that only 2 client connections at a time are permitted for all hosts other than “clank”, which is permitted 5. If a client from host “boing” is the first to connect to <strong>pmcd</strong>, its connection is checked against the second statement (that is the most specific match with a connection limit). As there are no other clients, the connection is accepted and contributes towards the limit for only the second statement above. If the next client connects from “clank”, its connection is checked against the limit for the first statement. There are no other connections from “clank”, so the connection is accepted. Once this connection is accepted, it counts towards <strong>both</strong> statements' limits because “clank” matches the host identifier in both statements. Remember that the decision to accept a new connection is made using only the most specific matching access control statement with a connection limit. Now, the connection limit for the second statement has been reached. Any connections from hosts other than “clank” will be refused.
-  <p>If instead, <strong>pmcd</strong> with no clients saw three successive connections arrived from “boing”, the first two would be accepted and the third refused. After that, if a connection was requested from “clank” it would be accepted. It matches the first statement, which is more specific than the second, so the connection limit in the first is used to determine that the client has the right to connect. Now there are 3 connections contributing to the second statement's connection limit. Even though the connection limit for the second statement has been exceeded, the earlier connections from “boing” are maintained. The connection limit is only checked at the time a client attempts a connection rather than being re-evaluated every time a new client connects to <strong>pmcd</strong>.
+  <p>This says that only 2 client connections at a time are permitted for all hosts other than "clank", which is permitted 5. If a client from host "boing" is the first to connect to <strong>pmcd</strong>, its connection is checked against the second statement (that is the most specific match with a connection limit). As there are no other clients, the connection is accepted and contributes towards the limit for only the second statement above. If the next client connects from "clank", its connection is checked against the limit for the first statement. There are no other connections from "clank", so the connection is accepted. Once this connection is accepted, it counts towards <strong>both</strong> statements' limits because "clank" matches the host identifier in both statements. Remember that the decision to accept a new connection is made using only the most specific matching access control statement with a connection limit. Now, the connection limit for the second statement has been reached. Any connections from hosts other than "clank" will be refused.
+  <p>If instead, <strong>pmcd</strong> with no clients saw three successive connections arrived from "boing", the first two would be accepted and the third refused. After that, if a connection was requested from "clank" it would be accepted. It matches the first statement, which is more specific than the second, so the connection limit in the first is used to determine that the client has the right to connect. Now there are 3 connections contributing to the second statement's connection limit. Even though the connection limit for the second statement has been exceeded, the earlier connections from "boing" are maintained. The connection limit is only checked at the time a client attempts a connection rather than being re-evaluated every time a new client connects to <strong>pmcd</strong>.
   <p>This gentle scheme is designed to allow reasonable limits to be imposed on a first come first served basis, with specific exceptions.
   <p>As illustrated by the example above, a client's connection is honored once it has been accepted. However, <strong>pmcd</strong> reconfiguration (see the next section) re-evaluates all the connection counts and will cause client connections to be dropped where connection limits have been exceeded.
 </div>
@@ -304,7 +304,7 @@ disallow host 129.127.112.2 : all except fetch;</pre>
       <p>command line options to <strong>pmcd</strong> when launched from <strong>$PCP_RC_DIR/pmcd</strong> All the command line option lines should start with a hyphen as the first character.
     <dt><strong>$PCP_SYSCONFIG_DIR/pmcd</strong>
     <dd>
-      <p>additional environment variables that will be set when <strong>pmcd</strong> executes. Only settings of the form “PMCD_VARIABLE=value” will be honoured.
+      <p>additional environment variables that will be set when <strong>pmcd</strong> executes. Only settings of the form "PMCD_VARIABLE=value" will be honoured.
     <dt><strong>./pmcd.log</strong>
     <dd>
       <p>(or <strong>$PCP_LOG_DIR/pmcd/pmcd.log</strong> when started automatically)
@@ -337,7 +337,7 @@ disallow host 129.127.112.2 : all except fetch;</pre>
 </div>
 <div class="section">
   <h2>DIAGNOSTICS</h2>
-  <p>If <strong>pmcd</strong> is already running the message “Error: OpenRequestSocket bind: Address may already be in use” will appear. This may also appear if <strong>pmcd</strong> was shutdown with an outstanding request from a client. In this case, a request socket has been left in the TIME_WAIT state and until the system closes it down (after some timeout period) it will not be possible to run <strong>pmcd</strong>.
+  <p>If <strong>pmcd</strong> is already running the message "Error: OpenRequestSocket bind: Address may already be in use" will appear. This may also appear if <strong>pmcd</strong> was shutdown with an outstanding request from a client. In this case, a request socket has been left in the TIME_WAIT state and until the system closes it down (after some timeout period) it will not be possible to run <strong>pmcd</strong>.
   <p>In addition to the standard <strong>PCP</strong> debugging flags, see <strong>pmdbg</strong>(1), <strong>pmcd</strong> currently uses <strong>DBG_TRACE_APPL0</strong> for tracing I/O and termination of agents, <strong>DBG_TRACE_APPL1</strong> for tracing access control and <strong>DBG_TRACE_APPL2</strong> for tracing the configuration file scanner and parser.
 </div>
 <div class="section">

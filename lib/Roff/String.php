@@ -37,8 +37,6 @@ class Roff_String
         // quotes and otherwise get messed up.
         if (in_array($newRequest, ['C\'', 'C`'])) {
             $requestVal = '"';
-        } elseif (in_array($newRequest, ['L"', 'R"'])) {
-            return ['i' => $i];
         } elseif ($newRequest === 'Q' and $requestVal === '\&"') {
             $requestVal = '“';
         } elseif ($newRequest === 'U' and $requestVal === '\&"') {
@@ -57,15 +55,15 @@ class Roff_String
     static function substitute(string $string, array &$replacements) :string
     {
 
-        // Want to match any of: \*. \(.. \*(.. \[....] \*[....]
+        // Want to match any of: \*. \*(.. \*[....]
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*?\[(?<str>[^\]\s]+)\]|\*?\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
           function ($matches) use (&$replacements) {
               if (isset($replacements[$matches['str']])) {
                   return $matches['bspairs'] . $replacements[$matches['str']];
               } else {
                   // TODO: bit of a hack try to combine all changes and do them all at last minute
-                  if (in_array($matches['str'], ['rs', 'dq', 'aq', 'R'])) {
+                  if (in_array($matches['str'], ['rs', 'dq', 'aq'])) {
                       return $matches[0];
                   } else {
                       return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.

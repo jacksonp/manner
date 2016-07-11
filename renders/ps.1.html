@@ -27,9 +27,9 @@
       <p>GNU long options, which are preceded by two dashes.
   </dl>
   <p>Options of different types may be freely mixed, but conflicts can appear. There are some synonymous options, which are functionally identical, due to the many standards and <strong>ps</strong> implementations that this <strong>ps</strong> is compatible with.
-  <p>Note that "<strong>ps&nbsp;-aux</strong>“ is distinct from ”<strong>ps&nbsp;aux</strong>“. The POSIX and UNIX standards require that ”<strong>ps&nbsp;-aux</strong>“ print all processes owned by a user named ”x", as well as printing all processes that would be selected by the <strong>-a</strong> option. If the user named “x” does not exist, this <strong>ps</strong> may interpret the command as "<strong>ps&nbsp;aux</strong>" instead and print a warning. This behavior is intended to aid in transitioning old scripts and habits. It is fragile, subject to change, and thus should not be relied upon.
+  <p>Note that "<strong>ps&nbsp;-aux</strong>" is distinct from "<strong>ps&nbsp;aux</strong>". The POSIX and UNIX standards require that "<strong>ps&nbsp;-aux</strong>" print all processes owned by a user named "x", as well as printing all processes that would be selected by the <strong>-a</strong> option. If the user named "x" does not exist, this <strong>ps</strong> may interpret the command as "<strong>ps&nbsp;aux</strong>" instead and print a warning. This behavior is intended to aid in transitioning old scripts and habits. It is fragile, subject to change, and thus should not be relied upon.
   <p>By default, <strong>ps</strong> selects all processes with the same effective user ID (euid=EUID) as the current user and associated with the same terminal as the invoker. It displays the process ID (pid=PID), the terminal associated with the process (tname=TTY), the cumulated CPU time in [dd-]hh:mm:ss format (time=TIME), and the executable name (ucmd=CMD). Output is unsorted by default.
-  <p>The use of BSD-style options will add process state (stat=STAT) to the default display and show the command args (args=COMMAND) instead of the executable name. You can override this with the <strong>PS_FORMAT</strong> environment variable. The use of BSD-style options will also change the process selection to include processes on other terminals (TTYs) that are owned by you; alternately, this may be described as setting the selection to be the set of all processes filtered to exclude processes owned by other users or not on a terminal. These effects are not considered when options are described as being “identical” below, so <strong>-M</strong> will be considered identical to <strong>Z</strong> and so on.
+  <p>The use of BSD-style options will add process state (stat=STAT) to the default display and show the command args (args=COMMAND) instead of the executable name. You can override this with the <strong>PS_FORMAT</strong> environment variable. The use of BSD-style options will also change the process selection to include processes on other terminals (TTYs) that are owned by you; alternately, this may be described as setting the selection to be the set of all processes filtered to exclude processes owned by other users or not on a terminal. These effects are not considered when options are described as being "identical" below, so <strong>-M</strong> will be considered identical to <strong>Z</strong> and so on.
   <p>Except as described below, process selection options are additive. The default selection is discarded, and then the selected processes are added to the set of processes to be displayed. A&nbsp;process will thus be shown if it meets any of the given selection criteria.
 </div>
 <div class="section">
@@ -91,7 +91,7 @@
       <p>Select all processes except both session leaders (see <em>getsid</em>(2)) and processes not associated with a terminal.
     <dt><strong>a</strong>
     <dd>
-      <p>Lift the BSD-style “only yourself” restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;“-”) options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes with a terminal (tty), or to list all processes when used together with the <strong>x</strong> option.
+      <p>Lift the BSD-style "only yourself" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes with a terminal (tty), or to list all processes when used together with the <strong>x</strong> option.
     <dt><strong>-d</strong>
     <dd>
       <p>Select all processes except session leaders.
@@ -106,7 +106,7 @@
       <p>Restrict the selection to only running processes.
     <dt><strong>x</strong>
     <dd>
-      <p>Lift the BSD-style “must have a tty” restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;“-”) options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes owned by you (same EUID as <strong>ps</strong>), or to list all processes when used together with the <strong>a</strong> option.
+      <p>Lift the BSD-style "must have a tty" restriction, which is imposed upon the set of all processes when some BSD-style (without&nbsp;"-") options are used or when the <strong>ps</strong> personality setting is BSD-like. The set of processes selected in this manner is in addition to the set of processes selected by other means. An alternate description is that this option causes <strong>ps</strong> to list all processes owned by you (same EUID as <strong>ps</strong>), or to list all processes when used together with the <strong>a</strong> option.
     <dt><strong>--deselect</strong>
     <dd>
       <p>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>-N</strong>.
@@ -114,7 +114,7 @@
 </div>
 <div class="section">
   <h2>PROCESS SELECTION BY LIST</h2>
-  <p>These options accept a single argument in the form of a blank-separated or comma-separated list. They can be used multiple times. For&nbsp;example:&nbsp;<strong>ps&nbsp;-p&nbsp;“1&nbsp;2”&nbsp;-p&nbsp;3,4</strong>
+  <p>These options accept a single argument in the form of a blank-separated or comma-separated list. They can be used multiple times. For&nbsp;example:&nbsp;<strong>ps&nbsp;-p&nbsp;"1&nbsp;2"&nbsp;-p&nbsp;3,4</strong>
   <dl class="indent-16">
     <dt><strong>-C</strong><em>&nbsp;cmdlist</em>
     <dd>
@@ -153,7 +153,7 @@
     <dt><strong>-t</strong><em>&nbsp;ttylist</em>
     <dd>
       <p>Select by tty.<br>
-      This selects the processes associated with the terminals given in <em>ttylist</em>. Terminals (ttys, or screens for text output) can be specified in several forms: /dev/ttyS1, ttyS1, S1. A&nbsp;plain “-” may be used to select processes not attached to any terminal.
+      This selects the processes associated with the terminals given in <em>ttylist</em>. Terminals (ttys, or screens for text output) can be specified in several forms: /dev/ttyS1, ttyS1, S1. A&nbsp;plain "-" may be used to select processes not attached to any terminal.
     <dt><strong>-u</strong><em>&nbsp;userlist</em>
     <dd>
       <p>Select by effective user ID (EUID) or name.<br>
@@ -238,7 +238,7 @@
     <dt><strong>-o</strong><em>&nbsp;format</em>
     <dd>
       <p>user-defined format.<br>
-      <em>format</em> is a single argument in the form of a blank-separated or comma-separated list, which offers a way to specify individual output columns. The recognized keywords are described in the <strong>STANDARD FORMAT SPECIFIERS</strong> section below. Headers may be renamed (<strong>ps&nbsp;-o&nbsp;pid,ruser=RealUser&nbsp;-o&nbsp;comm=Command</strong>) as desired. If all column headers are empty (<strong>ps&nbsp;-o&nbsp;pid=&nbsp;-o&nbsp;comm=</strong>) then the header line will not be output. Column width will increase as needed for wide headers; this may be used to widen up columns such as WCHAN (<strong>ps&nbsp;-o&nbsp;pid,wchan=WIDE-WCHAN-COLUMN&nbsp;-o&nbsp;comm</strong>). Explicit width control (<strong>ps&nbsp;opid,wchan:42,cmd</strong>) is offered too. The behavior of <strong>ps&nbsp;-o&nbsp;pid=X,comm=Y</strong> varies with personality; output may be one column named “X,comm=Y” or two columns named “X” and “Y”. Use multiple <strong>-o</strong> options when in doubt. Use the <strong>PS_FORMAT</strong> environment variable to specify a default as desired; DefSysV and DefBSD are macros that may be used to choose the default UNIX or BSD columns.
+      <em>format</em> is a single argument in the form of a blank-separated or comma-separated list, which offers a way to specify individual output columns. The recognized keywords are described in the <strong>STANDARD FORMAT SPECIFIERS</strong> section below. Headers may be renamed (<strong>ps&nbsp;-o&nbsp;pid,ruser=RealUser&nbsp;-o&nbsp;comm=Command</strong>) as desired. If all column headers are empty (<strong>ps&nbsp;-o&nbsp;pid=&nbsp;-o&nbsp;comm=</strong>) then the header line will not be output. Column width will increase as needed for wide headers; this may be used to widen up columns such as WCHAN (<strong>ps&nbsp;-o&nbsp;pid,wchan=WIDE-WCHAN-COLUMN&nbsp;-o&nbsp;comm</strong>). Explicit width control (<strong>ps&nbsp;opid,wchan:42,cmd</strong>) is offered too. The behavior of <strong>ps&nbsp;-o&nbsp;pid=X,comm=Y</strong> varies with personality; output may be one column named "X,comm=Y" or two columns named "X" and "Y". Use multiple <strong>-o</strong> options when in doubt. Use the <strong>PS_FORMAT</strong> environment variable to specify a default as desired; DefSysV and DefBSD are macros that may be used to choose the default UNIX or BSD columns.
     <dt><strong>s</strong>
     <dd>
       <p>display signal format
@@ -272,7 +272,7 @@
     <dd>
       <p>Sorting order. (overloaded)<br>
       The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>).
-      <p>For sorting, obsolete BSD <strong>O</strong> option syntax is <strong>O</strong>[<strong>+</strong>|<strong>-</strong>]<em>k1</em>[,[<strong>+</strong>|<strong>-</strong>]<em>k2</em>[,...]]. It orders the processes listing according to the multilevel sort specified by the sequence of one-letter short keys <em>k1</em>, <em>k2</em>, ... described in the <strong>OBSOLETE SORT KEYS</strong> section below. The&nbsp;“+” is currently optional, merely re-iterating the default direction on a key, but may help to distinguish an <strong>O</strong> sort from an <strong>O</strong> format. The&nbsp;“-” reverses direction only on the key it precedes.
+      <p>For sorting, obsolete BSD <strong>O</strong> option syntax is <strong>O</strong>[<strong>+</strong>|<strong>-</strong>]<em>k1</em>[,[<strong>+</strong>|<strong>-</strong>]<em>k2</em>[,...]]. It orders the processes listing according to the multilevel sort specified by the sequence of one-letter short keys <em>k1</em>, <em>k2</em>, ... described in the <strong>OBSOLETE SORT KEYS</strong> section below. The&nbsp;"+" is currently optional, merely re-iterating the default direction on a key, but may help to distinguish an <strong>O</strong> sort from an <strong>O</strong> format. The&nbsp;"-" reverses direction only on the key it precedes.
     <dt><strong>S</strong>
     <dd>
       <p>Sum up some information, such as CPU usage, from dead child processes into their parent. This is useful for examining a system where a parent process repeatedly forks off short-lived children to do work.
@@ -291,7 +291,7 @@
       The <strong>h</strong> option is problematic. Standard BSD <strong>ps</strong> uses this option to print a header on each page of output, but older Linux <strong>ps</strong> uses this option to totally disable the header. This version of <strong>ps</strong> follows the Linux usage of not printing the header unless the BSD personality has been selected, in which case it prints a header on each page of output. Regardless of the current personality, you can use the long options <strong>--headers</strong> and <strong>--no-headers</strong> to enable printing headers each page or disable headers entirely, respectively.
     <dt><strong>k</strong><em>&nbsp;spec</em>
     <dd>
-      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;“+” is optional since default direction is increasing numerical or lexicographic order. Identical to <strong>--sort</strong>. Examples:<br>
+      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to <strong>--sort</strong>. Examples:<br>
       <strong>ps&nbsp;jaxkuid,-ppid,+pid</strong><br>
       <strong>ps&nbsp;axk&nbsp;comm&nbsp;o&nbsp;comm,args</strong><br>
       <strong>ps&nbsp;kstart_time&nbsp;-ef</strong>
@@ -342,7 +342,7 @@
       <p>set screen height
     <dt><strong>--sort</strong><em>&nbsp;spec</em>
     <dd>
-      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;“+” is optional since default direction is increasing numerical or lexicographic order. Identical to&nbsp;<strong>k</strong>. For example: <strong>ps&nbsp;jax&nbsp;--sort=uid,-ppid,+pid</strong>
+      <p>specify sorting order. Sorting syntax is [<strong>+</strong>|<strong>-</strong>]<em>key</em>[,[<strong>+</strong>|<strong>-</strong>]<em>key</em>[,...]] Choose a multi-letter key from the <strong>STANDARD FORMAT SPECIFIERS</strong> section. The&nbsp;"+" is optional since default direction is increasing numerical or lexicographic order. Identical to&nbsp;<strong>k</strong>. For example: <strong>ps&nbsp;jax&nbsp;--sort=uid,-ppid,+pid</strong>
     <dt><strong>--width</strong><em>&nbsp;n</em>
     <dd>
       <p>set screen width
@@ -397,11 +397,11 @@
   <p>This <strong>ps</strong> needs access to namelist data for proper WCHAN display. For kernels prior to 2.6, the System.map file must be installed.
   <p>CPU usage is currently expressed as the percentage of time spent running during the entire lifetime of a process. This is not ideal, and&nbsp;it does not conform to the standards that <strong>ps</strong> otherwise conforms&nbsp;to. CPU&nbsp;usage is unlikely to add up to exactly&nbsp;100%.
   <p>The SIZE and RSS fields don't count some parts of a process including the page tables, kernel stack, struct thread_info, and struct task_struct. This is usually at least 20&nbsp;KiB of memory that is always resident. SIZE is the virtual size of the process (code+data+stack).
-  <p>Processes marked &lt;defunct&gt; are dead processes (so-called&nbsp;“zombies”) that remain because their parent has not destroyed them properly. These processes will be destroyed by <em>init</em>(8) if the parent process exits.
+  <p>Processes marked &lt;defunct&gt; are dead processes (so-called&nbsp;"zombies") that remain because their parent has not destroyed them properly. These processes will be destroyed by <em>init</em>(8) if the parent process exits.
 </div>
 <div class="section">
   <h2>PROCESS FLAGS</h2>
-  <p>The sum of these values is displayed in the “F” column, which is provided by the <strong>flags</strong> output specifier.
+  <p>The sum of these values is displayed in the "F" column, which is provided by the <strong>flags</strong> output specifier.
   <dl class="indent-5">
     <dt>1
     <dd>
@@ -413,7 +413,7 @@
 </div>
 <div class="section">
   <h2>PROCESS STATE CODES</h2>
-  <p>Here are the different values that the <strong>s</strong>, <strong>stat</strong> and <strong>state</strong> output specifiers (header&nbsp;“STAT”&nbsp;or&nbsp;“S”) will display to describe the state of a process.
+  <p>Here are the different values that the <strong>s</strong>, <strong>stat</strong> and <strong>state</strong> output specifiers (header&nbsp;"STAT"&nbsp;or&nbsp;"S") will display to describe the state of a process.
   <dl class="indent-5">
     <dt>D
     <dd>
@@ -435,7 +435,7 @@
       <p>dead (should never be seen)
     <dt>Z
     <dd>
-      <p>Defunct (“zombie”) process, terminated but not reaped by its parent.
+      <p>Defunct ("zombie") process, terminated but not reaped by its parent.
   </dl>
   <p>For BSD formats and when the <strong>stat</strong> keyword is used, additional characters may be displayed:
   <dl class="indent-5">
@@ -461,7 +461,7 @@
 </div>
 <div class="section">
   <h2>OBSOLETE SORT KEYS</h2>
-  <p>These keys are used by the BSD <strong>O</strong> option (when it is used for sorting). The GNU <strong>--sort</strong> option doesn't use these keys, but the specifiers described below in the <strong>STANDARD FORMAT SPECIFIERS</strong> section. Note that the values used in sorting are the internal values <strong>ps</strong> uses and not the “cooked” values used in some of the output format fields (e.g. sorting on tty will sort into device number, not according to the terminal name displayed). Pipe <strong>ps</strong> output into the <em>sort</em>(1) command if you want to sort the cooked values.
+  <p>These keys are used by the BSD <strong>O</strong> option (when it is used for sorting). The GNU <strong>--sort</strong> option doesn't use these keys, but the specifiers described below in the <strong>STANDARD FORMAT SPECIFIERS</strong> section. Note that the values used in sorting are the internal values <strong>ps</strong> uses and not the "cooked" values used in some of the output format fields (e.g. sorting on tty will sort into device number, not according to the terminal name displayed). Pipe <strong>ps</strong> output into the <em>sort</em>(1) command if you want to sort the cooked values.
   <table class="tbl">
     <tr>
       <td><strong>KEY</strong>
@@ -571,7 +571,7 @@
 </div>
 <div class="section">
   <h2>AIX FORMAT DESCRIPTORS</h2>
-  <p>This <strong>ps</strong> supports AIX format descriptors, which work somewhat like the formatting codes of <em>printf</em>(1) and <em>printf</em>(3). For example, the normal default output can be produced with this: <strong>ps&nbsp;-eo&nbsp;“%p&nbsp;%y&nbsp;%x&nbsp;%c”</strong>. The&nbsp;<strong>NORMAL</strong> codes are described in the next section.
+  <p>This <strong>ps</strong> supports AIX format descriptors, which work somewhat like the formatting codes of <em>printf</em>(1) and <em>printf</em>(3). For example, the normal default output can be produced with this: <strong>ps&nbsp;-eo&nbsp;"%p&nbsp;%y&nbsp;%x&nbsp;%c"</strong>. The&nbsp;<strong>NORMAL</strong> codes are described in the next section.
   <table class="tbl">
     <tr>
       <td><strong>CODE</strong>
@@ -654,7 +654,7 @@
     <tr>
       <td class="1 bold">%cpu
       <td class="1">%CPU
-      <td>cpu utilization of the process in “##.#” format. Currently, it is the CPU time used divided by the time the process has been running (cputime/realtime ratio), expressed as a percentage. It will not add up to 100% unless you are lucky. (alias&nbsp;<strong>pcpu</strong>).
+      <td>cpu utilization of the process in "##.#" format. Currently, it is the CPU time used divided by the time the process has been running (cputime/realtime ratio), expressed as a percentage. It will not add up to 100% unless you are lucky. (alias&nbsp;<strong>pcpu</strong>).
     <tr>
       <td class="1 bold">%mem
       <td class="1">%MEM
@@ -671,11 +671,11 @@
     <tr>
       <td class="1 bold">bsdstart
       <td class="1">START
-      <td>time the command started. If the process was started less than 24 hours ago, the output format is “&nbsp;HH:MM”, else it is “mmm&nbsp;dd” (where mmm is the three letters of the month). See also <strong>lstart</strong>, <strong>start</strong>, <strong>start_time</strong>, and <strong>stime</strong>.
+      <td>time the command started. If the process was started less than 24 hours ago, the output format is "&nbsp;HH:MM", else it is "mmm&nbsp;dd" (where mmm is the three letters of the month). See also <strong>lstart</strong>, <strong>start</strong>, <strong>start_time</strong>, and <strong>stime</strong>.
     <tr>
       <td class="1 bold">bsdtime
       <td class="1">TIME
-      <td>accumulated cpu time, user&nbsp;+&nbsp;system. The display format is usually “MMM:SS”, but can be shifted to the right if the process used more than 999 minutes of cpu time.
+      <td>accumulated cpu time, user&nbsp;+&nbsp;system. The display format is usually "MMM:SS", but can be shifted to the right if the process used more than 999 minutes of cpu time.
     <tr>
       <td class="1 bold">c
       <td class="1">C
@@ -766,7 +766,7 @@
     <tr>
       <td class="1 bold">cputime
       <td class="1">TIME
-      <td>cumulative CPU time, “[dd-]hh:mm:ss” format. (alias&nbsp;<strong>time</strong>).
+      <td>cumulative CPU time, "[dd-]hh:mm:ss" format. (alias&nbsp;<strong>time</strong>).
     <tr>
       <td class="1 bold">egid
       <td class="1">EGID
@@ -846,7 +846,7 @@
     <tr>
       <td class="1 bold">label
       <td class="1">LABEL
-      <td>security label, most commonly used for SE&nbsp;Linux context data. This is for the <em>Mandatory Access Control</em> (“MAC”) found on high-security systems.
+      <td>security label, most commonly used for SE&nbsp;Linux context data. This is for the <em>Mandatory Access Control</em> ("MAC") found on high-security systems.
     <tr>
       <td class="1 bold">lstart
       <td class="1">STARTED
@@ -981,7 +981,7 @@
     <tr>
       <td class="1 bold">sgi_p
       <td class="1">P
-      <td>processor that the process is currently executing on. Displays “*” if the process is not currently running or runnable.
+      <td>processor that the process is currently executing on. Displays "*" if the process is not currently running or runnable.
     <tr>
       <td class="1 bold">sgid
       <td class="1">SGID
@@ -1025,11 +1025,11 @@
     <tr>
       <td class="1 bold">start
       <td class="1">STARTED
-      <td>time the command started. If the process was started less than 24 hours ago, the output format is “HH:MM:SS”, else it is “&nbsp;&nbsp;mmm&nbsp;dd” (where mmm is a three-letter month&nbsp;name). See also <strong>lstart</strong>, <strong>bsdstart</strong>, <strong>start_time</strong>, and <strong>stime</strong>.
+      <td>time the command started. If the process was started less than 24 hours ago, the output format is "HH:MM:SS", else it is "&nbsp;&nbsp;mmm&nbsp;dd" (where mmm is a three-letter month&nbsp;name). See also <strong>lstart</strong>, <strong>bsdstart</strong>, <strong>start_time</strong>, and <strong>stime</strong>.
     <tr>
       <td class="1 bold">start_time
       <td class="1">START
-      <td>starting time or date of the process. Only the year will be displayed if the process was not started the same year <strong>ps</strong> was invoked, or&nbsp;“mmmdd” if&nbsp;it was not started the same day, or&nbsp;“HH:MM” otherwise. See also <strong>bsdstart</strong>, <strong>start</strong>, <strong>lstart</strong>, and <strong>stime</strong>.
+      <td>starting time or date of the process. Only the year will be displayed if the process was not started the same year <strong>ps</strong> was invoked, or&nbsp;"mmmdd" if&nbsp;it was not started the same day, or&nbsp;"HH:MM" otherwise. See also <strong>bsdstart</strong>, <strong>start</strong>, <strong>lstart</strong>, and <strong>stime</strong>.
     <tr>
       <td class="1 bold">stat
       <td class="1">STAT
@@ -1069,7 +1069,7 @@
     <tr>
       <td class="1 bold">time
       <td class="1">TIME
-      <td>cumulative CPU&nbsp;time, “[dd-]hh:mm:ss” format. (alias&nbsp;<strong>cputime</strong>).
+      <td>cumulative CPU&nbsp;time, "[dd-]hh:mm:ss" format. (alias&nbsp;<strong>cputime</strong>).
     <tr>
       <td class="1 bold">tname
       <td class="1">TTY
@@ -1117,7 +1117,7 @@
     <tr>
       <td class="1 bold">wchan
       <td class="1">WCHAN
-      <td>name of the kernel function in which the process is sleeping, a&nbsp;“-”&nbsp;if the process is running, or a “*”&nbsp;if the process is multi-threaded and <strong>ps</strong> is not displaying threads.
+      <td>name of the kernel function in which the process is sleeping, a&nbsp;"-"&nbsp;if the process is running, or a "*"&nbsp;if the process is multi-threaded and <strong>ps</strong> is not displaying threads.
   </table>
 </div>
 <div class="section">
@@ -1156,13 +1156,13 @@
       <p>Default namelist (System.map) location.
     <dt><strong>POSIXLY_CORRECT</strong>
     <dd>
-      <p>Don't find excuses to ignore bad “features”.
+      <p>Don't find excuses to ignore bad "features".
     <dt><strong>POSIX2</strong>
     <dd>
-      <p>When set to “on”, acts as <strong>POSIXLY_CORRECT</strong>.
+      <p>When set to "on", acts as <strong>POSIXLY_CORRECT</strong>.
     <dt><strong>UNIX95</strong>
     <dd>
-      <p>Don't find excuses to ignore bad “features”.
+      <p>Don't find excuses to ignore bad "features".
     <dt><strong>_XPG</strong>
     <dd>
       <p>Cancel <strong>CMD_ENV</strong><em>=irix</em> non-standard behavior.

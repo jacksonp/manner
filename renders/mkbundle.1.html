@@ -13,11 +13,11 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. By default only the assemblies specified in the command line will be included in the bundle. To automatically include all of the dependencies referenced, use the “--deps” command line option.
-  <p>There are two modes of operation, the default one uses the C compiler to create a bundle and requires a complete C and Mono SDK to produced executables. The simple mode (enabled when using the “--simple”) command line option does not require this, and also allows for cross compilation.
+  <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. By default only the assemblies specified in the command line will be included in the bundle. To automatically include all of the dependencies referenced, use the "--deps" command line option.
+  <p>There are two modes of operation, the default one uses the C compiler to create a bundle and requires a complete C and Mono SDK to produced executables. The simple mode (enabled when using the "--simple") command line option does not require this, and also allows for cross compilation.
   <p>For example, to create a bundle for hello world, use the following command:
   <pre>  $ mkbundle -o hello --simple hello.exe</pre>
-  <p>The simple version allows for cross-compiling, this requires a Mono runtime to be installed in the ~/.mono/targets/TARGET/mono to be available. You can use the “--local-targets” to list all available targets, and the “--cross” argument to specify the target, like this:
+  <p>The simple version allows for cross-compiling, this requires a Mono runtime to be installed in the ~/.mono/targets/TARGET/mono to be available. You can use the "--local-targets" to list all available targets, and the "--cross" argument to specify the target, like this:
   <pre> $ mkbundle --local-targets
         Available targets:
                 default - Current System Mono
@@ -30,9 +30,9 @@
   <h2>OLD EMBEDDING</h2>
   <p>For example, to create a bundle for hello world, use the following command:
   <pre> $ mkbundle -o hello hello.exe</pre>
-  <p>The above will pull hello.exe into a native program called “hello”. Notice that the produced image still contains the CIL image and no precompilation is done.
+  <p>The above will pull hello.exe into a native program called "hello". Notice that the produced image still contains the CIL image and no precompilation is done.
   <p>In addition, it is possible to control whether <em>mkbundle</em> should compile the resulting executable or not with the -c option. This is useful if you want to link additional libraries or control the generated output in more detail. For example, this could be used to link some libraries statically:
-  <pre>        $ mkbundle -c -o host.c -oo bundles.o --deps hello.exe
+  <pre>    $ mkbundle -c -o host.c -oo bundles.o --deps hello.exe
 
         $ cc host.c bundles.o /usr/lib/libmono.a -lc -lrt</pre>
   <p>You may also use <em>mkbundle</em> to generate a bundle you can use when embedding the Mono runtime in a native application. In that case, use both the -c and --nomain options. The resulting host.c file will not have a main() function. Call mono_mkbundle_init() before initializing the JIT in your code so that the bundled assemblies are available to the embedded runtime.
@@ -45,7 +45,7 @@
       <p>Produce the stub file, do not compile the resulting stub.
     <dt><em>--cross target</em>
     <dd>
-      <p>Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains a “mono” binary. You can fetch various targets using the --fetch-target command line option.
+      <p>Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains a "mono" binary. You can fetch various targets using the --fetch-target command line option.
     <dt><em>-o filename</em>
     <dd>
       <p>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
@@ -105,10 +105,10 @@
   <dl>
     <dt><em>AS</em>
     <dd>
-      <p>Assembler command. The default is “as”.
+      <p>Assembler command. The default is "as".
     <dt><em>CC</em>
     <dd>
-      <p>C compiler command. The default is “cc” under Linux and “gcc” under Windows.
+      <p>C compiler command. The default is "cc" under Linux and "gcc" under Windows.
     <dt><em>MONO_BUNDLED_OPTIONS</em>
     <dd>
       <p>Options to be passed to the bundled Mono runtime, separated by spaces. See the mono(1) manual page or run mono --help.
@@ -121,7 +121,7 @@
 </div>
 <div class="section">
   <h2>BUGS</h2>
-  <p>The option “--static” is not supported under Windows. Moreover, a full cygwin environment containing at least “gcc” and “as” is required for the build process. The generated executable does not depend on cygwin.
+  <p>The option "--static" is not supported under Windows. Moreover, a full cygwin environment containing at least "gcc" and "as" is required for the build process. The generated executable does not depend on cygwin.
 </div>
 <div class="section">
   <h2>MAILING LISTS</h2>

@@ -13,7 +13,7 @@
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
-  <p>xbuild can be used to build MSBuild project files. Integrated Development Environments like MonoDevelop and “Microsoft Visual Studio .NET” use msbuild project file format.
+  <p>xbuild can be used to build MSBuild project files. Integrated Development Environments like MonoDevelop and "Microsoft Visual Studio .NET" use msbuild project file format.
   <p>xbuild takes the path of the project or solution file to build, as the main argument. If no file is specified then it tries to build any solution file or project file in the current directory, that has a *proj extension.
 </div>
 <div class="section">
@@ -65,7 +65,7 @@
           <dd>
             <p>Encoding to use for the log file, eg. UTF-8, ASCII.
         </dl>
-        <p>Eg: xbuild foo.csproj /flp:Verbosity=normal “/flp1:LogFile=build.log;Append;Encoding=ASCII”
+        <p>Eg: xbuild foo.csproj /flp:Verbosity=normal "/flp1:LogFile=build.log;Append;Encoding=ASCII"
       </div>
     <dt><strong>/nologo</strong>
     <dd>
@@ -90,7 +90,7 @@
     <dt><em>MSBuildExtensionsPath</em>
     <dd>
       <p>MSBuild extensions are usually installed in $(MSBuildExtensionsPath), which xbuild resolves to $prefix/lib/mono/xbuild . When used in Import, like:
-      <p>&lt;Import Project=“$(MSBuildExtensionsPath)\TestTargets.targets”/&gt;
+      <p>&lt;Import Project="$(MSBuildExtensionsPath)\TestTargets.targets"/&gt;
       <p>xbuild tries various values for the msbuild property $(MSBuildExtensionsPath), in order:
       <p>1. Paths specified in the environment variable $MSBuildExtensionsPath.<br>
       2. /Library/Frameworks/Mono.framework/External/xbuild on Mac OSX.<br>
@@ -101,7 +101,7 @@
     <dd>
       <p>With ToolsVersion 4.0, projects can target arbitrary frameworks referenced by TargetFrameworkMoniker, which is of the format:
       <p>Identifier,Version=&lt;version&gt;[,Profile=&lt;profile&gt;]
-      <p>Eg. “.NETFramework,Version=v4.0”
+      <p>Eg. ".NETFramework,Version=v4.0"
       <p>The 3 parts of the moniker are given by the msbuild properties:
       <p>$(TargetFrameworkIdentifier), $(TargetFrameworkVersion) and $(TargetFrameworkProfile)
       <p>This moniker maps to a framework description file on disk:
@@ -114,13 +114,13 @@
   4. $prefix/lib/mono/xbuild-frameworks (default location)</pre>
       <p>XBuild tries the paths given above, in order, till it finds a FrameworkList.xml for the moniker. Running with /v:detailed or higher verbosity will show the various paths that it tries.
       <p>The FrameworkList.xml itself just has a root element like:
-      <p>&lt;FileList Name=“.NET Framework 3.5” TargetFrameworkDirectory=“..\..\..\..\3.5” IncludeFramework=“v3.0”&gt;<br>
+      <p>&lt;FileList Name=".NET Framework 3.5" TargetFrameworkDirectory="..\..\..\..\3.5" IncludeFramework="v3.0"&gt;<br>
       &lt;/FileList&gt;
       <p>Here the TargetFrameworkDirectory attribute specifies the directory where the assemblies for this particular framework can be found. If this is not set, then the parent of the folder containing the xml file is taken as the framework directory.
       <p>IncludeFramework attribute specifies the version of a framework (under the *same* $(TargetFrameworkIdentifier)) which should be included in the final list of Target framework directories.
     <dt><em>XBUILD_COLORS</em>
     <dd>
-      <p>If this variable is set, it contains a string of the form “type=foreground,type=..” that specifies which color to use to display errors/warnings etc on some terminals. Type here can be:
+      <p>If this variable is set, it contains a string of the form "type=foreground,type=.." that specifies which color to use to display errors/warnings etc on some terminals. Type here can be:
       <pre>        errors, warnings, messages or events
 
         events: These are project/target/task start and end event
@@ -129,12 +129,12 @@
       <p>For example, you could set this variable from your shell:
       <pre>   export XBUILD_COLORS
         XBUILD_COLORS=errors=brightred,warnings=blue</pre>
-      <p>You can disable the built-in color scheme by setting this variable to “disable”.
+      <p>You can disable the built-in color scheme by setting this variable to "disable".
   </dl>
 </div>
 <div class="section">
   <h2>NOTES</h2>
-  <p>On Mac OSX, for locating pkg-config (.pc) files, xbuild additionally looks in “/Library/Frameworks/Mono.framework/External/pkgconfig” .
+  <p>On Mac OSX, for locating pkg-config (.pc) files, xbuild additionally looks in "/Library/Frameworks/Mono.framework/External/pkgconfig" .
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>

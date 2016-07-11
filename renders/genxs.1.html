@@ -20,7 +20,7 @@
 </div>
 <div class="section">
   <h2>CONFIGURATION FILE FORMAT</h2>
-  <p>The configuration file is an xml document based on the following grammar (“?” means optional, “*” 0 or more):
+  <p>The configuration file is an xml document based on the following grammar ("?" means optional, "*" 0 or more):
   <pre>      &lt;configuration&gt;
                 &lt;serializer class="name" assembly="name"&gt; *
                         &lt;reader&gt;name&lt;/reader&gt; ?
@@ -35,7 +35,7 @@
                         &lt;/writerHooks&gt;
                 &lt;/serializer&gt;
         &lt;/configuration&gt;</pre>
-  <p>A configuration file can have multiple “serializer” elements, each of which specifies the class for which to generate a serializer together with several generation options. The source class is specified in the following attributes:
+  <p>A configuration file can have multiple "serializer" elements, each of which specifies the class for which to generate a serializer together with several generation options. The source class is specified in the following attributes:
   <dl class="indent-5">
     <dt>*
     <dd>
@@ -51,7 +51,7 @@
       <p><em>reader</em> : name of the reader class.
     <dt>*
     <dd>
-      <p><em>noReader</em> : if “true”, it does not generate reader class.
+      <p><em>noReader</em> : if "true", it does not generate reader class.
     <dt>*
     <dd>
       <p><em>writer</em> : name of the writer class.
@@ -63,13 +63,13 @@
       <p><em>implementation</em> : name of the serializer implementation class. This item is 2.0 only.
     <dt>*
     <dd>
-      <p><em>noWriter</em> : if “true”, it does not generate writer class.
+      <p><em>noWriter</em> : if "true", it does not generate writer class.
     <dt>*
     <dd>
       <p><em>namespace</em> : namespace of the reader and writer classes.
     <dt>*
     <dd>
-      <p><em>generateAsInternal</em> : if “true”, it generates classes as internal.
+      <p><em>generateAsInternal</em> : if "true", it generates classes as internal.
     <dt>*
     <dd>
       <p><em>outFileName</em> : name of the generated file.
@@ -94,7 +94,7 @@
                 &lt;insertBefore&gt;source code&lt;/insertBefore&gt; ?
                 &lt;insertAfter&gt;source code&lt;/insertAfter&gt; ?
         &lt;/hook&gt;</pre>
-  <p>The “type” attribute specifies the context in which the hook is applied. It can be one of the following:
+  <p>The "type" attribute specifies the context in which the hook is applied. It can be one of the following:
   <dl class="indent-5">
     <dt>*
     <dd>
@@ -115,7 +115,7 @@
     <dd>
       <p><em>type</em> : hook is applied for the whole type.
   </dl>
-  <p>The “select” element specifies the classes and members to which the hook has to be added. It can contain the following elements:
+  <p>The "select" element specifies the classes and members to which the hook has to be added. It can contain the following elements:
   <dl class="indent-5">
     <dt>*
     <dd>
@@ -149,7 +149,7 @@
       <p><em>$FULLTYPE:</em> full name of the class being generated, including namespace.
     <dt>*
     <dd>
-      <p><em>$OBJECT:</em> the object being serialized or deserialized. When using a replace reader hook of type “type”, the hook code must assign the deserialized object to this variable.
+      <p><em>$OBJECT:</em> the object being serialized or deserialized. When using a replace reader hook of type "type", the hook code must assign the deserialized object to this variable.
     <dt>*
     <dd>
       <p>-I $ELEMENT: name of the element of the object being serialized/deserialized.
@@ -158,7 +158,7 @@
       <p><em>$NAMESPACE:</em> namespace of the element of the object being serialized/deserialized.
     <dt>*
     <dd>
-      <p><em>$MEMBER:</em> name of the member being serialized/deserialized. Only valid in the “member” context.
+      <p><em>$MEMBER:</em> name of the member being serialized/deserialized. Only valid in the "member" context.
   </dl>
 </div>
 <div class="section">
@@ -185,7 +185,7 @@
         &lt;/select&gt;
         &lt;replace&gt;$OBJECT.Write (Writer);&lt;/replace&gt;
 &lt;/hook&gt;</pre>
-  <p>With this two hooks the serializer will print some information when serializing the class “MyClass”:
+  <p>With this two hooks the serializer will print some information when serializing the class "MyClass":
   <pre>&lt;hook type="type"&gt;
         &lt;select&gt;
                 &lt;typeName&gt;MyNamespace.MyClass&lt;/typeName&gt;
@@ -201,7 +201,7 @@
                 Console.WriteLine ("Serialized member $MEMBER");
         &lt;/insertAfter&gt;
 &lt;/hook&gt;</pre>
-  <p>This hook writes an additional element for all types that have the custom attribute “MyAttribute”:
+  <p>This hook writes an additional element for all types that have the custom attribute "MyAttribute":
   <pre>&lt;hook type="elements"&gt;
         &lt;select&gt;
                 &lt;typeAttribute&gt;MyNamespace.MyAttribute&lt;/typeAttribute&gt;

@@ -105,7 +105,7 @@
   <p>If there is no key, the first command will simply return the error ENOKEY and fail. The second and third commands will create a partial key with the type and description, and call out to <strong>/sbin/request-key</strong> with that key and the extra information supplied. This will then attempt to instantiate the key in some manner, such that a valid key is obtained.
   <p>The third command is like the second, except that the callout information is read from stdin rather than being passed on the command line.
   <p>If a valid key is obtained, the ID will be printed and the key attached as if the original search had succeeded.
-  <p>If there wasn't a valid key obtained, a temporary negative key will be attached to the destination keyring if given and the error “Requested key not available” will be given.
+  <p>If there wasn't a valid key obtained, a temporary negative key will be attached to the destination keyring if given and the error "Requested key not available" will be given.
   <p>testbox&gt;keyctl request2 user debug:hello wibble<br>
   23<br>
   testbox&gt;echo -n wibble | keyctl prequest2 user debug:hello<br>
@@ -115,7 +115,7 @@
   <p>(*) <strong>Update a key</strong>
   <p><strong>keyctl update</strong> &lt;key&gt; &lt;data&gt;<br>
   <strong>keyctl pupdate</strong> &lt;key&gt;
-  <p>This command replaces the data attached to a key with a new set of data. If the type of the key doesn't support update then error “Operation not supported” will be returned.
+  <p>This command replaces the data attached to a key with a new set of data. If the type of the key doesn't support update then error "Operation not supported" will be returned.
   <p>testbox&gt;keyctl update 23 zebra
   <p>The <strong>pupdate</strong> variant of the command reads the data from stdin rather than taking it from the command line:
   <p>testbox&gt;echo -n zebra | keyctl pupdate 23
@@ -126,28 +126,28 @@
   27
   <p>(*) <strong>Revoke a key</strong>
   <p><strong>keyctl revoke</strong> &lt;key&gt;
-  <p>This command marks a key as being revoked. Any further operations on that key (apart from unlinking it) will return error “Key has been revoked”.
+  <p>This command marks a key as being revoked. Any further operations on that key (apart from unlinking it) will return error "Key has been revoked".
   <p>testbox&gt;keyctl revoke 26<br>
   testbox&gt;keyctl describe 26<br>
   keyctl_describe: Key has been revoked
   <p>(*) <strong>Clear a keyring</strong>
   <p><strong>keyctl clear</strong> &lt;keyring&gt;
-  <p>This command unlinks all the keys attached to the specified keyring. Error “Not a directory” will be returned if the key specified is not a keyring.
+  <p>This command unlinks all the keys attached to the specified keyring. Error "Not a directory" will be returned if the key specified is not a keyring.
   <p>testbox&gt;keyctl clear 27
   <p>(*) <strong>Link a key to a keyring</strong>
   <p><strong>keyctl link</strong> &lt;key&gt; &lt;keyring&gt;
-  <p>This command makes a link from the key to the keyring if there's enough capacity to do so. Error “Not a directory” will be returned if the destination is not a keyring. Error “Permission denied” will be returned if the key doesn't have link permission or the keyring doesn't have write permission. Error “File table overflow” will be returned if the keyring is full. Error “Resource deadlock avoided” will be returned if an attempt was made to introduce a recursive link.
+  <p>This command makes a link from the key to the keyring if there's enough capacity to do so. Error "Not a directory" will be returned if the destination is not a keyring. Error "Permission denied" will be returned if the key doesn't have link permission or the keyring doesn't have write permission. Error "File table overflow" will be returned if the keyring is full. Error "Resource deadlock avoided" will be returned if an attempt was made to introduce a recursive link.
   <p>testbox&gt;keyctl link 23 27<br>
   testbox&gt;keyctl link 27 27<br>
   keyctl_link: Resource deadlock avoided
   <p>(*) <strong>Unlink a key from a keyring or the session keyring tree</strong>
   <p><strong>keyctl unlink</strong> &lt;key&gt; [&lt;keyring&gt;]
-  <p>If the keyring is specified, this command removes a link to the key from the keyring. Error “Not a directory” will be returned if the destination is not a keyring. Error “Permission denied” will be returned if the keyring doesn't have write permission. Error “No such file or directory” will be returned if the key is not linked to by the keyring.
+  <p>If the keyring is specified, this command removes a link to the key from the keyring. Error "Not a directory" will be returned if the destination is not a keyring. Error "Permission denied" will be returned if the keyring doesn't have write permission. Error "No such file or directory" will be returned if the key is not linked to by the keyring.
   <p>If the keyring is not specified, this command performs a depth-first search of the session keyring tree and removes all the links to the nominated key that it finds (and that it is permitted to remove). It prints the number of successful unlinks before exiting.
   <p>testbox&gt;keyctl unlink 23 27
   <p>(*) <strong>Search a keyring</strong>
   <p><strong>keyctl search</strong> &lt;keyring&gt; &lt;type&gt; &lt;desc&gt; [&lt;dest_keyring&gt;]
-  <p>This command non-recursively searches a keyring for a key of a particular type and description. If found, the ID of the key will be printed on stdout and the key will be attached to the destination keyring if present. Error “Requested key not available” will be returned if the key is not found.
+  <p>This command non-recursively searches a keyring for a key of a particular type and description. If found, the ID of the key will be printed on stdout and the key will be attached to the destination keyring if present. Error "Requested key not available" will be returned if the key is not found.
   <p>testbox&gt;keyctl search @us user debug:hello<br>
   23<br>
   testbox&gt;keyctl search @us user debug:bye<br>
@@ -156,8 +156,8 @@
   <p><strong>keyctl read</strong> &lt;key&gt;<br>
   <strong>keyctl pipe</strong> &lt;key&gt;<br>
   <strong>keyctl print</strong> &lt;key&gt;
-  <p>These commands read the payload of a key. “read” prints it on stdout as a hex dump, “pipe” dumps the raw data to stdout and “print” dumps it to stdout directly if it's entirely printable or as a hexdump preceded by “:hex:” if not.
-  <p>If the key type does not support reading of the payload, then error “Operation not supported” will be returned.
+  <p>These commands read the payload of a key. "read" prints it on stdout as a hex dump, "pipe" dumps the raw data to stdout and "print" dumps it to stdout directly if it's entirely printable or as a hexdump preceded by ":hex:" if not.
+  <p>If the key type does not support reading of the payload, then error "Operation not supported" will be returned.
   <p>testbox&gt;keyctl read 26<br>
   1 bytes of data in key:<br>
   62<br>
@@ -168,7 +168,7 @@
   <p>(*) <strong>List a keyring</strong>
   <p><strong>keyctl list</strong> &lt;keyring&gt;<br>
   <strong>keyctl rlist</strong> &lt;keyring&gt;
-  <p>These commands list the contents of a key as a keyring. “list” pretty prints the contents and “rlist” just produces a space-separated list of key IDs.
+  <p>These commands list the contents of a key as a keyring. "list" pretty prints the contents and "rlist" just produces a space-separated list of key IDs.
   <p>No attempt is made to check that the specified keyring is a keyring.
   <p>testbox&gt;keyctl list @us<br>
   2 keys in keyring:<br>
@@ -179,22 +179,22 @@
   <p>(*) <strong>Describe a key</strong>
   <p><strong>keyctl describe</strong> &lt;keyring&gt;<br>
   <strong>keyctl rdescribe</strong> &lt;keyring&gt; [sep]
-  <p>These commands fetch a description of a keyring. “describe” pretty prints the description in the same fashion as the “list” command; “rdescribe” prints the raw data returned from the kernel.
+  <p>These commands fetch a description of a keyring. "describe" pretty prints the description in the same fashion as the "list" command; "rdescribe" prints the raw data returned from the kernel.
   <p>testbox&gt;keyctl describe @us<br>
   -5: vrwsl---------- 4043 -1 keyring: _uid_ses.4043 testbox&gt;keyctl rdescribe @us keyring;4043;-1;3f1f0000;_uid_ses.4043
-  <p>The raw string is “&lt;type&gt;;&lt;uid&gt;;&lt;gid&gt;;&lt;perms&gt;;&lt;description&gt;”, where <em>uid</em> and <em>gid</em> are the decimal user and group IDs, <em>perms</em> is the permissions mask in hex, <em>type</em> and <em>description</em> are the type name and description strings (neither of which will contain semicolons).
+  <p>The raw string is "&lt;type&gt;;&lt;uid&gt;;&lt;gid&gt;;&lt;perms&gt;;&lt;description&gt;", where <em>uid</em> and <em>gid</em> are the decimal user and group IDs, <em>perms</em> is the permissions mask in hex, <em>type</em> and <em>description</em> are the type name and description strings (neither of which will contain semicolons).
   <p>(*) <strong>Change the access controls on a key</strong>
   <p><strong>keyctl chown</strong> &lt;key&gt; &lt;uid&gt;<br>
   <strong>keyctl chgrp</strong> &lt;key&gt; &lt;gid&gt;
   <p>These two commands change the UID and GID associated with evaluating a key's permissions mask. The UID also governs which quota a key is taken out of.
-  <p>The chown command is not currently supported; attempting it will earn the error “Operation not supported” at best.
+  <p>The chown command is not currently supported; attempting it will earn the error "Operation not supported" at best.
   <p>For non-superuser users, the GID may only be set to the process's GID or a GID in the process's groups list. The superuser may set any GID it likes.
   <p>testbox&gt;sudo keyctl chown 27 0<br>
   keyctl_chown: Operation not supported<br>
   testbox&gt;sudo keyctl chgrp 27 0
   <p>(*) <strong>Set the permissions mask on a key</strong>
   <p><strong>keyctl setperm</strong> &lt;key&gt; &lt;mask&gt;
-  <p>This command changes the permission control mask on a key. The mask may be specified as a hex number if it begins “0x”, an octal number if it begins “0” or a decimal number otherwise.
+  <p>This command changes the permission control mask on a key. The mask may be specified as a hex number if it begins "0x", an octal number if it begins "0" or a decimal number otherwise.
   <p>The hex numbers are a combination of:
   <p>Possessor UID GID Other Permission Granted<br>
   ======== ======== ======== ======== ==================<br>
@@ -247,15 +247,15 @@
   <strong>keyctl pinstantiate</strong> &lt;key&gt; &lt;keyring&gt;<br>
   <strong>keyctl negate</strong> &lt;key&gt; &lt;timeout&gt; &lt;keyring&gt;<br>
   <strong>keyctl reject</strong> &lt;key&gt; &lt;timeout&gt; &lt;error&gt; &lt;keyring&gt;
-  <p>These commands are used to attach data to a partially set up key (as created by the kernel and passed to /sbin/request-key). “instantiate” marks a key as being valid and attaches the data as the payload. “negate” and “reject” mark a key as invalid and sets a timeout on it so that it'll go away after a while. This prevents a lot of quickly sequential requests from slowing the system down overmuch when they all fail, as all subsequent requests will then fail with error “Requested key not found” (if negated) or the specified error (if rejected) until the negative key has expired.
+  <p>These commands are used to attach data to a partially set up key (as created by the kernel and passed to /sbin/request-key). "instantiate" marks a key as being valid and attaches the data as the payload. "negate" and "reject" mark a key as invalid and sets a timeout on it so that it'll go away after a while. This prevents a lot of quickly sequential requests from slowing the system down overmuch when they all fail, as all subsequent requests will then fail with error "Requested key not found" (if negated) or the specified error (if rejected) until the negative key has expired.
   <p>Reject's error argument can either be a UNIX error number or one of '<strong>rejected</strong>', '<strong>expired</strong>' or '<strong>revoked</strong>'.
   <p>The newly instantiated key will be attached to the specified keyring.
   <p>These commands may only be run from the program run by request-key - a special authorisation key is set up by the kernel and attached to the request-key's session keyring. This special key is revoked once the key to which it refers has been instantiated one way or another.
-  <p>testbox&gt;keyctl instantiate $1 “Debug $3” $4<br>
+  <p>testbox&gt;keyctl instantiate $1 "Debug $3" $4<br>
   testbox&gt;keyctl negate $1 30 $4<br>
   testbox&gt;keyctl reject $1 30 64 $4
   <p>The <strong>pinstantiate</strong> variant of the command reads the data from stdin rather than taking it from the command line:
-  <p>testbox&gt;echo -n “Debug $3” | keyctl pinstantiate $1 $4
+  <p>testbox&gt;echo -n "Debug $3" | keyctl pinstantiate $1 $4
   <p>(*) <strong>Set the expiry time on a key</strong>
   <p><strong>keyctl timeout</strong> &lt;key&gt; &lt;timeout&gt;
   <p>This command is used to set the timeout on a key, or clear an existing timeout if the value specified is zero. The timeout is given as a number of seconds into the future.
@@ -306,11 +306,11 @@
 <div class="section">
   <h2>ERRORS</h2>
   <p>There are a number of common errors returned by this program:
-  <p>“Not a directory” - a key wasn't a keyring.
-  <p>“Requested key not found” - the looked for key isn't available.
-  <p>“Key has been revoked” - a revoked key was accessed.
-  <p>“Key has expired” - an expired key was accessed.
-  <p>“Permission denied” - permission was denied by a UID/GID/mask combination.
+  <p>"Not a directory" - a key wasn't a keyring.
+  <p>"Requested key not found" - the looked for key isn't available.
+  <p>"Key has been revoked" - a revoked key was accessed.
+  <p>"Key has expired" - an expired key was accessed.
+  <p>"Permission denied" - permission was denied by a UID/GID/mask combination.
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>

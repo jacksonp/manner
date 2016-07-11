@@ -58,8 +58,8 @@
     <dd>
       <p>Create a &lt;since/&gt; element for added types and members with the value <em>SINCE</em> .<br>
       <br>
-      For example, when given <em>-since:“Gtk# 2.4”</em> an element will be inserted into the <em>Docs</em> element for all added types and type members:
-      <pre>   &lt;since version="Gtk# 2.4" /&gt;</pre>
+      For example, when given <em>-since:"Gtk# 2.4"</em> an element will be inserted into the <em>Docs</em> element for all added types and type members:
+      <pre>       &lt;since version="Gtk# 2.4" /&gt;</pre>
       <p>The Mono Documentation Browser and <em>monodocs2html</em> will use this element to specify in which version a member was added.
     <dt><em>-type:TYPE</em>
     <dd>
@@ -98,7 +98,7 @@
 &lt;monodoc&gt;
   &lt;source provider="ecma" basefile="MyWidgets" path="classlib-gnome"/&gt;
 &lt;/monodoc&gt;</pre>
-  <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the “classlib-gnome” part of the tree. If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml.
+  <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the "classlib-gnome" part of the tree. If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml.
   <p>Once you have all of your files (.zip, .tree and .sources) you can install them into the system with the following command:
   <pre>        $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`</pre>
   <p>The above will copy the files into the directory that Monodoc has registered (you might need root permissions to do this). The actual directory is returned by the <em>pkg-config</em> invocation.
@@ -131,11 +131,11 @@
     <dd>
       <p>The String ID refers to a type, with the number of generic types appended: <em>T:System.String</em> , <em>T:System.Collections.Generic.List`1</em>
   </dl>
-  <p>To make matters more interesting, generic types & members have two representations: the “unbound” representation (shown in examples above), in which class names have the count of generic parameters appended to their name. There is also a “bound” representation, in which the binding of generic parameters is listed within '{' and '}'.
+  <p>To make matters more interesting, generic types & members have two representations: the "unbound" representation (shown in examples above), in which class names have the count of generic parameters appended to their name. There is also a "bound" representation, in which the binding of generic parameters is listed within '{' and '}'.
   <p><strong>Unbound:</strong> <em>T:System.Collections.Generic.List`1</em> , <em>T:System.Collections.Generic.Dictionary`2</em> .
   <p><strong>Bound:</strong> <em>T:System.Collections.Generic.List{System.Int32}</em> <em>T:System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Predicate{System.String}}}</em> .
   <p>As you can see, bound variants can be arbitrarily complex (just like generics).
-  <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the “index” of the type/method's generic parameter is used as the binding, so given
+  <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the "index" of the type/method's generic parameter is used as the binding, so given
   <pre>  class FooType {
           public static void Foo&lt;T&gt; (System.Predicate&lt;T&gt; predicate) {}
         }</pre>
@@ -163,7 +163,7 @@
   </dl>
   <p>The following elements are used in documentation:
   <dl>
-    <dt><em>&lt;block subset=“SUBSET” type=“TYPE”&gt;XML_TEXT&lt;/block&gt;</em>
+    <dt><em>&lt;block subset="SUBSET" type="TYPE"&gt;XML_TEXT&lt;/block&gt;</em>
     <dd>
       <p>Create a block of text, similar in concept to a paragraph, but is used to create divisions within the text. To some extent, a &lt;block/&gt; is equivalent to the HTML &lt;h2/&gt; tag.<br>
       <br>
@@ -181,13 +181,13 @@
     <dt><em>&lt;c&gt;XML_TEXT&lt;/c&gt;</em>
     <dd>
       <p>Set text in a code-like font (similar to the HTML &lt;tt/&gt; element).
-    <dt><em>&lt;code lang=“LANGUAGE”&gt;TEXT&lt;/code&gt;</em>
+    <dt><em>&lt;code lang="LANGUAGE"&gt;TEXT&lt;/code&gt;</em>
     <dd>
       <p>Display multiple lines of text in a code-like font (similar to the HTML &lt;pre/&gt; element). <em>LANGUAGE</em> is the language this code block is for. For example, if <em>LANGUAGE</em> is <strong>C#</strong> , then <em>TEXT</em> will get syntax highlighting for the C# language within the Mono Documentation Browser.
     <dt><em>&lt;example&gt;XML_TEXT&lt;/example&gt;</em>
     <dd>
       <p>Indicates an example that should be displayed specially. For example:
-      <pre>    &lt;example&gt;
+      <pre>        &lt;example&gt;
           &lt;para&gt;An introductory paragraph.&lt;/para&gt;
           &lt;code lang="C#"&gt;
             class Example {
@@ -198,14 +198,14 @@
             }
           &lt;/code&gt;
         &lt;/example&gt;</pre>
-    <dt><em>&lt;exception cref=“CREF”&gt;XML_TEXT&lt;/exception&gt;</em>
+    <dt><em>&lt;exception cref="CREF"&gt;XML_TEXT&lt;/exception&gt;</em>
     <dd>
       <p>Identifies an exception that can be thrown by the documented member.<br>
       <br>
       <em>&lt;exception/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       <em>CREF</em> is the exception type that is thrown, while <em>XML_TEXT</em> contains the circumstances that would cause <em>CREF</em> to be thrown.
-      <pre>    &lt;exception cref="T:System.ArgumentNullException"&gt;
+      <pre>        &lt;exception cref="T:System.ArgumentNullException"&gt;
           &lt;paramref name="foo" /&gt; was &lt;see langword="null" /&gt;.
         &lt;/exception&gt;</pre>
     <dt><em>&lt;list&gt;XML&lt;/list&gt;</em>
@@ -243,21 +243,21 @@
       <br>
       For example,
       <pre>   &lt;para&gt;This is a paragraph of text.&lt;/para&gt;</pre>
-    <dt><em>&lt;param name=“NAME”&gt;XML_TEXT&lt;/param&gt;</em>
+    <dt><em>&lt;param name="NAME"&gt;XML_TEXT&lt;/param&gt;</em>
     <dd>
       <p><em>&lt;param/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       Describes the parameter <em>NAME</em> of the current constructor, method, or property:
-      <pre>     &lt;param name="count"&gt;
+      <pre> &lt;param name="count"&gt;
           A &lt;see cref="T:System.Int32" /&gt; containing the number
           of widgets to process.
         &lt;/param&gt;</pre>
-    <dt><em>&lt;paramref name=“NAME” /&gt;</em>
+    <dt><em>&lt;paramref name="NAME" /&gt;</em>
     <dd>
       <p>Indicates that <em>NAME</em> is a parameter.<br>
       <br>
       This usually renders <em>NAME</em> as italic text, so it is frequently (ab)used as an equivalent to the HTML &lt;i/&gt; element. See the <em>&lt;exception/&gt;</em> documentation (above) for an example.
-    <dt><em>&lt;permission cref=“CREF”&gt;XML_TEXT&lt;/permission&gt;</em>
+    <dt><em>&lt;permission cref="CREF"&gt;XML_TEXT&lt;/permission&gt;</em>
     <dd>
       <p>Documentes the security accessibility requirements of the current member.<br>
       <br>
@@ -285,22 +285,22 @@
           or not the process can access
           &lt;see cref="P:Mono.Unix.UnixFileSystemInfo.FullName" /&gt;.
         &lt;/returns&gt;</pre>
-    <dt><em>&lt;see cref=“CREF” /&gt;</em>
+    <dt><em>&lt;see cref="CREF" /&gt;</em>
     <dd>
       <p>Creates a link to the specified member within the current text:
-      <pre>       &lt;see cref="M:Some.Namespace.With.Type.Method" /&gt;</pre>
-    <dt><em>&lt;seealso cref=“CREF” /&gt;</em>
+      <pre>   &lt;see cref="M:Some.Namespace.With.Type.Method" /&gt;</pre>
+    <dt><em>&lt;seealso cref="CREF" /&gt;</em>
     <dd>
       <p><em>&lt;seealso/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       Allows an entry to be generated for the <em>See Also</em> subclause. Use <em>&lt;see/&gt;</em> to specify a link from within text.
-      <pre>       &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
-    <dt><em>&lt;since version=“VERSION” /&gt;</em>
+      <pre>   &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
+    <dt><em>&lt;since version="VERSION" /&gt;</em>
     <dd>
       <p><em>&lt;since/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       Permits specification of which version introduced the specified type or member.
-      <pre>    &lt;since version="Gtk# 2.4" /&gt;</pre>
+      <pre>        &lt;since version="Gtk# 2.4" /&gt;</pre>
     <dt><em>&lt;summary&gt;DESCRIPTION&lt;/summary&gt;</em>
     <dd>
       <p><em>&lt;summary/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
@@ -308,14 +308,14 @@
       Provides a (brief!) overview about a type or type member.<br>
       <br>
       This is usually displayed as part of a class declaration, and should be a reasonably short description of the type/member. Use <em>&lt;remarks/&gt;</em> for more detailed information.
-    <dt><em>&lt;typeparam name=“NAME”&gt;DESCRPITION&lt;/typeparam&gt;</em>
+    <dt><em>&lt;typeparam name="NAME"&gt;DESCRPITION&lt;/typeparam&gt;</em>
     <dd>
       <p><em>&lt;typeparam/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       This is used to describe type parameter for a generic type or generic method.<br>
       <br>
       <em>NAME</em> is the name of the type parameter, while <em>DESCRIPTION</em> contains a description of the parameter (what it's used for, what restrictions it must meet, etc.).
-      <pre>  &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
+      <pre>      &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
     <dt><em>&lt;typeparamref&gt;</em>
     <dd>
       <p>Used to indicate that a word is a type parameter, for use within other text blocks (e.g. within <em>&lt;para/&gt;</em> ).

@@ -15,7 +15,7 @@
   <h2>DESCRIPTION</h2>
   <p><strong>pmchart</strong> is a graphical utility that plots performance metrics values available through the facilities of the Performance Co-Pilot (PCP). Multiple charts can be displayed simultaneously, either aligned on the unified time axis (X-axis), and through the use of multiple interface Tabs.
   <p>Metric values can be sourced from one or more live hosts (simultaneously). Alternatively, one or more sets of PCP archives can be used as a source of historical data. See <strong>PCPIntro</strong>(1) for an in-depth discussion of the capabilities of the PCP framework, many of which are used by <strong>pmchart.</strong>
-  <p>Many aspects of the behaviour of <strong>pmchart</strong> can be customised through the interface. In particular, the use of “views” (refer to the section describing VIEWS later in this document) allows predefined sets of metrics and charting parameters like colors, scaling, titles, legends, and so on to be stored for later use, or use with different hosts and sets of archives. In addition, the Preferences dialog allows customisations to the rest of the <strong>pmchart</strong> user interface to be saved and restored between different invocations of the tool. This allows the default background color, highlight color, contents and location of the toolbar, and many other aspects to be configured.
+  <p>Many aspects of the behaviour of <strong>pmchart</strong> can be customised through the interface. In particular, the use of "views" (refer to the section describing VIEWS later in this document) allows predefined sets of metrics and charting parameters like colors, scaling, titles, legends, and so on to be stored for later use, or use with different hosts and sets of archives. In addition, the Preferences dialog allows customisations to the rest of the <strong>pmchart</strong> user interface to be saved and restored between different invocations of the tool. This allows the default background color, highlight color, contents and location of the toolbar, and many other aspects to be configured.
   <p><strong>pmchart</strong> makes extensive use of the <strong>pmtime</strong>(1) utility for time control, refer to the <strong>pmtime</strong> manual page for further details of its operation.
   <p>Options which control the default source, timing and layout of the <strong>pmchart</strong> window are as follows:
   <dl class="indent-5">
@@ -30,13 +30,13 @@
       <p>Used with <strong>-c</strong>, the view(s) are parsed, any errors are reported, and the tool exits. This is primarily intended for testing purposes. If a second <strong>-C</strong> option is presented, <strong>pmchart</strong> also connects to <strong>pmcd</strong>(1) to check the semantics of metrics.
     <dt><strong>-f</strong>
     <dd>
-      <p>Specify the default font <em>family</em> to be used in several chart components, such as the chart title, legend, and Y-axis label. The default value is “Sans Serif”. This setting does not affect the rest of the user interface, where the value is inherited from the environment in which <strong>pmchart</strong> operates, and differs according to the look-and-feel of each platform.
+      <p>Specify the default font <em>family</em> to be used in several chart components, such as the chart title, legend, and Y-axis label. The default value is "Sans Serif". This setting does not affect the rest of the user interface, where the value is inherited from the environment in which <strong>pmchart</strong> operates, and differs according to the look-and-feel of each platform.
     <dt><strong>-F</strong>
     <dd>
       <p>Specify the default font <em>point</em> size to be used in several chart components, such as the chart title, legend, and Y-axis label. The default is platform dependent, but is either 7, 8 or 9. This setting does not affect the rest of the user interface.
     <dt><strong>-g</strong>
     <dd>
-      <p>Generate image with the specified <em>geometry</em> (width and height). This option is only useful when used in conjunction with the <strong>-o</strong> option for generating an output image. The <em>geometry</em> argument takes the form “WxH” (e.g. 240x120). When NOT using the <strong>-o</strong> flag, to specify the display window geometry, use <strong>-geometry</strong> <em>geometry</em> where <em>geometry</em> specifies the desired window width, height and optional placement.
+      <p>Generate image with the specified <em>geometry</em> (width and height). This option is only useful when used in conjunction with the <strong>-o</strong> option for generating an output image. The <em>geometry</em> argument takes the form "WxH" (e.g. 240x120). When NOT using the <strong>-o</strong> flag, to specify the display window geometry, use <strong>-geometry</strong> <em>geometry</em> where <em>geometry</em> specifies the desired window width, height and optional placement.
     <dt><strong>-h</strong>
     <dd>
       <p>Current performance metric values are retrieved from the nominated <em>host</em> machine by default. Multiple <strong>-h</strong> options can be presented, and the list of hosts is used for sourcing metric values. Any <em>sources</em> listed on the command line are assumed to be hosts if this option is used.
@@ -68,14 +68,14 @@
     <dd>
       <p>Change the reporting timezone to the local timezone at the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> or <strong>-a</strong> options.
   </dl>
-  <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a “natural” alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
+  <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a "natural" alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
 </div>
 <div class="section">
   <h2>VIEWS</h2>
-  <p>The primary <strong>pmchart</strong> configuration file is the “view”, which allows the metadata associated with one or more charts to be saved in the filesystem. This metadata describes all aspects of the charts, including which PCP metrics and instances are to be used, which hosts, which colors, the chart titles, use of chart legends, and much more.
+  <p>The primary <strong>pmchart</strong> configuration file is the "view", which allows the metadata associated with one or more charts to be saved in the filesystem. This metadata describes all aspects of the charts, including which PCP metrics and instances are to be used, which hosts, which colors, the chart titles, use of chart legends, and much more.
   <p>From a conceptual point of view, there are two classes of view. These views share the same configuration file format - refer to a later section for a complete description of this format. The differences lie in where they are installed and how they are manipulated.
-  <p>The first class, the “system” view, is simply any view that is installed as part of the <strong>pmchart</strong> package. These are stored in <em>$PCP_VAR_DIR/config/pmchart.</em> When the <em>File→Open View</em> dialog is displayed, it is these views that are initially listed. The system views cannot be modified by a normal user, and should not be modified even by a user with suitable privileges, as they will be overwritten during an upgrade.
-  <p>The second class of view is the “user” view. These views are created on-the-fly using the <em>File→Save View</em> dialog. This is a mechanism for individual users to save their commonly used views. Access to these views is achieved through the <em>File→Open View</em> dialog, as with the system views. Once the dialog is opened, the list of views can be toggled between user and system views by clicking on the two toggle buttons in the top right corner. User views are stored in <em>$HOME/.pcp/pmchart.</em>
+  <p>The first class, the "system" view, is simply any view that is installed as part of the <strong>pmchart</strong> package. These are stored in <em>$PCP_VAR_DIR/config/pmchart.</em> When the <em>File→Open View</em> dialog is displayed, it is these views that are initially listed. The system views cannot be modified by a normal user, and should not be modified even by a user with suitable privileges, as they will be overwritten during an upgrade.
+  <p>The second class of view is the "user" view. These views are created on-the-fly using the <em>File→Save View</em> dialog. This is a mechanism for individual users to save their commonly used views. Access to these views is achieved through the <em>File→Open View</em> dialog, as with the system views. Once the dialog is opened, the list of views can be toggled between user and system views by clicking on the two toggle buttons in the top right corner. User views are stored in <em>$HOME/.pcp/pmchart.</em>
 </div>
 <div class="section">
   <h2>TABS</h2>
@@ -99,7 +99,7 @@
 </div>
 <div class="section">
   <h2>CONFIGURATION FILE SYNTAX</h2>
-  <p><strong>pmchart</strong> loads predefined chart configurations (or “views”) from external files that conform to the following rules. In the descriptions below keywords (shown in <code><strong>bold</strong></code>) may appear in upper, lower or mixed case, elements shown in <code>[stuff]</code> are optional, and user-supplied elements are shown as <code>&lt;other stuff&gt;</code>. A vertical bar (|) is used where syntactic elements are alternatives. Quotes (") may be used to enclose lexical elements that may contain white space, such as titles, labels and instance names.
+  <p><strong>pmchart</strong> loads predefined chart configurations (or "views") from external files that conform to the following rules. In the descriptions below keywords (shown in <code><strong>bold</strong></code>) may appear in upper, lower or mixed case, elements shown in <code>[stuff]</code> are optional, and user-supplied elements are shown as <code>&lt;other stuff&gt;</code>. A vertical bar (|) is used where syntactic elements are alternatives. Quotes (") may be used to enclose lexical elements that may contain white space, such as titles, labels and instance names.
   <dl class="indent-23">
     <dt>1.
     <dd>
@@ -111,7 +111,7 @@
 </pre>
     <dt>2.
     <dd>
-      <p>After the first line, lines beginning with “#” as the first non-white space character are treated as comments and skipped. Similarly blank lines are skipped.
+      <p>After the first line, lines beginning with "#" as the first non-white space character are treated as comments and skipped. Similarly blank lines are skipped.
     <dt>3.
     <dd>
       <p>The next line should be
@@ -131,7 +131,7 @@
       <p>A configuration contains one or more charts defined as follows:
       <pre><code><strong>chart</strong></code> [<code><strong>title</strong></code> &lt;title&gt;] <code><strong>style</strong></code> &lt;style&gt; &lt;options&gt;
 </pre>
-      <p>If specified, the title will appear centred and above the graph area of the chart. The <code>&lt;title&gt;</code> is usually enclosed in quotes (“) and if it contains the sequence ”%h“ this will be replaced by the short form of the hostname for the default source of metrics at the time this chart was loaded. Alternatively, ”%H" can be used to insert the full host name. If the hostname appears to be an inet or IPv6 address, no shortening will be attempted; it will be used as-is in both replacement cases. After the view is loaded, the title visibility and setting can be manipulated using the <em>Chart Title</em> text box in the <em>Edit→Chart</em> dialog.
+      <p>If specified, the title will appear centred and above the graph area of the chart. The <code>&lt;title&gt;</code> is usually enclosed in quotes (") and if it contains the sequence "%h" this will be replaced by the short form of the hostname for the default source of metrics at the time this chart was loaded. Alternatively, "%H" can be used to insert the full host name. If the hostname appears to be an inet or IPv6 address, no shortening will be attempted; it will be used as-is in both replacement cases. After the view is loaded, the title visibility and setting can be manipulated using the <em>Chart Title</em> text box in the <em>Edit→Chart</em> dialog.
       <div class="indent">
         <p>The <code>&lt;style&gt;</code> controls the initial plotting style of the chart, and should be one of the keywords <code><strong>plot</strong></code> (line graph), <code><strong>bar</strong></code>, <code><strong>stacking</strong></code> (stacked bar), <code><strong>area</strong></code> or <code><strong>utilization</strong></code>. After the view is loaded, the plotting style can be changed using the <em>Edit→Chart</em> Style dropdown list.
         <p>The <code>&lt;options&gt;</code> are zero or more of the optional elements:
@@ -153,7 +153,7 @@
 </pre>
       <div class="indent">
         <p>The keyword <code><strong>plot</strong></code> may be replaced with the keyword <code><strong>optional-plot</strong></code>, in which case if the source of performance data does not include the specified performance metric and/or instance, then this plot is silently dropped from the chart.
-        <p>If specified, the title will appear in the chart legend. The <code>&lt;title&gt;</code> is usually enclosed in quotes (“) and it may contain one or more wildcard characters which will be expanded using metric name, instance name, and host name for the plot. The wildcards are ”%i“ (short unique instance name, up to the first whitespace), ”%I“ (full instance name), ”%h“ (short host name, up to the first dot), %H (full host name), ”%m“ (metric name shortened to the final two PMNS components), and ”%M" (full metric name).
+        <p>If specified, the title will appear in the chart legend. The <code>&lt;title&gt;</code> is usually enclosed in quotes (") and it may contain one or more wildcard characters which will be expanded using metric name, instance name, and host name for the plot. The wildcards are "%i" (short unique instance name, up to the first whitespace), "%I" (full instance name), "%h" (short host name, up to the first dot), %H (full host name), "%m" (metric name shortened to the final two PMNS components), and "%M" (full metric name).
         <p>For older <strong>pmchart</strong> configuration files, the keyword <code><strong>title</strong></code> must be used instead of <code><strong>legend</strong></code>. Nowadays <strong>pmchart</strong> supports either keyword.
         <p>The <code><strong>color</strong></code> clause is optional for newer <strong>pmchart</strong> configuration files, but it was mandatory in the original <strong>pmchart</strong> configuration file format. <code>&lt;colorspec&gt;</code> may be one of the following:
         <pre><code><strong>#-cycle</strong></code>
@@ -165,7 +165,7 @@
 &lt;Xcolor&gt;
 </pre>
         <p>where each of <code>r</code>, <code>g</code> and <code>b</code> are hexadecimal digits (0-9 and A-F) representing respectively the red, green and blue color components. <code>&lt;Xcolor&gt;</code> is one of the color names from the X color database, e.g. <code><strong>red</strong></code> or <code><strong>steelblue</strong></code>, see also the output from <strong>showrgb</strong>(1).
-        <p>The “color” <code><strong>#-cycle</strong></code> specifies that <strong>pmchart</strong> should use the next in a pallet of colors that it uses cyclically for each chart. This is the default if the <code><strong>color</strong></code> clause is omitted.
+        <p>The "color" <code><strong>#-cycle</strong></code> specifies that <strong>pmchart</strong> should use the next in a pallet of colors that it uses cyclically for each chart. This is the default if the <code><strong>color</strong></code> clause is omitted.
         <p>The <code>&lt;hostspec&gt;</code> in the <code><strong>host</strong></code> clause may be a hostname, an IP address or an asterisk (*); the latter is used to mean the default source of performance metrics. For older <strong>pmchart</strong> configuration files, the <code><strong>host</strong></code> clause must be present, for new <strong>pmchart</strong> configuration files it is optional, and if missing the default source of performance metrics will be used.
         <p>The optional instance specification,
         <dl class="indent-23">

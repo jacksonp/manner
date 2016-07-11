@@ -24,20 +24,20 @@
   <p><em>chacl</em> changes the ACL(s) for a file or directory. The ACL(s) specified are applied to each file in the <strong><em>pathname</em></strong> arguments.
   <p>Each ACL is a string which is interpreted using the <em>acl_from_text</em>(3) routine. These strings are made up of comma separated clauses each of which is of the form, tag:name:perm. Where <strong><em>tag</em></strong> can be:
   <dl>
-    <dt>“user” (or “u”)
+    <dt>"user" (or "u")
     <dd>
       <p>indicating that the entry is a user ACL entry.
-    <dt>“group” (or “g”)
+    <dt>"group" (or "g")
     <dd>
       <p>indicating that the entry is a group ACL entry.
-    <dt>“other” (or “o”)
+    <dt>"other" (or "o")
     <dd>
       <p>indicating that the entry is an other ACL entry.
-    <dt>“mask” (or “m”)
+    <dt>"mask" (or "m")
     <dd>
       <p>indicating that the entry is a mask ACL entry.
   </dl>
-  <p><strong><em>name</em></strong> is a string which is the user or group name for the ACL entry. A null <strong><em>name</em></strong> in a user or group ACL entry indicates the file's owner or file's group. <strong><em>perm</em></strong> is the string “rwx” where each of the entries may be replaced by a “-” indicating no access of that type, e.g. “r-x”, “--x”, “---”.
+  <p><strong><em>name</em></strong> is a string which is the user or group name for the ACL entry. A null <strong><em>name</em></strong> in a user or group ACL entry indicates the file's owner or file's group. <strong><em>perm</em></strong> is the string "rwx" where each of the entries may be replaced by a "-" indicating no access of that type, e.g. "r-x", "--x", "---".
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -69,7 +69,7 @@
   <h2>EXAMPLES</h2>
   <p>A minimum ACL:
   <pre>  <strong>chacl u::rwx,g::r-x,o::r-- file</strong></pre>
-  <p>The file ACL is set so that the file's owner has “rwx”, the file's group has read and execute, and others have read only access to the file.
+  <p>The file ACL is set so that the file's owner has "rwx", the file's group has read and execute, and others have read only access to the file.
   <p>An ACL that is not a minimum ACL, that is, one that specifies a user or group other than the file's owner or owner's group, must contain a mask entry:
   <pre>  <strong><em>chacl u::rwx,g::r-x,o::r--,u:bob:r--,m::r-x file1 file2</em></strong></pre>
   <p>To set the default and access ACLs on <strong><em>newdir</em></strong> to be the same as on <strong><em>olddir</em></strong>, you could type:

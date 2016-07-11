@@ -17,16 +17,16 @@
   <em>* alias</em><br>
   <em>* alias command</em><br>
   <em>* alias command result</em>
-  <p>The first form lists all current aliases with their final result, the second form looks up a “command” and shows it's final result or an error message. The last form creates a new alias.
+  <p>The first form lists all current aliases with their final result, the second form looks up a "command" and shows it's final result or an error message. The last form creates a new alias.
 </div>
 <div class="section">
   <h2>Explanation of alias to final result conversion</h2>
-  <p>When you type an aliased command, like “yum --disableexcludes UPT lsu” using the default aliases, the yum-aliases plugin first takes the first “command”, by skipping over any options, and then looks up the result (in this case “UPT” is converted to “--enablerepo=updates-testing”). If there is a match, then it will replace the aliased “command” in the argument list and try again (again skipping over any options). By convention, in the default aliases list, alias “commands” that are in all CAPS only add options so you can join together a chain of them before any real command or aliased command.
-  <p>There are two things that can alter the above, if you have the “recursive” configuration option set to off then alias processing will stop after the first alias to command substitution. Also, like in shell aliases, if the result starts with \ then alias processing will stop.
+  <p>When you type an aliased command, like "yum --disableexcludes UPT lsu" using the default aliases, the yum-aliases plugin first takes the first "command", by skipping over any options, and then looks up the result (in this case "UPT" is converted to "--enablerepo=updates-testing"). If there is a match, then it will replace the aliased "command" in the argument list and try again (again skipping over any options). By convention, in the default aliases list, alias "commands" that are in all CAPS only add options so you can join together a chain of them before any real command or aliased command.
+  <p>There are two things that can alter the above, if you have the "recursive" configuration option set to off then alias processing will stop after the first alias to command substitution. Also, like in shell aliases, if the result starts with \ then alias processing will stop.
 </div>
 <div class="section">
   <h2>EXAMPLES</h2>
-  <p>To create a new alias command called “rm” which does the same thing as the command “remove” use:
+  <p>To create a new alias command called "rm" which does the same thing as the command "remove" use:
   <blockquote>
     yum <strong>alias</strong> rm remove
   </blockquote>
@@ -34,7 +34,7 @@
   <blockquote>
     yum <strong>alias</strong> update \update --skip-broken --disableexcludes=all --obsoletes
   </blockquote>
-  <p>To override the default “up” alias to use the above update command, and never ask for confirmation, you could use:
+  <p>To override the default "up" alias to use the above update command, and never ask for confirmation, you could use:
   <blockquote>
     yum <strong>alias</strong> up update -y
   </blockquote>

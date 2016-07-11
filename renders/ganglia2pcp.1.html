@@ -17,7 +17,7 @@
   <p>The intent of this converter is to take all of the rrd files found in the input_dir and generate a single pcp archive file. The mapping of ganglia metrics to pcp metrics is defined internally.
   <p>The resultant PCP achive may be used with all the PCP client tools to graph subsets of the data using <strong>pmchart</strong>(1), perform data reduction and reporting, filter with the PCP inference engine <strong>pmie</strong>(1), etc.
   <p>A series of physical files will be created with the prefix <em>outfile</em>. These are <em>outfile</em><strong>.0</strong> (the performance data), <em>outfile</em><strong>.meta</strong> (the metadata that describes the performance data) and <em>outfile</em><strong>.index</strong> (a temporal index to improve efficiency of replay operations for the archive). If any of these files exists already, then <strong>sar2pcp</strong> will <strong>not</strong> overwrite them and will exit with an error message of the form
-  <p>__pmLogNewFile: “blah.0” already exists, not over-written
+  <p>__pmLogNewFile: blah.0 already exists, not over-written
   <p><strong>ganglia2pcp</strong> is a Perl script that uses the PCP::LogImport Perl wrapper around the PCP <em>libpcp_import</em> library, and as such could be used as an example to develop new tools to import other types of performance data and create PCP archives. The RRDs Perl wrapper is used to parse the raw rrd format files.
   <p>Options control the functioning of the converter.
   <dl class="indent-5">
@@ -35,7 +35,7 @@
       <p>The <em>outdir</em> argument specifies a output to write to. The default is the current directory
     <dt><strong>-Z</strong>
     <dd>
-      <p>The <em>timezone</em> argument sets the source timezone in the PCP archive (the default is to use the local timezone). The timezone must have the format +HHMM (for hours and minutes East of UTC) or -HHMM (for hours and minutes West of UTC) or UTC. Note in particular that <strong>neither</strong> the <strong>zoneinfo</strong> (aka Olson) format, e.g. Europe/Paris, nor the Posix <strong>TZ</strong> format, e.g. EST+5 is allowed. Example: timezone=“+1100”.
+      <p>The <em>timezone</em> argument sets the source timezone in the PCP archive (the default is to use the local timezone). The timezone must have the format +HHMM (for hours and minutes East of UTC) or -HHMM (for hours and minutes West of UTC) or UTC. Note in particular that <strong>neither</strong> the <strong>zoneinfo</strong> (aka Olson) format, e.g. Europe/Paris, nor the Posix <strong>TZ</strong> format, e.g. EST+5 is allowed. Example: timezone=+1100.
     <dt><strong>-h</strong>
     <dd>
       <p>The <em>hostname</em> argument specifies a hostname to write to the archive. The default is taken from the directory name that the rrd files reside in.
