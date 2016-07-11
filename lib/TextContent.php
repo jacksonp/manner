@@ -22,12 +22,43 @@ class TextContent
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
-        $textSegments = preg_split(
-          '~(?<![^\\\\]\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
+        $textSegmentsS = preg_split(
+          '~(?<!\\\\)((?:\\\\\\\\)*)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
         );
+        /*
+                preg_match(
+                  '~^(.*?)(\\\\\\\\)*(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))?(.*?)$~u',
+                  $line,
+                  $textSegments
+                );
+                array_shift($textSegments);
+                $textSegments = array_filter($textSegments, function ($s) {
+                    return $s !== '';
+                });
+                $textSegments = array_values($textSegments);
+        */
+        $textSegments = [];
+        for ($i = 0; $i < count($textSegmentsS); ++$i) {
+            if ($textSegmentsS[$i] === '\\\\' and
+              $i > 0 and
+              count($textSegments) > 0 and
+              mb_substr($textSegments[count($textSegments) - 1], 0, 1) !== '\\'
+            ) {
+                $textSegments[count($textSegments) - 1] .= '\\\\';
+            } elseif ($textSegmentsS[$i] !== '') {
+                $textSegments[] = $textSegmentsS[$i];
+            }
+        }
+
+//        $textSegments = array_filter($textSegments, function ($s) {
+//            return $s !== '';
+//        });
+//        $textSegments = array_values($textSegments);
+//        var_dump($line);
+//        var_dump($textSegments);
 
         $numTextSegments    = count($textSegments);
         $horizontalPosition = 0; //TODO: could be worth setting this to characters in output so far from $line?
@@ -47,6 +78,13 @@ class TextContent
                 $man->setRegister($registerName, $horizontalPosition);
                 continue;
             }
+
+            if ($i < $numTextSegments - 1 and in_array(mb_substr($textSegments[$i], 0, 2),
+                ['\f', '\F']) and in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F'])
+            ) {
+                continue;
+            }
+
             switch ($textSegments[$i]) {
                 case '\u':
                     if ($i < $numTextSegments - 1) {
@@ -196,10 +234,15 @@ class TextContent
 
         $man = Man::instance();
 
-        $string = Roff_Glyph::substitute($string);
-        if ($applyCharTranslations) {
-            $string = $man->applyCharTranslations($string);
-        }
+        $string = Replace::pregCallback('~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\N\'(?<charnum>\d+)\'~u',
+          function ($matches) {
+              return $matches['bspairs'] . chr($matches['charnum']);
+          }, $string);
+
+        $roffStrings = $man->getStrings();
+//        $string      = Roff_String::substitute($string, $roffStrings);
+
+//        $string = Roff_Glyph::substitute($string);
 
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $singleCharacterEscapes = [
@@ -248,23 +291,37 @@ class TextContent
         ];
 
         $string = Replace::pregCallback(
-          '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?<str>.)~u',
-          function ($matches) use (&$singleCharacterEscapes) {
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
+          function ($matches) use (&$singleCharacterEscapes, &$roffStrings) {
               // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
               $prefix = str_repeat('\\', mb_strlen($matches['bspairs']) / 2);
-              if (isset($singleCharacterEscapes[$matches['str']])) {
-                  return $prefix . $singleCharacterEscapes[$matches['str']];
+              if ($matches['glyph'] !== '') {
+                  if (isset(Roff_Glyph::ALL_GLYPHS[$matches['glyph']])) {
+                      return $prefix . Roff_Glyph::ALL_GLYPHS[$matches['glyph']];
+                  } else {
+                      return $prefix; // Follow what groff does, if string isn't set use empty string.
+                  }
+              } elseif ($matches['string'] !== '') {
+                  if (isset($roffStrings[$matches['string']])) {
+                      return $prefix . $roffStrings[$matches['string']];
+                  } else {
+                      return $prefix; // Follow what groff does, if string isn't set use empty string.
+                  }
               } else {
-                  // If a backslash is followed by a character that does not constitute a defined escape sequence,
-                  // the backslash is silently ignored and the character maps to itself.
-                  return $prefix . $matches['str'];
+                  if (isset($singleCharacterEscapes[$matches['char']])) {
+                      return $prefix . $singleCharacterEscapes[$matches['char']];
+                  } else {
+                      // If a backslash is followed by a character that does not constitute a defined escape sequence,
+                      // the backslash is silently ignored and the character maps to itself.
+                      return $prefix . $matches['char'];
+                  }
               }
           },
           $string);
 
-        // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
-//        $string = Replace::preg('~(?<!\\\\)\\\\\\\\~u', '\\', $string);
-
+        if ($applyCharTranslations) {
+            $string = $man->applyCharTranslations($string);
+        }
 
         if (self::$canAddWhitespace and $addSpacing) {
             // Do this after regex above
@@ -273,10 +330,6 @@ class TextContent
 
         // Prettier double quotes:
         $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);
-
-        $string = Replace::pregCallback('~\\\\N\'(\d+)\'~u', function ($matches) {
-            return chr($matches[1]);
-        }, $string);
 
         // Get rid of <> around URLs - these get translated to &lt; and &gt; and then cause problems with finding out what we can make into links.
         $string = Replace::preg(

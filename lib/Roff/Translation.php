@@ -12,10 +12,11 @@ class Roff_Translation
         }
 
         $man = Man::instance();
-
-        $roffStrings = $man->getStrings();
-        $translate   = Roff_String::substitute($matches[1], $roffStrings);
-        $translate   = TextContent::interpretString($translate, false, false);
+//
+//        $roffStrings = $man->getStrings();
+//        $translate   = Roff_String::substitute($matches[1], $roffStrings);
+        $translate = $matches[1];
+        $translate = TextContent::interpretString($translate, false, false);
 
         $chrArray = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);
 
