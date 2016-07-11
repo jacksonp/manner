@@ -376,12 +376,7 @@ class Roff_Glyph
               if (isset(self::ALL_GLYPHS[$matches['str']])) {
                   return $matches['bspairs'] . self::ALL_GLYPHS[$matches['str']];
               } else {
-                  // TODO: bit of a hack try to combine all changes and do them all at last minute
-                  if (in_array($matches['str'], ['rs', 'dq', 'aq'])) {
-                      return $matches[0];
-                  } else {
-                      return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
-                  }
+                  return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
               }
           },
           $string);
