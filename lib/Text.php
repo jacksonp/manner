@@ -120,7 +120,6 @@ class Text
               'String',
               'Alias',
               'Translation',
-              'Title',
               'Skipped',
             ];
 

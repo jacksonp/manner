@@ -18,17 +18,6 @@ class Manner
 
         $linesNoComments = Text::stripComments($fileLines);
         $linesRoffed     = Text::applyRoffClasses($linesNoComments);
-
-        if (isset($man->title)) {
-            $title = $man->title;
-        } else {
-            $title = pathinfo($filePath, PATHINFO_FILENAME);
-        }
-
-        $h1 = $dom->createElement('h1');
-        $h1->appendChild(new DOMText($title));
-        $manPageContainer->appendChild($h1);
-
         Blocks::handle($manPageContainer, $linesRoffed);
 
         return $dom;
