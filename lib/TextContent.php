@@ -222,7 +222,7 @@ class TextContent
           '&'  => '',
             // variation on \&
           ')'  => '',
-          '\\'  => '\\',
+          '\\' => '\\',
 
 
             // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
