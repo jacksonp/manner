@@ -117,7 +117,7 @@ class Block_Text
 
     static private function removeContinuation(string $line)
     {
-        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
+        $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
         return $line;

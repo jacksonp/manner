@@ -19,11 +19,11 @@ class TextContent
 
         self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
-        $line               = Replace::preg('~\\\\c$~', '', $line, -1, $replacements);
+        $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
         $textSegments = preg_split(
-          '~(?<!\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
+          '~(?<![^\\\\]\\\\)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
           $line,
           null,
           PREG_SPLIT_DELIM_CAPTURE
@@ -194,17 +194,6 @@ class TextContent
     static function interpretString(string $string, bool $addSpacing = false, bool $applyCharTranslations = true):string
     {
 
-        // Get rid of this as no longer needed:
-        // "To begin a line with a control character without it being interpreted, precede it with \&.
-        // This represents a zero width space, which means it does not affect the output."
-        // (also remove tho if not at start of line.)
-        $string = Replace::preg('~\\\\[&\)]~u', '', $string);
-
-        if (self::$canAddWhitespace and $addSpacing) {
-            // Do this after regex above
-            $string = ' ' . $string;
-        }
-
         $man = Man::instance();
 
         $string = Roff_Glyph::substitute($string);
@@ -215,29 +204,72 @@ class TextContent
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $singleCharacterEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash
-          'e' => '\\',
-            // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not break case where it's followed by a dot, e.g. npm-cache.1).
-          '|' => '',
+          'e'  => '\\',
+            // 1/6 em narrow space glyph, e.g. enigma.6 synopsis. Just remove for now (but don't do this earlier to not
+            // break case where it's followed by a dot, e.g. npm-cache.1).
+          '|'  => '',
             // 1/12 em half-narrow space glyph; zero width in nroff. Just remove for now.
-          '^' => '',
+          '^'  => '',
             // Default optional hyphenation character. Just remove for now.
-          '%' => '',
+          '%'  => '',
             // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
-          ':' => '',
+          ':'  => '',
             // Digit-width space.
-          '0' => ' ',
+          '0'  => ' ',
+            // "To begin a line with a control character without it being interpreted, precede it with \&.
+            // This represents a zero width space, which means it does not affect the output."
+            // (also remove tho if not at start of line.)
+          '&'  => '',
+            // variation on \&
+          ')'  => '',
+          '\\'  => '\\',
+
+
+            // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
+          '/'  => '',
+            // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
+          ','  => '',
+            // The same as a dot (‘.’).  Necessary in nested macro definitions so that ‘\\..’ expands to ‘..’.
+          '.'  => '.',
+          '\'' => '´',
+            // The acute accent ´; same as \(aa.
+          '´'  => '´',
+            // The grave accent `; same as \(ga.
+          '`'  => '`',
+          '-'  => '-',
+            // The same as \(ul, the underline character.
+          '_'  => '_',
+          't'  => "\t",
+            // Unpaddable space size space glyph (no line break). See enigma.6:
+          ' '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
+            // Unbreakable space that stretches like a normal inter-word space when a line is adjusted
+          '~'  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
+
         ];
 
         $string = Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?<str>[^\\\\])~u',
+          '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?<str>.)~u',
           function ($matches) use (&$singleCharacterEscapes) {
+              // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
+              $prefix = str_repeat('\\', mb_strlen($matches['bspairs']) / 2);
               if (isset($singleCharacterEscapes[$matches['str']])) {
-                  return $matches['bspairs'] . $singleCharacterEscapes[$matches['str']];
+                  return $prefix . $singleCharacterEscapes[$matches['str']];
               } else {
-                  return $matches[0];
+                  // If a backslash is followed by a character that does not constitute a defined escape sequence,
+                  // the backslash is silently ignored and the character maps to itself.
+                  return $prefix . $matches['str'];
               }
           },
           $string);
+
+        // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
+//        $string = Replace::preg('~(?<!\\\\)\\\\\\\\~u', '\\', $string);
+
+
+        if (self::$canAddWhitespace and $addSpacing) {
+            // Do this after regex above
+            $string = ' ' . $string;
+        }
 
         // Prettier double quotes:
         $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);

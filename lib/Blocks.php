@@ -65,7 +65,7 @@ class Blocks
     {
 
         // Trim $lines
-        $trimVals = ['', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
+        $trimVals = ['', ' ', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
         ArrayHelper::ltrim($lines, $trimVals);
         ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
 
@@ -74,6 +74,8 @@ class Blocks
 
         $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
+
+            $lines[$i] = preg_replace('~^\\\\\.~u', '.', $lines[$i]);
 
             $line = $lines[$i];
 

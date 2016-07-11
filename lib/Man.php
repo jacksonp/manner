@@ -174,8 +174,11 @@ class Man
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
         }
-        $line = Text::translateCharacters($line);
 
+        // \w’string’: The width of the glyph sequence string. We approximate with ens.
+        $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
+            return mb_strlen(TextContent::interpretString($matches[0]));
+        }, $line);
 
         return $line;
     }

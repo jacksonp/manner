@@ -22,7 +22,7 @@ class BlockPreformatted
 
             $parentForLine = $parentNode;
 
-            if (mb_strlen($line) === 0 or
+            if ($line === '' or
               Block_P::check($line) or
               Inline_VerticalSpace::check($line) or
               preg_match('~^\\\\?\.$~u', $line) // empty requests
@@ -89,15 +89,23 @@ class BlockPreformatted
             }
 
             // FAIL on unknown command
-            if (mb_strlen($line) > 0 && in_array($line[0], ['.', "'"])) {
+            if (mb_strlen($line) > 0 and in_array($line[0], ['.', "'"])) {
                 throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line, false, false);
+            TextContent::interpretAndAppendText($parentForLine, rtrim($line), false, false);
             if ($i !== $numLines - 1) {
                 self::endInputLine($parentNode);
             }
 
+        }
+
+        while (
+          $parentForLine->lastChild and
+          $parentForLine->lastChild instanceof DOMText
+          and trim($parentForLine->lastChild->textContent) === ''
+        ) {
+            $parentForLine->removeChild($parentForLine->lastChild);
         }
 
     }

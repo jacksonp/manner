@@ -224,7 +224,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. The words `program', `all' and `disabled' have special meaning. `program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>   mono --trace=System app.exe</pre>
+      <pre>       mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. For example, to trace all calls to the System.String class, use:
       <pre>        mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -291,11 +291,11 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
 <div class="section">
   <h2>PROFILING</h2>
   <p>The mono runtime includes a profiler that can be used to explore various performance related problems in your application. The profiler is activated by passing the --profile command line argument to the Mono runtime, the format is:
-  <pre>  --profile[=profiler[:profiler_args]]</pre>
+  <pre>      --profile[=profiler[:profiler_args]]</pre>
   <p>Mono has a built-in profiler called 'default' (and is also the default if no arguments are specified), but developers can write custom profilers, see the section "CUSTOM PROFILERS" for more details.
   <p>If a <em>profiler</em> is not specified, the default profiler is used. The <em>profiler_args</em> is a profiler-specific string of options for the profiler itself. The default profiler accepts the following options 'alloc' to profile memory consumption by the application; 'time' to profile the time spent on each routine; 'jit' to collect time spent JIT-compiling methods and 'stat' to perform sample statistical profiling. If no options are provided the default is 'alloc,time,jit'.
   <p>By default the profile data is printed to stdout: to change this, use the 'file=filename' option to output the data to filename. For example:
-  <pre>     mono --profile program.exe</pre>
+  <pre>  mono --profile program.exe</pre>
   <p>That will run the program with the default profiler and will do time and allocation profiling.
   <pre>      mono --profile=default:stat,alloc,file=prof.out program.exe</pre>
   <p>Will do sample statistical profiling and allocation profiling on program.exe. The profile data is put in prof.out. Note that the statistical profiler has a very low overhead and should be the preferred profiler to use (for better output use the full path to the mono binary when running and make sure you have installed the addr2line utility that comes from the binutils package).
@@ -311,7 +311,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <h2>CUSTOM PROFILERS</h2>
   <p>Mono provides a mechanism for loading other profiling modules which in the form of shared libraries. These profiling modules can hook up to various parts of the Mono runtime to gather information about the code being executed.
   <p>To use a third party profiler you must pass the name of the profiler to Mono, like this:
-  <pre>  mono --profile=custom program.exe</pre>
+  <pre>     mono --profile=custom program.exe</pre>
   <p>In the above sample Mono will load the user defined profiler from the shared library `mono-profiler-custom.so'. This profiler module must be on your dynamic linker library path.
   <p>A list of other third party profilers is available from Mono's web site (www.mono-project.com/docs/advanced/performance-tips/)
   <p>Custom profiles are written as shared libraries. The shared library must be called `mono-profiler-NAME.so' where `NAME' is the name of your profiler.
@@ -324,10 +324,10 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <pre>  mono --profile=cov:demo demo.exe</pre>
   <p>Notice that the <em>assembly-name</em> does not include the extension.
   <p>You can further restrict the code coverage output by specifying a namespace:
-  <pre>     mono --profile=cov:demo/My.Utilities demo.exe</pre>
+  <pre>    mono --profile=cov:demo/My.Utilities demo.exe</pre>
   <p>Which will only perform code coverage in the given assembly and namespace.
   <p>Typical output looks like this:
-  <pre> Not covered: Class:.ctor ()
+  <pre>       Not covered: Class:.ctor ()
         Not covered: Class:A ()
         Not covered: Driver:.ctor ()
         Not covered: Driver:method ()
@@ -340,7 +340,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <h2>DEBUGGING AIDS</h2>
   <p>To debug managed applications, you can use the <strong>mdb</strong> command, a command line debugger.
   <p>It is possible to obtain a stack trace of all the active threads in Mono by sending the QUIT signal to Mono, you can do this from the command line, like this:
-  <pre>      kill -QUIT pid</pre>
+  <pre>   kill -QUIT pid</pre>
   <p>Where pid is the Process ID of the Mono process you want to examine. The process will continue running afterwards, but its state is not guaranteed.
   <p><strong>Important:</strong> this is a last-resort mechanism for debugging applications and should not be used to monitor or probe a production application. The integrity of the runtime after sending this signal is not guaranteed and the application might crash or terminate at any given point afterwards.
   <p>The <strong>--debug=casts</strong> option can be used to get more detailed information for Invalid Cast operations, it will provide information about the types involved.
@@ -349,7 +349,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <p>Use "info" to track the dynamic loading of assemblies.
   <p>Use the <em>MONO_LOG_MASK</em> environment variable to limit the extent of the messages you get: If set, the log mask is changed to the set value. Possible values are "asm" (assembly loader), "type", "dll" (native library loader), "gc" (garbage collector), "cfg" (config file loader), "aot" (precompiler), "security" (e.g. Moonlight CoreCLR support), "threadpool" (thread pool generic), "io-threadpool" (thread pool I/O), "io-layer" (I/O layer - sockets, handles, shared memory etc) and "all". The default value is "all". Changing the mask value allows you to display only messages for a certain component. You can use multiple masks by comma separating them. For example to see config file messages and assembly loader messages set you mask to "asm,cfg".
   <p>The following is a common use to track down problems with P/Invoke:
-  <pre>       $ MONO_LOG_LEVEL="debug" MONO_LOG_MASK="dll" mono glue.exe</pre>
+  <pre> $ MONO_LOG_LEVEL="debug" MONO_LOG_MASK="dll" mono glue.exe</pre>
 </div>
 <div class="section">
   <h2>DEBUGGING WITH LLDB</h2>
@@ -393,7 +393,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_CPU_ARCH</strong>
     <dd>
       <p>Override the automatic cpu detection mechanism. Currently used only on arm. The format of the value is as follows:
-      <pre>     "armvV [thumb[2]]"</pre>
+      <pre>   "armvV [thumb[2]]"</pre>
       <p>where V is the architecture number 4, 5, 6, 7 and the options can be currently be "thumb" or "thumb2". Example:
       <pre>     MONO_CPU_ARCH="armv4 thumb" mono ...</pre>
     <dt><strong>MONO_ARM_FORCE_SOFT_FLOAT</strong>
@@ -426,7 +426,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       <div class="indent">
         <dl>
           <dt><em>local[:path]</em>
-          <dd>Persists event logs and entries to the local file system. The directory in which to persist the event logs, event sources and entries can be specified as part of the value. If the path is not explicitly set, it defaults to "/var/lib/mono/eventlog" on unix and "%APPDATA%\mono\ventlog" on Windows.
+          <dd>Persists event logs and entries to the local file system. The directory in which to persist the event logs, event sources and entries can be specified as part of the value. If the path is not explicitly set, it defaults to "/var/lib/mono/eventlog" on unix and "%APPDATA%mono\ventlog" on Windows.
           <dt><em>win32</em>
           <dd><strong>Uses the native win32 API to write events and registers event logs and</strong> event sources in the registry. This is only available on Windows. On Unix, the directory permission for individual event log and event source directories is set to 777 (with +t bit) allowing everyone to read and write event log entries while only allowing entries to be deleted by the user(s) that created them.
           <dt><em>null</em>
@@ -533,10 +533,10 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. Set to a colon-separated list of "drive" to strip drive letters, or "case" to do case-insensitive file matching in every directory in a path. "all" enables all rewriting methods. (Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre>    MONO_IOMAP=drive:case
+      <pre>       MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
-      <pre>    MonoIOMAP &lt;appalias&gt; all</pre>
+      <pre>   MonoIOMAP &lt;appalias&gt; all</pre>
       <p>See mod_mono(8) for more details.
       <p>Additionally. Mono includes a profiler module which allows one to track what adjustements to file paths IOMAP code needs to do. The tracking code reports the managed location (full stack trace) from which the IOMAP-ed call was made and, on process exit, the locations where all the IOMAP-ed strings were created in managed code. The latter report is only approximate as it is not always possible to estimate the actual location where the string was created. The code uses simple heuristics - it analyzes stack trace leading back to the string allocation location and ignores all the managed code which lives in assemblies installed in GAC as well as in the class libraries shipped with Mono (since they are assumed to be free of case-sensitivity issues). It then reports the first location in the user's code - in most cases this will be the place where the string is allocated or very close to the location. The reporting code is implemented as a custom profiler module (see the "PROFILING" section) and can be loaded in the following way:
       <pre>        mono --profile=iomap yourapplication.exe</pre>
@@ -644,7 +644,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_TRACE</strong>
     <dd>
       <p>Used for runtime tracing of method calls. The format of the comma separated trace options is:
-      <pre> [-]M:method name
+      <pre>  [-]M:method name
         [-]N:namespace
         [-]T:class name
         [-]all

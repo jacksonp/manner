@@ -136,61 +136,11 @@ class Text
             }
 
             // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
-            $linesNoCond[] = rtrim($man->applyAllReplacements($lines[$i]));
+            $linesNoCond[] = $man->applyAllReplacements($lines[$i]);
 
         }
 
         return $linesNoCond;
-
-    }
-
-    static function translateCharacters($line)
-    {
-
-        // See http://man7.org/linux/man-pages/man7/groff_char.7.html
-
-        $replacements = [
-            // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
-          '\\\\' => '\\e',
-            // \/ Increases the width of the preceding glyph so that the spacing between that glyph and the following glyph is correct if the following glyph is a roman glyph. groff(7)
-          '\\/'  => '',
-            // \, Modifies the spacing of the following glyph so that the spacing between that glyph and the preceding glyph is correct if the preceding glyph is a roman glyph. groff(7)
-          '\\,'  => '',
-            // The same as a dot (‘.’).  Necessary in nested macro definitions so that ‘\\..’ expands to ‘..’.
-          '\\.'  => '.',
-          '\\\'' => '´',
-            // The acute accent ´; same as \(aa.
-          '\\´'  => '´',
-            // The grave accent `; same as \(ga.
-          '\\`'  => '`',
-          '\\-'  => '-',
-            // The same as \(ul, the underline character.
-          '\\_'  => '_',
-          '\\t'  => "\t",
-            // Unpaddable space size space glyph (no line break). See enigma.6:
-          '\\ '  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
-            // Unbreakable space that stretches like a normal inter-word space when a line is adjusted
-          '\\~'  => mb_convert_encoding(chr(160), 'UTF-8', 'HTML-ENTITIES'),
-        ];
-
-        // If a backslash is followed by a character that does not constitute a defined escape sequence, the backslash is silently ignored and the character maps to itself.
-        // Just the cases we come across:
-        $replacements['\\W']       = 'W';
-        $replacements['\\=']       = '=';
-        $replacements['\\+']       = '+';
-        $replacements['\\<']       = '<';
-        $replacements['\\>']       = '>';
-        $replacements['\\]']       = ']';
-        $replacements['\\' . "\t"] = "\t"; // See glite-lb-mon.1 where we want tabs inside <pre>
-
-        $line = strtr($line, $replacements);
-
-        // \w’string’: The width of the glyph sequence string. We approximate with ens.
-        $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
-            return mb_strlen(TextContent::interpretString($matches[0]));
-        }, $line);
-
-        return $line;
 
     }
 

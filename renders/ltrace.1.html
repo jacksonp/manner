@@ -89,8 +89,7 @@
   <p><em>-l</em> is ´show me what calls into this library´
   <p>Suppose I have a library defined with this header <strong>tstlib.h</strong>:
   <pre> void func_f_lib(void);
- void func_g_lib(void);
-</pre>
+ void func_g_lib(void);</pre>
   <p>and this implementation <strong>tstlib.c</strong>:
   <pre> #include "tstlib.h"
  void func_f_lib(void)
@@ -99,8 +98,7 @@
  }
  void func_g_lib(void)
  {
- }
-</pre>
+ }</pre>
   <p>Suppose I have an executable that uses this library defined like this <strong>tst.c</strong>:
   <pre> #include "tstlib.h"
  void func_f_main(void)
@@ -110,44 +108,37 @@
  {
      func_f_main();
      func_f_lib();
- }
-</pre>
+ }</pre>
   <p>If linking without <strong>-Bsymbolic</strong>, the internal <strong>func_g_lib()</strong> call uses the PLT like external calls, and thus ltrace says:
   <pre> <strong>$ ltrace -x 'func*' -L ./tst</strong>
  func_f_main()                             = &lt;void&gt;
  func_f_lib@tstlib.so( &lt;unfinished ...&gt;
  func_g_lib@tstlib.so()                    = &lt;void&gt;
  &lt;... func_f_lib resumed&gt; )                = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
   <pre> <strong>$ ltrace -e 'func*' ./tst</strong>
  tst-&gt;func_f_lib( &lt;unfinished ...&gt;
  tstlib.so-&gt;func_g_lib()                   = &lt;void&gt;
  &lt;... func_f_lib resumed&gt; )                = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
   <pre> <strong>$ ltrace -l tstlib.so ./tst</strong>
  tst-&gt;func_f_lib( &lt;unfinished ...&gt;
  tstlib.so-&gt;func_g_lib()                   = &lt;void&gt;
  &lt;... func_f_lib resumed&gt; )                = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
   <p>By contrast, if linking with <strong>-Bsymbolic</strong>, then the internal <strong>func_g_lib()</strong> call bypasses the PLT, and ltrace says:
   <pre> <strong>$ ltrace -x 'func*' -L ./tst</strong>
  func_f_main() = &lt;void&gt;
  func_f_lib@tstlib.so( &lt;unfinished ...&gt;
  func_g_lib@tstlib.so()                    = &lt;void&gt;
  &lt;... func_f_lib resumed&gt; )                = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
   <pre> <strong>$ ltrace -e 'func*' ./tst</strong>
  tst-&gt;func_f_lib()                         = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
   <pre> <strong>$ ltrace -l tstlib.so ./tst</strong>
  tst-&gt;func_f_lib()                         = &lt;void&gt;
- +++ exited (status 163) +++
-</pre>
+ +++ exited (status 163) +++</pre>
 </div>
 <div class="section">
   <h2>FILTER EXPRESSIONS</h2>

@@ -8,7 +8,7 @@ class Macro
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:
-        $argString = Replace::preg('~\s+~', ' ', $argString);
+        $argString = Replace::preg('~(?<!\\\\)\s+~', ' ', $argString);
 
         $argString = ltrim($argString);
 
@@ -48,7 +48,9 @@ class Macro
             $lastChar = $char;
         }
 
-        $args[] = $thisArg;
+        if ($thisArg !== '') {
+            $args[] = $thisArg;
+        }
 
         if (count($args) === 0) {
             return null;
