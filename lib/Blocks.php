@@ -38,9 +38,8 @@ class Blocks
         // stray .RE macros,
         // .ad macros that haven't been trimmed as in middle of $lines...
         return
-          preg_match('~^\.(RE|fi|ad|Sh)~u', $line) or
+          preg_match('~^\.(RE|fi|ad|Sh|\s*$)~u', $line) or
           in_array($line, [
-            '.',    // empty request
             '\'',   // empty request
             '..',   // Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
             '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro

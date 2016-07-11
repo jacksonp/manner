@@ -20,13 +20,16 @@ class Block_TH
             }
 
             foreach ($titleDetails as $k => $v) {
-                $titleDetails[$k] = TextContent::interpretString($man->applyAllReplacements($v));
+                // See amor.6 for \FB \FR nonsense.
+                $value = Replace::preg('~\\\\F[BR]~', '', $v);
+                $value = $man->applyAllReplacements($value);
+                $value = TextContent::interpretString($value);
+                // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
+                $value            = trim($value);
+                $titleDetails[$k] = $value;
             }
+            $man->title = $titleDetails[0];
 
-            // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
-            $titleDetails = array_map('trim', $titleDetails);
-            // See amor.6 for \FB \FR nonsense.
-            $man->title = Replace::preg('~\\\\F[BR]~', '', $titleDetails[0]);
             if (count($titleDetails) > 1) {
                 $man->section      = $titleDetails[1];
                 $man->date         = @$titleDetails[2] ?: '';
