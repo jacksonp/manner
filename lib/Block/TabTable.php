@@ -8,13 +8,13 @@ class Block_TabTable
 
     static function isStart($lines, $i)
     {
-        // mb_strpos() > 0: avoid indented stuff
+        // char before tab avoid indented stuff + exclude escaped tabs
         return
           $i < count($lines) - 2 and
           !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) and
-          mb_strpos($lines[$i], "\t") > 0 and
-          (mb_strpos($lines[$i + 1], "\t") > 0 or in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])) and
-          mb_strpos($lines[$i + 2], "\t") > 0;
+          preg_match('~[^\\\\]\t~u', $lines[$i]) and
+          (preg_match('~[^\\\\]\t~u', $lines[$i + 1]) or in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])) and
+          preg_match('~[^\\\\]\t~u', $lines[$i + 2]);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
