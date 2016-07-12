@@ -16,12 +16,17 @@ class Block_SY
 
         $numLines    = count($lines);
         $dom         = $parentNode->ownerDocument;
-        $commandName = trim($matches[1]);
+        $commandName = '';
+        $arguments   = Macro::parseArgString(Macro::massageLine($matches[1]));
+        if (!is_null($arguments)) {
+            $commandName = $arguments[0];
+        }
 
         $pre = $dom->createElement('pre');
         if ($commandName !== '') {
+            $commandName = trim(TextContent::interpretString($commandName));
             $pre->setAttribute('class', 'synopsis');
-            $pre->appendChild(new DOMText($commandName));
+            $pre->appendChild(new DOMText($commandName . ' '));
         }
 
         $preLines = [];

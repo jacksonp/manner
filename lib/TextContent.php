@@ -100,6 +100,7 @@ class TextContent
                     }
                     break;
                 case '\fB':
+                case '\FB':
                 case '\fb':
                 case '\f[B]':
                 case '\f3':
@@ -114,6 +115,7 @@ class TextContent
                     }
                     break;
                 case '\fI':
+                case '\FI':
                 case '\fi':
                 case '\f[I]':
                 case '\f2':

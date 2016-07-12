@@ -53,7 +53,7 @@ class BlockPreformatted
             } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or in_array($line, ['\\&', '\\)'])) {
                 continue;
             } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
-                $parentNode->appendChild(new DOMText(' ['));
+                $parentNode->appendChild(new DOMText('['));
                 $arguments = Macro::parseArgString($matches[1]);
                 $strong    = $parentNode->appendChild($dom->createElement('strong'));
                 TextContent::interpretAndAppendText($strong, $arguments[0]);
