@@ -28,8 +28,8 @@ class Roff_Register
               if (isset($replacements[$matches['reg']])) {
                   return $matches['bspairs'] . $replacements[$matches['reg']];
               } else {
-                  // TODO: Match groff's behaviour: unset registers are 0
-                  return $matches[0];
+                  // Match groff's behaviour: unset registers are 0
+                  return $matches['bspairs'] . '0';
               }
           },
           $string);
