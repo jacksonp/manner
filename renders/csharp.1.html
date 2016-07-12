@@ -18,7 +18,7 @@
   <p>The <em>gsharp</em> command is a GUI version of the C# interpreter that uses Gtk# and provides an area to attach widgets as well. This version can be attached to other Gtk# applications in a safe way as it injects itself into the main loop of a Gtk# application, avoiding any problems arising from the multi-threaded nature of injecting itself into a target process.
   <p>Files specified in the command line will be loaded and executed as scripts.
   <p>Starting with Mono 2.10, the <em>csharp</em> command can be used as an interpreter executed by executables flagged with the Unix execute attribute. To do this, make the first line of your C# source code look like this:
-  <pre>"#!/usr/bin/csharp"
+  <pre>"#!/usr/bin/csharp" 
 Console.WriteLine ("Hello, World");</pre>
 </div>
 <div class="section">
@@ -36,14 +36,14 @@ Console.WriteLine ("Hello, World");</pre>
   <p>Once you launch the csharp command, you will be greeted with the interactive prompt:
   <pre>$ csharp
 Mono C# Shell, type "help;" for help
-
+ 
 Enter statements below.
 csharp&gt;</pre>
   <p>A number of namespaces are pre-defined with C# these include System, System.Linq, System.Collections and System.Collections.Generic. Unlike the compiled mode, it is possible to add new using statements as you type code, for example:
   <pre>csharp&gt; new XmlDocument ();
 &lt;interactive&gt;(1,6): error CS0246: The type or namespace name `XmlDocument' could not be found. Are you missing a using directive or an assembly reference?
 csharp&gt; using System.Xml;
-csharp&gt; new XmlDocument ();
+csharp&gt; new XmlDocument (); 
 System.Xml.XmlDocument</pre>
   <p>Every time a command is typed, the scope of that command is one of a class that derives from the class Mono.CSharp.InteractiveBase. This class defines a number of static properties and methods. To display a list of available commands access the `help' property:
   <pre>csharp&gt; help;
@@ -56,7 +56,7 @@ System.Xml.XmlDocument</pre>
 "
 csharp&gt;</pre>
   <p>When expressions are entered, the C# shell will display the result of executing the expression:
-  <pre>csharp&gt; Math.Sin (Math.PI/4);
+  <pre>csharp&gt; Math.Sin (Math.PI/4); 
 0.707106781186547
 csharp&gt; 1+1;
 2
@@ -66,11 +66,11 @@ csharp&gt; "Hello, world".IndexOf (',');
   <pre>csharp&gt; var a = new XmlDocument ();
 csharp&gt; a;
 System.Xml.Document
-csharp&gt; csharp&gt; a.Name;
+csharp&gt; csharp&gt; a.Name;    
 "#document"
 csharp&gt;</pre>
   <p>A few datatypes are handled specially by the C# interactive shell like arrays, System.Collections.Hashtable, objects that implement System.Collections.IEnumerable and IDictionary and are rendered specially instead of just using ToString ():
-  <pre>csharp&gt; var pages = new Hashtable () {
+  <pre>csharp&gt; var pages = new Hashtable () { 
       &gt;  { "Mono",    "http://www.mono-project.com/" },
       &gt;  { "Linux",   "http://kernel.org" } };
 csharp&gt; pages;
@@ -78,15 +78,15 @@ csharp&gt; pages;
   <p>It is possible to use LINQ directly in the C# interactive shell since the System.Linq namespace has been imported at startup. The following sample gets a list of all the files that have not been accessed in a week from /tmp:
   <pre>csharp&gt; using System.IO;
 csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);
-csharp&gt; var old_files = from f in Directory.GetFiles ("/tmp")
-      &gt;   let fi = new FileInfo (f)
+csharp&gt; var old_files = from f in Directory.GetFiles ("/tmp") 
+      &gt;   let fi = new FileInfo (f) 
       &gt;   where fi.LastAccessTime &lt; LastWeek select f;
 csharp&gt;</pre>
   <p>You can of course print the results in a single statement as well:
   <pre>csharp&gt; using System.IO;
 csharp&gt; var last_week = DateTime.Now - TimeSpan.FromDays (7);
-csharp&gt; from f in Directory.GetFiles ("/tmp")
-      &gt;   let fi = new FileInfo (f)
+csharp&gt; from f in Directory.GetFiles ("/tmp") 
+      &gt;   let fi = new FileInfo (f) 
       &gt;   where fi.LastAccessTime &lt; last_week select f;
 [...]
 csharp&gt;</pre>
@@ -105,7 +105,7 @@ string a = "Hello"</pre>
   <pre>csharp&gt; var protocols = new string [] {
       &gt;    "ftp",
       &gt;    "http",
-      &gt;    "gopher"
+      &gt;    "gopher" 
       &gt; };
 csharp&gt; protocols;
 { "ftp", "http", "gopher" }</pre>
@@ -114,8 +114,8 @@ csharp&gt; protocols;
 csharp&gt; while (!done) { }
 Interrupted!
 System.Threading.ThreadAbortException: Thread was being aborted
-  at Class1.Host (System.Object& $retval) [0x00000]
-  at Mono.CSharp.InteractiveShell.ExecuteBlock (Mono.CSharp.Class host, Mono.CSharp.Undo undo) [0x00000]
+  at Class1.Host (System.Object& $retval) [0x00000] 
+  at Mono.CSharp.InteractiveShell.ExecuteBlock (Mono.CSharp.Class host, Mono.CSharp.Undo undo) [0x00000] 
 csharp&gt;</pre>
 </div>
 <div class="section">
