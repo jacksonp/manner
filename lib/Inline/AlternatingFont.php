@@ -23,7 +23,11 @@ class Inline_AlternatingFont
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        $arguments = Macro::parseArgString(@$matches[2]);
+        if (!@$matches[2]) {
+            return $i; // Just skip empty requests
+        }
+
+        $arguments = Macro::parseArgString(Macro::massageLine($matches[2]));
 
         if (is_null($arguments)) {
             return $i; // Just skip empty requests
