@@ -12,9 +12,16 @@ class Block_TabTable
         return
           $i < count($lines) - 2 and
           !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) and
-          preg_match('~[^\\\\]\t~u', $lines[$i]) and
-          (preg_match('~[^\\\\]\t~u', $lines[$i + 1]) or in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])) and
-          preg_match('~[^\\\\]\t~u', $lines[$i + 2]);
+          mb_strpos($lines[$i], "\t") > 0 and
+          preg_match('~[^\\\\\s]\t~u', $lines[$i]) and
+          (
+            (
+              preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) and mb_strpos($lines[$i + 1], "\t") > 0) or
+            (in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])
+            ) and
+            preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) and
+            mb_strpos($lines[$i + 2], "\t") > 0
+          );
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
