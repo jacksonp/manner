@@ -4,6 +4,45 @@
 class Request
 {
 
+    private static $classMap = [
+      'SH'  => 'Block_SH',
+      'SS'  => 'Block_SS',
+      'SY'  => 'Block_SY',
+      'P'   => 'Block_P',
+      'LP'  => 'Block_P',
+      'PP'  => 'Block_P',
+      'HP'  => 'Block_P',
+      'IP'  => 'Block_IP',
+      'TP'  => 'Block_TP',
+      'TQ'  => 'Block_TP',
+      'ti'  => 'Block_ti',
+      'RS'  => 'Block_RS',
+      'EX'  => 'Block_EX',
+      'Vb'  => 'Block_Vb',
+      'ce'  => 'Block_ce',
+      'nf'  => 'Block_nf',
+      'TS'  => 'Block_TS',
+      'TH'  => 'Block_TH',
+      'URL' => 'Inline_Link',
+      'UR'  => 'Inline_Link',
+      'MT'  => 'Inline_Link',
+      'R'   => 'Inline_FontOneInputLine',
+      'I'   => 'Inline_FontOneInputLine',
+      'B'   => 'Inline_FontOneInputLine',
+      'SB'  => 'Inline_FontOneInputLine',
+      'SM'  => 'Inline_FontOneInputLine',
+      'BI'  => 'Inline_AlternatingFont',
+      'BR'  => 'Inline_AlternatingFont',
+      'IB'  => 'Inline_AlternatingFont',
+      'IR'  => 'Inline_AlternatingFont',
+      'RB'  => 'Inline_AlternatingFont',
+      'RI'  => 'Inline_AlternatingFont',
+      'ft'  => 'Inline_ft',
+      'br'  => 'Inline_VerticalSpace',
+      'sp'  => 'Inline_VerticalSpace',
+      'ne'  => 'Inline_VerticalSpace',
+    ];
+
     static function canSkip(string $line)
     {
         // Ignore:
@@ -123,6 +162,27 @@ ROFF;
         $macroLine = Replace::preg('~^\.\s+~u', '.', $macroLine);
 
         return Replace::preg('~^\.nop ~u', '', $macroLine);
+    }
+
+    public static function getClass(array $lines, int $i): array
+    {
+
+        if ($lines[$i] === '') {
+            return ['class' => 'Block_P', 'arguments' => null];
+        } elseif (preg_match('~^\.\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
+            if (array_key_exists($matches[1], self::$classMap)) {
+                return ['class' => self::$classMap[$matches[1]], 'arguments' => Request::parseArguments($matches[2])];
+            } else {
+                throw new Exception('Unhandled request: ' . $lines[$i]);
+            }
+        } elseif (Block_TabTable::isStart($lines, $i)) {
+            return ['class' => 'Block_TabTable', 'arguments' => null];
+        } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
+            return ['class' => 'Block_Text', 'arguments' => null];
+        } else {
+            throw new Exception('Could not determine request class: ' . $lines[$i]);
+        }
+
     }
 
 }

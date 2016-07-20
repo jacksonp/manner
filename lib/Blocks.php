@@ -54,37 +54,15 @@ class Blocks
                 continue;
             }
 
-            $classes = [
-              'Block_SH',
-              'Block_SS',
-              'Block_SY',
-              'Block_P',
-              'Block_IP',
-              'Block_TP',
-              'Block_ti',
-              'Block_RS',
-              'Block_EX',
-              'Block_Vb',
-              'Block_ce',
-              'Block_nf',
-              'Block_TS',
-              'Block_TH',
-              'Block_TabTable',
-              'Block_Text',
-              'Inline_Link',
-              'Inline_FontOneInputLine',
-              'Inline_AlternatingFont',
-              'Inline_ft',
-              'Inline_VerticalSpace',
-            ];
 
-            foreach ($classes as $className) {
-                $newI = $className::checkAppend($parentNode, $lines, $i);
-                if ($newI !== false) {
-                    $i = $newI;
-                    continue 2;
-                }
+            $request = Request::getClass($lines, $i);
+
+            $newI = $request['class']::checkAppend($parentNode, $lines, $i);
+            if ($newI !== false) {
+                $i = $newI;
+                continue;
             }
+
 
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);
