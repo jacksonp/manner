@@ -22,7 +22,7 @@ class Block_IP
             return false;
         }
 
-        $ipArgs = Macro::parseArgString($matches[1]);
+        $ipArgs = Request::parseArguments($matches[1]);
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
@@ -45,7 +45,7 @@ class Block_IP
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs = Macro::parseArgString($matches[1]);
+                $ipArgs = Request::parseArguments($matches[1]);
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
                     if (
@@ -86,7 +86,7 @@ class Block_IP
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
             if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs = Macro::parseArgString($matches[1]);
+                $ipArgs = Request::parseArguments($matches[1]);
                 if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
                     --$i;
                     break;

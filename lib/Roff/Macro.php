@@ -25,7 +25,7 @@ class Roff_Macro
                 $foundEnd = true;
                 break;
             }
-            $macroLines[] = Macro::massageLine($macroLine);
+            $macroLines[] = Request::massageLine($macroLine);
         }
 
         if (!$foundEnd) {

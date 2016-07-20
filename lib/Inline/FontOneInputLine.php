@@ -21,7 +21,7 @@ class Inline_FontOneInputLine
             return false;
         }
 
-        $arguments = Macro::parseArgString(@$matches[2]);
+        $arguments = Request::parseArguments(@$matches[2]);
 
         if (is_null($arguments) and $i < count($lines) - 1 and preg_match('~\.IP~u', $lines[$i + 1])) {
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.

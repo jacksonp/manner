@@ -17,7 +17,7 @@ class Inline_ft
             return $i; // trailing .ft: skip
         }
 
-        $arguments = Macro::parseArgString(@$matches[1]);
+        $arguments = Request::parseArguments(@$matches[1]);
 
         if (is_null($arguments)) {
             return $i; // Just skip empty requests

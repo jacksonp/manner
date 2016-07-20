@@ -11,7 +11,7 @@ class Inline_Link
 
         if (preg_match('~^\.\s*URL\s(.*)$~u', $lines[$i], $matches)) {
             $dom       = $parentNode->ownerDocument;
-            $arguments = Macro::parseArgString($matches[1]);
+            $arguments = Request::parseArguments($matches[1]);
             if (is_null($arguments)) {
                 throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
             }
@@ -45,7 +45,7 @@ class Inline_Link
 
         $dom         = $parentNode->ownerDocument;
         $numLines    = count($lines);
-        $arguments   = Macro::parseArgString(@$matches[1]);
+        $arguments   = Request::parseArguments(@$matches[1]);
         $punctuation = '';
         $blockLines  = [];
 

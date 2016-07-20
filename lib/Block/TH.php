@@ -14,7 +14,7 @@ class Block_TH
 
         if (empty($man->title)) {
 
-            $titleDetails = Macro::parseArgString($matches[1]);
+            $titleDetails = Request::parseArguments($matches[1]);
             if (is_null($titleDetails) or count($titleDetails) < 1) {
                 throw new Exception($lines[$i] . ' - missing title info');
             }

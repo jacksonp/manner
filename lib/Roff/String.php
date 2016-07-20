@@ -23,7 +23,7 @@ class Roff_String
         }
 
         $newRequest = $matches[1];
-        $requestVal = Macro::simplifyRequest($matches[2]);
+        $requestVal = Request::simplifyRequest($matches[2]);
         if (mb_substr($requestVal, 0, 1) === '"') {
             $requestVal = mb_substr($requestVal, 1);
         }

@@ -27,7 +27,7 @@ class Inline_AlternatingFont
             return $i; // Just skip empty requests
         }
 
-        $arguments = Macro::parseArgString(Macro::massageLine($matches[2]));
+        $arguments = Request::parseArguments(Request::massageLine($matches[2]));
 
         if (is_null($arguments)) {
             return $i; // Just skip empty requests

@@ -81,7 +81,7 @@ class Text
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
             if (mb_substr($lines[$i], 0, 1) === '.') {
-                $bits = Macro::parseArgString($lines[$i]);
+                $bits = Request::parseArguments($lines[$i]);
                 if (count($bits) > 0) {
                     $macro  = trim(array_shift($bits));
                     $macros = $man->getMacros();

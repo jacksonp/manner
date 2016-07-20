@@ -45,7 +45,7 @@ class Block_TP
                     continue;
                 }
 
-                $requestArgs = Macro::parseArgString($matches[1]);
+                $requestArgs = Request::parseArguments($matches[1]);
                 if (is_null($firstIndent) and count($requestArgs) > 0) {
                     $firstIndent = 'indent';
                     if ($indentVal = Roff_Unit::normalize($requestArgs[0])) { // note: filters out 0s

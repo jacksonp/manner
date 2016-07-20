@@ -17,7 +17,7 @@ class Block_SY
         $numLines    = count($lines);
         $dom         = $parentNode->ownerDocument;
         $commandName = '';
-        $arguments   = Macro::parseArgString(Macro::massageLine($matches[1]));
+        $arguments   = Request::parseArguments(Request::massageLine($matches[1]));
         if (!is_null($arguments)) {
             $commandName = $arguments[0];
         }

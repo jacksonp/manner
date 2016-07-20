@@ -26,7 +26,7 @@ class Roff_Condition
           $lines[$i], $matches)
         ) {
             if (self::test($matches[1]) and self::test($matches[2])) {
-                return ['lines' => Text::applyRoffClasses([Macro::massageLine($matches[3])]), 'i' => $i];
+                return ['lines' => Text::applyRoffClasses([Request::massageLine($matches[3])]), 'i' => $i];
             } else {
                 return ['lines' => [], 'i' => $i];
             }
@@ -34,7 +34,7 @@ class Roff_Condition
 
         if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test($matches[1])) {
-                $lines[$i] = Macro::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
+                $lines[$i] = Request::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
                 return ['i' => $i - 1];
             } else {
                 return ['lines' => [], 'i' => $i];
@@ -63,7 +63,7 @@ class Roff_Condition
             }
 
             return self::handleElse($lines, $i + 1, $useIf,
-              Text::applyRoffClasses([Macro::massageLine($ifMatches[2])]));
+              Text::applyRoffClasses([Request::massageLine($ifMatches[2])]));
 
         }
 
@@ -92,7 +92,7 @@ class Roff_Condition
         if ($useIf) {
             return ['lines' => $ifLines, 'i' => $i];
         } else {
-            return ['lines' => Text::applyRoffClasses([Macro::massageLine($elseMatches[1])]), 'i' => $i];
+            return ['lines' => Text::applyRoffClasses([Request::massageLine($elseMatches[1])]), 'i' => $i];
         }
 
 
@@ -202,11 +202,11 @@ class Roff_Condition
             if (preg_match('~^(.*)\\\\}$~u', $line, $matches) and $openBraces === 0) {
                 $foundEnd = true;
                 if (!empty($matches[1]) and $matches[1] !== '\'br') {
-                    $replacementLines[] = Macro::massageLine($matches[1]);
+                    $replacementLines[] = Request::massageLine($matches[1]);
                 }
                 break;
             } elseif ($line !== '') {
-                $replacementLines[] = Macro::massageLine($line);
+                $replacementLines[] = Request::massageLine($line);
             }
             ++$ifIndex;
             if ($ifIndex < $numLines) {

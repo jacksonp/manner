@@ -1,10 +1,10 @@
 <?php
 
 
-class Macro
+class Request
 {
 
-    static function parseArgString($argString)
+    static function parseArguments($argString)
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:

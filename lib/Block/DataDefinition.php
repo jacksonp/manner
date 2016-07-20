@@ -25,7 +25,7 @@ class Block_DataDefinition
             $hitBlankIP = false;
             if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $nextIPMatches)) {
                 $hitIP      = true;
-                $nextIPArgs = Macro::parseArgString($nextIPMatches[1]);
+                $nextIPArgs = Request::parseArguments($nextIPMatches[1]);
                 $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
             }
 

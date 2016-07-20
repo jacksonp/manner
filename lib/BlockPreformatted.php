@@ -33,7 +33,7 @@ class BlockPreformatted
                 }
                 continue;
             } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs     = Macro::parseArgString($matches[1]);
+                $ipArgs     = Request::parseArguments($matches[1]);
                 $nextIndent = 4;
                 if (is_null($ipArgs) || trim($ipArgs[0]) === '') {
                     continue;
@@ -54,7 +54,7 @@ class BlockPreformatted
                 continue;
             } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
                 $parentNode->appendChild(new DOMText('['));
-                $arguments = Macro::parseArgString($matches[1]);
+                $arguments = Request::parseArguments($matches[1]);
                 $strong    = $parentNode->appendChild($dom->createElement('strong'));
                 TextContent::interpretAndAppendText($strong, $arguments[0]);
                 if (count($arguments) > 1) {
