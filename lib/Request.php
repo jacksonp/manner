@@ -185,12 +185,14 @@ ROFF;
                   'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
                 ];
             } else {
-                throw new Exception('Unhandled request: ' . $lines[$i]);
+                return ['class' => 'Request_Unknown', 'arguments' => null];
             }
         } elseif (Block_TabTable::isStart($lines, $i)) {
             return ['class' => 'Block_TabTable', 'arguments' => null];
         } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
             return ['class' => 'Block_Text', 'arguments' => null];
+        } elseif (self::canSkip($lines[$i])) {
+            return ['class' => 'Empty_Request', 'arguments' => null];
         } else {
             throw new Exception('Could not determine request class: "' . $lines[$i] . '"');
         }

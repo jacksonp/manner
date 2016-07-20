@@ -4,30 +4,16 @@
 class Block_SH
 {
 
-    static function check($line)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
-        if (preg_match('~^\.\s*SH(.*)$~u', $line, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
         $headingNode = $dom->createElement('h2');
 
-        if ($matches[1] === '') {
-            if ($i === $numLines - 1 or self::check($lines[$i + 1])) {
+        if (count($arguments) === 0) {
+            if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
                 return $i;
             }
             // Text for subheading is on next line.
@@ -37,8 +23,7 @@ class Block_SH
             }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $sectionHeading = trim($matches[1]);
-            $sectionHeading = trim($sectionHeading, '"');
+            $sectionHeading = implode(' ', $arguments);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
@@ -54,10 +39,10 @@ class Block_SH
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line    = $lines[$i];
-            $matches = self::check($lines[$i]);
-            if ($matches !== false) {
+            $request = Request::getClass($lines, $i);
+            if ($request['class'] === 'Block_SH') {
                 if (
-                  $matches[1] === '' and
+                  count($request['arguments']) === 0 and
                   $i < $numLines - 1 and
                   in_array($lines[$i + 1], Block_Section::skipSectionNameLines)
                 ) {
