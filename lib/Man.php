@@ -64,6 +64,8 @@ class Man
           '.V'   => '1500',
           'x'    => '0',
             // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
+          'year' => date('Y'),
+          'yr'   => date('Y') - 1900,
         ];
         $this->strings               = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)

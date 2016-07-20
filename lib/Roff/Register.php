@@ -13,6 +13,8 @@ class Roff_Register
 
         $man           = Man::instance();
         $registerValue = $man->applyAllReplacements($matches['val']);
+        // Normalize here: a unit value may be concatenated when the register is used.
+        $registerValue = Roff_Unit::normalize($registerValue);
         $man->setRegister($matches['name'], $registerValue);
 
         return ['i' => $i];

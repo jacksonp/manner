@@ -23,7 +23,7 @@ class Block_SH
             }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $sectionHeading = implode(' ', $arguments);
+            $sectionHeading = trim(implode(' ', $arguments));
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
