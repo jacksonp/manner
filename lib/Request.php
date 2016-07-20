@@ -187,6 +187,10 @@ ROFF;
                   'request'   => $matches[1],
                   'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
                 ];
+            } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
+                // Lenient with things starting with ' to match pre-refactor output...
+                // TODO: eventually just skip requests we don't know, whether they start with . or '
+                return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
             } else {
                 return ['class' => 'Request_Unknown', 'request' => $matches[1], 'arguments' => null];
             }
