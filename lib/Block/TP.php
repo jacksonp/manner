@@ -4,23 +4,8 @@
 class Block_TP
 {
 
-    static function check(string $string)
-    {
-        if (preg_match('~^\.\s*T[PQ] ?(.*)$~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
     static function checkAppend(HybridNode $parentNode, array &$lines, int $i)
     {
-
-        // TODO $matches[1] will contain the indentation level, try to use this to handle nested dls?
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         $numLines = count($lines);
 
