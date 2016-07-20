@@ -54,39 +54,32 @@ class Blocks
                 continue;
             }
 
-            $blockClasses = [
-              'SH',
-              'SS',
-              'SY',
-              'P',
-              'IP',
-              'TP',
-              'ti',
-              'RS',
-              'EX',
-              'Vb',
-              'ce',
-              'nf',
-              'TS',
-              'TH',
-              'TabTable',
-              'Text',
+            $classes = [
+              'Block_SH',
+              'Block_SS',
+              'Block_SY',
+              'Block_P',
+              'Block_IP',
+              'Block_TP',
+              'Block_ti',
+              'Block_RS',
+              'Block_EX',
+              'Block_Vb',
+              'Block_ce',
+              'Block_nf',
+              'Block_TS',
+              'Block_TH',
+              'Block_TabTable',
+              'Block_Text',
+              'Inline_Link',
+              'Inline_FontOneInputLine',
+              'Inline_AlternatingFont',
+              'Inline_ft',
+              'Inline_VerticalSpace',
             ];
 
-            foreach ($blockClasses as $blockClass) {
-                $className = 'Block_' . $blockClass;
-                $newI      = $className::checkAppend($parentNode, $lines, $i);
-                if ($newI !== false) {
-                    $i = $newI;
-                    continue 2;
-                }
-            }
-
-            $inlineClasses = ['Link', 'FontOneInputLine', 'AlternatingFont', 'ft', 'VerticalSpace'];
-
-            foreach ($inlineClasses as $inlineClass) {
-                $className = 'Inline_' . $inlineClass;
-                $newI      = $className::checkAppend($parentNode, $lines, $i);
+            foreach ($classes as $className) {
+                $newI = $className::checkAppend($parentNode, $lines, $i);
                 if ($newI !== false) {
                     $i = $newI;
                     continue 2;
