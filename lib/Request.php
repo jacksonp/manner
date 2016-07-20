@@ -180,7 +180,7 @@ ROFF;
             return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
         } elseif (self::canSkip($lines[$i])) {
             return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
-        } elseif (preg_match('~^\\\\?\.\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
+        } elseif (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
             if (array_key_exists($matches[1], self::$classMap)) {
                 return [
                   'class'     => self::$classMap[$matches[1]],
