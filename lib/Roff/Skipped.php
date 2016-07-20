@@ -70,8 +70,9 @@ class Roff_Skipped
         // .XX: looks like some kind of indexing
         // .fp: mount font at position
         // .l: ?
+        // .mc: margin glyph
         if (preg_match(
-          '~^[\.\'](?:\s|(iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc|defcolor|pdfdest|em|Iq|XX|fp|l)(\s|$))~u',
+          '~^[\.\'](?:\s|(iX|IX|nh|na|hy|hys|hym|UN|UC|DT|lf|TA|IN|LL|PU|LO 1|pl|pc|PD|RP|po|in|ll|fam|rs|rm|ta|cp|it|ps|bp|ul|so|bd|BB|BY|mk|rt|ss|cs|vs|ev|evc|hw|ns|mso|tm|tm1|tmc|defcolor|pdfdest|em|Iq|XX|fp|l|mc)(\s|$))~u',
           $line)
         ) {
             return ['i' => $i];
