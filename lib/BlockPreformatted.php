@@ -28,6 +28,19 @@ class BlockPreformatted
                     $addIndent = 0;
                 }
                 continue;
+            } elseif (in_array(
+              $request['class'],
+              ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
+            )) {
+                $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
+                  $request['request']);
+                if ($newI !== false) {
+                    if ($i !== $numLines - 1 and $request['class'] !== 'Request_Skippable') {
+                        self::endInputLine($parentNode);
+                    }
+                    $i = $newI;
+                    continue;
+                }
             } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
                 $ipArgs     = Request::parseArguments($matches[1]);
                 $nextIndent = 4;
@@ -62,20 +75,6 @@ class BlockPreformatted
                 continue;
             }
 
-            $classes = ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable'];
-
-            $request = Request::getClass($lines, $i);
-            if (in_array($request['class'], $classes)) {
-                $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
-                  $request['request']);
-                if ($newI !== false) {
-                    if ($i !== $numLines - 1 and $request['class'] !== 'Request_Skippable') {
-                        self::endInputLine($parentNode);
-                    }
-                    $i = $newI;
-                    continue;
-                }
-            }
 
             if ($addIndent > 0) {
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
