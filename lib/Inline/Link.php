@@ -19,7 +19,7 @@ class Inline_Link
             $anchor->setAttribute('href', $arguments[0]);
 
             if (count($arguments) > 1) {
-                TextContent::interpretAndAppendText($anchor, $arguments[1], false, false);
+                TextContent::interpretAndAppendText($anchor, $arguments[1]);
             } else {
                 Blocks::handle($anchor, [$lines[++$i]]);
             }
@@ -82,7 +82,7 @@ class Inline_Link
 
         if (count($blockLines) === 0) {
 
-            TextContent::interpretAndAppendText($anchor, $url, false, false);
+            TextContent::interpretAndAppendText($anchor, $url);
         } else {
             Blocks::handle($anchor, $blockLines);
         }

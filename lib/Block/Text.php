@@ -135,8 +135,7 @@ class Block_Text
         TextContent::interpretAndAppendText(
           $textParent,
           $line,
-          $textParent->hasContent(),
-          !in_array($textParent->tagName, ['h2', 'h3'])
+          $textParent->hasContent()
         );
 
         if ($shouldAppend) {
