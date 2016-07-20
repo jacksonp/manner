@@ -46,22 +46,13 @@ class Blocks
         $numLines = count($lines);
         for ($i = 0; $i < $numLines; ++$i) {
 
-            $lines[$i] = preg_replace('~^\\\\\.~u', '.', $lines[$i]);
-
-            $line = $lines[$i];
-
-            if (Request::canSkip($line)) {
-                continue;
-            }
-
-
             $request = Request::getClass($lines, $i);
 
             $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request']);
             if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);
-                throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
+                throw new Exception('"' . $lines[$i] . '" Blocks::handle() could not handle it.');
             }
 
             $i = $newI;
