@@ -4,20 +4,15 @@
 class Block_SY
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
 
         // These get swallowed:
-        $blockEnds = ['.YS'];
-
-        if (!preg_match('~^\.\s*SY\s?(.*)$~u', $lines[$i], $matches)) {
-            return false;
-        }
-
+        $blockEnds   = ['.YS'];
         $numLines    = count($lines);
         $dom         = $parentNode->ownerDocument;
         $commandName = '';
-        $arguments   = Request::parseArguments(Request::massageLine($matches[1]));
+
         if (!is_null($arguments)) {
             $commandName = $arguments[0];
         }

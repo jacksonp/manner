@@ -4,23 +4,8 @@
 class Block_nf
 {
 
-    static function check(string $string)
-    {
-        if (preg_match('~^\.\s*nf\s?(.*)$~u', $string, $matches)) {
-            // Don't actually expect anything in $matches[1]
-            return $matches;
-        }
-
-        return false;
-    }
-
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         // These get swallowed:
         $blockEnds = '~^\.(fi|ad|ad n|ad b)(?:\s|$)~u';

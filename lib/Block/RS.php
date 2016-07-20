@@ -4,28 +4,18 @@
 class Block_RS
 {
 
-    static function check(string $string)
-    {
-        if (preg_match('~^\.\s*RS ?(.*)$~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
 
     // TODO: see munch.6 Copyright section and .RS 0
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
 
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
-
-        $thisIndent = Roff_Unit::normalize(trim($matches[1]));
+        $thisIndent = '';
         $className  = 'indent';
-        if ($thisIndent) { // note this filters out 0s
-            $className .= '-' . $thisIndent;
+        if (!is_null($arguments) and count($arguments) > 0) {
+            $thisIndent = Roff_Unit::normalize(@$arguments[0]);
+            if ($thisIndent) { // note this filters out 0s
+                $className .= '-' . $thisIndent;
+            }
         }
         $numLines   = count($lines);
         $dom        = $parentNode->ownerDocument;

@@ -25,19 +25,14 @@ class Block_Text
         $numLines   = count($lines);
         for (; $i < $numLines; ++$i) {
 
-            if (
-              Block_RS::check($lines[$i]) or
-              Block_TP::check($lines[$i]) or
-              Block_IP::check($lines[$i]) or
-              Block_SH::check($lines[$i]) or
-              Block_SS::check($lines[$i]) or
-              Block_nf::check($lines[$i])
-            ) {
+            $request = Request::getClass($lines, $i);
+
+            if (in_array($request['class'], ['Block_RS', 'Block_TP', 'Block_IP', 'Block_SH', 'Block_SS', 'Block_nf'])) {
                 --$i;
                 break;
             }
 
-            if (!Block_P::check($lines[$i]) and !Inline_VerticalSpace::check($lines[$i])) {
+            if (!in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
                 $blockLines[] = $lines[$i];
                 if (
                   mb_substr($lines[$i], 0, 1) !== '.' or

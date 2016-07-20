@@ -43,6 +43,11 @@ class Request
       'ne'  => 'Inline_VerticalSpace',
     ];
 
+    static function isEmptyRequest(string $line)
+    {
+        return in_array($line, ['.', '\'', '\\.']);
+    }
+
     static function canSkip(string $line)
     {
         // Ignore:
@@ -50,8 +55,8 @@ class Request
         // .ad macros that haven't been trimmed as in middle of $lines...
         return
           preg_match('~^\.(RE|fi|ad|Sh|\s*$)~u', $line) or
+          self::isEmptyRequest($line) or
           in_array($line, [
-            '\'',   // empty request
             '..',   // Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
             '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
             '.EE',  // strays
@@ -168,10 +173,17 @@ ROFF;
     {
 
         if ($lines[$i] === '') {
+            // empty lines cause a new paragraph, see sar.1
+            // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             return ['class' => 'Block_P', 'arguments' => null];
+        } elseif (self::isEmptyRequest($lines[$i])) {
+            return ['class' => 'Empty_Request', 'arguments' => null];
         } elseif (preg_match('~^\.\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
             if (array_key_exists($matches[1], self::$classMap)) {
-                return ['class' => self::$classMap[$matches[1]], 'arguments' => Request::parseArguments($matches[2])];
+                return [
+                  'class'     => self::$classMap[$matches[1]],
+                  'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
+                ];
             } else {
                 throw new Exception('Unhandled request: ' . $lines[$i]);
             }
@@ -180,7 +192,7 @@ ROFF;
         } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
             return ['class' => 'Block_Text', 'arguments' => null];
         } else {
-            throw new Exception('Could not determine request class: ' . $lines[$i]);
+            throw new Exception('Could not determine request class: "' . $lines[$i] . '"');
         }
 
     }

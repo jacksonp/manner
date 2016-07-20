@@ -57,16 +57,14 @@ class Blocks
 
             $request = Request::getClass($lines, $i);
 
-            $newI = $request['class']::checkAppend($parentNode, $lines, $i);
-            if ($newI !== false) {
-                $i = $newI;
-                continue;
-            }
-
-
+            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments']);
+            if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);
-            throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
+                throw new Exception('"' . $line . '" Blocks::handle() could not handle it.');
+            }
+
+            $i = $newI;
 
         }
 

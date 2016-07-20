@@ -20,13 +20,11 @@ class BlockPreformatted
                 $nextIndent = 0;
             }
 
+            $request = Request::getClass($lines, $i);
+
             $parentForLine = $parentNode;
 
-            if ($line === '' or
-              Block_P::check($line) or
-              Inline_VerticalSpace::check($line) or
-              preg_match('~^\\\\?\.$~u', $line) // empty requests
-            ) {
+            if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
                 if ($i > 0 && $i !== $numLines - 1) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
