@@ -4,34 +4,20 @@
 class Block_SS
 {
 
-    static function check($line)
-    {
-        if (preg_match('~^\.\s*SS(.*)$~u', $line, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
     private static function endSubsection($line)
     {
         return preg_match('~^\.\s*S[SH]~u', $line);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 
         $headingNode = $dom->createElement('h3');
 
-        if ($matches[1] === '') {
+        if (is_null($arguments)) {
             if ($i === $numLines - 1 or self::endSubsection($lines[$i + 1])) {
                 return $i;
             }
@@ -43,8 +29,7 @@ class Block_SS
             }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $sectionHeading = trim($matches[1]);
-            $sectionHeading = trim($sectionHeading, '"');
+            $sectionHeading = implode(' ', $arguments);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
