@@ -4,24 +4,8 @@
 class Inline_FontOneInputLine
 {
 
-    static function check(string $string)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
-        if (preg_match('~^\.\s*(R|I|B|SB|SM)(\s.*)?$~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
-
-        $arguments = Request::parseArguments(@$matches[2]);
 
         if (is_null($arguments) and $i < count($lines) - 1 and preg_match('~\.IP~u', $lines[$i + 1])) {
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.
@@ -32,7 +16,7 @@ class Inline_FontOneInputLine
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        switch ($matches[1]) {
+        switch ($request) {
             case 'R':
                 $appendToParentNode = false;
                 $innerNode          = $textParent;
