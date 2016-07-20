@@ -30,13 +30,8 @@ class Inline_VerticalSpace
         return false;
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
         $numLines = count($lines);
@@ -63,7 +58,7 @@ class Inline_VerticalSpace
         ) {
 
             self::addBR($textParent);
-            if (in_array($matches[1], ['sp', 'ne'])) {
+            if (in_array($request, ['sp', 'ne'])) {
                 self::addBR($textParent);
             }
 
