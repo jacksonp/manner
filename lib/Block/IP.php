@@ -4,28 +4,13 @@
 class Block_IP
 {
 
-    static function check(string $string)
-    {
-        if (preg_match('~^\.\s*IP ?(.*)$~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
-    static function checkAppend(DOMElement $parentNode, array $lines, int $i)
+    static function checkAppend(DOMElement $parentNode, array $lines, int $i, $arguments)
     {
 
-        // TODO $matches will contain the indentation level, try to use this to handle nested dls?
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
-
-        $ipArgs = Request::parseArguments($matches[1]);
+        // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-        if (!is_null($ipArgs) && trim($ipArgs[0]) !== '') {
+        if (!is_null($arguments) && trim($arguments[0]) !== '') {
             return self::appendDl($parentNode, $lines, $i);
         } else {
             return self::appendBlockquote($parentNode, $lines, $i);
