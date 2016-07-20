@@ -175,24 +175,25 @@ ROFF;
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            return ['class' => 'Block_P', 'arguments' => null];
+            return ['class' => 'Block_P', 'request' => null, 'arguments' => null];
         } elseif (self::isEmptyRequest($lines[$i])) {
-            return ['class' => 'Empty_Request', 'arguments' => null];
+            return ['class' => 'Empty_Request', 'request' => null, 'arguments' => null];
         } elseif (preg_match('~^\.\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
             if (array_key_exists($matches[1], self::$classMap)) {
                 return [
                   'class'     => self::$classMap[$matches[1]],
+                  'request'   => $matches[1],
                   'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
                 ];
             } else {
-                return ['class' => 'Request_Unknown', 'arguments' => null];
+                return ['class' => 'Request_Unknown', 'request' => $matches[1], 'arguments' => null];
             }
         } elseif (Block_TabTable::isStart($lines, $i)) {
-            return ['class' => 'Block_TabTable', 'arguments' => null];
+            return ['class' => 'Block_TabTable', 'request' => null, 'arguments' => null];
         } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
-            return ['class' => 'Block_Text', 'arguments' => null];
+            return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
         } elseif (self::canSkip($lines[$i])) {
-            return ['class' => 'Empty_Request', 'arguments' => null];
+            return ['class' => 'Empty_Request', 'request' => null, 'arguments' => null];
         } else {
             throw new Exception('Could not determine request class: "' . $lines[$i] . '"');
         }

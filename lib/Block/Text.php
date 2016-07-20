@@ -37,12 +37,8 @@ class Block_Text
                 if (
                   mb_substr($lines[$i], 0, 1) !== '.' or
                   (
-                    $matches = Inline_FontOneInputLine::check($lines[$i]) and
-                    @$matches[2] != '' // NB: not !==, might not be set
-                  ) or
-                  (
-                    $matches = Inline_AlternatingFont::check($lines[$i]) and
-                    @$matches[2] != '' // NB: not !==, might not be set
+                    in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) and
+                    !is_null($request['arguments']) and count($request['arguments']) > 0 and $request['arguments'][0] !== ''
                   )
                 ) {
                     break;

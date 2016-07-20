@@ -64,17 +64,18 @@ class BlockPreformatted
                 continue;
             }
 
-            $inlineClasses = ['FontOneInputLine', 'AlternatingFont', 'ft'];
+            $inlineClasses = ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft'];
 
-            foreach ($inlineClasses as $inlineClass) {
-                $className = 'Inline_' . $inlineClass;
-                $newI      = $className::checkAppend($parentNode, $lines, $i);
+            $request = Request::getClass($lines, $i);
+            if (in_array($request['class'], $inlineClasses)) {
+                $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
+                  $request['request']);
                 if ($newI !== false) {
                     if ($i !== $numLines - 1) {
                         self::endInputLine($parentNode);
                     }
                     $i = $newI;
-                    continue 2;
+                    continue;
                 }
             }
 

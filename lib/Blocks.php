@@ -57,7 +57,7 @@ class Blocks
 
             $request = Request::getClass($lines, $i);
 
-            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments']);
+            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request']);
             if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);

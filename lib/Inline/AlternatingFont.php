@@ -4,51 +4,29 @@
 class Inline_AlternatingFont
 {
 
-    static function check(string $string)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
-        if (preg_match('~^\.\s*(BI|BR|IB|IR|RB|RI)(\s.*)?$~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
-    }
-
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
-
-        $matches = self::check($lines[$i]);
-        if ($matches === false) {
-            return false;
-        }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        if (!@$matches[2]) {
+        if (is_null($arguments) or count($arguments) === 0) {
             return $i; // Just skip empty requests
         }
-
-        $arguments = Request::parseArguments(Request::massageLine($matches[2]));
-
-        if (is_null($arguments)) {
-            return $i; // Just skip empty requests
-        }
-
-        $command = $matches[1];
 
         $dom = $parentNode->ownerDocument;
 
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
         foreach ($arguments as $bi => $bit) {
-            $commandCharIndex = $bi % 2;
-            if (!isset($command[$commandCharIndex])) {
-                throw new Exception($lines[$i] . ' command ' . $command . ' has nothing at index ' . $commandCharIndex);
+            $requestCharIndex = $bi % 2;
+            if (!isset($request[$requestCharIndex])) {
+                throw new Exception($lines[$i] . ' command ' . $request . ' has nothing at index ' . $requestCharIndex);
             }
             if (trim($bit) === '') {
                 TextContent::interpretAndAppendText($textParent, $bit);
                 continue;
             }
-            switch ($command[$commandCharIndex]) {
+            switch ($request[$requestCharIndex]) {
                 case 'R':
                     TextContent::interpretAndAppendText($textParent, $bit);
                     break;
@@ -67,7 +45,7 @@ class Inline_AlternatingFont
                     }
                     break;
                 default:
-                    throw new Exception($lines[$i] . ' command ' . $command . ' unexpected character at index ' . $commandCharIndex);
+                    throw new Exception($lines[$i] . ' command ' . $request . ' unexpected character at index ' . $requestCharIndex);
             }
         }
 
