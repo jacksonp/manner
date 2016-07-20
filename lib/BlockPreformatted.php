@@ -22,8 +22,6 @@ class BlockPreformatted
 
             $request = Request::getClass($lines, $i);
 
-            $parentForLine = $parentNode;
-
             if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
                 if ($i > 0 && $i !== $numLines - 1) {
                     $parentNode->appendChild(new DOMText("\n"));
@@ -64,14 +62,14 @@ class BlockPreformatted
                 continue;
             }
 
-            $inlineClasses = ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft'];
+            $classes = ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable'];
 
             $request = Request::getClass($lines, $i);
-            if (in_array($request['class'], $inlineClasses)) {
+            if (in_array($request['class'], $classes)) {
                 $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
                   $request['request']);
                 if ($newI !== false) {
-                    if ($i !== $numLines - 1) {
+                    if ($i !== $numLines - 1 and $request['class'] !== 'Request_Skippable') {
                         self::endInputLine($parentNode);
                     }
                     $i = $newI;
@@ -92,7 +90,7 @@ class BlockPreformatted
                 throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
             }
 
-            TextContent::interpretAndAppendText($parentForLine, $line);
+            TextContent::interpretAndAppendText($parentNode, $line);
             if ($i !== $numLines - 1) {
                 self::endInputLine($parentNode);
             }
@@ -100,11 +98,11 @@ class BlockPreformatted
         }
 
         while (
-          $parentForLine->lastChild and
-          $parentForLine->lastChild instanceof DOMText
-          and trim($parentForLine->lastChild->textContent) === ''
+          $parentNode->lastChild and
+          $parentNode->lastChild instanceof DOMText
+          and trim($parentNode->lastChild->textContent) === ''
         ) {
-            $parentForLine->removeChild($parentForLine->lastChild);
+            $parentNode->removeChild($parentNode->lastChild);
         }
 
     }

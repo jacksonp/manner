@@ -7,11 +7,11 @@ class Inline_AlternatingFont
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-
         if (is_null($arguments) or count($arguments) === 0) {
             return $i; // Just skip empty requests
         }
+
+        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $dom = $parentNode->ownerDocument;
 

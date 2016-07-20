@@ -12,7 +12,7 @@ class Block_SH
 
         $headingNode = $dom->createElement('h2');
 
-        if (count($arguments) === 0) {
+        if (is_null($arguments) or count($arguments) === 0) {
             if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
                 return $i;
             }

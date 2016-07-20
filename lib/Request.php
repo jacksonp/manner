@@ -90,6 +90,7 @@ class Request
 
         $args         = [];
         $thisArg      = '';
+        $foundQuote   = false;
         $inQuotes     = false;
         $stringLength = mb_strlen($argString);
         $lastChar     = '';
@@ -103,6 +104,7 @@ class Request
                 $args[]  = $thisArg;
                 $thisArg = '';
             } elseif ($char === '"') {
+                $foundQuote = true;
                 if ($inQuotes and $i < $stringLength - 1 and mb_substr($argString, $i + 1, 1) === '"') {
                     // When in quotes, "" produces a quote.
                     $thisArg .= '"';
@@ -120,7 +122,7 @@ class Request
             $lastChar = $char;
         }
 
-        if ($thisArg !== '') {
+        if ($thisArg !== '' or $foundQuote) { // Want return an empty string, e.g. for .SH ""
             $args[] = $thisArg;
         }
 
