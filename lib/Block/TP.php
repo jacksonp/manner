@@ -23,17 +23,18 @@ class Block_TP
         $firstIndent = null;
 
         for (; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match('~^\.\s*T[PQ] ?(.*)$~u', $line, $matches)) {
-                if ($i === $numLines - 1 or preg_match('~^\.\s*[IT]P ?(.*)$~u', $lines[$i + 1])) {
+
+            $request = Request::getClass($lines, $i);
+
+            if ($request['class'] === 'Block_TP') {
+                if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
                     // a bug in the man page, just skip:
                     continue;
                 }
 
-                $requestArgs = Request::parseArguments($matches[1]);
-                if (is_null($firstIndent) and count($requestArgs) > 0) {
+                if (is_null($firstIndent) and count($request['arguments']) > 0) {
                     $firstIndent = 'indent';
-                    if ($indentVal = Roff_Unit::normalize($requestArgs[0])) { // note: filters out 0s
+                    if ($indentVal = Roff_Unit::normalize($request['arguments'][0])) { // note: filters out 0s
                         $firstIndent = 'indent-' . $indentVal;
                         $dl->setAttribute('class', $firstIndent);
                     }
