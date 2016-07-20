@@ -14,7 +14,7 @@
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>This manual page documents the GNU version of <strong>find</strong>. GNU <strong>find</strong> searches the directory tree rooted at each given starting-point by evaluating the given expression from left to right, according to the rules of precedence (see section OPERATORS), until the outcome is known (the left hand side is false for <em>and</em> operations, true for <em>or</em>), at which point <strong>find</strong> moves on to the next file name. If no starting-point is specified, `.' is assumed.
-  <p>If you are using <strong>find</strong> in an environment where security is important (for example if you are using it to search directories that are writable by other users), you should read the "Security Considerations" chapter of the findutils documentation, which is called <strong>Finding Files</strong> and comes with findutils. That document also includes a lot more detail and discussion than this manual page, so you may find it a more useful source of information.
+  <p>If you are using <strong>find</strong> in an environment where security is important (for example if you are using it to search directories that are writable by other users), you should read the `Security Considerations' chapter of the findutils documentation, which is called <strong>Finding Files</strong> and comes with findutils. That document also includes a lot more detail and discussion than this manual page, so you may find it a more useful source of information.
 </div>
 <div class="section">
   <h2>OPTIONS</h2>
@@ -308,10 +308,10 @@
       <dt>-exec <em>command</em> ;
       <dd>Execute <em>command</em>; true if 0 status is returned. All following arguments to <strong>find</strong> are taken to be arguments to the command until an argument consisting of `;' is encountered. The string `{}' is replaced by the current file name being processed everywhere it occurs in the arguments to the command, not just in arguments where it is alone, as in some versions of <strong>find</strong>. Both of these constructions might need to be escaped (with a `\') or quoted to protect them from expansion by the shell. See the <strong>EXAMPLES</strong> section for examples of the use of the <strong>-exec</strong> option. The specified command is run once for each matched file. The command is executed in the starting directory. There are unavoidable security problems surrounding use of the <strong>-exec</strong> action; you should use the <strong>-execdir</strong> option instead.
       <dt>-exec <em>command</em> {} +
-      <dd>This variant of the <strong>-exec</strong> action runs the specified command on the selected files, but the command line is built by appending each selected file name at the end; the total number of invocations of the command will be much less than the number of matched files. The command line is built in much the same way that <strong>xargs</strong> builds its command lines. Only one instance of `{}' is allowed within the command. The command is executed in the starting directory. If any invocation returns a non-zero value as exit status, then <strong>find</strong> returns a non-zero exit status. If <strong>find</strong> encounters an error, this can sometimes cause an immediate exit, so some pending commands may not be run at all. This variant of <strong>-exec</strong> always returns true.
+      <dd>This variant of the <strong>-exec</strong> action runs the specified command on the selected files, but the command line is built by appending each selected file name at the end; the total number of invocations of the command will be much less than the number of matched files. The command line is built in much the same way that <strong>xargs</strong> builds its command lines. Only one instance of `{}' is allowed within the command, and (when <strong>find</strong> is being invoked from a shell) it should be quoted (for example, '{}') to protect it from interpretation by shells. The command is executed in the starting directory. If any invocation returns a non-zero value as exit status, then <strong>find</strong> returns a non-zero exit status. If <strong>find</strong> encounters an error, this can sometimes cause an immediate exit, so some pending commands may not be run at all. This variant of <strong>-exec</strong> always returns true.
       <dt>-execdir <em>command</em> ;
       <dt>-execdir <em>command</em> {} +
-      <dd>Like <strong>-exec</strong>, but the specified command is run from the subdirectory containing the matched file, which is not normally the directory in which you started <strong>find</strong>. This a much more secure method for invoking commands, as it avoids race conditions during resolution of the paths to the matched files. As with the <strong>-exec</strong> action, the `+' form of <strong>-execdir</strong> will build a command line to process more than one matched file, but any given invocation of <em>command</em> will only list files that exist in the same subdirectory. If you use this option, you must ensure that your <strong>$PATH</strong> environment variable does not reference `.'; otherwise, an attacker can run any commands they like by leaving an appropriately-named file in a directory in which you will run <strong>-execdir</strong>. The same applies to having entries in <strong>$PATH</strong> which are empty or which are not absolute directory names. If any invocation returns a non-zero value as exit status, then <strong>find</strong> returns a non-zero exit status. If <strong>find</strong> encounters an error, this can sometimes cause an immediate exit, so some pending commands may not be run at all. The result of the action depends on whether the <strong>+</strong> or the <strong>;</strong> variant is being used; <strong>-execdir</strong> <em>command</em> <strong>{} +</strong> always returns true, while <strong>-execdir</strong> <em>command</em> <strong>{} ;</strong> returns true only if <em>command</em> returns 0.
+      <dd>Like <strong>-exec</strong>, but the specified command is run from the subdirectory containing the matched file, which is not normally the directory in which you started <strong>find</strong>. As with -exec, the {} should be quoted if find is being invoked from a shell. This a much more secure method for invoking commands, as it avoids race conditions during resolution of the paths to the matched files. As with the <strong>-exec</strong> action, the `+' form of <strong>-execdir</strong> will build a command line to process more than one matched file, but any given invocation of <em>command</em> will only list files that exist in the same subdirectory. If you use this option, you must ensure that your <strong>$PATH</strong> environment variable does not reference `.'; otherwise, an attacker can run any commands they like by leaving an appropriately-named file in a directory in which you will run <strong>-execdir</strong>. The same applies to having entries in <strong>$PATH</strong> which are empty or which are not absolute directory names. If any invocation returns a non-zero value as exit status, then <strong>find</strong> returns a non-zero exit status. If <strong>find</strong> encounters an error, this can sometimes cause an immediate exit, so some pending commands may not be run at all. The result of the action depends on whether the <strong>+</strong> or the <strong>;</strong> variant is being used; <strong>-execdir</strong> <em>command</em> <strong>{} +</strong> always returns true, while <strong>-execdir</strong> <em>command</em> <strong>{} ;</strong> returns true only if <em>command</em> returns 0.
       <dt>-fls <em>file</em>
       <dd>True; like <strong>-ls</strong> but write to <em>file</em> like <strong>-fprint</strong>. The output file is always created, even if the predicate is never matched. See the <strong>UNUSUAL FILENAMES</strong> section for information about how unusual characters in filenames are handled.
       <dt>-fprint <em>file</em>
@@ -451,7 +451,7 @@
             <dt>%G
             <dd>File's numeric group ID.
             <dt>%h
-            <dd>Leading directories of file's name (all but the last element). If the file name contains no slashes (since it is in the current directory) the %h specifier expands to ".".
+            <dd>Leading directories of file's name (all but the last element). If the file name contains no slashes (since it is in the current directory) the %h specifier expands to `.'.
             <dt>%H
             <dd>Starting-point under which file was found.
             <dt>%i
@@ -512,7 +512,7 @@
       <dt>-not <em>expr</em>
       <dd>Same as ! <em>expr</em>, but not POSIX compliant.
       <dt><em>expr1 expr2</em>
-      <dd>Two expressions in a row are taken to be joined with an implied "and"; <em>expr2</em> is not evaluated if <em>expr1</em> is false.
+      <dd>Two expressions in a row are taken to be joined with an implied <strong>-a</strong>; <em>expr2</em> is not evaluated if <em>expr1</em> is false.
       <dt><em>expr1</em> -a <em>expr2</em>
       <dd>Same as <em>expr1 expr2</em>.
       <dt><em>expr1</em> -and <em>expr2</em>
@@ -555,7 +555,7 @@
     <dt><strong>-type</strong>
     <dd>Supported. POSIX specifies `b', `c', `d', `l', `p', `f' and `s'. GNU find also supports `D', representing a Door, where the OS provides these. Furthermore, GNU find allows multiple types to be specified at once in a comma-separated list.
     <dt><strong>-ok</strong>
-    <dd>Supported. Interpretation of the response is according to the "yes" and "no" patterns selected by setting the `LC_MESSAGES' environment variable. When the `POSIXLY_CORRECT' environment variable is set, these patterns are taken system's definition of a positive (yes) or negative (no) response. See the system's documentation for <strong>nl_langinfo</strong>(3), in particular YESEXPR and NOEXPR. When `POSIXLY_CORRECT' is not set, the patterns are instead taken from <strong>find</strong>'s own message catalogue.
+    <dd>Supported. Interpretation of the response is according to the `yes' and `no' patterns selected by setting the `LC_MESSAGES' environment variable. When the `POSIXLY_CORRECT' environment variable is set, these patterns are taken system's definition of a positive (yes) or negative (no) response. See the system's documentation for <strong>nl_langinfo</strong>(3), in particular YESEXPR and NOEXPR. When `POSIXLY_CORRECT' is not set, the patterns are instead taken from <strong>find</strong>'s own message catalogue.
     <dt><strong>-newer</strong>
     <dd>Supported. If the file specified is a symbolic link, it is always dereferenced. This is a change from previous behaviour, which used to take the relevant time from the symbolic link; see the HISTORY section below.
     <dt><strong>-perm</strong>
@@ -628,14 +628,14 @@
   <pre><strong>find . -perm -220</strong>
 <strong>find . -perm -g+w,u+w</strong></pre>
   <p>Both these commands do the same thing; search for files which are writable by both their owner and their group.
-  <pre><strong>find . -perm -444 -perm /222 ! -perm /111</strong>
-<strong>find . -perm -a+r -perm /a+w ! -perm /a+x</strong></pre>
+  <pre><strong>find . -perm -444 -perm /222 \! -perm /111</strong>
+<strong>find . -perm -a+r -perm /a+w \! -perm /a+x</strong></pre>
   <p>These two commands both search for files that are readable for everybody ( <strong>-perm -444</strong> or <strong>-perm -a+r</strong>), have at least one write bit set ( <strong>-perm /222</strong> or <strong>-perm /a+w</strong>) but are not executable for anybody ( <strong>! -perm /111</strong> and <strong>! -perm /a+x</strong> respectively).
   <pre><strong>cd /source-dir</strong>
-<strong>find . -name .snapshot -prune -o \( \! -name *~ -print0 \)|</strong>
+<strong>find . -name .snapshot -prune -o \( \! -name '*~' -print0 \)|</strong>
 <strong>cpio -pmd0 /dest-dir</strong></pre>
   <p>This command copies the contents of <strong>/source-dir</strong> to <strong>/dest-dir</strong>, but omits files and directories named <strong>.snapshot</strong> (and anything in them). It also omits files or directories whose name ends in <strong>~</strong>, but not their contents. The construct <strong>-prune -o \( ... -print0 \)</strong> is quite common. The idea here is that the expression before <strong>-prune</strong> matches things which are to be pruned. However, the <strong>-prune</strong> action itself returns true, so the following <strong>-o</strong> ensures that the right hand side is evaluated only for those directories which didn't get pruned (the contents of the pruned directories are not even visited, so their contents are irrelevant). The expression on the right hand side of the <strong>-o</strong> is in parentheses only for clarity. It emphasises that the <strong>-print0</strong> action takes place only for things that didn't have <strong>-prune</strong> applied to them. Because the default `and' condition between tests binds more tightly than <strong>-o</strong>, this is the default anyway, but the parentheses help to show what is going on.
-  <pre><strong>find repo/ \( -exec test -d {}/.svn \; -or \</strong>
+  <pre><strong>find repo/ \( -exec test -d '{}'/.svn \; -or \</strong>
 <strong>-exec test -d {}/.git \; -or -exec test -d {}/CVS \; \) \</strong>
 <strong>-print -prune</strong></pre>
   <p>Given the following directory of projects and their associated SCM administrative directories, perform an efficient search for the projects' roots:

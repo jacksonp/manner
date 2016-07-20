@@ -9,14 +9,17 @@
 </div>
 <div class="section">
   <h2>SYNOPSIS</h2>
-  <p><strong>mono-symbolicate exefile stacktracesfile [directories...]</strong>
+  <p><strong>mono-symbolicate &lt;msym dir&gt; &lt;input file&gt;</strong>
+  <p><strong>mono-symbolicate store-symbols &lt;msym dir&gt; [&lt;dir&gt;]+</strong>
 </div>
 <div class="section">
   <h2>DESCRIPTION</h2>
   <p>mono-symbolicate is a tool that converts a stack trace with &lt;filename unknown&gt;:0 into one with file names and line numbers.
-  <p>The output of calling this tool will be the provided <em>stacktracesfile</em> where &lt;filename unknown&gt;:0 parts are replaced by a file name and a line number.
-  <p>For the tool to work it needs to load referenced assemblies, it will first look in the same folder as <em>exefile</em> then from one of the provided <em>directories.</em>
-  <p>The tool assumes that the folder with a referenced assembly called for example name.dll will also include name.dll.mdb, if the referenced assembly is AOT compiled then the tool is also expecting to find name.dll.msym.
+  <p>When mono-symbolicate is called with a symbol directory and a file containing a stacktrace:
+  <p><strong>mono-symbolicate &lt;msym dir&gt; &lt;input file&gt;</strong>
+  <p>The tool writes into stdout the file contents while adding file location to stack frames when it is possible to symbolicate with the symbols available on the symbol directory.
+  <p>Managed symbols .exe/.dll can be added to the symbol directory by doing:
+  <p><strong>mono-symbolicate store-symbols &lt;msym dir&gt; [&lt;dir&gt;]+</strong>
 </div>
 <div class="section">
   <h2>AUTHOR</h2>
