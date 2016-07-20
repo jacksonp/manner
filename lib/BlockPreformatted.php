@@ -53,9 +53,9 @@ class BlockPreformatted
                 if ($i === $numLines - 1) {
                     continue;
                 }
-                $line       = $lines[++$i];
                 $addIndent  = 0;
                 $nextIndent = 4;
+                continue;
             } elseif (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
                 $nextIndent = 4;
                 continue;
@@ -78,10 +78,6 @@ class BlockPreformatted
 
             if ($addIndent > 0) {
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
-            }
-
-            if ($line === '.') {
-                continue;
             }
 
             // FAIL on unknown command
