@@ -112,6 +112,11 @@ class Request
                 } elseif (($i === 0 or $lastChar === ' ') and !$inQuotes) {
                     $inQuotes = true;
                 } elseif ($inQuotes) {
+                    if ($i < $stringLength - 1 and mb_substr($argString, $i + 1, 1) !== ' ') {
+                        // New arg
+                        $args[]  = $thisArg;
+                        $thisArg = '';
+                    }
                     $inQuotes = false;
                 } else {
                     $thisArg .= '"';
