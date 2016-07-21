@@ -23,14 +23,16 @@ class Block_SH
             }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $sectionHeading = trim(implode(' ', $arguments));
+            $sectionHeading = implode(' ', $arguments);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SH macros
-        if (empty($sectionHeading)) {
+        if (trim($headingNode->textContent) === '') {
             return $i;
         }
+
+        $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
 
         $section = $dom->createElement('div');
         $section->setAttribute('class', 'section');
@@ -42,9 +44,10 @@ class Block_SH
             $request = Request::getClass($lines, $i);
             if ($request['class'] === 'Block_SH') {
                 if (
-                  count($request['arguments']) === 0 and
-                  $i < $numLines - 1 and
-                  in_array($lines[$i + 1], Block_Section::skipSectionNameLines)
+                  (count($request['arguments']) === 1 and $request['arguments'][0] === '\\ ') or
+                  (count($request['arguments']) === 0 and
+                    $i < $numLines - 1 and
+                    in_array($lines[$i + 1], Block_Section::skipSectionNameLines))
                 ) {
                     continue;
                 }

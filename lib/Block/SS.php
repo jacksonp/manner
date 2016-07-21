@@ -29,14 +29,16 @@ class Block_SS
             }
             Blocks::handle($headingNode, [$sectionHeading]);
         } else {
-            $sectionHeading = trim(implode(' ', $arguments));
+            $sectionHeading = ltrim(implode(' ', $arguments));
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SS macros
-        if (empty($sectionHeading)) {
+        if (trim($headingNode->textContent) === '') {
             return $i;
         }
+
+        $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
 
         $subsection = $dom->createElement('div');
         $subsection->setAttribute('class', 'subsection');
