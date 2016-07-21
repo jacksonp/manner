@@ -4,7 +4,7 @@
 class Roff_String
 {
 
-    static function checkEvaluate(array $lines, int $i)
+    static function checkEvaluate(array $lines, int $i, $macroArguments)
     {
 
         if (!preg_match('~^\.\s*ds1? (.*?) (.*)$~u', $lines[$i], $matches)) {
@@ -45,6 +45,7 @@ class Roff_String
 
         // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
         $requestVal = $man->applyAllReplacements($requestVal);
+        $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
 //        $requestVal = TextContent::interpretString($requestVal);
 
         $man->addString($newRequest, $requestVal);

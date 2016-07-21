@@ -70,7 +70,7 @@ class Text
 
     }
 
-    static function applyRoffClasses(array $lines): array
+    static function applyRoffClasses(array &$lines, $callerArguments = null): array
     {
 
         $man = Man::instance();
@@ -87,25 +87,13 @@ class Text
                     $macros = $man->getMacros();
                     if (isset($macros[$macro])) {
                         $man->setRegister('.$', count($arguments));
-                        $evaluatedMacroLines = [];
-                        foreach ($macros[$macro] as $macroLine) {
-
-                            // \$x - Macro or string argument with one-digit number x in the range 1 to 9.
-                            for ($n = 1; $n < 10; ++$n) {
-                                $macroLine = str_replace('\\$' . $n, @$arguments[$n - 1] ?: '', $macroLine);
+                        if (!is_null($callerArguments)) {
+                            foreach ($arguments as $k => $v) {
+                                $arguments[$k] = Roff_Macro::applyReplacements($arguments[$k], $callerArguments);
                             }
-
-                            // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                            $macroLine = str_replace('\\$*', implode(' ', $arguments), $macroLine);
-
-                            // Other \$ things are also arguments...
-                            if (mb_strpos($macroLine, '\\$') !== false) {
-                                throw new Exception($macroLine . ' - can not handle macro that specifies arguments.');
-                            }
-
-                            $evaluatedMacroLines[] = $macroLine;
                         }
-                        $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($evaluatedMacroLines));
+
+                        $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($macros[$macro], $arguments));
 
                         continue;
                     }
@@ -125,15 +113,19 @@ class Text
 
             foreach ($roffClasses as $roffClass) {
                 $className = 'Roff_' . $roffClass;
-                $result    = $className::checkEvaluate($lines, $i);
+                $result    = $className::checkEvaluate($lines, $i, $callerArguments);
                 if ($result !== false) {
                     if (isset($result['lines'])) {
-                        $linesNoCond = array_merge($linesNoCond, $result['lines']);
+                        foreach ($result['lines'] as $l) {
+                            $linesNoCond[] = Roff_Macro::applyReplacements($l, $callerArguments);
+                        }
                     }
                     $i = $result['i'];
                     continue 2;
                 }
             }
+
+            $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
 
             // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
             $linesNoCond[] = $man->applyAllReplacements($lines[$i]);
