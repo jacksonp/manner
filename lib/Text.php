@@ -81,22 +81,22 @@ class Text
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
             if (mb_substr($lines[$i], 0, 1) === '.') {
-                $bits = Request::parseArguments($lines[$i]);
-                if (count($bits) > 0) {
-                    $macro  = trim(array_shift($bits));
+                $arguments = Request::parseArguments($lines[$i]);
+                if (count($arguments) > 0) {
+                    $macro  = trim(array_shift($arguments));
                     $macros = $man->getMacros();
                     if (isset($macros[$macro])) {
-                        $man->setRegister('.$', count($bits));
+                        $man->setRegister('.$', count($arguments));
                         $evaluatedMacroLines = [];
                         foreach ($macros[$macro] as $macroLine) {
 
                             // \$x - Macro or string argument with one-digit number x in the range 1 to 9.
                             for ($n = 1; $n < 10; ++$n) {
-                                $macroLine = str_replace('\\$' . $n, @$bits[$n - 1] ?: '', $macroLine);
+                                $macroLine = str_replace('\\$' . $n, @$arguments[$n - 1] ?: '', $macroLine);
                             }
 
                             // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
-                            $macroLine = str_replace('\\$*', implode(' ', $bits), $macroLine);
+                            $macroLine = str_replace('\\$*', implode(' ', $arguments), $macroLine);
 
                             // Other \$ things are also arguments...
                             if (mb_strpos($macroLine, '\\$') !== false) {
