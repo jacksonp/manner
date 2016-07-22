@@ -5,7 +5,7 @@ class Roff_Condition
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
-    const CONDITION_REGEX = '([cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
+    const CONDITION_REGEX = '([ntv]|[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
     static function checkEvaluate(array &$lines, int $i, $macroArguments)
     {
@@ -125,7 +125,6 @@ class Roff_Condition
 
         $alwaysTrue = [
           'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
-          'n\h\'-\w\'',   // Hack for netchange.5
         ];
 
         if (in_array($condition, $alwaysTrue, true)) {

@@ -145,15 +145,15 @@ class Request
         $known = [];
 
         $known['C++'] = <<<'ROFF'
-C  + +  
+C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
 ROFF;
 
         $known['ð'] = <<<'ROFF'
-d \(ga
+d\h'-1'\(ga
 ROFF;
 
         $known['Ð'] = <<<'ROFF'
-D \(hy
+D\h'-1'\(hy
 ROFF;
         $known['Þ'] = <<<'ROFF'
 \o'bp'

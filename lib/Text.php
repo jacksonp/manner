@@ -53,12 +53,6 @@ class Text
             // Don't worry about changes in point size for now (see rc.1 for digit instead of +- in \s10):
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+\d]?\d~u', '$1', $line);
 
-            // Don't worry about this:
-            // \v, \h: "Local vertical/horizontal motion"
-            // \l: Horizontal line drawing function (optionally using character c).
-            // \L: Vertical line drawing function (optionally using character c).
-            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
-
             // Don't worry colour changes:
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?\])~u', '$1', $line);
 

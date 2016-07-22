@@ -177,10 +177,18 @@ class Man
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
         }
 
-        // \w’string’: The width of the glyph sequence string. We approximate with ens.
+        // \w’string’: The width of the glyph sequence string. We approximate...
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
             return mb_strlen(TextContent::interpretString($matches[0]));
         }, $line);
+
+        // Don't worry about this:
+        // \v, \h: "Local vertical/horizontal motion"
+        // \l: Horizontal line drawing function (optionally using character c).
+        // \L: Vertical line drawing function (optionally using character c).
+        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', ' ', $line);
+
+        // $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
 
         return $line;
     }
