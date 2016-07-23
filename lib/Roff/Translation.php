@@ -16,7 +16,7 @@ class Roff_Translation
 //        $roffStrings = $man->getStrings();
 //        $translate   = Roff_String::substitute($matches[1], $roffStrings);
         $translate = $matches[1];
-        $translate = TextContent::interpretString($translate, false, false);
+        $translate = TextContent::interpretString($translate, false);
 
         $chrArray = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);
 

@@ -6,18 +6,12 @@ class TextContent
 
     static $continuation = false;
 
-    private static $canAddWhitespace = true;
-
-    static function interpretAndAppendText(
-      DOMElement $parentNode,
-      string $line,
-      $addSpacing = false
-    ) {
+    static function interpretAndAppendText(DOMElement $parentNode, string $line)
+    {
 
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
 
-        self::$canAddWhitespace = !self::$continuation;
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
@@ -53,9 +47,6 @@ class TextContent
         $horizontalPosition = 0; //TODO: could be worth setting this to characters in output so far from $line?
 
         for ($i = 0; $i < $numTextSegments; ++$i) {
-            if ($addSpacing) {
-                $addSpacing = $i === 0;
-            }
             if (mb_substr($textSegments[$i], 0, 2) === '\\k') {
                 $registerName = mb_substr($textSegments[$i], 2);
                 if (mb_strlen($registerName) === 1) {
@@ -105,7 +96,7 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
                         if ($parentNode->isOrInTag('strong') || trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
@@ -120,7 +111,7 @@ class TextContent
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
                         if ($parentNode->isOrInTag('em') or trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
@@ -136,7 +127,7 @@ class TextContent
                         $strong = $parentNode->appendChild($dom->createElement('strong'));
                         $em     = $strong->appendChild($dom->createElement('em'));
                         $em->appendChild(new DOMText(
-                          self::interpretString($textSegments[++$i], $addSpacing)));
+                          self::interpretString($textSegments[++$i])));
                     }
                     break;
                 case '\f':
@@ -166,7 +157,7 @@ class TextContent
                 case '\f[CW]':
                 case '\f[CO]':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i], $addSpacing));
+                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
                         if ($parentNode->tagName === 'code' || trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
@@ -182,7 +173,7 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $code = $parentNode->appendChild($dom->createElement('code'));
                         $em   = $code->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                     }
                     break;
                 case '\f(CWB':
@@ -191,7 +182,7 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $code   = $parentNode->appendChild($dom->createElement('code'));
                         $strong = $code->appendChild($dom->createElement('strong'));
-                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                     }
                     break;
                 case '\f[CBI]':
@@ -199,7 +190,7 @@ class TextContent
                         $code   = $parentNode->appendChild($dom->createElement('code'));
                         $strong = $code->appendChild($dom->createElement('strong'));
                         $em     = $strong->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i], $addSpacing)));
+                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
                     }
                     break;
                 case '\f[SM]':
@@ -207,12 +198,12 @@ class TextContent
                     if ($i < $numTextSegments - 1) {
                         $small = $parentNode->appendChild($dom->createElement('small'));
                         $small->appendChild(new DOMText(
-                          self::interpretString($textSegments[++$i], $addSpacing)));
+                          self::interpretString($textSegments[++$i])));
                     }
                     break;
                 default:
                     if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
-                        $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i], $addSpacing)));
+                        $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i])));
                     }
             }
 
@@ -220,7 +211,7 @@ class TextContent
 
     }
 
-    static function interpretString(string $string, bool $addSpacing = false, bool $applyCharTranslations = true):string
+    static function interpretString(string $string, bool $applyCharTranslations = true):string
     {
 
         $man = Man::instance();
@@ -312,11 +303,6 @@ class TextContent
 
         if ($applyCharTranslations) {
             $string = $man->applyCharTranslations($string);
-        }
-
-        if (self::$canAddWhitespace and $addSpacing) {
-            // Do this after regex above
-            $string = ' ' . $string;
         }
 
         // Prettier double quotes:
