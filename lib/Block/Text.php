@@ -10,6 +10,7 @@ class Block_Text
     {
         if (
           $parentNode->tagName !== 'pre' and
+          (!$textParent->lastChild or $textParent->lastChild->nodeType !== XML_ELEMENT_NODE or $textParent->lastChild->tagName !== 'br') and
           !$shouldAppend and
           !TextContent::$continuation and
           $textParent->hasContent()
@@ -123,11 +124,9 @@ class Block_Text
             self::addImplicitBreak($textParent);
         }
 
-        TextContent::interpretAndAppendText(
-          $textParent,
-          $line,
-          $textParent->hasContent()
-        );
+        self::addSpace($parentNode, $textParent, $shouldAppend);
+
+        TextContent::interpretAndAppendText($textParent, $line);
 
         if ($shouldAppend) {
             $parentNode->appendBlockIfHasContent($textParent);
