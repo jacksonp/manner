@@ -308,12 +308,6 @@ class TextContent
         // Prettier double quotes:
         $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);
 
-        // Get rid of <> around URLs - these get translated to &lt; and &gt; and then cause problems with finding out what we can make into links.
-        $string = Replace::preg(
-          '~[<⟨](?:URL:\s?)?(?<url>(?:ftp|https?)://[^\s()<>⟨⟩]+(?:\([\w\d]+\)|(?:[^[:punct:]\s]|/)))\s?[>⟩]~u',
-          '$1',
-          $string);
-
         return $string;
 
     }
