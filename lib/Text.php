@@ -39,10 +39,6 @@ class Text
             // TODO: fix this hack, see groff_mom.7
             $line = preg_replace('~^\.FONT ~u', '.', $line);
 
-            $line = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
-                return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
-            }, $line);
-
             // Don't worry about changes in point size for now (see rc.1 for digit instead of +- in \s10):
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+\d]?\d~u', '$1', $line);
 

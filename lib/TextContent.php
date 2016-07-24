@@ -226,6 +226,11 @@ class TextContent
 
 //        $string = Roff_Glyph::substitute($string);
 
+
+        $string = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
+            return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
+        }, $string);
+
         $string = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
             return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
         }, $string);
