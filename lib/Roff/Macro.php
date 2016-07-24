@@ -39,10 +39,6 @@ class Roff_Macro
             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
             // TODO: .FONT see hack in Text::preprocessLines
             // .URL: we can do a better job with the semantic info.
-        } elseif ($newMacro === '.INDENT') {
-            $man->addAlias('INDENT', 'RS');
-        } elseif ($newMacro === '.UNINDENT') {
-            $man->addAlias('UNINDENT', 'RE');
         } else {
             $man->addMacro($newMacro, $macroLines);
         }

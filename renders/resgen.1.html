@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="" data-package="" data-section-name="">
+<title>resgen</title>
+<h1>resgen</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>resgen, resgen2 - Mono/CLI Resource Generator
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>resgen source.ext [dest.ext]</strong>
+  <p><strong>resgen /compile source.ext[,dest.resources] [...]</strong>
+  <p><strong>resgen2</strong>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p>Convert a resource file from one format to another.
+  <p>The currently supported formats are text, resources, resx and po.
+  <dl>
+    <dt><em>.txt, .text</em>
+    <dd>
+      <p>Used to process text files, the format of the text file is of the form:
+      <pre>        key=value</pre>
+      <p>The value argument can contain special characters as long as they are escaped. The escape sequences currently supported are \n, \r, \t, \\ (to get the escape sequence itself) and with resgen2 unicode escape sequences are supported with the \uXXXX escape sequence, where XXXX is a four digit number.<br>
+      <br>
+      Lines that start with the # or ; character are considered comments and ignored.
+    <dt><em>'.resources'</em>
+    <dd>This is the binary file format implemented by the <em>System.Resources.ResourceReader</em> class, part of mscorlib.dll
+    <dt><em>'.resx'</em>
+    <dd>This is the binary file format implemented by the <em>System.Resources.ResXResourceReader</em> class. This class is not part of mscorlib.dll, this class is part of System.Windows.Forms.
+    <dt><em>'.po'.</em>
+    <dd>
+      <p>PO files are the source files used by the Unix gettext infrastructure that is typically used to internationalize applications.<br>
+      <br>
+      Lines starting with the '#' character are comment lines.<br>
+      <br>
+      The file contains many instance of strings like this:
+      <pre>     msgid KEY
+     msgstr VALUE</pre>
+      <p>The KEY is typically the string to translate and the VALUE is the translation. On PO files instead of using codes as the KEY (as it is customary with resource files) the KEY is typically a complete english message that applications embed in their source code and will be used as a fallback if no translation resources are used.<br>
+      <br>
+      Since resources are key value pairs, the extended features in PO files are not supported (plurals and support for N-cases).<br>
+      <br>
+      To learn more about the po file format, use your info browser and point it to the "(gettext)PO Files" node.
+  </dl>
+  <p>If the destination file is not specified, source.resources will be used.
+  <p>The /compile option takes a list of .resX or .txt files to convert to the output file name.
+</div>
+<div class="section">
+  <h2>OPTIONS</h2>
+  <dl>
+    <dt><em>-compile</em>
+    <dd>This switch instructs <em>resgen</em> to compile multiple files. It must appear before any resources are specified on the command line.
+    <dt><em>-usesourcepath</em>
+    <dd>This option is only available for <em>resgen2</em>, and it instructs resgen to resolve relative paths using the directory of the resx file as current directory.
+  </dl>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <p>This program will load referenced assemblies from the Mono assembly cache.
+</div>
+<div class="section">
+  <h2>MAILING LISTS</h2>
+  <p>Visit http://lists.ximian.com/mailman/listinfo/mono-devel-list for details.
+</div>
+<div class="section">
+  <h2>WEB SITE</h2>
+  <p>Visit: http://www.mono-project.com for details
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p><strong>mcs(1),</strong>mono(1),<strong>mono-config(5).</strong>
+</div>
+

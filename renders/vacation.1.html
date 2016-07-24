@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="man-page-info" data-date="$Date: 2013-11-22 20:52:02 $" data-package="" data-section-name="">
+<title>VACATION</title>
+<h1>VACATION</h1>
+<div class="section">
+  <h2>NAME</h2>
+  <p>vacation - E-mail auto-responder
+</div>
+<div class="section">
+  <h2>SYNOPSIS</h2>
+  <p><strong>vacation</strong> [<strong>-a</strong> <em>alias</em>] [<strong>-C</strong> <em>cffile</em>] [<strong>-d</strong>] [<strong>-f</strong> <em>database</em>] [<strong>-i</strong>] [<strong>-I</strong>] [<strong>-j</strong>] [<strong>-l</strong>] [<strong>-m</strong> <em>message</em>] [<strong>-R</strong> <em>returnaddr</em>] [<strong>-r</strong> <em>interval</em>] [<strong>-s</strong> <em>address</em>] [<strong>-t</strong> <em>time</em>] [<strong>-U</strong>] [<strong>-x</strong>] [<strong>-z</strong>] <em>login</em>
+</div>
+<div class="section">
+  <h2>DESCRIPTION</h2>
+  <p><strong>Vacation</strong> returns a message, <em>~/.vacation.msg</em> by default, to the sender informing them that you are currently not reading your mail. The message is only sent to each sender once per reply interval (see <strong>-r</strong> below). The intended use is in a <em>.forward</em> file. For example, your <em>.forward</em> file might have:
+  <blockquote>
+    \eric, "|/usr/bin/vacation -a allman eric"
+  </blockquote>
+  <p>which would send messages to you (assuming your login name was eric) and reply to any messages for “eric” or “allman”.
+  <p>Available options:
+  <dl>
+    <dt><strong>-a</strong> <em>alias</em>
+    <dd>Handle messages for <em>alias</em> in the same manner as those received for the user's login name.
+    <dt><strong>-C</strong> <em>cfpath</em>
+    <dd>Specify pathname of the sendmail configuration file. This option is ignored if <strong>-U</strong> is specified. This option defaults to the standard sendmail configuration file, located at /etc/mail/sendmail.cf on most systems.
+    <dt><strong>-d</strong>
+    <dd>Send error/debug messages to stderr instead of syslog. Otherwise, fatal errors, such as calling <strong>vacation</strong> with incorrect arguments, or with non-existent <em>login</em>s, are logged in the system log file, using syslog(8). This should only be used on the command line, not in your <em>.forward</em> file.
+    <dt><strong>-f</strong> <em>filename</em>
+    <dd>Use <em>filename</em> as name of the database instead of <em>~/.vacation.db</em> or <em>~/.vacation.{dir,pag}</em>. Unless the <em>filename</em> starts with / it is relative to ~.
+    <dt><strong>-i</strong>
+    <dd>Initialize the vacation database files. It should be used before you modify your <em>.forward</em> file. This should only be used on the command line, not in your <em>.forward</em> file.
+    <dt><strong>-I</strong>
+    <dd>Same as <strong>-i</strong> (for backwards compatibility). This should only be used on the command line, not in your <em>.forward</em> file.
+    <dt><strong>-j</strong>
+    <dd>Respond to the message regardless of whether the login is listed as a recipient for the message. Do not use this flag unless you are sure of the consequences. For example, this will cause to reply to mailing list messages which may result in removing you from the list.
+    <dt><strong>-l</strong>
+    <dd>List the content of the vacation database file including the address and the associated time of the last auto-response to that address. This should only be used on the command line, not in your <em>.forward</em> file.
+    <dt><strong>-m</strong> <em>filename</em>
+    <dd>Use <em>filename</em> as name of the file containing the message to send instead of <em>~/.vacation.msg</em>. Unless the <em>filename</em> starts with / it is relative to ~.
+    <dt><strong>-R</strong> <em>returnaddr</em>
+    <dd>Set the reply envelope sender address
+    <dt><strong>-r</strong> <em>interval</em>
+    <dd>Set the reply interval to <em>interval</em> days. The default is one week. An interval of “0” or “infinite” (actually, any non-numeric character) will never send more than one reply. The <strong>-r</strong> option should only be used when the vacation database is initialized (see <strong>-i</strong> above).
+    <dt><strong>-s</strong> <em>address</em>
+    <dd>Use <em>address</em> instead of the incoming message sender address on the <em>From</em> line as the recipient for the vacation message.
+    <dt><strong>-t</strong> <em>time</em>
+    <dd>Ignored, available only for compatibility with Sun's vacation program.
+    <dt><strong>-U</strong>
+    <dd>Do not attempt to lookup <em>login</em> in the password file. The -f and -m options must be used to specify the database and message file since there is no home directory for the default settings for these options.
+    <dt><strong>-x</strong>
+    <dd>Reads an exclusion list from stdin (one address per line). Mails coming from an address in this exclusion list won't get a reply by <strong>vacation</strong>. It is possible to exclude complete domains by specifying “@domain” as element of the exclusion list. This should only be used on the command line, not in your <em>.forward</em> file.
+    <dt><strong>-z</strong>
+    <dd>Set the sender of the vacation message to “&lt;&gt;” instead of the user. This probably violates the RFCs since vacation messages are not required by a standards-track RFC to have a null reverse-path.
+  </dl>
+  <p><strong>Vacation</strong> reads the first line from the standard input for a UNIX “From” line to determine the sender. Sendmail(8) includes this “From” line automatically.
+  <p>No message will be sent unless <em>login</em> (or an <em>alias</em> supplied using the <strong>-a</strong> option) is part of either the “To:” or “Cc:” headers of the mail. No messages from “???-REQUEST”, “???-RELAY”, “???-OWNER”, “OWNER-???”, “Postmaster”, “UUCP”, “MAILER”, or “MAILER-DAEMON” will be replied to (where these strings are case insensitive) nor is a notification sent if a “Precedence: bulk” or “Precedence: junk” line is included in the mail headers. The people who have sent you messages are maintained as a db(3) or dbm(3) database in the file <em>.vacation.db</em> or <em>.vacation.{dir,pag}</em> in your home directory.
+  <p><strong>Vacation</strong> expects a file <em>.vacation.msg</em>, in your home directory, containing a message to be sent back to each sender. It should be an entire message (including headers). For example, it might contain:
+  <blockquote>
+    <pre>From: eric@CS.Berkeley.EDU (Eric Allman)
+Subject: I am on vacation
+Delivered-By-The-Graces-Of: The Vacation program
+Precedence: bulk
+
+I am on vacation until July 22.  If you have something urgent,
+please contact Keith Bostic &lt;bostic@CS.Berkeley.EDU&gt;.
+--eric</pre>
+  </blockquote>
+</div>
+<div class="section">
+  <h2>FILES</h2>
+  <dl class="indent-135">
+    <dt>~/.vacation.db
+    <dd>default database file for db(3)
+    <dt>~/.vacation.{dir,pag}
+    <dd>default database file for dbm(3)
+    <dt>~/.vacation.msg
+    <dd>default message to send
+  </dl>
+</div>
+<div class="section">
+  <h2>SEE ALSO</h2>
+  <p>sendmail(8), syslog(8)
+</div>
+<div class="section">
+  <h2>HISTORY</h2>
+  <p>The <strong>vacation</strong> command appeared in 4.3BSD.
+</div>
+

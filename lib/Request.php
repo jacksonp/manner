@@ -45,7 +45,7 @@ class Request
 
     static function isEmptyRequest(string $line)
     {
-        return in_array($line, ['.', '\'', '\\.']);
+        return in_array(rtrim($line), ['.', '\'', '\\.']);
     }
 
     static function canSkip(string $line)
@@ -188,25 +188,28 @@ ROFF;
         } elseif (self::canSkip($lines[$i])) {
             return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
         } elseif (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
-            if (array_key_exists($matches[1], self::$classMap)) {
+            $requestName = $matches[1];
+            if (array_key_exists($requestName, self::$classMap)) {
                 return [
-                  'class'     => self::$classMap[$matches[1]],
-                  'request'   => $matches[1],
+                  'class'     => self::$classMap[$requestName],
+                  'request'   => $requestName,
                   'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
                 ];
+            } elseif (in_array($requestName, Request_Unhandled::requests)) {
+                throw new exception('Unhandled request ' . $lines[$i]);
             } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
                 // Lenient with things starting with ' to match pre-refactor output...
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
                 return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
             } else {
-                return ['class' => 'Request_Unknown', 'request' => $matches[1], 'arguments' => null];
+                return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
             }
         } elseif (Block_TabTable::isStart($lines, $i)) {
             return ['class' => 'Block_TabTable', 'request' => null, 'arguments' => null];
         } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
             return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
         } else {
-            throw new Exception('Could not determine request class: "' . $lines[$i] . '"');
+            return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
         }
 
     }
