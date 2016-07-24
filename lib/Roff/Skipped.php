@@ -30,6 +30,7 @@ class Roff_Skipped
       'itc', // "Same as .it but count lines interrupted with \c as one line."
       'lf', // "Set input line number to N."
       'll', // Set line length
+      'lt', // Length of title
       'mc', // margin glyph
       'mk', // Mark current vertical position in register.
       'mso', // The same as .so except that file is searched in the tmac directories.

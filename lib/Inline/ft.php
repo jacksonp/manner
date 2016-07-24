@@ -26,7 +26,7 @@ class Inline_ft
         $fontAbbreviation = $arguments[0];
 
         // Skip stray regular font settings:
-        if (in_array($fontAbbreviation, ['1', 'R', 'P', 'CR', 'AR'])) {
+        if (in_array($fontAbbreviation, ['0', '1', 'R', 'P', 'CR', 'AR'])) {
             return $i;
         }
 
@@ -58,6 +58,7 @@ class Inline_ft
             switch ($fontAbbreviation) {
                 case 'I':
                 case '2':
+                case 'AI':
                     $node = $dom->createElement('em');
                     break;
                 case 'B':

@@ -66,7 +66,6 @@ class Request_Unhandled
       'lg',
       'lsm',
       'ls',
-      'lt',
       'ne',
       'nf',
       'nm',
