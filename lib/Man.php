@@ -131,6 +131,11 @@ class Man
         $this->registers[$name] = $value;
     }
 
+    public function unsetRegister(string $name)
+    {
+        unset($this->registers[$name]);
+    }
+
     public function getRegisters(): array
     {
         return $this->registers;
