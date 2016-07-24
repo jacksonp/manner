@@ -35,7 +35,6 @@ class Request_Unhandled
       'color',
       'composite',
       'continue',
-      'cu',
       'da',
       'dei',
       'dei1',
@@ -47,7 +46,6 @@ class Request_Unhandled
       'ec',
       'ecr',
       'ecs',
-      'ex',
       'fc',
       'fl', // Flush output buffer.
       'fspecial',

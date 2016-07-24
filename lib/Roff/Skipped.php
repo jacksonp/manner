@@ -9,11 +9,13 @@ class Roff_Skipped
       'bp', // "Eject current page and begin new page."
       'cp', // Enable or disable compatibility mode.
       'cs', // font N M: Set constant character width mode for font to N/36 ems with em M.
+      'cu', // Continuous underline in nroff, like .ul in troff.
       'defcolor', // Define color, see https://www.gnu.org/software/groff/manual/html_node/Colors.html
       'em', // .em macro: The macro is run after the end of input.
       'eo', // Turn off escape character mechanism.
       'ev',  // Switch to previous environment and pop it off the stack.
       'evc', // Copy the contents of environment env to the current environment. No pushing or popping.
+      'ex', // Exit from roff processing.
       'fam', // sets font family, generally used in conjunction with .nf blocks which already get a monospace font.
       'fchar', // Define fallback character (or glyph) c as string anything.
       'fcolor', // Set fill color
