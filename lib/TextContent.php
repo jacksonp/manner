@@ -226,6 +226,10 @@ class TextContent
 
 //        $string = Roff_Glyph::substitute($string);
 
+        $string = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
+            return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
+        }, $string);
+
         // NB: these substitutions have to happen at the same time, with no backtracking to look again at replaced chars.
         $singleCharacterEscapes = [
             // "\e represents the current escape character." - let's hope it's always a backslash

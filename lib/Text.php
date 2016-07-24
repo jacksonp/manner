@@ -43,10 +43,6 @@ class Text
                 return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
             }, $line);
 
-            $line = Replace::pregCallback('~\\\\\[char(\d+)\]~u', function ($matches) {
-                return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
-            }, $line);
-
             // Don't worry about changes in point size for now (see rc.1 for digit instead of +- in \s10):
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+\d]?\d~u', '$1', $line);
 
