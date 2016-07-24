@@ -5,7 +5,7 @@ class Roff_Condition
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
-    const CONDITION_REGEX = '([ntv]|[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
+    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
     static function checkEvaluate(array &$lines, int $i, $macroArguments)
     {
@@ -135,7 +135,6 @@ class Roff_Condition
           '\n()P',
           't', // "Formatter is troff."
           'v', // vroff
-          'rF',
           'require_index',
           'c \[shc]', // see man.1
           '\'po4a.hide\'',
@@ -173,6 +172,10 @@ class Roff_Condition
             // dname: True if there is a string, macro, diversion, or request called name.
             // Hack (all other checks are against "d pdfmarks", hopefully that's should be false.
             return in_array($matches[1], ['TE', 'TS', 'URL']);
+        }
+
+        if (preg_match('~^r\s*(\w+)$~u', $condition, $matches)) {
+            return $man->issetRegister($matches[1]);
         }
 
         $condition = Roff_Unit::normalize($condition);

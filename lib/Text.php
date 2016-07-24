@@ -33,9 +33,6 @@ class Text
                 continue;
             }
 
-            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
-            $line = Replace::preg('~^\.do ~u', '.', $line);
-
             // NB: Workaround for lots of broken tcl man pages (section n, Tk_*, Tcl_*, others...):
             $line = Replace::preg('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
 
@@ -73,6 +70,10 @@ class Text
         $linesNoCond       = [];
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
+
+            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
+            // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
+            $lines[$i] = Replace::preg('~^\.do ~u', '.', $lines[$i]);
 
             if (mb_substr($lines[$i], 0, 1) === '.') {
                 $arguments = Request::parseArguments($lines[$i]);

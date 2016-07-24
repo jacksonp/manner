@@ -133,8 +133,12 @@ class Man
 
     public function getRegisters(): array
     {
-
         return $this->registers;
+    }
+
+    public function issetRegister(string $name): bool
+    {
+        return array_key_exists($name, $this->registers);
     }
 
     public function addString(string $string, string $value)
