@@ -32,18 +32,19 @@ class Manner
 
         $man = Man::instance();
 
+        $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars($man->extra1) . '" data-extra2="' . htmlspecialchars($man->extra2) . '" data-extra3="' . htmlspecialchars($man->extra3) . '">';
+
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',
             '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
-            '<meta name="man-page-info" data-date="', htmlspecialchars($man->date), '" data-package="', htmlspecialchars($man->package), '" data-section-name="', htmlspecialchars($man->section_name), '">',
+            $manPageInfo,
             '<title>', htmlspecialchars($man->title), '</title>',
             $html;
         } else {
             $fp = fopen($outputFile, 'w');
             fwrite($fp, '<!DOCTYPE html>');
             fwrite($fp, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">');
-            fwrite($fp,
-              '<meta name="man-page-info" data-date="' . htmlspecialchars($man->date) . '" data-package="' . htmlspecialchars($man->package) . '" data-section-name="' . htmlspecialchars($man->section_name) . '">');
+            fwrite($fp, $manPageInfo);
             fwrite($fp, '<title>' . htmlspecialchars($man->title) . '</title>');
             fwrite($fp, $html);
             fclose($fp);

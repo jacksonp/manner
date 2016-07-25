@@ -31,10 +31,10 @@ class Block_TH
             $man->title = $titleDetails[0];
 
             if (count($titleDetails) > 1) {
-                $man->section      = $titleDetails[1];
-                $man->date         = @$titleDetails[2] ?: '';
-                $man->package      = @$titleDetails[3] ?: '';
-                $man->section_name = @$titleDetails[4] ?: '';
+                $man->section = $titleDetails[1];
+                $man->extra1  = @$titleDetails[2] ?: '';
+                $man->extra2  = @$titleDetails[3] ?: '';
+                $man->extra3  = @$titleDetails[4] ?: '';
             }
 
 
