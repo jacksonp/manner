@@ -162,7 +162,7 @@ otherwise -&gt;
   <p><code>kernel.percpu.cpu.user :foo :bar #cpu0 @0..2</code>
   <p>defines 6 values corresponding to the time spent executing in user mode on CPU 0 on the hosts “foo” and “bar” over the last 3 consecutive samples. The default interpretation in the absence of <strong>:</strong> (host), <strong>#</strong> (instance) and <strong>@</strong> (time) qualifiers is all instances at the most recent sample time for the default source of PCP performance metrics.
   <p>Host and instance names that do not follow the rules for variables in programming languages, ie. alphabetic optionally followed by alphanumerics, should be enclosed in single quotes.
-  <p>Expression evaluation follows the law of “least surprises”. Where performance metrics have the semantics of a counter, <strong>pmie</strong> will automatically convert to a rate based upon consecutive samples and the time interval between these samples. All expressions are evaluated in double precision, and where appropriate, automatically scaled into canonical units of “bytes”, “seconds” and “counts”.
+  <p>Expression evaluation follows the law of “least surprises”. Where performance metrics have the semantics of a counter, <strong>pmie</strong> will automatically convert to a rate based upon consecutive samples and the time interval between these samples. All numeric expressions are evaluated in double precision, and where appropriate, automatically scaled into canonical units of “bytes”, “seconds” and “counts”.
   <p>A <strong>rule</strong> is a special form of expression that specifies a condition or logical expression, a special operator (<strong>-&gt;</strong>) and actions to be performed when the condition is found to be true.
   <p>The following table summarizes the basic <strong>pmie</strong> operators:
   <table class="tbl">
@@ -194,6 +194,7 @@ otherwise -&gt;
       <td class="f(CW)"><code><strong>instant</strong></code>
       <td>No automatic rate conversion (rarely required)
   </table>
+  <p>All operators are supported for numeric-valued operands and expressions. For string-valued operands, namely literal string constants enclosed in double quotes or metrics with a data type of string (<strong>PM_TYPE_STRING</strong>), <strong>only</strong> the operators <strong>==</strong> and <strong>!=</strong> are supported.
   <p>The <code><strong>rate</strong></code> and <code><strong>instant</strong></code> operators are the logical inverse of one another, so an arithmetic expression <em>expr</em> is equal to <code><strong>rate instant</strong></code> <em>expr</em>. The more useful cases involve using <code><strong>rate</strong></code> with a metric that is not a counter to determine the rate of change over time or <code><strong>instant</strong></code> with a metric that is a counter to determine if the current value is above or below some threshold.
   <p>Aggregate operators may be used to aggregate or summarize along one dimension of a set-valued expression. The following aggregate operators map from a logical expression to a logical expression of lower dimension.
   <table class="tbl">

@@ -81,7 +81,6 @@ class Inline_Link
         $anchor->setAttribute('href', $href);
 
         if (count($blockLines) === 0) {
-
             TextContent::interpretAndAppendText($anchor, $url);
         } else {
             Blocks::handle($anchor, $blockLines);

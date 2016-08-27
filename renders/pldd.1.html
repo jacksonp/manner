@@ -28,6 +28,10 @@
   </dl>
 </div>
 <div class="section">
+  <h2>EXIT STATUS</h2>
+  <p>On success, <strong>pldd</strong> exits with the status 0. If the specified process does not exist, the user does not have permission to access its dynamic shared object list, or no command-line arguments are supplied, <strong>pldd</strong> exists with a status of 1. If given an invalid option, it exits with the status 64.
+</div>
+<div class="section">
   <h2>VERSIONS</h2>
   <p><strong>pldd</strong> is available since glibc 2.15.
 </div>
@@ -36,8 +40,17 @@
   <p>The <strong>pldd</strong> command is not specified by POSIX.1. Some other systems have a similar command.
 </div>
 <div class="section">
-  <h2>EXIT STATUS</h2>
-  <p>On success, <strong>pldd</strong> exits with the status 0. If the specified process does not exist, the user does not have permission to access its dynamic shared object list, or no command-line arguments are supplied, <strong>pldd</strong> exists with a status of 1. If given an invalid option, it exits with the status 64.
+  <h2>NOTES</h2>
+  <p>The command
+  <p>lsof -p PID
+  <p>also shows output that includes the dynamic shared objects that are linked into a process.
+  <p>The <strong>gdb</strong>(1) <em>info shared</em> command also shows the shared libraries being used by a process, so that one can obtain similar output to <strong>pldd</strong> using a command such as the following (to monitor the process with the specified <em>pid</em>):
+  <pre>$ <strong>gdb -ex "set confirm off" -ex "set height 0" -ex "info shared" \</strong>
+        <strong>-ex "quit" -p $pid | grep '^0x.*0x'</strong></pre>
+</div>
+<div class="section">
+  <h2>BUGS</h2>
+  <p>Since glibc 2.19, <strong>pldd</strong> is broken: it just hangs when executed. It is unclear if it will ever be fixed.
 </div>
 <div class="section">
   <h2>EXAMPLE</h2>
@@ -51,12 +64,6 @@ linux-vdso.so.1
 /lib64/libc.so.6
 /lib64/ld-linux-x86-64.so.2
 /lib64/libnss_files.so.2</pre>
-</div>
-<div class="section">
-  <h2>NOTES</h2>
-  <p>The command
-  <p>lsof -p PID
-  <p>also shows output that includes the dynamic shared objects that are linked into a process.
 </div>
 <div class="section">
   <h2>SEE ALSO</h2>

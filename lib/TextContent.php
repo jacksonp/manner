@@ -290,7 +290,7 @@ class TextContent
               // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
               $prefix = str_repeat('\\', mb_strlen($matches['bspairs']) / 2);
               if ($matches['glyph'] !== '') {
-                  if (isset(Roff_Glyph::ALL_GLYPHS[$matches['glyph']])) {
+                  if (array_key_exists($matches['glyph'], Roff_Glyph::ALL_GLYPHS)) {
                       return $prefix . Roff_Glyph::ALL_GLYPHS[$matches['glyph']];
                   } else {
                       return $prefix; // Follow what groff does, if string isn't set use empty string.

@@ -418,7 +418,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dd>This makes the Mono runtime and the SGen garbage collector run in cooperative mode as opposed to run on preemptive mode. Preemptive mode is the mode that Mono has used historically, going back to the Boehm days, where the garbage collector would run at any point and suspend execution of all threads as required to perform a garbage collection. The cooperative mode on the other hand requires the cooperation of all threads to stop at a safe point. This makes for an easier to debug garbage collector. As of Mono 4.3.0 it is a work in progress, and while it works, it has not been used extensively. This option enabled the feature and allows us to find spots that need to be tuned for this mode of operation. Alternatively, this mode can be enabled at compile time by using the --with-cooperative-gc flag when calling configure.
     <dt><strong>MONO_ENV_OPTIONS</strong>
     <dd>This environment variable allows you to pass command line arguments to a Mono process through the environment. This is useful for example to force all of your Mono processes to use LLVM or SGEN without having to modify any launch scripts.
-    <dt><strong>MONO_ENV_OPTIONS</strong>
+    <dt><strong>MONO_SDB_ENV_OPTIONS</strong>
     <dd>Used to pass extra options to the debugger agent in the runtime, as they were passed using --debugger-agent=.
     <dt><strong>MONO_EVENTLOG_TYPE</strong>
     <dd>
@@ -485,8 +485,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
         <dt><strong>print-pinning</strong>
         <dd>Gathers statistics on the classes whose objects are pinned in the nursery and for which global remset entries are added. Prints those statistics when shutting down.
         <dt><strong>collect-before-allocs</strong>
-        <dt><strong>check-at-minor-collections</strong>
-        <dd>This performs a consistency check on minor collections and also clears the nursery at collection time, instead of the default, when buffers are allocated (clear-at-gc). The consistency check ensures that there are no major to minor references that are not on the remembered sets.
+        <dt><strong>check-remset-consistency</strong>
+        <dd>This performs a remset consistency check at various opportunities, and also clears the nursery at collection time, instead of the default, when buffers are allocated (clear-at-gc). The consistency check ensures that there are no major to minor references that are not on the remembered sets.
         <dt><strong>mod-union-consistency-check</strong>
         <dd>Checks that the mod-union cardtable is consistent before each finishing major collection pause. This check is only applicable to concurrent major collectors.
         <dt><strong>check-mark-bits</strong>
@@ -533,7 +533,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. Set to a colon-separated list of "drive" to strip drive letters, or "case" to do case-insensitive file matching in every directory in a path. "all" enables all rewriting methods. (Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre>       MONO_IOMAP=drive:case
+      <pre>   MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
       <pre>   MonoIOMAP &lt;appalias&gt; all</pre>

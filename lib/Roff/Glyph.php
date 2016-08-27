@@ -373,7 +373,7 @@ class Roff_Glyph
         return Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\[(?<str>[^\]\s]+)\]|\((?<str>[^\s]{2}))~u',
           function ($matches) {
-              if (isset(self::ALL_GLYPHS[$matches['str']])) {
+              if (array_key_exists($matches['str'], self::ALL_GLYPHS)) {
                   return $matches['bspairs'] . self::ALL_GLYPHS[$matches['str']];
               } else {
                   return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
