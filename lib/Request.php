@@ -18,6 +18,7 @@ class Request
       'ti'  => 'Block_ti',
       'RS'  => 'Block_RS',
       'EX'  => 'Block_EX',
+      'fc'  => 'Block_fc',
       'Vb'  => 'Block_Vb',
       'ce'  => 'Block_ce',
       'nf'  => 'Block_nf',
