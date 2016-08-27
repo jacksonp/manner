@@ -196,7 +196,7 @@ class Roff_Condition
 
     }
 
-    private static function ifBlock(array $lines, int $i, string $firstLine, bool $processContents, $macroArguments)
+    private static function ifBlock(array &$lines, int $i, string $firstLine, bool $processContents, $macroArguments)
     {
 
         $numLines         = count($lines);
@@ -217,10 +217,14 @@ class Roff_Condition
                 $recurse = true;
             }
             $openBraces -= substr_count($line, '\\}');
-            if (preg_match('~^(.*)\\\\}$~u', $line, $matches) and $openBraces === 0) {
+            if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) and $openBraces === 0) {
                 $foundEnd = true;
                 if (!empty($matches[1]) and $matches[1] !== '\'br') {
                     $replacementLines[] = Request::massageLine($matches[1]);
+                }
+                if (!empty($matches[2])) {
+                    --$ifIndex;
+                    $lines[$ifIndex] = $matches[2];
                 }
                 break;
             } elseif ($line !== '') {
