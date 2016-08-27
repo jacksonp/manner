@@ -6,9 +6,12 @@ class Block_fc
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
-        if (!preg_match('~^\.\s*fc\s+\^\s+\~$~u', $lines[$i])) {
+        if (!preg_match('~^\.\s*fc\s+(.)\s+(.)$~u', $lines[$i], $matches)) {
             return false;
         }
+
+        $delim = $matches[1];
+        $pad   = $matches[2];
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
@@ -20,15 +23,15 @@ class Block_fc
                 continue; // Swallow
             } elseif (preg_match('~^\.\s*fi~u', $line)) {
                 break; // Finished
-            } elseif (mb_strpos($line, '^') === 0) {
+            } elseif (mb_strpos($line, $delim) === 0) {
 
-                $cells = preg_split('~\^~', $line);
+                $cells = preg_split('~' . preg_quote($delim, '~') . '~', $line);
                 array_shift($cells);
 
                 $tr = $dom->createElement('tr');
                 foreach ($cells as $contents) {
-                    $contents = trim($contents, '~');
-                    $td = $dom->createElement('td');
+                    $contents = trim($contents, $pad);
+                    $td       = $dom->createElement('td');
                     TextContent::interpretAndAppendText($td, $contents);
                     $tr->appendChild($td);
                 }
