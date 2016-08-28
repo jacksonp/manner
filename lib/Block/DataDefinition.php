@@ -38,7 +38,10 @@ class Block_DataDefinition
                 ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
-                } elseif (preg_match('~^\.\s*([HTLP]?P|SS|SH|TQ|TH)~u', $line) or ($hitIP && !$hitBlankIP)) {
+                } elseif (
+                  Request::is($line, ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) or
+                  ($hitIP and !$hitBlankIP)
+                ) {
                     --$i;
                     break;
                 }
