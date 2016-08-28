@@ -8,7 +8,7 @@ class Block_nf
     {
 
         // These get swallowed:
-        $blockEnds = '~^\.(fi|ad|ad n|ad b)(?:\s|$)~u';
+        $blockEnds = '~^\\\\?\.(fi|ad|ad n|ad b)(?:\s|$)~u';
         $numLines  = count($lines);
         $dom       = $parentNode->ownerDocument;
 
