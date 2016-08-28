@@ -13,6 +13,8 @@ class Man
     private $strings;
     private $characterTranslations; // .tr
 
+    private $blockClasses;
+
     /**
      * @var Man The reference to *Singleton* instance of this class
      */
@@ -84,6 +86,49 @@ class Man
           'Tm' => '™',
         ];
         $this->characterTranslations = [];
+
+        $this->blockClasses = [
+          'SH' => 'Block_SH',
+          'SS' => 'Block_SS',
+          'SY' => 'Block_SY',
+          'P'  => 'Block_P',
+          'LP' => 'Block_P',
+          'PP' => 'Block_P',
+          'HP' => 'Block_P',
+          'IP' => 'Block_IP',
+          'TP' => 'Block_TP',
+          'TQ' => 'Block_TP',
+          'ti' => 'Block_ti',
+          'RS' => 'Block_RS',
+          'EX' => 'Block_EX',
+          'fc' => 'Block_fc',
+          'Vb' => 'Block_Vb',
+          'ce' => 'Block_ce',
+          'nf' => 'Block_nf',
+          'TS' => 'Block_TS',
+          'TH' => 'Block_TH',
+        ];
+
+        $this->inlineClasses = [
+          'URL' => 'Inline_Link',
+          'UR'  => 'Inline_Link',
+          'MT'  => 'Inline_Link',
+          'R'   => 'Inline_FontOneInputLine',
+          'I'   => 'Inline_FontOneInputLine',
+          'B'   => 'Inline_FontOneInputLine',
+          'SB'  => 'Inline_FontOneInputLine',
+          'SM'  => 'Inline_FontOneInputLine',
+          'BI'  => 'Inline_AlternatingFont',
+          'BR'  => 'Inline_AlternatingFont',
+          'IB'  => 'Inline_AlternatingFont',
+          'IR'  => 'Inline_AlternatingFont',
+          'RB'  => 'Inline_AlternatingFont',
+          'RI'  => 'Inline_AlternatingFont',
+          'ft'  => 'Inline_ft',
+          'br'  => 'Inline_VerticalSpace',
+          'sp'  => 'Inline_VerticalSpace',
+          'ne'  => 'Inline_VerticalSpace',
+        ];
 
     }
 
@@ -200,6 +245,22 @@ class Man
         // $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
 
         return $line;
+    }
+
+    public function requestStartsBlock(string $requestName)
+    {
+        return array_key_exists($requestName, $this->blockClasses);
+    }
+
+    public function getRequestClass(string $requestName)
+    {
+        if ($this->requestStartsBlock($requestName)) {
+            return $this->blockClasses[$requestName];
+        } elseif (array_key_exists($requestName, $this->inlineClasses)) {
+            return $this->inlineClasses[$requestName];
+        } else {
+            return false;
+        }
     }
 
 

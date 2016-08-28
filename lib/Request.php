@@ -4,46 +4,6 @@
 class Request
 {
 
-    private static $classMap = [
-      'SH'  => 'Block_SH',
-      'SS'  => 'Block_SS',
-      'SY'  => 'Block_SY',
-      'P'   => 'Block_P',
-      'LP'  => 'Block_P',
-      'PP'  => 'Block_P',
-      'HP'  => 'Block_P',
-      'IP'  => 'Block_IP',
-      'TP'  => 'Block_TP',
-      'TQ'  => 'Block_TP',
-      'ti'  => 'Block_ti',
-      'RS'  => 'Block_RS',
-      'EX'  => 'Block_EX',
-      'fc'  => 'Block_fc',
-      'Vb'  => 'Block_Vb',
-      'ce'  => 'Block_ce',
-      'nf'  => 'Block_nf',
-      'TS'  => 'Block_TS',
-      'TH'  => 'Block_TH',
-      'URL' => 'Inline_Link',
-      'UR'  => 'Inline_Link',
-      'MT'  => 'Inline_Link',
-      'R'   => 'Inline_FontOneInputLine',
-      'I'   => 'Inline_FontOneInputLine',
-      'B'   => 'Inline_FontOneInputLine',
-      'SB'  => 'Inline_FontOneInputLine',
-      'SM'  => 'Inline_FontOneInputLine',
-      'BI'  => 'Inline_AlternatingFont',
-      'BR'  => 'Inline_AlternatingFont',
-      'IB'  => 'Inline_AlternatingFont',
-      'IR'  => 'Inline_AlternatingFont',
-      'RB'  => 'Inline_AlternatingFont',
-      'RI'  => 'Inline_AlternatingFont',
-      'ft'  => 'Inline_ft',
-      'br'  => 'Inline_VerticalSpace',
-      'sp'  => 'Inline_VerticalSpace',
-      'ne'  => 'Inline_VerticalSpace',
-    ];
-
     static function isEmptyRequest(string $line)
     {
         return in_array(rtrim($line), ['.', '\'', '\\.']);
@@ -190,9 +150,11 @@ ROFF;
             return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
         } elseif (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
             $requestName = $matches[1];
-            if (array_key_exists($requestName, self::$classMap)) {
+            $man         = Man::instance();
+            $class       = $man->getRequestClass($requestName);
+            if ($class !== false) {
                 return [
-                  'class'     => self::$classMap[$requestName],
+                  'class'     => $class,
                   'request'   => $requestName,
                   'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
                 ];

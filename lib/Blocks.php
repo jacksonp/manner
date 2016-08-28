@@ -4,8 +4,6 @@
 class Blocks
 {
 
-    const BLOCK_END_REGEX = '~^\.([LP]?P|HP|TP|IP|ti|RS|EX|fc|ce|nf|TS|SS|SH|Vb|SY)~u';
-
     const TEXT_CONTAINERS = [
       'p',
       'blockquote',
@@ -24,12 +22,13 @@ class Blocks
 
     static function lineEndsBlock(array $lines, int $i)
     {
-        $line = $lines[$i];
+        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3}).*$~u', $lines[$i], $matches)) {
+            if (Man::instance()->requestStartsBlock($matches[1])) {
+                return true;
+            }
+        }
 
-        return
-          $line === '' or
-          preg_match(Blocks::BLOCK_END_REGEX, $line) or
-          Block_TabTable::isStart($lines, $i);
+        return $lines[$i] === '' or Block_TabTable::isStart($lines, $i);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
