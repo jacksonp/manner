@@ -20,8 +20,10 @@ class Inline_Link
 
             if (count($arguments) > 1) {
                 TextContent::interpretAndAppendText($anchor, $arguments[1]);
-            } else {
+            } elseif ($i < count($lines) - 1) {
                 Blocks::handle($anchor, [$lines[++$i]]);
+            } else {
+                $anchor->appendChild(new DOMText($arguments[0]));
             }
 
             if ($textParent->hasContent()) {
