@@ -36,7 +36,7 @@ class Block_RS
                 } else {
                     ++$rsLevel;
                 }
-            } elseif (preg_match('~^\.\s*RE~u', $line)) {
+            } elseif (Request::is($line, 'RE')) {
                 if ($skippedRSs > 0) {
                     --$skippedRSs;
                     continue;
@@ -46,7 +46,7 @@ class Block_RS
                         break;
                     }
                 }
-            } elseif (preg_match('~^\.\s*TP~u', $line)) {
+            } elseif (Request::is($line, 'TP')) {
                 // prevent skipping
                 $thisIndent = 'GARBAGE';
             }

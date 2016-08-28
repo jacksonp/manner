@@ -15,9 +15,9 @@ class Block_DataDefinition
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (preg_match('~^\.\s*RS~u', $line)) {
+            if (Request::is($line, 'RS')) {
                 ++$rsLevel;
-            } elseif (preg_match('~^\.\s*RE~u', $line)) {
+            } elseif (Request::is($line, 'RE')) {
                 --$rsLevel;
             }
 
@@ -31,11 +31,7 @@ class Block_DataDefinition
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (
-                  preg_match('~^\.\s*[LP]?P$~u', $line) and
-                  $i < $numLines - 1 and
-                  mb_substr($lines[$i + 1], 0, 3) === '.TP'
-                ) {
+                if (Request::is($line, ['LP', 'PP', 'P']) and $i < $numLines - 1 and Request::is($lines[$i + 1], 'TP')) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
                 } elseif (

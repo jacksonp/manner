@@ -15,7 +15,7 @@ class Block_nf
         $preLines = [];
         while ($i < $numLines - 1) {
             $line = $lines[$i + 1];
-            if (preg_match('~^\.\s*S[SH]~u', $line)) {
+            if (Request::is($line, ['SS', 'SH'])) {
                 break;
             } elseif (preg_match($blockEnds, $line)) {
                 while ($i < $numLines - 1 and preg_match($blockEnds, $lines[$i + 1])) {
@@ -32,11 +32,7 @@ class Block_nf
             return $i;
         }
 
-        if (
-          $i < $numLines - 1 and
-          preg_match('~\.RS~u', $preLines[0]) and
-          $lines[$i + 1] === '.RE'
-        ) {
+        if ($i < $numLines - 1 and Request::is($preLines[0], 'RS') and Request::is($lines[$i + 1], 'RE')) {
             $preLines[] = $lines[++$i];
         }
 

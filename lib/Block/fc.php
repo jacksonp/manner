@@ -19,9 +19,9 @@ class Block_fc
         $table = $dom->createElement('table');
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.\s*(nf|ta)~u', $line)) {
+            if (Request::is($line, ['ta', 'nf'])) {
                 continue; // Swallow
-            } elseif (preg_match('~^\.\s*fi~u', $line)) {
+            } elseif (Request::is($line, 'fi')) {
                 break; // Finished
             } elseif (mb_strpos($line, $delim) === 0) {
 

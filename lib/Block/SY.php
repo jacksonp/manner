@@ -28,7 +28,7 @@ class Block_SY
         for ($i = $i + 1; $i < $numLines; ++$i) {
             if (in_array($lines[$i], $blockEnds)) {
                 break;
-            } elseif (preg_match('~^\.\s*SY~u', $lines[$i])) {
+            } elseif (Request::is($lines[$i], 'SY')) {
                 --$i;
                 break;
             }

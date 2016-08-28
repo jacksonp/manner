@@ -22,7 +22,7 @@ class Block_ti
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
             $line = $lines[$i + 1];
-            if (preg_match('~^\.\s*ti~u', $line)) {
+            if (Request::is($line, 'ti')) {
                 // Could be a change in indentation, just add a break for now
                 $blockLines[] = '.br';
                 continue;

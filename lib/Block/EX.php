@@ -17,9 +17,9 @@ class Block_EX
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
-            if (preg_match('~^\.\s*EE~u', $line)) {
+            if (Request::is($line, 'EE')) {
                 break;
-            } elseif (preg_match('~^\.\s*(nf|fi)~u', $line)) {
+            } elseif (Request::is($line, ['nf', 'fi'])) {
                 // .EX already marks block as preformatted, just ignore
                 continue;
             } else {

@@ -73,7 +73,7 @@ class Block_TS
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (preg_match('~^\.\s*TE~u', $line)) {
+            if (Request::is($line, 'TE')) {
                 $parentNode->appendBlockIfHasContent($table);
 
                 return $i;

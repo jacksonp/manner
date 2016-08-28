@@ -19,7 +19,7 @@ class Block_ce
         $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
         for (; $i < $centerLinesUpTo; ++$i) {
             $nextLine = $lines[$i + 1];
-            if (mb_strpos($nextLine, '.ce') === 0) {
+            if (Request::is($nextLine, 'ce')) {
                 break;
             }
             $blockLines[] = $nextLine;
