@@ -4,18 +4,14 @@
 class Block_ce
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
-
-        if (!preg_match('~^\.\s*ce ?(\d*)$~u', $lines[$i], $matches)) {
-            return false;
-        }
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
         $blockLines       = [];
-        $numLinesToCenter = empty($matches[1]) ? 1 : (int)$matches[1];
+        $numLinesToCenter = empty($arguments[0]) ? 1 : (int)$arguments[0];
         $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
         for (; $i < $centerLinesUpTo; ++$i) {
             $nextLine = $lines[$i + 1];
@@ -32,8 +28,6 @@ class Block_ce
 
         return $i;
 
-
     }
-
 
 }

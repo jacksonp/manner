@@ -7,11 +7,6 @@ class Block_ti
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        // .ti = temporary indent
-        if (!preg_match('~^\.\s*ti ?(.*)$~u', $lines[$i], $matches)) {
-            return false;
-        }
-
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 

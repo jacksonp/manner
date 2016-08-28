@@ -4,14 +4,11 @@
 class Block_fc
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
-        if (!preg_match('~^\.\s*fc\s+(.)\s+(.)$~u', $lines[$i], $matches)) {
-            return false;
-        }
 
-        $delim = $matches[1];
-        $pad   = $matches[2];
+        $delim = $arguments[0];
+        $pad   = $arguments[1];
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;

@@ -6,9 +6,6 @@ class Block_EX
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
-        if (!preg_match('~^\.\s*EX~u', $lines[$i])) {
-            return false;
-        }
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;

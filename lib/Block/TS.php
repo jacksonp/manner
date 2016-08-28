@@ -45,10 +45,6 @@ class Block_TS
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.\s*TS~u', $lines[$i])) {
-            return false;
-        }
-
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);
 

@@ -59,11 +59,6 @@ class Block_Text
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        // TODO: accept \' for now, see e.g. tar.0p .TS with cell '0'
-        if (preg_match('~^[\.]~u', $lines[$i])) {
-            return false;
-        }
-
         $numLines = count($lines);
 
         $line = self::removeContinuation($lines[$i]);

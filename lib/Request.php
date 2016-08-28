@@ -148,41 +148,42 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
+        $return = ['class' => null, 'request' => null, 'arguments' => null];
 
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            return ['class' => 'Block_P', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Block_P';
         } elseif (self::isEmptyRequest($lines[$i])) {
-            return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Request_Skippable';
         } elseif (self::canSkip($lines[$i])) {
-            return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Request_Skippable';
         } elseif (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
             $requestName = $matches[1];
             $man         = Man::instance();
             $class       = $man->getRequestClass($requestName);
             if ($class !== false) {
-                return [
-                  'class'     => $class,
-                  'request'   => $requestName,
-                  'arguments' => Request::parseArguments(Request::massageLine($matches[2])),
-                ];
+                $return['class']     = $class;
+                $return['request']   = $requestName;
+                $return['arguments'] = Request::parseArguments(Request::massageLine($matches[2]));
             } elseif (in_array($requestName, Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $lines[$i]);
             } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
                 // Lenient with things starting with ' to match pre-refactor output...
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
-                return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
+                $return['class'] = 'Block_Text';
             } else {
-                return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
+                $return['class'] = 'Request_Skippable';
             }
         } elseif (Block_TabTable::isStart($lines, $i)) {
-            return ['class' => 'Block_TabTable', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Block_TabTable';
         } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
-            return ['class' => 'Block_Text', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Block_Text';
         } else {
-            return ['class' => 'Request_Skippable', 'request' => null, 'arguments' => null];
+            $return['class'] = 'Request_Skippable';
         }
+
+        return $return;
 
     }
 
