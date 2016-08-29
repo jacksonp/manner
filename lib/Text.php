@@ -95,6 +95,7 @@ class Text
               'String',
               'Alias',
               'Translation',
+              'Rename',
               'Skipped',
             ];
 
