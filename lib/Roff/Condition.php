@@ -24,19 +24,6 @@ class Roff_Condition
             return self::ifBlock($lines, $i, $matches[2], self::test($matches[1], $macroArguments), $macroArguments);
         }
 
-        if (
-        preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' (.*)$~u',
-          $lines[$i], $matches)
-        ) {
-            if (self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments)) {
-                $lineArray = [Request::massageLine($matches[3])];
-
-                return ['lines' => Text::applyRoffClasses($lineArray), 'i' => $i];
-            } else {
-                return ['lines' => [], 'i' => $i];
-            }
-        }
-
         if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
             if (self::test($matches[1], $macroArguments)) {
                 $lines[$i] = Request::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
