@@ -37,7 +37,7 @@ class Text
             $line = Replace::preg('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
 
             // TODO: fix this hack, see groff_mom.7
-            $line = preg_replace('~^\.FONT ~u', '.', $line);
+            $line = Replace::preg('~^\.FONT ~u', '.', $line);
 
             // Don't worry about changes in point size for now (see rc.1 for digit instead of +- in \s10):
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+\d]?\d~u', '$1', $line);

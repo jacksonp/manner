@@ -36,13 +36,6 @@ class TextContent
             }
         }
 
-//        $textSegments = array_filter($textSegments, function ($s) {
-//            return $s !== '';
-//        });
-//        $textSegments = array_values($textSegments);
-//        var_dump($line);
-//        var_dump($textSegments);
-
         $numTextSegments    = count($textSegments);
         $horizontalPosition = 0; //TODO: could be worth setting this to characters in output so far from $line?
 
