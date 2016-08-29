@@ -10,8 +10,6 @@ class Roff_Condition
     static function checkEvaluate(array &$lines, int $i, $macroArguments)
     {
 
-        // TODO: check Roff_Macro::applyReplacements() is applied on all returned 'lines'
-
         if (preg_match(
           '~^[\.\']if\s+' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
           $lines[$i], $matches)
@@ -44,7 +42,6 @@ class Roff_Condition
             }
 
             return self::handleElse($lines, $i + 1, $useIf, $if['lines'], $macroArguments);
-
         }
 
         if (preg_match('~^[\.\']\s*ie ' . self::CONDITION_REGEX . '\s?(.*)$~u', $lines[$i], $ifMatches)) {
@@ -54,11 +51,10 @@ class Roff_Condition
                 $i = $result['i'];
             }
 
-            $lineArray = [Request::massageLine($ifMatches[2])];
+            $lineArray = [Roff_Macro::applyReplacements(Request::massageLine($ifMatches[2]), $macroArguments)];
 
             return self::handleElse($lines, $i + 1, $useIf, Text::applyRoffClasses($lineArray, $macroArguments),
               $macroArguments);
-
         }
 
         return false;
@@ -86,7 +82,7 @@ class Roff_Condition
         if ($useIf) {
             return ['lines' => $ifLines, 'i' => $i];
         } else {
-            $lineArray = [Request::massageLine($elseMatches[1])];
+            $lineArray = [Roff_Macro::applyReplacements(Request::massageLine($elseMatches[1]), $macroArguments)];
 
             return ['lines' => Text::applyRoffClasses($lineArray, $macroArguments), 'i' => $i];
         }
