@@ -11,12 +11,7 @@ class Roff_Rename
             return false;
         }
 
-        // Just ignore these for now:
-        if (in_array($matches[1], ["'' }`", "}` ''"])) {
-            return ['i' => $i];
-        }
-
-        throw new Exception('Unhandled .rn line: ' . $lines[$i]);
+        return ['i' => $i]; // Ignore for now!
 
     }
 
