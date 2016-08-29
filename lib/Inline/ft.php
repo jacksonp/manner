@@ -4,20 +4,14 @@
 class Inline_ft
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
-
-        if (!preg_match('~^\.\s*ft(\s.*)?$~u', $lines[$i], $matches)) {
-            return false;
-        }
 
         $numLines = count($lines);
 
         if ($i === $numLines - 1) {
             return $i; // trailing .ft: skip
         }
-
-        $arguments = Request::parseArguments(@$matches[1]);
 
         if (is_null($arguments)) {
             return $i; // Just skip empty requests

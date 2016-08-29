@@ -4,14 +4,13 @@
 class Inline_Link
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        if (preg_match('~^\.\s*URL\s(.*)$~u', $lines[$i], $matches)) {
-            $dom       = $parentNode->ownerDocument;
-            $arguments = Request::parseArguments($matches[1]);
+        if ($request === 'URL') {
+            $dom = $parentNode->ownerDocument;
             if (is_null($arguments)) {
                 throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
             }
@@ -41,18 +40,13 @@ class Inline_Link
             return $i;
         }
 
-        if (!preg_match('~^\.\s*(?:UR|MT)(?:$|\s<?(.*?)>?$)~u', $lines[$i], $matches)) {
-            return false;
-        }
-
         $dom         = $parentNode->ownerDocument;
         $numLines    = count($lines);
-        $arguments   = Request::parseArguments(@$matches[1]);
         $punctuation = '';
         $blockLines  = [];
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (preg_match('~^\.\s*(?:UR|MT)~u', $lines[$i])) {
+            if (Request::is($lines[$i], ['UR', 'MT'])) {
                 --$i;
                 break;
             } elseif (preg_match('~^\.\s*(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
@@ -76,6 +70,7 @@ class Inline_Link
             if (count($blockLines) > 0) {
                 Blocks::handle($parentNode, $blockLines);
             }
+
             return $i;
         }
 
@@ -105,10 +100,9 @@ class Inline_Link
 
     }
 
-    private
-    static function getValidHREF(
-      string $url
-    ) {
+    private static function getValidHREF(string $url)
+    {
+        $url = Replace::preg('~^<(.*)>$~u', '$1', $url);
         $href = TextContent::interpretString($url);
         if (filter_var($href, FILTER_VALIDATE_URL)) {
             return $href;

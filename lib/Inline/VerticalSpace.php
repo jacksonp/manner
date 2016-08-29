@@ -23,11 +23,7 @@ class Inline_VerticalSpace
 
     static function check($string)
     {
-        if (preg_match('~^\\\\?\.(br|sp|ne)(\s|$)~u', $string, $matches)) {
-            return $matches;
-        }
-
-        return false;
+        return Request::is($string, ['br', 'sp', 'ne']);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)

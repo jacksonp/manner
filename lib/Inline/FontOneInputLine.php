@@ -7,7 +7,7 @@ class Inline_FontOneInputLine
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
 
-        if (is_null($arguments) and $i < count($lines) - 1 and preg_match('~\.IP~u', $lines[$i + 1])) {
+        if (is_null($arguments) and $i < count($lines) - 1 and Request::is($lines[$i + 1], 'IP')) {
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
@@ -56,8 +56,8 @@ class Inline_FontOneInputLine
             if ($lines[$i] === '') {
                 return $i;
             }
-            $result     = Block_Text::getNextInputLine($lines, $i);
-            $i          = $result['i'];
+            $result = Block_Text::getNextInputLine($lines, $i);
+            $i      = $result['i'];
             if (count($result['lines']) === 0) {
                 return $i;
             }
