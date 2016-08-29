@@ -4,8 +4,6 @@
 class Block_RS
 {
 
-
-    // TODO: see munch.6 Copyright section and .RS 0
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
     {
 
