@@ -19,6 +19,7 @@ class Request
           self::isEmptyRequest($line) or
           in_array($line, [
             '..',   // Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
+            '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
             '.EE',  // strays
             '.BR',  // empty
             '.R',   // man page trying to set font to Regular? (not an actual macro, not needed)
