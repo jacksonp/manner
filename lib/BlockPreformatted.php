@@ -41,35 +41,36 @@ class BlockPreformatted
                     $i = $newI;
                     continue;
                 }
-            } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs     = Request::parseArguments($matches[1]);
+            } elseif ($request['request'] === 'IP') {
                 $nextIndent = 4;
-                if (count($ipArgs) === 0 or trim($ipArgs[0]) === '') {
+                if (count($request['arguments']) === 0 or trim($request['arguments'][0]) === '') {
                     continue;
                 } else {
-                    $line = $ipArgs[0];
+                    $line = $request['arguments'][0];
                 }
-            } elseif (preg_match('~^\.TP ?(.*)$~u', $line, $matches)) {
+            } elseif ($request['request'] === 'TP') {
                 if ($i === $numLines - 1) {
                     continue;
                 }
                 $addIndent  = 0;
                 $nextIndent = 4;
                 continue;
-            } elseif (preg_match('~^\.ti ?(.*)$~u', $line, $matches)) {
+            } elseif ($request['request'] === 'ti') {
                 $nextIndent = 4;
                 continue;
-            } elseif (preg_match('~^\.(nf|RS|RE|fi)~u', $line) or in_array($line, ['\\&', '\\)', '.ce 0'])) {
+            } elseif (
+              in_array($request['request'], ['nf', 'RS', 'RE', 'fi']) or
+              in_array($line, ['\\&', '\\)', '.ce 0'])
+            ) {
                 continue;
-            } elseif (preg_match('~^\.OP\s(.+)$~u', $line, $matches)) {
+            } elseif ($request['request'] === 'OP') {
                 $parentNode->appendChild(new DOMText('['));
-                $arguments = Request::parseArguments($matches[1]);
                 $strong    = $parentNode->appendChild($dom->createElement('strong'));
-                TextContent::interpretAndAppendText($strong, $arguments[0]);
-                if (count($arguments) > 1) {
+                TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
+                if (count($request['arguments']) > 1) {
                     $parentNode->appendChild(new DOMText(' '));
                     $em = $parentNode->appendChild($dom->createElement('em'));
-                    TextContent::interpretAndAppendText($em, $arguments[1]);
+                    TextContent::interpretAndAppendText($em, $request['arguments'][1]);
                 }
                 $parentNode->appendChild(new DOMText('] '));
                 continue;

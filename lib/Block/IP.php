@@ -28,21 +28,21 @@ class Block_IP
         $firstIndent = null;
 
         for (; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match('~^\\\\?\.\s*IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs = Request::parseArguments($matches[1]);
+            $line    = $lines[$i];
+            $request = Request::get($line);
+            if ($request['request'] === 'IP') {
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-                if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
+                if (count($request['arguments']) and trim($request['arguments'][0]) !== '') {
                     if (
                       is_null($firstIndent) and
-                      count($ipArgs) > 1 and
-                      $indentVal = Roff_Unit::normalize($ipArgs[1]) // note this filters out 0s
+                      count($request['arguments']) > 1 and
+                      $indentVal = Roff_Unit::normalize($request['arguments'][1]) // note this filters out 0s
                     ) {
                         $firstIndent = 'indent-' . $indentVal;
                         $dl->setAttribute('class', $firstIndent);
                     }
                     $dt = $dom->createElement('dt');
-                    TextContent::interpretAndAppendText($dt, $ipArgs[0]);
+                    TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
                     $dl->appendChild($dt);
                     $dd = $dom->createElement('dd');
                     $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
@@ -69,14 +69,12 @@ class Block_IP
         $block = $dom->createElement('blockquote');
 
         for (; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match('~^\\\\?\.\s*IP ?(.*)$~u', $line, $matches)) {
-                $ipArgs = Request::parseArguments($matches[1]);
-                if (count($ipArgs) > 0 and trim($ipArgs[0]) !== '') {
-                    --$i;
-                    break;
-                }
-            } else {
+            $line    = $lines[$i];
+            $request = Request::get($line);
+            if (
+              $request['request'] !== 'IP' or
+              (count($request['arguments']) > 0 and trim($request['arguments'][0]) !== '')
+            ) {
                 --$i;
                 break;
             }

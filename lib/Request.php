@@ -153,7 +153,7 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
-        $return = ['class' => null, 'request' => null, 'arguments' => []];
+        $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => ''];
 
         $request = self::get($lines[$i]);
 
