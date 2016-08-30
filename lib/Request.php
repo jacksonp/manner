@@ -9,32 +9,35 @@ class Request
         return in_array(rtrim($line), ['.', '\'', '\\.']);
     }
 
-    static function canSkip(string $line)
+    static function canSkip(string $line, array $request)
     {
         // Ignore:
         // stray .RE macros,
         // .ad macros that haven't been trimmed as in middle of $lines...
+        // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
+        // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
-          preg_match('~^\.(RE|fi|ad|Sh|\s*$)~u', $line) or
-          self::isEmptyRequest($line) or
-          in_array($line, [
-            '..',   // Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
-            '.ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
-            '.EE',  // strays
-            '.BR',  // empty
-            '.R',   // man page trying to set font to Regular? (not an actual macro, not needed)
+          $request['request'] === 'br.' or
+          in_array($request['request'], [
+            'RE',
+            'fi',
+            'ad',
+            'Sh',
+            'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
+            'EE',  // strays
               // .man page bugs:
-            '.sp,',
-            '.sp2',
-            '.br.',
-            '.pp', // spurious, in *_selinux.8 pages
-            '.RH',
-            '.Sp',
-            '.Sp ',
-            '.TH', // Empty .THs only
-            '.TC',
-            '.TR',
-          ]);
+            'sp,',
+            'sp2',
+            'pp', // spurious, in *_selinux.8 pages
+            'RH',
+            'Sp',
+            'Sp ',
+            'TC',
+            'TR',
+          ]) or
+          (in_array($request['request'], ['R', 'BR', 'TH']) and count($request['arguments']) === 0) or // Empty only
+          preg_match('~^\.\.?\s*$~u', $line) or
+          self::isEmptyRequest($line);
     }
 
     static function parseArguments(string $argString)
@@ -163,7 +166,7 @@ ROFF;
             $return['class'] = 'Block_P';
         } elseif (self::isEmptyRequest($lines[$i])) {
             $return['class'] = 'Request_Skippable';
-        } elseif (self::canSkip($lines[$i])) {
+        } elseif (self::canSkip($lines[$i], $request)) {
             $return['class'] = 'Request_Skippable';
         } elseif (!is_null($request['request'])) {
             $man   = Man::instance();

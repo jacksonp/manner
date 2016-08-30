@@ -14,15 +14,16 @@ class Block_nf
 
         $preLines = [];
         while ($i < $numLines - 1) {
-            $line = $lines[$i + 1];
-            if (Request::is($line, ['SS', 'SH'])) {
+            $line    = $lines[$i + 1];
+            $request = Request::get($line);
+            if (Block_SS::endSubsection($line)) {
                 break;
             } elseif (preg_match($blockEnds, $line)) {
                 while ($i < $numLines - 1 and preg_match($blockEnds, $lines[$i + 1])) {
                     ++$i;
                 }
                 break;
-            } elseif ($line !== '.ad l') {
+            } elseif (!($request['request'] === 'ad' and $request['arg_string'] === 'l')) {
                 $preLines[] = $line;
             }
             ++$i;

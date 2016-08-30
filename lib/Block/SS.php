@@ -4,7 +4,7 @@
 class Block_SS
 {
 
-    private static function endSubsection($line)
+    static function endSubsection($line)
     {
         return Request::is($line, ['SS', 'SH']);
     }
