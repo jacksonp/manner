@@ -67,23 +67,22 @@ class Text
             // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
             $lines[$i] = Replace::preg('~^\.do ~u', '.', $lines[$i]);
 
-            if (mb_substr($lines[$i], 0, 1) === '.') {
-                $arguments = Request::parseArguments($lines[$i]);
-                if (count($arguments) > 0) {
-                    $macro  = trim(array_shift($arguments));
-                    $macros = $man->getMacros();
-                    if (isset($macros[$macro])) {
-                        $man->setRegister('.$', count($arguments));
-                        if (!is_null($callerArguments)) {
-                            foreach ($arguments as $k => $v) {
-                                $arguments[$k] = Roff_Macro::applyReplacements($arguments[$k], $callerArguments);
-                            }
+            $request = Request::get($lines[$i]);
+
+            if (!is_null($request['request'])) {
+                $macros = $man->getMacros();
+                if (isset($macros['.' . $request['request']])) {
+                    $man->setRegister('.$', count($request['arguments']));
+                    if (!is_null($callerArguments)) {
+                        foreach ($request['arguments'] as $k => $v) {
+                            $arguments[$k] = Roff_Macro::applyReplacements($request['arguments'][$k], $callerArguments);
                         }
-
-                        $linesNoCond = array_merge($linesNoCond, Text::applyRoffClasses($macros[$macro], $arguments));
-
-                        continue;
                     }
+
+                    $linesNoCond = array_merge($linesNoCond,
+                      Text::applyRoffClasses($macros['.' . $request['request']], $request['arguments']));
+
+                    continue;
                 }
             }
 
