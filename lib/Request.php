@@ -149,7 +149,7 @@ ROFF;
     public static function get(string $line): array
     {
         $return = ['request' => null, 'arguments' => []];
-        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z0-9]+)(?:\s+(.*)|$)$~u', $line, $matches)) {
+        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z0-9]+)(?:\s+(.*)$|$)~u', $line, $matches)) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
                 $return['arguments'] = Request::parseArguments(Request::massageLine($matches[2]));
