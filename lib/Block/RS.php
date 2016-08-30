@@ -22,9 +22,10 @@ class Block_RS
         $rsLevel    = 1;
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (preg_match('~^\.\s*RS ?(.*)$~u', $line, $matches)) {
-                $indent = Roff_Unit::normalize(trim($matches[1]));
+            $line    = $lines[$i];
+            $request = Request::get($line);
+            if ($request['request'] === 'RS') {
+                $indent = Roff_Unit::normalize(trim($request['arg_string']));
                 if ($indent === $thisIndent) {
                     if (count($blockLines) > 0 and !in_array($blockLines[count($blockLines) - 1], ['.sp', '.br'])) {
                         $blockLines[] = '.br';
@@ -34,7 +35,7 @@ class Block_RS
                 } else {
                     ++$rsLevel;
                 }
-            } elseif (Request::is($line, 'RE')) {
+            } elseif ($request['request'] === 'RE') {
                 if ($skippedRSs > 0) {
                     --$skippedRSs;
                     continue;
@@ -44,7 +45,7 @@ class Block_RS
                         break;
                     }
                 }
-            } elseif (Request::is($line, 'TP')) {
+            } elseif ($request['request'] === 'TP') {
                 // prevent skipping
                 $thisIndent = 'GARBAGE';
             }
