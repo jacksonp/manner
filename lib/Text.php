@@ -79,7 +79,7 @@ class Text
                     $man->setRegister('.$', count($request['arguments']));
                     if (!is_null($callerArguments)) {
                         foreach ($request['arguments'] as $k => $v) {
-                            $arguments[$k] = Roff_Macro::applyReplacements($request['arguments'][$k], $callerArguments);
+                            $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k], $callerArguments);
                         }
                     }
 
