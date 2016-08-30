@@ -147,8 +147,8 @@ ROFF;
         if (preg_match('~^(?:\\\\?\.|\')\s*([-\w]+)(?:\s+(.*))?$~ui', $line, $matches)) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
-                $return['arg_string'] = $matches[2];
-                $return['arguments']  = Request::parseArguments(Request::massageLine($matches[2]));
+                $return['arg_string'] = Request::massageLine($matches[2]);
+                $return['arguments']  = Request::parseArguments($return['arg_string']);
             }
         }
 
