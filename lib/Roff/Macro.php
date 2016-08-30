@@ -47,11 +47,17 @@ class Roff_Macro
 
     }
 
-    static function applyReplacements(string $string, $arguments): string
+    static function applyReplacements(string $string, &$arguments): string
     {
 
         if (is_null($arguments)) {
             return $string;
+        }
+
+        if (Request::is($string, 'shift')) {
+            array_shift($arguments);
+
+            return '.';
         }
 
         // \$x - Macro or string argument with one-digit number x in the range 1 to 9.

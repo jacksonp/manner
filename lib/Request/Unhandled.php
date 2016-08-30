@@ -91,7 +91,6 @@ class Request_Unhandled
       'rnn',
       'rr',
       'shc',
-      'shift',
       'sizes',
       'special',
       'spreadwarn',

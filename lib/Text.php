@@ -53,7 +53,7 @@ class Text
 
     }
 
-    static function applyRoffClasses(array &$lines, $callerArguments = null): array
+    static function applyRoffClasses(array &$lines, &$callerArguments = null): array
     {
 
         $man = Man::instance();
