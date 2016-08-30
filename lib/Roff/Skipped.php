@@ -55,6 +55,7 @@ class Roff_Skipped
       'tmc', // Similar to .tm1 without emitting a final newline.
       'ul', // "Underline (italicize in troff) N input lines." TODO: Could revisit this and implement.
       'vs', // Change to previous vertical base line spacing.
+      'warn', // Set warnings code to n.
     ];
 
     static function checkEvaluate(array $lines, int $i)

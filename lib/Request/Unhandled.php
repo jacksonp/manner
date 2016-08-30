@@ -112,7 +112,6 @@ class Request_Unhandled
       'uf',
       'unformat',
       'vpt',
-      'warn',
       'warnscale',
       'wh',
       'while',

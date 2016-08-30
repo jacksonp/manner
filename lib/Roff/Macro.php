@@ -49,6 +49,7 @@ class Roff_Macro
 
     static function applyReplacements(string $string, $arguments): string
     {
+
         if (is_null($arguments)) {
             return $string;
         }

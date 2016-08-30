@@ -44,7 +44,7 @@ class BlockPreformatted
             } elseif (preg_match('~^\.IP ?(.*)$~u', $line, $matches)) {
                 $ipArgs     = Request::parseArguments($matches[1]);
                 $nextIndent = 4;
-                if (is_null($ipArgs) || trim($ipArgs[0]) === '') {
+                if (count($ipArgs) === 0 or trim($ipArgs[0]) === '') {
                     continue;
                 } else {
                     $line = $ipArgs[0];
