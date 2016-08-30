@@ -134,11 +134,7 @@ ROFF;
 
     public static function is(string $line, $requests):bool
     {
-        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})~u', $line, $matches)) {
-            return in_array($matches[1], (array)$requests);
-        }
-
-        return false;
+        return in_array(Request::get($line)['request'], (array)$requests);
     }
 
     public static function get(string $line): array
