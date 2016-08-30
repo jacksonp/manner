@@ -26,7 +26,7 @@ class Block_DataDefinition
             if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $nextIPMatches)) {
                 $hitIP      = true;
                 $nextIPArgs = Request::parseArguments($nextIPMatches[1]);
-                $hitBlankIP = is_null($nextIPArgs) || trim($nextIPArgs[0]) === '';
+                $hitBlankIP = count($nextIPArgs) === 0 || trim($nextIPArgs[0]) === '';
             }
 
             // <= 0 for stray .REs

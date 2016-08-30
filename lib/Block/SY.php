@@ -4,7 +4,7 @@
 class Block_SY
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         // These get swallowed:
@@ -13,7 +13,7 @@ class Block_SY
         $dom         = $parentNode->ownerDocument;
         $commandName = '';
 
-        if (!is_null($arguments)) {
+        if (count($arguments) > 0) {
             $commandName = $arguments[0];
         }
 

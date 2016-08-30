@@ -4,13 +4,13 @@
 class Block_IP
 {
 
-    static function checkAppend(DOMElement $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(DOMElement $parentNode, array $lines, int $i, array $arguments)
     {
 
         // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-        if (!is_null($arguments) && trim($arguments[0]) !== '') {
+        if (count($arguments) > 0 and trim($arguments[0]) !== '') {
             return self::appendDl($parentNode, $lines, $i);
         } else {
             return self::appendBlockquote($parentNode, $lines, $i);
@@ -72,7 +72,7 @@ class Block_IP
             $line = $lines[$i];
             if (preg_match('~^\\\\?\.\s*IP ?(.*)$~u', $line, $matches)) {
                 $ipArgs = Request::parseArguments($matches[1]);
-                if (!is_null($ipArgs) and trim($ipArgs[0]) !== '') {
+                if (count($ipArgs) > 0 and trim($ipArgs[0]) !== '') {
                     --$i;
                     break;
                 }

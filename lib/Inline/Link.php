@@ -4,14 +4,14 @@
 class Inline_Link
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
     {
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         if ($request === 'URL') {
             $dom = $parentNode->ownerDocument;
-            if (is_null($arguments)) {
+            if (count($arguments) === 0) {
                 throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
             }
             $anchor = $dom->createElement('a');
@@ -57,7 +57,7 @@ class Inline_Link
         }
 
         $href = false;
-        if (!is_null($arguments)) {
+        if (count($arguments) > 0) {
             $url  = $arguments[0];
             $href = self::getValidHREF($url);
         }

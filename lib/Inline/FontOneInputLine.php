@@ -4,10 +4,10 @@
 class Inline_FontOneInputLine
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
     {
 
-        if (is_null($arguments) and $i < count($lines) - 1 and Request::is($lines[$i + 1], 'IP')) {
+        if (count($arguments) === 0 and $i < count($lines) - 1 and Request::is($lines[$i + 1], 'IP')) {
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
@@ -48,7 +48,7 @@ class Inline_FontOneInputLine
 
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
-        if (is_null($arguments)) {
+        if (count($arguments) === 0) {
             if ($i === $numLines - 1) {
                 return $i;
             }

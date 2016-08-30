@@ -37,7 +37,7 @@ class Request
           ]);
     }
 
-    static function parseArguments($argString)
+    static function parseArguments(string $argString)
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:
@@ -46,7 +46,7 @@ class Request
         $argString = ltrim($argString);
 
         if ($argString === '') {
-            return null;
+            return [];
         }
 
         $args         = [];
@@ -92,10 +92,6 @@ class Request
             $args[] = $thisArg;
         }
 
-        if (count($args) === 0) {
-            return null;
-        }
-
         return $args;
 
     }
@@ -132,7 +128,6 @@ ROFF;
     public static function massageLine(string $macroLine)
     {
         $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-        $macroLine = Replace::preg('~^\.\s+~u', '.', $macroLine);
 
         return Replace::preg('~^\.nop ~u', '', $macroLine);
     }
@@ -149,7 +144,7 @@ ROFF;
     public static function get(string $line): array
     {
         $return = ['request' => null, 'arguments' => [], 'arg_string' => ''];
-        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z0-9]+)(?:\s+(.*)$|$)~u', $line, $matches)) {
+        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z0-9]+)(?:\s+(.*))?$~u', $line, $matches)) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
                 $return['arg_string'] = $matches[2];
@@ -162,7 +157,9 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
-        $return = ['class' => null, 'request' => null, 'arguments' => null];
+        $return = ['class' => null, 'request' => null, 'arguments' => []];
+
+        $request = self::get($lines[$i]);
 
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
@@ -172,15 +169,13 @@ ROFF;
             $return['class'] = 'Request_Skippable';
         } elseif (self::canSkip($lines[$i])) {
             $return['class'] = 'Request_Skippable';
-        } elseif (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3})(.*)$~u', $lines[$i], $matches)) {
-            $requestName = $matches[1];
-            $man         = Man::instance();
-            $class       = $man->getRequestClass($requestName);
+        } elseif (!is_null($request['request'])) {
+            $man   = Man::instance();
+            $class = $man->getRequestClass($request['request']);
             if ($class !== false) {
-                $return['class']     = $class;
-                $return['request']   = $requestName;
-                $return['arguments'] = Request::parseArguments(Request::massageLine($matches[2]));
-            } elseif (in_array($requestName, Request_Unhandled::requests)) {
+                $return          = $request;
+                $return['class'] = $class;
+            } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $lines[$i]);
             } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
                 // Lenient with things starting with ' to match pre-refactor output...

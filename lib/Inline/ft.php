@@ -4,7 +4,7 @@
 class Inline_ft
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         $numLines = count($lines);
@@ -13,7 +13,7 @@ class Inline_ft
             return $i; // trailing .ft: skip
         }
 
-        if (is_null($arguments)) {
+        if (count($arguments) === 0) {
             return $i; // Just skip empty requests
         }
 

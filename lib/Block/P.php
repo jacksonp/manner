@@ -4,7 +4,7 @@
 class Block_P
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         $numLines = count($lines);

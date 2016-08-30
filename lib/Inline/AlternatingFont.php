@@ -4,10 +4,10 @@
 class Inline_AlternatingFont
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
     {
 
-        if (is_null($arguments) or count($arguments) === 0) {
+        if (count($arguments) === 0) {
             return $i; // Just skip empty requests
         }
 

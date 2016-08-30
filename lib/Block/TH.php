@@ -3,14 +3,14 @@
 class Block_TH
 {
 
-    static function checkAppend(DOMElement $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(DOMElement $parentNode, array $lines, int $i, array $arguments)
     {
 
         $man = Man::instance();
 
         if (empty($man->title)) {
 
-            if (is_null($arguments) or count($arguments) < 1) {
+            if (count($arguments) < 1) {
                 throw new Exception($lines[$i] . ' - missing title info');
             }
 

@@ -4,7 +4,7 @@
 class Block_SH
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         $dom      = $parentNode->ownerDocument;
@@ -12,7 +12,7 @@ class Block_SH
 
         $headingNode = $dom->createElement('h2');
 
-        if (is_null($arguments) or count($arguments) === 0) {
+        if (count($arguments) === 0) {
             if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
                 return $i;
             }

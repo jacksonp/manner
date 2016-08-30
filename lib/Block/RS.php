@@ -4,13 +4,13 @@
 class Block_RS
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         $thisIndent = '';
         $className  = 'indent';
-        if (!is_null($arguments) and count($arguments) > 0) {
-            $thisIndent = Roff_Unit::normalize(@$arguments[0]);
+        if (count($arguments) > 0) {
+            $thisIndent = Roff_Unit::normalize($arguments[0]);
             if ($thisIndent) { // note this filters out 0s
                 $className .= '-' . $thisIndent;
             }

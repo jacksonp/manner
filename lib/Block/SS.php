@@ -9,7 +9,7 @@ class Block_SS
         return preg_match('~^\.\s*S[SH]~u', $line);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
+    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
         $dom      = $parentNode->ownerDocument;
@@ -17,7 +17,7 @@ class Block_SS
 
         $headingNode = $dom->createElement('h3');
 
-        if (is_null($arguments)) {
+        if (count($arguments) === 0) {
             if ($i === $numLines - 1 or self::endSubsection($lines[$i + 1])) {
                 return $i;
             }

@@ -11,7 +11,7 @@ class Block_ce
         $dom      = $parentNode->ownerDocument;
 
         $blockLines       = [];
-        $numLinesToCenter = empty($arguments[0]) ? 1 : (int)$arguments[0];
+        $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
         $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
         for (; $i < $centerLinesUpTo; ++$i) {
             $nextLine = $lines[$i + 1];
