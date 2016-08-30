@@ -130,9 +130,7 @@ ROFF;
 
     public static function massageLine(string $macroLine)
     {
-        $macroLine = str_replace(['\\\\'], ['\\'], $macroLine);
-
-        return Replace::preg('~^\.nop ~u', '', $macroLine);
+        return str_replace(['\\\\'], ['\\'], $macroLine);
     }
 
     public static function is(string $line, $requests):bool

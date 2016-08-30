@@ -69,7 +69,6 @@ class Request_Unhandled
       'nf',
       'nm',
       'nn',
-      'nop',
       'nroff',
       'nx',
       'open',

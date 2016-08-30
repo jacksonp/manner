@@ -65,9 +65,9 @@ class Text
 
             $request = Request::get($lines[$i]);
 
-            if ($request['request'] === 'do') {
-                // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
-                // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
+            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
+            // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
+            if ($request['request'] === 'do' or $request['request'] === 'nop') {
                 $lines[$i] = $request['arg_string'];
                 --$i;
                 continue;
