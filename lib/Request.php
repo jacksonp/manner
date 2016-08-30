@@ -40,7 +40,7 @@ class Request
           self::isEmptyRequest($line);
     }
 
-    static function parseArguments(string $argString)
+    private static function parseArguments(string $argString)
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:
@@ -130,7 +130,7 @@ ROFF;
 
     public static function massageLine(string $macroLine)
     {
-        return str_replace(['\\\\'], ['\\'], $macroLine);
+        return str_replace('\\\\', '\\', $macroLine);
     }
 
     public static function is(string $line, $requests):bool
