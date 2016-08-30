@@ -132,6 +132,7 @@ class TextContent
                 case '\fR':
                 case '\fr':
                 case '\f[]':
+                case '\F[]':
                 case '\FR':
                 case '\F[R]':
                 case '\f1':
