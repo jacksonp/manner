@@ -141,7 +141,7 @@ ROFF;
     public static function get(string $line): array
     {
         $return = ['request' => null, 'arguments' => [], 'arg_string' => ''];
-        if (preg_match('~^(?:\\\\?\.|\')\s*([-\w]+)(?:\s+(.*))?$~ui', $line, $matches)) {
+        if (preg_match('~^(?:\\\\?\.|\')\s*([^\s\\\\]+)(?:[\s\\\\]\s*(.*))?$~ui', $line, $matches)) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
                 $return['arg_string'] = Request::massageLine($matches[2]);
