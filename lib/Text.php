@@ -92,6 +92,7 @@ class Text
 
             $roffClasses = [
               'Comment',
+              'Char',
               'Condition',
               'Macro',
               'Register',

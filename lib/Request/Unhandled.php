@@ -29,7 +29,6 @@ class Request_Unhandled
       'cf',
       'cflags',
       'ch',
-      'char',
       'chop',
       'class',
       'color',

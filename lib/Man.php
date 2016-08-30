@@ -9,6 +9,7 @@ class Man
     private $data;
     private $aliases;
     private $macros;
+    private $entities;
     private $registers;
     private $strings;
     private $characterTranslations; // .tr
@@ -44,9 +45,10 @@ class Man
 
     public function reset()
     {
-        $this->data    = [];
-        $this->aliases = [];
-        $this->macros  = [];
+        $this->data     = [];
+        $this->aliases  = [];
+        $this->macros   = [];
+        $this->entities = [];
         // See https://www.mankier.com/7/groff#Registers
         $this->registers             = [
           '.g'   => '1',
@@ -201,6 +203,11 @@ class Man
         return $this->strings;
     }
 
+    public function setEntity(string $from, string $to)
+    {
+        $this->entities[$from] = $to;
+    }
+
     public function setCharTranslation(string $from, string $to)
     {
         $this->characterTranslations[$from] = $to;
@@ -226,6 +233,11 @@ class Man
     {
 
         $line = Roff_Register::substitute($line, $this->registers);
+
+        if (count($this->entities)) {
+            $line = strtr($line, $this->entities);
+        }
+
         $line = Roff_String::substitute($line, $this->strings);
         foreach ($this->aliases as $new => $old) {
             $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
