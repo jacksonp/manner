@@ -15,27 +15,31 @@ class Block_DataDefinition
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            if (Request::is($line, 'RS')) {
+            $request = Request::get($line);
+
+            if ($request['request'] === 'RS') {
                 ++$rsLevel;
-            } elseif (Request::is($line, 'RE')) {
+            } elseif ($request['request'] === 'RE') {
                 --$rsLevel;
             }
 
             $hitIP      = false;
             $hitBlankIP = false;
-            if (preg_match('~^\.\s*IP ?(.*)$~u', $line, $nextIPMatches)) {
+            if ($request['request'] === 'IP') {
                 $hitIP      = true;
-                $nextIPArgs = Request::parseArguments($nextIPMatches[1]);
-                $hitBlankIP = count($nextIPArgs) === 0 || trim($nextIPArgs[0]) === '';
+                $hitBlankIP = count($request['arguments']) === 0 || trim($request['arguments'][0]) === '';
             }
 
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
-                if (Request::is($line, ['LP', 'PP', 'P']) and $i < $numLines - 1 and Request::is($lines[$i + 1], 'TP')) {
+                if (
+                  in_array($request['request'], ['LP', 'PP', 'P']) and
+                  $i < $numLines - 1 and Request::is($lines[$i + 1], 'TP')
+                ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
                 } elseif (
-                  Request::is($line, ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) or
+                  in_array($request['request'], ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) or
                   ($hitIP and !$hitBlankIP)
                 ) {
                     --$i;
