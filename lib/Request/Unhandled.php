@@ -47,7 +47,6 @@ class Request_Unhandled
       'ecs',
       'fc',
       'fl', // Flush output buffer.
-      'fspecial',
       'ftr',
       'fzoom',
       'gcolor',
