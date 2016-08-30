@@ -67,7 +67,13 @@ class Text
 
             // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
             // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
-            if ($request['request'] === 'do' or $request['request'] === 'nop') {
+            if ($request['request'] === 'do') {
+                $lines[$i] = '.' . $request['arg_string'];
+                --$i;
+                continue;
+            }
+
+            if ($request['request'] === 'nop') {
                 $lines[$i] = $request['arg_string'];
                 --$i;
                 continue;
@@ -79,7 +85,8 @@ class Text
                     $man->setRegister('.$', count($request['arguments']));
                     if (!is_null($callerArguments)) {
                         foreach ($request['arguments'] as $k => $v) {
-                            $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k], $callerArguments);
+                            $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k],
+                              $callerArguments);
                         }
                     }
 
