@@ -63,11 +63,15 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
-            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
-            // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
-            $lines[$i] = Replace::preg('~^\.do ~u', '.', $lines[$i]);
-
             $request = Request::get($lines[$i]);
+
+            if ($request['request'] === 'do') {
+                // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
+                // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
+                $lines[$i] = $request['arg_string'];
+                --$i;
+                continue;
+            }
 
             if (!is_null($request['request'])) {
                 $macros = $man->getMacros();
