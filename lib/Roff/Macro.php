@@ -12,7 +12,7 @@ class Roff_Macro
         }
 
         $numLines   = count($lines);
-        $newMacro   = '.' . $matches[1];
+        $newMacro   = $matches[1];
         $macroLines = [];
         $foundEnd   = false;
 
@@ -20,7 +20,7 @@ class Roff_Macro
             $macroLine = $lines[$i];
             if (
               $macroLine === '..' or
-              ($newMacro === '.P!' and $macroLine === '.') // work around bug in Xm*.3 man pages
+              ($newMacro === 'P!' and $macroLine === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;
@@ -34,7 +34,7 @@ class Roff_Macro
 
         $man = Man::instance();
 
-        if (in_array($newMacro, ['.SS', '.FONT', '.URL', '.SY', '.YS', '.SH', '.TP', '.RS', '.RE'])) {
+        if (in_array($newMacro, ['SS', 'FONT', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE'])) {
             // Do nothing: don't override these macros.
             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
             // TODO: .FONT see hack in Text::preprocessLines

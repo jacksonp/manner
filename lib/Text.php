@@ -71,7 +71,7 @@ class Text
 
             if (!is_null($request['request'])) {
                 $macros = $man->getMacros();
-                if (isset($macros['.' . $request['request']])) {
+                if (isset($macros[$request['request']])) {
                     $man->setRegister('.$', count($request['arguments']));
                     if (!is_null($callerArguments)) {
                         foreach ($request['arguments'] as $k => $v) {
@@ -80,7 +80,7 @@ class Text
                     }
 
                     $linesNoCond = array_merge($linesNoCond,
-                      Text::applyRoffClasses($macros['.' . $request['request']], $request['arguments']));
+                      Text::applyRoffClasses($macros[$request['request']], $request['arguments']));
 
                     continue;
                 }
