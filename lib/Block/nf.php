@@ -84,16 +84,17 @@ class Block_nf
 
         $pre = $dom->createElement('pre');
 
-        if (preg_match('~^\.\s*RS ?(.*)$~u', $preLines[0], $matches)) {
-            if (!preg_match('~^\.\s*RE~u', array_pop($preLines))) {
+        $request = Request::get($preLines[0]);
+        if ($request['request'] === 'RS') {
+            if (!Request::is(array_pop($preLines), 'RE')) {
                 throw new Exception('.nf block contains initial .RS but not final .RE');
             }
             array_shift($preLines);
             ArrayHelper::trim($preLines, ['', '.br', '.sp']);
             $className = 'indent';
             if (
-              !empty($matches[1]) and
-              $indentVal = Roff_Unit::normalize(trim($matches[1])) // note this filters out 0s
+              !empty($request['arg_string']) and
+              $indentVal = Roff_Unit::normalize(trim($request['arg_string'])) // note this filters out 0s
             ) {
                 $className .= '-' . $indentVal;
             }

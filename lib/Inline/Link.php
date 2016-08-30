@@ -46,11 +46,12 @@ class Inline_Link
         $blockLines  = [];
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (Request::is($lines[$i], ['UR', 'MT'])) {
+            $request = Request::get($lines[$i]);
+            if (in_array($request['request'], ['UR', 'MT'])) {
                 --$i;
                 break;
-            } elseif (preg_match('~^\.\s*(?:UE|ME)(.*)~u', $lines[$i], $matches)) {
-                $punctuation = trim($matches[1]);
+            } elseif (in_array($request['request'], ['UE', 'ME'])) {
+                $punctuation = trim($request['arg_string']);
                 break;
             }
             $blockLines[] = $lines[$i];
@@ -102,7 +103,7 @@ class Inline_Link
 
     private static function getValidHREF(string $url)
     {
-        $url = Replace::preg('~^<(.*)>$~u', '$1', $url);
+        $url  = Replace::preg('~^<(.*)>$~u', '$1', $url);
         $href = TextContent::interpretString($url);
         if (filter_var($href, FILTER_VALIDATE_URL)) {
             return $href;

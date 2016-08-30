@@ -48,7 +48,7 @@ class Block_TP
 
                 for ($i = $i + 1; $i < $numLines; ++$i) {
                     $line = $lines[$i];
-                    if (preg_match('~^\.\s*TQ$~u', $line)) {
+                    if (Request::is($line, 'TQ')) {
                         $result = Block_Text::getNextInputLine($lines, $i + 1);
                         $i      = $result['i'];
                         $dt     = $dom->createElement('dt');

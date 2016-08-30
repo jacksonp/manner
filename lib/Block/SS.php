@@ -6,7 +6,7 @@ class Block_SS
 
     private static function endSubsection($line)
     {
-        return preg_match('~^\.\s*S[SH]~u', $line);
+        return Request::is($line, ['SS', 'SH']);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
