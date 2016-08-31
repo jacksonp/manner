@@ -58,10 +58,10 @@ class Text
 
         $man = Man::instance();
 
-        $numNoCommentLines = count($lines);
-        $linesNoCond       = [];
+        $numLines = count($lines);
+        $outLines = [];
 
-        for ($i = 0; $i < $numNoCommentLines; ++$i) {
+        for ($i = 0; $i < $numLines; ++$i) {
 
             // Do comments first
             $result = Roff_Comment::checkEvaluate($lines, $i);
@@ -71,7 +71,6 @@ class Text
             }
 
             $request = Request::get($lines[$i]);
-
 
             if (!is_null($request['request'])) {
 
@@ -99,7 +98,7 @@ class Text
                         }
                     }
 
-                    $linesNoCond = array_merge($linesNoCond,
+                    $outLines = array_merge($outLines,
                       Text::applyRoffClasses($macros[$request['request']], $request['arguments']));
 
                     continue;
@@ -107,11 +106,11 @@ class Text
 
                 $className = $man->getRoffRequestClass($request['request']);
                 if ($className) {
-                    $result    = $className::evaluate($request, $lines, $i, $callerArguments);
+                    $result = $className::evaluate($request, $lines, $i, $callerArguments);
                     if ($result !== false) {
                         if (isset($result['lines'])) {
                             foreach ($result['lines'] as $l) {
-                                $linesNoCond[] = Roff_Macro::applyReplacements($l, $callerArguments);
+                                $outLines[] = Roff_Macro::applyReplacements($l, $callerArguments);
                             }
                         }
                         $i = $result['i'];
@@ -130,11 +129,11 @@ class Text
             $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
 
             // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
-            $linesNoCond[] = $man->applyAllReplacements($lines[$i]);
+            $outLines[] = $man->applyAllReplacements($lines[$i]);
 
         }
 
-        return $linesNoCond;
+        return $outLines;
 
     }
 

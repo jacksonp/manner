@@ -7,14 +7,10 @@ class Roff_String
     static function evaluate(array $request, array $lines, int $i, $macroArguments)
     {
 
-        if (!preg_match('~^\.\s*ds1? (.*?) (.*)$~u', $lines[$i], $matches)) {
-            if (preg_match('~^\.\s*ds~u', $lines[$i])) {
-                return ['i' => $i]; // ignore any .ds that didn't match first preg_match.
-            }
-
-            return false;
+        if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {
+            // May have just one argument, e.g. gnugo.6 - skip for now.
+            return ['i' => $i];
         }
-
 
         $man = Man::instance();
 

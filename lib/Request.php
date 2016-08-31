@@ -125,7 +125,6 @@ ROFF;
 
         return array_search($string, $known) ?: $string;
 
-
     }
 
     public static function massageLine(string $macroLine)

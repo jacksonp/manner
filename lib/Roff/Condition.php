@@ -203,7 +203,7 @@ class Roff_Condition
             if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) and $openBraces === 0) {
                 $foundEnd = true;
                 if (!empty($matches[1]) and $matches[1] !== '\'br') {
-                    $replacementLines[] = Request::massageLine($matches[1]);
+                    $replacementLines[] = $matches[1];
                 }
                 if (!empty($matches[2])) {
                     --$ifIndex;
@@ -211,7 +211,7 @@ class Roff_Condition
                 }
                 break;
             } elseif ($line !== '') {
-                $replacementLines[] = Request::massageLine($line);
+                $replacementLines[] = $line;
             }
             ++$ifIndex;
             if ($ifIndex < $numLines) {
