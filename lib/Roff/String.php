@@ -4,7 +4,7 @@
 class Roff_String
 {
 
-    static function checkEvaluate(array $lines, int $i, $macroArguments)
+    static function evaluate(array $request, array $lines, int $i, $macroArguments)
     {
 
         if (!preg_match('~^\.\s*ds1? (.*?) (.*)$~u', $lines[$i], $matches)) {

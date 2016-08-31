@@ -7,7 +7,7 @@ class Roff_Condition
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
     const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
-    static function checkEvaluate(array &$lines, int $i, $macroArguments)
+    static function evaluate(array $request, array &$lines, int $i, $macroArguments)
     {
 
         if (preg_match(
@@ -230,7 +230,8 @@ class Roff_Condition
         if ($recurse) {
             $recurseLines = [];
             for ($j = 0; $j < count($replacementLines); ++$j) {
-                $result = self::checkEvaluate($replacementLines, $j, $macroArguments);
+                // TODO: fix first param below?
+                $result = self::evaluate([], $replacementLines, $j, $macroArguments);
                 if ($result !== false) {
                     $recurseLines = array_merge($recurseLines, $result['lines']);
                     $j            = $result['i'];

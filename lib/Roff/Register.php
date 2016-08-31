@@ -4,7 +4,7 @@
 class Roff_Register
 {
 
-    static function checkEvaluate(array $lines, int $i)
+    static function evaluate(array $request, array $lines, int $i)
     {
 
         if (preg_match('~^\.\s*rr (?<name>\S+)$~u', $lines[$i], $matches)) {

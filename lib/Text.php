@@ -107,7 +107,7 @@ class Text
 
                 $className = $man->getRoffRequestClass($request['request']);
                 if ($className) {
-                    $result    = $className::checkEvaluate($lines, $i, $callerArguments);
+                    $result    = $className::evaluate($request, $lines, $i, $callerArguments);
                     if ($result !== false) {
                         if (isset($result['lines'])) {
                             foreach ($result['lines'] as $l) {

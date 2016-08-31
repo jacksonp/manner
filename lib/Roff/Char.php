@@ -4,11 +4,11 @@
 class Roff_Char
 {
 
-    static function checkEvaluate(array $lines, int $i)
+    static function evaluate(array $request, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.char\s+(.+)\s+(.+)$~u', $lines[$i], $matches)) {
-            return false;
+        if (!preg_match('~^(.+)\s+(.+)$~u', $request['arg_string'], $matches)) {
+            throw new Exception('Unexpected arguments received in Roff_Char:' . $request['arg_string']);
         }
 
         $man = Man::instance();
