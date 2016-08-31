@@ -171,7 +171,7 @@ class Roff_Condition
             return in_array($matches[1], ['TE', 'TS', 'URL']);
         }
 
-        if (preg_match('~^r\s*(\w+)$~u', $condition, $matches)) {
+        if (preg_match('~^r\s*([-\w]+)$~u', $condition, $matches)) {
             return $man->issetRegister($matches[1]);
         }
 
