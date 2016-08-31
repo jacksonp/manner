@@ -70,9 +70,7 @@ class Block_TS
             $line = $lines[$i];
 
             if (Request::is($line, 'TE')) {
-                $parentNode->appendBlockIfHasContent($table);
-
-                return $i;
+                break;
             } elseif ($line === '.T&') {
                 list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
                 $formatRowNum = 0;
@@ -175,7 +173,9 @@ class Block_TS
 
         }
 
-        throw new Exception('.TS without .TE in ' . $parentNode->lastChild->tagName);
+        $parentNode->appendBlockIfHasContent($table);
+
+        return $i;
 
     }
 
