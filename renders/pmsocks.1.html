@@ -21,7 +21,7 @@
 </div>
 <div class="section">
   <h2>IRIX CONFIGURATION</h2>
-  <p>On IRIX, <strong>pmsocks</strong> is simply a shell wrapper that sets the appropriate environment variables and then executes the <em>path</em> program with <em>args</em> arguments (if any). <strong>pmsocks</strong> works by setting the <strong>_RLD_LIST</strong> environment variable (see <strong>rld</strong>(1)) to load a dynamic shared library (see <strong>dso</strong>(5)) containing stubs for “socksified” network library functions; This “socksified” library is installed at <em>/usr/pcp/lib/libpcp_socks.so</em>.
+  <p>On IRIX, <strong>pmsocks</strong> is simply a shell wrapper that sets the appropriate environment variables and then executes the <em>path</em> program with <em>args</em> arguments (if any). <strong>pmsocks</strong> works by setting the <strong>_RLD_LIST</strong> environment variable (see <strong>rld</strong>(1)) to load a dynamic shared library (see <strong>dso</strong>(5)) containing stubs for ``socksified'' network library functions; This ``socksified'' library is installed at <em>/usr/pcp/lib/libpcp_socks.so</em>.
   <p>There are a number of conditions required for this to be successful and the user is strongly advised to read this whole manual page (in particular the <strong>CAVEAT</strong> section below) before attempting to use <strong>pmsocks</strong>.
   <p>When <strong>pmsocks</strong> is installed, the <em>/etc/pcp_socks.conf</em> configuration file is also installed with minimum default settings. These settings specify that socket connections to the local host should be made directly, without contacting any socks server daemon. This is necessary so that PCP clients will be able to establish a local connection to the <strong>X</strong>(1) server, and use PCP connections, possibly via a <strong>sockd</strong> daemon, to monitor remote hosts. In the present implementation of <strong>pmsocks</strong>, non-direct connections to the <strong>X</strong>(1) server do not work, hence if the display is remote, then the remote host must be on the same side of the firewall and <em>/etc/pcp_socks.conf</em> must be configured to connect directly to that host.
   <p>The format of <em>/etc/pcp_socks.conf</em> is identical to <em>/etc/socks.conf</em> as documented in the <em>CSTC-4.2</em> socks distribution. This distribution may be obtained via information contained in the socks FAQ at
@@ -34,7 +34,7 @@
   direct LOCALHOSTNAME 255.255.255.255 # direct localhost<br>
   sockd 0.0.0.0 0.0.0.0 # contact sockd everywhere else<br>
   <br>
-  Note that the string <strong>LOCALHOSTNAME</strong> is dynamically substituted at run time with the name of the local host, as obtained by a call to <strong>gethostname</strong>(2). Assuming the real IP address of the local host is <strong>1.2.3.4</strong> and that a normal class-c subnet is used locally, the most common customization would be to specify direct connections for all hosts on the local subnet, by inserting another “direct” line as follows:<br>
+  Note that the string <strong>LOCALHOSTNAME</strong> is dynamically substituted at run time with the name of the local host, as obtained by a call to <strong>gethostname</strong>(2). Assuming the real IP address of the local host is <strong>1.2.3.4</strong> and that a normal class-c subnet is used locally, the most common customization would be to specify direct connections for all hosts on the local subnet, by inserting another ``direct'' line as follows:<br>
   <br>
   direct LOCALHOSTNAME 255.255.255.255 # direct localhost<br>
   direct 1.2.3.0 255.255.255.0 # direct on local subnet<br>
@@ -69,7 +69,7 @@
     <dt>0)
     <dd>Because <strong>sockd</strong> can only handle TCP/IP sockets, <strong>pmsocks</strong> never attempts to use <strong>sockd</strong> for sockets of type <strong>SOCK_DGRAM</strong> or if the <strong>domain</strong> parameter in a call to <strong>socket</strong>(2) is <strong>PF_UNIX</strong> (unix domain sockets should never need to use <strong>sockd</strong> anyway).
     <dt>1)
-    <dd>Some firewall products do not support “socksified” applications, and in these cases, <strong>pmsocks</strong> cannot be used. In this case, it will be necessary to configure the firewall to allow connections through the firewall for the PMCD communications port, typically tcp/4321.
+    <dd>Some firewall products do not support ``socksified'' applications, and in these cases, <strong>pmsocks</strong> cannot be used. In this case, it will be necessary to configure the firewall to allow connections through the firewall for the PMCD communications port, typically tcp/4321.
     <dt>2)
     <dd>The PCP protocol is TPC/IP-based and works with the socks protocol, but connections which use UDP/DATAGRAM sockets or remote X11 connections via <strong>sockd</strong> may not work. If the remote display host is on the same side of the firewall as the application, this may be circumvented by configuring the remote display host to use direct connections - see above. Also, using X11 display options which use shared memory may hang the X server when used with <strong>pmsocks</strong>.
     <dt>3)
@@ -79,7 +79,7 @@
     <dt>5)
     <dd>When used over a WAN, often the <strong>sockd</strong> daemon will be a long way from the application. This may result in PCP client connections timing out before connecting to the remote <strong>pmcd</strong>. If this is occurring, set the environment variable <strong>PMCD_CONNECT_TIMEOUT</strong> to a higher value than the default (5 seconds). Refer to <strong>PMAPI</strong>(3) for further details about this variable.
     <dt>6)
-    <dd>When using <strong>pmsocks</strong> to connect to <strong>pmcd</strong>(1), but <em>“Connection Refused”</em> error messages are returned, it is not immediately obvious whether <strong>pmcd</strong>(1) is returning the error or <strong>sockd</strong>.
+    <dd>When using <strong>pmsocks</strong> to connect to <strong>pmcd</strong>(1), but <em>``Connection Refused''</em> error messages are returned, it is not immediately obvious whether <strong>pmcd</strong>(1) is returning the error or <strong>sockd</strong>.
   </dl>
 </div>
 <div class="section">

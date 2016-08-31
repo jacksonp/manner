@@ -36,11 +36,11 @@
   <p><em>Tcpdump</em> will, if not run with the <strong>-c</strong> flag, continue capturing packets until it is interrupted by a SIGINT signal (generated, for example, by typing your interrupt character, typically control-C) or a SIGTERM signal (typically generated with the <strong>kill</strong>(1) command); if run with the <strong>-c</strong> flag, it will capture packets until it is interrupted by a SIGINT or SIGTERM signal or the specified number of packets have been processed.
   <p>When <em>tcpdump</em> finishes capturing packets, it will report counts of:
   <blockquote>
-    packets “captured” (this is the number of packets that <em>tcpdump</em> has received and processed);
-    <p>packets “received by filter” (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);
-    <p>packets “dropped by kernel” (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
+    packets ``captured'' (this is the number of packets that <em>tcpdump</em> has received and processed);
+    <p>packets ``received by filter'' (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);
+    <p>packets ``dropped by kernel'' (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
   </blockquote>
-  <p>On platforms that support the SIGINFO signal, such as most BSDs (including Mac OS X) and Digital/Tru64 UNIX, it will report those counts when it receives a SIGINFO signal (generated, for example, by typing your “status” character, typically control-T, although on some platforms, such as Mac OS X, the “status” character is not set by default, so you must set it with <strong>stty</strong>(1) in order to use it) and will continue capturing packets. On platforms that do not support the SIGINFO signal, the same can be achieved by using the SIGUSR1 signal.
+  <p>On platforms that support the SIGINFO signal, such as most BSDs (including Mac OS X) and Digital/Tru64 UNIX, it will report those counts when it receives a SIGINFO signal (generated, for example, by typing your ``status'' character, typically control-T, although on some platforms, such as Mac OS X, the ``status'' character is not set by default, so you must set it with <strong>stty</strong>(1) in order to use it) and will continue capturing packets. On platforms that do not support the SIGINFO signal, the same can be achieved by using the SIGUSR1 signal.
   <p>Reading packets from a network interface may require that you have special privileges; see the <strong>pcap (3PCAP)</strong> man page for details. Reading a saved packet file doesn't require special privileges.
 </div>
 <div class="section">
@@ -99,8 +99,8 @@
     <dt><strong>-i</strong> <em>interface</em>
     <dt><strong>--interface=</strong><em>interface</em>
     <dd>
-      <p>Listen on <em>interface</em>. If unspecified, <em>tcpdump</em> searches the system interface list for the lowest numbered, configured up interface (excluding loopback), which may turn out to be, for example, “eth0”.
-      <p>On Linux systems with 2.2 or later kernels, an <em>interface</em> argument of “any” can be used to capture packets from all interfaces. Note that captures on the “any” device will not be done in promiscuous mode.
+      <p>Listen on <em>interface</em>. If unspecified, <em>tcpdump</em> searches the system interface list for the lowest numbered, configured up interface (excluding loopback), which may turn out to be, for example, ``eth0''.
+      <p>On Linux systems with 2.2 or later kernels, an <em>interface</em> argument of ``any'' can be used to capture packets from all interfaces. Note that captures on the ``any'' device will not be done in promiscuous mode.
       <p>If the <strong>-D</strong> flag is supported, an interface number as printed by that flag can be used as the <em>interface</em> argument, if no interface on the system has that number as a name.
     <dt><strong>-I</strong>
     <dt><strong>--monitor-mode</strong>
@@ -109,7 +109,7 @@
       <p>Note that in monitor mode the adapter might disassociate from the network with which it's associated, so that you will not be able to use any wireless networks with that adapter. This could prevent accessing files on a network server, or resolving host names or network addresses, if you are capturing in monitor mode and are not connected to another network with another adapter.
       <p>This flag will affect the output of the <strong>-L</strong> flag. If <strong>-I</strong> isn't specified, only those link-layer types available when not in monitor mode will be shown; if <strong>-I</strong> is specified, only those link-layer types available when in monitor mode will be shown.
     <dt><strong>--immediate-mode</strong>
-    <dd>Capture in "immediate mode". In this mode, packets are delivered to tcpdump as soon as they arrive, rather than being buffered for efficiency. This is the default when printing packets rather than saving packets to a “savefile” if the packets are being printed to a terminal rather than to a file or pipe.
+    <dd>Capture in "immediate mode". In this mode, packets are delivered to tcpdump as soon as they arrive, rather than being buffered for efficiency. This is the default when printing packets rather than saving packets to a ``savefile'' if the packets are being printed to a terminal rather than to a file or pipe.
     <dt><strong>-j</strong> <em>tstamp_type</em>
     <dt><strong>--time-stamp-type=</strong><em>tstamp_type</em>
     <dd>Set the time stamp type for the capture to <em>tstamp_type</em>. The names to use for the time stamp types are given in <strong>pcap-tstamp</strong>(@MAN_MISC_INFO@); not all the types listed there will necessarily be valid for any given interface.
@@ -131,8 +131,8 @@
       <pre><strong>tcpdump -l | tee dat</strong></pre>
       <p>or
       <pre><strong>tcpdump -l &gt; dat & tail -f dat</strong></pre>
-      <p>Note that on Windows,“line buffered” means “unbuffered”, so that WinDump will write each character individually if <strong>-l</strong> is specified.
-      <p><strong>-U</strong> is similar to <strong>-l</strong> in its behavior, but it will cause output to be “packet-buffered”, so that the output is written to stdout at the end of each packet rather than at the end of each line; this is buffered on all platforms, including Windows.
+      <p>Note that on Windows,``line buffered'' means ``unbuffered'', so that WinDump will write each character individually if <strong>-l</strong> is specified.
+      <p><strong>-U</strong> is similar to <strong>-l</strong> in its behavior, but it will cause output to be ``packet-buffered'', so that the output is written to stdout at the end of each packet rather than at the end of each line; this is buffered on all platforms, including Windows.
     <dt><strong>-L</strong>
     <dt><strong>--list-data-link-types</strong>
     <dd>List the known data link types for the interface, in the specified mode, and exit. The list of known data link types may be dependent on the specified mode; for example, on some platforms, a Wi-Fi interface might support one set of data link types when not in monitor mode (for example, it might support only fake Ethernet headers, or might support 802.11 headers but not support 802.11 headers with radio information) and another set of data link types when in monitor mode (for example, it might support 802.11 headers, or 802.11 headers with radio information, only in monitor mode).
@@ -143,7 +143,7 @@
     <dt><strong>-n</strong>
     <dd>Don't convert addresses (i.e., host addresses, port numbers, etc.) to names.
     <dt><strong>-N</strong>
-    <dd>Don't print domain name qualification of host names. E.g., if you give this flag then <em>tcpdump</em> will print “nic” instead of “nic.ddn.mil”.
+    <dd>Don't print domain name qualification of host names. E.g., if you give this flag then <em>tcpdump</em> will print ``nic'' instead of ``nic.ddn.mil''.
     <dt><strong>-#</strong>
     <dt><strong>--number</strong>
     <dd>Print an optional packet number at the beginning of the line.
@@ -159,7 +159,7 @@
     <dt><strong>-q</strong>
     <dd>Quick (quiet?) output. Print less protocol information so output lines are shorter.
     <dt><strong>-r</strong> <em>file</em>
-    <dd>Read packets from <em>file</em> (which was created with the <strong>-w</strong> option or by other tools that write pcap or pcap-ng files). Standard input is used if <em>file</em> is “-”.
+    <dd>Read packets from <em>file</em> (which was created with the <strong>-w</strong> option or by other tools that write pcap or pcap-ng files). Standard input is used if <em>file</em> is ``-''.
     <dt><strong>-S</strong>
     <dt><strong>--absolute-tcp-sequence-numbers</strong>
     <dd>Print absolute, rather than relative, TCP sequence numbers.
@@ -186,8 +186,8 @@
     <dt><strong>-U</strong>
     <dt><strong>--packet-buffered</strong>
     <dd>
-      <p>If the <strong>-w</strong> option is not specified, make the printed packet output “packet-buffered”; i.e., as the description of the contents of each packet is printed, it will be written to the standard output, rather than, when not writing to a terminal, being written only when the output buffer fills.
-      <p>If the <strong>-w</strong> option is specified, make the saved raw packet output “packet-buffered”; i.e., as each packet is saved, it will be written to the output file, rather than being written only when the output buffer fills.
+      <p>If the <strong>-w</strong> option is not specified, make the printed packet output ``packet-buffered''; i.e., as the description of the contents of each packet is printed, it will be written to the standard output, rather than, when not writing to a terminal, being written only when the output buffer fills.
+      <p>If the <strong>-w</strong> option is specified, make the saved raw packet output ``packet-buffered''; i.e., as each packet is saved, it will be written to the output file, rather than being written only when the output buffer fills.
       <p>The <strong>-U</strong> flag will not be supported if <em>tcpdump</em> was built with an older version of <em>libpcap</em> that lacks the <strong>pcap_dump_flush()</strong> function.
     <dt><strong>-v</strong>
     <dd>
@@ -198,10 +198,10 @@
     <dt><strong>-vvv</strong>
     <dd>Even more verbose output. For example, telnet <strong>SB</strong> ... <strong>SE</strong> options are printed in full. With <strong>-X</strong> Telnet options are printed in hex as well.
     <dt><strong>-V</strong> <em>file</em>
-    <dd>Read a list of filenames from <em>file</em>. Standard input is used if <em>file</em> is “-”.
+    <dd>Read a list of filenames from <em>file</em>. Standard input is used if <em>file</em> is ``-''.
     <dt><strong>-w</strong> <em>file</em>
     <dd>
-      <p>Write the raw packets to <em>file</em> rather than parsing and printing them out. They can later be printed with the -r option. Standard output is used if <em>file</em> is “-”.
+      <p>Write the raw packets to <em>file</em> rather than parsing and printing them out. They can later be printed with the -r option. Standard output is used if <em>file</em> is ``-''.
       <p>This output will be buffered if written to a file or pipe, so a program reading from the file or pipe may not see packets for an arbitrary amount of time after they are received. Use the <strong>-U</strong> flag to cause packets to be written as soon as they are received.
       <p>The MIME type <em>application/vnd.tcpdump.pcap</em> has been registered with IANA for <em>pcap</em> files. The filename extension <em>.pcap</em> appears to be the most commonly used along with <em>.cap</em> and <em>.dmp</em>. <em>Tcpdump</em> itself doesn't check the extension when reading capture files and doesn't add an extension when writing them (it uses magic numbers in the file header instead). However, many operating systems and applications will use the extension if it is present and adding one (e.g. .pcap) is recommended.
       <p>See <strong>pcap-savefile</strong>(@MAN_FILE_FORMATS@) for a description of the file format.
@@ -276,7 +276,7 @@
   <p>On Token Ring networks, the '-e' option causes <em>tcpdump</em> to print the `access control' and `frame control' fields, the source and destination addresses, and the packet length. As on FDDI networks, packets are assumed to contain an LLC packet. Regardless of whether the '-e' option is specified or not, the source routing information is printed for source-routed packets.
   <p>On 802.11 networks, the '-e' option causes <em>tcpdump</em> to print the `frame control' fields, all of the addresses in the 802.11 header, and the packet length. As on FDDI networks, packets are assumed to contain an LLC packet.
   <p><em>(N.B.: The following description assumes familiarity with the SLIP compression algorithm described in RFC-1144.)</em>
-  <p>On SLIP links, a direction indicator (“I” for inbound, “O” for outbound), packet type, and compression information are printed out. The packet type is printed first. The three types are <em>ip</em>, <em>utcp</em>, and <em>ctcp</em>. No further link information is printed for <em>ip</em> packets. For TCP packets, the connection identifier is printed following the type. If the packet is compressed, its encoded header is printed out. The special cases are printed out as <strong>*S+</strong><em>n</em> and <strong>*SA+</strong><em>n</em>, where <em>n</em> is the amount by which the sequence number (or sequence number and ack) has changed. If it is not a special case, zero or more changes are printed. A change is indicated by U (urgent pointer), W (window), A (ack), S (sequence number), and I (packet ID), followed by a delta (+n or -n), or a new value (=n). Finally, the amount of data in the packet and compressed header length are printed.
+  <p>On SLIP links, a direction indicator (``I'' for inbound, ``O'' for outbound), packet type, and compression information are printed out. The packet type is printed first. The three types are <em>ip</em>, <em>utcp</em>, and <em>ctcp</em>. No further link information is printed for <em>ip</em> packets. For TCP packets, the connection identifier is printed following the type. If the packet is compressed, its encoded header is printed out. The special cases are printed out as <strong>*S+</strong><em>n</em> and <strong>*SA+</strong><em>n</em>, where <em>n</em> is the amount by which the sequence number (or sequence number and ack) has changed. If it is not a special case, zero or more changes are printed. A change is indicated by U (urgent pointer), W (window), A (ack), S (sequence number), and I (packet ID), followed by a delta (+n or -n), or a new value (=n). Finally, the amount of data in the packet and compressed header length are printed.
   <p>For example, the following line shows an outbound compressed TCP packet, with an implicit connection identifier; the ack has changed by 6, the sequence number by 49, and the packet ID by 6; there are 3 bytes of data and 6 bytes of compressed header:
   <pre><strong>O ctcp * A+6 S+49 I+6 3 (6)</strong></pre>
   <p><strong>ARP/RARP Packets</strong>
@@ -453,10 +453,10 @@ sushi.1023 &gt; wrl.nfs: NFS request xid 79658
         148 read fh 21,11/12.195 8192 bytes @ 24576
 wrl.nfs &gt; sushi.1023: NFS reply xid 79658
         reply ok 1472 read REG 100664 ids 417/0 sz 29388</pre>
-  <p>(-v also prints the IP header TTL, ID, length, and fragmentation fields, which have been omitted from this example.) In the first line, <em>sushi</em> asks <em>wrl</em> to read 8192 bytes from file 21,11/12.195, at byte offset 24576. <em>Wrl</em> replies `ok'; the packet shown on the second line is the first fragment of the reply, and hence is only 1472 bytes long (the other bytes will follow in subsequent fragments, but these fragments do not have NFS or even UDP headers and so might not be printed, depending on the filter expression used). Because the -v flag is given, some of the file attributes (which are returned in addition to the file data) are printed: the file type (“REG”, for regular file), the file mode (in octal), the uid and gid, and the file size.
+  <p>(-v also prints the IP header TTL, ID, length, and fragmentation fields, which have been omitted from this example.) In the first line, <em>sushi</em> asks <em>wrl</em> to read 8192 bytes from file 21,11/12.195, at byte offset 24576. <em>Wrl</em> replies `ok'; the packet shown on the second line is the first fragment of the reply, and hence is only 1472 bytes long (the other bytes will follow in subsequent fragments, but these fragments do not have NFS or even UDP headers and so might not be printed, depending on the filter expression used). Because the -v flag is given, some of the file attributes (which are returned in addition to the file data) are printed: the file type (``REG'', for regular file), the file mode (in octal), the uid and gid, and the file size.
   <p>If the -v flag is given more than once, even more details are printed.
   <p>Note that NFS requests are very large and much of the detail won't be printed unless <em>snaplen</em> is increased. Try using `<strong>-s 192</strong>' to watch NFS traffic.
-  <p>NFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of “recent” requests, and matches them to the replies using the transaction ID. If a reply does not closely follow the corresponding request, it might not be parsable.<br>
+  <p>NFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the transaction ID. If a reply does not closely follow the corresponding request, it might not be parsable.<br>
   <br>
   <strong>AFS Requests and Replies</strong>
   <p>Transarc AFS (Andrew File System) requests and replies are printed as:<br>
@@ -478,10 +478,10 @@ pike.afsfs &gt; elvis.7001: rx data fs reply rename</pre>
   <p>If the -v flag is given three times, the security index and service id are printed.
   <p>Error codes are printed for abort packets, with the exception of Ubik beacon packets (because abort packets are used to signify a yes vote for the Ubik protocol).
   <p>Note that AFS requests are very large and many of the arguments won't be printed unless <em>snaplen</em> is increased. Try using `<strong>-s 256</strong>' to watch AFS traffic.
-  <p>AFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of “recent” requests, and matches them to the replies using the call number and service ID. If a reply does not closely follow the corresponding request, it might not be parsable.
+  <p>AFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the call number and service ID. If a reply does not closely follow the corresponding request, it might not be parsable.
   <p><strong>KIP AppleTalk (DDP in UDP)</strong>
   <p>AppleTalk DDP packets encapsulated in UDP datagrams are de-encapsulated and dumped as DDP packets (i.e., all the UDP header information is discarded). The file <em>/etc/atalk.names</em> is used to translate AppleTalk net and node numbers to names. Lines in this file have the form
-  <pre><em>number      name</em>
+  <pre><em>number        name</em>
 
 <code>1.254             ether</code>
 16.1            icsd-net

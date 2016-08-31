@@ -311,9 +311,6 @@ class TextContent
             $string = $man->applyCharTranslations($string);
         }
 
-        // Prettier double quotes:
-        $string = Replace::preg('~``(.*?)\'\'~u', '“$1”', $string);
-
         return $string;
 
     }

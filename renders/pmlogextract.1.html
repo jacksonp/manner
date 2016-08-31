@@ -28,11 +28,11 @@
     <dt><strong>-f</strong>
     <dd>For most common uses, all of the input archive logs will have been collected in the same timezone. But if this is not the case, then <strong>pmlogextract</strong> must choose one of the timezones from the input archive logs to be used as the timezone for the output archive log. The default is to use the timezone from the <em>last</em> input archive log. The <strong>-f</strong> option forces the timezone from the <em>first</em> input archive log to be used.
     <dt><strong>-S</strong> <em>starttime</em>
-    <dd>Define the start of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
+    <dd>Define the start of a time window to restrict the samples retrieved or specify a ``natural'' alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
     <dt><strong>-s</strong> <em>samples</em>
     <dd>The argument <em>samples</em> defines the number of samples to be written to <em>output</em>. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmlogextract</strong> will sample until the end of the PCP archive log, or the end of the time window as specified by <strong>-T</strong>, whichever comes first. The <strong>-s</strong> option will override the <strong>-T</strong> option if it occurs sooner.
     <dt><strong>-T</strong> <em>endtime</em>
-    <dd>Define the termination of a time window to restrict the samples retrieved or specify a “natural” alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
+    <dd>Define the termination of a time window to restrict the samples retrieved or specify a ``natural'' alignment of the output sample times; refer to <strong>PCPIntro</strong>(1). See also the <strong>-w</strong> option.
     <dt><strong>-v</strong> <em>volsamples</em>
     <dd>
       <p>The <em>output</em> archive log is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogextract</strong> to start a new volume after <em>volsamples</em> log records have been written to the archive log.
@@ -89,7 +89,7 @@
       <td>01:10.000
       <td>last record from second input archive log
   </table>
-  <p>The time period where the performance data is missing starts just after 09:15 and ends just before 09:20. When the output archive log is processed with any of the PCP reporting tools, the <em>&lt;mark&gt;</em> record is used to indicate a period of missing data. For example using the output archive above, imagine one was reporting the average I/O rate at 30 minute intervals aligned on the hour and half-hour. The I/O count metric is a counter, so the average I/O rate requires two valid values from consecutive sample times. There would be values for all the intervals ending at 09:00, then no values at 09:30 because of the <em>&lt;mark&gt;</em> record, then no values at 10:00 because the “prior” value at 09:30 is not available, then the rate would be reported again at 10:30 and continue every 30 minutes until the last reported value at 01:00.
+  <p>The time period where the performance data is missing starts just after 09:15 and ends just before 09:20. When the output archive log is processed with any of the PCP reporting tools, the <em>&lt;mark&gt;</em> record is used to indicate a period of missing data. For example using the output archive above, imagine one was reporting the average I/O rate at 30 minute intervals aligned on the hour and half-hour. The I/O count metric is a counter, so the average I/O rate requires two valid values from consecutive sample times. There would be values for all the intervals ending at 09:00, then no values at 09:30 because of the <em>&lt;mark&gt;</em> record, then no values at 10:00 because the ``prior'' value at 09:30 is not available, then the rate would be reported again at 10:30 and continue every 30 minutes until the last reported value at 01:00.
   <p>The presence of <em>&lt;mark&gt;</em> records in a PCP archive log can be established using <strong>pmdumplog</strong>(1) where a timestamp and the annotation <strong>&lt;mark&gt;</strong> is used to indicate a <em>&lt;mark&gt;</em> record.
 </div>
 <div class="section">

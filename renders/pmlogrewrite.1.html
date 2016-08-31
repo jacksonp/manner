@@ -27,7 +27,7 @@
     <dt><strong>-C</strong>
     <dd>Parse the rewriting rules and quit. <em>outlog</em> is not created. When <strong>-C</strong> is specified, this also sets <strong>-v</strong> and <strong>-w</strong> so that all warnings and verbose messages are displayed as <em>config</em> is parsed.
     <dt><strong>-c</strong> <em>config</em>
-    <dd>If <em>config</em> is a file or symbolic link, read and parse rewriting rules from there. If <em>config</em> is a directory, then all of the files or symbolic links in that directory (excluding those beginning with a period “.”) will be used to provide the rewriting rules. Multiple <strong>-c</strong> options are allowed.
+    <dd>If <em>config</em> is a file or symbolic link, read and parse rewriting rules from there. If <em>config</em> is a directory, then all of the files or symbolic links in that directory (excluding those beginning with a period ``.'') will be used to provide the rewriting rules. Multiple <strong>-c</strong> options are allowed.
     <dt><strong>-d</strong>
     <dd>Desperate mode. Normally if a fatal error occurs, all trace of the partially written PCP archive <em>outlog</em> is removed. With the <strong>-d</strong> option, the partially created <em>outlog</em> archive log is not removed.
     <dt><strong>-i</strong>
@@ -35,7 +35,7 @@
     <dt><strong>-q</strong>
     <dd>Quick mode, where if there are no rewriting actions to be performed (none of the global data, instance domains or metrics from <em>inlog</em> will be changed), then <strong>pmlogrewrite</strong> will exit (with status 0, so success) immediately after parsing the configuration file(s) and <em>outlog</em> is not created.
     <dt><strong>-s</strong>
-    <dd>When the “units” of a metric are changed, if the dimension in terms of space, time and count is unaltered, then the scaling factor is being changed, e.g. BYTE to KBYTE, or MSEC<sup>-1</sup> to USEC<sup>-1</sup>, or the composite MBYTE.SEC<sup>-1</sup> to KBYTE.USEC<sup>-1</sup>. The motivation may be (a) that the original metadata was wrong but the values in <em>inlog</em> are correct, or (b) the metadata is changing so the values need to change as well. The default <strong>pmlogrewrite</strong> behaviour matches case (a). If case (b) applies, then use the <strong>-s</strong> option and the values of all the metrics with a scale factor change in each result will be rescaled. For finer control over value rescaling refer to the <strong><em>RESCALE</em></strong> option for the <strong><em>UNITS</em></strong> clause of the metric rewriting rule described below.
+    <dd>When the ``units'' of a metric are changed, if the dimension in terms of space, time and count is unaltered, then the scaling factor is being changed, e.g. BYTE to KBYTE, or MSEC<sup>-1</sup> to USEC<sup>-1</sup>, or the composite MBYTE.SEC<sup>-1</sup> to KBYTE.USEC<sup>-1</sup>. The motivation may be (a) that the original metadata was wrong but the values in <em>inlog</em> are correct, or (b) the metadata is changing so the values need to change as well. The default <strong>pmlogrewrite</strong> behaviour matches case (a). If case (b) applies, then use the <strong>-s</strong> option and the values of all the metrics with a scale factor change in each result will be rescaled. For finer control over value rescaling refer to the <strong><em>RESCALE</em></strong> option for the <strong><em>UNITS</em></strong> clause of the metric rewriting rule described below.
     <dt><strong>-v</strong>
     <dd>Increase verbosity of diagnostic output.
     <dt><strong>-w</strong>
@@ -47,7 +47,7 @@
   <h2>REWRITING RULES SYNTAX</h2>
   <p>A configuration file contains zero or more rewriting rules as defined below.
   <p>Keywords and special punctuation characters are shown below in <strong><em>bolditalic</em></strong> font and are case-insensitive, so <strong><em>METRIC</em></strong>, <strong><em>metric</em></strong> and <strong><em>Metric</em></strong> are all equivalent in rewriting rules.
-  <p>The character “#” introduces a comment and the remainder of the line is ignored. Otherwise the input is relatively free format with optional white space (spaces, tabs or newlines) between lexical items in the rules.
+  <p>The character ``#'' introduces a comment and the remainder of the line is ignored. Otherwise the input is relatively free format with optional white space (spaces, tabs or newlines) between lexical items in the rules.
   <p>A <strong>global</strong> rewriting rule has the form:
   <p><strong><em>GLOBAL</em></strong> <strong><em>{</em></strong> <em>globalspec</em> ... <strong><em>}</em></strong>
   <p>where <em>globalspec</em> is zero or more of the following clauses:
@@ -55,14 +55,14 @@
     <p><strong><em>HOSTNAME</em></strong> <strong><em>-&gt;</em></strong> <em>hostname</em>
     <p>Modifies the label records in the <em>outlog</em> PCP archive, so that the metrics will appear to have been collected from the host <em>hostname</em>.
     <p><strong><em>TIME</em></strong> <strong><em>-&gt;</em></strong> <em>delta</em>
-    <p>Both metric values and the instance domain metadata in a PCP archive carry timestamps. This clause forces all the timestamps to be adjusted by <em>delta</em>, where <em>delta</em> is an optional sign “+” (the default) or “-”, an optional number of hours followed by a colon “:”, an optional number of minutes followed by a colon “:”, a number of seconds, an optional fraction of seconds following a period “.”. The simplest example would be “30” to increase the timestamps by 30 seconds. A more complex example would be “-23:59:59.999” to move the timestamps backwards by one millisecond less than one day.
+    <p>Both metric values and the instance domain metadata in a PCP archive carry timestamps. This clause forces all the timestamps to be adjusted by <em>delta</em>, where <em>delta</em> is an optional sign ``+'' (the default) or ``-'', an optional number of hours followed by a colon ``:'', an optional number of minutes followed by a colon ``:'', a number of seconds, an optional fraction of seconds following a period ``.''. The simplest example would be ``30'' to increase the timestamps by 30 seconds. A more complex example would be ``-23:59:59.999'' to move the timestamps backwards by one millisecond less than one day.
     <p><strong><em>TZ</em></strong> <strong><em>-&gt;</em></strong> <strong><em>"</em></strong><em>timezone</em><strong><em>"</em></strong>
     <p>Modifies the label records in the <em>outlog</em> PCP archive, so that the metrics will appear to have been collected from a host with a local timezone of <em>timezone</em>. <em>timezone</em> must be enclosed in quotes, and should conform to the valid timezone syntax rules for the local platform.
   </div>
   <p>An <strong>indom</strong> rewriting rule modifies an instance domain and has the form:
   <p><strong><em>INDOM</em></strong> <em>domain</em><strong><em>.</em></strong><em>serial</em> <strong><em>{</em></strong> <em>indomspec</em> ... <strong><em>}</em></strong>
   <p>where <em>domain</em> and <em>serial</em> identify one or more existing instance domains from <em>inlog</em> - typically <em>domain</em> would be an integer in the range 1 to 510 and <em>serial</em> would be an integer in the range 0 to 4194304.
-  <p>As a special case <em>serial</em> could be an asterisk “*” which means the rule applies to every instance domain with a domain number of <em>domain</em>.
+  <p>As a special case <em>serial</em> could be an asterisk ``*'' which means the rule applies to every instance domain with a domain number of <em>domain</em>.
   <p>If a designated instance domain is not in <em>inlog</em> the rule has no effect.
   <p>The <em>indomspec</em> is zero or more of the following clauses:
   <div class="indent-26">
@@ -86,7 +86,7 @@ eek urk</pre>
     </div>
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
     <div class="indent-26">
-      <p>Modifies the metadata for the instance domain and every metric associated with the instance domain. As a special case, <em>newserial</em> could be an asterisk “*” which means use <em>serial</em> from the <strong>indom</strong> rewriting rule, although this is most useful when <em>serial</em> is also an asterisk. So for example:<br>
+      <p>Modifies the metadata for the instance domain and every metric associated with the instance domain. As a special case, <em>newserial</em> could be an asterisk ``*'' which means use <em>serial</em> from the <strong>indom</strong> rewriting rule, although this is most useful when <em>serial</em> is also an asterisk. So for example:<br>
       <code>indom 29.* { indom -&gt; 109.* }</code> will move all instance domains from domain 29 to domain 109.
     </div>
     <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>DUPLICATE</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
@@ -104,7 +104,7 @@ eek urk</pre>
   <p>A <strong>metric</strong> rewriting rule has the form:
   <p><strong><em>METRIC</em></strong> <em>metricid</em> <strong><em>{</em></strong> <em>metricspec</em> ... <strong><em>}</em></strong>
   <p>where <em>metricid</em> identifies one or more existing metrics from <em>inlog</em> using either a metric name, or the internal encoding for a metric's PMID as <em>domain</em><strong><em>.</em></strong><em>cluster</em><strong><em>.</em></strong><em>item</em>. In the latter case, typically <em>domain</em> would be an integer in the range 1 to 510, <em>cluster</em> would be an integer in the range 0 to 4095, and <em>item</em> would be an integer in the range 0 to 1023.
-  <p>As special cases <em>item</em> could be an asterisk “*” which means the rule applies to every metric with a domain number of <em>domain</em> and a cluster number of <em>cluster</em>, or <em>cluster</em> could be an asterisk which means the rule applies to every metric with a domain number of <em>domain</em> and an item number of <em>item</em>, or both <em>cluster</em> and <em>item</em> could be asterisks, and rule applies to every metric with a domain number of <em>domain</em>.
+  <p>As special cases <em>item</em> could be an asterisk ``*'' which means the rule applies to every metric with a domain number of <em>domain</em> and a cluster number of <em>cluster</em>, or <em>cluster</em> could be an asterisk which means the rule applies to every metric with a domain number of <em>domain</em> and an item number of <em>item</em>, or both <em>cluster</em> and <em>item</em> could be asterisks, and rule applies to every metric with a domain number of <em>domain</em>.
   <p>If a designated metric is not in <em>inlog</em> the rule has no effect.
   <p>The <em>metricspec</em> is zero or more of the following clauses:
   <div class="indent-26">
@@ -153,7 +153,7 @@ metric sample.bin { indom -&gt; 123.2 }</pre>
     </div>
     <p><strong><em>PMID</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newcluster</em><strong><em>.</em></strong><em>newitem</em>
     <div class="indent-26">
-      <p>Modifies the metadata and results to renumber the metric's PMID. As special cases, <em>newcluster</em> could be an asterisk “*” which means use <em>cluster</em> from the <strong>metric</strong> rewriting rule and/or <em>item</em> could be an asterisk which means use <em>item</em> from the <strong>metric</strong> rewriting rule. This is most useful when <em>cluster</em> and/or <em>item</em> is also an asterisk. So for example:<br>
+      <p>Modifies the metadata and results to renumber the metric's PMID. As special cases, <em>newcluster</em> could be an asterisk ``*'' which means use <em>cluster</em> from the <strong>metric</strong> rewriting rule and/or <em>item</em> could be an asterisk which means use <em>item</em> from the <strong>metric</strong> rewriting rule. This is most useful when <em>cluster</em> and/or <em>item</em> is also an asterisk. So for example:<br>
       <code>metric 30.*.* { pmid -&gt; 123.*.* }</code> will move all metrics from domain 30 to domain 123.
     </div>
     <p><strong><em>SEM</em></strong> <strong><em>-&gt;</em></strong> <em>newsem</em>
@@ -193,7 +193,7 @@ indom 60.2 {
     inst 15 -&gt; 900 iname "15 minute" -&gt; "900 second"
 }</pre>
   </div>
-  <p>If we decide to split the “proc” metrics out of the Linux PMDA, this will involve changing the domain number for the PMID of these metrics and the associated instance domains. The rules below would rewrite an old archive to match the changes after the PMDA split.
+  <p>If we decide to split the ``proc'' metrics out of the Linux PMDA, this will involve changing the domain number for the PMID of these metrics and the associated instance domains. The rules below would rewrite an old archive to match the changes after the PMDA split.
   <div class="indent-4">
     <pre># all Linux proc metrics are in 7 clusters
 metric 60.8.* { pmid -&gt; 123.*.* }

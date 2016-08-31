@@ -24,11 +24,11 @@
   <p>In the special case where only a single input archive needs to be merged, <strong>pmlogmv</strong>(1) is used to rename the archive, rather than copy the input archive using <strong>pmlogger_merge</strong>.
   <p>The <strong>-M</strong> option may be used to disable archive merging (or renaming) and rewriting (<strong>-M</strong> implies <strong>-r</strong>). This is most useful in cases where the archives are being incrementally copied to a remote repository, e.g. using <strong>rsync</strong>(1). Merging, renaming and rewriting all risk an increase in the synchronization load, especially immediately after <strong>pmlogger_daily</strong> has run, so <strong>-M</strong> may be useful in these cases.
   <p>To assist with debugging or diagnosing intermittent failures the <strong>-t</strong> option may be used. This will turn on very verbose tracing (<strong>-VV</strong>) and capture the trace output in a file named <strong>$PCP_LOG_DIR/pmlogger/daily.</strong><em>datestamp</em><strong>.trace,</strong> where <em>datestamp</em> is the time <strong>pmlogger_daily</strong> was run in the format YYYYMMDD.HH.MM. In addition, the <em>want</em> argument will ensure that trace files created with <strong>-t</strong> will be kept for <em>want</em> days and then discarded.
-  <p>In addition, if the PCP “notices” file (<strong>$PCP_LOG_DIR/NOTICES</strong>) is larger than 20480 bytes, <strong>pmlogger_daily</strong> will rename the file with a “.old” suffix, and start a new “notices” file. The rotate threshold may be changed from 20480 to <em>size</em> bytes using the <strong>-s</strong> option.
-  <p>Use of the <strong>-m</strong> option causes <strong>pmlogger_daily</strong> to construct a summary of the “notices” file entries which were generated in the last 24 hours, and e-mail that summary to the set of space-separated <em>addresses</em>. This daily summary is stored in the file <strong>$PCP_LOG_DIR/NOTICES.daily</strong>, which will be empty when no new “notices” entries were made in the previous 24 hour period.
+  <p>In addition, if the PCP ``notices'' file (<strong>$PCP_LOG_DIR/NOTICES</strong>) is larger than 20480 bytes, <strong>pmlogger_daily</strong> will rename the file with a ``.old'' suffix, and start a new ``notices'' file. The rotate threshold may be changed from 20480 to <em>size</em> bytes using the <strong>-s</strong> option.
+  <p>Use of the <strong>-m</strong> option causes <strong>pmlogger_daily</strong> to construct a summary of the ``notices'' file entries which were generated in the last 24 hours, and e-mail that summary to the set of space-separated <em>addresses</em>. This daily summary is stored in the file <strong>$PCP_LOG_DIR/NOTICES.daily</strong>, which will be empty when no new ``notices'' entries were made in the previous 24 hour period.
   <p>The script <strong>$PCP_BINADM_DIR/pmlogger_daily</strong> could be copied and modified to implement a site-specific procedure for end-of-week and/or end-of-month management for a set of PCP archives.
   <p><strong>pmlogger_check</strong> may be run at any time, and is intended to check that the desired set of <strong>pmlogger</strong>(1) processes are running, and if not to re-launch any failed loggers. Use of the <strong>-s</strong> option provides the reverse functionality, allowing the set of <strong>pmlogger</strong> processes to be cleanly shutdown. Use of the <strong>-C</strong> option queries the system service runlevel information for <strong>pmlogger</strong>, and uses that to determine whether to start processes.
-  <p>The <strong>-T</strong> option provides a terser form of output for <strong>pmlogger_check</strong> that is most suitable for a <em>pmlogger</em> “farm” where many instances of <em>pmlogger</em> are expected to be running.
+  <p>The <strong>-T</strong> option provides a terser form of output for <strong>pmlogger_check</strong> that is most suitable for a <em>pmlogger</em> ``farm'' where many instances of <em>pmlogger</em> are expected to be running.
   <p><strong>pmlogger_merge</strong> is a wrapper script for <strong>pmlogextract</strong>(1) that merges all of the archive logs matching the <em>input-basename</em> arguments, and creates a new archive using <em>output-name</em> as the base name for the physical files that constitute an archive log. The <em>input-basename</em> arguments may contain meta characters in the style of <strong>sh</strong>(1). If specified, the <strong>-f</strong> option causes all of the input files to be removed once the output archive has been created.
   <p><strong>pmlogger_merge</strong> is used by <strong>pmlogger_daily</strong>.
   <p>Both <strong>pmlogger_daily</strong> and <strong>pmlogger_check</strong> are controlled by PCP logger control file(s) that specifies the <strong>pmlogger</strong> instances to be managed. The default control file is <strong>$PCP_PMLOGGERCONTROL_PATH</strong>, but an alternate may be specified using the <strong>-c</strong> option. If the directory <strong>$PCP_PMLOGGERCONTROL_PATH</strong>.d (or <em>control</em>.d from the <strong>-c</strong> option) exists, then the contents of any additional control files therein will be appended to the main control file (which must exist).
@@ -36,10 +36,10 @@
   <p>The control file(s) should be customized according to the following rules that define for the current version (1.1) of the control file format.
   <dl class="indent-52">
     <dt>1.
-    <dd>Lines beginning with a “#” are comments.
+    <dd>Lines beginning with a ``#'' are comments.
     <dt>2.
     <dd>
-      <p>Lines beginning with a “$” are assumed to be assignments to environment variables in the style of <strong>sh</strong>(1), and all text following the “$” will be <strong>eval</strong>'ed by the script reading the control file, and the corresponding variable exported into the environment. This is particularly useful to set and export variables into the environment of the administrative scripts, e.g.<br>
+      <p>Lines beginning with a ``$'' are assumed to be assignments to environment variables in the style of <strong>sh</strong>(1), and all text following the ``$'' will be <strong>eval</strong>'ed by the script reading the control file, and the corresponding variable exported into the environment. This is particularly useful to set and export variables into the environment of the administrative scripts, e.g.<br>
       <pre>$ PMCD_CONNECT_TIMEOUT=20</pre>
     <dt>3.
     <dd>
@@ -108,7 +108,7 @@ boing  n  n  $PCP_LOG_DIR/pmlogger/boing  -c ./pmlogger.config</code></pre>
     <dt><strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em><strong>/Latest</strong>
     <dd>PCP archive folio created by <strong>mkaf</strong>(1) for the most recently launched archive containing performance metrics from the host <em>hostname</em>
     <dt><strong>$PCP_LOG_DIR/NOTICES</strong>
-    <dd>PCP “notices” file used by <strong>pmie</strong>(1) and friends
+    <dd>PCP ``notices'' file used by <strong>pmie</strong>(1) and friends
   </dl>
 </div>
 <div class="section">

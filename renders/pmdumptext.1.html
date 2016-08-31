@@ -17,11 +17,11 @@
   <p>Unless directed to another host by the <strong>-h</strong> option, or to one or more sets of archives by the <strong>-a</strong> option, <strong>pmdumptext</strong> will contact <strong>pmcd</strong>(1) on the local host to obtain the required information.
   <p><strong>pmdumptext</strong> may be run in interactive mode with the <strong>-i</strong> option which displays the values in equal width columns. Without this option, no attempt is made to line up any values allowing the output to be easily parsed by other applications.
   <p>The format of the output can be further controlled by changing the precision of the values with <strong>-P</strong>, the width of the columns with <strong>-w</strong>, and the format of the values with the <strong>-G</strong> and <strong>-F</strong> options for the shortest of scientific or fixed digits, and a fixed width format, respectively.
-  <p>The <em>metrics</em> to be dumped can be listed on the command line, in a <em>config</em> file, or piped to <strong>pmdumptext</strong> on <em>stdin</em>. A metric consists of an optional source (host or archive), the metric name, and an optional instance list immediately after the name. A colon is used to separate a host name from the metric, and a forward slash (“/”) to separate an archive name from the metric. Instances are enclosed in square brackets and a comma is used between each instance if more than one is stated. For example, some legal metrics are:
+  <p>The <em>metrics</em> to be dumped can be listed on the command line, in a <em>config</em> file, or piped to <strong>pmdumptext</strong> on <em>stdin</em>. A metric consists of an optional source (host or archive), the metric name, and an optional instance list immediately after the name. A colon is used to separate a host name from the metric, and a forward slash (``/'') to separate an archive name from the metric. Instances are enclosed in square brackets and a comma is used between each instance if more than one is stated. For example, some legal metrics are:
   <pre>kernel.all.cpu.idle
 myhost:kernel.all.cpu.idle[cpu0,cpu3]
 /path/to/myarchive/kernel.all.cpu.idle[cpu1]</pre>
-  <p>The format of a metric is further described in <strong>PCPIntro</strong>(1). A normalization value may optionally follow a metric name in a <em>config</em> file or on <em>stdin</em>. The metric value will be scaled by this value. For example, if the file system “/dev/root” has a capacity of 1965437 bytes, then the percentage of the file system that is used could be dumped with this <em>config</em>:
+  <p>The format of a metric is further described in <strong>PCPIntro</strong>(1). A normalization value may optionally follow a metric name in a <em>config</em> file or on <em>stdin</em>. The metric value will be scaled by this value. For example, if the file system ``/dev/root'' has a capacity of 1965437 bytes, then the percentage of the file system that is used could be dumped with this <em>config</em>:
   <pre>filesys.used[/dev/root] 19654.37</pre>
   <p>A normalization value may not be used with <em>metrics</em> specified as command line arguments.
   <p>A metric name is not required to be a leaf node in the Performance Metrics Name Space (PMNS), except when one or more instances are specified. For example, to dump all file system metrics, only <em>filesys</em> is required to dump <em>filesys.capacity</em>, <em>filesys.used</em>, <em>filesys.free</em> etc.
@@ -36,7 +36,7 @@ myhost:kernel.all.cpu.idle[cpu0,cpu3]
     <dt><strong>-C</strong>
     <dd>Exit before dumping any values, but after parsing the metrics. Metrics, instances, normals and units are listed if <strong>-m</strong>, <strong>-l</strong>, <strong>-N</strong> and/or <strong>-u</strong> are specified.
     <dt><strong>-c</strong>
-    <dd>If no <em>metrics</em> are listed on the command line, a <em>config</em> file can be used to specify the <em>metrics</em> to be dumped. Unlike the command line <em>metrics</em>, each metric may be followed by a normalization value. Empty lines and lines that begin with “#” are ignored.
+    <dd>If no <em>metrics</em> are listed on the command line, a <em>config</em> file can be used to specify the <em>metrics</em> to be dumped. Unlike the command line <em>metrics</em>, each metric may be followed by a normalization value. Empty lines and lines that begin with ``#'' are ignored.
     <dt><strong>-d</strong>
     <dd>Specify the <em>delimiter</em> that separates each column of output. The <em>delimiter</em> may only be a single character.
     <dt><strong>-f</strong>
@@ -76,9 +76,9 @@ myhost:kernel.all.cpu.idle[cpu0,cpu3]
     <dt><strong>-u</strong>
     <dd>Output the units of the metrics before the first values, but after the metric names if <strong>-m</strong> is also specified.
     <dt><strong>-U</strong>
-    <dd>Change the output when values are unavailable to <em>string</em>. The default string is “?”.
+    <dd>Change the output when values are unavailable to <em>string</em>. The default string is ``?''.
     <dt><strong>-w</strong>
-    <dd>Set the column width of the output. Strings will be truncated to this width, and maybe postfixed by “...” if the <em>width</em> is greater than 5.
+    <dd>Set the column width of the output. Strings will be truncated to this width, and maybe postfixed by ``...'' if the <em>width</em> is greater than 5.
     <dt><strong>-X</strong>
     <dd>Output the column number and complete metric names, one-per-line, both before dumping the first set of values and again each time the header is repeated.
     <dt><strong>-z</strong>
@@ -100,7 +100,7 @@ myhost:kernel.all.cpu.idle[cpu0,cpu3]
     <dt>o
     <dd>All metrics with space units (bytes to terabytes) are scaled to bytes. Note that 1024 bytes with be represented as 1.02K, not 1.00K.
     <dt>o
-    <dd>Metrics that are counters with time units (nanoseconds to hours) represent time utilization over the sample interval. The unit strings of such metrics is changed to “Time Utilization” or abbreviated to “util” and the values are normalized to the range zero to one.
+    <dd>Metrics that are counters with time units (nanoseconds to hours) represent time utilization over the sample interval. The unit strings of such metrics is changed to ``Time Utilization'' or abbreviated to ``util'' and the values are normalized to the range zero to one.
   </dl>
 </div>
 <div class="section">

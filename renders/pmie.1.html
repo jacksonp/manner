@@ -49,7 +49,7 @@
     <dt><strong>-U</strong> <em>username</em>
     <dd>User account under which to run <strong>pmie</strong>. The default is the current user account for interactive use. When run as a daemon, the unprivileged "pcp" account is used in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-v</strong>
-    <dd>Unless one of the verbose options <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong> appears on the command line, expressions are evaluated silently, the only output is as a result of any actions being executed. In the verbose mode, specified using the <strong>-v</strong> flag, the value of each expression is printed as it is evaluated. The values are in canonical units; bytes in the dimension of “space”, seconds in the dimension of “time” and events in the dimension of “count”. See <strong>pmLookupDesc</strong>(3) for details of the supported dimension and scaling mechanisms for performance metrics. The verbose mode is useful in monitoring the value of given expressions, evaluating derived performance metrics, passing these values on to other tools for further processing and in debugging new expressions.
+    <dd>Unless one of the verbose options <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong> appears on the command line, expressions are evaluated silently, the only output is as a result of any actions being executed. In the verbose mode, specified using the <strong>-v</strong> flag, the value of each expression is printed as it is evaluated. The values are in canonical units; bytes in the dimension of ``space'', seconds in the dimension of ``time'' and events in the dimension of ``count''. See <strong>pmLookupDesc</strong>(3) for details of the supported dimension and scaling mechanisms for performance metrics. The verbose mode is useful in monitoring the value of given expressions, evaluating derived performance metrics, passing these values on to other tools for further processing and in debugging new expressions.
     <dt><strong>-V</strong>
     <dd>This option has the same effect as the <strong>-v</strong> option, except that the name of the host and instance (if applicable) are printed as well as expression values.
     <dt><strong>-W</strong>
@@ -61,7 +61,7 @@
     <dt><strong>-z</strong>
     <dd>Change the reporting timezone to the timezone of the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> option or the first named set of archives (as described above for the <strong>-a</strong> option).
   </dl>
-  <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong>, and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a “natural” alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
+  <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong>, and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a ``natural'' alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
   <p>Output from <strong>pmie</strong> is directed to standard output and standard error as follows:
   <dl class="indent-5">
     <dt><strong>stdout</strong>
@@ -160,9 +160,9 @@ otherwise -&gt;
   <p>Operands are performance metric names (see <strong>pmns</strong>(5)) and the normal literal constants.
   <p>Operands involving performance metrics may produce sets of values, as a result of enumeration in the dimensions of <strong>hosts</strong>, <strong>instances</strong> and <strong>time</strong>. Special qualifiers may appear after a performance metric name to define the enumeration in each dimension. For example,
   <p><code>kernel.percpu.cpu.user :foo :bar #cpu0 @0..2</code>
-  <p>defines 6 values corresponding to the time spent executing in user mode on CPU 0 on the hosts “foo” and “bar” over the last 3 consecutive samples. The default interpretation in the absence of <strong>:</strong> (host), <strong>#</strong> (instance) and <strong>@</strong> (time) qualifiers is all instances at the most recent sample time for the default source of PCP performance metrics.
+  <p>defines 6 values corresponding to the time spent executing in user mode on CPU 0 on the hosts ``foo'' and ``bar'' over the last 3 consecutive samples. The default interpretation in the absence of <strong>:</strong> (host), <strong>#</strong> (instance) and <strong>@</strong> (time) qualifiers is all instances at the most recent sample time for the default source of PCP performance metrics.
   <p>Host and instance names that do not follow the rules for variables in programming languages, ie. alphabetic optionally followed by alphanumerics, should be enclosed in single quotes.
-  <p>Expression evaluation follows the law of “least surprises”. Where performance metrics have the semantics of a counter, <strong>pmie</strong> will automatically convert to a rate based upon consecutive samples and the time interval between these samples. All numeric expressions are evaluated in double precision, and where appropriate, automatically scaled into canonical units of “bytes”, “seconds” and “counts”.
+  <p>Expression evaluation follows the law of ``least surprises''. Where performance metrics have the semantics of a counter, <strong>pmie</strong> will automatically convert to a rate based upon consecutive samples and the time interval between these samples. All numeric expressions are evaluated in double precision, and where appropriate, automatically scaled into canonical units of ``bytes'', ``seconds'' and ``counts''.
   <p>A <strong>rule</strong> is a special form of expression that specifies a condition or logical expression, a special operator (<strong>-&gt;</strong>) and actions to be performed when the condition is found to be true.
   <p>The following table summarizes the basic <strong>pmie</strong> operators:
   <table class="tbl">
@@ -228,12 +228,12 @@ otherwise -&gt;
       <td class="cw(4i)">Explanation
     <tr class="border-bottom">
       <td class="f(C) bold">match_inst
-      <td>For each value of the logical expression that is “true”, the result is “true” if the associated instance name matches the regular expression. Otherwise the result is “false”.
+      <td>For each value of the logical expression that is ``true'', the result is ``true'' if the associated instance name matches the regular expression. Otherwise the result is ``false''.
     <tr>
       <td class="f(C) bold">nomatch_inst
-      <td>For each value of the logical expression that is “true”, the result is “true” if the associated instance name does <strong>not</strong> match the regular expression. Otherwise the result is “false”.
+      <td>For each value of the logical expression that is ``true'', the result is ``true'' if the associated instance name does <strong>not</strong> match the regular expression. Otherwise the result is ``false''.
   </table>
-  <p>For example, the expression below will be “true” for disks attached to controllers 2 or 3 performing more than 20 operations per second:
+  <p>For example, the expression below will be ``true'' for disks attached to controllers 2 or 3 performing more than 20 operations per second:
   <pre>match_inst "^dks[23]d" disk.dev.total &gt; 20;</pre>
   <p>The following aggregate operators map from an arithmetic expression to an arithmetic expression of lower dimension.
   <table class="tbl">
