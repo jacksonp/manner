@@ -11,8 +11,7 @@ class Roff_Char
             throw new Exception('Unexpected arguments received in Roff_Char:' . $request['arg_string']);
         }
 
-        $man = Man::instance();
-        $man->setEntity($matches[1], $matches[2]);
+        Man::instance()->setEntity($matches[1], $matches[2]);
 
         return ['i' => $i];
 

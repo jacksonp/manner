@@ -7,13 +7,16 @@ class Roff_Register
     static function evaluate(array $request, array $lines, int $i)
     {
 
-        if (preg_match('~^\.\s*rr (?<name>\S+)$~u', $lines[$i], $matches)) {
-            Man::instance()->unsetRegister($matches['name']);
+        if ($request['request'] === 'rr') {
+            Man::instance()->unsetRegister($request['arg_string']);
 
             return ['i' => $i];
         }
 
-        if (!preg_match('~^\.\s*nr (?<name>\S+) (?<val>.+)$~u', $lines[$i], $matches)) {
+        if (
+          $request['request'] !== 'nr' or
+          !preg_match('~^(?<name>\S+) (?<val>.+)$~u', $request['arg_string'], $matches)
+        ) {
             return false;
         }
 

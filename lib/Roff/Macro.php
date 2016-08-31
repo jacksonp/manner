@@ -7,8 +7,8 @@ class Roff_Macro
     static function evaluate(array $request, array $lines, int $i)
     {
 
-        if (!preg_match('~^\.\s*de1? ([^\s"]+)\s*$~u', $lines[$i], $matches)) {
-            return false;
+        if (!preg_match('~^([^\s"]+)\s*$~u', $request['arg_string'], $matches)) {
+            throw new Exception('Unexpected argument in Roff_Macro: ' . $request['arg_string']);
         }
 
         $numLines   = count($lines);
