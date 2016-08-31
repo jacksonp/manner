@@ -4,7 +4,7 @@
 class Block_RS
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
+    static function checkAppend(HybridNode $parentNode, array &$lines, int $i, array $arguments)
     {
 
         $thisIndent = '';
@@ -50,6 +50,12 @@ class Block_RS
                 $thisIndent = 'GARBAGE';
             }
             $blockLines[] = $line;
+        }
+
+        // Hack for duplicity.1
+        if (count($blockLines) > 0 and $blockLines[count($blockLines) - 1] === '.PP') {
+            $lines[$i] = '.PP';
+            --$i;
         }
 
         if (count($blockLines) > 0) {
