@@ -10,51 +10,58 @@ class Roff_Condition
     static function evaluate(array $request, array &$lines, int $i, $macroArguments)
     {
 
-        if (preg_match(
-          '~^[\.\']if\s+' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
-          $lines[$i], $matches)
-        ) {
-            return self::ifBlock($lines, $i, $matches[3],
-              self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments), $macroArguments);
-        }
+        if ($request['request'] === 'if') {
 
-        if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $lines[$i], $matches)) {
-            return self::ifBlock($lines, $i, $matches[2], self::test($matches[1], $macroArguments), $macroArguments);
-        }
-
-        if (preg_match('~^[\.\']\s*if\s+' . self::CONDITION_REGEX . '\s?(.*?)$~u', $lines[$i], $matches)) {
-            if (self::test($matches[1], $macroArguments)) {
-                $lines[$i] = Request::massageLine($matches[2]); // i.e. just remove .if <condition> prefix and go again.
-                return ['i' => $i - 1];
-            } else {
-                return ['lines' => [], 'i' => $i];
-            }
-        }
-
-        if (preg_match('~^[\.\']\s*ie ' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $lines[$i], $matches)) {
-            $useIf = self::test($matches[1], $macroArguments);
-            $if    = self::ifBlock($lines, $i, $matches[2], $useIf, $macroArguments);
-            $i     = $if['i'];
-
-            $result = Roff_Comment::checkEvaluate($lines, $i);
-            if ($result !== false) {
-                $i = $result['i'];
+            if (preg_match(
+              '~^' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
+              $request['arg_string'], $matches)
+            ) {
+                return self::ifBlock($lines, $i, $matches[3],
+                  self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments),
+                  $macroArguments);
             }
 
-            return self::handleElse($lines, $i + 1, $useIf, $if['lines'], $macroArguments);
-        }
-
-        if (preg_match('~^[\.\']\s*ie ' . self::CONDITION_REGEX . '\s?(.*)$~u', $lines[$i], $ifMatches)) {
-            $useIf  = self::test($ifMatches[1], $macroArguments);
-            $result = Roff_Comment::checkEvaluate($lines, $i + 1);
-            if ($result !== false) {
-                $i = $result['i'];
+            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['arg_string'], $matches)) {
+                return self::ifBlock($lines, $i, $matches[2], self::test($matches[1], $macroArguments),
+                  $macroArguments);
             }
 
-            $lineArray = [Roff_Macro::applyReplacements(Request::massageLine($ifMatches[2]), $macroArguments)];
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $request['arg_string'], $matches)) {
+                if (self::test($matches[1], $macroArguments)) {
+                    $lines[$i] = $matches[2]; // i.e. just remove .if <condition> prefix and go again.
+                    return ['i' => $i - 1];
+                } else {
+                    return ['lines' => [], 'i' => $i];
+                }
+            }
 
-            return self::handleElse($lines, $i + 1, $useIf, Text::applyRoffClasses($lineArray, $macroArguments),
-              $macroArguments);
+        } elseif ($request['request'] === 'ie') {
+
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['arg_string'], $matches)) {
+                $useIf = self::test($matches[1], $macroArguments);
+                $if    = self::ifBlock($lines, $i, $matches[2], $useIf, $macroArguments);
+                $i     = $if['i'];
+
+                $result = Roff_Comment::checkEvaluate($lines, $i);
+                if ($result !== false) {
+                    $i = $result['i'];
+                }
+
+                return self::handleElse($lines, $i + 1, $useIf, $if['lines'], $macroArguments);
+            }
+
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['arg_string'], $ifMatches)) {
+                $useIf  = self::test($ifMatches[1], $macroArguments);
+                $result = Roff_Comment::checkEvaluate($lines, $i + 1);
+                if ($result !== false) {
+                    $i = $result['i'];
+                }
+
+                $lineArray = [Roff_Macro::applyReplacements($ifMatches[2], $macroArguments)];
+
+                return self::handleElse($lines, $i + 1, $useIf, Text::applyRoffClasses($lineArray, $macroArguments),
+                  $macroArguments);
+            }
         }
 
         return false;
@@ -230,9 +237,12 @@ class Roff_Condition
         if ($recurse) {
             $recurseLines = [];
             for ($j = 0; $j < count($replacementLines); ++$j) {
-                // TODO: fix first param below?
-                $result = self::evaluate([], $replacementLines, $j, $macroArguments);
-                if ($result !== false) {
+                if (
+                  $request = Request::get($replacementLines[$j]) and
+                  in_array($request['request'], ['if', 'ie']) and
+                  $result = self::evaluate($request, $replacementLines, $j, $macroArguments) and
+                  $result !== false
+                ) {
                     $recurseLines = array_merge($recurseLines, $result['lines']);
                     $j            = $result['i'];
                 } else {
