@@ -22,10 +22,9 @@ class Blocks
 
     static function lineEndsBlock(array $lines, int $i)
     {
-        if (preg_match('~^(?:\\\\?\.|\')\s*([a-zA-Z]{1,3}).*$~u', $lines[$i], $matches)) {
-            if (Man::instance()->requestStartsBlock($matches[1])) {
-                return true;
-            }
+        $request = Request::get($lines[$i]);
+        if ($request['request'] and Man::instance()->requestStartsBlock($request['request'])) {
+            return true;
         }
 
         return $lines[$i] === '' or Block_TabTable::isStart($lines, $i);
