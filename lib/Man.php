@@ -93,11 +93,12 @@ class Man
 
         $this->roffClasses = [
           'do'   => 'Roff_do',
+          'nop'  => 'Roff_nop',
           'char' => 'Roff_Char',
           'if'   => 'Roff_Condition',
           'ie'   => 'Roff_Condition',
-          'de'   => 'Roff_Macro',
-          'de1'  => 'Roff_Macro',
+          'de'   => 'Roff_de',
+          'de1'  => 'Roff_de',
           'rr'   => 'Roff_Register',
           'nr'   => 'Roff_Register',
           'ds'   => 'Roff_String',
