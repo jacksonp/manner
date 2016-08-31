@@ -4,18 +4,14 @@
 class Roff_Translation
 {
 
-    static function evaluate(array $request, array $lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i)
     {
-
-        if (!preg_match('~^\.tr (.+)$~u', $lines[$i], $matches)) {
-            return false;
-        }
 
         $man = Man::instance();
 //
 //        $roffStrings = $man->getStrings();
 //        $translate   = Roff_String::substitute($matches[1], $roffStrings);
-        $translate = $matches[1];
+        $translate = $request['arg_string'];
         $translate = TextContent::interpretString($translate, false);
 
         $chrArray = preg_split('~~u', $translate, -1, PREG_SPLIT_NO_EMPTY);

@@ -4,7 +4,7 @@
 class Roff_Macro
 {
 
-    static function evaluate(array $request, array $lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i)
     {
 
         if (!preg_match('~^([^\s"]+)\s*$~u', $request['arg_string'], $matches)) {

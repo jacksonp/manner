@@ -74,20 +74,6 @@ class Text
 
             if (!is_null($request['request'])) {
 
-                // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
-                // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
-                if ($request['request'] === 'do') {
-                    $lines[$i] = '.' . $request['arg_string'];
-                    --$i;
-                    continue;
-                }
-
-                if ($request['request'] === 'nop') {
-                    $lines[$i] = $request['arg_string'];
-                    --$i;
-                    continue;
-                }
-
                 $macros = $man->getMacros();
                 if (isset($macros[$request['request']])) {
                     $man->setRegister('.$', count($request['arguments']));
