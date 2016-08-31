@@ -87,19 +87,20 @@ class Block_nf
 
         $request = Request::get($preLines[0]);
         if ($request['request'] === 'RS') {
-            if (!Request::is(array_pop($preLines), 'RE')) {
-                throw new Exception('.nf block contains initial .RS but not final .RE');
+            $lastRequest = Request::get($preLines[count($preLines) - 1]);
+            if ($lastRequest['request'] === 'RE') {
+                array_pop($preLines);
+                array_shift($preLines);
+                ArrayHelper::trim($preLines, ['', '.br', '.sp']);
+                $className = 'indent';
+                if (
+                  !empty($request['arg_string']) and
+                  $indentVal = Roff_Unit::normalize(trim($request['arg_string'])) // note this filters out 0s
+                ) {
+                    $className .= '-' . $indentVal;
+                }
+                $pre->setAttribute('class', $className);
             }
-            array_shift($preLines);
-            ArrayHelper::trim($preLines, ['', '.br', '.sp']);
-            $className = 'indent';
-            if (
-              !empty($request['arg_string']) and
-              $indentVal = Roff_Unit::normalize(trim($request['arg_string'])) // note this filters out 0s
-            ) {
-                $className .= '-' . $indentVal;
-            }
-            $pre->setAttribute('class', $className);
         }
 
         BlockPreformatted::handle($pre, $preLines);
