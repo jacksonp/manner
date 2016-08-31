@@ -63,23 +63,32 @@ class Text
 
         for ($i = 0; $i < $numNoCommentLines; ++$i) {
 
+            // Do comments first
+            $result = Roff_Comment::checkEvaluate($lines, $i);
+            if ($result !== false) {
+                $i = $result['i'];
+                continue;
+            }
+
             $request = Request::get($lines[$i]);
 
-            // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
-            // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
-            if ($request['request'] === 'do') {
-                $lines[$i] = '.' . $request['arg_string'];
-                --$i;
-                continue;
-            }
-
-            if ($request['request'] === 'nop') {
-                $lines[$i] = $request['arg_string'];
-                --$i;
-                continue;
-            }
 
             if (!is_null($request['request'])) {
+
+                // .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
+                // Do this here rather than earlier as we many pick up new .do calls e.g. in conditional statements.
+                if ($request['request'] === 'do') {
+                    $lines[$i] = '.' . $request['arg_string'];
+                    --$i;
+                    continue;
+                }
+
+                if ($request['request'] === 'nop') {
+                    $lines[$i] = $request['arg_string'];
+                    --$i;
+                    continue;
+                }
+
                 $macros = $man->getMacros();
                 if (isset($macros[$request['request']])) {
                     $man->setRegister('.$', count($request['arguments']));
@@ -95,33 +104,27 @@ class Text
 
                     continue;
                 }
+
+                $className = $man->getRoffRequestClass($request['request']);
+                if ($className) {
+                    $result    = $className::checkEvaluate($lines, $i, $callerArguments);
+                    if ($result !== false) {
+                        if (isset($result['lines'])) {
+                            foreach ($result['lines'] as $l) {
+                                $linesNoCond[] = Roff_Macro::applyReplacements($l, $callerArguments);
+                            }
+                        }
+                        $i = $result['i'];
+                        continue;
+                    }
+                }
+
             }
 
-            $roffClasses = [
-              'Comment',
-              'Char',
-              'Condition',
-              'Macro',
-              'Register',
-              'String',
-              'Alias',
-              'Translation',
-              'Rename',
-              'Skipped',
-            ];
-
-            foreach ($roffClasses as $roffClass) {
-                $className = 'Roff_' . $roffClass;
-                $result    = $className::checkEvaluate($lines, $i, $callerArguments);
-                if ($result !== false) {
-                    if (isset($result['lines'])) {
-                        foreach ($result['lines'] as $l) {
-                            $linesNoCond[] = Roff_Macro::applyReplacements($l, $callerArguments);
-                        }
-                    }
-                    $i = $result['i'];
-                    continue 2;
-                }
+            $result = Roff_Skipped::checkEvaluate($lines, $i);
+            if ($result !== false) {
+                $i = $result['i'];
+                continue;
             }
 
             $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);

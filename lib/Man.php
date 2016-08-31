@@ -14,7 +14,9 @@ class Man
     private $strings;
     private $characterTranslations; // .tr
 
+    private $roffClasses;
     private $blockClasses;
+    private $inlineClasses;
 
     /**
      * @var Man The reference to *Singleton* instance of this class
@@ -88,6 +90,21 @@ class Man
           'Tm' => '™',
         ];
         $this->characterTranslations = [];
+
+        $this->roffClasses = [
+          'char' => 'Roff_Char',
+          'if'   => 'Roff_Condition',
+          'ie'   => 'Roff_Condition',
+          'de'   => 'Roff_Macro',
+          'de1'  => 'Roff_Macro',
+          'rr'   => 'Roff_Register',
+          'nr'   => 'Roff_Register',
+          'ds'   => 'Roff_String',
+          'ds1'  => 'Roff_String',
+          'als'  => 'Roff_Alias',
+          'tr'   => 'Roff_Translation',
+          'rn'   => 'Roff_Rename',
+        ];
 
         $this->blockClasses = [
           'SH' => 'Block_SH',
@@ -275,5 +292,13 @@ class Man
         }
     }
 
+    public function getRoffRequestClass(string $requestName)
+    {
+        if (array_key_exists($requestName, $this->roffClasses)) {
+            return $this->roffClasses[$requestName];
+        } else {
+            return false;
+        }
+    }
 
 }
