@@ -12,21 +12,25 @@ class Roff_Condition
 
         if ($request['request'] === 'if') {
 
+            if (mb_strlen($request['raw_arg_string']) === 0) {
+                return ['i' => $i]; // Just skip
+            }
+
             if (preg_match(
               '~^' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
-              $request['arg_string'], $matches)
+              $request['raw_arg_string'], $matches)
             ) {
                 return self::ifBlock($lines, $i, $matches[3],
                   self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments),
                   $macroArguments);
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
                 return self::ifBlock($lines, $i, $matches[2], self::test($matches[1], $macroArguments),
                   $macroArguments);
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $request['arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $request['raw_arg_string'], $matches)) {
                 if (self::test($matches[1], $macroArguments)) {
                     $lines[$i] = $matches[2]; // i.e. just remove .if <condition> prefix and go again.
                     return ['i' => $i - 1];
@@ -37,7 +41,7 @@ class Roff_Condition
 
         } elseif ($request['request'] === 'ie') {
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
                 $useIf = self::test($matches[1], $macroArguments);
                 $if    = self::ifBlock($lines, $i, $matches[2], $useIf, $macroArguments);
                 $i     = $if['i'];
@@ -50,7 +54,7 @@ class Roff_Condition
                 return self::handleElse($lines, $i + 1, $useIf, $if['lines'], $macroArguments);
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['arg_string'], $ifMatches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['raw_arg_string'], $ifMatches)) {
                 $useIf  = self::test($ifMatches[1], $macroArguments);
                 $result = Roff_Comment::checkEvaluate($lines, $i + 1);
                 if ($result !== false) {
@@ -64,7 +68,7 @@ class Roff_Condition
             }
         }
 
-        return false;
+        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $lines[$i]);
 
     }
 
@@ -73,14 +77,18 @@ class Roff_Condition
 
         $line = $lines[$i];
 
-        if (preg_match('~^[\.\']\s*el\s?\\\\{(.*)$~u', $line, $matches)) {
-            $else     = self::ifBlock($lines, $i, $matches[1], !$useIf, $macroArguments);
-            $newLines = $useIf ? $ifLines : $else['lines'];
+        $request = Request::get($line);
 
-            return ['lines' => $newLines, 'i' => $else['i']];
-        }
+        if ($request['request'] === 'el') {
 
-        if (!preg_match('~^[\.\']\s*el (.*)$~u', $line, $elseMatches)) {
+            if (preg_match('~^\\\\{(.*)$~u', $request['raw_arg_string'], $matches)) {
+                $else     = self::ifBlock($lines, $i, $matches[1], !$useIf, $macroArguments);
+                $newLines = $useIf ? $ifLines : $else['lines'];
+
+                return ['lines' => $newLines, 'i' => $else['i']];
+            }
+
+        } else {
             //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
             // Just skip the ie and el lines:
             return ['lines' => [], 'i' => $i];
@@ -89,11 +97,10 @@ class Roff_Condition
         if ($useIf) {
             return ['lines' => $ifLines, 'i' => $i];
         } else {
-            $lineArray = [Roff_Macro::applyReplacements(Request::massageLine($elseMatches[1]), $macroArguments)];
+            $lineArray = [Roff_Macro::applyReplacements($request['arg_string'], $macroArguments)];
 
             return ['lines' => Text::applyRoffClasses($lineArray, $macroArguments), 'i' => $i];
         }
-
 
     }
 

@@ -139,12 +139,13 @@ ROFF;
 
     public static function get(string $line): array
     {
-        $return = ['request' => null, 'arguments' => [], 'arg_string' => ''];
-        if (preg_match('~^(?:\\\\?\.|\')\s*([^\s\\\\]+)(?:[\s\\\\]\s*(.*))?$~ui', $line, $matches)) {
+        $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        if (preg_match('~^(?:\\\\?\.|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui', $line, $matches)) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
-                $return['arg_string'] = Request::massageLine($matches[2]);
-                $return['arguments']  = Request::parseArguments($return['arg_string']);
+                $return['raw_arg_string'] = ltrim($matches[2]);
+                $return['arg_string']     = Request::massageLine($return['raw_arg_string']);
+                $return['arguments']      = Request::parseArguments($return['arg_string']);
             }
         }
 
@@ -153,7 +154,7 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
-        $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => ''];
+        $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
 
         $request = self::get($lines[$i]);
 
