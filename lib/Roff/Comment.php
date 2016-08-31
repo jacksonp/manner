@@ -26,7 +26,7 @@ class Roff_Comment
             return ['i' => $i - 1];
         }
 
-        if (preg_match('~^\.\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[$i], $matches)) {
+        if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[$i], $matches)) {
             $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
             $numLines  = count($lines);
             for ($i = $i + 1; $i < $numLines; ++$i) {
@@ -34,7 +34,7 @@ class Roff_Comment
                     return ['i' => $i];
                 }
             }
-            throw new Exception($matches[0] . ' with no corresponding ' . $delimiter);
+            throw new Exception($matches[0] . ' with no corresponding "' . $delimiter . '"');
         }
 
         return false;
