@@ -19,7 +19,7 @@ class Roff_de
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $macroLine = $lines[$i];
             if (
-              $macroLine === '..' or
+              rtrim($macroLine) === '..' or
               ($newMacro === 'P!' and $macroLine === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
