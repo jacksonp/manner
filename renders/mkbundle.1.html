@@ -18,8 +18,16 @@
   <p>An older mechanism creates a small C stub that links against the libmono library to produce a self-contained executable and requires a C compiler. It is described in the "OLD EMBEDDING" section below.
   <p>For example, to create a bundle for hello world, use the following command:
   <pre>    $ mkbundle -o hello --simple hello.exe</pre>
-  <p>The simple version allows for cross-compiling, this requires a Mono runtime to be installed in the ~/.mono/targets/TARGET/mono to be available. You can use the "--local-targets" to list all available targets, and the "--cross" argument to specify the target, like this:
-  <pre> $ mkbundle --local-targets      
+  <p>You can configure options to be passed to the Mono runtime directly into your executable, for this, use the <em>--options</em> flag. For example, the following disables inlining, by passing the "-O=-inline" command line option to the embedded executable:
+  <pre>        $ mkbundle -o hello --options -O=-inline --simple hello.exe
+
+
+The simple version allows for cross-compiling, this requires a Mono
+runtime to be installed in the ~/.mono/targets/TARGET/mono to be
+available.   You can use the "--local-targets" to list all available
+targets, and the "--cross" argument to specify the target, like this:
+
+        $ mkbundle --local-targets      
         Available targets:
                 default - Current System Mono
                 4.4.0-macosx-x86
@@ -59,6 +67,8 @@
     <dd>Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains a "mono" binary. You can fetch various targets using the --fetch-target command line option.
     <dt><em>--deps</em>
     <dd>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
+    <dt><em>--env KEY=VALUE</em>
+    <dd>Use this to hardcode an environment variable at runtime for KEY to be mapped to VALUE. This is useful in scenarios where you want to enable certain Mono runtime configuration options that are controlled by environment variables.
     <dt><em>--fetch-target target</em>
     <dd>Downloads a precompiled runtime for the specified target from the Mono distribution site.
     <dt><em>--i18n encoding</em>
@@ -79,6 +89,12 @@
     <dd>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
     <dt><em>-o filename</em>
     <dd>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
+    <dt><em>--options OPTS</em>
+    <dd>Since the resulting executable will be treated as a standalone program, you can use this option to pass configuration options to the Mono runtime and bake those into the resulting executable. These options are specified as <em>OPTS.</em><br>
+    <br>
+    You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed.<br>
+    <br>
+    Additionally, users of your binary can still configure their own options by setting the <em>MONO_ENV_OPTIONS</em> environment variable.
     <dt><em>--target-server SERVER</em>
     <dd>By default the mkbundle tool will download from a Mono server the target runtimes, you can specify a different server to provide cross-compiled runtimes.
   </dl>

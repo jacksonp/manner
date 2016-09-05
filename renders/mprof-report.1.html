@@ -130,6 +130,8 @@
         </div>
       <dt>·
       <dd><em>counters</em>: sample counters values every 1 second. This allow a really lightweight way to have insight in some of the runtime key metrics. Counters displayed in non verbose mode are : Methods from AOT, Methods JITted using mono JIT, Methods JITted using LLVM, Total time spent JITting (sec), User Time, System Time, Total Time, Working Set, Private Bytes, Virtual Bytes, Page Faults and CPU Load Average (1min, 5min and 15min).
+      <dt>·
+      <dd><em>coverage</em>: collect code coverage data. This implies enabling the <em>calls</em> option.
     </dl>
   </div>
   <div class="subsection">
@@ -142,10 +144,10 @@
     <h3>Trace information for events</h3>
     <p>Often it is important for some events, like allocations, lock contention and exception throws to know where they happened. Or we may want to see what sequence of calls leads to a particular method invocation. To see this info invoke mprof-report as follows:
     <p><strong>mprof-report&nbsp;--traces&nbsp;output.mlpd</strong>
-    <p>The maximum number of methods in each stack trace can be specified with the <em>—maxframes=NUM</em> option:
+    <p>The maximum number of methods in each stack trace can be specified with the <em>--maxframes=NUM</em> option:
     <p><strong>mprof-report&nbsp;--traces&nbsp;--maxframes=4&nbsp;output.mlpd</strong>
     <p>The stack trace info will be available if method enter/leave events have been recorded or if stack trace collection wasn't explicitly disabled with the <em>maxframes=0</em> profiler option. Note that the profiler will collect up to 8 frames by default at specific events when the <em>nocalls</em> option is used, so in that case, if more stack frames are required in mprof-report, a bigger value for maxframes when profiling must be used, too.
-    <p>The <em>—traces</em> option also controls the reverse reference feature in the heapshot report: for each class it reports how many references to objects of that class come from other classes.
+    <p>The <em>--traces</em> option also controls the reverse reference feature in the heapshot report: for each class it reports how many references to objects of that class come from other classes.
   </div>
   <div class="subsection">
     <h3>Sort order for methods and allocations</h3>
@@ -215,6 +217,10 @@
       <dd><em>heapshot</em>: live heap usage at heap shots
       <dt>·
       <dd><em>counters</em>: counters samples
+      <dt>·
+      <dd><em>coverage</em>: code coverage data
+      <dt>·
+      <dd><em>stats</em>: event statistics
     </dl>
     <p>It is possible to limit some of the data displayed to a timeframe of the program execution with the option:
     <p><strong>--time=FROM-TO</strong>
@@ -227,13 +233,13 @@
   </div>
   <div class="subsection">
     <h3>Track individual objects</h3>
-    <p>Instead of printing the usual reports from the profiler data, it is possible to track some interesting information about some specific object addresses. The objects are selected based on their address with the <em>—track</em> option as follows:
+    <p>Instead of printing the usual reports from the profiler data, it is possible to track some interesting information about some specific object addresses. The objects are selected based on their address with the <em>--track</em> option as follows:
     <p><strong>--track=0xaddr1[,0xaddr2,...]</strong>
-    <p>The reported info (if available in the data file), will be class name, size, creation time, stack trace of creation (with the <em>—traces</em> option), etc. If heapshot data is available it will be possible to also track what other objects reference one of the listed addresses.
-    <p>The object addresses can be gathered either from the profiler report in some cases (like in the monitor lock report), from the live application or they can be selected with the <em>—find=FINDSPEC</em> option. FINDSPEC can be one of the following:
+    <p>The reported info (if available in the data file), will be class name, size, creation time, stack trace of creation (with the <em>--traces</em> option), etc. If heapshot data is available it will be possible to also track what other objects reference one of the listed addresses.
+    <p>The object addresses can be gathered either from the profiler report in some cases (like in the monitor lock report), from the live application or they can be selected with the <em>--find=FINDSPEC</em> option. FINDSPEC can be one of the following:
     <dl class="indent-2">
       <dt>·
-      <dd><em>S:SIZE</em>: where the object is selected if it's size is at least <em>SIZE</em>
+      <dd><em>S:SIZE</em>: where the object is selected if its size is at least <em>SIZE</em>
       <dt>·
       <dd><em>T:NAME</em>: where the object is selected if <em>NAME</em> partially matches its class name
     </dl>
@@ -248,52 +254,65 @@
     <p><strong>--out=FILENAME</strong>
   </div>
   <div class="subsection">
+    <h3>Processing code coverage data</h3>
+    <p>If you ran the profiler with the <em>coverage</em> option, you can process the collected coverage data into an XML file by running mprof-report like this:
+    <p><strong>mprof-report --coverage-out=coverage.xml output.mlpd</strong>
+  </div>
+  <div class="subsection">
     <h3>Dealing with profiler slowness</h3>
     <p>If the profiler needs to collect lots of data, the execution of the program will slow down significantly, usually 10 to 20 times slower. There are several ways to reduce the impact of the profiler on the program execution.
-  </div>
-  <div class="subsection">
-    <h3>Use the statistical sampling mode</h3>
-    <p>Statistical sampling allows executing a program under the profiler with minimal performance overhead (usually less than 10%). This mode allows checking where the program is spending most of it's execution time without significantly perturbing its behaviour.
-  </div>
-  <div class="subsection">
-    <h3>Collect less data</h3>
-    <p>Collecting method enter/leave events can be very expensive, especially in programs that perform many millions of tiny calls. The profiler option <em>nocalls</em> can be used to avoid collecting this data or it can be limited to only a few call levels with the <em>calldepth</em> option.
-    <p>Object allocation information is expensive as well, though much less than method enter/leave events. If it's not needed, it can be skipped with the <em>noalloc</em> profiler option. Note that when method enter/leave events are discarded, by default stack traces are collected at each allocation and this can be expensive as well. The impact of stack trace information can be reduced by setting a low value with the <em>maxframes</em> option or by eliminating them completely, by setting it to 0.
-    <p>The other major source of data is the heapshot profiler option: especially if the managed heap is big, since every object needs to be inspected. The <em>MODE</em> parameter of the <em>heapshot</em> option can be used to reduce the frequency of the heap shots.
-  </div>
-  <div class="subsection">
-    <h3>Reduce the timestamp overhead</h3>
-    <p>On many operating systems or architectures what actually slows down profiling is the function provided by the system to get timestamp information. The <em>time=fast</em> profiler option can be usually used to speed up this operation, but, depending on the system, time accounting may have some level of approximation (though statistically the data should be still fairly valuable).
+    <dl class="indent-4">
+      <dt><em>Use the statistical sampling mode</em>
+      <dd>Statistical sampling allows executing a program under the profiler with minimal performance overhead (usually less than 10%). This mode allows checking where the program is spending most of its execution time without significantly perturbing its behaviour.
+      <dt><em>Collect less data</em>
+      <dd>Collecting method enter/leave events can be very expensive, especially in programs that perform many millions of tiny calls. The profiler option <em>nocalls</em> can be used to avoid collecting this data or it can be limited to only a few call levels with the <em>calldepth</em> option.<br>
+      <br>
+      Object allocation information is expensive as well, though much less than method enter/leave events. If it's not needed, it can be skipped with the <em>noalloc</em> profiler option. Note that when method enter/leave events are discarded, by default stack traces are collected at each allocation and this can be expensive as well. The impact of stack trace information can be reduced by setting a low value with the <em>maxframes</em> option or by eliminating them completely, by setting it to 0.<br>
+      <br>
+      The other major source of data is the <em>heapshot</em> profiler option: especially if the managed heap is big, since every object needs to be inspected. The <em>MODE</em> parameter of the <em>heapshot</em> option can be used to reduce the frequency of the heap shots.
+      <dt><em>Reduce the timestamp overhead</em>
+      <dd>On many operating systems or architectures what actually slows down profiling is the function provided by the system to get timestamp information. The <em>time=fast</em> profiler option can be usually used to speed up this operation, but, depending on the system, time accounting may have some level of approximation (though statistically the data should be still fairly valuable).
+    </dl>
   </div>
   <div class="subsection">
     <h3>Dealing with the size of the data files</h3>
     <p>When collecting a lot of information about a profiled program, huge data files can be generated. There are a few ways to minimize the amount of data, for example by not collecting some of the more space-consuming information or by compressing the information on the fly or by just generating a summary report.
-  </div>
-  <div class="subsection">
-    <h3>Reducing the amount of data</h3>
-    <p>Method enter/leave events can be excluded completely with the <em>nocalls</em> option or they can be limited to just a few levels of calls with the <em>calldepth</em> option. For example, the option:
-    <p><strong>calldepth=10</strong>
-    <p>will ignore the method events when there are more than 10 managed stack frames. This is very useful for programs that have deep recursion or for programs that perform many millions of tiny calls deep enough in the call stack. The optimal number for the calldepth option depends on the program and it needs to be balanced between providing enough profiling information and allowing fast execution speed.
-    <p>Note that by default, if method events are not recorded at all, the profiler will collect stack trace information at events like allocations. To avoid gathering this data, use the <em>maxframes=0</em> profiler option.
-    <p>Allocation events can be eliminated with the <em>noalloc</em> option.
-    <p>Heap shot data can also be huge: by default it is collected at each major collection. To reduce the frequency, you can specify a heapshot mode: for example to collect every 5 collections (including major and minor):
-    <p><strong>heapshot=5gc</strong>
-    <p>or when at least 5 seconds passed since the last heap shot:
-    <p><strong>heapshot=5000ms</strong>
-  </div>
-  <div class="subsection">
-    <h3>Compressing the data</h3>
-    <p>To reduce the amout of disk space used by the data, the data can be compressed either after it has been generated with the gzip command:
-    <p><strong>gzip&nbsp;-9&nbsp;output.mlpd</strong>
-    <p>or it can be compressed automatically by using the <em>zip</em> profiler option. Note that in this case there could be a significant slowdown of the profiled program.
-    <p>The mprof-report program will tranparently deal with either compressed or uncompressed data files.
-  </div>
-  <div class="subsection">
-    <h3>Generating only a summary report</h3>
-    <p>Often it's enough to look at the profiler summary report to diagnose an issue and in this case it's possible to avoid saving the profiler data file to disk. This can be accomplished with the <em>report</em> profiler option, which will basically send the data to the mprof-report program for display.
-    <p>To have more control of what summary information is reported (or to use a completely different program to decode the profiler data), the <em>output</em> profiler option can be used, with <strong>|</strong> as the first character: the rest of the output name will be executed as a program with the data fed in on the standard input.
-    <p>For example, to print only the Monitor summary with stack trace information, you could use it like this:
-    <p><strong>output=|mprof-report&nbsp;--reports=monitor&nbsp;--traces&nbsp;-</strong>
+    <dl class="indent-4">
+      <dt><em>Reducing the amount of data</em>
+      <dd>Method enter/leave events can be excluded completely with the <em>nocalls</em> option or they can be limited to just a few levels of calls with the <em>calldepth</em> option. For example, the option:<br>
+      <br>
+      <strong>calldepth=10</strong><br>
+      <br>
+      will ignore the method events when there are more than 10 managed stack frames. This is very useful for programs that have deep recursion or for programs that perform many millions of tiny calls deep enough in the call stack. The optimal number for the calldepth option depends on the program and it needs to be balanced between providing enough profiling information and allowing fast execution speed.<br>
+      <br>
+      Note that by default, if method events are not recorded at all, the profiler will collect stack trace information at events like allocations. To avoid gathering this data, use the <em>maxframes=0</em> profiler option.<br>
+      <br>
+      Allocation events can be eliminated with the <em>noalloc</em> option.<br>
+      <br>
+      Heap shot data can also be huge: by default it is collected at each major collection. To reduce the frequency, you can specify a heapshot mode: for example to collect every 5 collections (including major and minor):<br>
+      <br>
+      <strong>heapshot=5gc</strong><br>
+      <br>
+      or when at least 5 seconds passed since the last heap shot:<br>
+      <br>
+      <strong>heapshot=5000ms</strong>
+      <dt><em>Compressing the data</em>
+      <dd>To reduce the amout of disk space used by the data, the data can be compressed either after it has been generated with the gzip command:<br>
+      <br>
+      <strong>gzip&nbsp;-9&nbsp;output.mlpd</strong><br>
+      <br>
+      or it can be compressed automatically by using the <em>zip</em> profiler option. Note that in this case there could be a significant slowdown of the profiled program.<br>
+      <br>
+      The mprof-report program will tranparently deal with either compressed or uncompressed data files.
+      <dt><em>Generating only a summary report</em>
+      <dd>Often it's enough to look at the profiler summary report to diagnose an issue and in this case it's possible to avoid saving the profiler data file to disk. This can be accomplished with the <em>report</em> profiler option, which will basically send the data to the mprof-report program for display.<br>
+      <br>
+      To have more control of what summary information is reported (or to use a completely different program to decode the profiler data), the <em>output</em> profiler option can be used, with <strong>|</strong> as the first character: the rest of the output name will be executed as a program with the data fed in on the standard input.<br>
+      <br>
+      For example, to print only the Monitor summary with stack trace information, you could use it like this:<br>
+      <br>
+      <strong>output=|mprof-report&nbsp;--reports=monitor&nbsp;--traces&nbsp;-</strong>
+    </dl>
   </div>
 </div>
 <div class="section">
@@ -306,6 +325,6 @@
 </div>
 <div class="section">
   <h2>AUTHORS</h2>
-  <p>Paolo Molaro.
+  <p>Paolo Molaro, Alex Rønne Petersen
 </div>
 
