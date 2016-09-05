@@ -85,7 +85,6 @@ class Request_Unhandled
       'pvs',
       'rd',
       'return',
-      'rj',
       'rn',
       'rnn',
       'rr',
