@@ -4,6 +4,18 @@
 class Block_nf
 {
 
+    private static function endBlock($request)
+    {
+        if (in_array($request['request'], ['fi'])) {
+            return true;
+        }
+        if ($request['request'] === 'ad' and in_array($request['arg_string'], ['', 'n', 'b'])) {
+            return true;
+        }
+
+        return false;
+    }
+
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
@@ -16,10 +28,10 @@ class Block_nf
         while ($i < $numLines - 1) {
             $line    = $lines[$i + 1];
             $request = Request::get($line);
-            if (Block_SS::endSubsection($line)) {
+            if (Block_SS::endSubsection($line) or $request['request'] === 'TS') {
                 break;
-            } elseif (preg_match($blockEnds, $line)) {
-                while ($i < $numLines - 1 and preg_match($blockEnds, $lines[$i + 1])) {
+            } elseif (self::endBlock($request)) {
+                while ($i < $numLines - 1 and $request = Request::get($lines[$i + 1]) and self::endBlock($request)) {
                     ++$i;
                 }
                 break;
