@@ -69,8 +69,8 @@ class Inline_ft
                     $node = $dom->createElement('code');
                     break;
                 default:
-                    throw new Exception($fontAbbreviation . ': Unhandled font abbreviation.');
-
+                    $node = $dom->createElement('span');
+                    $node->setAttribute('class', 'font-' . $fontAbbreviation);
             }
             if ($textParent->isOrInTag('pre')) {
                 BlockPreformatted::handle($node, $blockLines);
