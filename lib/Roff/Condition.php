@@ -181,7 +181,7 @@ class Roff_Condition
         $condition = Replace::preg('~&~u', ' and ', $condition);
 
         if (preg_match('~^([-\+\*/\d\(\)><=\.\s]| or | and )+$~u', $condition)) {
-            $condition = Replace::preg('~(?<=\d)=(?=\d)~', '==', $condition);
+            $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
             try {
                 return eval('return ' . $condition . ';');
             } catch (ParseError $e) {
