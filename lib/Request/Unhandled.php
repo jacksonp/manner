@@ -50,7 +50,6 @@ class Request_Unhandled
       'ftr',
       'fzoom',
       'gcolor',
-      'hc',
       'hcode',
       'hla',
       'hlm',
