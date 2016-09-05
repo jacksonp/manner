@@ -59,8 +59,8 @@ class BlockPreformatted
                 $nextIndent = 4;
                 continue;
             } elseif (
-              in_array($request['request'], ['nf', 'RS', 'RE', 'fi']) or
-              in_array($line, ['\\&', '\\)', '.ce 0'])
+              in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) or
+              in_array($line, ['\\&', '\\)'])
             ) {
                 continue;
             } elseif ($request['request'] === 'OP') {
