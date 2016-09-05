@@ -1,6 +1,5 @@
 <?php
 
-
 class Roff_Skipped
 {
 
@@ -59,6 +58,40 @@ class Roff_Skipped
       'warn', // Set warnings code to n.
     ];
 
+    const nonStandardRequests = [
+        // index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
+      'iX',
+      'IX',
+      'XX',
+        // .UN u Creates a named hypertext location named u; do not include a corresponding UE command. When generating HTML this should translate into the HTML command <ANAME=\"u\"id=\"u\">&nbsp;</A> (the &nbsp; is optional if support for Mosaic is unneeded).
+      'UN',
+        // "Alter the footer for use with BSD man pages. This command exists only for compatibility; don't use it. See the groff info manual for more."
+      'UC',
+        // "Set tabs every 0.5 inches. Since this macro is always called during a TH macro, it makes sense to call it only if the tab positions have been changed. Use of this presentation-level macro is deprecated. It translates poorly to HTML, under which exact whitespace control and tabbing are not readily available. Thus, information or distinctions that you use .DT to express are likely to be lost. If you feel tempted to use it, you should probably be composing a table using tbl(1) markup instead."
+      'DT',
+        // something like Title Adjust?:
+      'TA',
+        // "sets the indent relative to subheads.":
+      'IN',
+        // "sets the line length, which includes the value of IN.":
+      'LL',
+        // "Adjust the empty space before a new paragraph or section.":
+      'PD',
+        // "Specifies the report format for your document. The report format creates a separate cover page.":
+      'RP',
+        // looks like a color setting, e.g. skipfish.1:
+      'BB',
+        // looks like it sets the authors, e.g. as86.1:
+      'BY',
+        // hack for error in foo2lava.1:
+      'pdfdest',
+        // ?
+      'Iq',
+      'l',
+      'PU',
+      'LO',
+    ];
+
     static function checkEvaluate(array $lines, int $i)
     {
 
@@ -73,30 +106,8 @@ class Roff_Skipped
             return ['i' => $i];
         }
 
-        // Skip stuff we don't care about:
-        // .iX, .IX: index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
-        // .UN: " .UN u Creates a named hypertext location named u; do not include a corresponding UE command. When generating HTML this should translate into the HTML command <ANAME=\"u\"id=\"u\">&nbsp;</A> (the &nbsp; is optional if support for Mosaic is unneeded).
-        // .UC: "Alter the footer for use with BSD man pages. This command exists only for compatibility; don't use it. See the groff info manual for more."
-        // .DT: "Set tabs every 0.5 inches. Since this macro is always called during a TH macro, it makes sense to call it only if the tab positions have been changed. Use of this presentation-level macro is deprecated. It translates poorly to HTML, under which exact whitespace control and tabbing are not readily available. Thus, information or distinctions that you use .DT to express are likely to be lost. If you feel tempted to use it, you should probably be composing a table using tbl(1) markup instead."
-        // .TA: something like Title Adjust?
-        // .IN "sets the indent relative to subheads."
-        // .LL "sets the line length, which includes the value of IN."
-        // .PU: ?
-        // .LO 1: ?
-        // .PD: "Adjust the empty space before a new paragraph or section."
-        // .RP: "Specifies the report format for your document. The report format creates a separate cover page."
-        // .BB: looks like a color setting, e.g. skipfish.1
-        // .BY: looks like it sets the authors, e.g. as86.1
-        // .pdfdest: hack for error in foo2lava.1
-        // .Iq: ?
-        // .XX: looks like some kind of indexing
-        // .l: ?
-        if (preg_match(
-          '~^[\.\'](iX|IX|UN|UC|DT|TA|IN|LL|PU|LO 1|PD|RP|BB|BY|pdfdest|Iq|XX|l|' .
-          implode('|', self::requests)
-          . ')(\s|$)~u',
-          $lines[$i])
-        ) {
+        $request = Request::get($lines[$i]);
+        if (in_array($request['request'], self::requests) or in_array($request['request'], self::nonStandardRequests)) {
             return ['i' => $i];
         }
 
