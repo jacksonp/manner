@@ -96,6 +96,8 @@ class Roff_Skipped
     {
 
         $skipLines = [
+            // Skip stray .ec with no arguments (but not .ec with arguments, in case empty .ec is there to revert).
+          '.ec',
             // Empty requests:
           '...',
           '\\.',
