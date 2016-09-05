@@ -18,6 +18,7 @@ class Roff_Skipped
       'fam', // sets font family, generally used in conjunction with .nf blocks which already get a monospace font.
       'fchar', // Define fallback character (or glyph) c as string anything.
       'fcolor', // Set fill color
+      'fl', // Flush output buffer
       'fp', // mount font at position
       'fspecial', // Reset list of special fonts for font to be empty.
       'fschar', // Define fallback character (or glyph) c for font f
