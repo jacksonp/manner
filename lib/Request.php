@@ -140,7 +140,10 @@ ROFF;
     public static function get(string $line): array
     {
         $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
-        if (preg_match('~^(?:\\\\?\.|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui', $line, $matches)) {
+        if (preg_match(
+          '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+          $line, $matches)
+        ) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) and !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
@@ -174,7 +177,7 @@ ROFF;
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $lines[$i]);
-            } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
+            } elseif (!preg_match('~^[' . preg_quote($man->control_char, '~') . ']~u', $lines[$i])) {
                 // Lenient with things starting with ' to match pre-refactor output...
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
                 $return['class'] = 'Block_Text';

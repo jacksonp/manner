@@ -48,6 +48,7 @@ class Man
     public function reset()
     {
         $this->data     = [
+          'control_char'   => '.',
           'eq_delim_left'  => null,
           'eq_delim_right' => null,
         ];
