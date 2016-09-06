@@ -111,9 +111,6 @@ class Request_Unhandled
       'write',
       'writec',
       'writem',
-        // macros:
-      'EQ',
-      'EN',
     ];
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)

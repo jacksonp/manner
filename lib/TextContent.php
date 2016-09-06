@@ -12,6 +12,25 @@ class TextContent
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
 
+        if (!is_null($man->eq_delim_left) and !is_null($man->eq_delim_right)) {
+            if (preg_match(
+              '~^(.*?)' .
+              preg_quote($man->eq_delim_left, '~') .
+              '(.+?)' .
+              preg_quote($man->eq_delim_right, '~') .
+              '(.*)$~', $line, $matches)
+            ) {
+                if (mb_strlen($matches[1]) > 0) {
+                    self::interpretAndAppendText($parentNode, $matches[1]);
+                }
+                Roff_EQ::appendMath($parentNode, $matches[2]);
+                if (mb_strlen($matches[3]) > 0) {
+                    self::interpretAndAppendText($parentNode, $matches[3]);
+                }
+                return;
+            }
+        }
+
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;

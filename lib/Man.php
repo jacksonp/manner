@@ -47,7 +47,10 @@ class Man
 
     public function reset()
     {
-        $this->data     = [];
+        $this->data     = [
+          'eq_delim_left'  => null,
+          'eq_delim_right' => null,
+        ];
         $this->aliases  = [];
         $this->macros   = [];
         $this->entities = [];
@@ -106,6 +109,7 @@ class Man
           'als'  => 'Roff_Alias',
           'tr'   => 'Roff_Translation',
           'rn'   => 'Roff_Rename',
+          'EQ'   => 'Roff_EQ',
         ];
 
         $this->blockClasses = [
