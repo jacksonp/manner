@@ -102,6 +102,7 @@ class Man
           'ie'   => 'Roff_Condition',
           'de'   => 'Roff_de',
           'de1'  => 'Roff_de',
+          'di'   => 'Roff_di',
           'rr'   => 'Roff_Register',
           'nr'   => 'Roff_Register',
           'ds'   => 'Roff_String',
