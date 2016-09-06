@@ -24,7 +24,7 @@ class TextContent
                 if (mb_strlen($matches[1]) > 0) {
                     self::interpretAndAppendText($parentNode, $matches[1]);
                 }
-                Roff_EQ::appendMath($parentNode, $matches[2]);
+                Inline_EQ::appendMath($parentNode, [$matches[2]]);
                 if (mb_strlen($matches[3]) > 0) {
                     self::interpretAndAppendText($parentNode, $matches[3]);
                 }
@@ -51,6 +51,7 @@ class TextContent
                         // Stick first letter into substring, recurse to carry on processing next letter
                         self::interpretAndAppendText($parentNode, mb_substr($line, 0, $letterPosition));
                         self::interpretAndAppendText($parentNode, mb_substr($line, $letterPosition));
+
                         return;
                     }
 

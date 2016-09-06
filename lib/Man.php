@@ -109,7 +109,6 @@ class Man
           'als'  => 'Roff_Alias',
           'tr'   => 'Roff_Translation',
           'rn'   => 'Roff_Rename',
-          'EQ'   => 'Roff_EQ',
         ];
 
         $this->blockClasses = [
@@ -153,6 +152,7 @@ class Man
           'br'  => 'Inline_VerticalSpace',
           'sp'  => 'Inline_VerticalSpace',
           'ne'  => 'Inline_VerticalSpace',
+          'EQ'  => 'Inline_EQ',
         ];
 
     }
