@@ -42,6 +42,10 @@ class Roff_EQ
 
     static function appendMath(DOMElement $parentNode, string $line)
     {
+
+        // Hack for mm2gv:
+        $line = str_replace(['\\fI', '\\fP'], '', $line);
+
         $eqnString = '.EQ' . PHP_EOL;
         $eqnString .= $line . PHP_EOL;
         $eqnString .= '.EN' . PHP_EOL;
@@ -53,9 +57,6 @@ class Roff_EQ
         array_pop($output);
 
         $mathString = implode('', $output);
-
-        // Hacks:
-        $mathString = str_replace(['\\fI', '\\fP'], '', $mathString);
 
         $mathDoc = new DOMDocument;
         @$mathDoc->loadHTML($mathString);

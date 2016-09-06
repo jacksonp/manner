@@ -9,8 +9,9 @@ class TextContent
     static function interpretAndAppendText(DOMElement $parentNode, string $line)
     {
 
-        $dom = $parentNode->ownerDocument;
-        $man = Man::instance();
+        $dom        = $parentNode->ownerDocument;
+        $man        = Man::instance();
+        $lineLength = mb_strlen($line);
 
         if (!is_null($man->eq_delim_left) and !is_null($man->eq_delim_right)) {
             if (preg_match(
@@ -27,9 +28,81 @@ class TextContent
                 if (mb_strlen($matches[3]) > 0) {
                     self::interpretAndAppendText($parentNode, $matches[3]);
                 }
+
                 return;
             }
         }
+
+        if (preg_match_all('~(?<!\\\\)(?:\\\\\\\\)*\\\\(d|u)~u', $line, $matches, PREG_OFFSET_CAPTURE)) {
+
+            if (count($matches[1]) === 1) {
+                // just a stray... catch it later.
+            } else {
+                $lastLetterPosition = 0;
+                for ($i = 0; $i < count($matches[1]); $i += 2) {
+                    $letter = $matches[1][$i][0];
+                    // http://stackoverflow.com/a/1725329 for the next line:
+                    $letterPosition = mb_strlen(substr($line, 0, $matches[1][$i][1]));
+
+                    $nextLetter         = $matches[1][$i + 1][0];
+                    $nextLetterPosition = mb_strlen(substr($line, 0, $matches[1][$i + 1][1]));
+
+                    if ($letter === $nextLetter) {
+                        // Stick first letter into substring, recurse to carry on processing next letter
+                        self::interpretAndAppendText($parentNode, mb_substr($line, 0, $letterPosition));
+                        self::interpretAndAppendText($parentNode, mb_substr($line, $letterPosition));
+                        return;
+                    }
+
+                    if ($letterPosition > $lastLetterPosition + 1) {
+                        self::interpretAndAppendText($parentNode,
+                          mb_substr($line, $lastLetterPosition, $letterPosition - $lastLetterPosition - 1));
+                    }
+
+                    if ($letter === 'u' and $nextLetter === 'd') {
+                        $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
+                    } elseif ($letter === 'd' and $nextLetter === 'u') {
+                        $newChildNode = $parentNode->appendChild($dom->createElement('sub'));
+                    }
+                    self::interpretAndAppendText($newChildNode,
+                      mb_substr($line, $letterPosition + 1, $nextLetterPosition - $letterPosition - 2));
+
+                    $lastLetterPosition = $nextLetterPosition + 1;
+
+                }
+
+                if ($nextLetterPosition < $lineLength - 1) {
+                    self::interpretAndAppendText($parentNode, mb_substr($line, $nextLetterPosition + 1));
+                }
+
+                return;
+            }
+
+        }
+
+        /*
+        if (preg_match('~^(.*?)\\\\(d|u)(.+?)\\\\(d|u)(.*)$~', $line, $matches)) {
+            if (mb_strlen($matches[1]) > 0) {
+                self::interpretAndAppendText($parentNode, $matches[1]);
+            }
+
+            if ($matches[2] === 'u' and $matches[4] === 'd') {
+                $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
+            } elseif ($matches[2] === 'd' and $matches[4] === 'u') {
+                $newChildNode = $parentNode->appendChild($dom->createElement('sub'));
+            } else {
+                throw new Exception('Cannot handle two consecutive \\' . $matches[2] . ' in ' . $line);
+                // Cases seen are garbage man pages
+            }
+            self::interpretAndAppendText($newChildNode, $matches[3]);
+
+            if (mb_strlen($matches[5]) > 0) {
+                self::interpretAndAppendText($parentNode, $matches[5]);
+            }
+
+            return;
+        }
+        */
 
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
