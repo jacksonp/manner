@@ -189,7 +189,9 @@ class Roff_Condition
             }
         }
 
-        throw new Exception('Unhandled condition: "' . $condition . '".');
+        // If we can't figure it out, assume false. We could also do this: throw new Exception('Unhandled condition: "' . $condition . '".');
+
+        return false;
 
     }
 
