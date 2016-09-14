@@ -25,6 +25,9 @@ class Roff_Macro
         // \$* : In a macro or string, the concatenation of all the arguments separated by spaces.
         $string = str_replace('\\$*', implode(' ', $arguments), $string);
 
+        // \$@ : In a macro or string, the concatenation of all the arguments with each surrounded by double quotes, and separated by spaces.
+        $string = str_replace('\\$@', '"' . implode('" "', $arguments) . '"', $string);
+
         // Other \$ things are also arguments...
         if (mb_strpos($string, '\\$') !== false) {
             throw new Exception($string . ' - can not handle macro that specifies arguments.');

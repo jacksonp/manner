@@ -160,9 +160,10 @@ class Roff_Condition
             return false; // No colours for now.
         }
 
-        if (preg_match('~^c~u', $condition)) {
+        if (preg_match('~^[Fc]~u', $condition)) {
+            // Ffont: True if there exists a font named font.
             // cch: True if there is a glyph ch available.
-            return true; // Assume we have all the glyphs
+            return true; // Assume we have all the glyphs and fonts
         }
 
         if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
