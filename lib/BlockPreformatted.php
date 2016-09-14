@@ -65,7 +65,7 @@ class BlockPreformatted
                 continue;
             } elseif ($request['request'] === 'OP') {
                 $parentNode->appendChild(new DOMText('['));
-                $strong    = $parentNode->appendChild($dom->createElement('strong'));
+                $strong = $parentNode->appendChild($dom->createElement('strong'));
                 TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
                 if (count($request['arguments']) > 1) {
                     $parentNode->appendChild(new DOMText(' '));
@@ -82,7 +82,7 @@ class BlockPreformatted
             }
 
             // FAIL on unknown command
-            if (mb_strlen($line) > 0 and in_array($line[0], ['.', "'"])) {
+            if (mb_strlen($line) > 0 and mb_substr($line[0], 0, 1) === Man::instance()->control_char) {
                 throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
             }
 
