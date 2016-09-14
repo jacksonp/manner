@@ -8,7 +8,6 @@ class Request_Unhandled
     const requests = [
       'ab',
       'ad',
-      'af',
       'aln',
       'als',
       'am',

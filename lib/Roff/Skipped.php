@@ -4,6 +4,7 @@ class Roff_Skipped
 {
 
     const requests = [
+      'af', // ".af register c: Assign format c to register (c=l,i,I,a,A)."
       'bd', // "Embolden font by N-1 units."
       'bp', // "Eject current page and begin new page."
       'cp', // Enable or disable compatibility mode.
