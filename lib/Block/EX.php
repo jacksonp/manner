@@ -10,18 +10,18 @@ class Block_EX
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
-
         $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, 'EE')) {
+        while ($i < $numLines - 1) {
+            $line    = $lines[$i + 1];
+            $request = Request::get($line);
+            if (Block_SS::endSubsection($line) or in_array($request['request'], ['TS', 'EE'])) {
                 break;
             } elseif (Request::is($line, ['nf', 'fi'])) {
-                // .EX already marks block as preformatted, just ignore
-                continue;
+                // .EX already marks block as preformatted, just skip
             } else {
                 $blockLines[] = $line;
             }
+            ++$i;
         }
 
         $block = $dom->createElement('pre');
