@@ -19,10 +19,8 @@ class Block_nf
     static function checkAppend(HybridNode $parentNode, array $lines, int $i)
     {
 
-        // These get swallowed:
-        $blockEnds = '~^\\\\?\.(fi|ad|ad n|ad b)(?:\s|$)~u';
-        $numLines  = count($lines);
-        $dom       = $parentNode->ownerDocument;
+        $numLines = count($lines);
+        $dom      = $parentNode->ownerDocument;
 
         $preLines = [];
         while ($i < $numLines - 1) {
@@ -32,10 +30,15 @@ class Block_nf
                 break;
             } elseif (self::endBlock($request)) {
                 while ($i < $numLines - 1 and $request = Request::get($lines[$i + 1]) and self::endBlock($request)) {
-                    ++$i;
+                    ++$i; // swallow
                 }
                 break;
-            } elseif (!($request['request'] === 'ad' and $request['arg_string'] === 'l')) {
+            } elseif (
+              in_array($request['request'], ['EX', 'EE']) or
+              ($request['request'] === 'ad' and $request['arg_string'] === 'l')
+            ) {
+                // Skip
+            } else {
                 $preLines[] = $line;
             }
             ++$i;
