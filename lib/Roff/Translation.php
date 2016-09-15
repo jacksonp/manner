@@ -4,7 +4,7 @@
 class Roff_Translation
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
     {
 
         $man = Man::instance();

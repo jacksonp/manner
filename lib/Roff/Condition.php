@@ -7,7 +7,7 @@ class Roff_Condition
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
     const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
-    static function evaluate(array $request, array &$lines, int $i, $macroArguments)
+    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i, $macroArguments)
     {
 
         if ($request['request'] === 'if') {
@@ -20,13 +20,13 @@ class Roff_Condition
               '~^' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
               $request['raw_arg_string'], $matches)
             ) {
-                return self::ifBlock($lines, $i, $matches[3],
+                return self::ifBlock($parentNode, $lines, $i, $matches[3],
                   self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments),
                   $macroArguments);
             }
 
             if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
-                return self::ifBlock($lines, $i, $matches[2], self::test($matches[1], $macroArguments),
+                return self::ifBlock($parentNode, $lines, $i, $matches[2], self::test($matches[1], $macroArguments),
                   $macroArguments);
             }
 
@@ -43,7 +43,7 @@ class Roff_Condition
 
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
                 $useIf = self::test($matches[1], $macroArguments);
-                $if    = self::ifBlock($lines, $i, $matches[2], $useIf, $macroArguments);
+                $if    = self::ifBlock($parentNode, $lines, $i, $matches[2], $useIf, $macroArguments);
                 $i     = $if['i'];
 
                 $result = Roff_Comment::checkEvaluate($lines, $i);
@@ -51,7 +51,7 @@ class Roff_Condition
                     $i = $result['i'];
                 }
 
-                return self::handleElse($lines, $i + 1, $useIf, $if['lines'], $macroArguments);
+                return self::handleElse($parentNode, $lines, $i + 1, $useIf, $if['lines'], $macroArguments);
             }
 
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['raw_arg_string'], $ifMatches)) {
@@ -63,7 +63,8 @@ class Roff_Condition
 
                 $lineArray = [Roff_Macro::applyReplacements($ifMatches[2], $macroArguments)];
 
-                return self::handleElse($lines, $i + 1, $useIf, Text::applyRoffClasses($lineArray, $macroArguments),
+                return self::handleElse($parentNode, $lines, $i + 1, $useIf,
+                  Text::applyRoffClasses($parentNode, $lineArray, $macroArguments),
                   $macroArguments);
             }
         }
@@ -72,7 +73,14 @@ class Roff_Condition
 
     }
 
-    private static function handleElse(array $lines, int $i, bool $useIf, array $ifLines, $macroArguments): array
+    private static function handleElse(
+      DOMElement $parentNode,
+      array $lines,
+      int $i,
+      bool $useIf,
+      array $ifLines,
+      $macroArguments
+    ): array
     {
 
         $line = $lines[$i];
@@ -82,7 +90,7 @@ class Roff_Condition
         if ($request['request'] === 'el') {
 
             if (preg_match('~^\\\\{(.*)$~u', $request['raw_arg_string'], $matches)) {
-                $else     = self::ifBlock($lines, $i, $matches[1], !$useIf, $macroArguments);
+                $else     = self::ifBlock($parentNode, $lines, $i, $matches[1], !$useIf, $macroArguments);
                 $newLines = $useIf ? $ifLines : $else['lines'];
 
                 return ['lines' => $newLines, 'i' => $else['i']];
@@ -99,7 +107,7 @@ class Roff_Condition
         } else {
             $lineArray = [Roff_Macro::applyReplacements($request['arg_string'], $macroArguments)];
 
-            return ['lines' => Text::applyRoffClasses($lineArray, $macroArguments), 'i' => $i];
+            return ['lines' => Text::applyRoffClasses($parentNode, $lineArray, $macroArguments), 'i' => $i];
         }
 
     }
@@ -196,8 +204,14 @@ class Roff_Condition
 
     }
 
-    private static function ifBlock(array &$lines, int $i, string $firstLine, bool $processContents, $macroArguments)
-    {
+    private static function ifBlock(
+      DOMElement $parentNode,
+      array &$lines,
+      int $i,
+      string $firstLine,
+      bool $processContents,
+      $macroArguments
+    ) {
 
         $numLines         = count($lines);
         $foundEnd         = false;
@@ -250,7 +264,7 @@ class Roff_Condition
                 if (
                   $request = Request::get($replacementLines[$j]) and
                   in_array($request['request'], ['if', 'ie']) and
-                  $result = self::evaluate($request, $replacementLines, $j, $macroArguments) and
+                  $result = self::evaluate($parentNode, $request, $replacementLines, $j, $macroArguments) and
                   $result !== false
                 ) {
                     $recurseLines = array_merge($recurseLines, $result['lines']);
@@ -266,7 +280,7 @@ class Roff_Condition
             $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
         }
 
-        return ['lines' => Text::applyRoffClasses($replacementLines), 'i' => $ifIndex];
+        return ['lines' => Text::applyRoffClasses($parentNode, $replacementLines), 'i' => $ifIndex];
 
     }
 

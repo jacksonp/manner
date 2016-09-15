@@ -4,7 +4,7 @@
 class Text
 {
 
-    static function applyRoffClasses(array &$lines, &$callerArguments = null): array
+    static function applyRoffClasses(DOMElement $parentNode, array &$lines, &$callerArguments = null): array
     {
 
         $man = Man::instance();
@@ -36,14 +36,14 @@ class Text
                     }
 
                     $outLines = array_merge($outLines,
-                      Text::applyRoffClasses($macros[$request['request']], $request['arguments']));
+                      Text::applyRoffClasses($parentNode, $macros[$request['request']], $request['arguments']));
 
                     continue;
                 }
 
                 $className = $man->getRoffRequestClass($request['request']);
                 if ($className) {
-                    $result = $className::evaluate($request, $lines, $i, $callerArguments);
+                    $result = $className::evaluate($parentNode, $request, $lines, $i, $callerArguments);
                     if ($result !== false) {
                         if (isset($result['lines'])) {
                             foreach ($result['lines'] as $l) {
