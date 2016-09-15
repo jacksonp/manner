@@ -20,6 +20,13 @@ class Blocks
       'h3',
     ];
 
+    static function trim(array &$lines)
+    {
+        $trimVals = ['', ' ', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
+        ArrayHelper::ltrim($lines, $trimVals);
+        ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
+    }
+
     static function lineEndsBlock(array $lines, int $i)
     {
         $request = Request::get($lines[$i]);
@@ -33,10 +40,7 @@ class Blocks
     static function handle(DOMElement $parentNode, array $lines)
     {
 
-        // Trim $lines
-        $trimVals = ['', ' ', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
-        ArrayHelper::ltrim($lines, $trimVals);
-        ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
+        Blocks::trim($lines);
 
 //        var_dump($parentNode->tagName);
 //        var_dump($lines);

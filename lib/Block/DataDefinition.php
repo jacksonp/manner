@@ -56,9 +56,7 @@ class Block_DataDefinition
             }
         }
 
-        if (count($blockLines) > 0) {
-            Blocks::handle($parentNode, $blockLines);
-        }
+        Blocks::handle($parentNode, $blockLines);
 
         return $i;
 
