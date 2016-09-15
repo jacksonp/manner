@@ -16,7 +16,7 @@ class Manner
         $man = Man::instance();
         $man->reset();
 
-        $linesNoComments = Text::stripComments($fileLines);
+        $linesNoComments = Preprocessor::strip($fileLines);
         $linesRoffed     = Text::applyRoffClasses($linesNoComments);
         Blocks::handle($manPageContainer, $linesRoffed);
 
