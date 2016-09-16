@@ -63,9 +63,9 @@ class Roff_Condition
 
                 $lineArray = [Roff_Macro::applyReplacements($ifMatches[2], $macroArguments)];
 
-                return self::handleElse($parentNode, $lines, $i + 1, $useIf,
-                  Text::applyRoffClasses($parentNode, $lineArray, $macroArguments),
-                  $macroArguments);
+                Text::applyRoffClasses($parentNode, $lineArray, $macroArguments);
+
+                return self::handleElse($parentNode, $lines, $i + 1, $useIf, $lineArray, $macroArguments);
             }
         }
 
@@ -106,8 +106,9 @@ class Roff_Condition
             return ['lines' => $ifLines, 'i' => $i];
         } else {
             $lineArray = [Roff_Macro::applyReplacements($request['arg_string'], $macroArguments)];
+            Text::applyRoffClasses($parentNode, $lineArray, $macroArguments);
 
-            return ['lines' => Text::applyRoffClasses($parentNode, $lineArray, $macroArguments), 'i' => $i];
+            return ['lines' => $lineArray, 'i' => $i];
         }
 
     }
@@ -270,7 +271,7 @@ class Roff_Condition
                     if (array_key_exists('lines', $result)) {
                         $recurseLines = array_merge($recurseLines, $result['lines']);
                     }
-                    $j            = $result['i'];
+                    $j = $result['i'];
                 } else {
                     $recurseLines[] = $replacementLines[$j];
                 }
@@ -282,7 +283,9 @@ class Roff_Condition
             $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
         }
 
-        return ['lines' => Text::applyRoffClasses($parentNode, $replacementLines, $macroArguments), 'i' => $ifIndex];
+        Text::applyRoffClasses($parentNode, $replacementLines, $macroArguments);
+
+        return ['lines' => $replacementLines, 'i' => $ifIndex];
 
     }
 
