@@ -280,7 +280,7 @@ class Roff_Condition
             $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
         }
 
-        return ['lines' => Text::applyRoffClasses($parentNode, $replacementLines), 'i' => $ifIndex];
+        return ['lines' => Text::applyRoffClasses($parentNode, $replacementLines, $macroArguments), 'i' => $ifIndex];
 
     }
 
