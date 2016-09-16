@@ -9,10 +9,9 @@ class Text
 
         $man = Man::instance();
 
-        $numLines = count($lines);
         $outLines = [];
 
-        for ($i = 0; $i < $numLines; ++$i) {
+        for ($i = 0; $i < count($lines); ++$i) {
 
             // Do comments first
             $result = Roff_Comment::checkEvaluate($lines, $i);
