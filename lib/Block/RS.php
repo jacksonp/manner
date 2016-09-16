@@ -58,6 +58,8 @@ class Block_RS
             --$i;
         }
 
+        Blocks::trim($blockLines);
+
         if (count($blockLines) > 0) {
             $rsBlock = $dom->createElement('div');
             $rsBlock->setAttribute('class', $className);

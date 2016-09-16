@@ -39,9 +39,6 @@ class Blocks
 
     static function handle(DOMElement $parentNode, array $lines)
     {
-
-        Blocks::trim($lines);
-
 //        var_dump($parentNode->tagName);
 //        var_dump($lines);
 

@@ -150,6 +150,7 @@ class Block_TS
                                     $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
                                     $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                 }
+                                Blocks::trim($tBlockLines);
                                 Blocks::handle($cell, $tBlockLines);
                                 break;
                             } else {

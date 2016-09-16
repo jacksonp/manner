@@ -75,6 +75,7 @@ class Inline_ft
             if ($textParent->isOrInTag('pre')) {
                 BlockPreformatted::handle($node, $blockLines);
             } else {
+                Blocks::trim($blockLines);
                 Blocks::handle($node, $blockLines);
             }
             $textParent->appendBlockIfHasContent($node);

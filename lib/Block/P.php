@@ -18,6 +18,8 @@ class Block_P
             $blockLines[] = $lines[$i + 1];
         }
 
+        Blocks::trim($blockLines);
+
         if (count($blockLines) > 0) {
             if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
                 Blocks::handle($parentNode, $blockLines);

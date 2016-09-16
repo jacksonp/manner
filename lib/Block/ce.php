@@ -23,6 +23,7 @@ class Block_ce
         }
         $block = $dom->createElement('div');
         $block->setAttribute('class', 'center');
+        Blocks::trim($blockLines);
         Blocks::handle($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 

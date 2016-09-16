@@ -54,6 +54,7 @@ class Block_SS
             }
         }
 
+        Blocks::trim($blockLines);
         Blocks::handle($subsection, $blockLines);
         $parentNode->appendBlockIfHasContent($subsection);
 

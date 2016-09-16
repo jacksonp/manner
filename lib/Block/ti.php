@@ -30,6 +30,7 @@ class Block_ti
         }
 
         $block = $dom->createElement('blockquote');
+        Blocks::trim($blockLines);
         Blocks::handle($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 

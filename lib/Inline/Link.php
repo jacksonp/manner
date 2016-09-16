@@ -20,7 +20,9 @@ class Inline_Link
             if (count($arguments) > 1) {
                 TextContent::interpretAndAppendText($anchor, $arguments[1]);
             } elseif ($i < count($lines) - 1) {
-                Blocks::handle($anchor, [$lines[++$i]]);
+                $blockLines = [$lines[++$i]];
+                Blocks::trim($blockLines);
+                Blocks::handle($anchor, $blockLines);
             } else {
                 $anchor->appendChild(new DOMText($arguments[0]));
             }
@@ -68,9 +70,8 @@ class Inline_Link
         }
         if ($href === false) {
             // No valid URL, output any content as text and bail.
-            if (count($blockLines) > 0) {
-                Blocks::handle($parentNode, $blockLines);
-            }
+            Blocks::trim($blockLines);
+            Blocks::handle($parentNode, $blockLines);
 
             return $i;
         }
@@ -78,6 +79,7 @@ class Inline_Link
         $anchor = $dom->createElement('a');
         $anchor->setAttribute('href', $href);
 
+        Blocks::trim($blockLines);
         if (count($blockLines) === 0) {
             TextContent::interpretAndAppendText($anchor, $url);
         } else {

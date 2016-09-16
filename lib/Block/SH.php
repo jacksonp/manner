@@ -58,6 +58,7 @@ class Block_SH
             }
         }
 
+        Blocks::trim($blockLines);
         Blocks::handle($section, $blockLines);
         $parentNode->appendBlockIfHasContent($section);
 

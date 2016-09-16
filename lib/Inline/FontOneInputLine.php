@@ -61,7 +61,9 @@ class Inline_FontOneInputLine
             if (count($result['lines']) === 0) {
                 return $i;
             }
-            Blocks::handle($innerNode, $result['lines']);
+            $blockLines = $result['lines'];
+            Blocks::trim($blockLines);
+            Blocks::handle($innerNode, $blockLines);
         } else {
             TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
         }

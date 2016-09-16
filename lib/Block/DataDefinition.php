@@ -56,6 +56,7 @@ class Block_DataDefinition
             }
         }
 
+        Blocks::trim($blockLines);
         Blocks::handle($parentNode, $blockLines);
 
         return $i;

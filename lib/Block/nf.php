@@ -75,6 +75,7 @@ class Block_nf
                         continue;
                     }
                     $request = '';
+                    // TODO: use Request?
                     if (mb_substr($preLine, 0, 1) === '.') {
                         preg_match('~^(\.\w+ )"?(.*?)"?$~u', $preLine, $matches);
                         $request = $matches[1];
@@ -88,7 +89,9 @@ class Block_nf
                         if (empty($request)) {
                             TextContent::interpretAndAppendText($codeNode, $tdLine);
                         } else {
-                            Blocks::handle($codeNode, [$request . $tdLine]);
+                            $blockLines = [$request . $tdLine];
+                            Blocks::trim($blockLines);
+                            Blocks::handle($codeNode, $blockLines);
                         }
                         $tr->appendChild($cell);
                     }
