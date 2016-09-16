@@ -30,7 +30,7 @@ class Roff_Macro
 
         // Other \$ things are also arguments...
         if (mb_strpos($string, '\\$') !== false) {
-            throw new Exception($string . ' - can not handle macro that specifies arguments.');
+            throw new Exception($string . ' - can not handle macro with: ' . $string);
         }
 
         return $string;

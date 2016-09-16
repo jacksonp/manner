@@ -14,10 +14,6 @@ class Roff_String
 
         $man = Man::instance();
 
-        if (empty($matches[2])) {
-            return ['i' => $i];
-        }
-
         $newRequest = $matches[1];
         $requestVal = Request::simplifyRequest($matches[2]);
         if (mb_substr($requestVal, 0, 1) === '"') {
