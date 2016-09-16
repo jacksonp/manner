@@ -17,8 +17,8 @@ class Manner
         $man->reset();
 
         $strippedLines = Preprocessor::strip($fileLines);
-        $linesRoffed   = Text::applyRoffClasses($manPageContainer, $strippedLines);
-        Blocks::handle($manPageContainer, $linesRoffed);
+        Text::applyRoffClasses($manPageContainer, $strippedLines);
+        Blocks::handle($manPageContainer, $strippedLines);
 
         return $dom;
     }

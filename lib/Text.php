@@ -21,7 +21,7 @@ class Text
                     --$i;
                 } else {
                     array_splice($lines, $i, $result['i'] + 1 - $i);
-                    --$i;// = $result['i'] - 1;
+                    --$i;
                 }
                 continue;
             }
@@ -63,7 +63,6 @@ class Text
                             array_splice($lines, $i, $result['i'] + 1 - $i);
                         }
                         --$i;
-//                        $i = $result['i'] - 1;
                         continue;
                     }
                 }
@@ -74,7 +73,6 @@ class Text
             if ($result !== false) {
                 array_splice($lines, $i, $result['i'] + 1 - $i);
                 --$i;
-//                $i = $result['i'] - 1;
                 continue;
             }
 
