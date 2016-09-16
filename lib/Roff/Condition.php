@@ -63,7 +63,7 @@ class Roff_Condition
 
                 $lineArray = [Roff_Macro::applyReplacements($ifMatches[2], $macroArguments)];
 
-                Text::applyRoffClasses($parentNode, $lineArray, $macroArguments);
+                Roff::parse($parentNode, $lineArray, $macroArguments);
 
                 return self::handleElse($parentNode, $lines, $i + 1, $useIf, $lineArray, $macroArguments);
             }
@@ -106,7 +106,7 @@ class Roff_Condition
             return ['lines' => $ifLines, 'i' => $i];
         } else {
             $lineArray = [Roff_Macro::applyReplacements($request['arg_string'], $macroArguments)];
-            Text::applyRoffClasses($parentNode, $lineArray, $macroArguments);
+            Roff::parse($parentNode, $lineArray, $macroArguments);
 
             return ['lines' => $lineArray, 'i' => $i];
         }
@@ -283,7 +283,7 @@ class Roff_Condition
             $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
         }
 
-        Text::applyRoffClasses($parentNode, $replacementLines, $macroArguments);
+        Roff::parse($parentNode, $replacementLines, $macroArguments);
 
         return ['lines' => $replacementLines, 'i' => $ifIndex];
 

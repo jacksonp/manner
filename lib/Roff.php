@@ -1,10 +1,10 @@
 <?php
 
 
-class Text
+class Roff
 {
 
-    static function applyRoffClasses(DOMElement $parentNode, array &$lines, &$callerArguments = null)
+    static function parse(DOMElement $parentNode, array &$lines, &$callerArguments = null)
     {
 
         $man = Man::instance();
@@ -43,7 +43,7 @@ class Text
                     // Make copies of arrays:
                     $macroLines           = $macros[$request['request']];
                     $macroCallerArguments = $request['arguments'];
-                    Text::applyRoffClasses($parentNode, $macroLines, $macroCallerArguments);
+                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
                     array_splice($lines, $i, 1, $macroLines);
                     --$i;
 
@@ -81,7 +81,7 @@ class Text
             // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
             $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
-            
+
 
         }
 
