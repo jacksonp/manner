@@ -9,14 +9,20 @@ class Text
 
         $man = Man::instance();
 
-        $outLines = [];
-
         for ($i = 0; $i < count($lines); ++$i) {
+
+//            echo $i, "\t", $lines[$i], PHP_EOL;
+//            var_dump(array_slice($lines, 0, 5));
 
             // Do comments first
             $result = Roff_Comment::checkEvaluate($lines, $i);
             if ($result !== false) {
-                $i = $result['i'];
+                if ($result['i'] < $i) { // We want another look at a modified $lines[$i];
+                    --$i;
+                } else {
+                    array_splice($lines, $i, $result['i'] + 1 - $i);
+                    --$i;// = $result['i'] - 1;
+                }
                 continue;
             }
 
@@ -34,8 +40,12 @@ class Text
                         }
                     }
 
-                    $outLines = array_merge($outLines,
-                      Text::applyRoffClasses($parentNode, $macros[$request['request']], $request['arguments']));
+                    // Make copies of arrays:
+                    $macroLines           = $macros[$request['request']];
+                    $macroCallerArguments = $request['arguments'];
+                    $newLines             = Text::applyRoffClasses($parentNode, $macroLines, $macroCallerArguments);
+                    array_splice($lines, $i, 1, $newLines);
+                    --$i;
 
                     continue;
                 }
@@ -45,11 +55,15 @@ class Text
                     $result = $className::evaluate($parentNode, $request, $lines, $i, $callerArguments);
                     if ($result !== false) {
                         if (isset($result['lines'])) {
-                            foreach ($result['lines'] as $l) {
-                                $outLines[] = Roff_Macro::applyReplacements($l, $callerArguments);
+                            foreach ($result['lines'] as $k => $l) {
+                                $result['lines'][$k] = Roff_Macro::applyReplacements($l, $callerArguments);
                             }
+                            array_splice($lines, $i, $result['i'] + 1 - $i, $result['lines']);
+                        } else {
+                            array_splice($lines, $i, $result['i'] + 1 - $i);
                         }
-                        $i = $result['i'];
+                        --$i;
+//                        $i = $result['i'] - 1;
                         continue;
                     }
                 }
@@ -58,18 +72,20 @@ class Text
 
             $result = Roff_Skipped::checkEvaluate($lines, $i);
             if ($result !== false) {
-                $i = $result['i'];
+                array_splice($lines, $i, $result['i'] + 1 - $i);
+                --$i;
+//                $i = $result['i'] - 1;
                 continue;
             }
 
             $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
 
             // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
-            $outLines[] = $man->applyAllReplacements($lines[$i]);
+            $lines[$i] = $man->applyAllReplacements($lines[$i]);
 
         }
 
-        return $outLines;
+        return $lines;
 
     }
 

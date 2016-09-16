@@ -267,7 +267,9 @@ class Roff_Condition
                   $result = self::evaluate($parentNode, $request, $replacementLines, $j, $macroArguments) and
                   $result !== false
                 ) {
-                    $recurseLines = array_merge($recurseLines, $result['lines']);
+                    if (array_key_exists('lines', $result)) {
+                        $recurseLines = array_merge($recurseLines, $result['lines']);
+                    }
                     $j            = $result['i'];
                 } else {
                     $recurseLines[] = $replacementLines[$j];
