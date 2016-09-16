@@ -10,16 +10,16 @@ class Block_TabTable
     {
         // char before tab avoid indented stuff + exclude escaped tabs
         return
-          $i < count($lines) - 2 and
-          !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) and
-          mb_strpos($lines[$i], "\t") > 0 and
-          preg_match('~[^\\\\\s]\t~u', $lines[$i]) and
+          $i < count($lines) - 2 &&
+          !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) &&
+          mb_strpos($lines[$i], "\t") > 0 &&
+          preg_match('~[^\\\\\s]\t~u', $lines[$i]) &&
           (
             (
-              preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) and mb_strpos($lines[$i + 1], "\t") > 0) or
+              preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) && mb_strpos($lines[$i + 1], "\t") > 0) ||
             (in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])
-            ) and
-            preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) and
+            ) &&
+            preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) &&
             mb_strpos($lines[$i + 2], "\t") > 0
           );
     }
@@ -64,7 +64,7 @@ class Block_TabTable
                 $line = $lines[$i + 1];
             }
 
-            if (mb_strpos($line, "\t") === false and $line !== '\\&...') { // \&... see pmlogextract.1
+            if (mb_strpos($line, "\t") === false && $line !== '\\&...') { // \&... see pmlogextract.1
                 return $i;
             }
 

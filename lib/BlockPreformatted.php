@@ -35,7 +35,7 @@ class BlockPreformatted
                 $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
                   $request['request']);
                 if ($newI !== false) {
-                    if ($i !== $numLines - 1 and $request['class'] !== 'Request_Skippable') {
+                    if ($i !== $numLines - 1 && $request['class'] !== 'Request_Skippable') {
                         self::endInputLine($parentNode);
                     }
                     $i = $newI;
@@ -43,7 +43,7 @@ class BlockPreformatted
                 }
             } elseif ($request['request'] === 'IP') {
                 $nextIndent = 4;
-                if (count($request['arguments']) === 0 or trim($request['arguments'][0]) === '') {
+                if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
                     continue;
                 } else {
                     $line = $request['arguments'][0];
@@ -59,7 +59,7 @@ class BlockPreformatted
                 $nextIndent = 4;
                 continue;
             } elseif (
-              in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) or
+              in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) ||
               in_array($line, ['\\&', '\\)'])
             ) {
                 continue;
@@ -82,7 +82,7 @@ class BlockPreformatted
             }
 
             // FAIL on unknown command
-            if (mb_strlen($line) > 0 and mb_substr($line[0], 0, 1) === Man::instance()->control_char) {
+            if (mb_strlen($line) > 0 && mb_substr($line[0], 0, 1) === Man::instance()->control_char) {
                 throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
             }
 
@@ -94,9 +94,9 @@ class BlockPreformatted
         }
 
         while (
-          $parentNode->lastChild and
-          $parentNode->lastChild instanceof DOMText
-          and trim($parentNode->lastChild->textContent) === ''
+          $parentNode->lastChild &&
+          $parentNode->lastChild instanceof DOMText &&
+          trim($parentNode->lastChild->textContent) === ''
         ) {
             $parentNode->removeChild($parentNode->lastChild);
         }
@@ -105,7 +105,7 @@ class BlockPreformatted
 
     private static function endInputLine(DOMElement $parentNode)
     {
-        if (TextContent::$continuation or $parentNode->getAttribute('class') === 'synopsis') {
+        if (TextContent::$continuation || $parentNode->getAttribute('class') === 'synopsis') {
             $parentNode->appendChild(new DOMText(' '));
         } else {
             $parentNode->appendChild(new DOMText("\n"));

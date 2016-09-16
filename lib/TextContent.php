@@ -13,7 +13,7 @@ class TextContent
         $man        = Man::instance();
         $lineLength = mb_strlen($line);
 
-        if (!is_null($man->eq_delim_left) and !is_null($man->eq_delim_right)) {
+        if (!is_null($man->eq_delim_left) && !is_null($man->eq_delim_right)) {
             if (preg_match(
               '~^(.*?)' .
               preg_quote($man->eq_delim_left, '~') .
@@ -60,9 +60,9 @@ class TextContent
                           mb_substr($line, $lastLetterPosition, $letterPosition - $lastLetterPosition - 1));
                     }
 
-                    if ($letter === 'u' and $nextLetter === 'd') {
+                    if ($letter === 'u' && $nextLetter === 'd') {
                         $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
-                    } elseif ($letter === 'd' and $nextLetter === 'u') {
+                    } elseif ($letter === 'd' && $nextLetter === 'u') {
                         $newChildNode = $parentNode->appendChild($dom->createElement('sub'));
                     }
                     self::interpretAndAppendText($newChildNode,
@@ -87,9 +87,9 @@ class TextContent
                 self::interpretAndAppendText($parentNode, $matches[1]);
             }
 
-            if ($matches[2] === 'u' and $matches[4] === 'd') {
+            if ($matches[2] === 'u' && $matches[4] === 'd') {
                 $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
-            } elseif ($matches[2] === 'd' and $matches[4] === 'u') {
+            } elseif ($matches[2] === 'd' && $matches[4] === 'u') {
                 $newChildNode = $parentNode->appendChild($dom->createElement('sub'));
             } else {
                 throw new Exception('Cannot handle two consecutive \\' . $matches[2] . ' in ' . $line);
@@ -118,9 +118,9 @@ class TextContent
 
         $textSegments = [];
         for ($i = 0; $i < count($textSegmentsS); ++$i) {
-            if ($textSegmentsS[$i] === '\\\\' and
-              $i > 0 and
-              count($textSegments) > 0 and
+            if ($textSegmentsS[$i] === '\\\\' &&
+              $i > 0 &&
+              count($textSegments) > 0 &&
               mb_substr($textSegments[count($textSegments) - 1], 0, 1) !== '\\'
             ) {
                 $textSegments[count($textSegments) - 1] .= '\\\\';
@@ -145,8 +145,8 @@ class TextContent
                 continue;
             }
 
-            if ($i < $numTextSegments - 1 and in_array(mb_substr($textSegments[$i], 0, 2),
-                ['\f', '\F']) and in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F', '\d', '\u'])
+            if ($i < $numTextSegments - 1 && in_array(mb_substr($textSegments[$i], 0, 2),
+                ['\f', '\F']) && in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F', '\d', '\u'])
             ) {
                 continue;
             }
@@ -154,7 +154,7 @@ class TextContent
             switch ($textSegments[$i]) {
                 case '\u':
                     if ($i < $numTextSegments - 1) {
-                        if ($i === $numTextSegments - 2 or $textSegments[$i + 2] === '\d') {
+                        if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\d') {
                             $sup = $parentNode->appendChild($dom->createElement('sup'));
                             $sup->appendChild(new DOMText(
                               self::interpretString($textSegments[++$i], false)));
@@ -166,7 +166,7 @@ class TextContent
                     break;
                 case '\d':
                     if ($i < $numTextSegments - 1) {
-                        if ($i === $numTextSegments - 2 or $textSegments[$i + 2] === '\u') {
+                        if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\u') {
                             $sub = $parentNode->appendChild($dom->createElement('sub'));
                             $sub->appendChild(new DOMText(
                               self::interpretString($textSegments[++$i], false)));
@@ -198,7 +198,7 @@ class TextContent
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
                         $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if ($parentNode->isOrInTag('em') or trim($textSegments[$i]) === '') {
+                        if ($parentNode->isOrInTag('em') || trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
                             $em = $parentNode->appendChild($dom->createElement('em'));

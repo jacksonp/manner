@@ -9,7 +9,7 @@ class Inline_VerticalSpace
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;
         while ($nodeCheck) {
-            if ($nodeCheck instanceof DOMElement and $nodeCheck->tagName === 'br') {
+            if ($nodeCheck instanceof DOMElement && $nodeCheck->tagName === 'br') {
                 ++$prevBRs;
             } else {
                 break;
@@ -42,13 +42,13 @@ class Inline_VerticalSpace
             'h2',
             'h3',
             'code',
-          ]) or
+          ]) ||
           (
-            $textParent->hasChildNodes() and
+            $textParent->hasChildNodes() &&
             (
-              !($textParent->lastChild instanceof DOMElement) or
+              !($textParent->lastChild instanceof DOMElement) ||
               $textParent->lastChild->tagName !== 'pre'
-            ) and
+            ) &&
             $i !== $numLines - 1
           )
         ) {

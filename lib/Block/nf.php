@@ -9,7 +9,7 @@ class Block_nf
         if (in_array($request['request'], ['fi'])) {
             return true;
         }
-        if ($request['request'] === 'ad' and in_array($request['arg_string'], ['', 'n', 'b'])) {
+        if ($request['request'] === 'ad' && in_array($request['arg_string'], ['', 'n', 'b'])) {
             return true;
         }
 
@@ -26,16 +26,16 @@ class Block_nf
         while ($i < $numLines - 1) {
             $line    = $lines[$i + 1];
             $request = Request::get($line);
-            if (Block_SS::endSubsection($line) or $request['request'] === 'TS') {
+            if (Block_SS::endSubsection($line) || $request['request'] === 'TS') {
                 break;
             } elseif (self::endBlock($request)) {
-                while ($i < $numLines - 1 and $request = Request::get($lines[$i + 1]) and self::endBlock($request)) {
+                while ($i < $numLines - 1 && $request = Request::get($lines[$i + 1]) && self::endBlock($request)) {
                     ++$i; // swallow
                 }
                 break;
             } elseif (
-              in_array($request['request'], ['EX', 'EE']) or
-              ($request['request'] === 'ad' and $request['arg_string'] === 'l')
+              in_array($request['request'], ['EX', 'EE']) ||
+              ($request['request'] === 'ad' && $request['arg_string'] === 'l')
             ) {
                 // Skip
             } else {
@@ -48,7 +48,7 @@ class Block_nf
             return $i;
         }
 
-        if ($i < $numLines - 1 and Request::is($preLines[0], 'RS') and Request::is($lines[$i + 1], 'RE')) {
+        if ($i < $numLines - 1 && Request::is($preLines[0], 'RS') && Request::is($lines[$i + 1], 'RE')) {
             $preLines[] = $lines[++$i];
         }
 
@@ -109,7 +109,7 @@ class Block_nf
                 ArrayHelper::trim($preLines, ['', '.br', '.sp']);
                 $className = 'indent';
                 if (
-                  !empty($request['arg_string']) and
+                  !empty($request['arg_string']) &&
                   $indentVal = Roff_Unit::normalize(trim($request['arg_string'])) // note this filters out 0s
                 ) {
                     $className .= '-' . $indentVal;

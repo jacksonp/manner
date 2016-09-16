@@ -19,7 +19,7 @@ class Block_P
         }
 
         if (count($blockLines) > 0) {
-            if ($parentNode->tagName === 'p' and !$parentNode->hasContent()) {
+            if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
                 Blocks::handle($parentNode, $blockLines);
             } else {
                 $p = $dom->createElement('p');

@@ -14,7 +14,7 @@ class Block_EX
         while ($i < $numLines - 1) {
             $line    = $lines[$i + 1];
             $request = Request::get($line);
-            if (Block_SS::endSubsection($line) or in_array($request['request'], ['TS', 'EE'])) {
+            if (Block_SS::endSubsection($line) || in_array($request['request'], ['TS', 'EE'])) {
                 break;
             } elseif (Request::is($line, ['nf', 'fi'])) {
                 // .EX already marks block as preformatted, just skip

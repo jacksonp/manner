@@ -31,7 +31,7 @@ class Inline_ft
         for (; $i < $numLines - 1; ++$i) {
             $nextLine = $lines[$i + 1];
             if (
-              preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) or
+              preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) ||
               Blocks::lineEndsBlock($lines, $i + 1)
             ) {
                 break;

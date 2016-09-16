@@ -62,7 +62,7 @@ class Inline_Link
             $url  = $arguments[0];
             $href = self::getValidHREF($url);
         }
-        if ($href === false and count($blockLines) === 1) {
+        if ($href === false && count($blockLines) === 1) {
             $url  = $blockLines[0];
             $href = self::getValidHREF($url);
         }

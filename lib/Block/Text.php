@@ -9,10 +9,10 @@ class Block_Text
     static function addSpace(DOMElement $parentNode, DOMElement $textParent, bool $shouldAppend)
     {
         if (
-          $parentNode->tagName !== 'pre' and
-          (!$textParent->lastChild or $textParent->lastChild->nodeType !== XML_ELEMENT_NODE or $textParent->lastChild->tagName !== 'br') and
-          !$shouldAppend and
-          !TextContent::$continuation and
+          $parentNode->tagName !== 'pre' &&
+          (!$textParent->lastChild || $textParent->lastChild->nodeType !== XML_ELEMENT_NODE || $textParent->lastChild->tagName !== 'br') &&
+          !$shouldAppend &&
+          !TextContent::$continuation &&
           $textParent->hasContent()
         ) {
             $textParent->appendChild(new DOMText(' '));
@@ -36,10 +36,10 @@ class Block_Text
             if (!in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
                 $blockLines[] = $lines[$i];
                 if (
-                  mb_substr($lines[$i], 0, 1) !== '.' or
+                  mb_substr($lines[$i], 0, 1) !== '.' ||
                   (
-                    in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) and
-                    !is_null($request['arguments']) and count($request['arguments']) > 0 and $request['arguments'][0] !== ''
+                    in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) &&
+                    !is_null($request['arguments']) && count($request['arguments']) > 0 && $request['arguments'][0] !== ''
                   )
                 ) {
                     break;
@@ -48,7 +48,7 @@ class Block_Text
             }
 
         }
-        if ($i < $numLines - 1 and $lines[$i + 1] === '.UE') {
+        if ($i < $numLines - 1 && $lines[$i + 1] === '.UE') {
             $blockLines[] = $lines[++$i];
         }
 
@@ -67,13 +67,13 @@ class Block_Text
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
-        if (mb_strlen($line) < 2 or mb_substr($line, 0, 2) !== '\\.') {
+        if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
             for (; $i < $numLines - 1; ++$i) {
                 $nextLine = $lines[$i + 1];
-                if (trim($nextLine) === '' or
-                  in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) or
-                  mb_strpos($nextLine, "\t") > 0 or // Could be TabTable
-                  (mb_strlen($nextLine) > 1 and mb_substr($nextLine, 0, 2) === '\\.')
+                if (trim($nextLine) === '' ||
+                  in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
+                  mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
+                  (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
                 ) {
                     break;
                 }
@@ -132,11 +132,8 @@ class Block_Text
     private static function addImplicitBreak(DOMElement $parentNode)
     {
         if (
-          $parentNode->hasChildNodes() and
-          (
-            $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE or
-            $parentNode->lastChild->tagName !== 'br'
-          )
+          $parentNode->hasChildNodes() &&
+          ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
         ) {
             $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
         }

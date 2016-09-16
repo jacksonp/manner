@@ -10,7 +10,7 @@ class Block_IP
         // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-        if (count($arguments) > 0 and trim($arguments[0]) !== '') {
+        if (count($arguments) > 0 && trim($arguments[0]) !== '') {
             return self::appendDl($parentNode, $lines, $i);
         } else {
             return self::appendBlockquote($parentNode, $lines, $i);
@@ -32,10 +32,10 @@ class Block_IP
             $request = Request::get($line);
             if ($request['request'] === 'IP') {
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-                if (count($request['arguments']) and trim($request['arguments'][0]) !== '') {
+                if (count($request['arguments']) && trim($request['arguments'][0]) !== '') {
                     if (
-                      is_null($firstIndent) and
-                      count($request['arguments']) > 1 and
+                      is_null($firstIndent) &&
+                      count($request['arguments']) > 1 &&
                       $indentVal = Roff_Unit::normalize($request['arguments'][1]) // note this filters out 0s
                     ) {
                         $firstIndent = 'indent-' . $indentVal;
@@ -72,8 +72,8 @@ class Block_IP
             $line    = $lines[$i];
             $request = Request::get($line);
             if (
-              $request['request'] !== 'IP' or
-              (count($request['arguments']) > 0 and trim($request['arguments'][0]) !== '')
+              $request['request'] !== 'IP' ||
+              (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')
             ) {
                 --$i;
                 break;

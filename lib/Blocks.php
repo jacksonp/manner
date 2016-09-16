@@ -30,11 +30,11 @@ class Blocks
     static function lineEndsBlock(array $lines, int $i)
     {
         $request = Request::get($lines[$i]);
-        if ($request['request'] and Man::instance()->requestStartsBlock($request['request'])) {
+        if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
 
-        return $lines[$i] === '' or Block_TabTable::isStart($lines, $i);
+        return $lines[$i] === '' || Block_TabTable::isStart($lines, $i);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
@@ -69,7 +69,7 @@ class Blocks
             return [$parentNode, false];
         } else {
             $parentNodeLastBlock = $parentNode->getLastBlock();
-            if (is_null($parentNodeLastBlock) or
+            if (is_null($parentNodeLastBlock) ||
               in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
             ) {
                 return [$parentNode->ownerDocument->createElement('p'), true];

@@ -33,9 +33,9 @@ class Roff_String
         // quotes and otherwise get messed up.
         if (in_array($newRequest, ['C\'', 'C`'])) {
             $requestVal = '"';
-        } elseif ($newRequest === 'Q' and $requestVal === '\&"') {
+        } elseif ($newRequest === 'Q' && $requestVal === '\&"') {
             $requestVal = '“';
-        } elseif ($newRequest === 'U' and $requestVal === '\&"') {
+        } elseif ($newRequest === 'U' && $requestVal === '\&"') {
             $requestVal = '”';
         }
 

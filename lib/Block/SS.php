@@ -18,7 +18,7 @@ class Block_SS
         $headingNode = $dom->createElement('h3');
 
         if (count($arguments) === 0) {
-            if ($i === $numLines - 1 or self::endSubsection($lines[$i + 1])) {
+            if ($i === $numLines - 1 || self::endSubsection($lines[$i + 1])) {
                 return $i;
             }
             // Text for subheading is on next line.

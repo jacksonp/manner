@@ -9,7 +9,7 @@ class Block_TP
 
         $numLines = count($lines);
 
-        if ($i < $numLines - 1 and $lines[$i + 1] === '.nf') {
+        if ($i < $numLines - 1 && $lines[$i + 1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
             $lines[$i + 1] = $lines[$i];
             $lines[$i]     = '.nf';
@@ -27,12 +27,12 @@ class Block_TP
             $request = Request::getClass($lines, $i);
 
             if ($request['class'] === 'Block_TP') {
-                if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
+                if ($i === $numLines - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
                     // a bug in the man page, just skip:
                     continue;
                 }
 
-                if (is_null($firstIndent) and count($request['arguments']) > 0) {
+                if (is_null($firstIndent) && count($request['arguments']) > 0) {
                     $firstIndent = 'indent';
                     if ($indentVal = Roff_Unit::normalize($request['arguments'][0])) { // note: filters out 0s
                         $firstIndent = 'indent-' . $indentVal;

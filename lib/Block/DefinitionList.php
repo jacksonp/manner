@@ -12,7 +12,7 @@ class Block_DefinitionList
         // See pmdapipe.1, pmcd.1:
         while ($dd = $dl->firstChild and $dd->tagName === 'dd') {
             $class = $dl->getAttribute('class');
-            if ($dd->childNodes->length === 1 and $dd->firstChild->tagName === 'pre') {
+            if ($dd->childNodes->length === 1 && $dd->firstChild->tagName === 'pre') {
                 if (!in_array($class, ['', 'indent'])) {
                     $dd->firstChild->setAttribute('class', $class);
                 }
@@ -42,8 +42,8 @@ class Block_DefinitionList
                 $everyChildIsDT = false;
             }
             if (
-              $dlChild->childNodes->length === 1 and
-              $dlChild->firstChild instanceof DOMElement and
+              $dlChild->childNodes->length === 1 &&
+              $dlChild->firstChild instanceof DOMElement &&
               $dlChild->firstChild->tagName === 'p'
             ) {
                 while ($dlChild->firstChild->firstChild) {
@@ -74,7 +74,7 @@ class Block_DefinitionList
 
         $newParagraphs = [];
 
-        while ($dl->lastChild and $dl->lastChild->tagName === 'dt') {
+        while ($dl->lastChild && $dl->lastChild->tagName === 'dt') {
             $p     = $dom->createElement('p');
             $class = $dl->getAttribute('class');
             if (!in_array($class, ['', 'indent'])) {

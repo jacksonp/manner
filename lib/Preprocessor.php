@@ -21,9 +21,9 @@ class Preprocessor
             // picked up Roff_Condition, e.g. man.1
             // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
             while (
-              $i < $numLines - 1 and
-              mb_substr($line, -1, 1) === '\\' and
-              (mb_strlen($line) === 1 or mb_substr($line, -2, 1) !== '\\')) {
+              $i < $numLines - 1 &&
+              mb_substr($line, -1, 1) === '\\' &&
+              (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
                 $line = mb_substr($line, 0, -1) . $lines[++$i];
             }
 

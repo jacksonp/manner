@@ -14,7 +14,7 @@ class Roff_Register
         }
 
         if (
-          $request['request'] !== 'nr' or
+          $request['request'] !== 'nr' ||
           !preg_match('~^(?<name>\S+) (?<val>.+)$~u', $request['arg_string'], $matches)
         ) {
             return false;

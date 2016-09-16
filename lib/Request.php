@@ -17,7 +17,7 @@ class Request
         // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
         // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
-          $request['request'] === 'br.' or
+          $request['request'] === 'br.' ||
           in_array($request['request'], [
             'RE',
             'fi',
@@ -34,9 +34,9 @@ class Request
             'Sp ',
             'TC',
             'TR',
-          ]) or
-          (in_array($request['request'], ['R', 'BR', 'TH']) and count($request['arguments']) === 0) or // Empty only
-          preg_match('~^\.\.?\s*$~u', $line) or
+          ]) ||
+          (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
+          preg_match('~^\.\.?\s*$~u', $line) ||
           self::isEmptyRequest($line);
     }
 
@@ -63,20 +63,20 @@ class Request
             if ($char === '\\') {
                 // Take this char and the next
                 $thisArg .= $char . mb_substr($argString, ++$i, 1);
-            } elseif ($char === ' ' and !$inQuotes) {
+            } elseif ($char === ' ' && !$inQuotes) {
                 // New arg
                 $args[]  = $thisArg;
                 $thisArg = '';
             } elseif ($char === '"') {
                 $foundQuote = true;
-                if ($inQuotes and $i < $stringLength - 1 and mb_substr($argString, $i + 1, 1) === '"') {
+                if ($inQuotes && $i < $stringLength - 1 && mb_substr($argString, $i + 1, 1) === '"') {
                     // When in quotes, "" produces a quote.
                     $thisArg .= '"';
                     ++$i;
-                } elseif (($i === 0 or $lastChar === ' ') and !$inQuotes) {
+                } elseif (($i === 0 || $lastChar === ' ') && !$inQuotes) {
                     $inQuotes = true;
                 } elseif ($inQuotes) {
-                    if ($i < $stringLength - 1 and mb_substr($argString, $i + 1, 1) !== ' ') {
+                    if ($i < $stringLength - 1 && mb_substr($argString, $i + 1, 1) !== ' ') {
                         // New arg
                         $args[]  = $thisArg;
                         $thisArg = '';
@@ -91,7 +91,7 @@ class Request
             $lastChar = $char;
         }
 
-        if ($thisArg !== '' or $foundQuote) { // Want return an empty string, e.g. for .SH ""
+        if ($thisArg !== '' || $foundQuote) { // Want return an empty string, e.g. for .SH ""
             $args[] = $thisArg;
         }
 
@@ -145,7 +145,7 @@ ROFF;
           $line, $matches)
         ) {
             $return['request'] = $matches[1];
-            if (array_key_exists(2, $matches) and !is_null($matches[2])) {
+            if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = Request::massageLine($return['raw_arg_string']);
                 $return['arguments']      = Request::parseArguments($return['arg_string']);

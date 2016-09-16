@@ -20,8 +20,8 @@ class Roff_de
             $macroLine = $lines[$i];
             $request   = Request::get($macroLine);
             if (
-              $request['request'] === '.' or
-              ($newMacro === 'P!' and $macroLine === '.') // work around bug in Xm*.3 man pages
+              $request['request'] === '.' ||
+              ($newMacro === 'P!' && $macroLine === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;

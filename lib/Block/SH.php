@@ -13,7 +13,7 @@ class Block_SH
         $headingNode = $dom->createElement('h2');
 
         if (count($arguments) === 0) {
-            if ($i === $numLines - 1 or Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
+            if ($i === $numLines - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
                 return $i;
             }
             // Text for subheading is on next line.
@@ -44,9 +44,9 @@ class Block_SH
             $request = Request::getClass($lines, $i);
             if ($request['class'] === 'Block_SH') {
                 if (
-                  (count($request['arguments']) === 1 and $request['arguments'][0] === '\\ ') or
-                  (count($request['arguments']) === 0 and
-                    $i < $numLines - 1 and
+                  (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
+                  (count($request['arguments']) === 0 &&
+                    $i < $numLines - 1 &&
                     in_array($lines[$i + 1], Block_Section::skipSectionNameLines))
                 ) {
                     continue;

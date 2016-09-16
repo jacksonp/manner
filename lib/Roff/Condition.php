@@ -21,7 +21,7 @@ class Roff_Condition
               $request['raw_arg_string'], $matches)
             ) {
                 return self::ifBlock($parentNode, $lines, $i, $matches[3],
-                  self::test($matches[1], $macroArguments) and self::test($matches[2], $macroArguments),
+                  self::test($matches[1], $macroArguments) && self::test($matches[2], $macroArguments),
                   $macroArguments);
             }
 
@@ -150,7 +150,7 @@ class Roff_Condition
         }
 
         if (
-          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) or
+          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) ||
           preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
         ) {
             return Roff_Macro::applyReplacements($matches[1], $macroArguments) ===
@@ -225,15 +225,15 @@ class Roff_Condition
         for ($ifIndex = $i; $ifIndex < $numLines;) {
 
             $openBraces += substr_count($line, '\\{');
-            if ($openBraces > 1 or
-              ($i !== $ifIndex and preg_match('~^\.\s*i[fe] ~u', $line))
+            if ($openBraces > 1 ||
+              ($i !== $ifIndex && preg_match('~^\.\s*i[fe] ~u', $line))
             ) {
                 $recurse = true;
             }
             $openBraces -= substr_count($line, '\\}');
-            if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) and $openBraces === 0) {
+            if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) && $openBraces === 0) {
                 $foundEnd = true;
-                if (!empty($matches[1]) and $matches[1] !== '\'br') {
+                if (!empty($matches[1]) && $matches[1] !== '\'br') {
                     $replacementLines[] = $matches[1];
                 }
                 if (!empty($matches[2])) {

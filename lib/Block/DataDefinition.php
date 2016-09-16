@@ -33,14 +33,14 @@ class Block_DataDefinition
             // <= 0 for stray .REs
             if ($rsLevel <= 0) {
                 if (
-                  in_array($request['request'], ['LP', 'PP', 'P']) and
-                  $i < $numLines - 1 and Request::is($lines[$i + 1], 'TP')
+                  in_array($request['request'], ['LP', 'PP', 'P']) &&
+                  $i < $numLines - 1 && Request::is($lines[$i + 1], 'TP')
                 ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
                 } elseif (
-                  in_array($request['request'], ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) or
-                  ($hitIP and !$hitBlankIP)
+                  in_array($request['request'], ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) ||
+                  ($hitIP && !$hitBlankIP)
                 ) {
                     --$i;
                     break;
@@ -50,7 +50,7 @@ class Block_DataDefinition
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < $numLines - 1 or trim($line) !== '') {
+                if ($i < $numLines - 1 || trim($line) !== '') {
                     $blockLines[] = $line;
                 }
             }

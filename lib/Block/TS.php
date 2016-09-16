@@ -108,7 +108,7 @@ class Block_TS
                     $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
                     $bold    = $numReplaced > 0;
 
-                    if ($tableRowNum === 0 and $bold) {
+                    if ($tableRowNum === 0 && $bold) {
                         $cell = $dom->createElement('th');
                     } else {
                         $cell = $dom->createElement('td');

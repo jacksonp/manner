@@ -27,7 +27,7 @@ class Block_RS
             if ($request['request'] === 'RS') {
                 $indent = Roff_Unit::normalize(trim($request['arg_string']));
                 if ($indent === $thisIndent) {
-                    if (count($blockLines) > 0 and !in_array($blockLines[count($blockLines) - 1], ['.sp', '.br'])) {
+                    if (count($blockLines) > 0 && !in_array($blockLines[count($blockLines) - 1], ['.sp', '.br'])) {
                         $blockLines[] = '.br';
                     }
                     ++$skippedRSs;
@@ -53,7 +53,7 @@ class Block_RS
         }
 
         // Hack for duplicity.1
-        if (count($blockLines) > 0 and $blockLines[count($blockLines) - 1] === '.PP') {
+        if (count($blockLines) > 0 && $blockLines[count($blockLines) - 1] === '.PP') {
             $lines[$i] = '.PP';
             --$i;
         }
@@ -62,9 +62,9 @@ class Block_RS
             $rsBlock = $dom->createElement('div');
             $rsBlock->setAttribute('class', $className);
             Blocks::handle($rsBlock, $blockLines);
-            if ($className === 'indent' and
-              $rsBlock->childNodes->length === 1 and
-              $rsBlock->firstChild instanceof DOMElement and
+            if ($className === 'indent' &&
+              $rsBlock->childNodes->length === 1 &&
+              $rsBlock->firstChild instanceof DOMElement &&
               !in_array($rsBlock->firstChild->tagName, ['strong', 'em', 'small', 'a', 'code'])
             ) {
                 $parentNode->appendChild($rsBlock->firstChild);
