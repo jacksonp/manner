@@ -7,9 +7,7 @@ class Block_TP
     static function checkAppend(HybridNode $parentNode, array &$lines, int $i)
     {
 
-        $numLines = count($lines);
-
-        if ($i < $numLines - 1 && $lines[$i + 1] === '.nf') {
+        if ($i < count($lines) - 1 && $lines[$i + 1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
             $lines[$i + 1] = $lines[$i];
             $lines[$i]     = '.nf';
@@ -22,12 +20,12 @@ class Block_TP
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        for (; $i < $numLines; ++$i) {
+        for (; $i < count($lines); ++$i) {
 
             $request = Request::getClass($lines, $i);
 
             if ($request['class'] === 'Block_TP') {
-                if ($i === $numLines - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
+                if ($i === count($lines) - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
                     // a bug in the man page, just skip:
                     continue;
                 }
@@ -40,22 +38,19 @@ class Block_TP
                     }
                 }
 
-                $result = Block_Text::getNextInputLine($lines, $i + 1);
-                $i      = $result['i'];
-                $dt     = $dom->createElement('dt');
-                Blocks::handle($dt, $result['lines']);
+                $dt         = $dom->createElement('dt');
+                $callerArgs = null;
+                $i          = Roff::parse($dt, $lines, $callerArgs, $i + 1) - 1;
+
                 $dl->appendBlockIfHasContent($dt);
 
-                for ($i = $i + 1; $i < $numLines; ++$i) {
+                while ($i < count($lines)) {
                     $line = $lines[$i];
                     if (Request::is($line, 'TQ')) {
-                        $result = Block_Text::getNextInputLine($lines, $i + 1);
-                        $i      = $result['i'];
-                        $dt     = $dom->createElement('dt');
-                        Blocks::handle($dt, $result['lines']);
+                        $dt = $dom->createElement('dt');
+                        $i  = Roff::parse($dt, $lines, $callerArgs, $i + 1) - 1;
                         $dl->appendBlockIfHasContent($dt);
                     } else {
-                        --$i;
                         break;
                     }
                 }

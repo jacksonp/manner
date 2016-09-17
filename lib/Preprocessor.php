@@ -45,6 +45,18 @@ class Preprocessor
             // Don't worry colour changes:
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?\])~u', '$1', $line);
 
+            // Copied from Roff_Comment for top.1
+            if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $line, $matches)) {
+                $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
+                $numLines  = count($lines);
+                for ($i = $i + 1; $i < $numLines; ++$i) {
+                    if ($lines[$i] === $delimiter) {
+                        continue 2;
+                    }
+                }
+                throw new Exception($matches[0] . ' with no corresponding "' . $delimiter . '"');
+            }
+
             $linesNoComments[] = $line;
 
         }

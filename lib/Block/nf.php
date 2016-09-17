@@ -91,7 +91,7 @@ class Block_nf
                         } else {
                             $blockLines = [$request . $tdLine];
                             Blocks::trim($blockLines);
-                            Blocks::handle($codeNode, $blockLines);
+                            Roff::parse($codeNode, $blockLines);
                         }
                         $tr->appendChild($cell);
                     }

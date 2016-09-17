@@ -21,7 +21,7 @@ class Block_SH
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 return $i;
             }
-            Blocks::handle($headingNode, [$sectionHeading]);
+            Roff::parse($headingNode, [$sectionHeading]);
         } else {
             $sectionHeading = implode(' ', $arguments);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
@@ -58,7 +58,7 @@ class Block_SH
         }
 
         Blocks::trim($blockLines);
-        Blocks::handle($section, $blockLines);
+        Roff::parse($section, $blockLines);
         $parentNode->appendBlockIfHasContent($section);
 
         return $i;

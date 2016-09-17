@@ -31,7 +31,7 @@ class Block_ti
 
         $block = $dom->createElement('blockquote');
         Blocks::trim($blockLines);
-        Blocks::handle($block, $blockLines);
+        Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
         return $i;

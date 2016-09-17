@@ -76,7 +76,7 @@ class Inline_ft
                 BlockPreformatted::handle($node, $blockLines);
             } else {
                 Blocks::trim($blockLines);
-                Blocks::handle($node, $blockLines);
+                Roff::parse($node, $blockLines);
             }
             $textParent->appendBlockIfHasContent($node);
         }

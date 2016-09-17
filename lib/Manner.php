@@ -18,7 +18,6 @@ class Manner
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
-        Blocks::handle($manPageContainer, $strippedLines);
 
         return $dom;
     }

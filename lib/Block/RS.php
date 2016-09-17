@@ -63,7 +63,7 @@ class Block_RS
         if (count($blockLines) > 0) {
             $rsBlock = $dom->createElement('div');
             $rsBlock->setAttribute('class', $className);
-            Blocks::handle($rsBlock, $blockLines);
+            Roff::parse($rsBlock, $blockLines);
             if ($className === 'indent' &&
                 $rsBlock->childNodes->length === 1 &&
                 $rsBlock->firstChild instanceof DOMElement &&

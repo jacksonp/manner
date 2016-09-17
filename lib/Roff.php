@@ -4,12 +4,24 @@
 class Roff
 {
 
-    static function parse(DOMElement $parentNode, array &$lines, &$callerArguments = null)
-    {
+    static function parse(
+      DOMElement $parentNode,
+      array &$lines,
+      &$callerArguments = null,
+      $stopOnContentLineAfter = false
+    ) {
 
         $man = Man::instance();
 
-        for ($i = 0; $i < count($lines); ++$i) {
+        if ($stopOnContentLineAfter !== false) {
+            $i             = $stopOnContentLineAfter;
+            $stopOnContent = true;
+        } else {
+            $i             = 0;
+            $stopOnContent = false;
+        }
+
+        for (; $i < count($lines) && !($stopOnContent and $parentNode->textContent !== ''); ++$i) {
 
 //            echo $i, "\t", $lines[$i], PHP_EOL;
 //            var_dump(array_slice($lines, 0, 5));
@@ -44,8 +56,6 @@ class Roff
                     $macroLines           = $macros[$request['request']];
                     $macroCallerArguments = $request['arguments'];
                     Roff::parse($parentNode, $macroLines, $macroCallerArguments);
-                    array_splice($lines, $i, 1, $macroLines);
-                    --$i;
 
                     continue;
                 }
@@ -78,12 +88,21 @@ class Roff
 
             $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
 
-            // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
-            $lines[$i] = $man->applyAllReplacements($lines[$i]);
+            $request = Request::getClass($lines, $i);
 
+            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request'],
+              $stopOnContent);
+            if ($newI === false) {
+//            var_dump(array_slice($lines, $i - 5, 10));
+//            var_dump($lines);
+                throw new Exception('"' . $lines[$i] . '" Roff::parse() could not handle it.');
+            }
 
+            $i = $newI;
 
         }
+
+        return $i;
 
     }
 

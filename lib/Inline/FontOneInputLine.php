@@ -52,6 +52,14 @@ class Inline_FontOneInputLine
             if ($i === $numLines - 1) {
                 return $i;
             }
+            $textParent->appendChild($appendToParentNode);
+            if ($shouldAppend) {
+                $parentNode->appendChild($textParent);
+            }
+
+            return $i;
+
+            /*
             ++$i;
             if ($lines[$i] === '') {
                 return $i;
@@ -63,7 +71,8 @@ class Inline_FontOneInputLine
             }
             $blockLines = $result['lines'];
             Blocks::trim($blockLines);
-            Blocks::handle($innerNode, $blockLines);
+            Roff::parse($innerNode, $blockLines);
+            */
         } else {
             TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
         }

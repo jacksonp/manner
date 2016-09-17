@@ -22,7 +22,7 @@ class Inline_Link
             } elseif ($i < count($lines) - 1) {
                 $blockLines = [$lines[++$i]];
                 Blocks::trim($blockLines);
-                Blocks::handle($anchor, $blockLines);
+                Roff::parse($anchor, $blockLines);
             } else {
                 $anchor->appendChild(new DOMText($arguments[0]));
             }
@@ -71,7 +71,7 @@ class Inline_Link
         if ($href === false) {
             // No valid URL, output any content as text and bail.
             Blocks::trim($blockLines);
-            Blocks::handle($parentNode, $blockLines);
+            Roff::parse($parentNode, $blockLines);
 
             return $i;
         }
@@ -83,7 +83,7 @@ class Inline_Link
         if (count($blockLines) === 0) {
             TextContent::interpretAndAppendText($anchor, $url);
         } else {
-            Blocks::handle($anchor, $blockLines);
+            Roff::parse($anchor, $blockLines);
         }
         if ($anchor->hasContent()) {
             if ($textParent->hasContent()) {

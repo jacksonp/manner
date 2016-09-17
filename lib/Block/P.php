@@ -22,10 +22,10 @@ class Block_P
 
         if (count($blockLines) > 0) {
             if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
-                Blocks::handle($parentNode, $blockLines);
+                Roff::parse($parentNode, $blockLines);
             } else {
                 $p = $dom->createElement('p');
-                Blocks::handle($p, $blockLines);
+                Roff::parse($p, $blockLines);
                 $parentNode->appendBlockIfHasContent($p);
             }
         }

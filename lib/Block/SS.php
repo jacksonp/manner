@@ -27,7 +27,7 @@ class Block_SS
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
                 return $i;
             }
-            Blocks::handle($headingNode, [$sectionHeading]);
+            Roff::parse($headingNode, [$sectionHeading]);
         } else {
             $sectionHeading = ltrim(implode(' ', $arguments));
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
@@ -54,7 +54,7 @@ class Block_SS
         }
 
         Blocks::trim($blockLines);
-        Blocks::handle($subsection, $blockLines);
+        Roff::parse($subsection, $blockLines);
         $parentNode->appendBlockIfHasContent($subsection);
 
         return $i - 1;

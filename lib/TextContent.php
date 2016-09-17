@@ -9,8 +9,10 @@ class TextContent
     static function interpretAndAppendText(DOMElement $parentNode, string $line)
     {
 
-        $dom        = $parentNode->ownerDocument;
-        $man        = Man::instance();
+        $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
+        // A macro may be defined multiple times in a document and we want the current one.
+        $line       = $man->applyAllReplacements($line);
         $lineLength = mb_strlen($line);
 
         if (!is_null($man->eq_delim_left) && !is_null($man->eq_delim_right)) {

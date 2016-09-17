@@ -37,6 +37,7 @@ class Blocks
         return Block_TabTable::isStart($lines, $i);
     }
 
+    /*
     static function handle(DOMElement $parentNode, array $lines)
     {
 //        var_dump($parentNode->tagName);
@@ -51,7 +52,7 @@ class Blocks
             if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);
-                throw new Exception('"' . $lines[$i] . '" Blocks::handle() could not handle it.');
+                throw new Exception('"' . $lines[$i] . '" Roff::parse() could not handle it.');
             }
 
             $i = $newI;
@@ -59,19 +60,45 @@ class Blocks
         }
 
     }
+    */
+
+    static function _maybeLastEmptyChildWaitingForText(DOMElement $parentNode)
+    {
+        if (
+          $parentNode->lastChild &&
+          $parentNode->lastChild->nodeType === XML_ELEMENT_NODE &&
+          in_array($parentNode->lastChild->tagName, ['em', 'strong', 'small']) &&
+          $parentNode->lastChild->textContent === ''
+        ) {
+            if ($parentNode->lastChild->lastChild &&
+              $parentNode->lastChild->lastChild->nodeType === XML_ELEMENT_NODE &&
+              in_array($parentNode->lastChild->lastChild->tagName, ['em', 'strong', 'small'])
+            ) {
+                // bash.1:
+                // .SM
+                // .B
+                // ARITHMETIC EVALUATION
+                return [$parentNode->lastChild->lastChild, false, true];
+            } else {
+                return [$parentNode->lastChild, false, true];
+            }
+        } else {
+            return [$parentNode, false, $parentNode->tagName === 'dt'];
+        }
+    }
 
     static function getTextParent(DOMElement $parentNode)
     {
         if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
-            return [$parentNode, false];
+            return self::_maybeLastEmptyChildWaitingForText($parentNode);
         } else {
             $parentNodeLastBlock = $parentNode->getLastBlock();
             if (is_null($parentNodeLastBlock) ||
               in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
             ) {
-                return [$parentNode->ownerDocument->createElement('p'), true];
+                return [$parentNode->ownerDocument->createElement('p'), true, false];
             } else {
-                return [$parentNodeLastBlock, false];
+                return self::_maybeLastEmptyChildWaitingForText($parentNodeLastBlock);
             }
         }
     }

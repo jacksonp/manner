@@ -151,7 +151,7 @@ class Block_TS
                                     $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                 }
                                 Blocks::trim($tBlockLines);
-                                Blocks::handle($cell, $tBlockLines);
+                                Roff::parse($cell, $tBlockLines);
                                 break;
                             } else {
                                 $tBlockLines[] = $tBlockLine;
@@ -160,7 +160,7 @@ class Block_TS
 
                     } else {
                         // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
-                        //Blocks::handle($cell, [$tdContents]);
+                        //Roff::parse($cell, [$tdContents]);
                         if (Inline_VerticalSpace::check($tdContents) === false) {
                             TextContent::interpretAndAppendText($cell, $tdContents);
                         }

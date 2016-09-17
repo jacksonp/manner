@@ -39,7 +39,9 @@ class Block_Text
                   mb_substr($lines[$i], 0, 1) !== '.' ||
                   (
                     in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) &&
-                    !is_null($request['arguments']) && count($request['arguments']) > 0 && $request['arguments'][0] !== ''
+                    !is_null($request['arguments']) &&
+                    count($request['arguments']) > 0 &&
+                    $request['arguments'][0] !== ''
                   )
                 ) {
                     break;
@@ -56,8 +58,14 @@ class Block_Text
 
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
+    static function checkAppend(
+      HybridNode $parentNode,
+      array $lines,
+      int $i,
+      array $arguments,
+      $request,
+      $needOneLineOnly = false
+    ) {
 
         $numLines = count($lines);
 
@@ -66,9 +74,13 @@ class Block_Text
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
+        if (!$needOneLineOnly) {
+            list ($textParent, $shouldAppend, $needOneLineOnly) = Blocks::getTextParent($parentNode);
+        }
+
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
-            for (; $i < $numLines - 1; ++$i) {
+            for (; $i < $numLines - 1 && (self::$continuation || !$needOneLineOnly); ++$i) {
                 $nextLine = $lines[$i + 1];
                 if (trim($nextLine) === '' ||
                   in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
