@@ -179,8 +179,7 @@
         <br>
         An additional binary operator, <strong>=~</strong>, is available, with the same precedence as <strong>==</strong> and <strong>!=</strong>. When it is used, the string to the right of the operator is considered an extended regular expression and matched accordingly (as in <em>regex</em>(3)). The return value is 0 if the string matches the pattern, and 1 otherwise. If the regular expression is syntactically incorrect, the conditional expression's return value is 2. If the <strong>nocasematch</strong> shell option is enabled, the match is performed without regard to the case of alphabetic characters. Any part of the pattern may be quoted to force the quoted portion to be matched as a string. Bracket expressions in regular expressions must be treated carefully, since normal quoting characters lose their meanings between brackets. If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a string. Substrings matched by parenthesized subexpressions within the regular expression are saved in the array variable <small><strong>BASH_REMATCH</strong>.</small> The element of <small><strong>BASH_REMATCH</strong></small> with index 0 is the portion of the string matching the entire regular expression. The element of <small><strong>BASH_REMATCH</strong></small> with index <em>n</em> is the portion of the string matching the <em>n</em>th parenthesized subexpression.<br>
         <br>
-        Expressions may be combined using the following operators, listed in decreasing order of precedence:<br>
-        <br>
+        Expressions may be combined using the following operators, listed in decreasing order of precedence:
         <div class="indent">
           <dl>
             <dt><strong>( <em>expression</em> )</strong>
@@ -683,8 +682,7 @@
       <dd><strong>Case modification</strong>. This expansion modifies the case of alphabetic characters in <em>parameter</em>. The <em>pattern</em> is expanded to produce a pattern just as in pathname expansion. Each character in the expanded value of <em>parameter</em> is tested against <em>pattern</em>, and, if it matches the pattern, its case is converted. The pattern should not attempt to match more than one character. The <strong>^</strong> operator converts lowercase letters matching <em>pattern</em> to uppercase; the <strong>,</strong> operator converts matching uppercase letters to lowercase. The <strong>^^</strong> and <strong>,,</strong> expansions convert each matched character in the expanded value; the <strong>^</strong> and <strong>,</strong> expansions match and convert only the first character in the expanded value. If <em>pattern</em> is omitted, it is treated like a <strong>?</strong>, which matches every character. If <em>parameter</em> is <strong>@</strong> or <strong>*</strong>, the case modification operation is applied to each positional parameter in turn, and the expansion is the resultant list. If <em>parameter</em> is an array variable subscripted with <strong>@</strong> or <strong>*</strong>, the case modification operation is applied to each member of the array in turn, and the expansion is the resultant list.
       <dt>${<em>parameter</em><strong>@</strong><em>operator</em>}
       <dd>
-        <p><strong>Parameter transformation</strong>. The expansion is either a transformation of the value of <em>parameter</em> or information about <em>parameter</em> itself, depending on the value of <em>operator</em>. Each <em>operator</em> is a single letter:<br>
-        <br>
+        <p><strong>Parameter transformation</strong>. The expansion is either a transformation of the value of <em>parameter</em> or information about <em>parameter</em> itself, depending on the value of <em>operator</em>. Each <em>operator</em> is a single letter:
         <div class="indent">
           <dl>
             <dt><strong>Q</strong>
@@ -767,7 +765,8 @@
         Within <strong>[</strong> and <strong>]</strong>, the syntax <strong>[.</strong><em>symbol</em><strong>.]</strong> matches the collating symbol <em>symbol</em>.
       </div>
     </div>
-    <p>If the <strong>extglob</strong> shell option is enabled using the <strong>shopt</strong> builtin, several extended pattern matching operators are recognized. In the following description, a <em>pattern-list</em> is a list of one or more patterns separated by a <strong>|</strong>. Composite patterns may be formed using one or more of the following sub-patterns:
+    <p>If the <strong>extglob</strong> shell option is enabled using the <strong>shopt</strong> builtin, several extended pattern matching operators are recognized. In the following description, a <em>pattern-list</em> is a list of one or more patterns separated by a <strong>|</strong>. Composite patterns may be formed using one or more of the following sub-patterns:<br>
+    <br>
     <dl>
       <dt><strong>?(</strong><em>pattern-list</em><strong>)</strong>
       <dd>Matches zero or one occurrence of the given patterns
@@ -1434,8 +1433,7 @@
           <dd>The <strong>term=</strong> form may be used to include terminal-specific key bindings, perhaps to bind the key sequences output by the terminal's function keys. The word on the right side of the <strong>=</strong> is tested against both the full name of the terminal and the portion of the terminal name before the first <strong>-</strong>. This allows <em>sun</em> to match both <em>sun</em> and <em>sun-cmd</em>, for instance.
           <dt><strong>application</strong>
           <dd>
-            <p>The <strong>application</strong> construct is used to include application-specific settings. Each program using the readline library sets the <em>application name</em>, and an initialization file can test for a particular value. This could be used to bind key sequences to functions useful for a specific program. For instance, the following command adds a key sequence that quotes the current or previous word in <strong>bash</strong>:<br>
-            <br>
+            <p>The <strong>application</strong> construct is used to include application-specific settings. Each program using the readline library sets the <em>application name</em>, and an initialization file can test for a particular value. This could be used to bind key sequences to functions useful for a specific program. For instance, the following command adds a key sequence that quotes the current or previous word in <strong>bash</strong>:
             <pre><strong>$if</strong> Bash
 # Quote the current or previous word
 "\C-xq": "\eb\"\ef\""

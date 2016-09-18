@@ -35,6 +35,21 @@ class HybridNode extends DOMElement
     {
         if ($block->hasChildNodes()) {
             if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+                if (in_array($block->tagName, self::BLOCK_TAGS)) {
+                    $lastChild = $this->lastChild;
+                    if ($lastChild) {
+                        $lastChildOfLastChild = $lastChild->lastChild;
+                        while (
+                          $lastChildOfLastChild &&
+                          $lastChildOfLastChild->nodeType === XML_ELEMENT_NODE &&
+                          $lastChildOfLastChild->tagName === 'br'
+                        ) {
+                            $lastChild->removeChild($lastChild->lastChild);
+                            $lastChildOfLastChild = $lastChild->lastChild;
+                        }
+                    }
+                }
+
                 return $this->appendChild($block);
             }
         }
