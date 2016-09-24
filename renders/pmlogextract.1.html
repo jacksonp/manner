@@ -3,21 +3,21 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGEXTRACT</title>
 <h1>PMLOGEXTRACT</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogextract</strong> - reduce, extract, concatenate and merge Performance Co-Pilot archives
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmlogextract</strong> [<strong>-dfwz</strong>] [<strong>-c</strong> <em>configfile</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-s</strong> <em>samples</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-v</strong> <em>volsamples</em>] [<strong>-Z</strong> <em>timezone</em>] <em>input</em> [...] <em>output</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlogextract</strong> reads one or more Performance Co-Pilot (PCP) archive logs identified by <em>input</em> and creates a temporally merged and/or reduced PCP archive log in <em>output</em>. <em>input</em> is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. The nature of merging is controlled by the number of input archive logs, while the nature of data reduction is controlled by the command line arguments. The input(s) must be sets of PCP archive logs created by <strong>pmlogger</strong>(1) with performance data collected from the <strong>same</strong> host, but usually over different time periods and possibly (although not usually) with different performance metrics being logged.
   <p>If only one <em>input</em> is specified, then the default behavior simply copies the input set of PCP archive logs, into the output PCP archive log. When two or more sets of PCP archive logs are specified as <em>input</em>, the sets of logs are merged (or concatenated) and written to <em>output</em>.
   <p>In the output archive log a <em>&lt;mark&gt;</em> record will be inserted at a time just past the end of each of the input archive logs to indicate a possible temporal discontinuity between the end of one input archive log and the start of the next input archive log. See the <strong>MARK RECORDS</strong> section below for more information. There is no <em>&lt;mark&gt;</em> record after the end of the <em>last</em> (in temporal order) of the input archive logs.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND LINE OPTIONS</h2>
   <p>The command line options for <strong>pmlogextract</strong> are as follows:
   <dl class="indent-7">
@@ -46,16 +46,16 @@
     <dt><strong>-z</strong>
     <dd>Use the local timezone of the host from the input archive logs. The default is to initially use the timezone of the local host.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION FILE SYNTAX</h2>
   <p>The <em>configfile</em> contains metrics of interest - only those metrics (or instances) mentioned explicitly or implicitly in the configuration file will be included in the <em>output</em> archive. Each specifications must begin on a new line, and may span multiple lines in the configuration file. Instances may also be specified, but they are optional. The format for each specification is
   <p>metric [[instance[,instance...]]]
   <p>where <em>metric</em> may be a leaf or a non-leaf name in the Performance Metrics Name Space (PMNS, see <strong>pmns</strong>(5)). If a metric refers to a non-leaf node in the PMNS, <strong>pmlogextract</strong> will recursively descend the PMNS and include all metrics corresponding to descendent leaf nodes.
   <p>Instances are optional, and may be specified as a list of one or more space (or comma) separated names, numbers or strings (enclosed in single or double quotes). Elements in the list that are numbers are assumed to be internal instance identifiers - see <strong>pmGetInDom</strong>(3) for more information. If no instances are given, then <strong>all</strong> instances of the associated metric(s) will be extracted.
   <p>Any additional white space is ignored and comments may be added with a `#' prefix.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION FILE EXAMPLE</h2>
   <p>This is an example of a valid <em>configfile</em>:
   <p>#<br>
@@ -64,8 +64,8 @@
   <p>kernel.all.cpu<br>
   kernel.percpu.cpu.sys ["cpu0","cpu1"]<br>
   disk.dev ["dks0d1"]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MARK RECORDS</h2>
   <p>When more than one input archive log contributes performance data to the output archive log, then <em>&lt;mark&gt;</em> records are inserted to indicate a possible discontinuity in the performance data.
   <p>A <em>&lt;mark&gt;</em> record contains a timestamp and no performance data and is used to indicate that there is a time period in the PCP archive log where we do not know the values of <strong>any</strong> performance metrics, because there was no <strong>pmlogger</strong>(1) collecting performance data during this period. Since these periods are often associated with the restart of a service or <strong>pmcd</strong>(1) or a system, there may be considerable doubt as to the continuity of performance data across this time period.
@@ -91,8 +91,8 @@
   </table>
   <p>The time period where the performance data is missing starts just after 09:15 and ends just before 09:20. When the output archive log is processed with any of the PCP reporting tools, the <em>&lt;mark&gt;</em> record is used to indicate a period of missing data. For example using the output archive above, imagine one was reporting the average I/O rate at 30 minute intervals aligned on the hour and half-hour. The I/O count metric is a counter, so the average I/O rate requires two valid values from consecutive sample times. There would be values for all the intervals ending at 09:00, then no values at 09:30 because of the <em>&lt;mark&gt;</em> record, then no values at 10:00 because the ``prior'' value at 09:30 is not available, then the rate would be reported again at 10:30 and continue every 30 minutes until the last reported value at 01:00.
   <p>The presence of <em>&lt;mark&gt;</em> records in a PCP archive log can be established using <strong>pmdumplog</strong>(1) where a timestamp and the annotation <strong>&lt;mark&gt;</strong> is used to indicate a <em>&lt;mark&gt;</em> record.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>METADATA CHECKS</h2>
   <p>When more than one <em>input</em> archive set is specified, <strong>pmlogextract</strong> performs a number of checks to ensure the metadata is consistent for metrics appearing in more than one of the <em>input</em> archive sets. These checks include:
   <dl class="indent-13">
@@ -111,8 +111,8 @@
   </dl>
   <p>If any of these checks fail, <strong>pmlogextract</strong> reports the details and aborts without creating the <em>output</em> archive.
   <p>To address these semantic issues, use <strong>pmlogrewrite</strong>(1) to translate the <em>input</em> archives into equivalent archives with consistent metdadata before using <strong>pmlogextract</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <p>For each of the <em>input</em> and <em>output</em> archive logs, several physical files are used.
   <dl class="indent-10">
@@ -123,23 +123,23 @@
     <dt><em>archive</em><strong>.index</strong>
     <dd>temporal index to support rapid random access to the other files in the archive log.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogger</strong>(1), <strong>pmlogreduce</strong>(1), <strong>pmlogrewrite</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>All error conditions detected by <strong>pmlogextract</strong> are reported on <em>stderr</em> with textual (if sometimes terse) explanation.
   <p>Should one of the input archive logs be corrupted (this can happen if the <strong>pmlogger</strong> instance writing the log suddenly dies), then <strong>pmlogextract</strong> will detect and report the position of the corruption in the file, and any subsequent information from that archive log will not be processed.
   <p>If any error is detected, <strong>pmlogextract</strong> will exit with a non-zero status.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>The preamble metrics (pmcd.pmlogger.archive, pmcd.pmlogger.host, and pmcd.pmlogger.port), which are automatically recorded by <strong>pmlogger</strong> at the start of the archive, may not be present in the archive output by <strong>pmlogextract</strong>. These metrics are only relevant while the archive is being created, and have no significance once recording has finished.
-</div>
+</section>
 

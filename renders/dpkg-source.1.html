@@ -3,20 +3,20 @@
 <meta name="man-page-info" data-extra1="2013-12-05" data-extra2="Debian Project" data-extra3="dpkg utilities">
 <title>dpkg-source</title>
 <h1>dpkg-source</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>dpkg-source - Debian source package (.dsc) manipulation tool
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dpkg-source</strong> [<em>option</em>...] <em>command</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dpkg-source</strong> packs and unpacks Debian source archives.
   <p>None of these commands allow multiple options to be combined into one, and they do not allow the value for an option to be specified in a separate argument.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMANDS</h2>
   <dl>
     <dt><strong>-x</strong>, <strong>--extract</strong> <em>filename</em>.dsc [<em>output-directory</em>]
@@ -42,10 +42,10 @@
     <dt><strong>--version</strong>
     <dd>Show the version and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
-  <div class="subsection">
+  <section>
     <h3>Generic build options</h3>
     <dl>
       <dt><strong>-c</strong><em>control-file</em>
@@ -82,8 +82,8 @@
     </dl>
     <p><strong>Note:</strong> While they have similar purposes, <strong>-i</strong> and <strong>-I</strong> have very different syntax and semantics. <strong>-i</strong> can only be specified once and takes a perl compatible regular expression which is matched against the full relative path of each file. <strong>-I</strong> can specified multiple times and takes a filename pattern with shell wildcards. The pattern is applied to the full relative path but also to each part of the path individually. The exact semantic of tar's <strong>--exclude</strong> option is somewhat complicated, see https://www.gnu.org/software/tar/manual/tar.html#wildcards for a full documentation.
     <p>The default regex and patterns for both options can be seen in the output of the <strong>--help</strong> command.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Generic extract options</h3>
     <dl>
       <dt><strong>--no-copy</strong>
@@ -99,12 +99,12 @@
       <dt><strong>--ignore-bad-version</strong>
       <dd>Turns the bad source package version check into a non-fatal warning (since dpkg 1.17.7). This option should only be necessary when extracting ancient source packages with broken versions, just for backwards compatibility.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>SOURCE PACKAGE FORMATS</h2>
   <p>If you don't know what source format to use, you should probably pick either “3.0 (quilt)” or “3.0 (native)”. See https://wiki.debian.org/Projects/DebSrc3.0 for information on the deployment of those formats within Debian.
-  <div class="subsection">
+  <section>
     <h3>Format: 1.0</h3>
     <p>A source package in this format consists either of a <strong>.orig.tar.gz</strong> associated to a <strong>.diff.gz</strong> or a single <strong>.tar.gz</strong> (in that case the package is said to be <em>native</em>). Optionally the original tarball might be accompanied by a detached upstream signature <strong>.orig.tar.gz.asc</strong>, extraction supported since dpkg 1.18.5.
     <p><strong>Extracting</strong>
@@ -147,18 +147,18 @@
       <dt><strong>--skip-debianization</strong>
       <dd>Skips application of the debian diff on top of the upstream sources (since dpkg 1.15.1).
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 2.0</h3>
     <p>Extraction supported since dpkg 1.13.9, building supported since dpkg 1.14.8. Also known as wig&amp;pen. This format is not recommended for wide-spread usage, the format “3.0 (quilt)” replaces it. Wig&amp;pen was the first specification of a new-generation source package format.
     <p>The behaviour of this format is the same as the “3.0 (quilt)” format except that it doesn't use an explicit list of patches. All files in <strong>debian/patches/</strong> matching the perl regular expression <strong>[\w-]+</strong> must be valid patches: they are applied at extraction time.
     <p>When building a new source package, any change to the upstream source is stored in a patch named <strong>zz_debian-diff-auto</strong>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 3.0 (native)</h3>
     <p>Supported since dpkg 1.14.17. This format is an extension of the native package format as defined in the 1.0 format. It supports all compression methods and will ignore by default any VCS specific files and directories as well as many temporary files (see default value associated to <strong>-I</strong> option in the <strong>--help</strong> output).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 3.0 (quilt)</h3>
     <p>Supported since dpkg 1.14.17. A source package in this format contains at least an original tarball (<strong>.orig.tar.</strong><em>ext</em> where <em>ext</em> can be <strong>gz</strong>, <strong>bz2</strong>, <strong>lzma</strong> and <strong>xz</strong>) and a debian tarball (<strong>.debian.tar.</strong><em>ext</em>). It can also contain additional original tarballs (<strong>.orig-</strong><em>component</em><strong>.tar.</strong><em>ext</em>). <em>component</em> can only contain alphanumeric characters and hyphens (‘-’). Optionally each original tarball can be accompanied by a detached upstream signature (<strong>.orig.tar.</strong><em>ext</em><strong>.asc</strong> and <strong>.orig-</strong><em>component</em><strong>.tar.</strong><em>ext</em><strong>.asc</strong>), extraction supported since dpkg 1.17.20, building supported since dpkg 1.18.5.
     <p><strong>Extracting</strong>
@@ -212,8 +212,8 @@
       <dt><strong>--skip-patches</strong>
       <dd>Do not apply patches at the end of the extraction (since dpkg 1.14.18).
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 3.0 (custom)</h3>
     <p>Supported since dpkg 1.14.17. This format is special. It doesn't represent a real source package format but can be used to create source packages with arbitrary files.
     <p><strong>Build options</strong>
@@ -222,8 +222,8 @@
       <dt><strong>--target-format=</strong><em>value</em>
       <dd><strong>Required</strong>. Defines the real format of the generated source package. The generated .dsc file will contain this value in its <strong>Format</strong> field and not “3.0 (custom)”.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 3.0 (git)</h3>
     <p>Supported since dpkg 1.14.17. This format is experimental.
     <p>A source package in this format consists of a single bundle of a git repository <strong>.git</strong> to hold the source of a package. There may also be a <strong>.gitshallow</strong> file listing revisions for a shallow git clone.
@@ -240,8 +240,8 @@
       <dt><strong>--git-depth=</strong><em>number</em>
       <dd>Creates a shallow clone with a history truncated to the specified number of revisions.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Format: 3.0 (bzr)</h3>
     <p>Supported since dpkg 1.14.17. This format is experimental. It generates a single tarball containing the bzr repository.
     <p><strong>Extracting</strong>
@@ -249,47 +249,47 @@
     <p><strong>Building</strong>
     <p>Before going any further, some checks are done to ensure that we don't have any non-ignored uncommitted changes.
     <p>Then the VCS specific part of the source directory is copied over to a temporary directory. Before this temporary directory is packed in a tarball, various cleanup are done to save space.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
-  <div class="subsection">
+  <section>
     <h3>no source format specified in debian/source/format</h3>
     <p>The file <strong>debian/source/format</strong> should always exist and indicate the desired source format. For backwards compatibility, format “1.0” is assumed when the file doesn't exist but you should not rely on this: at some point in the future <strong>dpkg-source</strong> will be modified to fail when that file doesn't exist.
     <p>The rationale is that format “1.0” is no longer the recommended format, you should usually pick one of the newer formats (“3.0 (quilt)”, “3.0 (native)”) but <strong>dpkg-source</strong> will not do this automatically for you. If you want to continue using the old format, you should be explicit about it and put “1.0” in <strong>debian/source/format</strong>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>the diff modifies the following upstream files</h3>
     <p>When using source format “1.0” it is usually a bad idea to modify upstream files directly as the changes end up hidden and mostly undocumented in the .diff.gz file. Instead you should store your changes as patches in the debian directory and apply them at build-time. To avoid this complexity you can also use the format “3.0 (quilt)” that offers this natively.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>cannot represent change to <em>file</em></h3>
     <p>Changes to upstream sources are usually stored with patch files, but not all changes can be represented with patches: they can only alter the content of plain text files. If you try replacing a file with something of a different type (for example replacing a plain file with a symlink or a directory), you will get this error message.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>newly created empty file <em>file</em> <strong>will not be represented in diff</strong></h3>
     <p>Empty files can't be created with patch files. Thus this change is not recorded in the source package and you are warned about it.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>executable mode <em>perms</em> <strong>of</strong> <em>file</em> <strong>will not be represented in diff</strong></h3>
     <p>Patch files do not record permissions of files and thus executable permissions are not stored in the source package. This warning reminds you of that fact.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>special mode <em>perms</em> <strong>of</strong> <em>file</em> <strong>will not be represented in diff</strong></h3>
     <p>Patch files do not record permissions of files and thus modified permissions are not stored in the source package. This warning reminds you of that fact.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>FILE FORMATS</h2>
-  <div class="subsection">
+  <section>
     <h3>debian/source/format</h3>
     <p>This file contains on a single line the format that should be used to build the source package (possible formats are described above). No leading or trailing spaces are allowed.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>debian/source/include-binaries</h3>
     <p>This file contains a list of binary files (one per line) that should be included in the debian tarball. Leading and trailing spaces are stripped. Lines starting with ‘<strong>#</strong>’ are comments and are skipped. Empty lines are ignored.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>debian/source/options</h3>
     <p>This file contains a list of long options that should be automatically prepended to the set of command line options of a <strong>dpkg-source --build</strong> or <strong>dpkg-source --print-format</strong> call. Options like <strong>--compression</strong> and <strong>--compression-level</strong> are well suited for this file.
     <p>Each option should be put on a separate line. Empty lines and lines starting with ‘<strong>#</strong>’ are ignored. The leading ‘<strong>--</strong>’ should be stripped and short options are not allowed. Optional spaces are allowed around the ‘<strong>=</strong>’ symbol and optional quotes are allowed around the value. Here's an example of such a file:
@@ -301,26 +301,26 @@
     # ignore changes on config.{sub,guess}<br>
     extend-diff-ignore = "(^|/)(config.sub|config.guess)$"
     <p>Note: <strong>format</strong> options are not accepted in this file, you should use <strong>debian/source/format</strong> instead.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>debian/source/local-options</h3>
     <p>Exactly like <strong>debian/source/options</strong> except that the file is not included in the generated source package. It can be useful to store a preference tied to the maintainer or to the VCS repository where the source package is maintained.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>debian/source/local-patch-header and debian/source/patch-header</h3>
     <p>Free form text that is put on top of the automatic patch generated in formats “2.0” or “3.0 (quilt)”. <strong>local-patch-header</strong> is not included in the generated source package while <strong>patch-header</strong> is.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>debian/patches/series</h3>
     <p>This file lists all patches that have to be applied (in the given order) on top of the upstream source package. Leading and trailing spaces are stripped. Lines starting with ‘<strong>#</strong>’ are comments and are skipped. Empty lines are ignored. Remaining lines start with a patch filename (relative to the <strong>debian/patches/</strong> directory) up to the first space character or the end of line. Optional <strong>quilt</strong> options can follow up to the end of line or the first ‘<strong>#</strong>’ preceded by one or more spaces (which marks the start of a comment up to the end of line).
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>BUGS</h2>
   <p>The point at which field overriding occurs compared to certain standard output field settings is rather confused.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>deb-src-control</strong>(5), <strong>deb-changelog</strong>(5), <strong>dsc</strong>(5).
-</div>
+</section>
 

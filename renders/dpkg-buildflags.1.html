@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="2014-09-04" data-extra2="Debian Project" data-extra3="dpkg suite">
 <title>dpkg-buildflags</title>
 <h1>dpkg-buildflags</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>dpkg-buildflags - returns build flags to use during package build
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dpkg-buildflags</strong> [<em>option</em>...] [<em>command</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dpkg-buildflags</strong> is a tool to retrieve compilation flags to use during build of Debian packages. The default flags are defined by the vendor but they can be extended/overriden in several ways:
   <dl>
@@ -36,8 +36,8 @@
     <dd>Extend the flag named <em>flag</em> by prepending the options given in <em>value</em>. A space is appended to the prepended value if the flag's current value is non-empty.
   </dl>
   <p>The configuration files can contain comments on lines starting with a hash (#). Empty lines are also ignored.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMANDS</h2>
   <dl>
     <dt><strong>--dump</strong>
@@ -90,8 +90,8 @@
     <dt><strong>--version</strong>
     <dd>Show the version and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SUPPORTED FLAGS</h2>
   <dl>
     <dt><strong>CFLAGS</strong>
@@ -114,14 +114,14 @@
     <dd>Options passed to the compiler when linking executables or shared objects (if the linker is called directly, then <strong>-Wl</strong> and <strong>,</strong> have to be stripped from these options). Default value: empty.
   </dl>
   <p>New flags might be added in the future if the need arises (for example to support other languages).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FEATURE AREAS</h2>
   <p>Each area feature can be enabled and disabled in the <strong>DEB_BUILD_OPTIONS</strong> and <strong>DEB_BUILD_MAINT_OPTIONS</strong> environment variable's area value with the ‘<strong>+</strong>’ and ‘<strong>-</strong>’ modifier. For example, to enable the <strong>hardening</strong> “pie” feature and disable the “fortify” feature you can do this in <strong>debian/rules</strong>:
   <p>export DEB_BUILD_MAINT_OPTIONS=hardening=+pie,-fortify
   <p>The special feature <strong>all</strong> (valid in any area) can be used to enable or disable all area features at the same time. Thus disabling everything in the <strong>hardening</strong> area and enabling only “format” and “fortify” can be achieved with:
   <p>export DEB_BUILD_MAINT_OPTIONS=hardening=-all,+format,+fortify
-  <div class="subsection">
+  <section>
     <h3>qa</h3>
     <p>Several compile-time options (detailed below) can be used to help detect problems in the source code or build system.
     <dl>
@@ -130,8 +130,8 @@
       <dt><strong>canary</strong>
       <dd>This setting (disabled by default) adds dummy canary options to the build flags, so that the build logs can be checked for how the build flags propagate and to allow finding any omission of normal build flag settings. The only currently supported flags are <strong>CPPFLAGS</strong>, <strong>CFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>OBJCXXFLAGS</strong> with flags set to <strong>-D__DEB_CANARY_</strong><em>flag</em>_<em>random-id</em><strong>__</strong>, and <strong>LDFLAGS</strong> set to <strong>-Wl,-z,deb-canary-</strong><em>random-id</em>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>sanitize</h3>
     <p>Several compile-time options (detailed below) can be used to help sanitize a resulting binary against memory corruptions, memory leaks, use after free, threading data races and undefined behavior bugs.
     <dl>
@@ -144,8 +144,8 @@
       <dt><strong>undefined</strong>
       <dd>This setting (disabled by default) adds <strong>-fsanitize=undefined</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong> and <strong>LDFLAGS</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>hardening</h3>
     <p>Several compile-time options (detailed below) can be used to help harden a resulting binary against memory corruption attacks, or provide additional warning messages during compilation. Except as noted below, these are enabled by default for architectures that support them.
     <dl>
@@ -184,8 +184,8 @@
         <p>Unconditionally passing <strong>-fPIE</strong>, <strong>-fpie</strong> or <strong>-pie</strong> to a build-system using libtool is safe as these flags will get stripped when building shared libraries. Otherwise on projects that build both programs and shared libraries you might need to make sure that when building the shared libraries <strong>-fPIC</strong> is always passed last (so that it overrides any previous <strong>-PIE</strong>) to compilation flags such as <strong>CFLAGS</strong>, and <strong>-shared</strong> is passed last (so that it overrides any previous <strong>-pie</strong>) to linking flags such as <strong>LDFLAGS</strong>.
         <p>Additionally, since PIE is implemented via a general register, some register starved architectures (but not including i386 anymore since optimizations implemented in gcc &gt;= 5) can see performance losses of up to 15% in very text-segment-heavy application workloads; most workloads see less than 1%. Architectures with more general registers (e.g. amd64) do not see as high a worst-case penalty.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>reproducible</h3>
     <p>The compile-time options detailed below can be used to help improve build reproducibility or provide additional warning messages during compilation. Except as noted below, these are enabled by default for architectures that support them.
     <dl>
@@ -194,9 +194,9 @@
       <dt><strong>fixdebugpath</strong>
       <dd>This setting (enabled by default) adds <strong>-fdebug-prefix-map=</strong><em>BUILDPATH</em><strong>=.</strong> to <strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>OBJCFLAGS</strong>, <strong>OBJCXXFLAGS</strong>, <strong>GCJFLAGS</strong>, <strong>FFLAGS</strong> and <strong>FCFLAGS</strong> where <strong>BUILDPATH</strong> is set to the top-level directory of the package being built. This has the effect of removing the build path from any generated debug symbols.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>There are 2 sets of environment variables doing the same operations, the first one (DEB_<em>flag</em>_<em>op</em>) should never be used within <strong>debian/rules</strong>. It's meant for any user that wants to rebuild the source package with different build flags. The second set (DEB_<em>flag</em>_MAINT_<em>op</em>) should only be used in <strong>debian/rules</strong> by package maintainers to change the resulting build flags.
   <dl>
@@ -220,10 +220,10 @@
     <dt><strong>DEB_BUILD_PATH</strong>
     <dd>This variable sets the build path (since dpkg 1.18.8) to use in features such as <strong>fixdebugpath</strong> so that they can be controlled by the caller. This variable is currently Debian and derivatives-specific.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
-  <div class="subsection">
+  <section>
     <h3>Configuration files</h3>
     <dl>
       <dt><strong>/etc/dpkg/buildflags.conf</strong>
@@ -232,16 +232,16 @@
       <dt><strong>$HOME/.config/dpkg/buildflags.conf</strong>
       <dd>User configuration file.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Packaging support</h3>
     <dl>
       <dt><strong>/usr/share/dpkg/buildflags.mk</strong>
       <dd>Makefile snippet that will load (and optionally export) all flags supported by <strong>dpkg-buildflags</strong> into variables (since dpkg 1.16.1).
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>To pass build flags to a build command in a makefile:
   <div class="indent-4">
@@ -258,7 +258,7 @@
     <pre>eval "set -- $(dpkg-buildflags --export=cmdline)"
 for dir in a b c; do (cd $dir &amp;& ./configure "$@" &amp;& make); done</pre>
   </div>
-  <div class="subsection">
+  <section>
     <h3>Usage in debian/rules</h3>
     <p>You should call <strong>dpkg-buildflags</strong> or include <strong>buildflags.mk</strong> from the <strong>debian/rules</strong> file to obtain the needed build flags to pass to the build system. Note that older versions of <strong>dpkg-buildpackage</strong> (before dpkg 1.16.1) exported these flags automatically. However, you should not rely on this, since this breaks manual invocation of <strong>debian/rules</strong>.
     <p>For packages with autoconf-like build systems, you can pass the relevant options to configure or <strong>make</strong>(1) directly, as shown above.
@@ -279,6 +279,6 @@ export CPPFLAGS CFLAGS LDFLAGS</pre>
 build-arch:
         $(CC) -o hello hello.c $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)</pre>
     </div>
-  </div>
-</div>
+  </section>
+</section>
 

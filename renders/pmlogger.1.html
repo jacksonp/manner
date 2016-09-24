@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGGER</title>
 <h1>PMLOGGER</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogger</strong> - create archive log for performance metrics
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmlogger</strong> [<strong>-c</strong> <em>configfile</em>] [<strong>-h</strong> <em>host</em>] [<strong>-K</strong> <em>spec</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-L</strong>] [<strong>-m</strong> <em>note</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-o</strong>] [<strong>-p</strong> <em>pid</em>] [<strong>-P</strong>] [<strong>-r</strong>] [<strong>-s</strong> <em>endsize</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-u</strong>] [<strong>-U</strong> <em>username</em>] [<strong>-v</strong> <em>volsize</em>] [<strong>-V</strong> <em>version</em>] [<strong>-x</strong> <em>fd</em>] [<strong>-y</strong>] <em>archive</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlogger</strong> creates the archive logs of performance metric values that may be ``played back'' by other Performance Co-Pilot (see <strong>PCPIntro</strong>(1)) tools. These logs form the basis of the VCR paradigm and retrospective performance analysis services common to the PCP toolkit.
   <p>The mandatory argument <em>archive</em> is the base name for the physical files that constitute an archive log.
@@ -52,8 +52,8 @@
   <p>Historically the buffers for the current log may be flushed to disk using the <strong>flush</strong> command of <strong>pmlc</strong>(1), or by sending <strong>pmlogger</strong> a SIGUSR1 signal or by using the <strong>-u</strong> option. The current version of <em>pmlogger</em> and the <em>libpcp</em> routines that underpin <em>pmlogger</em> unconditionally use unbuffered writes and a single <strong>fwrite</strong>(3) for each logical record written, and so ``flushing'' does not force any additional data to be written to the file system. The <strong>-u</strong> option, the SIGUSR1 handling and the <strong>pmlc</strong>(1) <strong>flush</strong> command are retained for backwards compatibility.
   <p>When launched with the <strong>-x</strong> option, pmlogger will accept asynchronous control requests on the file descriptor <em>fd</em>. This option is only expected to be used internally by PCP applications that support ``live record mode''.
   <p>The <strong>-m</strong> option allows the string <em>note</em> to be appended to the map file for this instance of <strong>pmlogger</strong> in the <strong>$PCP_TMP_DIR/pmlogger</strong> directory. This is currently used internally to document the file descriptor (<em>fd</em>) when the <strong>-x</strong> option is used, or to indicate that this <strong>pmlogger</strong> instance was started under the control of <strong>pmlogger_check</strong>(1).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION FILE SYNTAX</h2>
   <p>The configuration file may be specified with the <strong>-c</strong> option. If it is not, configuration specifications are read from standard input.
   <p>If <em>configfile</em> does not exist, then a search is made in the directory <em>$PCP_VAR_DIR/config/pmlogger</em> for a file of the same name, and if found that file is used, e.g. if <em>config.mumble</em> does not exist in the current directory and the file <em>$PCP_VAR_DIR/config/pmlogger/config.mumble</em> does exist, then <strong>-c config.mumble</strong> and <strong>-c $PCP_VAR_DIR/config/pmlogger/config.mumble</strong> are equivalent.
@@ -102,8 +102,8 @@
       </div>
   </dl>
   <p>The configuration (either from standard input or <em>configfile</em>) is initially scanned by <strong>pmcpp</strong>(1) with the options <strong>-rs</strong> and <strong>-I</strong> <em>$PCP_VAR_DIR/config/pmlogger</em>. This extends the configuration file syntax with include file processing (<strong>%include</strong>), a common location to search for include files (<em>$PCP_VAR_DIR/config/pmlogger</em>), macro definitions (<strong>%define</strong>), macro expansion (<strong>%</strong><em>name</em> and <strong>%{</strong><em>name</em><strong>}</strong>) and conditional inclusion of lines (<strong>%ifdef</strong> <em>name</em> ... <strong>%else</strong> ... <strong>%endif</strong> and <strong>%ifndef</strong> <em>name</em> ... <strong>%else</strong> ... <strong>%endif</strong>).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>For each PCP utility, there is a sample <strong>pmlogger</strong> configuration file that could be used to create an archive log suitable for replaying with that tool (i.e. includes all of the performance metrics used by the tool). For a tool named <em>foo</em> this configuration file is located in <em>$PCP_VAR_DIR/config/pmlogger/config.foo</em>.
   <p>The following is a simple default configuration file for a primary <strong>pmlogger</strong> instance, and demonstrates most of the capabilities of the configuration specification language.
@@ -133,8 +133,8 @@ log mandatory on %disk_detail_freq {
 [access]
 disallow * : all except enquire;
 allow localhost : mandatory, advisory;</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><em>archive</em><strong>.meta</strong>
@@ -157,22 +157,22 @@ allow localhost : mandatory, advisory;</pre>
     <dd>(or <strong>$PCP_LOG_DIR/pmlogger/<em>hostname</em>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
     all messages and diagnostics are directed here
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>Normally <strong>pmlogger</strong> creates a socket to receive control messages from <strong>pmlc</strong>(1) on the first available TCP/IP port numbered 4330 or higher. The environment variable <strong>PMLOGGER_PORT</strong> may be used to specify an alternative starting port number.
   <p>If set to the value 1, the <strong>PMLOGGER_LOCAL</strong> environment variable will cause <strong>pmlogger</strong> to run in a localhost-only mode of operation, where it binds only to the loopback interface.
   <p>The <strong>PMLOGGER_MAXPENDING</strong> variable can be set to indicate the maximum length to which the queue of pending <strong>pmlc</strong> connections may grow.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogger_check</strong>(1), <strong>__pmSpecLocalPMDA</strong>(3), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5), <strong>pmns</strong>(5) and <strong>chkconfig</strong>(8).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>The archive logs are sufficiently precious that <strong>pmlogger</strong> will not truncate an existing physical file. A message of the form<br>
   __pmLogNewFile: "foo.index" already exists, not over-written<br>
@@ -180,5 +180,5 @@ allow localhost : mandatory, advisory;</pre>
   <p>There may be at most one primary <strong>pmlogger</strong> instance per monitored host; attempting to bend this rule produces the error:<br>
   pmlogger: there is already a primary pmlogger running
   <p>Various other messages relating to the creation and/or deletion of files in <em>$PCP_TMP_DIR/pmlogger</em> suggest a permission problem on this directory, or some feral files have appeared therein.
-</div>
+</section>
 

@@ -3,20 +3,20 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGREDUCE</title>
 <h1>PMLOGREDUCE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogreduce</strong> - temporal reduction of Performance Co-Pilot archives
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_BINADM_DIR/pmlogreduce</strong> [<strong>-z</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-s</strong> <em>samples</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-v</strong> <em>volsamples</em>] [<strong>-Z</strong> <em>timezone</em>] <em>input</em> <em>output</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlogreduce</strong> reads one set of Performance Co-Pilot (PCP) archives identified by <em>input</em> and creates a temporally reduced PCP archive in <em>output</em>. <em>input</em> is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. The data reduction involves statistical and temporal reduction of samples with an output sampling interval defined by the <strong>-t</strong> option in the <em>output</em> archive (independent of the sampling intervals in the <em>input</em> archives), and is further controlled by other command line arguments.
   <p>For some metrics, temporal data reduction is not going to be helpful, so for metrics with types <strong>PM_TYPE_AGGREGATE</strong> or <strong>PM_TYPE_EVENT</strong>, a warning is issued if these metrics are found in <em>input</em> and they will be skipped and not appear in the <em>output</em> archive.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND LINE OPTIONS</h2>
   <p>The command line options for <strong>pmlogreduce</strong> are as follows:
   <dl class="indent-7">
@@ -41,8 +41,8 @@
     <dt><strong>-z</strong>
     <dd>Use the local timezone of the host from the <em>input</em> archives when displaying the date and time, or interpreting the <strong>-S</strong> and <strong>-T</strong> options. The default is to initially use the timezone of the local host.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DATA REDUCTION</h2>
   <p>The statistical and temporal reduction follows the following rules:
   <dl class="indent-52">
@@ -66,8 +66,8 @@
     <dt>5.
     <dd>Any ``mark'' records in the <em>input</em> archives (as created by <strong>pmlogextract</strong>(1)) will be preserved in the <em>output</em> archive, so periods where no data is available are maintained, and data interpolation will <strong>not</strong> occur across these periods when the <em>output</em> archive is subsequently processed with PCP applications.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <p>For each of the <em>input</em> and <em>output</em> archives, several physical files are used.
   <dl class="indent-10">
@@ -78,23 +78,23 @@
     <dt><em>archive</em><strong>.index</strong>
     <dd>temporal index to support rapid random access to the other files in the archive log.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogextract</strong>(1), <strong>pmlogger</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>All error conditions detected by <strong>pmlogreduce</strong> are reported on <em>stderr</em> with textual (if sometimes terse) explanation.
   <p>Should the <em>input</em> archives be corrupted (this can happen if the <strong>pmlogger</strong> instance writing the archive suddenly dies), then <strong>pmlogreduce</strong> will detect and report the position of the corruption in the file, and any subsequent information from the <em>input</em> archives will not be processed.
   <p>If any error is detected, <strong>pmlogreduce</strong> will exit with a non-zero status.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>The preamble metrics (pmcd.pmlogger.archive, pmcd.pmlogger.host, and pmcd.pmlogger.port), which are automatically recorded by <strong>pmlogger</strong> at the start of the archive, may not be present in the archive output by <strong>pmlogreduce</strong>. These metrics are only relevant while the archive is being created, and have no significance once recording has finished.
-</div>
+</section>
 

@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMPROXY</title>
 <h1>PMPROXY</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmproxy</strong> - proxy for performance metrics collector daemon
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmproxy</strong> [<strong>-Af</strong>] [<strong>-C</strong> <em>dirname</em>] [<strong>-i</strong> <em>ipaddress</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-L</strong> <em>bytes</em>] [<strong>-M</strong> <em>certname</em>] [<strong>-p</strong> <em>port</em>[,<em>port</em> ...] [<strong>-P</strong> <em>passfile</em>] [<strong>-U</strong> <em>username</em>] [<strong>-x</strong> <em>file</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmproxy</strong> acts as a protocol proxy for <strong>pmcd</strong>(1), allowing Performance Co-Pilot (PCP) monitoring clients to connect to one or more <strong>pmcd</strong>(1) instances via <strong>pmproxy</strong>.
   <p>Normally <strong>pmproxy</strong> is deployed in a firewall domain, or on a ``head'' node of a cluster where the IP (Internet Protocol) address of the hosts where <strong>pmcd</strong>(1) is running may be unknown to the PCP monitoring clients, although the IP address of the host where <strong>pmproxy</strong> is running is known to these clients. Similarly, the clients may have network connectivity only to the host where <strong>pmproxy</strong> is running, while there is network connectivity from that host to the hosts of interest where <strong>pmcd</strong>(1) is running.
@@ -39,8 +39,8 @@
     <dt><strong>-x</strong> <em>file</em>
     <dd>Before the <strong>pmproxy</strong> <em>logfile</em> can be opened, <strong>pmproxy</strong> may encounter a fatal error which prevents it from starting. By default, the output describing this error is sent to <strong>/dev/tty</strong> but it may redirected to <em>file</em>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STARTING AND STOPPING PMPROXY</h2>
   <p>Normally, <strong>pmproxy</strong> is started automatically at boot time and stopped when the system is being brought down. Under certain circumstances it is necessary to start or stop <strong>pmproxy</strong> manually. To do this one must become superuser and type
   <p><code># $PCP_RC_DIR/pmproxy start</code>
@@ -48,8 +48,8 @@
   <p><code># $PCP_RC_DIR/pmproxy stop</code>
   <p>to stop <strong>pmproxy</strong>. Starting <strong>pmproxy</strong> when it is already running is the same as stopping it and then starting it again.
   <p>Normally <strong>pmproxy</strong> listens for PCP client connections on TCP/IP port number 44322 (registered at <em>http://www.iana.org/</em>). Either the environment variable <strong>PMPROXY_PORT</strong> <strong>-p</strong> command line option may be used to specify alternative port number(s) when <strong>PMPROXY_PORT</strong> or the <strong>-p</strong> command line option may be used to specify alternative port number(s) when <strong>pmproxy</strong> is started; in each case, the specification is a comma-separated list of one or more numerical port numbers. Should both methods be used or multiple <strong>-p</strong> options appear on the command line, <strong>pmproxy</strong> will listen on the union of the set of ports specified via all <strong>-p</strong> options and the <strong>PMPROXY_PORT</strong> environment variable. If non-default ports are used with <strong>pmproxy</strong> care should be taken to ensure that <strong>PMPROXY_PORT</strong> is also set in the environment of any client application that will connect to <strong>pmproxy</strong>, or that the extended host specification syntax is used (see <strong>PCPIntro</strong>(1) for details).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl>
     <dt><strong>PCP_PMPROXYOPTIONS_PATH</strong>
@@ -62,8 +62,8 @@
     <dt><strong>/etc/pki/nssdb</strong>
     <dd>default Network Security Services (NSS) certificate database directory, used for optional Secure Socket Layer connections. This database can be created and queried using the NSS <strong>certutil</strong> tool, amongst others.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>In addition to the PCP environment variables described in the <strong>PCP ENVIRONMENT</strong> section below, there are several environment variables that influence the interactions between a PCP monitoring client, <strong>pmcd</strong> and <strong>pmcd</strong>(1).
   <dl>
@@ -78,18 +78,18 @@
   </dl>
   <p>If set to the value 1, the <strong>PMPROXY_LOCAL</strong> environment variable will cause <strong>pmproxy</strong> to run in a localhost-only mode of operation, where it binds only to the loopback interface.
   <p>The <strong>PMPROXY_MAXPENDING</strong> variable can be set to indicate the maximum length to which the queue of pending client connections may grow.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdbg</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>If <strong>pmproxy</strong> is already running the message "Error: OpenRequestSocket bind: Address already in use" will appear. This may also appear if <strong>pmproxy</strong> was shutdown with an outstanding request from a client. In this case, a request socket has been left in the TIME_WAIT state and until the system closes it down (after some timeout period) it will not be possible to run <strong>pmproxy</strong>.
   <p>In addition to the standard <strong>PCP</strong> debugging flags, see <strong>pmdbg</strong>(1), <strong>pmproxy</strong> currently uses <strong>DBG_TRACE_CONTEXT</strong> for tracing client connections and disconnections
-</div>
+</section>
 

@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="07/22/2016" data-extra2="Nmap" data-extra3="Nmap Reference Guide">
 <title>NMAP</title>
 <h1>NMAP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>nmap - Network exploration tool and security / port scanner
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>nmap</strong> [<em>Scan&nbsp;Type</em>...] [<em>Options</em>] {<em>target&nbsp;specification</em>}
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>Nmap (“Network Mapper”) is an open source tool for network exploration and security auditing. It was designed to rapidly scan large networks, although it works fine against single hosts. Nmap uses raw IP packets in novel ways to determine what hosts are available on the network, what services (application name and version) those hosts are offering, what operating systems (and OS versions) they are running, what type of packet filters/firewalls are in use, and dozens of other characteristics. While Nmap is commonly used for security audits, many systems and network administrators find it useful for routine tasks such as network inventory, managing service upgrade schedules, and monitoring host or service uptime.
   <p>The output from Nmap is a list of scanned targets, with supplemental information on each depending on the options used. Key among that information is the “interesting ports table”. That table lists the port number and protocol, service name, and state. The state is either open, filtered, closed, or unfiltered. Open means that an application on the target machine is listening for connections/packets on that port. Filtered means that a firewall, filter, or other network obstacle is blocking the port so that Nmap cannot tell whether it is open or closed. Closed ports have no application listening on them, though they could open up at any time. Ports are classified as unfiltered when they are responsive to Nmap's probes, but Nmap cannot determine whether they are open or closed. Nmap reports the state combinations open|filtered and closed|filtered when it cannot determine which of the two states describe a port. The port table may also include software version details when version detection has been requested. When an IP protocol scan is requested (<strong>-sO</strong>), Nmap provides information on supported IP protocols rather than listening ports.
@@ -49,8 +49,8 @@ HOP RTT      ADDRESS
 Nmap done: 1 IP address (1 host up) scanned in 14.40 seconds</pre>
   </div>
   <p>The newest version of Nmap can be obtained from <strong>https://nmap.org</strong>. The newest version of this man page is available at <strong>https://nmap.org/book/man.html</strong>. It is also included as a chapter of Nmap Network Scanning: The Official Nmap Project Guide to Network Discovery and Security Scanning (see <strong>https://nmap.org/book/</strong>).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS SUMMARY</h2>
   <p>This options summary is printed when Nmap is run with no arguments, and the latest version is always available at <strong>https://svn.nmap.org/nmap/docs/nmap.usage.txt</strong>. It helps people remember the most common options, but is no substitute for the in-depth documentation in the rest of this manual. Some obscure options aren't even included here.
   <div class="indent-4">
@@ -169,8 +169,8 @@ EXAMPLES:
   nmap -v -iR 10000 -Pn -p 80
 SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES</pre>
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TARGET SPECIFICATION</h2>
   <p>Everything on the Nmap command-line that isn't an option (or option argument) is treated as a target host specification. The simplest case is to specify a target IP address or hostname for scanning.
   <p>Sometimes you wish to scan a whole network of adjacent hosts. For this, Nmap supports CIDR-style addressing. You can append /<em>numbits</em> to an IPv4 address or hostname and Nmap will scan every IP address for which the first <em>numbits</em> are the same as for the reference IP or hostname given. For example, 192.168.10.0/24 would scan the 256 hosts between 192.168.10.0 (binary: 11000000 10101000 00001010 00000000) and 192.168.10.255 (binary: 11000000 10101000 00001010 11111111), inclusive. 192.168.10.40/24 would scan exactly the same targets. Given that the host scanme.nmap.org is at the IP address 64.13.134.52, the specification scanme.nmap.org/16 would scan the 65,536 IP addresses between 64.13.0.0 and 64.13.255.255. The smallest allowed value is /0, which targets the whole Internet. The largest value is /32, which scans just the named host or IP address because all address bits are fixed.
@@ -199,8 +199,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <br>
     The exclude file may contain comments that start with # and extend to the end of the line.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HOST DISCOVERY</h2>
   <p>One of the very first steps in any network reconnaissance mission is to reduce a (sometimes huge) set of IP ranges into a list of active or interesting hosts. Scanning every port of every single IP address is slow and usually unnecessary. Of course what makes a host interesting depends greatly on the scan purposes. Network administrators may only be interested in hosts running a certain service, while security auditors may care about every single device with an IP address. An administrator may be comfortable using just an ICMP ping to locate hosts on his internal network, while an external penetration tester may use a diverse set of dozens of probes in an attempt to evade firewall restrictions.
   <p>Because host discovery needs are so diverse, Nmap offers a wide variety of options for customizing the techniques used. Host discovery is sometimes called ping scan, but it goes well beyond the simple ICMP echo request packets associated with the ubiquitous ping tool. Users can skip the ping step entirely with a list scan (<strong>-sL</strong>) or by disabling ping (<strong>-Pn</strong>), or engage the network with arbitrary combinations of multi-port TCP SYN/ACK, UDP, SCTP INIT and ICMP probes. The goal of these probes is to solicit responses which demonstrate that an IP address is actually active (is being used by a host or network device). On many networks, only a small percentage of IP addresses are active at any given time. This is particularly common with private address space such as 10.0.0.0/8. That network has 16 million IPs, but I have seen it used by companies with less than a thousand machines. Host discovery can find those machines in a sparsely allocated sea of IP addresses.
@@ -319,8 +319,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <br>
     This option also comes in handy when scanning private networks. Sometimes only a few name servers provide proper rDNS information, and you may not even know where they are. You can scan the network for port 53 (perhaps with version detection), then try Nmap list scans (<strong>-sL</strong>) specifying each name server one at a time with <strong>--dns-servers</strong> until you find one which works.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PORT SCANNING BASICS</h2>
   <p>While Nmap has grown in functionality over the years, it began as an efficient port scanner, and that remains its core function. The simple command <strong>nmap</strong> <em>target</em> scans 1,000 TCP ports on the host <em>target</em>. While many port scanners have traditionally lumped all ports into the open or closed states, Nmap is much more granular. It divides ports into six states: open, closed, filtered, unfiltered, open|filtered, or closed|filtered.
   <p>These states are not intrinsic properties of the port itself, but describe how Nmap sees them. For example, an Nmap scan from the same network as the target may show port 135/tcp as open, while a scan at the same time with the same options from across the Internet might show that port as filtered.
@@ -349,8 +349,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>This state is used when Nmap is unable to determine whether a port is closed or filtered. It is only used for the IP ID idle scan.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PORT SCANNING TECHNIQUES</h2>
   <p>As a novice performing automotive repair, I can struggle for hours trying to fit my rudimentary tools (hammer, duct tape, wrench, etc.) to the task at hand. When I fail miserably and tow my jalopy to a real mechanic, he invariably fishes around in a huge tool chest until pulling out the perfect gizmo which makes the job seem effortless. The art of port scanning is similar. Experts understand the dozens of scan techniques and choose the appropriate one (or combination) for a given task. Inexperienced users and script kiddies, on the other hand, try to solve every problem with the default SYN scan. Since Nmap is free, the only barrier to port scanning mastery is knowledge. That certainly beats the automotive world, where it may take great skill to determine that you need a strut spring compressor, then you still have to pay thousands of dollars for it.
   <p>Most of the scan types are only available to privileged users. This is because they send and receive raw packets, which requires root access on Unix systems. Using an administrator account on Windows is recommended, though Nmap sometimes works for unprivileged users on that platform when WinPcap has already been loaded into the OS. Requiring root privileges was a serious limitation when Nmap was released in 1997, as many users only had access to shared shell accounts. Now, the world is different. Computers are cheaper, far more people have always-on direct Internet access, and desktop Unix systems (including Linux and Mac OS X) are prevalent. A Windows version of Nmap is now available, allowing it to run on even more desktops. For all these reasons, users have less need to run Nmap from limited shared shell accounts. This is fortunate, as the privileged options make Nmap far more powerful and flexible.
@@ -452,8 +452,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <br>
     This vulnerability was widespread in 1997 when Nmap was released, but has largely been fixed. Vulnerable servers are still around, so it is worth trying when all else fails. If bypassing a firewall is your goal, scan the target network for port 21 (or even for any FTP services if you scan all ports with version detection) and use the ftp-bounce NSE script. Nmap will tell you whether the host is vulnerable or not. If you are just trying to cover your tracks, you don't need to (and, in fact, shouldn't) limit yourself to hosts on the target network. Before you go scanning random Internet addresses for vulnerable FTP servers, consider that sysadmins may not appreciate you abusing their servers in this way.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PORT SPECIFICATION AND SCAN ORDER</h2>
   <p>In addition to all of the scan methods discussed previously, Nmap offers options for specifying which ports are scanned and whether the scan order is randomized or sequential. By default, Nmap scans the most common 1,000 ports for each protocol.
   <p><strong>-p</strong> <em>port ranges</em> (Only scan specified ports)
@@ -488,8 +488,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>Scans the <em>n</em> highest-ratio ports found in nmap-services file after excluding all ports specified by <strong>--exclude-ports</strong>. <em>n</em> must be 1 or greater.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SERVICE AND VERSION DETECTION</h2>
   <p>Point Nmap at a remote machine and it might tell you that ports 25/tcp, 80/tcp, and 53/udp are open. Using its nmap-services database of about 2,200 well-known services, Nmap would report that those ports probably correspond to a mail server (SMTP), web server (HTTP), and name server (DNS) respectively. This lookup is usually accurate—the vast majority of daemons listening on TCP port 25 are, in fact, mail servers. However, you should not bet your security on this! People can and do run services on strange ports.
   <p>Even if Nmap is right, and the hypothetical server above is running SMTP, HTTP, and DNS servers, that is not a lot of information. When doing vulnerability assessments (or even simple network inventories) of your companies or clients, you really want to know which mail and DNS servers and versions are running. Having an accurate version number helps dramatically in determining which exploits a server is vulnerable to. Version detection helps you obtain this information.
@@ -523,8 +523,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>This causes Nmap to print out extensive debugging info about what version scanning is doing. It is a subset of what you get with <strong>--packet-trace</strong>.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OS DETECTION</h2>
   <p>One of Nmap's best-known features is remote OS detection using TCP/IP stack fingerprinting. Nmap sends a series of TCP and UDP packets to the remote host and examines practically every bit in the responses. After performing dozens of tests such as TCP ISN sampling, TCP options support and ordering, IP ID sampling, and the initial window size check, Nmap compares the results to its nmap-os-db database of more than 2,600 known OS fingerprints and prints out the OS details if there is a match. Each fingerprint includes a freeform textual description of the OS, and a classification which provides the vendor name (e.g. Sun), underlying OS (e.g. Solaris), OS generation (e.g. 10), and device type (general purpose, router, switch, game console, etc). Most fingerprints also have a Common Platform Enumeration (CPE) representation, like cpe:/o:linux:linux_kernel:2.6.
   <p>If Nmap is unable to guess the OS of a machine, and conditions are good (e.g. at least one open port and one closed port were found), Nmap will provide a URL you can use to submit the fingerprint if you know (for sure) the OS running on the machine. By doing this you contribute to the pool of operating systems known to Nmap and thus it will be more accurate for everyone.
@@ -548,8 +548,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>When Nmap performs OS detection against a target and fails to find a perfect match, it usually repeats the attempt. By default, Nmap tries five times if conditions are favorable for OS fingerprint submission, and twice when conditions aren't so good. Specifying a lower <strong>--max-os-tries</strong> value (such as 1) speeds Nmap up, though you miss out on retries which could potentially identify the OS. Alternatively, a high value may be set to allow even more retries when conditions are favorable. This is rarely done, except to generate better fingerprints for submission and integration into the Nmap OS database.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NMAP SCRIPTING ENGINE (NSE)</h2>
   <p>The Nmap Scripting Engine (NSE) is one of Nmap's most powerful and flexible features. It allows users to write (and share) simple scripts (using the <strong>Lua programming language</strong><sup>[11]</sup> ) to automate a wide variety of networking tasks. Those scripts are executed in parallel with the speed and efficiency you expect from Nmap. Users can rely on the growing and diverse set of scripts distributed with Nmap, or write their own to meet custom needs.
   <p>Tasks we had in mind when creating the system include network discovery, more sophisticated version detection, vulnerability detection. NSE can even be used for vulnerability exploitation.
@@ -631,8 +631,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>This option updates the script database found in scripts/script.db which is used by Nmap to determine the available default scripts and categories. It is only necessary to update the database if you have added or removed NSE scripts from the default scripts directory or if you have changed the categories of any script. This option is generally used by itself: <strong>nmap --script-updatedb</strong>.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TIMING AND PERFORMANCE</h2>
   <p>One of my highest Nmap development priorities has always been performance. A default scan (<strong>nmap</strong> <em>hostname</em>) of a host on my local network takes a fifth of a second. That is barely enough time to blink, but adds up when you are scanning hundreds or thousands of hosts. Moreover, certain scan options such as UDP scanning and version detection can increase scan times substantially. So can certain firewall configurations, particularly response rate limiting. While Nmap utilizes parallelism and many advanced algorithms to accelerate these scans, the user has ultimate control over how Nmap runs. Expert users carefully craft Nmap commands to obtain only the information they care about while meeting their time constraints.
   <p>Techniques for improving scan times include omitting non-critical tests, and upgrading to the latest version of Nmap (performance enhancements are made frequently). Optimizing timing parameters can also make a substantial difference. Those options are listed below.
@@ -722,8 +722,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <br>
     The main effects of <strong>T0</strong> are serializing the scan so only one port is scanned at a time, and waiting five minutes between sending each probe. <strong>T1</strong> and <strong>T2</strong> are similar but they only wait 15 seconds and 0.4 seconds, respectively, between probes. <strong>T3</strong> is Nmap's default behavior, which includes parallelization. <strong>-T4</strong> does the equivalent of <strong>--max-rtt-timeout 1250ms --min-rtt-timeout 100ms --initial-rtt-timeout 500ms --max-retries 6</strong> and sets the maximum TCP scan delay to 10 milliseconds. <strong>T5</strong> does the equivalent of <strong>--max-rtt-timeout 300ms --min-rtt-timeout 50ms --initial-rtt-timeout 250ms --max-retries 2 --host-timeout 15m</strong> as well as setting the maximum TCP scan delay to 5&nbsp;ms.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FIREWALL/IDS EVASION AND SPOOFING</h2>
   <p>Many Internet pioneers envisioned a global open network with a universal IP address space allowing virtual connections between any two nodes. This allows hosts to act as true peers, serving and retrieving information from each other. People could access all of their home systems from work, changing the climate control settings or unlocking the doors for early guests. This vision of universal connectivity has been stifled by address space shortages and security concerns. In the early 1990s, organizations began deploying firewalls for the express purpose of reducing connectivity. Huge networks were cordoned off from the unfiltered Internet by application proxies, network address translation, and packet filters. The unrestricted flow of information gave way to tight regulation of approved communication channels and the content that passes over them.
   <p>Network obstructions such as firewalls can make mapping a network exceedingly difficult. It will not get any easier, as stifling casual reconnaissance is often a key goal of implementing the devices. Nevertheless, Nmap offers many features to help understand these complex networks, and to verify that filters are working as intended. It even supports mechanisms for bypassing poorly implemented defenses. One of the best methods of understanding your network security posture is to try to defeat it. Place yourself in the mind-set of an attacker, and deploy techniques from this section against your networks. Launch an FTP bounce scan, idle scan, fragmentation attack, or try to tunnel through one of your own proxies.
@@ -818,8 +818,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>Asks Nmap to use the deprecated Adler32 algorithm for calculating the SCTP checksum. If <strong>--adler32</strong> is not given, CRC-32C (Castagnoli) is used. <strong>RFC 2960</strong><sup>[14]</sup> originally defined Adler32 as checksum algorithm for SCTP; <strong>RFC 4960</strong><sup>[7]</sup> later redefined the SCTP checksums to use CRC-32C. Current SCTP implementations should be using CRC-32C, but in order to elicit responses from old, legacy SCTP implementations, it may be preferable to use Adler32.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT</h2>
   <p>Any security tool is only as useful as the output it generates. Complex tests and algorithms are of little value if they aren't presented in an organized and comprehensible fashion. Given the number of ways Nmap is used by people and other software, no single format can please everyone. So Nmap offers several formats, including the interactive mode for humans to read directly and XML for easy parsing by software.
   <p>In addition to offering different output formats, Nmap provides options for controlling the verbosity of output as well as debugging messages. Output types may be sent to standard output or to named files, which Nmap can append to or clobber. Output files may also be used to resume aborted scans.
@@ -918,8 +918,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>Specify this option to prevent Nmap from associating any XSL stylesheet with its XML output. The xml-stylesheet directive is omitted.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MISCELLANEOUS OPTIONS</h2>
   <p>This section describes some important (and not-so-important) options that don't really fit anywhere else.
   <p><strong>-6</strong> (Enable IPv6 scanning)
@@ -974,8 +974,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <div class="indent-4">
     <p>Prints a short help screen with the most common command flags. Running Nmap without any arguments does the same thing.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RUNTIME INTERACTION</h2>
   <p>During the execution of Nmap, all key presses are captured. This allows you to interact with the program without aborting and restarting it. Certain special keys will change options, while any other keys will print out a status message telling you about the scan. The convention is that <em>lowercase letters increase</em> the amount of printing, and <em>uppercase letters decrease</em> the printing. You may also press ‘<em>?</em>’ for help.
   <p><strong>v</strong> / <strong>V</strong>
@@ -1001,8 +1001,8 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <pre>Stats: 0:00:07 elapsed; 20 hosts completed (1 up), 1 undergoing Service Scan
 Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>Here are some Nmap usage examples, from the simple and routine to a little more complex and esoteric. Some actual IP addresses and domain names are used to make things more concrete. In their place you should substitute addresses/names from <em>your own network</em>. While I don't think port scanning other networks is or should be illegal, some network administrators don't appreciate unsolicited scanning of their networks and may complain. Getting permission first is the best approach.
   <p>For testing purposes, you have permission to scan the host scanme.nmap.org. This permission only includes scanning via Nmap and not testing exploits or denial of service attacks. To conserve bandwidth, please do not initiate more than a dozen scans against that host per day. If this free scanning target service is abused, it will be taken down and Nmap will report Failed to resolve given hostname/IP: scanme.nmap.org. These permissions also apply to the hosts scanme2.nmap.org, scanme3.nmap.org, and so on, though those hosts do not currently exist.
@@ -1016,24 +1016,24 @@ Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
   <p>Asks Nmap to choose 100,000 hosts at random and scan them for web servers (port 80). Host enumeration is disabled with <strong>-Pn</strong> since first sending a couple probes to determine whether a host is up is wasteful when you are only probing one port on each target host anyway.
   <p><strong>nmap -Pn -p80 -oX logs/pb-port80scan.xml -oG logs/pb-port80scan.gnmap 216.163.128.20/20</strong>
   <p>This scans 4096 IPs for any web servers (without pinging them) and saves the output in grepable and XML formats.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NMAP BOOK</h2>
   <p>While this reference guide details all material Nmap options, it can't fully demonstrate how to apply those features to quickly solve real-world tasks. For that, we released Nmap Network Scanning: The Official Nmap Project Guide to Network Discovery and Security Scanning. Topics include subverting firewalls and intrusion detection systems, optimizing Nmap performance, and automating common networking tasks with the Nmap Scripting Engine. Hints and instructions are provided for common Nmap tasks such as taking network inventory, penetration testing, detecting rogue wireless access points, and quashing network worm outbreaks. Examples and diagrams show actual communication on the wire. More than half of the book is available free online. See <strong>https://nmap.org/book</strong> for more information.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Like its author, Nmap isn't perfect. But you can help make it better by sending bug reports or even writing patches. If Nmap doesn't behave the way you expect, first upgrade to the latest version available from <strong>https://nmap.org</strong>. If the problem persists, do some research to determine whether it has already been discovered and addressed. Try searching for the error message on our search page at <strong>http://insecure.org/search.html</strong> or at Google. Also try browsing the nmap-dev archives at <strong>http://seclists.org/</strong>. Read this full manual page as well. If nothing comes of this, mail a bug report to &lt;dev@nmap.org&gt;. Please include everything you have learned about the problem, as well as what version of Nmap you are running and what operating system version it is running on. Problem reports and Nmap usage questions sent to &lt;dev@nmap.org&gt; are far more likely to be answered than those sent to Fyodor directly. If you subscribe to the nmap-dev list before posting, your message will bypass moderation and get through more quickly. Subscribe at <strong>https://nmap.org/mailman/listinfo/dev</strong>.
   <p>Code patches to fix bugs are even better than bug reports. Basic instructions for creating patch files with your changes are available at <strong>https://svn.nmap.org/nmap/HACKING</strong>. Patches may be sent to nmap-dev (recommended) or to Fyodor directly.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Gordon “Fyodor” Lyon &lt;fyodor@nmap.org&gt; (<strong>http://insecure.org</strong>)
   <p>Hundreds of people have made valuable contributions to Nmap over the years. These are detailed in the CHANGELOG file which is distributed with Nmap and also available from <strong>https://nmap.org/changelog.html</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>LEGAL NOTICES</h2>
-  <div class="subsection">
+  <section>
     <h3>Nmap Copyright and Licensing</h3>
     <p>The Nmap Security Scanner is (C) 1996–2015 Insecure.Com LLC. Nmap is also a registered trademark of Insecure.Com LLC. This program is free software; you may redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; Version 2 (“GPL”), BUT ONLY WITH ALL OF THE CLARIFICATIONS AND EXCEPTIONS DESCRIBED HEREIN. This guarantees your right to use, modify, and redistribute this software under certain conditions. If you wish to embed Nmap technology into proprietary software, we sell alternative licenses (contact &lt;sales@nmap.com&gt;). Dozens of software vendors already license Nmap technology such as host discovery, port scanning, OS detection, version detection, and the Nmap Scripting Engine.
     <p>Note that the GPL places important restrictions on “derivative works”, yet it does not provide a detailed definition of that term. To avoid misunderstandings, we interpret that term as broadly as copyright law allows. For example, we consider an application to constitute a derivative work for the purpose of this license if it does any of the following with any software or content covered by this license (“Covered Software”):
@@ -1061,39 +1061,39 @@ Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
     <p>Because this license imposes special exceptions to the GPL, Covered Work may not be combined (even as part of a larger work) with plain GPL software. The terms, conditions, and exceptions of this license must be included as well. This license is incompatible with some other open source licenses as well. In some cases we can relicense portions of Nmap or grant special permissions to use it in other open source software. Please contact fyodor@nmap.org with any such requests. Similarly, we don't incorporate incompatible open source software into Covered Software without special permission from the copyright holders.
     <p>If you have any questions about the licensing restrictions on using Nmap in other works, are happy to help. As mentioned above, we also offer alternative license to integrate Nmap into proprietary applications and appliances. These contracts have been sold to dozens of software vendors, and generally include a perpetual license as well as providing for priority support and updates. They also fund the continued development of Nmap. Please email &lt;sales@nmap.com&gt; for further information.
     <p>If you have received a written license agreement or contract for Covered Software stating terms other than these, you may choose to use and redistribute Covered Software under those terms instead of these.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Creative Commons License for this Nmap Guide</h3>
     <p>This Nmap Reference Guide is (C) 2005–2012 Insecure.Com LLC. It is hereby placed under version 3.0 of the <strong>Creative Commons Attribution License</strong><sup>[19]</sup>. This allows you redistribute and modify the work as you desire, as long as you credit the original source. Alternatively, you may choose to treat this document as falling under the same license as Nmap itself (discussed previously).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Source Code Availability and Community Contributions</h3>
     <p>Source is provided to this software because we believe users have a right to know exactly what a program is going to do before they run it. This also allows you to audit the software for security holes.
     <p>Source code also allows you to port Nmap to new platforms, fix bugs, and add new features. You are highly encouraged to send your changes to &lt;dev@nmap.org&gt; for possible incorporation into the main distribution. By sending these changes to Fyodor or one of the Insecure.Org development mailing lists, it is assumed that you are offering the Nmap Project (Insecure.Com LLC) the unlimited, non-exclusive right to reuse, modify, and relicense the code. Nmap will always be available open source, but this is important because the inability to relicense code has caused devastating problems for other Free Software projects (such as KDE and NASM). We also occasionally relicense the code to third parties as discussed above. If you wish to specify special license conditions of your contributions, just say so when you send them.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>No Warranty</h3>
     <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License v2.0 for more details at <strong>http://www.gnu.org/licenses/gpl-2.0.html</strong>, or in the COPYING file included with Nmap.
     <p>It should also be noted that Nmap has occasionally been known to crash poorly written applications, TCP/IP stacks, and even operating systems. While this is extremely rare, it is important to keep in mind. <em>Nmap should never be run against mission critical systems</em> unless you are prepared to suffer downtime. We acknowledge here that Nmap may crash your systems or networks and we disclaim all liability for any damage or problems Nmap could cause.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Inappropriate Usage</h3>
     <p>Because of the slight risk of crashes and because a few black hats like to use Nmap for reconnaissance prior to attacking systems, there are administrators who become upset and may complain when their system is scanned. Thus, it is often advisable to request permission before doing even a light scan of a network.
     <p>Nmap should never be installed with special privileges (e.g. suid root). That would open up a major security vulnerability as other users on the system (or attackers) could use it for privilege escalation.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Third-Party Software and Funding Notices</h3>
     <p>This product includes software developed by the <strong>Apache Software Foundation</strong><sup>[20]</sup>. A modified version of the <strong>Libpcap portable packet capture library</strong><sup>[21]</sup> is distributed along with Nmap. The Windows version of Nmap utilized the Libpcap-derived <strong>WinPcap library</strong><sup>[22]</sup> instead. Regular expression support is provided by the <strong>PCRE library</strong><sup>[23]</sup>, which is open-source software, written by Philip Hazel. Certain raw networking functions use the <strong>Libdnet</strong><sup>[24]</sup> networking library, which was written by Dug Song. A modified version is distributed with Nmap. Nmap can optionally link with the <strong>OpenSSL cryptography toolkit</strong><sup>[25]</sup> for SSL version detection support. The Nmap Scripting Engine uses an embedded version of the <strong>Lua programming language</strong><sup>[26]</sup>. The <strong>Liblinear linear classification library</strong><sup>[27]</sup> is used for our <strong>IPv6 OS detection machine learning techniques</strong><sup>[28]</sup>. All of the third-party software described in this paragraph is freely redistributable under BSD-style software licenses.
     <p>Binary packages for Windows and Mac OS X include support libraries necessary to run Zenmap and Ndiff with Python and PyGTK. (Unix platforms commonly make these libraries easy to install, so they are not part of the packages.) A listing of these support libraries and their licenses is included in the LICENSES files.
     <p>This software was supported in part through the <strong>Google Summer of Code</strong><sup>[29]</sup> and the <strong>DARPA CINDER program</strong><sup>[30]</sup> (DARPA-BAA-10-84).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>United States Export Control</h3>
     <p>Nmap only uses encryption when compiled with the optional OpenSSL support and linked with OpenSSL. When compiled without OpenSSL support, Insecure.Com LLC believes that Nmap is not subject to U.S. <strong>Export Administration Regulations (EAR)</strong><sup>[31]</sup> export control. As such, there is no applicable ECCN (export control classification number) and exportation does not require any special license, permit, or other governmental authorization.
     <p>When compiled with OpenSSL support or distributed as source code, Insecure.Com LLC believes that Nmap falls under U.S. ECCN <strong>5D002</strong><sup>[32]</sup> (“Information Security Software”). We distribute Nmap under the TSU exception for publicly available encryption software defined in <strong>EAR 740.13(e)</strong><sup>[33]</sup>.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>NOTES</h2>
   <dl class="indent-4">
     <dt>1.
@@ -1295,5 +1295,5 @@ Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
         <p>http://www.access.gpo.gov/bis/ear/pdf/740.pdf
       </div>
   </dl>
-</div>
+</section>
 

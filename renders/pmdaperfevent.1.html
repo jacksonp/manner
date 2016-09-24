@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMDAPERFEVENT</title>
 <h1>PMDAPERFEVENT</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmdaperfevent</strong> - hardware performance counter performance metrics domain agent (PMDA)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_PMDAS_DIR/perfevent/pmdaperfevent</strong> [<strong>-d</strong> <em>domain</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-U</strong> <em>username</em>] [<strong>-i</strong> <em>port</em>] [<strong>-p</strong>] [<strong>-u</strong> <em>socket</em>] [<strong>-6</strong>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmdaperfevent</strong> is a Performance Metrics Domain Agent (PMDA) that configures and reads the hardware performance counters using the Linux kernel perf_event API.
   <p>The <strong>perfevent</strong> PMDA exports metrics for hardware performance counters that are configurable from the Linux kernel perf_event API. The PMDA uses the libpfm4 library to access the hardware performance counters so any counters that are supported in libpfm4 should be available. Also included is the ability to read the Intel RAPL counters via direct MSR access. The PMDA supports automatically loading different counters for each hardware architecture. A single configuration file is used to specify the desired counters for each hardware performance monitoring unit (PMU). The configuration file allows different counters to be programmed on different CPUs and supports round-robin assignment of uncore counters needed for some AMD chips.
@@ -34,8 +34,8 @@
     <dt><strong>-6</strong>
     <dd>expect <strong>pmcd</strong>(1) to connect on given ipv6 port (number or name)
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INSTALLATION</h2>
   <p>The <strong>perfevent</strong> PMDA is not activated by default To install the PMDA, do the following as root:
   <pre># cd $PCP_PMDAS_DIR/perfevent
@@ -44,8 +44,8 @@
   <pre># cd $PCP_PMDAS_DIR/perfevent
 # ./Remove</pre>
   <p><strong>pmdaperfevent</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
@@ -61,21 +61,21 @@
     <dt><strong>$PCP_LOG_DIR/pmcd/perfevent.log</strong>
     <dd>default log file for error messages and other information from <strong>pmdaperfevent</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>UPGRADING</h2>
   <p>Some metric names have changed starting in version 3.10.8 to better conform to PMNS conventions. <strong>pmlogrewrite</strong>(1) can be used to update old archives. A helper utility, <strong>$PCP_PMDAS_DIR/perfevent/perfevent-makerewrite.pl</strong> will generate a config file that is suitable for use with <strong>pmlogrewrite</strong>(1) to update the metric names in existing archives.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Each event is placed in its own group and there is no way to group related events together so they are guaranteed to be simultaneously active. A workaround for this is to ensure that the number of configured events is less than or equal to the number of available hardware counters. This means that the events will not be time-multiplexed by the kernel and will be simultaneously active.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>perfalloc</strong>(1), <strong>perfevent.conf</strong>(5), <strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmlogrewrite</strong>(1), <strong>PMAPI</strong>(3), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5) and <strong>sysctl</strong>(8).
-</div>
+</section>
 

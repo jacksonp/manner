@@ -3,22 +3,22 @@
 <meta name="man-page-info" data-extra1="" data-extra2="" data-extra3="">
 <title>XARGS</title>
 <h1>XARGS</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>xargs - build and execute command lines from standard input
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>xargs</strong> [<strong>-0prtx</strong>] [<strong>-E</strong> <em>eof-str</em>] [<strong>-e</strong>[<em>eof-str</em>]] [<strong>--eof</strong>[=<em>eof-str</em>]] [<strong>--null</strong>] [<strong>-d</strong> <em>delimiter</em>] [<strong>--delimiter</strong> <em>delimiter</em>] [<strong>-I</strong> <em>replace-str</em>] [<strong>-i</strong>[<em>replace-str</em>]] [<strong>--replace</strong>[=<em>replace-str</em>]] [<strong>-l</strong>[<em>max-lines</em>]] [<strong>-L</strong> <em>max-lines</em>] [<strong>--max-lines</strong>[=<em>max-lines</em>]] [<strong>-n</strong> <em>max-args</em>] [<strong>--max-args</strong>=<em>max-args</em>] [<strong>-s</strong> <em>max-chars</em>] [<strong>--max-chars</strong>=<em>max-chars</em>] [<strong>-P</strong> <em>max-procs</em>] [<strong>--max-procs</strong>=<em>max-procs</em>] [<strong>--process-slot-var</strong>=<em>name</em>] [<strong>--interactive</strong>] [<strong>--verbose</strong>] [<strong>--exit</strong>] [<strong>--no-run-if-empty</strong>] [<strong>--arg-file</strong>=<em>file</em>] [<strong>--show-limits</strong>] [<strong>--version</strong>] [<strong>--help</strong>] [<em>command</em> [<em>initial-arguments</em>]]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>This manual page documents the GNU version of <strong>xargs</strong>. <strong>xargs</strong> reads items from the standard input, delimited by blanks (which can be protected with double or single quotes or a backslash) or newlines, and executes the <em>command</em> (default is <em>/bin/echo</em>) one or more times with any <em>initial-arguments</em> followed by items read from standard input. Blank lines on the standard input are ignored.
   <p>The command line for <em>command</em> is built up until it reaches a system-defined limit (unless the <strong>-n</strong> and <strong>-L</strong> options are used). The specified <em>command</em> will be invoked as many times as necessary to use up the list of input items. In general, there will be many fewer invocations of <em>command</em> than there were items in the input. This will normally have significant performance benefits. Some commands can usefully be executed in parallel too; see the <strong>-P</strong> option.
   <p>Because Unix filenames can contain blanks and newlines, this default behaviour is often problematic; filenames containing blanks and/or newlines are incorrectly processed by <strong>xargs</strong>. In these situations it is better to use the <strong>-0</strong> option, which prevents such problems. When using this option you will need to ensure that the program which produces the input for <strong>xargs</strong> also uses a null character as a separator. If that program is GNU <strong>find</strong> for example, the <strong>-print0</strong> option does this for you.
   <p>If any invocation of the command exits with a status of 255, <strong>xargs</strong> will stop immediately without reading any further input. An error message is issued on stderr when this happens.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-0, --null</strong>
@@ -64,8 +64,8 @@
     <dt><strong>--version</strong>
     <dd>Print the version number of <strong>xargs</strong> and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <pre><strong>find /tmp -name core -type f -print | xargs /bin/rm -f</strong></pre>
   <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them. Note that this will work incorrectly if there are any filenames containing newlines or spaces.
@@ -77,8 +77,8 @@
   <p>Generates a compact listing of all the users on the system.
   <pre><strong>xargs sh -c 'emacs "$@" &lt; /dev/tty' emacs</strong></pre>
   <p>Launches the minimum number of copies of Emacs needed, one after the other, to edit the files listed on <strong>xargs</strong>' standard input. This example achieves the same effect as BSD's <strong>-o</strong> option, but in a more flexible and portable way.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p><strong>xargs</strong> exits with the following status:
   <pre>0 if it succeeds
@@ -89,19 +89,19 @@
 127 if the command is not found
 1 if some other error occurred.</pre>
   <p>Exit codes greater than 128 are used by the shell to indicate that a program died due to a fatal signal.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STANDARDS CONFORMANCE</h2>
   <p>As of GNU xargs version 4.2.9, the default behaviour of <strong>xargs</strong> is not to have a logical end-of-file marker. POSIX (IEEE Std 1003.1, 2004 Edition) allows this.
   <p>The -l and -i options appear in the 1997 version of the POSIX standard, but do not appear in the 2004 version of the standard. Therefore you should use -L and -I instead, respectively.
   <p>The POSIX standard allows implementations to have a limit on the size of arguments to the <strong>exec</strong> functions. This limit could be as low as 4096 bytes including the size of the environment. For scripts to be portable, they must not rely on a larger value. However, I know of no implementation whose actual limit is that small. The <strong>--show-limits</strong> option can be used to discover the actual limits in force on the current system.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>find</strong>(1), <strong>locate</strong>(1), <strong>locatedb</strong>(5), <strong>updatedb</strong>(1), <strong>fork</strong>(2), <strong>execvp</strong>(3), <strong>kill</strong>(1), <strong>signal</strong>(7),
   <p>The full documentation for <strong>xargs</strong> is maintained as a Texinfo manual. If the <strong>info</strong> and <strong>xargs</strong> programs are properly installed at your site, the command <strong>info xargs</strong> should give you access to the complete manual.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>The <strong>-L</strong> option is incompatible with the <strong>-I</strong> option, but perhaps should not be.
   <p>It is not possible for <strong>xargs</strong> to be used securely, since there will always be a time gap between the production of the list of input files and their use in the commands that <strong>xargs</strong> issues. If other users have access to the system, they can manipulate the filesystem during this time window to force the action of the commands <strong>xargs</strong> runs to apply to files that you didn't intend. For a more detailed discussion of this and related problems, please refer to the ``Security Considerations'' chapter in the findutils Texinfo documentation. The <strong>-execdir</strong> option of <strong>find</strong> can often be used as a more secure alternative.
@@ -109,5 +109,5 @@
   <p><strong>somecommand | xargs -s 50000 echo | xargs -I '{}' -s 100000 rm '{}'</strong>
   <p>Here, the first invocation of <strong>xargs</strong> has no input line length limit because it doesn't use the <strong>-i</strong> option. The second invocation of <strong>xargs</strong> does have such a limit, but we have ensured that the it never encounters a line which is longer than it can handle. This is not an ideal solution. Instead, the <strong>-i</strong> option should not impose a line length limit, which is why this discussion appears in the BUGS section. The problem doesn't occur with the output of <strong>find</strong>(1) because it emits just one filename per line.
   <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. Other comments about <strong>xargs</strong>(1) and about the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
-</div>
+</section>
 

@@ -3,17 +3,17 @@
 <meta name="man-page-info" data-extra1="March 2016" data-extra2="" data-extra3="">
 <title>SCREEN</title>
 <h1>SCREEN</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>screen - screen manager with VT100/ANSI terminal emulation
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>screen</strong> [ <strong>-<em>options</em></strong> ] [ <strong><em>cmd</em></strong> [ <strong><em>args</em></strong> ] ]<br>
   <strong>screen -r</strong> [[<em>pid</em><strong>.</strong>]<em>tty</em>[<strong>.</strong><em>host</em>]]<br>
   <strong>screen -r</strong> <em>sessionowner</em><strong>/</strong>[[<em>pid</em><strong>.</strong>]<em>tty</em>[<strong>.</strong><em>host</em>]]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><em>Screen</em> is a full-screen window manager that multiplexes a physical terminal between several processes (typically interactive shells). Each virtual terminal provides the functions of a DEC VT100 terminal and, in addition, several control functions from the ISO 6429 (ECMA 48, ANSI X3.64) and ISO 2022 standards (e.g. insert/delete line and support for multiple character sets). There is a scrollback history buffer for each virtual terminal and a copy-and-paste mechanism that allows moving text regions between windows.
   <p>When <em>screen</em> is called, it creates a single window with a shell in it (or the specified command) and then gets out of your way so that you can use the program as you normally would. Then, at any time, you can create new (full-screen) windows with other programs in them (including more shells), kill existing windows, view a list of windows, turn output logging on and off, copy-and-paste text between windows, view the scrollback history, switch between windows in whatever manner you wish, etc. All windows run their programs completely independent of each other. Programs continue to run when their window is currently not visible and even when the whole <em>screen</em> session is detached from the user's terminal. When a program terminates, <em>screen</em> (per default) kills the window that contained it. If this window was in the foreground, the display switches to the previous window; if none are left, <em>screen</em> exits. Shells usually distinguish between running as login-shell or sub-shell. Screen runs them as sub-shells, unless told otherwise (See “shell” .screenrc command).
@@ -25,14 +25,14 @@
   </blockquote>
   <p>from a shell prompt within a previously created window. This will not run another copy of <em>screen</em>, but will instead supply the command name and its arguments to the window manager (specified in the $STY environment variable) who will use it to create the new window. The above example would start the emacs editor (editing prog.c) and switch to its window. - Note that you cannot transport environment variables from the invoking shell to the application (emacs in this case), because it is forked from the parent screen process, not from the invoking shell.
   <p>If “/etc/utmp” is writable by <em>screen</em>, an appropriate record will be written to this file for each window, and removed when the window is terminated. This is useful for working with “talk”, “script”, “shutdown”, “rsend”, “sccs” and other similar programs that use the utmp file to determine who you are. As long as <em>screen</em> is active on your terminal, the terminal's own record is removed from the utmp file. See also “C-a L”.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>GETTING STARTED</h2>
   <p>Before you begin to use <em>screen</em> you'll need to make sure you have correctly selected your terminal type, just as you would for any other termcap/terminfo program. (You can do this by using <em>tset</em> for example.)
   <p>If you're impatient and want to get started without doing a lot more reading, you should remember this one command: “C-a ?”. Typing these two characters will display a list of the available <em>screen</em> commands and their bindings. Each keystroke is discussed in the section “DEFAULT KEY BINDINGS”. The manual section “CUSTOMIZATION” deals with the contents of your .screenrc.
   <p>If your terminal is a “true” auto-margin terminal (it doesn't allow the last position on the screen to be updated without scrolling the screen) consider using a version of your terminal's termcap that has automatic margins turned <em>off</em>. This will ensure an accurate and optimal update of the screen in all circumstances. Most terminals nowadays have “magic” margins (automatic margins plus usable last column). This is the VT100 style type and perfectly suited for <em>screen</em>. If all you've got is a “true” auto-margin terminal <em>screen</em> will be content to use it, but updating a character put into the last position on the screen may not be possible until the screen scrolls or the character is moved into a safe position in some other way. This delay can be shortened by using a terminal with insert-character capability.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND-LINE OPTIONS</h2>
   <p>Screen has the following command-line options:
   <dl class="indent-5">
@@ -125,8 +125,8 @@
     <dt><strong>-6</strong>
     <dd>Resolve hostnames only to IPv6 addresses.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEFAULT KEY BINDINGS</h2>
   <p>As mentioned, each <em>screen</em> command consists of a “C-a” followed by one other character. For your convenience, all commands that are bound to lower-case letters are also bound to their control character counterparts (with the exception of “C-a a”; see below), thus, “C-a c” as well as “C-a C-c” can be used to create a window. See section “CUSTOMIZATION” for a description of the command.
   <p>The following table shows the default key bindings. The trailiing commas in boxes with multiple keystroke entries are separators, not part of the bindings.
@@ -377,8 +377,8 @@
       <td>(displays)
       <td>Show a listing of all currently attached displays.
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CUSTOMIZATION</h2>
   <p>The “socket directory” defaults either to $HOME/.screen or simply to /tmp/screens or preferably to /usr/local/screens chosen at compile-time. If <em>screen</em> is installed setuid-root, then the administrator should compile <em>screen</em> with an adequate (not NFS mounted) socket directory. If <em>screen</em> is not running setuid-root, the user can specify any mode 700 directory in the environment variable $SCREENDIR.
   <p>When <em>screen</em> is invoked, it executes initialization commands from the files “/usr/local/etc/screenrc” and “.screenrc” in the user's home directory. These are the “programmer's defaults” that can be overridden in the following ways: for the global screenrc file <em>screen</em> searches for the environment variable $SYSSCREENRC (this override feature may be disabled at compile-time). The user specific screenrc file is searched in $SCREENRC, then $HOME/.screenrc. The command line option <strong>-c</strong> takes precedence over the above user screenrc files.
@@ -1313,8 +1313,8 @@ C-a : paste p</pre>
         </div>
       </div>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>THE MESSAGE LINE</h2>
   <p><em>Screen</em> displays informational messages and other diagnostics in a <em>message line</em>. While this line is distributed to appear at the bottom of the screen, it can be defined to appear at the top of the screen during compilation. If your terminal has a status line defined in its termcap, <em>screen</em> will use this for displaying its messages, otherwise a line of the current screen will be temporarily overwritten and output will be momentarily interrupted. The message line is automatically removed after a few seconds delay, but it can also be removed early (on terminals without a status line) by beginning to type.
   <p>The message line facility can be used by an application running in the current window by means of the ANSI <em>Privacy message</em> control sequence. For instance, from within the shell, try something like:
@@ -1322,8 +1322,8 @@ C-a : paste p</pre>
     echo '&lt;esc&gt;^Hello world from window '$WINDOW'&lt;esc&gt;\\'
   </blockquote>
   <p>where '&lt;esc&gt;' is an <em>escape</em>, '^' is a literal up-arrow, and '\\' turns into a single backslash.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>WINDOW TYPES</h2>
   <p>Screen provides three different window types. New windows are created with <em>screen</em>'s <strong>screen</strong> command (see also the entry in chapter “CUSTOMIZATION”). The first parameter to the <strong>screen</strong> command defines which type of window is created. The different window types are all special cases of the normal type. They have been added in order to allow <em>screen</em> to be used efficiently as a console multiplexer with 100 or more windows.
   <dl class="indent-3">
@@ -1373,8 +1373,8 @@ C-a : paste p</pre>
     <p>For telnet windows, the command <strong>break</strong> sends the telnet code IAC BREAK (decimal 243) to the remote host.
     <p>This window type is only available if <em>screen</em> was compiled with the ENABLE_TELNET option defined.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STRING ESCAPES</h2>
   <p>Screen provides an escape mechanism to insert information like the current time into messages or file names. The escape character is '%' with one exception: inside of a window's hardstatus '^%' ('^E') is used instead.
   <p>Here is the full list of supported escapes:
@@ -1492,15 +1492,15 @@ C-a : paste p</pre>
     <dt>%?%F%{.R.}%?%3n %t%? [%h]%?
     <dd>The window number and title and the window's hardstatus, if one is set. Also use a red background if this is the active focus. Useful for “caption string”.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FLOW-CONTROL</h2>
   <p>Each window has a flow-control setting that determines how <em>screen</em> deals with the XON and XOFF characters (and perhaps the interrupt character). When flow-control is turned off, <em>screen</em> ignores the XON and XOFF characters, which allows the user to send them to the current program by simply typing them (useful for the <em>emacs</em> editor, for instance). The trade-off is that it will take longer for output from a “normal” program to pause in response to an XOFF. With flow-control turned on, XON and XOFF characters are used to immediately pause the output of the current window. You can still send these characters to the current program, but you must use the appropriate two-character <em>screen</em> commands (typically “C-a q” (xon) and “C-a s” (xoff)). The xon/xoff commands are also useful for typing C-s and C-q past a terminal that intercepts these characters.
   <p>Each window has an initial flow-control value set with either the <strong>-f</strong> option or the “defflow” .screenrc command. Per default the windows are set to automatic flow-switching. It can then be toggled between the three states 'fixed on', 'fixed off' and 'automatic' interactively with the “flow” command bound to "C-a f".
   <p>The automatic flow-switching mode deals with flow control using the TIOCPKT mode (like “rlogin” does). If the tty driver does not support TIOCPKT, <em>screen</em> tries to find out the right mode based on the current setting of the application keypad - when it is enabled, flow-control is turned off and visa versa. Of course, you can still manipulate flow-control manually when needed.
   <p>If you're running with flow-control enabled and find that pressing the interrupt key (usually C-c) does not interrupt the display until another 6-8 lines have scrolled by, try running <em>screen</em> with the “interrupt” option (add the “interrupt” flag to the “flow” command in your .screenrc, or use the <strong>-i</strong> command-line option). This causes the output that <em>screen</em> has accumulated from the interrupted program to be flushed. One disadvantage is that the virtual terminal's memory contains the non-flushed version of the output, which in rare cases can cause minor inaccuracies in the output. For example, if you switch screens and return, or update the screen with “C-a l” you would see the version of the output you would have gotten without “interrupt” being on. Also, you might need to turn off flow-control (or use auto-flow mode to turn it off automatically) when running a program that expects you to type the interrupt character as input, as it is possible to interrupt the output of the virtual terminal to your physical terminal when flow-control is enabled. If this happens, a simple refresh of the screen with “C-a l” will restore it. Give each mode a try, and use whichever mode you find more comfortable.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TITLES (naming windows)</h2>
   <p>You can customize each window's name in the window display (viewed with the “windows” command (C-a w)) by setting it with one of the title commands. Normally the name displayed is the actual command name of the program created in the window. However, it is sometimes useful to distinguish various programs of the same name or to change the name on-the-fly to reflect the current state of the window.
   <p>The default name for all shell windows can be set with the “shelltitle” command in the .screenrc file, while all other windows are created with a “screen” command and thus can have their name set with the <strong>-t</strong> option. Interactively, there is the title-string escape-sequence (&lt;esc&gt;k<em>name</em>&lt;esc&gt;\) and the “title” command (C-a A). The former can be output from an application to control the window's name under software control, and the latter will prompt for a name when typed. You can also bind pre-defined names to keys with the “title” command to set things quickly without prompting.
@@ -1538,8 +1538,8 @@ C-a : paste p</pre>
     PROMPT_COMMAND='printf "\033k\033\134"'
   </blockquote>
   <p>(I used “\134” to output a `\' because of a bug in bash v1.04).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>THE VIRTUAL TERMINAL</h2>
   <p>Each window in a <em>screen</em> session emulates a VT100 terminal, with some extra functions added. The VT100 emulator is hard-coded, no other terminal types can be emulated.<br>
   Usually <em>screen</em> tries to emulate as much of the VT100/ANSI standard as possible. But if your terminal lacks certain capabilities, the emulation may not be complete. In these cases <em>screen</em> has to tell the applications that some of the features are missing. This is no problem on machines using termcap, because <em>screen</em> can use the $TERMCAP variable to customize the standard <em>screen</em> termcap.
@@ -1807,8 +1807,8 @@ C-a : paste p</pre>
     <dt><strong>ESC [ 6 n</strong>
     <dd>Send Cursor Position Report
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INPUT TRANSLATION</h2>
   <p>In order to do a full VT100 emulation <em>screen</em> has to detect that a sequence of characters in the input stream was generated by a keypress on the user's keyboard and insert the VT100 style escape sequence. <em>Screen</em> has a very flexible way of doing this by making it possible to map arbitrary commands on arbitrary sequences of characters. For standard VT100 emulation the command will always insert a string in the input buffer of the window (see also command <strong>stuff</strong> in the command table). Because the sequences generated by a keypress can change after a reattach from a different terminal type, it is possible to bind commands to the termcap name of the keys. <em>Screen</em> will insert the correct binding after each reattach. See the <strong>bindkey</strong> command for further details on the syntax and examples.
   <p>Here is the table of the default key bindings. The fourth is what command is executed if the keyboard is switched into application mode.
@@ -2005,8 +2005,8 @@ C-a : paste p</pre>
       <td>\015
       <td>\033OM
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SPECIAL TERMINAL CAPABILITIES</h2>
   <p>The following table describes all terminal capabilities that are recognized by <em>screen</em> and are not in the termcap(5) manual. You can place these capabilities in your termcap entries (in `/etc/termcap') or use them with the commands `termcap', `terminfo' and `termcapinfo' in your screenrc files. It is often not possible to place these capabilities in the terminfo database.
   <dl class="indent-13">
@@ -2053,8 +2053,8 @@ C-a : paste p</pre>
     <dt><strong>TF</strong> <em>(bool)</em>
     <dd>Add missing capabilities to the termcap/info entry. (Set by default).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CHARACTER TRANSLATION</h2>
   <p><em>Screen</em> has a powerful mechanism to translate characters to arbitrary strings depending on the current font and terminal type. Use this feature if you want to work with a common standard character set (say ISO8851-latin1) even on terminals that scatter the more unusual characters over several national language font pages.
   <p>Syntax:
@@ -2070,8 +2070,8 @@ C-a : paste p</pre>
   <p>This example shows one use of the extension:
   <p>termcap xterm 'XC=K%,%\E(B,[\304,\\\\\326,]\334'
   <p>Here, a part of the German ('K') charset is emulated on an xterm. If <em>screen</em> has to change to the 'K' charset, '\E(B' will be sent to the terminal, i.e. the ASCII charset is used instead. The template is just '%', so the mapping is straightforward: '[' to '\304', '\' to '\326', and ']' to '\334'.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <dl class="indent-15">
     <dt>COLUMNS
@@ -2105,8 +2105,8 @@ C-a : paste p</pre>
     <dt>WINDOW
     <dd>Window number of a window (at creation time).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-34">
     <dt>…/screen-4.?.??/etc/screenrc
@@ -2142,16 +2142,16 @@ C-a : paste p</pre>
     <dt>$LOCKPRG
     <dd>Program that locks a terminal.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p>termcap(5), utmp(5), vi(1), captoinfo(1), tic(1)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHORS</h2>
   <p>Originally created by Oliver Laumann. For a long time maintained and developed by Juergen Weigert, Michael Schroeder, Micah Cowan and Sadrul Habib Chowdhury. This latest version was produced by Amadeusz Sławiński &lt;amade@asmblr.net&gt; and Alexander Naumov &lt;alexander_naumov@opensuse.org&gt;.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COPYLEFT</h2>
   <pre>Copyright (c) 2010-2015
         Juergen Weigert (jnweiger@immd4.informatik.uni-erlangen.de)
@@ -2168,8 +2168,8 @@ Copyright (C) 1987 Oliver Laumann</pre>
   <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3, or (at your option) any later version.
   <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
   <p>You should have received a copy of the GNU General Public License along with this program (see the file COPYING); if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONTRIBUTORS</h2>
   <pre>Eric S. Raymond &lt;esr@thyrsus.com&gt;,
 Ken Beal &lt;kbeal@amber.ssd.csd.harris.com&gt;,
@@ -2199,16 +2199,16 @@ Matt Mosley &lt;mattm@access.digex.net&gt;,
 Gregory Neil Shapiro &lt;gshapiro@wpi.WPI.EDU&gt;,
 Johannes Zellner &lt;johannes@zellner.org&gt;,
 Pablo Averbuj &lt;pablo@averbuj.com&gt;.</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>VERSION</h2>
   <p>This is version 4.3.1. Its roots are a merge of a custom version 2.3PR7 by Wayne Davison and several enhancements to Oliver Laumann's version 2.0. Note that all versions numbered 2.x are copyright by Oliver Laumann.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AVAILABILITY</h2>
   <p>The latest official release of <em>screen</em> available via anonymous ftp from ftp.gnu.org/gnu/screen/ or any other <em>GNU</em> distribution site. The home site of <em>screen</em> is savannah.gnu.org/projects/screen/. If you want to help, send a note to screen-devel@gnu.org.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <dl class="indent-3">
     <dt>·
@@ -2240,5 +2240,5 @@ Pablo Averbuj &lt;pablo@averbuj.com&gt;.</pre>
     <dt>·
     <dd>Send bug-reports, fixes, enhancements, t-shirts, money, beer & pizza to <strong>screen-devel@gnu.org</strong>.
   </dl>
-</div>
+</section>
 

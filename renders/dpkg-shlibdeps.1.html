@@ -3,19 +3,19 @@
 <meta name="man-page-info" data-extra1="2013-09-06" data-extra2="Debian Project" data-extra3="dpkg utilities">
 <title>dpkg-shlibdeps</title>
 <h1>dpkg-shlibdeps</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>dpkg-shlibdeps - generate shared library substvar dependencies
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dpkg-shlibdeps</strong> [<em>option</em>...] [<em><strong>-e</strong></em>]<em>executable</em> [<em>option</em>...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dpkg-shlibdeps</strong> calculates shared library dependencies for executables named in its arguments. The dependencies are added to the substitution variables file <strong>debian/substvars</strong> as variable names <strong>shlibs:</strong><em>dependency-field</em> where <em>dependency-field</em> is a dependency field name. Any other variables starting with <strong>shlibs:</strong> are removed from the file.
   <p><strong>dpkg-shlibdeps</strong> has two possible sources of information to generate dependency information. Either <em>symbols</em> files or <em>shlibs</em> files. For each binary that <strong>dpkg-shlibdeps</strong> analyzes, it finds out the list of libraries that it's linked with. Then, for each library, it looks up either the <em>symbols</em> file, or the <em>shlibs</em> file (if the former doesn't exist or if debian/shlibs.local contains the relevant dependency). Both files are supposed to be provided by the library package and should thus be available as /var/lib/dpkg/info/<em>package</em>.<em>symbols</em> or /var/lib/dpkg/info/<em>package</em>.<em>shlibs</em>. The package name is identified in two steps: find the library file on the system (looking in the same directories that <strong>ld.so</strong> would use), then use <strong>dpkg -S</strong> <em>library-file</em> to lookup the package providing the library.
-  <div class="subsection">
+  <section>
     <h3>Symbols files</h3>
     <p>Symbols files contain finer-grained dependency information by providing the minimum dependency for each symbol that the library exports. The script tries to find a symbols file associated to a library package in the following places (first match is used):
     <dl>
@@ -29,8 +29,8 @@
     </dl>
     <p>While scanning the symbols used by all binaries, <strong>dpkg-shlibdeps</strong> remembers the (biggest) minimal version needed for each library. At the end of the process, it is able to write out the minimal dependency for every library used (provided that the information of the <em>symbols</em> files are accurate).
     <p>As a safe-guard measure, a symbols file can provide a <strong>Build-Depends-Package</strong> meta-information field and <strong>dpkg-shlibdeps</strong> will extract the minimal version required by the corresponding package in the <strong>Build-Depends</strong> field and use this version if it's higher than the minimal version computed by scanning symbols.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Shlibs files</h3>
     <p>Shlibs files associate directly a library to a dependency (without looking at the symbols). It's thus often stronger than really needed but very safe and easy to handle.
     <p>The dependencies for a library are looked up in several places. The first file providing information for the library of interest is used:
@@ -47,9 +47,9 @@
       <dd>Per-system default shared library dependency information.
     </dl>
     <p>The extracted dependencies are then directly used (except if they are filtered out because they have been identified as duplicate, or as weaker than another dependency).
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>OPTIONS</h2>
   <p><strong>dpkg-shlibdeps</strong> interprets non-option arguments as executable names, just as if they'd been supplied as <strong>-e</strong><em>executable.</em>
   <dl>
@@ -93,10 +93,10 @@
     <dt><strong>--version</strong>
     <dd>Show the version and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
-  <div class="subsection">
+  <section>
     <h3>Warnings</h3>
     <p>Since <strong>dpkg-shlibdeps</strong> analyzes the set of symbols used by each binary of the generated package, it is able to emit warnings in several cases. They inform you of things that can be improved in the package. In most cases, those improvements concern the upstream sources directly. By order of decreasing importance, here are the various warnings that you can encounter:
     <dl>
@@ -111,8 +111,8 @@
       <dt><em>binary</em> <strong>should not be linked against</strong> <em>library</em> <strong>(it uses none of the library's symbols)</strong>
       <dd>The <em>binary</em> is linked to a library that it doesn't need. It's not a problem but some small performance improvements in binary load time can be obtained by not linking this library to this binary. This warning checks the same information as the previous one but does it for each binary instead of doing the check globally on all binaries analyzed.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Errors</h3>
     <p><strong>dpkg-shlibdeps</strong> will fail if it can't find a public library used by a binary or if this library has no associated dependency information (either shlibs file or symbols file). A public library has a SONAME and is versioned (libsomething.so.<em>X</em>). A private library (like a plugin) should not have a SONAME and doesn't need to be versioned.
     <dl>
@@ -126,10 +126,10 @@
         <p>This failure can be caused by a bad or missing shlibs or symbols file in the package of the library. It might also happen if the library is built within the same source package and if the shlibs files has not yet been created (in which case you must fix debian/rules to create the shlibs before calling <strong>dpkg-shlibdeps</strong>). Bad RPATH can also lead to the library being found under a non-canonical name (example: /usr/lib/openoffice.org/../lib/libssl.so.0.9.8 instead of /usr/lib/libssl.so.0.9.8) that's not associated to any package, <strong>dpkg-shlibdeps</strong> tries to work around this by trying to fallback on a canonical name (using <strong>realpath</strong>(3)) but it might not always work. It's always best to clean up the RPATH of the binary to avoid problems.
         <p>Calling <strong>dpkg-shlibdeps</strong> in verbose mode (<strong>-v</strong>) will provide much more information about where it tried to find the dependency information. This might be useful if you don't understand why it's giving you this error.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>deb-shlibs</strong>(5), <strong>deb-symbols</strong>(5), <strong>dpkg-gensymbols</strong>(1).
-</div>
+</section>
 

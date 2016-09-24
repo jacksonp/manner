@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="6 January 2001" data-extra2="" data-extra3="">
 <title>mcs</title>
 <h1>mcs</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>mcs - Mono C# Compiler
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>mcs</strong> [option] [source-files]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>mcs is the Mono C# compiler, an implementation of the ECMA-334 language specification. You can pass one or more options to drive the compiler, and a set of source files. Extra options or arguments can be provided in a response file. Response files are referenced by prepending the @ symbol to the response file name.
   <p>The <em>mcs</em> compiler is used to compile against the latest Mono Base Class Library version and fully implements C# 1.0, 2.0, 3.0, 4.0, 5.0 and 6.0 specifications.
@@ -20,8 +20,8 @@
   <p>C# source files must end with a ".cs" extension. Compilation of C# source code requires all the files that make up a library, module or executable to be provided on the command line. There is no support for partial compilation. To achieve the benefits of partial compilation, you should compile programs into their own assemblies, and later reference them with the "-r" flag.
   <p>The Mono C# compiler generates images (.exe files) that contain CIL byte code that can be executed by any system that implements a Common Language Infrastructure virtual machine such as the Microsoft .NET runtime engine on Windows or the Mono runtime engine on Unix systems. Executables are not bound to a specific CPU or operating system.
   <p>The Mono C# compiler by default only references three assemblies: mscorlib.dll, System.dll and System.Xml.dll. If you want to reference extra libraries you must manually specify them using the -pkg: command line option or the -r: command line option. Alternatively if you want to get all of the System libraries, you can use the -pkg:dotnet command line option.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><em>--about</em>
@@ -115,7 +115,7 @@
       The compiler will invoke pkg-config --libs on the set of packages specified on the command line to obtain libraries and directories to compile the code.<br>
       <br>
       This is typically used with third party components, like this:
-      <pre>              $ mcs -pkg:gtk-sharp demo.cs</pre>
+      <pre>          $ mcs -pkg:gtk-sharp demo.cs</pre>
       <dl>
         <dt><em>-pkg:dotnet</em>
         <dd>This will instruct the compiler to reference the System.* libraries available on a typical dotnet framework installation, notice that this does not include all of the Mono libraries, only the System.* ones. This is a convenient shortcut for those porting code.
@@ -188,8 +188,8 @@
     <dt><em>--</em>
     <dd>Use this to stop option parsing, and allow option-looking parameters to be passed on the command line.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PACKAGES AND LIBRARIES</h2>
   <p>When referencing an assembly, if the name of the assembly is a path, the compiler will try to load the assembly specified in the path. If it does not, then the compiler will try loading the assembly from the current directory, the compiler base directory and if the assembly is not found in any of those places in the directories specified as arguments to the -lib: command argument.
   <p>The compiler uses the library path to locate libraries, and is able to reference libraries from a particular package if that directory is used. To simplify the use of packages, the C# compiler includes the -pkg: command line option that is used to load specific collections of libraries.
@@ -210,19 +210,19 @@
   <pre>   $ pkg-config --libs gtk-sharp-2.0</pre>
   <p>Usually this merely references the libraries from PACKAGEBASE/PKG.
   <p>Although there are directory names for 3.0 and 3.5, that does not mean that there are 3.0 and 3.5 compiler editions or profiles. Those are merely new libraries that must be manually referenced either with the proper -pkg: invocation, or by referencing the libraries directly.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SPECIAL DEFINES</h2>
   <p>The <strong>TRACE</strong> and <strong>DEBUG</strong> defines have a special meaning to the compiler.
   <p>By default calls to methods and properties in the System.Diagnostics.Trace class are not generated unless the TRACE symbol is defined (either through a "#define TRACE") in your source code, or by using the <em>--define TRACE</em> in the command line.
   <p>By default calls to methods and properties in the System.Diagnostics.Debug class are not generated unless the DEBUG symbol is defined (either through a "#define DEBUG") in your source code, or by using the <em>--define DEBUG</em> in the command line.
   <p>Note that the effect of defining TRACE and DEBUG is a global setting, even if they are only defined in a single file.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEBUGGING SUPPORT</h2>
   <p>When using the "-debug" flag, MCS will generate a file with the extension .mdb that contains the debugging information for the generated assembly. This file is consumed by the Mono debugger (mdb).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <dl>
     <dt><em>MCS_COLORS</em>
@@ -238,34 +238,34 @@
         MCS_COLORS=errors=brightwhite,red</pre>
       <p>You can disable the built-in color scheme by setting this variable to "disable".
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NOTES</h2>
   <p>During compilation the MCS compiler defines the __MonoCS__ symbol, this can be used by pre-processor instructions to compile Mono C# compiler specific code. Please note that this symbol is only to test for the compiler, and is not useful to distinguish compilation or deployment platforms.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHORS</h2>
   <p>The Mono C# Compiler was written by Miguel de Icaza, Ravi Pratap, Martin Baulig, Marek Safar and Raja Harinath. The development was funded by Ximian, Novell and Marek Safar.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>LICENSE</h2>
   <p>The Mono Compiler Suite is released under the terms of the GNU GPL or the MIT X11. Please read the accompanying `COPYING' file for details. Alternative licensing for the compiler is available from Xamarin.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p>csharp(1), mono(1), pkg-config(1), sn(1)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>To report bugs in the compiler, you must file them on our bug tracking system, at: http://www.mono-project.com/community/bugs/
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MAILING LIST</h2>
   <p>The Mono Mailing lists are listed at http://www.mono-project.com/community/help/mailing-lists/
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MORE INFORMATION</h2>
   <p>The Mono C# compiler was developed by Novell, Inc (http://www.novell.com) and Xamarin Inc (http://www.xamarin.com) is based on the ECMA C# language standard available here: http://www.ecma.ch/ecma1/STAND/ecma-334.htm
   <p>The home page for the Mono C# compiler is at http://www.mono-project.com/docs/about-mono/languages/csharp/
-</div>
+</section>
 

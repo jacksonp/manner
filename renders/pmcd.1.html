@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMCD</title>
 <h1>PMCD</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmcd</strong> - performance metrics collector daemon
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmcd</strong> [<strong>-AfQSv</strong>] [<strong>-c</strong> <em>config</em>] [<strong>-C</strong> <em>dirname</em>] [<strong>-H</strong> <em>hostname</em>] [<strong>-i</strong> <em>ipaddress</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-L</strong> <em>bytes</em>] [<strong>-M</strong> <em>certname</em>] [<strong>-</strong>[<strong>n</strong>|<strong>N</strong>] <em>pmnsfile</em>] [<strong>-p</strong> <em>port</em>[,<em>port</em> ...]] [<strong>-P</strong> <em>passfile</em>] [<strong>-q</strong> <em>timeout</em>] [<strong>-s</strong> <em>sockname</em>] [<strong>-T</strong> <em>traceflag</em>] [<strong>-t</strong> <em>timeout</em>] [<strong>-U</strong> <em>username</em>] [<strong>-x</strong> <em>file</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmcd</strong> is the collector used by the Performance Co-Pilot (see <strong>PCPIntro</strong>(1)) to gather performance metrics on a system. As a rule, there must be an instance of <strong>pmcd</strong> running on a system for any performance metrics to be available to the PCP.
   <p><strong>pmcd</strong> accepts connections from client applications running either on the same machine or remotely and provides them with metrics and other related information from the machine that <strong>pmcd</strong> is executing on. <strong>pmcd</strong> delegates most of this request servicing to a collection of Performance Metrics Domain Agents (or just agents), where each agent is responsible for a particular group of metrics, known as the domain of the agent. For example the <strong>postgresql</strong> agent is responsible for reporting information relating to the PostgreSQL database, such as the transaction and query counts, indexing and replication statistics, and so on.
@@ -80,15 +80,15 @@
   </dl>
   <p>If a PDU exchange with an agent times out, the agent has violated the requirement that it delivers metrics with little or no delay. This is deemed a protocol failure and the agent is disconnected from <strong>pmcd</strong>. Any subsequent requests for information from the agent will fail with a status indicating that there is no agent to provide it.
   <p>It is possible to specify access control to <strong>pmcd</strong> based on users, groups and hosts. This allows one to prevent users, groups of users, and certain hosts from accessing the metrics provided by <strong>pmcd</strong> and is described in more detail in the Section on ACCESS CONTROL below.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION</h2>
   <p>On startup <strong>pmcd</strong> looks for a configuration file named <em>$PCP_PMCDCONF_PATH</em>. This file specifies which agents cover which performance metrics domains and how <strong>pmcd</strong> should make contact with the agents. An optional section specifying access controls may follow the agent configuration data.
   <p><strong>Warning</strong>: <strong>pmcd</strong> is usually started as part of the boot sequence and runs initially as root. The configuration file may contain shell commands to create agents, which will be executed by root. To prevent security breaches the configuration file should be writable only by root. The use of absolute path names is also recommended.
   <p>The case of the reserved words in the configuration file is unimportant, but elsewhere, the case is preserved.
   <p>Blank lines and comments are permitted (even encouraged) in the configuration file. A comment begins with a ``#'' character and finishes at the end of the line. A line may be continued by ensuring that the last character on the line is a ``\'' (backslash). A comment on a continued line ends at the end of the continued line. Spaces may be included in lexical elements by enclosing the entire element in double quotes. A double quote preceded by a backslash is always a literal double quote. A ``#'' in double quotes or preceded by a backslash is treated literally rather than as a comment delimiter. Lexical elements and separators are described further in the following sections.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AGENT CONFIGURATION</h2>
   <p>Each line of the agent configuration section of the configuration file contains details of how to connect <strong>pmcd</strong> to one of its agents and specifies which metrics domain the agent deals with. An agent may be attached as a DSO, or via a socket, or a pair of pipes.
   <p>Each line of the agent configuration section of the configuration file must be either an agent specification, a comment, or a blank line. Lexical elements are separated by whitespace characters, however a single agent specification may not be broken across lines unless a <strong>\</strong> (backslash) is used to continue the line.
@@ -145,8 +145,8 @@
     <dt><em>command</em>
     <dd>specifies a command line to start the agent when <strong>pmcd</strong> initializes. Note that <em>command</em> is mandatory for pipe-based agents. The <em>command</em> is considered to start from the first non-white character after the <em>protocol</em> parameter and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ACCESS CONTROL CONFIGURATION</h2>
   <p>The access control section of the configuration file is optional, but if present it must follow the agent configuration data. The case of reserved words is ignored, but elsewhere case is preserved. Lexical elements in the access control section are separated by whitespace or the special delimiter characters: square brackets (``['' and ``]''), braces (``{'' and ``}''), colon (``:''), semicolon (``;'') and comma (``,''). The special characters are not treated as special in the agent configuration section. Lexical elements may be quoted (double quotes) as necessary.
   <p>The access control section of the file must start with a line of the form:
@@ -236,8 +236,8 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>If instead, <strong>pmcd</strong> with no clients saw three successive connections arrived from "boing", the first two would be accepted and the third refused. After that, if a connection was requested from "clank" it would be accepted. It matches the first statement, which is more specific than the second, so the connection limit in the first is used to determine that the client has the right to connect. Now there are 3 connections contributing to the second statement's connection limit. Even though the connection limit for the second statement has been exceeded, the earlier connections from "boing" are maintained. The connection limit is only checked at the time a client attempts a connection rather than being re-evaluated every time a new client connects to <strong>pmcd</strong>.
   <p>This gentle scheme is designed to allow reasonable limits to be imposed on a first come first served basis, with specific exceptions.
   <p>As illustrated by the example above, a client's connection is honored once it has been accepted. However, <strong>pmcd</strong> reconfiguration (see the next section) re-evaluates all the connection counts and will cause client connections to be dropped where connection limits have been exceeded.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RECONFIGURING PMCD</h2>
   <p>If the configuration file has been changed or if an agent is not responding because it has terminated or the PMNS has been changed, <strong>pmcd</strong> may be reconfigured by sending it a SIGHUP, as in
   <pre># pmsignal -a -s HUP pmcd</pre>
@@ -245,8 +245,8 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>It also checks the PMNS file for changes. If the PMNS file has been modified, then it is reloaded. Use of <strong>tail</strong>(1) on the log file is recommended while reconfiguring <strong>pmcd</strong>.
   <p>If the configuration for an agent has changed (any parameter except the agent's label is different), the agent is restarted. Agents whose configurations do not change are not restarted. Any existing agents not present in the new configuration are terminated. Any deceased agents are that are still listed are restarted.
   <p>Sometimes it is necessary to restart an agent that is still running, but malfunctioning. Simply stop the agent (e.g. using SIGTERM from <strong>pmsignal</strong>(1)), then send <strong>pmcd</strong> a SIGHUP, which will cause the agent to be restarted.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STARTING AND STOPPING PMCD</h2>
   <p>Normally, <strong>pmcd</strong> is started automatically at boot time and stopped when the system is being brought down. Under certain circumstances it is necessary to start or stop <strong>pmcd</strong> manually. To do this one must become superuser and type
   <pre># $PCP_RC_DIR/pmcd start</pre>
@@ -255,8 +255,8 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>to stop <strong>pmcd</strong>. Starting <strong>pmcd</strong> when it is already running is the same as stopping it and then starting it again.
   <p>Sometimes it may be necessary to restart <strong>pmcd</strong> during another phase of the boot process. Time-consuming parts of the boot process are often put into the background to allow the system to become available sooner (e.g. mounting huge databases). If an agent run by <strong>pmcd</strong> requires such a task to complete before it can run properly, it is necessary to restart or reconfigure <strong>pmcd</strong> after the task completes. Consider, for example, the case of mounting a database in the background while booting. If the PMDA which provides the metrics about the database cannot function until the database is mounted and available but <strong>pmcd</strong> is started before the database is ready, the PMDA will fail (however <strong>pmcd</strong> will still service requests for metrics from other domains). If the database is initialized by running a shell script, adding a line to the end of the script to reconfigure <strong>pmcd</strong> (by sending it a SIGHUP) will restart the PMDA (if it exited because it couldn't connect to the database). If the PMDA didn't exit in such a situation it would be necessary to restart <strong>pmcd</strong> because if the PMDA was still running <strong>pmcd</strong> would not restart it.
   <p>Normally <strong>pmcd</strong> listens for client connections on TCP/IP port number 44321 (registered at <em>http://www.iana.org/</em>). Either the environment variable <strong>PMCD_PORT</strong> or the <strong>-p</strong> command line option may be used to specify alternative port number(s) when <strong>pmcd</strong> is started; in each case, the specification is a comma-separated list of one or more numerical port numbers. Should both methods be used or multiple <strong>-p</strong> options appear on the command line, <strong>pmcd</strong> will listen on the union of the set of ports specified via all <strong>-p</strong> options and the <strong>PMCD_PORT</strong> environment variable. If non-default ports are used with <strong>pmcd</strong> care should be taken to ensure that <strong>PMCD_PORT</strong> is also set in the environment of any client application that will connect to <strong>pmcd</strong>, or that the extended host specification syntax is used (see <strong>PCPIntro</strong>(1) for details).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><em>$PCP_PMCDCONF_PATH</em>
@@ -277,32 +277,32 @@ disallow host 129.127.112.2 : all except fetch;</pre>
     <dt><strong>/etc/groups</strong>
     <dd>group names, group identifiers and group members, used for access control specifications
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>In addition to the PCP environment variables described in the <strong>PCP ENVIRONMENT</strong> section below, the <strong>PMCD_PORT</strong> variable is also recognised as the TCP/IP port for incoming connections (default <em>44321</em>), and the <strong>PMCD_SOCKET</strong> variable is also recognised as the path to be used for the Unix domain socket.
   <p>If set to the value 1, the <strong>PMCD_LOCAL</strong> environment variable will cause <strong>pmcd</strong> to run in a localhost-only mode of operation, where it binds only to the loopback interface. The <em>pmcd.feature.local</em> metric can be queried to determine if <strong>pmcd</strong> is running in this mode.
   <p>The <strong>PMCD_MAXPENDING</strong> variable can be set to indicate the maximum length to which the queue of pending client connections may grow.
   <p>The <strong>PMCD_ROOT_AGENT</strong> variable controls whether or not <strong>pmcd</strong> or <strong>pmdaroot</strong> (when available), start subsequent pmdas. When set to a non-zero value, <strong>pmcd</strong> will opt to have <strong>pmdaroot</strong> start, and stop, PMDAs.
   <p>The <strong>PMCD_RESTART_AGENTS</strong> variable determines the behaviour of <strong>pmcd</strong> in the presence of child PMDAs that have been observed to exit (this is a typical response in the presence of very large, usually domain-induced, PDU latencies). When set to a non-zero value, <strong>pmcd</strong> will attempt to restart such PMDAS once every minute. When set to zero, it uses the original behaviour of just logging the failure.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>If <strong>pmcd</strong> is already running the message "Error: OpenRequestSocket bind: Address may already be in use" will appear. This may also appear if <strong>pmcd</strong> was shutdown with an outstanding request from a client. In this case, a request socket has been left in the TIME_WAIT state and until the system closes it down (after some timeout period) it will not be possible to run <strong>pmcd</strong>.
   <p>In addition to the standard <strong>PCP</strong> debugging flags, see <strong>pmdbg</strong>(1), <strong>pmcd</strong> currently uses <strong>DBG_TRACE_APPL0</strong> for tracing I/O and termination of agents, <strong>DBG_TRACE_APPL1</strong> for tracing access control and <strong>DBG_TRACE_APPL2</strong> for tracing the configuration file scanner and parser.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p><strong>pmcd</strong> does not explicitly terminate its children (agents), it only closes their pipes. If an agent never checks for a closed pipe it may not terminate.
   <p>The configuration file parser will only read lines of less than 1200 characters. This is intended to prevent accidents with binary files.
   <p>The timeouts controlled by the <strong>-t</strong> option apply to IPC between <strong>pmcd</strong> and the PMDAs it spawns. This is independent of settings of the environment variables <strong>PMCD_CONNECT_TIMEOUT</strong> and <strong>PMCD_REQUEST_TIMEOUT</strong> (see <strong>PCPIntro</strong>(1)) which may be used respectively to control timeouts for client applications trying to connect to <strong>pmcd</strong> and trying to receive information from <strong>pmcd</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmdbg</strong>(1), <strong>pmerr</strong>(1), <strong>pmgenmap</strong>(1), <strong>pminfo</strong>(1), <strong>pmrep</strong>(1), <strong>pmstat</strong>(1), <strong>pmstore</strong>(1), <strong>pmval</strong>(1), <strong>getpwent</strong>(3), <strong>getgrent</strong>(3), <strong>pcp.conf</strong>(5), and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

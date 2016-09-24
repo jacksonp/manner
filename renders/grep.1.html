@@ -3,23 +3,23 @@
 <meta name="man-page-info" data-extra1="GNU grep @VERSION@" data-extra2="User Commands" data-extra3="">
 <title>GREP</title>
 <h1>GREP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>grep, egrep, fgrep - print lines matching a pattern
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>grep</strong> [<em>OPTIONS</em>] <em>PATTERN</em> [<em>FILE</em>...]<br>
   <strong>grep</strong> [<em>OPTIONS</em>] [<strong>-e</strong> <em>PATTERN</em> | <strong>-f</strong> <em>FILE</em>] [<em>FILE</em>...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>grep</strong> searches the named input <em>FILE</em>s for lines containing a match to the given <em>PATTERN</em>. If no files are specified, or if the file “<strong>-</strong>” is given, <strong>grep</strong> searches standard input. By default, <strong>grep</strong> prints the matching lines.
   <p>In addition, the variant programs <strong>egrep</strong> and <strong>fgrep</strong> are the same as <strong>grep&nbsp;-E</strong> and <strong>grep&nbsp;-F</strong>, respectively. These variants are deprecated, but are provided for backward compatibility.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
-  <div class="subsection">
+  <section>
     <h3>Generic Program Information</h3>
     <dl>
       <dt><strong>--help</strong>
@@ -27,8 +27,8 @@
       <dt><strong>-V</strong>, <strong>--version</strong>
       <dd>Output the version number of <strong>grep</strong> and exit.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Matcher Selection</h3>
     <dl>
       <dt><strong>-E</strong>, <strong>--extended-regexp</strong>
@@ -40,8 +40,8 @@
       <dt><strong>-P</strong>, <strong>--perl-regexp</strong>
       <dd>Interpret the pattern as a Perl-compatible regular expression (PCRE). This is highly experimental and <strong>grep -P</strong> may warn of unimplemented features.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Matching Control</h3>
     <dl>
       <dt><strong>-e</strong> <em>PATTERN</em><strong>, --regexp=</strong><em>PATTERN</em>
@@ -59,8 +59,8 @@
       <dt><strong>-y</strong>
       <dd>Obsolete synonym for <strong>-i</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>General Output Control</h3>
     <dl>
       <dt><strong>-c</strong>, <strong>--count</strong>
@@ -80,8 +80,8 @@
       <dt><strong>-s</strong>, <strong>--no-messages</strong>
       <dd>Suppress error messages about nonexistent or unreadable files.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Output Line Prefix Control</h3>
     <dl>
       <dt><strong>-b</strong>, <strong>--byte-offset</strong>
@@ -101,8 +101,8 @@
       <dt><strong>-Z</strong>, <strong>--null</strong>
       <dd>Output a zero byte (the ASCII <strong>NUL</strong> character) instead of the character that normally follows a file name. For example, <strong>grep -lZ</strong> outputs a zero byte after each file name instead of the usual newline. This option makes the output unambiguous, even in the presence of file names containing unusual characters like newlines. This option can be used with commands like <strong>find -print0</strong>, <strong>perl -0</strong>, <strong>sort -z</strong>, and <strong>xargs -0</strong> to process arbitrary file names, even those that contain newline characters.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Context Line Control</h3>
     <dl>
       <dt><strong>-A</strong> <em>NUM</em><strong>, --after-context=</strong><em>NUM</em>
@@ -112,8 +112,8 @@
       <dt><strong>-C</strong> <em>NUM</em><strong>, -</strong><em>NUM</em><strong>, --context=</strong><em>NUM</em>
       <dd>Print <em>NUM</em> lines of output context. Places a line containing a group separator (<strong>--</strong>) between contiguous groups of matches. With the <strong>-o</strong> or <strong>--only-matching</strong> option, this has no effect and a warning is given.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>File and Directory Selection</h3>
     <dl>
       <dt><strong>-a</strong>, <strong>--text</strong>
@@ -145,8 +145,8 @@
       <dt><strong>-R</strong>, <strong>--dereference-recursive</strong>
       <dd>Read all files under each directory, recursively. Follow all symbolic links, unlike <strong>-r</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Other Options</h3>
     <dl>
       <dt><strong>--line-buffered</strong>
@@ -156,29 +156,29 @@
       <dt><strong>-z</strong>, <strong>--null-data</strong>
       <dd>Treat input and output data as sequences of lines, each terminated by a zero byte (the ASCII NUL character) instead of a newline. Like the <strong>-Z</strong> or <strong>--null</strong> option, this option can be used with commands like <strong>sort -z</strong> to process arbitrary file names.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>REGULAR EXPRESSIONS</h2>
   <p>A regular expression is a pattern that describes a set of strings. Regular expressions are constructed analogously to arithmetic expressions, by using various operators to combine smaller expressions.
   <p><strong>grep</strong> understands three different versions of regular expression syntax: “basic” (BRE), “extended” (ERE) and “perl” (PCRE). In GNU&nbsp;<strong>grep</strong>, there is no difference in available functionality between basic and extended syntaxes. In other implementations, basic regular expressions are less powerful. The following description applies to extended regular expressions; differences for basic regular expressions are summarized afterwards. Perl-compatible regular expressions give additional functionality, and are documented in pcresyntax(3) and pcrepattern(3), but work only if PCRE is available in the system.
   <p>The fundamental building blocks are the regular expressions that match a single character. Most characters, including all letters and digits, are regular expressions that match themselves. Any meta-character with special meaning may be quoted by preceding it with a backslash.
   <p>The period <strong>.</strong> matches any single character.
-  <div class="subsection">
+  <section>
     <h3>Character Classes and Bracket Expressions</h3>
     <p>A <em>bracket expression</em> is a list of characters enclosed by <strong>[</strong> and <strong>]</strong>. It matches any single character in that list; if the first character of the list is the caret <strong>^</strong> then it matches any character <em>not</em> in the list. For example, the regular expression <strong>[0123456789]</strong> matches any single digit.
     <p>Within a bracket expression, a <em>range expression</em> consists of two characters separated by a hyphen. It matches any single character that sorts between the two characters, inclusive, using the locale's collating sequence and character set. For example, in the default C locale, <strong>[a-d]</strong> is equivalent to <strong>[abcd]</strong>. Many locales sort characters in dictionary order, and in these locales <strong>[a-d]</strong> is typically not equivalent to <strong>[abcd]</strong>; it might be equivalent to <strong>[aBbCcDd]</strong>, for example. To obtain the traditional interpretation of bracket expressions, you can use the C locale by setting the <strong>LC_ALL</strong> environment variable to the value <strong>C</strong>.
     <p>Finally, certain named classes of characters are predefined within bracket expressions, as follows. Their names are self explanatory, and they are <strong>[:alnum:]</strong>, <strong>[:alpha:]</strong>, <strong>[:cntrl:]</strong>, <strong>[:digit:]</strong>, <strong>[:graph:]</strong>, <strong>[:lower:]</strong>, <strong>[:print:]</strong>, <strong>[:punct:]</strong>, <strong>[:space:]</strong>, <strong>[:upper:]</strong>, and <strong>[:xdigit:].</strong> For example, <strong>[[:alnum:]]</strong> means the character class of numbers and letters in the current locale. In the C locale and ASCII character set encoding, this is the same as <strong>[0-9A-Za-z]</strong>. (Note that the brackets in these class names are part of the symbolic names, and must be included in addition to the brackets delimiting the bracket expression.) Most meta-characters lose their special meaning inside bracket expressions. To include a literal <strong>]</strong> place it first in the list. Similarly, to include a literal <strong>^</strong> place it anywhere but first. Finally, to include a literal <strong>-</strong> place it last.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Anchoring</h3>
     <p>The caret <strong>^</strong> and the dollar sign <strong>$</strong> are meta-characters that respectively match the empty string at the beginning and end of a line.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>The Backslash Character and Special Expressions</h3>
     <p>The symbols <strong>\&lt;</strong> and <strong>\&gt;</strong> respectively match the empty string at the beginning and end of a word. The symbol <strong>\b</strong> matches the empty string at the edge of a word, and <strong>\B</strong> matches the empty string provided it's <em>not</em> at the edge of a word. The symbol <strong>\w</strong> is a synonym for <strong>[_[:alnum:]]</strong> and <strong>\W</strong> is a synonym for <strong>[^_[:alnum:]]</strong>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Repetition</h3>
     <p>A regular expression may be followed by one of several repetition operators:
     <dl>
@@ -197,29 +197,29 @@
       <dt><strong>{</strong><em>n</em><strong>,</strong><em>m</em><strong>}</strong>
       <dd>The preceding item is matched at least <em>n</em> times, but not more than <em>m</em> times.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Concatenation</h3>
     <p>Two regular expressions may be concatenated; the resulting regular expression matches any string formed by concatenating two substrings that respectively match the concatenated expressions.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Alternation</h3>
     <p>Two regular expressions may be joined by the infix operator <strong>|</strong>; the resulting regular expression matches any string matching either alternate expression.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Precedence</h3>
     <p>Repetition takes precedence over concatenation, which in turn takes precedence over alternation. A whole expression may be enclosed in parentheses to override these precedence rules and form a subexpression.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Back References and Subexpressions</h3>
     <p>The back-reference <strong>\</strong><em>n</em>, where <em>n</em> is a single digit, matches the substring previously matched by the <em>n</em>th parenthesized subexpression of the regular expression.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Basic vs Extended Regular Expressions</h3>
     <p>In basic regular expressions the meta-characters <strong>?</strong>, <strong>+</strong>, <strong>{</strong>, <strong>|</strong>, <strong>(</strong>, and <strong>)</strong> lose their special meaning; instead use the backslashed versions <strong>\?</strong>, <strong>\+</strong>, <strong>\{</strong>, <strong>\|</strong>, <strong>\(</strong>, and <strong>\)</strong>.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <p>The behavior of <strong>grep</strong> is affected by the following environment variables.
   <p>The locale for category <strong>LC_</strong><em>foo</em> is specified by examining the three environment variables <strong>LC_ALL</strong>, <strong>LC_<em>foo</em></strong>, <strong>LANG</strong>, in that order. The first of these variables that is set specifies the locale. For example, if <strong>LC_ALL</strong> is not set, but <strong>LC_MESSAGES</strong> is set to <strong>pt_BR</strong>, then the Brazilian Portuguese locale is used for the <strong>LC_MESSAGES</strong> category. The C locale is used if none of these environment variables are set, if the locale catalog is not installed, or if <strong>grep</strong> was not compiled with national language support (NLS). The shell command <strong>locale -a</strong> lists locales that are currently available.
@@ -270,49 +270,49 @@
     <dt><strong>_</strong><em>N</em><strong>_GNU_nonoption_argv_flags_</strong>
     <dd>(Here <em>N</em> is <strong>grep</strong>'s numeric process ID.) If the <em>i</em>th character of this environment variable's value is <strong>1</strong>, do not consider the <em>i</em>th operand of <strong>grep</strong> to be an option, even if it appears to be one. A shell can put this variable in the environment for each command it runs, specifying which operands are the results of file name wildcard expansion and therefore should not be treated as options. This behavior is available only with the GNU C library, and only when <strong>POSIXLY_CORRECT</strong> is not set.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p>Normally the exit status is 0 if a line is selected, 1 if no lines were selected, and 2 if an error occurred. However, if the <strong>-q</strong> or <strong>--quiet</strong> or <strong>--silent</strong> is used and a line is selected, the exit status is 0 even if an error occurred.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COPYRIGHT</h2>
   <p>Copyright 1998-2000, 2002, 2005-2016 Free Software Foundation, Inc.
   <p>This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
-  <div class="subsection">
+  <section>
     <h3>Reporting Bugs</h3>
     <p>Email bug reports to An <a href="http://lists.gnu.org/mailman/listinfo/bug-grep">email archive</a> and a <a href="http://debbugs.gnu.org/cgi/pkgreport.cgi?package=grep">bug tracker</a> are available.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Known Bugs</h3>
     <p>Large repetition counts in the <strong>{</strong><em>n</em><strong>,</strong><em>m</em><strong>}</strong> construct may cause <strong>grep</strong> to use lots of memory. In addition, certain other obscure regular expressions require exponential time and space, and may cause <strong>grep</strong> to run out of memory.
     <p>Back-references are very slow, and may require exponential time.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>SEE ALSO</h2>
-  <div class="subsection">
+  <section>
     <h3>Regular Manual Pages</h3>
     <p>awk(1), cmp(1), diff(1), find(1), gzip(1), perl(1), sed(1), sort(1), xargs(1), zgrep(1), read(2), pcre(3), pcresyntax(3), pcrepattern(3), terminfo(5), glob(7), regex(7).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>POSIX Programmer's Manual Page</h3>
     <p>grep(1p).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Full Documentation</h3>
     <p>A <a href="http://www.gnu.org/software/grep/manual/">complete manual</a> is available. If the <strong>info</strong> and <strong>grep</strong> programs are properly installed at your site, the command
     <blockquote>
       <strong>info grep</strong>
     </blockquote>
     <p>should give you access to the complete manual.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>NOTES</h2>
   <p>This man page is maintained only fitfully; the full documentation is often more up-to-date.
-</div>
+</section>
 

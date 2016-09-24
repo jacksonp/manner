@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="July 28, 2004" data-extra2="Linux" data-extra3="Linux User's Manual">
 <title>PS</title>
 <h1>PS</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>ps - report a snapshot of the current processes.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>ps</strong> [<em>options</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>ps</strong> displays information about a selection of the active processes. If you want a repetitive update of the selection and the displayed information, use&nbsp;<em>top</em>(1) instead.
   <p>This version of <strong>ps</strong> accepts several kinds of options:
@@ -28,8 +28,8 @@
   <p>By default, <strong>ps</strong> selects all processes with the same effective user ID (euid=EUID) as the current user and associated with the same terminal as the invoker. It displays the process ID (pid=PID), the terminal associated with the process (tname=TTY), the cumulated CPU time in [dd-]hh:mm:ss format (time=TIME), and the executable name (ucmd=CMD). Output is unsorted by default.
   <p>The use of BSD-style options will add process state (stat=STAT) to the default display and show the command args (args=COMMAND) instead of the executable name. You can override this with the <strong>PS_FORMAT</strong> environment variable. The use of BSD-style options will also change the process selection to include processes on other terminals (TTYs) that are owned by you; alternately, this may be described as setting the selection to be the set of all processes filtered to exclude processes owned by other users or not on a terminal. These effects are not considered when options are described as being "identical" below, so <strong>-M</strong> will be considered identical to <strong>Z</strong> and so on.
   <p>Except as described below, process selection options are additive. The default selection is discarded, and then the selected processes are added to the set of processes to be displayed. A&nbsp;process will thus be shown if it meets any of the given selection criteria.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <dl class="indent-3">
     <dt>To see every process on the system using standard syntax:
@@ -61,8 +61,8 @@
     <dt>Print only the name of PID 42:
     <dd><strong>ps&nbsp;-p&nbsp;42&nbsp;-o&nbsp;comm=</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SIMPLE PROCESS SELECTION</h2>
   <dl class="indent-16">
     <dt><strong>-A</strong>
@@ -88,8 +88,8 @@
     <dt><strong>--deselect</strong>
     <dd>Select all processes except those that fulfill the specified conditions. (negates the selection) Identical to <strong>-N</strong>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROCESS SELECTION BY LIST</h2>
   <p>These options accept a single argument in the form of a blank-separated or comma-separated list. They can be used multiple times. For&nbsp;example:&nbsp;<strong>ps&nbsp;-p&nbsp;"1&nbsp;2"&nbsp;-p&nbsp;3,4</strong>
   <dl class="indent-16">
@@ -146,8 +146,8 @@
     <dt><strong><em>123</em></strong>
     <dd>Identical to <strong>--pid&nbsp;</strong><em>123</em>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT FORMAT CONTROL</h2>
   <p>These options are used to choose the information displayed by <strong>ps</strong>. The output may differ by personality.
   <dl class="indent-16">
@@ -194,8 +194,8 @@
     <dt><strong>--context</strong>
     <dd>Display security context format. (for&nbsp;SE&nbsp;Linux)
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT MODIFIERS</h2>
   <dl class="indent-16">
     <dt><strong>-H</strong>
@@ -262,8 +262,8 @@
     <dt><strong>--width</strong><em>&nbsp;n</em>
     <dd>set screen width
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>THREAD DISPLAY</h2>
   <dl class="indent-16">
     <dt><strong>H</strong>
@@ -277,8 +277,8 @@
     <dt><strong>-m</strong>
     <dd>Show threads after processes
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OTHER INFORMATION</h2>
   <dl class="indent-16">
     <dt><strong>L</strong>
@@ -294,16 +294,16 @@
     <dt><strong>--version</strong>
     <dd>Print the procps version.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NOTES</h2>
   <p>This <strong>ps</strong> works by reading the virtual files in&nbsp;/proc. This <strong>ps</strong> does not need to be setuid kmem or have any privileges to run. Do not give this <strong>ps</strong> any special permissions.
   <p>This <strong>ps</strong> needs access to namelist data for proper WCHAN display. For kernels prior to 2.6, the System.map file must be installed.
   <p>CPU usage is currently expressed as the percentage of time spent running during the entire lifetime of a process. This is not ideal, and&nbsp;it does not conform to the standards that <strong>ps</strong> otherwise conforms&nbsp;to. CPU&nbsp;usage is unlikely to add up to exactly&nbsp;100%.
   <p>The SIZE and RSS fields don't count some parts of a process including the page tables, kernel stack, struct thread_info, and struct task_struct. This is usually at least 20&nbsp;KiB of memory that is always resident. SIZE is the virtual size of the process (code+data+stack).
   <p>Processes marked &lt;defunct&gt; are dead processes (so-called&nbsp;"zombies") that remain because their parent has not destroyed them properly. These processes will be destroyed by <em>init</em>(8) if the parent process exits.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROCESS FLAGS</h2>
   <p>The sum of these values is displayed in the "F" column, which is provided by the <strong>flags</strong> output specifier.
   <dl class="indent-5">
@@ -312,8 +312,8 @@
     <dt>4
     <dd>used super-user privileges
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROCESS STATE CODES</h2>
   <p>Here are the different values that the <strong>s</strong>, <strong>stat</strong> and <strong>state</strong> output specifiers (header&nbsp;"STAT"&nbsp;or&nbsp;"S") will display to describe the state of a process.
   <dl class="indent-5">
@@ -347,8 +347,8 @@
     <dt>+
     <dd>is in the foreground process group
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OBSOLETE SORT KEYS</h2>
   <p>These keys are used by the BSD <strong>O</strong> option (when it is used for sorting). The GNU <strong>--sort</strong> option doesn't use these keys, but the specifiers described below in the <strong>STANDARD FORMAT SPECIFIERS</strong> section. Note that the values used in sorting are the internal values <strong>ps</strong> uses and not the "cooked" values used in some of the output format fields (e.g. sorting on tty will sort into device number, not according to the terminal name displayed). Pipe <strong>ps</strong> output into the <em>sort</em>(1) command if you want to sort the cooked values.
   <table class="tbl">
@@ -457,8 +457,8 @@
       <td>priority
       <td class="w(3i)">kernel scheduling priority
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AIX FORMAT DESCRIPTORS</h2>
   <p>This <strong>ps</strong> supports AIX format descriptors, which work somewhat like the formatting codes of <em>printf</em>(1) and <em>printf</em>(3). For example, the normal default output can be produced with this: <strong>ps&nbsp;-eo&nbsp;"%p&nbsp;%y&nbsp;%x&nbsp;%c"</strong>. The&nbsp;<strong>NORMAL</strong> codes are described in the next section.
   <table class="tbl">
@@ -527,8 +527,8 @@
       <td>vsz
       <td>VSZ
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STANDARD FORMAT SPECIFIERS</h2>
   <p>Here are the different keywords that may be used to control the output format (e.g. with option <strong>-o</strong>) or to sort the selected processes with the GNU-style <strong>--sort</strong> option.
   <p>For example: <strong>ps&nbsp;-eo&nbsp;pid,user,args&nbsp;--sort&nbsp;user</strong>
@@ -1008,8 +1008,8 @@
       <td class="1">WCHAN
       <td>name of the kernel function in which the process is sleeping, a&nbsp;"-"&nbsp;if the process is running, or a "*"&nbsp;if the process is multi-threaded and <strong>ps</strong> is not displaying threads.
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <p>The following environment variables could affect <strong>ps</strong>:
   <dl class="indent-3">
@@ -1043,8 +1043,8 @@
     <dd>Cancel <strong>CMD_ENV</strong><em>=irix</em> non-standard behavior.
   </dl>
   <p>In general, it&nbsp;is a bad idea to set these variables. The one exception is <strong>CMD_ENV</strong> or <strong>PS_PERSONALITY</strong>, which could be set to Linux for normal systems. Without that setting, <strong>ps</strong> follows the useless and bad parts of the Unix98 standard.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PERSONALITY</h2>
   <table class="tbl">
     <tr>
@@ -1123,12 +1123,12 @@
       <td>unix98
       <td>standard
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><em>top</em>(1), <em>pgrep</em>(1), <em>pstree</em>(1), <em>proc</em>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STANDARDS</h2>
   <p>This <strong>ps</strong> conforms to:
   <dl class="indent-4">
@@ -1143,10 +1143,10 @@
     <dt>5
     <dd>ISO/IEC 9945:2003
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p><strong>ps</strong> was originally written by Branko Lankester &lt;lankeste@fwi.uva.nl&gt;. Michael K. Johnson &lt;johnsonm@redhat.com&gt; re-wrote it significantly to use the proc filesystem, changing a few things in the process. Michael Shields &lt;mjshield@nyx.cs.du.edu&gt; added the pid-list feature. Charles Blake &lt;cblake@bbn.com&gt; added multi-level sorting, the dirent-style library, the device name-to-number mmaped database, the approximate binary search directly on System.map, and many code and documentation cleanups. David Mossberger-Tang wrote the generic BFD support for psupdate. Albert Cahalan &lt;albert@users.sf.net&gt; rewrote ps for full Unix98 and BSD support, along with some ugly hacks for obsolete and foreign syntax.
   <p>Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;. No&nbsp;subscription is required or suggested.
-</div>
+</section>
 

@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLC</title>
 <h1>PMLC</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlc</strong> - configure active Performance Co-Pilot pmlogger(s) interactively
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmlc</strong> [<strong>-e</strong>] [<strong>-h</strong> <em>host</em>] [<strong>-i</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-P</strong>] [<strong>-p</strong> <em>port</em>] [<strong>-Z</strong> <em>timezone</em>] [<strong>-z</strong>] [<strong>pid</strong>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlc</strong> may be used to change those metrics and instances which a <strong>pmlogger</strong>(1) writes to a Performance Co-Pilot archive (see <strong>PCPIntro</strong>(1)), the frequency with which the metrics are collected and whether the logging is mandatory, advisory, on or off. It also reports the current logging status of metrics and instances. <strong>pmlc</strong> may be used to control pmlogger instances on remote hosts as well as those on the local host.
   <p>Normally <strong>pmlc</strong> operates on the distributed Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative local PMNS is loaded from the file <em>pmnsfile</em>.
@@ -63,8 +63,8 @@
   <p>There is no continuation character required for commands that span lines.
   <p>The word <strong>at</strong> may be used interchangeably with <strong>@</strong>.
   <p>A request to log all instances of a metric will supersede any prior request to log either all or specific instances of a metric (if the request specifies a permissible transition in the logging state). A request to log specific instances of a metric when all instances of a metric are already being logged is refused by <strong>pmlogger</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ACCESS CONTROL</h2>
   <p><strong>pmlc</strong> may have restricted access to and control over <strong>pmlogger</strong>(1) processes.
   <p>If a <strong>pmlogger</strong>(1) is unable to export its control information to the local <strong>pmcd</strong>(1), then that <strong>pmlogger</strong>(1) cannot cannot be connected to nor controlled by <strong>pmlc</strong>. In practice, this means the <strong>pmlogger</strong>(1) process has to be owned by the user ``pcp'' and/or the group ``pcp''. If <strong>pmlogger</strong>(1) is running on the host ``foo'' then use ``pminfo -f -h foo pmcd.pmlogger'' to verify that the <strong>pmlogger</strong>(1) of interest is known to <strong>pmcd</strong>(1), alternatively <strong>pmlogger</strong>(1) instances that are not reported from the <strong>pmlc</strong> <strong>show loggers @foo</strong> command are not known to <strong>pmcd</strong>(1) on the host ``foo''.
@@ -96,24 +96,24 @@
       <td class="f() bold">new volume
       <td><strong>mandatory</strong>
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmlogger</strong>(1), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5) and <strong>environ</strong>(7).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>Most error or warning messages are self-explanatory. A message of the form<br>
   Warning: unable to change logging state for... followed by a list of metrics (and possibly instances) indicates that <strong>pmlogger</strong> refused the request for the metrics (and instances) that appear. Any metrics (and instances) that were specified but do not appear in the message have had their logging state updated successfully (no news is good news). Usually this warning results from requesting advisory logging when a mandatory control is already in place, or requesting logging for specific instances when all instances are already being logged.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEAT</h2>
   <p>If all instances of a metric are being logged and a request is made to log specific instances of the metric with the same state and frequency, the request may appear to succeed, even though <strong>pmlogger</strong> has refused the request. This is not normally a problem, as the required information will still be placed into the log by <strong>pmlogger</strong>.
   <p>However in the case where the metric is to be logged once, the outcome is not what might be expected. When <strong>pmlogger</strong> receives a request to log a metric once, it places the current value(s) of the metric into the log as soon as it can, regardless of whether the metric is already in the log. This may be used to force values into the log. When a request to log specific instances of a metric arrives and is refused because all instances of the metric are already being logged, <strong>pmlogger</strong> does not place values for the instances requested into the log. It returns the current logging state for each instance requested to <strong>pmlc</strong>. The requested and returned states are identical, so <strong>pmlc</strong> doesn't raise an error as it should.
   <p>To ensure that only certain instances of a metric are being logged, one should always turn off logging for all instances of the metric prior to turning on logging for the specific instances required.
-</div>
+</section>
 

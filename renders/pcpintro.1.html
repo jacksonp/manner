@@ -3,11 +3,11 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PCPINTRO</title>
 <h1>PCPINTRO</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>PCPIntro</strong> - introduction to the Performance Co-Pilot (PCP)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INTRODUCTION</h2>
   <p>The Performance Co-Pilot (PCP) is a toolkit designed for monitoring and managing system-level performance. These services are distributed and scalable to accommodate the most complex system configurations and performance problems.
   <p>PCP supports many different platforms, including (but not limited to) Linux, MacOSX, Solaris and Windows. From a high-level PCP can be considered to contain two classes of software utility:
@@ -18,19 +18,19 @@
     <dd>These are the parts of PCP that display data collected from hosts (or archives) that have the <em>PCP Collector</em> installed. Many monitor tools are available as part of the core PCP release, while other (typically graphical) monitoring tools are available separately in the PCP GUI package.
   </dl>
   <p>This manual entry describes the high-level features and options common to most PCP utilities available on all platforms.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OVERVIEW</h2>
   <p>The PCP architecture is distributed in the sense that any PCP tool may be executing remotely. On the host (or hosts) being monitored, each domain of performance metrics, whether the kernel, a service layer, a database management system, a web server, an application, etc. requires a Performance Metrics Domain Agent (PMDA) which is responsible for collecting performance measurements from that domain. All PMDAs are controlled by the Performance Metrics Collector Daemon (<strong>pmcd</strong>(1)) on the same host.
   <p>Client applications (the monitoring tools) connect to <strong>pmcd</strong>(1), which acts as a router for requests, by forwarding requests to the appropriate PMDA and returning the responses to the clients. Clients may also access performance data from sets of PCP archives (created using <strong>pmlogger</strong>(1)) for retrospective analysis.
-  <div class="subsection">
+  <section>
     <h3>Security philosophy</h3>
     <p>PCP redistributes a wealth of performance information within a host and across its networks. The following security philosophy underlies the setting of several <em>defaults</em> that control how much information is sent and received.
     <p>By default, the information exposed by PMCD about a host is approximately of the same level of confidentiality as available to a completely unprivileged user on that host. So, performance data that is available to be <em>read</em> completely freely on a machine may be made available by PMCD to the network.
     <p>However, the host running PMCD and its network is <em>not</em> assumed to run only friendly applications. Therefore, <em>write</em> type operations, including from the local host, are not permitted by default.
     <p>These defaults may be overridden (expanded or reduced) in several ways, including by specifying network ACLs in <strong>pmcd.conf</strong>, activating non-default PMDAs, or by using PMCD connections that pass user credentials. For example, some PMDAs automatically provide greater information for particular credentialed users or groups.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Applications</h3>
     <p>The following performance monitoring applications are primarily console based, typically run directly from the command line, and are just a small subset of the tools available as part of the base PCP package.
     <p>Each tool or command is documented completely in its own reference page.
@@ -57,9 +57,9 @@
       <dt><strong>pmdumptext</strong>
       <dd>Produce ASCII reports for arbitrary combinations of performance metrics.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>COMMON COMMAND LINE ARGUMENTS</h2>
   <p>There is a set of common command line arguments that are used consistently by most PCP tools.
   <dl>
@@ -76,8 +76,8 @@
     <dt><strong>-Z</strong> <em>timezone</em>
     <dd>By default, applications report the time of day according to the local timezone on the system where the application is executed. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INTERVAL SPECIFICATION AND ALIGNMENT</h2>
   <p>Most PCP tools operate with periodic sampling or reporting, and the <strong>-t</strong> and <strong>-A</strong> options may be used to control the duration of the sample interval and the alignment of the sample times.
   <dl>
@@ -100,8 +100,8 @@
         <p>Note that alignment occurs by advancing the time as required, and that <strong>-A</strong> acts as a modifier to advance both the start of the time window (see the next section) and the origin time (if the <strong>-O</strong> option is specified).
       </div>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TIME WINDOW SPECIFICATION</h2>
   <p>Many PCP tools are designed to operate in some time window of interest, e.g. to define a termination time for real-time monitoring or to define a start and end time within a set of PCP archive logs.
   <p>In the absence of the <strong>-O</strong> and <strong>-A</strong> options to specify an initial sample time origin and time alignment (see above), the PCP application will retrieve the first sample at the start of the time window.
@@ -152,8 +152,8 @@
   <p>If any high order fields are missing, they are filled in by starting with the year, month and day from the current time (real-time mode) or the time at the beginning of the set of PCP archive logs (archive mode) and advancing the time until it matches the fields that are specified. So, for example if the time window starts by default at ``Mon Mar 4 13:07:47 1996'', then <strong>-S @13:10</strong> corresponds to 13:10:00 on Mon Mar 4, 1996, while <strong>-S @10:00</strong> corresponds to 10:00:00 on Tue Mar 5, 1996 (note this is the following day).
   <p>For greater precision than afforded by <strong>datetime</strong>(3), the seconds component may be a floating point number.
   <p>If a timezone is not included in a <em>datetime</em> then there ares several interpretations available depending on the other command line options used. The default is to use the local timezone on the system where the PCP tool is being run. A <strong>-Z</strong> option specifies an explicit timezone, else a <strong>-z</strong> option changes the timezone to the local timezone at the host that is the source of the performance metrics.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PERFORMANCE METRICS - NAMES AND IDENTIFIERS</h2>
   <p>The number of performance metric names supported by PCP on most platforms ranges from many hundreds to several thousand. The PCP libraries and applications use an internal identification scheme that unambiguously associates a single integer with each known performance metric. This integer is known as the Performance Metric Identifier, or PMID. Although not a requirement, PMIDs tend to have global consistency across all systems, so a particular performance metric usually has the same PMID.
   <p>For all users and most applications, direct use of the PMIDs would be inappropriate (e.g. this would limit the range of accessible metrics, make the code hard to maintain, force the user interface to be particularly baroque, etc.). Hence a Performance Metrics Name Space (PMNS) is used to provide external names and a hierarchic classification for performance metrics. A PMNS is represented as a tree, with each node having a label, a pointer to either a PMID (for leaf nodes) or a set of descendent nodes in the PMNS (for non-leaf nodes).
@@ -163,8 +163,8 @@
   <p>The default local PMNS used by <strong>pmcd</strong> is located at <strong>$PCP_VAR_DIR/pmns/root</strong> however the environment variable <strong>PMNS_DEFAULT</strong> may be set to the full pathname of a different PMNS which will then be used as the default local PMNS.
   <p>Most applications do not use the local PMNS directly, but rather import parts of the PMNS as required from the same place that performance metrics are fetched, i.e. from <strong>pmcd</strong>(1) for live monitoring or from a set of PCP archives for retrospective monitoring.
   <p>To explore the PMNS use <strong>pminfo</strong>(1), or if the PCP GUI package is installed the New Chart and Metric Search windows within <strong>pmchart</strong>(1).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PERFORMANCE METRIC SPECIFICATIONS</h2>
   <p>In configuration files and (to a lesser extent) command line options, metric specifications adhere to the following syntax rules.
   <p>If the source of performance metrics is real-time from <strong>pmcd</strong>(1) then the accepted syntax is
@@ -181,14 +181,14 @@
   <p>White space is ignored everywhere except within a quoted <em>instance</em> name.
   <p>An empty <em>instance</em> is silently ignored, and in particular ``<strong>[]</strong>'' is the same as no <em>instance</em>, while ``<strong>[one,,,two]</strong>'' is parsed as specifying just the two instances ``<strong>one</strong>'' and ``<strong>two</strong>''.
   <p>As a special case, if the <strong>host</strong> is the single character ``@'' then this refers to a <strong>PM_CONTEXT_LOCAL</strong> source, see <strong>pmNewContext</strong>(3).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SECURE PMCD CONNECTIONS</h2>
   <p>Since PCP version 3.6.11, a monitor can explicitly request a secure connection to a collector host running <strong>pmcd</strong>(1) or <strong>pmproxy</strong>(1) using the PM_CTXFLAG_SECURE context flag. If the PCP Collector host supports this feature - refer to the pmcd.feature.secure metric for confirmation of this - a TLS/SSL (Transport Layer Security or Secure Sockets Layer) connection can be established which uses public key cryptography and related techniques. These features aim to prevent eavesdropping and data tampering from a malicious third party, as well as providing server-side authentication (confident identification of a server by a client) which can be used to guard against man-in-the-middle attacks.
   <p>A secure <strong>pmcd</strong> connection requires use of certificate-based authentication. The security features offered by <strong>pmcd</strong> and <strong>pmproxy</strong> are implemented using the Network Security Services (NSS) APIs and utilities. The NSS <strong>certutil</strong> tool can be used to create certificates suitable for establishing trust between PCP monitor and collector hosts.
   <p>A complete description is beyond the scope of this document, refer to the <strong>PCP ENVIRONMENT</strong>, <strong>FILES</strong> and <strong>SEE ALSO</strong> sections for detailed information. This includes links to tutorials on the steps involved in setting up the available security features.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PMCD HOST SPECIFICATION</h2>
   <p>In the absence of an explicit host name specification, most tools will default to the local host in live update mode. In PCP releases since 3.8.4 onward, this results in an efficient local protocol being selected - typically a Unix domain socket. If this option is used (which can also be explicitly requested via the <em>unix:</em> host specification described below), it is important to note that all connections will be automatically authenticated. In other words, the credentials of the user invoking a client tool will automatically be made available to <strong>pmcd</strong>(1) and all of its PMDAs, on the users behalf, such that results can be customized to the privilege levels of individual users.
   <p>Names of remote hosts running the <strong>pmcd</strong>(1) daemon can of course also be provided to request a remote host be used. The most basic form of <strong>pmcd</strong> host specification is a simple host name, possibly including the domain name if necessary. However, this can be extended in a number of ways to further refine attributes of the connection made to <strong>pmcd</strong>.
@@ -213,8 +213,8 @@ $ pcp -h local:</code></pre>
   <p>In all situations, host names can be used interchangeably with IPv4 or IPv6 addressing (directly), as shown above. In the case of an IPv6 address, the full address must be enclosed by square brackets and the scope (interface) must also be specified.
   <p>The final <em>local:</em> example above is now the default for most tools. This connection is an automatically authenticated local host connection on all platforms that support Unix domain sockets. No password is required and authentication is automatic. This is also the most efficient (lowest overhead) communication channel available.
   <p>The difference between <em>unix:</em> and <em>local:</em> is that the former is a strict Unix domain socket specification (connection fails if it cannot connect that way), whereas the latter has a more forgiving fallback to using <em>localhost</em> (i.e. a regular Inet socket connection is used when Unix domain socket connections are unavailable).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>In addition to the PCP run-time environment and configuration variables described in the <strong>PCP ENVIRONMENT</strong> section below, the following environment variables apply to all installations.
   <p>Note that most uses of these environment variables are optimized to check the environment only the first time the variable might be used. As the environment usually is not checked again, the only safe strategy is to ensure all PCP-related environment variables are set before the first call into any of the PCP libraries.
@@ -290,8 +290,8 @@ $ pcp -h local:</code></pre>
     <dt><strong>PMIECONF_PATH</strong>
     <dd>If set, <strong>pmieconf</strong>(1) will form its <strong>pmieconf</strong>(5) specification (set of parameterized <strong>pmie</strong>(1) rules) using all valid <strong>pmieconf</strong> files found below each subdirectory in this colon-separated list of subdirectories. If not set, the default is <strong>$PCP_VAR_DIR/config/pmieconf</strong>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>/etc/pcp.conf</strong>
@@ -338,12 +338,12 @@ $ pcp -h local:</code></pre>
     <dt><strong>$PCP_PMLOGGERCONTROL_PATH</strong>
     <dd>Control file for <strong>pmlogger</strong>(1) instances launched from <strong>$PCP_RC_DIR/pcp</strong> and/or managed by <strong>pmlogger_check</strong>(1) and <strong>pmlogger_daily</strong>(1) as part of a production PCP archive collection setup.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmcd</strong>(1), <strong>pmie</strong>(1), <strong>pmie_daily</strong>(1), <strong>pminfo</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogger</strong>(1), <strong>pmlogger_daily</strong>(1), <strong>pmrep</strong>(1), <strong>pmstat</strong>(1), <strong>pmval</strong>(1), <strong>pcp</strong>(1), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5), <strong>pmns</strong>(5) and <strong>chkconfig</strong>(8).
   <p>If the PCP GUI package is installed, then the following entries are also relevant:<br>
@@ -353,5 +353,5 @@ $ pcp -h local:</code></pre>
   <em>http://www.mozilla.org/projects/security/pki/nss/#documentation</em><br>
   <em>http://www.mozilla.org/projects/security/pki/nss/tools/certutil.html</em>
   <p>Also refer to the books <em>Performance Co-Pilot User's and Administrator's Guide</em> and <em>Performance Co-Pilot Programmer's Guide</em> which can be found at http://www.pcp.io/
-</div>
+</section>
 

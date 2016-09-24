@@ -3,19 +3,19 @@
 <meta name="man-page-info" data-extra1="2014-09-06" data-extra2="GNU" data-extra3="Linux user manual">
 <title>MEMUSAGE</title>
 <h1>MEMUSAGE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>memusage - profile memory usage of a program
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>memusage</strong> [<em>option</em>]... <em>program</em> [<em>programoption</em>]...
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>memusage</strong> is a bash script which profiles memory usage of the program, <em>program</em>. It preloads the <strong>libmemusage.so</strong> library into the caller's environment (via the <strong>LD_PRELOAD</strong> environment variable; see <strong>ld.so</strong>(8)). The <strong>libmemusage.so</strong> library traces memory allocation by intercepting calls to <strong>malloc</strong>(3), <strong>calloc</strong>(3), <strong>free</strong>(3), and <strong>realloc</strong>(3); optionally, calls to <strong>mmap</strong>(2), <strong>mremap</strong>(2), and <strong>munmap</strong>(2) can also be intercepted.
   <p><strong>memusage</strong> can output the collected data in textual form, or it can use <strong>memusagestat</strong>(1) (see the <strong>-p</strong> option, below) to create a PNG file containing graphical representation of the collected data.
-  <div class="subsection">
+  <section>
     <h3>Memory usage summary</h3>
     <p>The "Memory usage summary" line output by <strong>memusage</strong> contains three fields:
     <div class="indent-4">
@@ -30,13 +30,13 @@
     </div>
     <p>Immediately following this summary line, a table shows the number calls, total memory allocated or deallocated, and number of failed calls for each intercepted function. For <strong>realloc</strong>(3) and <strong>mremap</strong>(2), the additional field "nomove" shows reallocations that changed the address of a block, and the additional "dec" field shows reallocations that decreased the size of the block. For <strong>realloc</strong>(3), the additional field "free" shows reallocations that caused a block to be freed (i.e., the reallocated size was 0).
     <p>The "realloc/total memory" of the table output by <strong>memusage</strong> does not reflect cases where <strong>realloc</strong>(3) is used to reallocate a block of memory to have a smaller size than previously. This can cause sum of all "total memory" cells (excluding "free") to be larger than the "free/total memory" cell.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Histogram for block sizes</h3>
     <p>The "Histogram for block sizes" provides a breakdown of memory allocations into various bucket sizes.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-n&nbsp;</strong><em>name</em><strong>,&nbsp;--progname=</strong><em>name</em>
@@ -71,16 +71,16 @@
     <dt><strong>-y&nbsp;</strong><em>size</em><strong>,&nbsp;--y-size=</strong><em>size</em>
     <dd>Make the graph <em>size</em> pixels high.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p>Exit status is equal to the exit status of profiled program.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>To report bugs, see <a href="http://www.gnu.org/software/libc/bugs.html">http://www.gnu.org/software/libc/bugs.html</a>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLE</h2>
   <p>Below is a simple program that reallocates a block of memory in cycles that rise to a peak before then cyclically reallocating the memory in smaller blocks that return to zero. After compiling the program and running the following commands, a graph of the memory usage of the program can be found in the file <em>memusage.png</em>:
   <pre>$ <strong>memusage --data=memusage.dat ./a.out</strong>
@@ -104,7 +104,7 @@ Histogram for block sizes:
  5840-5855            2   4% =================================
  6432-6447            1   2% ================
 $ <strong>memusagestat memusage.dat memusage.png</strong></pre>
-  <div class="subsection">
+  <section>
     <h3>Program source</h3>
     <pre>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -136,10 +136,10 @@ main(int argc, char *argv[])
      free(p);
      exit(EXIT_SUCCESS);
 }</pre>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>memusagestat</strong>(1), <strong>mtrace</strong>(1) <strong>ld.so</strong>(8)
-</div>
+</section>
 

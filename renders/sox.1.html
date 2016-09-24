@@ -3,11 +3,11 @@
 <meta name="man-page-info" data-extra1="December 31, 2014" data-extra2="sox" data-extra3="Sound eXchange">
 <title>SoX</title>
 <h1>SoX</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>SoX - Sound eXchange, the Swiss Army knife of audio manipulation
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <pre><strong>sox</strong> [<em>global-options</em>] [<em>format-options</em>] <em>infile1</em>
         [[<em>format-options</em>] <em>infile2</em>] ... [<em>format-options</em>] <em>outfile</em>
@@ -19,10 +19,10 @@
 
 <strong>rec</strong> [<em>global-options</em>] [<em>format-options</em>] <em>outfile</em>
         [<em>effect</em> [<em>effect-options</em>]] ...</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
-  <div class="subsection">
+  <section>
     <h3>Introduction</h3>
     <p>SoX reads and writes audio files in most popular formats and can optionally apply effects to them. It can combine multiple input sources, synthesise audio, and, on many systems, act as a general purpose audio player or a multi-track audio recorder. It also has limited ability to split the input into multiple output files.<br>
     <br>
@@ -81,8 +81,8 @@
     <p>records a stream of audio such as LP/cassette and splits in to multiple audio files at points with 2 seconds of silence. Also, it does not start recording until it detects audio is playing and stops after it sees 10 minutes of silence.<br>
     <br>
     N.B. The above is just an overview of SoX's capabilities; detailed explanations of how to use <em>all</em> SoX parameters, file formats, and effects can be found below in this manual, in <strong>soxformat</strong>(7), and in <strong>soxi</strong>(1).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>File Format Types</h3>
     <p>SoX can work with `self-describing' and `raw' audio files. `self-describing' formats (e.g. WAV, FLAC, MP3) have a header that completely describes the signal and encoding attributes of the audio data that follows. `raw' or `headerless' formats do not contain this information, so the audio characteristics of these must be described on the SoX command line or inferred from those of the input file.<br>
     <br>
@@ -104,8 +104,8 @@
     One important use of audio file comments is to convey `Replay Gain' information. SoX supports applying Replay Gain information (for certain input file formats only; currently, at least FLAC and Ogg Vorbis), but not generating it. Note that by default, SoX copies input file comments to output files that support comments, so output files may contain Replay Gain information if some was present in the input file. In this case, if anything other than a simple format conversion was performed then the output file Replay Gain information is likely to be incorrect and so should be recalculated using a tool that supports this (not SoX).<br>
     <br>
     The <strong>soxi</strong>(1) command can be used to display information from audio file headers.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Determining & Setting The File Format</h3>
     <p>There are several mechanisms available for SoX to use to determine or set the format characteristics of an audio file. Depending on the circumstances, individual characteristics may be determined or set using different mechanisms.<br>
     <br>
@@ -128,8 +128,8 @@
       <dd>The input file format characteristics, or the closest that is supported by the output file type.
     </dl>
     <p>For all files, SoX will exit with an error if the file type cannot be determined. Command-line format options may need to be added or changed to resolve the problem.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Playing & Recording Audio</h3>
     <p>The <strong>play</strong> and <strong>rec</strong> commands are provided so that basic playing and recording is as simple as<br>
     <br>
@@ -182,8 +182,8 @@
     <br>
     <pre><code>   rec -n</code></pre>
     <p>The recording level should be adjusted (using the system-provided mixer program, not SoX) so that the meter is <em>at most occasionally</em> full scale, and never `in the red' (an exclamation mark is shown). See also <strong>-S</strong> below.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Accuracy</h3>
     <p>Many file formats that compress audio discard some of the audio signal information whilst doing so. Converting to such a format and then converting back again will not produce an exact copy of the original audio. This is the case for many formats used in telephony (e.g. A-law, GSM) where low signal bandwidth is more important than high audio fidelity, and for many formats used in portable music players (e.g. MP3, Vorbis) where adequate fidelity can be retained even with the large compression ratios that are needed to make portable players practical.<br>
     <br>
@@ -197,8 +197,8 @@
     <p>SoX first decompresses the input MP3 file, then applies the <strong>trim</strong> effect, and finally creates the output MP3 file by re-compressing the audio - with a possible reduction in fidelity above that which occurred when the input file was created. Hence, if what is ultimately desired is lossily compressed audio, it is highly recommended to perform all audio processing using lossless file formats and then convert to the lossy format only at the final stage.<br>
     <br>
     <strong>N.B.</strong> Applying multiple effects with a single SoX invocation will, in general, produce more accurate results than those produced using multiple SoX invocations.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Dithering</h3>
     <p>Dithering is a technique used to maximise the dynamic range of audio stored at a particular bit-depth. Any distortion introduced by quantisation is decorrelated by adding a small amount of white noise to the signal. In most cases, SoX can determine whether the selected processing requires dither and will add it during output formatting if appropriate.<br>
     <br>
@@ -214,8 +214,8 @@
     <p>For example, adjusting volume with <strong>vol 0.25</strong> requires two additional bits in which to losslessly store its results (since 0.25 decimal equals 0.01 binary). So if the input file bit-depth is 16, then SoX's internal representation will utilise 18 bits after processing this volume change. In order to store the output at the same depth as the input, dithering is used to remove the additional bits.<br>
     <br>
     Use the <strong>-V</strong> option to see what processing SoX has automatically added. The <strong>-D</strong> option may be given to override automatic dithering. To invoke dithering manually (e.g. to select a noise-shaping curve), see the <strong>dither</strong> effect.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Clipping</h3>
     <p>Clipping is distortion that occurs when an audio signal level (or `volume') exceeds the range of the chosen representation. In most cases, clipping is undesirable and so should be corrected by adjusting the level prior to the point (in the processing chain) at which it occurs.<br>
     <br>
@@ -233,8 +233,8 @@
     If clipping occurs at any point during processing, SoX will display a warning message to that effect.<br>
     <br>
     See also <strong>-G</strong> and the <strong>gain</strong> and <strong>norm</strong> effects.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Input File Combining</h3>
     <p>SoX's input combiner can be configured (see OPTIONS below) to combine multiple files using any of the following methods: `concatenate', `sequence', `mix', `mix-power', `merge', or `multiply'. The default method is `sequence' for <strong>play</strong>, and `concatenate' for <strong>rec</strong> and <strong>sox</strong>.<br>
     <br>
@@ -263,8 +263,8 @@
     If mixed audio seems loud enough at some points but too quiet in others then dynamic range compression should be applied to correct this - see the <strong>compand</strong> effect.<br>
     <br>
     With the `mix-power' combine method, the mixed volume is approximately equal to that of one of the input signals. This is achieved by balancing using a factor of ¹/√n instead of ¹/n. Note that this balancing factor does not guarantee that clipping will not occur, but the number of clips will usually be low and the resultant distortion is generally imperceptible.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Output Files</h3>
     <p>SoX's default behaviour is to take one or more input files and write them to a single output file.
     <p>This behaviour can be changed by specifying the pseudo-effect `newfile' within the effects list. SoX will then enter multiple output mode.
@@ -273,22 +273,22 @@
     <p>Multiple output mode is not very useful unless an effect that will stop the effects chain early is specified before the `newfile'. If end of file is reached before the effects chain stops itself then no new file will be created as it would be empty.
     <p>The following is an example of splitting the first 60 seconds of an input file into two 30 second files and ignoring the rest.
     <pre><code>   sox song.wav ringtone%1n.wav trim 0 30 : newfile : trim 0 30</code></pre>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Stopping SoX</h3>
     <p>Usually SoX will complete its processing and exit automatically once it has read all available audio data from the input files.<br>
     <br>
     If desired, it can be terminated earlier by sending an interrupt signal to the process (usually by pressing the keyboard interrupt key which is normally Ctrl-C). This is a natural requirement in some circumstances, e.g. when using SoX to make a recording. Note that when using SoX to play multiple files, Ctrl-C behaves slightly differently: pressing it once causes SoX to skip to the next file; pressing it twice in quick succession causes SoX to exit.<br>
     <br>
     Another option to stop processing early is to use an effect that has a time period or sample count to determine the stopping point. The trim effect is an example of this. Once all effects chains have stopped then SoX will also stop.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>FILENAMES</h2>
   <p>Filenames can be simple file names, absolute or relative path names, or URLs (input files only). Note that URL support requires that <strong>wget</strong>(1) is available.<br>
   <br>
   Note: Giving SoX an input or output filename that is the same as a SoX effect-name will not work since SoX will treat it as an effect specification. The only work-around to this is to avoid such filenames. This is generally not difficult since most audio filenames have a filename `extension', whilst effect-names do not.
-  <div class="subsection">
+  <section>
     <h3>Special Filenames</h3>
     <p>The following special filenames may be used in certain circumstances in place of a normal filename on the command line:
     <dl>
@@ -331,15 +331,15 @@
       <br>
       The sampling rate associated with a null file is by default 48&nbsp;kHz, but, as with a normal file, this can be overridden if desired using command-line format options (see below).
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Supported File & Audio Device Types</h3>
     <p>See <strong>soxformat</strong>(7) for a list and description of the supported file formats and audio device drivers.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>OPTIONS</h2>
-  <div class="subsection">
+  <section>
     <h3>Global Options</h3>
     <p>These options can be specified on the command line at any point before the first effect name.<br>
     <br>
@@ -516,8 +516,8 @@
         </dl>
         <p>By default, the verbosity level is set to 2 (shows errors and warnings). Each occurrence of the <strong>-V</strong> option increases the verbosity level by 1. Alternatively, the verbosity level can be set to an absolute number by specifying it immediately after the <strong>-V</strong>, e.g. <strong>-V0</strong> sets it to 0.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Input File Options</h3>
     <p>These options apply only to input files and may precede only input filenames on the command line.
     <dl>
@@ -528,8 +528,8 @@
       <br>
       See also the <strong>norm</strong>, <strong>vol</strong>, and <strong>gain</strong> effects, and see <strong>Input File Balancing</strong> above.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Input & Output File Format Options</h3>
     <p>These options apply to the input or output file whose name they immediately precede on the command line and are used mainly when working with headerless file formats or when specifying a format for the output file that is different to that of the input file.
     <dl>
@@ -657,8 +657,8 @@
       <br>
       <strong>N.B.</strong> See also N.B. in section on <strong>-x</strong> above.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Output File Format Options</h3>
     <p>These options apply only to the output file and may precede only the output filename on the command line.
     <dl>
@@ -673,14 +673,14 @@
       <dt><strong>-C</strong>, <strong>--compression</strong> <em>FACTOR</em>
       <dd>The compression factor for variably compressing output file formats. If this option is not given then a default compression factor will apply. The compression factor is interpreted differently for different compressing file formats. See the description of the file formats that use this option in <strong>soxformat</strong>(7) for more information.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>EFFECTS</h2>
   <p>In addition to converting, playing and recording audio files, SoX can be used to invoke a number of audio `effects'. Multiple effects may be applied by specifying them one after another at the end of the SoX command line, forming an `effects chain'. Note that applying multiple effects in real-time (i.e. when playing audio) is likely to require a high performance computer. Stopping other applications may alleviate performance issues should they occur.<br>
   <br>
   Some of the SoX effects are primarily intended to be applied to a single instrument or `voice'. To facilitate this, the <strong>remix</strong> effect and the global SoX option <strong>-M</strong> can be used to isolate then recombine tracks from a multi-track recording.
-  <div class="subsection">
+  <section>
     <h3>Multiple Effects Chains</h3>
     <p>A single effects chain is made up of one or more effects. Audio from the input runs through the chain until either the end of the input file is reached or an effect in the chain requests to terminate the chain.<br>
     <br>
@@ -695,8 +695,8 @@
     The following is an example of multiple effects chains. It will split the input file into multiple files of 30 seconds in length. Each output filename will have unique number in its name as documented in the <strong>Output Files</strong> section.<br>
     <br>
     <pre><code>   sox infile.wav output.wav trim 0 30 : newfile : restart</code></pre>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Common Notation And Parameters</h3>
     <p>In the descriptions that follow, brackets [ ] are used to denote parameters that are optional, braces { } to denote those that are both optional and repeatable, and angle brackets &lt; &gt; to denote those that are repeatable but not optional. Where applicable, default values for optional parameters are shown in parenthesis ( ).<br>
     <br>
@@ -750,8 +750,8 @@
     <p>Time specifications can also be chained with <strong>+</strong> or <strong>-</strong> into a new time specification where the right part is added to or subtracted from the left, respectively: `3:00-200s' means two hundred samples less than three minutes.<br>
     <br>
     To see if SoX has support for an optional effect, enter <strong>sox -h</strong> and look for its name under the list: `EFFECTS'.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Supported Effects</h3>
     <p>Note: a categorised list of the effects can be found in the accompanying `README' file.
     <dl>
@@ -1983,23 +1983,23 @@ sox part1.wav piece.wav part2.wav "$5" \
       <br>
       See also <strong>gain</strong> for a volume-changing effect with different capabilities, and <strong>compand</strong> for a dynamic-range compression/expansion/limiting effect.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>Exit status is 0 for no error, 1 if there is a problem with the command-line parameters, or 2 if an error occurs during file processing.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Please report any bugs found in this version of SoX to the mailing list (sox-users@lists.sourceforge.net).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>soxi</strong>(1), <strong>soxformat</strong>(7), <strong>libsox</strong>(3)<br>
   <strong>audacity</strong>(1), <strong>gnuplot</strong>(1), <strong>octave</strong>(1), <strong>wget</strong>(1)<br>
   The SoX web site at http://sox.sourceforge.net<br>
   SoX scripting examples at http://sox.sourceforge.net/Docs/Scripts
-  <div class="subsection">
+  <section>
     <h3>References</h3>
     <dl>
       <dt>[1]
@@ -2017,9 +2017,9 @@ sox part1.wav piece.wav part2.wav "$5" \
       <dt>[7]
       <dd>Steve Harris, <em>LADSPA plugins</em>, http://plugin.org.uk
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>LICENSE</h2>
   <p>Copyright 1998-2013 Chris Bagwell and SoX Contributors.<br>
   Copyright 1991 Lance Norskog and Sundry Contributors.<br>
@@ -2027,9 +2027,9 @@ sox part1.wav piece.wav part2.wav "$5" \
   This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2, or (at your option) any later version.<br>
   <br>
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHORS</h2>
   <p>Chris Bagwell (cbagwell@users.sourceforge.net). Other authors and contributors are listed in the ChangeLog file that is distributed with the source code.
-</div>
+</section>
 

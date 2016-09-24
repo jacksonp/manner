@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMVIEW</title>
 <h1>PMVIEW</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmview</strong> - performance metrics 3D visualization back-end
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmview</strong> [<strong>-Cz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>[<strong>,</strong><em>archive</em><strong>,</strong>...]] [<strong>-c</strong> <em>configfile</em>] [<strong>-h</strong> <em>host</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-O</strong> <em>origin</em>] [<strong>-p</strong> <em>port</em>] [<strong>-R</strong> <em>logconfig</em>] [<strong>-r</strong> <em>addconfig</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-x</strong> <em>version</em>] [<strong>-Z</strong> <em>timezone</em>] [<strong>-geometry</strong> <em>geometry</em>] [<strong>-display</strong> <em>display</em>] [<strong>-name</strong> <em>name</em>] [<strong>-title</strong> <em>title</em>] [<strong>-xrm "</strong><em>resourceName</em><strong>:</strong> <em>value</em><strong>"</strong> ...] [<em>other X11-args</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmview</strong> is a generalized 3D performance metrics visualization tool for the Performance Co-Pilot (<strong>PCP</strong>(1)).
   <p><strong>pmview</strong> is the base utility behind performance metrics visualization tools such as <strong>dkvis</strong>(1), <strong>mpvis</strong>(1), <strong>osvis</strong>(1) and <strong>nfsvis</strong>(1), It is also used by a range of related tools that are specific to optional Performance Domain Agents (PMDA) and/or PCP add-on products. <strong>pmview</strong> may also be used to construct customized 3D performance displays.
@@ -19,8 +19,8 @@
   <p>A configuration file (as specified by the <strong>-c</strong> option, or read from standard input) is used to specify the position, color, maximum value and labels of metrics and metric instances in the scene. The maximum value acts as a normalization factor and is used to scale the object height and/or color in proportion to the metric values. Metric values which exceed the associated maximum value are displayed as solid white objects. If a metric is unavailable, the object will have minimum height and will be colored grey.
   <p>Normally, the tool operates in ``live'' mode where performance metrics are fetched in real-time. The user can view metrics from any host running <strong>pmcd</strong>(1). <strong>pmview</strong> can also replay archives of performance metrics (see <strong>pmlogger</strong>(1)) and allow the user to interactively control the current replay time and rate using the VCR paradigm. This is particularly useful for retrospective comparisons and for post-mortem analysis of performance problems where a remote system is not accessible or a performance analyst is not available on-site.
   <p>All metrics in the Performance Metrics Name Space (PMNS) with numeric value semantics from any number of hosts or archives may be visualized. <strong>pmview</strong> examines the semantics of the metrics and where sensible, converts metric values to a rate before scaling.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND LINE OPTIONS</h2>
   <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a ``natural'' alignment of the sample times; refer to <strong>PCPIntro(1)</strong> for a complete description of these options.
   <p>The other available options are:
@@ -58,12 +58,12 @@
   <blockquote>
     Most standard <strong>X</strong>(1) command line arguments may be used.
   </blockquote>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>WINDOW</h2>
   <p>The <strong>pmview</strong> window is comprised of a menu bar, time and scale controls, metric and time values, and an ``examiner'' viewer (see <strong>ivview</strong>(1)), which displays the 3D scene.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMINER VIEWER</h2>
   <p>The left, right and bottom edges of the examiner viewer contain a variety of thumb wheels and buttons that can be used to adjust the visualization of the 3D scene. The <em>Rotx</em> and <em>Roty</em> thumb wheels allow the user to rotate the scene about the x and y axes, respectively. The <em>dolly</em> thumb wheel moves the virtual camera closer and further from the scene allowing the user to examine specific parts in detail or view the entire scene. On the right edge of the viewer are eight buttons which affect the way the user can interact with the scene.
   <dl class="indent-26">
@@ -85,14 +85,14 @@
     <dd>Switches the display between perspective and orthogonal projections.
   </dl>
   <p>Pressing the right mouse button within the scene window will bring up a menu of options which affect how the 3D scene is drawn. The options include drawing the blocks as wire frames, and turning on stereo viewing.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>METRIC SELECTION</h2>
   <p>When the pointer cursor is active, more information about the 3D scene can be obtained. Text describing the metric represented by the block under the cursor will be displayed in the top text box of the <strong>pmview</strong> window. The text contains the source and name of the metric, current value and units, and the percentage of the expected maximum (or normalization) value. The text box is updated whenever the scene is updated with the latest metric values or when the cursor is moved over another block in the scene. Moving the cursor over a base plane block, text or the surrounding space will clear the text box.
   <p>Clicking the left mouse button on a block will bind the text box on that metric instance so that the metric can be monitored while performing other actions with the mouse. The block will be highlighted with a red wire frame. Clicking the left mouse button on text or the space surrounding the scene will unselect the object, causing the text box to revert to the original behavior of showing the metric underneath the cursor.
   <p>Selecting a base plane instead of a modulated block will cause all the blocks on that base plane to be selected. When more than one object is selected, the text box behaves as if nothing is selected, so the metric displayed is the metric currently under the cursor. Multiple selections are also possible by pressing the SHIFT key while selecting an object with the left mouse button.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MENUS</h2>
   <p>There are four menus in <strong>pmview</strong>'s user interface which allow scenes to be recorded, saved and printed (<strong>File</strong>), access to the time controls (<strong>Options</strong>), launching other tools (<strong>Launch</strong>) and online help (<strong>Help</strong>).
   <dl class="indent-26">
@@ -125,24 +125,24 @@
     <dt><strong>Help/...</strong>
     <dd>If <em>pcp.books.help</em> has been installed, then the <strong>insight</strong>(1) books for <strong>pmview</strong> are displayed.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TIME CONTROLS</h2>
   <p>In addition to the menu options for time controls, the current direction of the time controls (see <strong>pmtime</strong>(1)) is shown in a button in the top-left corner of the <strong>pmview</strong> window. Pressing this button will display the time control and is identical in behavior to <strong>Options/Show Time Control</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SCALE CONTROLS</h2>
   <p>Above the examiner window is a thumb wheel and an editable text box which allow the user to apply a multiplier to all values represented in the scene. Spinning the wheel to the right and/or increasing the text value for the scale will increase the height of the bars. Spinning the wheel to the left and/or lowering the text value will decrease the height of the bars. The button to the right of the thumb wheel will reset the scale so that the bars appear at the original height for their current value.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TIME INFORMATION</h2>
   <p>Beside the scale controls is another text box which displays the time of the fetched metrics. The time will change with the time controller (see <strong>pmtime</strong>(1)).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>The default face of the 3D font in the <strong>pmview</strong> window can be altered via <em>PMVIEW_FONT</em> environment variable which can be set to the base name of a Type1 font file in the default Inventor fonts directory.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_VAR_DIR/pmns/*</strong>
@@ -160,18 +160,18 @@
     <dt><strong>/usr/lib/DPS/outline/base/</strong>
     <dd>directory where Inventor normally looks for the outlines of Type1 fonts.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>dkvis</strong>(1), <strong>insight</strong>(1), <strong>inventor</strong>(1), <strong>ivview</strong>(1), <strong>mpvis</strong>(1), <strong>nfsvis</strong>(1), <strong>osvis</strong>(1), <strong>oview</strong>(1), <strong>pcp</strong>(1), <strong>PCPIntro</strong>(1), <strong>pmafm</strong>(1), <strong>pmcd</strong>(1), <strong>pmchart</strong>(1), <strong>pmdumptext</strong>(1), <strong>pmlogger</strong>(1), <strong>pmtime</strong>(1), <strong>pmview</strong>(1), <strong>X</strong>(1), <strong>xconfirm</strong>(1), <strong>xlv_vis</strong>(1), <strong>pcp.conf</strong>(5), <strong>pmview</strong>(5), <strong>environ</strong>(7) and <strong>pmlaunch</strong>(5).
   <p>Relevant information is also available from the on-line PCP Tutorial. Provided the <strong>pcp.man.tutorial</strong> subsystem from the PCP images has been installed, access the URL <strong>file:$PCP_DOC_DIR/Tutorial/pmview.html</strong> from your web browser.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>Are intended to be self-explanatory. The environment variable <strong>PCP_STDERR</strong> can be set to force most startup warnings and errors to be sent to the standard error stream rather than posted in a dialog.
-</div>
+</section>
 

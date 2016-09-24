@@ -3,23 +3,23 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMSOCKS</title>
 <h1>PMSOCKS</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmsocks</strong> - shell wrapper for performance monitoring across firewalls
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmsocks</strong> <em>path</em> [<em>args</em> ...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmsocks</strong> allows Performance Co-Pilot (PCP) clients running on hosts located on the internal side of a TCP/IP firewall to monitor remote hosts on the other side of the firewall. This assumes the firewall has been configured with a compliant <strong>sockd</strong> daemon and the necessary access controls are satisfied.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION</h2>
   <p><strong>pmsocks</strong> uses the <strong>tsocks</strong>(5) library, which is not included with PCP. You can get <strong>tsocks</strong> from <em>http://www.progsoc.uts.edu.au/~delius/</em>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>IRIX CONFIGURATION</h2>
   <p>On IRIX, <strong>pmsocks</strong> is simply a shell wrapper that sets the appropriate environment variables and then executes the <em>path</em> program with <em>args</em> arguments (if any). <strong>pmsocks</strong> works by setting the <strong>_RLD_LIST</strong> environment variable (see <strong>rld</strong>(1)) to load a dynamic shared library (see <strong>dso</strong>(5)) containing stubs for ``socksified'' network library functions; This ``socksified'' library is installed at <em>/usr/pcp/lib/libpcp_socks.so</em>.
   <p>There are a number of conditions required for this to be successful and the user is strongly advised to read this whole manual page (in particular the <strong>CAVEAT</strong> section below) before attempting to use <strong>pmsocks</strong>.
@@ -40,8 +40,8 @@
   direct 1.2.3.0 255.255.255.0 # direct on local subnet<br>
   sockd 0.0.0.0 0.0.0.0 # contact sockd everywhere else
   <p>The order of lines is important - the first line matching the requested destination IP address during a <strong>connect</strong>(2) call (after the requested IP address has been masked by the third parameter of the <em>/etc/pcp_socks.conf</em> line), specifies via the first parameter whether to contact the socks daemon or whether to attempt a direct connection.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>IRIX ENVIRONMENT VARIABLES</h2>
   <p>There are several environment variables used by <strong>pmsocks</strong> as follows:
   <dl class="indent-10">
@@ -61,8 +61,8 @@
     <dt><strong>PMCD_CONNECT_TIMEOUT</strong>
     <dd>Specifies the time-out, in seconds, for connections to <strong>pmcd</strong>(1). When using <strong>pmsocks</strong>, this may need to be increased from the default (5 seconds) due to the additional delays introduced as a result of using <strong>sockd</strong>. See <strong>PMAPI</strong>(3) for further details about this variable.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEAT</h2>
   <p>The following notes should be considered carefully:
   <dl class="indent-5">
@@ -81,20 +81,20 @@
     <dt>6)
     <dd>When using <strong>pmsocks</strong> to connect to <strong>pmcd</strong>(1), but <em>``Connection Refused''</em> error messages are returned, it is not immediately obvious whether <strong>pmcd</strong>(1) is returning the error or <strong>sockd</strong>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COPYRIGHT NOTICE</h2>
   <p><strong>tsocks</strong> is covered by the GPL license and is copyright Shaun Clowes (delius@progsoc.org).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>/etc/tsocks.conf</strong>
     <dd>configuration file
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmcd</strong>(1), <strong>pminfo</strong>(1), <strong>pmlogger</strong>(1), <strong>pmval</strong>(1), <strong>X</strong>(1), <strong>PMAPI</strong>(3), <strong>resolver</strong>(5), and <strong>tsocks</strong>(5).
-</div>
+</section>
 

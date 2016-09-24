@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMDAMMV</title>
 <h1>PMDAMMV</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmdammv</strong> - memory mapped values performance metrics domain agent (PMDA)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_PMDAS_DIR/mmv/pmdammv</strong> [<strong>-d</strong> <em>domain</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-U</strong> <em>username</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmdammv</strong> is a Performance Metrics Domain Agent (PMDA) which exports application level performance metrics using memory mapped files. It offers an extremely low overhead instrumentation facility that is well-suited to long running, mission critical applications where it is desirable to have performance metrics and availability information permanently enabled.
   <p>The <strong>mmv</strong> PMDA exports instrumentation that has been added to an application using the MMV APIs (refer to <strong>mmv_stats_init</strong>(3) and <strong>mmv</strong>(5) for further details). These APIs can be called from several languages, including C, C++, Perl, Python and Java (via the separate ``Parfait'' class library).
@@ -24,8 +24,8 @@
     <dt><strong>-U</strong>
     <dd>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INSTALLATION</h2>
   <p>Firstly, a security model for interprocess communication between instrumented applications and <strong>pmdammv</strong> (running as a shared library inside <strong>pmcd</strong>) must be chosen and established.
   <p>This communication occurs through memory mapped files in a location known to both <strong>pmdammv</strong> and the instrumented applications. That location is <em>$PCP_TMP_DIR/mmv</em>, although that is often hidden behind application APIs such as ``Parfait'' and <strong>mmv_stats_init</strong>(3). The permissions set on this directory indicate the security model in use.
@@ -44,8 +44,8 @@
   <pre># cd $PCP_PMDAS_DIR/mmv
 # ./Remove</pre>
   <p><strong>pmdammv</strong> is launched by <strong>pmcd</strong> and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong> when the agent is installed or removed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
@@ -61,13 +61,13 @@
     <dt><strong>$PCP_LOG_DIR/pmcd/mmv.log</strong>
     <dd>default log file for error messages and other information from <strong>pmdammv</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>newgrp</strong>(1), <strong>setgid</strong>(2), <strong>mmv_stats_init</strong>(3), <strong>mmv</strong>(5), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

@@ -3,24 +3,24 @@
 <meta name="man-page-info" data-extra1="2016 August 26" data-extra2="GNU Bash 4.4" data-extra3="">
 <title>BASH</title>
 <h1>BASH</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>bash - GNU Bourne-Again SHell
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>bash</strong> [options] [command_string | file]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COPYRIGHT</h2>
   <p>Bash is Copyright (C) 1989-2016 by the Free Software Foundation, Inc.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>Bash</strong> is an <strong>sh</strong>-compatible command language interpreter that executes commands read from the standard input or from a file. <strong>Bash</strong> also incorporates useful features from the <em>Korn</em> and <em>C</em> shells (<strong>ksh</strong> and <strong>csh</strong>).
   <p><strong>Bash</strong> is intended to be a conformant implementation of the Shell and Utilities portion of the IEEE POSIX specification (IEEE Standard 1003.1). <strong>Bash</strong> can be configured to be POSIX-conformant by default.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <p>All of the single-character shell options documented in the description of the <strong>set</strong> builtin command can be used as options when the shell is invoked. In addition, <strong>bash</strong> interprets the following options when it is invoked:
   <dl class="indent-10">
@@ -71,12 +71,12 @@
     <dt><strong>--version</strong>
     <dd>Show version information for this instance of <strong>bash</strong> on the standard output and exit successfully.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ARGUMENTS</h2>
   <p>If arguments remain after option processing, and neither the <strong>-c</strong> nor the <strong>-s</strong> option has been supplied, the first argument is assumed to be the name of a file containing shell commands. If <strong>bash</strong> is invoked in this fashion, <strong>$0</strong> is set to the name of the file, and the positional parameters are set to the remaining arguments. <strong>Bash</strong> reads and executes commands from this file, then exits. <strong>Bash</strong>'s exit status is the exit status of the last command executed in the script. If no commands are executed, the exit status is 0. An attempt is first made to open the file in the current directory, and, if no file is found, then the shell searches the directories in <small><strong>PATH</strong></small> for the script.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INVOCATION</h2>
   <p>A <em>login shell</em> is one whose first character of argument zero is a <strong>-</strong>, or one started with the <strong>--login</strong> option.
   <p>An <em>interactive</em> shell is one started without non-option arguments (unless <strong>-s</strong> is specified) and without the <strong>-c</strong> option whose standard input and error are both connected to terminals (as determined by <em>isatty</em>(3)), or one started with the <strong>-i</strong> option. <small><strong>PS1</strong></small> is set and <strong>$-</strong> includes <strong>i</strong> if <strong>bash</strong> is interactive, allowing a shell script or a startup file to test this state.
@@ -92,8 +92,8 @@
   <p>When <strong>bash</strong> is started in <em>posix</em> mode, as with the <strong>--posix</strong> command line option, it follows the POSIX standard for startup files. In this mode, interactive shells expand the <small><strong>ENV</strong></small> variable and commands are read and executed from the file whose name is the expanded value. No other startup files are read.
   <p><strong>Bash</strong> attempts to determine when it is being run with its standard input connected to a network connection, as when executed by the remote shell daemon, usually <em>rshd</em>, or the secure shell daemon <em>sshd</em>. If <strong>bash</strong> determines it is being run in this fashion, it reads and executes commands from <em>~/.bashrc</em>, if that file exists and is readable. It will not do this if invoked as <strong>sh</strong>. The <strong>--norc</strong> option may be used to inhibit this behavior, and the <strong>--rcfile</strong> option may be used to force another file to be read, but neither <em>rshd</em> nor <em>sshd</em> generally invoke the shell with those options or allow them to be specified.
   <p>If the shell is started with the effective user (group) id not equal to the real user (group) id, and the <strong>-p</strong> option is not supplied, no startup files are read, shell functions are not inherited from the environment, the <small><strong>SHELLOPTS</strong>,</small> <small><strong>BASHOPTS</strong>,</small> <small><strong>CDPATH</strong>,</small> and <small><strong>GLOBIGNORE</strong></small> variables, if they appear in the environment, are ignored, and the effective user id is set to the real user id. If the <strong>-p</strong> option is supplied at invocation, the startup behavior is the same, but the effective user id is not reset.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEFINITIONS</h2>
   <p>The following definitions are used throughout the rest of this document.
   <dl>
@@ -112,20 +112,20 @@
       <p>A <em>token</em> that performs a control function. It is one of the following symbols:
       <p><strong>|| & &amp;& ; ;; ;& ;;& ( ) | |& &lt;newline&gt;</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RESERVED WORDS</h2>
   <p><em>Reserved words</em> are words that have a special meaning to the shell. The following words are recognized as reserved when unquoted and either the first word of a simple command (see <small><strong>SHELL GRAMMAR</strong></small> below) or the third word of a <strong>case</strong> or <strong>for</strong> command:
   <p><strong>! case coproc do done elif else esac fi for function if in select then until while { } time [[ ]]</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SHELL GRAMMAR</h2>
-  <div class="subsection">
+  <section>
     <h3>Simple Commands</h3>
     <p>A <em>simple command</em> is a sequence of optional variable assignments followed by <strong>blank</strong>-separated words and redirections, and terminated by a <em>control operator</em>. The first word specifies the command to be executed, and is passed as argument zero. The remaining words are passed as arguments to the invoked command.
     <p>The return value of a <em>simple command</em> is its exit status, or 128+<em>n</em> if the command is terminated by signal <em>n</em>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Pipelines</h3>
     <p>A <em>pipeline</em> is a sequence of one or more commands separated by one of the control operators <strong>|</strong> or <strong>|&</strong>. The format for a pipeline is:
     <p>[<strong>time</strong> [<strong>-p</strong>]] [ ! ] <em>command</em> [ [<strong>|</strong>⎪<strong>|&</strong>] <em>command2</em> ... ]
@@ -134,8 +134,8 @@
     <p>If the <strong>time</strong> reserved word precedes a pipeline, the elapsed as well as user and system time consumed by its execution are reported when the pipeline terminates. The <strong>-p</strong> option changes the output format to that specified by POSIX. When the shell is in <em>posix mode</em>, it does not recognize <strong>time</strong> as a reserved word if the next token begins with a `-'. The <small><strong>TIMEFORMAT</strong></small> variable may be set to a format string that specifies how the timing information should be displayed; see the description of <small><strong>TIMEFORMAT</strong></small> under <strong>Shell Variables</strong> below.
     <p>When the shell is in <em>posix mode</em>, <strong>time</strong> may be followed by a newline. In this case, the shell displays the total user and system time consumed by the shell and its children. The <small><strong>TIMEFORMAT</strong></small> variable may be used to specify the format of the time information.
     <p>Each command in a pipeline is executed as a separate process (i.e., in a subshell).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Lists</h3>
     <p>A <em>list</em> is a sequence of one or more pipelines separated by one of the operators <strong>;</strong>, <strong>&</strong>, <strong>&amp;&</strong>, or <strong>||</strong>, and optionally terminated by one of <strong>;</strong>, <strong>&</strong>, or <strong>&lt;newline&gt;</strong>.
     <p>Of these list operators, <strong>&amp;&</strong> and <strong>||</strong> have equal precedence, followed by <strong>;</strong> and <strong>&</strong>, which have equal precedence.
@@ -147,8 +147,8 @@
     <p>An OR list has the form
     <p><em>command1</em> <strong>||</strong> <em>command2</em>
     <p><em>command2</em> is executed if and only if <em>command1</em> returns a non-zero exit status. The return status of AND and OR lists is the exit status of the last command executed in the list.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Compound Commands</h3>
     <p>A <em>compound command</em> is one of the following. In most cases a <em>list</em> in a command's description may be separated from the rest of the command by one or more newlines, and may be followed by a newline in place of a semicolon.
     <dl>
@@ -197,16 +197,16 @@
       <dt><strong>until</strong> <em>list-1</em>; <strong>do</strong> <em>list-2</em>; <strong>done</strong>
       <dd>The <strong>while</strong> command continuously executes the list <em>list-2</em> as long as the last command in the list <em>list-1</em> returns an exit status of zero. The <strong>until</strong> command is identical to the <strong>while</strong> command, except that the test is negated: <em>list-2</em> is executed as long as the last command in <em>list-1</em> returns a non-zero exit status. The exit status of the <strong>while</strong> and <strong>until</strong> commands is the exit status of the last command executed in <em>list-2</em>, or zero if none was executed.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Coprocesses</h3>
     <p>A <em>coprocess</em> is a shell command preceded by the <strong>coproc</strong> reserved word. A coprocess is executed asynchronously in a subshell, as if the command had been terminated with the <strong>&</strong> control operator, with a two-way pipe established between the executing shell and the coprocess.
     <p>The format for a coprocess is:
     <p><strong>coproc</strong> [<em>NAME</em>] <em>command</em> [<em>redirections</em>]
     <p>This creates a coprocess named <em>NAME</em>. If <em>NAME</em> is not supplied, the default name is <strong>COPROC</strong>. <em>NAME</em> must not be supplied if <em>command</em> is a <em>simple command</em> (see above); otherwise, it is interpreted as the first word of the simple command. When the coprocess is executed, the shell creates an array variable (see <strong>Arrays</strong> below) named <em>NAME</em> in the context of the executing shell. The standard output of <em>command</em> is connected via a pipe to a file descriptor in the executing shell, and that file descriptor is assigned to <em>NAME</em>[0]. The standard input of <em>command</em> is connected via a pipe to a file descriptor in the executing shell, and that file descriptor is assigned to <em>NAME</em>[1]. This pipe is established before any redirections specified by the command (see <small><strong>REDIRECTION</strong></small> below). The file descriptors can be utilized as arguments to shell commands and redirections using standard word expansions. The file descriptors are not available in subshells. The process ID of the shell spawned to execute the coprocess is available as the value of the variable <em>NAME</em>_PID. The <strong>wait</strong> builtin command may be used to wait for the coprocess to terminate.
     <p>Since the coprocess is created as an asynchronous command, the <strong>coproc</strong> command always returns success. The return status of a coprocess is the exit status of <em>command</em>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Shell Function Definitions</h3>
     <p>A shell function is an object that is called like a simple command and executes a compound command with a new set of positional parameters. Shell functions are declared as follows:
     <dl>
@@ -214,13 +214,13 @@
       <dt><strong>function</strong> <em>name</em> [()] <em>compound-command</em> [<em>redirection</em>]
       <dd>This defines a function named <em>name</em>. The reserved word <strong>function</strong> is optional. If the <strong>function</strong> reserved word is supplied, the parentheses are optional. The <em>body</em> of the function is the compound command <em>compound-command</em> (see <strong>Compound Commands</strong> above). That command is usually a <em>list</em> of commands between { and }, but may be any command listed under <strong>Compound Commands</strong> above, with one exception: If the <strong>function</strong> reserved word is used, but the parentheses are not supplied, the braces are required. <em>compound-command</em> is executed whenever <em>name</em> is specified as the name of a simple command. When in <em>posix mode</em>, <em>name</em> may not be the name of one of the POSIX <em>special builtins</em>. Any redirections (see <small><strong>REDIRECTION</strong></small> below) specified when a function is defined are performed when the function is executed. The exit status of a function definition is zero unless a syntax error occurs or a readonly function with the same name already exists. When executed, the exit status of a function is the exit status of the last command executed in the body. (See <small><strong>FUNCTIONS</strong></small> below.)
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>COMMENTS</h2>
   <p>In a non-interactive shell, or an interactive shell in which the <strong>interactive_comments</strong> option to the <strong>shopt</strong> builtin is enabled (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below), a word beginning with <strong>#</strong> causes that word and all remaining characters on that line to be ignored. An interactive shell without the <strong>interactive_comments</strong> option enabled does not allow comments. The <strong>interactive_comments</strong> option is on by default in interactive shells.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>QUOTING</h2>
   <p><em>Quoting</em> is used to remove the special meaning of certain characters or words to the shell. Quoting can be used to disable special treatment for special characters, to prevent reserved words from being recognized as such, and to prevent parameter expansion.
   <p>Each of the <em>metacharacters</em> listed above under <small><strong>DEFINITIONS</strong></small> has special meaning to the shell and must be quoted if it is to represent itself.
@@ -270,8 +270,8 @@
   </dl>
   <p>The expanded result is single-quoted, as if the dollar sign had not been present.
   <p>A double-quoted string preceded by a dollar sign (<strong>$</strong>"<em>string</em>") will cause the string to be translated according to the current locale. If the current locale is <strong>C</strong> or <strong>POSIX</strong>, the dollar sign is ignored. If the string is translated and replaced, the replacement is double-quoted.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PARAMETERS</h2>
   <p>A <em>parameter</em> is an entity that stores values. It can be a <em>name</em>, a number, or one of the special characters listed below under <strong>Special Parameters</strong>. A <em>variable</em> is a parameter denoted by a <em>name</em>. A variable has a <em>value</em> and zero or more <em>attributes</em>. Attributes are assigned using the <strong>declare</strong> builtin command (see <strong>declare</strong> below in <small><strong>SHELL BUILTIN COMMANDS</strong>).</small>
   <p>A parameter is set if it has been assigned a value. The null string is a valid value. Once a variable is set, it may be unset only by using the <strong>unset</strong> builtin command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
@@ -283,12 +283,12 @@
   <p>declare -n ref=$1<br>
   <br>
   inside the function creates a nameref variable <strong>ref</strong> whose value is the variable name passed as the first argument. References and assignments to <strong>ref</strong>, and changes to its attributes, are treated as references, assignments, and attribute modifications to the variable whose name was passed as <strong>$1</strong>. If the control variable in a <strong>for</strong> loop has the nameref attribute, the list of words can be a list of shell variables, and a name reference will be established for each word in the list, in turn, when the loop is executed. Array variables cannot be given the <strong>nameref</strong> attribute. However, nameref variables can reference array variables and subscripted array variables. Namerefs can be unset using the <strong>-n</strong> option to the <strong>unset</strong> builtin. Otherwise, if <strong>unset</strong> is executed with the name of a nameref variable as an argument, the variable referenced by the nameref variable will be unset.
-  <div class="subsection">
+  <section>
     <h3>Positional Parameters</h3>
     <p>A <em>positional parameter</em> is a parameter denoted by one or more digits, other than the single digit 0. Positional parameters are assigned from the shell's arguments when it is invoked, and may be reassigned using the <strong>set</strong> builtin command. Positional parameters may not be assigned to with assignment statements. The positional parameters are temporarily replaced when a shell function is executed (see <small><strong>FUNCTIONS</strong></small> below).
     <p>When a positional parameter consisting of more than a single digit is expanded, it must be enclosed in braces (see <small><strong>EXPANSION</strong></small> below).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Special Parameters</h3>
     <p>The shell treats several parameters specially. These parameters may only be referenced; assignment to them is not allowed.
     <dl>
@@ -311,8 +311,8 @@
       <dt><strong>_</strong>
       <dd>At shell startup, set to the absolute pathname used to invoke the shell or shell script being executed as passed in the environment or argument list. Subsequently, expands to the last argument to the previous command, after expansion. Also set to the full pathname used to invoke each command executed and placed in the environment exported to that command. When checking mail, this parameter holds the name of the mail file currently being checked.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Shell Variables</h3>
     <p>The following variables are set by the shell:
     <dl>
@@ -562,8 +562,8 @@
       <dt><strong>histchars</strong>
       <dd>The two or three characters which control history expansion and tokenization (see <small><strong>HISTORY EXPANSION</strong></small> below). The first character is the <em>history expansion</em> character, the character which signals the start of a history expansion, normally `<strong>!</strong>'. The second character is the <em>quick substitution</em> character, which is used as shorthand for re-running the previous command entered, substituting one string for another in the command. The default is `<strong>^</strong>'. The optional third character is the character which indicates that the remainder of the line is a comment when found as the first character of a word, normally `<strong>#</strong>'. The history comment character causes history substitution to be skipped for the remaining words on the line. It does not necessarily cause the shell parser to treat the rest of the line as a comment.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Arrays</h3>
     <p><strong>Bash</strong> provides one-dimensional indexed and associative array variables. Any variable may be used as an indexed array; the <strong>declare</strong> builtin will explicitly declare an array. There is no maximum limit on the size of an array, nor any requirement that members be indexed or assigned contiguously. Indexed arrays are referenced using integers (including arithmetic expressions) and are zero-based; associative arrays are referenced using arbitrary strings. Unless otherwise noted, indexed array indices must be non-negative integers.
     <p>An indexed array is created automatically if any variable is assigned to using the syntax <em>name</em>[<em>subscript</em>]=<em>value</em>. The <em>subscript</em> is treated as an arithmetic expression that must evaluate to a number. To explicitly declare an indexed array, use <strong>declare -a <em>name</em></strong> (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below). <strong>declare -a <em>name</em>[<em>subscript</em>]</strong> is also accepted; the <em>subscript</em> is ignored.
@@ -578,16 +578,16 @@
     <p>It is possible to obtain the keys (indices) of an array as well as the values. ${<strong>!</strong><em>name</em>[<em>@</em>]} and ${<strong>!</strong><em>name</em>[<em>*</em>]} expand to the indices assigned in array variable <em>name</em>. The treatment when in double quotes is similar to the expansion of the special parameters <em>@</em> and <em>*</em> within double quotes.
     <p>The <strong>unset</strong> builtin is used to destroy arrays. <strong>unset</strong> <em>name</em>[<em>subscript</em>] destroys the array element at index <em>subscript</em>. Negative subscripts to indexed arrays are interpreted as described above. Care must be taken to avoid unwanted side effects caused by pathname expansion. <strong>unset</strong> <em>name</em>, where <em>name</em> is an array, or <strong>unset</strong> <em>name</em>[<em>subscript</em>], where <em>subscript</em> is <strong>*</strong> or <strong>@</strong>, removes the entire array.
     <p>The <strong>declare</strong>, <strong>local</strong>, and <strong>readonly</strong> builtins each accept a <strong>-a</strong> option to specify an indexed array and a <strong>-A</strong> option to specify an associative array. If both options are supplied, <strong>-A</strong> takes precedence. The <strong>read</strong> builtin accepts a <strong>-a</strong> option to assign a list of words read from the standard input to an array. The <strong>set</strong> and <strong>declare</strong> builtins display array values in a way that allows them to be reused as assignments.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>EXPANSION</h2>
   <p>Expansion is performed on the command line after it has been split into words. There are seven kinds of expansion performed: <em>brace expansion</em>, <em>tilde expansion</em>, <em>parameter and variable expansion</em>, <em>command substitution</em>, <em>arithmetic expansion</em>, <em>word splitting</em>, and <em>pathname expansion</em>.
   <p>The order of expansions is: brace expansion; tilde expansion, parameter and variable expansion, arithmetic expansion, and command substitution (done in a left-to-right fashion); word splitting; and pathname expansion.
   <p>On systems that can support it, there is an additional expansion available: <em>process substitution</em>. This is performed at the same time as tilde, parameter, variable, and arithmetic expansion and command substitution.
   <p>After these expansions are performed, quote characters present in the original word are removed unless they have been quoted themselves (<em>quote removal</em>).
   <p>Only brace expansion, word splitting, and pathname expansion can change the number of words of the expansion; other expansions expand a single word to a single word. The only exceptions to this are the expansions of "<strong>$@</strong>" and "<strong>${</strong><em>name</em><strong>[@]}</strong>" as explained above (see <small><strong>PARAMETERS</strong>).</small>
-  <div class="subsection">
+  <section>
     <h3>Brace Expansion</h3>
     <p><em>Brace expansion</em> is a mechanism by which arbitrary strings may be generated. This mechanism is similar to <em>pathname expansion</em>, but the filenames generated need not exist. Patterns to be brace expanded take the form of an optional <em>preamble</em>, followed by either a series of comma-separated strings or a sequence expression between a pair of braces, followed by an optional <em>postscript</em>. The preamble is prefixed to each string contained within the braces, and the postscript is then appended to each resulting string, expanding left to right.
     <p>Brace expansions may be nested. The results of each expanded string are not sorted; left to right order is preserved. For example, a<strong>{</strong>d,c,b<strong>}</strong>e expands into `ade ace abe'.
@@ -598,15 +598,15 @@
     <p>mkdir /usr/local/src/bash/{old,new,dist,bugs} or
     <p>chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
     <p>Brace expansion introduces a slight incompatibility with historical versions of <strong>sh</strong>. <strong>sh</strong> does not treat opening or closing braces specially when they appear as part of a word, and preserves them in the output. <strong>Bash</strong> removes braces from words as a consequence of brace expansion. For example, a word entered to <strong>sh</strong> as <em>file{1,2}</em> appears identically in the output. The same word is output as <em>file1 file2</em> after expansion by <strong>bash</strong>. If strict compatibility with <strong>sh</strong> is desired, start <strong>bash</strong> with the <strong>+B</strong> option or disable brace expansion with the <strong>+B</strong> option to the <strong>set</strong> command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Tilde Expansion</h3>
     <p>If a word begins with an unquoted tilde character (`<strong>~</strong>'), all of the characters preceding the first unquoted slash (or all characters, if there is no unquoted slash) are considered a <em>tilde-prefix</em>. If none of the characters in the tilde-prefix are quoted, the characters in the tilde-prefix following the tilde are treated as a possible <em>login name</em>. If this login name is the null string, the tilde is replaced with the value of the shell parameter <small><strong>HOME</strong>.</small> If <small><strong>HOME</strong></small> is unset, the home directory of the user executing the shell is substituted instead. Otherwise, the tilde-prefix is replaced with the home directory associated with the specified login name.
     <p>If the tilde-prefix is a `~+', the value of the shell variable <small><strong>PWD</strong></small> replaces the tilde-prefix. If the tilde-prefix is a `~-', the value of the shell variable <small><strong>OLDPWD</strong>,</small> if it is set, is substituted. If the characters following the tilde in the tilde-prefix consist of a number <em>N</em>, optionally prefixed by a `+' or a `-', the tilde-prefix is replaced with the corresponding element from the directory stack, as it would be displayed by the <strong>dirs</strong> builtin invoked with the tilde-prefix as an argument. If the characters following the tilde in the tilde-prefix consist of a number without a leading `+' or `-', `+' is assumed.
     <p>If the login name is invalid, or the tilde expansion fails, the word is unchanged.
     <p>Each variable assignment is checked for unquoted tilde-prefixes immediately following a <strong>:</strong> or the first <strong>=</strong>. In these cases, tilde expansion is also performed. Consequently, one may use filenames with tildes in assignments to <small><strong>PATH</strong>,</small> <small><strong>MAILPATH</strong>,</small> and <small><strong>CDPATH</strong>,</small> and the shell assigns the expanded value.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Parameter Expansion</h3>
     <p>The `<strong>$</strong>' character introduces parameter expansion, command substitution, or arithmetic expansion. The parameter name or symbol to be expanded may be enclosed in braces, which are optional but serve to protect the variable to be expanded from characters immediately following it which could be interpreted as part of the name.
     <p>When braces are used, the matching ending brace is the first `<strong>}</strong>' not escaped by a backslash or within a quoted string, and not within an embedded arithmetic expansion, command substitution, or parameter expansion.
@@ -682,8 +682,8 @@
           The result of the expansion is subject to word splitting and pathname expansion as described below.
         </div>
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Command Substitution</h3>
     <p><em>Command substitution</em> allows the output of a command to replace the command name. There are two forms:
     <p><strong>$(</strong><em>command</em><strong>)</strong> or
@@ -692,27 +692,27 @@
     <p>When the old-style backquote form of substitution is used, backslash retains its literal meaning except when followed by <strong>$</strong>, <strong>`</strong>, or <strong>\</strong>. The first backquote not preceded by a backslash terminates the command substitution. When using the $(<em>command</em>) form, all characters between the parentheses make up the command; none are treated specially.
     <p>Command substitutions may be nested. To nest when using the backquoted form, escape the inner backquotes with backslashes.
     <p>If the substitution appears within double quotes, word splitting and pathname expansion are not performed on the results.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Arithmetic Expansion</h3>
     <p>Arithmetic expansion allows the evaluation of an arithmetic expression and the substitution of the result. The format for arithmetic expansion is:
     <p><strong>$((</strong><em>expression</em><strong>))</strong>
     <p>The <em>expression</em> is treated as if it were within double quotes, but a double quote inside the parentheses is not treated specially. All tokens in the expression undergo parameter and variable expansion, command substitution, and quote removal. The result is treated as the arithmetic expression to be evaluated. Arithmetic expansions may be nested.
     <p>The evaluation is performed according to the rules listed below under <small><strong>ARITHMETIC EVALUATION</strong>.</small> If <em>expression</em> is invalid, <strong>bash</strong> prints a message indicating failure and no substitution occurs.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Process Substitution</h3>
     <p><em>Process substitution</em> allows a process's input or output to be referred to using a filename. It takes the form of <strong>&lt;(</strong><em>list</em><strong>)</strong> or <strong>&gt;(</strong><em>list</em><strong>)</strong>. The process <em>list</em> is run asynchronously, and its input or output appears as a filename. This filename is passed as an argument to the current command as the result of the expansion. If the <strong>&gt;(</strong><em>list</em><strong>)</strong> form is used, writing to the file will provide input for <em>list</em>. If the <strong>&lt;(</strong><em>list</em><strong>)</strong> form is used, the file passed as an argument should be read to obtain the output of <em>list</em>. Process substitution is supported on systems that support named pipes (<em>FIFOs</em>) or the <strong>/dev/fd</strong> method of naming open files.
     <p>When available, process substitution is performed simultaneously with parameter and variable expansion, command substitution, and arithmetic expansion.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Word Splitting</h3>
     <p>The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for <em>word splitting</em>.
     <p>The shell treats each character of <small><strong>IFS</strong></small> as a delimiter, and splits the results of the other expansions into words using these characters as field terminators. If <small><strong>IFS</strong></small> is unset, or its value is exactly <strong>&lt;space&gt;&lt;tab&gt;&lt;newline&gt;</strong>, the default, then sequences of <strong>&lt;space&gt;</strong>, <strong>&lt;tab&gt;</strong>, and <strong>&lt;newline&gt;</strong> at the beginning and end of the results of the previous expansions are ignored, and any sequence of <small><strong>IFS</strong></small> characters not at the beginning or end serves to delimit words. If <small><strong>IFS</strong></small> has a value other than the default, then sequences of the whitespace characters <strong>space</strong>, <strong>tab</strong>, and <strong>newline</strong> are ignored at the beginning and end of the word, as long as the whitespace character is in the value of <small><strong>IFS</strong></small> (an <small><strong>IFS</strong></small> whitespace character). Any character in <small><strong>IFS</strong></small> that is not <small><strong>IFS</strong></small> whitespace, along with any adjacent <small><strong>IFS</strong></small> whitespace characters, delimits a field. A sequence of <small><strong>IFS</strong></small> whitespace characters is also treated as a delimiter. If the value of <small><strong>IFS</strong></small> is null, no word splitting occurs.
     <p>Explicit null arguments (<strong>""</strong> or <strong>''</strong>) are retained and passed to commands as empty strings. Unquoted implicit null arguments, resulting from the expansion of parameters that have no values, are removed. If a parameter with no value is expanded within double quotes, a null argument results and is retained and passed to a command as an empty string. When a quoted null argument appears as part of a word whose expansion is non-null, the null argument is removed. That is, the word <code>-d''</code> becomes <code>-d</code> after word splitting and null argument removal.
     <p>Note that if no expansion occurs, no splitting is performed.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Pathname Expansion</h3>
     <p>After word splitting, unless the <strong>-f</strong> option has been set, <strong>bash</strong> scans each word for the characters <strong>*</strong>, <strong>?</strong>, and <strong>[</strong>. If one of these characters appears, then the word is regarded as a <em>pattern</em>, and replaced with an alphabetically sorted list of filenames matching the pattern (see <small><strong>Pattern Matching</strong></small> below). If no matching filenames are found, and the shell option <strong>nullglob</strong> is not enabled, the word is left unchanged. If the <strong>nullglob</strong> option is set, and no matches are found, the word is removed. If the <strong>failglob</strong> shell option is set, and no matches are found, an error message is printed and the command is not executed. If the shell option <strong>nocaseglob</strong> is enabled, the match is performed without regard to the case of alphabetic characters. When a pattern is used for pathname expansion, the character <strong>``.''</strong> at the start of a name or immediately following a slash must be matched explicitly, unless the shell option <strong>dotglob</strong> is set. When matching a pathname, the slash character must always be matched explicitly. In other cases, the <strong>``.''</strong> character is not treated specially. See the description of <strong>shopt</strong> below under <small><strong>SHELL BUILTIN COMMANDS</strong></small> for a description of the <strong>nocaseglob</strong>, <strong>nullglob</strong>, <strong>failglob</strong>, and <strong>dotglob</strong> shell options.
     <p>The <small><strong>GLOBIGNORE</strong></small> shell variable may be used to restrict the set of filenames matching a <em>pattern</em>. If <small><strong>GLOBIGNORE</strong></small> is set, each matching filename that also matches one of the patterns in <small><strong>GLOBIGNORE</strong></small> is removed from the list of matches. If the <strong>nocaseglob</strong> option is set, the matching against the patterns in <small><strong>GLOBIGNORE</strong></small> is performed without regard to case. The filenames <strong>``.''</strong> and <strong>``..''</strong> are always ignored when <small><strong>GLOBIGNORE</strong></small> is set and not null. However, setting <small><strong>GLOBIGNORE</strong></small> to a non-null value has the effect of enabling the <strong>dotglob</strong> shell option, so all other filenames beginning with a <strong>``.''</strong> will match. To get the old behavior of ignoring filenames beginning with a <strong>``.''</strong>, make <strong>``.*''</strong> one of the patterns in <small><strong>GLOBIGNORE</strong>.</small> The <strong>dotglob</strong> option is disabled when <small><strong>GLOBIGNORE</strong></small> is unset. The pattern matching honors the setting of the <strong>extglob</strong> shell option.
@@ -750,13 +750,13 @@
       <dt><strong>!(</strong><em>pattern-list</em><strong>)</strong>
       <dd>Matches anything except one of the given patterns
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Quote Removal</h3>
     <p>After the preceding expansions, all unquoted occurrences of the characters <strong>\</strong>, <strong>'</strong>, and <strong>"</strong> that did not result from one of the above expansions are removed.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>REDIRECTION</h2>
   <p>Before a command is executed, its input and output may be <em>redirected</em> using a special notation interpreted by the shell. Redirection allows commands' file handles to be duplicated, opened, closed, made to refer to different files, and can change the files the command reads from and writes to. Redirection may also be used to modify file handles in the current shell execution environment. The following redirection operators may precede or appear anywhere within a <em>simple command</em> or may follow a <em>command</em>. Redirections are processed in the order they appear, from left to right.
   <p>Each redirection that may be preceded by a file descriptor number may instead be preceded by a word of the form {<em>varname</em>}. In this case, for each redirection operator except &gt;&amp;- and &lt;&amp;-, the shell will allocate a file descriptor greater than or equal to 10 and assign it to <em>varname</em>. If &gt;&amp;- or &lt;&amp;- is preceded by {<em>varname</em>}, the value of <em>varname</em> defines the file descriptor to close.
@@ -784,26 +784,26 @@
   </dl>
   <p>A failure to open or create a file causes the redirection to fail.
   <p>Redirections using file descriptors greater than 9 should be used with care, as they may conflict with file descriptors the shell uses internally.
-  <div class="subsection">
+  <section>
     <h3>Redirecting Input</h3>
     <p>Redirection of input causes the file whose name results from the expansion of <em>word</em> to be opened for reading on file descriptor <em>n</em>, or the standard input (file descriptor 0) if <em>n</em> is not specified.
     <p>The general format for redirecting input is:
     <p>[<em>n</em>]<strong>&lt;</strong><em>word</em>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Redirecting Output</h3>
     <p>Redirection of output causes the file whose name results from the expansion of <em>word</em> to be opened for writing on file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified. If the file does not exist it is created; if it does exist it is truncated to zero size.
     <p>The general format for redirecting output is:
     <p>[<em>n</em>]<strong>&gt;</strong><em>word</em>
     <p>If the redirection operator is <strong>&gt;</strong>, and the <strong>noclobber</strong> option to the <strong>set</strong> builtin has been enabled, the redirection will fail if the file whose name results from the expansion of <em>word</em> exists and is a regular file. If the redirection operator is <strong>&gt;|</strong>, or the redirection operator is <strong>&gt;</strong> and the <strong>noclobber</strong> option to the <strong>set</strong> builtin command is not enabled, the redirection is attempted even if the file named by <em>word</em> exists.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Appending Redirected Output</h3>
     <p>Redirection of output in this fashion causes the file whose name results from the expansion of <em>word</em> to be opened for appending on file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified. If the file does not exist it is created.
     <p>The general format for appending output is:
     <p>[<em>n</em>]<strong>&gt;&gt;</strong><em>word</em>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Redirecting Standard Output and Standard Error</h3>
     <p>This construct allows both the standard output (file descriptor 1) and the standard error output (file descriptor 2) to be redirected to the file whose name is the expansion of <em>word</em>.
     <p>There are two formats for redirecting standard output and standard error:
@@ -812,8 +812,8 @@
     <p>Of the two forms, the first is preferred. This is semantically equivalent to
     <p><strong>&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
     <p>When using the second form, <em>word</em> may not expand to a number or <strong>-</strong>. If it does, other redirection operators apply (see <strong>Duplicating File Descriptors</strong> below) for compatibility reasons.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Appending Standard Output and Standard Error</h3>
     <p>This construct allows both the standard output (file descriptor 1) and the standard error output (file descriptor 2) to be appended to the file whose name is the expansion of <em>word</em>.
     <p>The format for appending standard output and standard error is:
@@ -821,8 +821,8 @@
     <p>This is semantically equivalent to
     <p><strong>&gt;&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
     <p>(see <strong>Duplicating File Descriptors</strong> below).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Here Documents</h3>
     <p>This type of redirection instructs the shell to read input from the current source until a line containing only <em>delimiter</em> (with no trailing blanks) is seen. All of the lines read up to that point are then used as the standard input (or file descriptor <em>n</em> if <em>n</em> is specified) for a command.
     <p>The format of here-documents is:
@@ -831,14 +831,14 @@
 <em>delimiter</em></pre>
     <p>No parameter and variable expansion, command substitution, arithmetic expansion, or pathname expansion is performed on <em>word</em>. If any part of <em>word</em> is quoted, the <em>delimiter</em> is the result of quote removal on <em>word</em>, and the lines in the here-document are not expanded. If <em>word</em> is unquoted, all lines of the here-document are subjected to parameter expansion, command substitution, and arithmetic expansion, the character sequence <strong>\&lt;newline&gt;</strong> is ignored, and <strong>\</strong> must be used to quote the characters <strong>\</strong>, <strong>$</strong>, and <strong>`</strong>.
     <p>If the redirection operator is <strong>&lt;&lt;-</strong>, then all leading tab characters are stripped from input lines and the line containing <em>delimiter</em>. This allows here-documents within shell scripts to be indented in a natural fashion.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Here Strings</h3>
     <p>A variant of here documents, the format is:
     <pre>[<em>n</em>]<strong>&lt;&lt;&lt;</strong><em>word</em></pre>
     <p>The <em>word</em> undergoes brace expansion, tilde expansion, parameter and variable expansion, command substitution, arithmetic expansion, and quote removal. Pathname expansion and word splitting are not performed. The result is supplied as a single string, with a newline appended, to the command on its standard input (or file descriptor <em>n</em> if <em>n</em> is specified).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Duplicating File Descriptors</h3>
     <p>The redirection operator
     <p>[<em>n</em>]<strong>&lt;&</strong><em>word</em>
@@ -846,8 +846,8 @@
     <p>The operator
     <p>[<em>n</em>]<strong>&gt;&</strong><em>word</em>
     <p>is used similarly to duplicate output file descriptors. If <em>n</em> is not specified, the standard output (file descriptor 1) is used. If the digits in <em>word</em> do not specify a file descriptor open for output, a redirection error occurs. If <em>word</em> evaluates to <strong>-</strong>, file descriptor <em>n</em> is closed. As a special case, if <em>n</em> is omitted, and <em>word</em> does not expand to one or more digits or <strong>-</strong>, the standard output and standard error are redirected as described previously.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Moving File Descriptors</h3>
     <p>The redirection operator
     <p>[<em>n</em>]<strong>&lt;&</strong><em>digit</em><strong>-</strong>
@@ -855,15 +855,15 @@
     <p>Similarly, the redirection operator
     <p>[<em>n</em>]<strong>&gt;&</strong><em>digit</em><strong>-</strong>
     <p>moves the file descriptor <em>digit</em> to file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Opening File Descriptors for Reading and Writing</h3>
     <p>The redirection operator
     <p>[<em>n</em>]<strong>&lt;&gt;</strong><em>word</em>
     <p>causes the file whose name is the expansion of <em>word</em> to be opened for both reading and writing on file descriptor <em>n</em>, or on file descriptor 0 if <em>n</em> is not specified. If the file does not exist, it is created.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>ALIASES</h2>
   <p><em>Aliases</em> allow a string to be substituted for a word when it is used as the first word of a simple command. The shell maintains a list of aliases that may be set and unset with the <strong>alias</strong> and <strong>unalias</strong> builtin commands (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below). The first word of each simple command, if unquoted, is checked to see if it has an alias. If so, that word is replaced by the text of the alias. The characters <strong>/</strong>, <strong>$</strong>, <strong>`</strong>, and <strong>=</strong> and any of the shell <em>metacharacters</em> or quoting characters listed above may not appear in an alias name. The replacement text may contain any valid shell input, including shell metacharacters. The first word of the replacement text is tested for aliases, but a word that is identical to an alias being expanded is not expanded a second time. This means that one may alias <strong>ls</strong> to <strong>ls -F</strong>, for instance, and <strong>bash</strong> does not try to recursively expand the replacement text. If the last character of the alias value is a <em>blank</em>, then the next command word following the alias is also checked for alias expansion.
   <p>Aliases are created and listed with the <strong>alias</strong> command, and removed with the <strong>unalias</strong> command.
@@ -871,8 +871,8 @@
   <p>Aliases are not expanded when the shell is not interactive, unless the <strong>expand_aliases</strong> shell option is set using <strong>shopt</strong> (see the description of <strong>shopt</strong> under <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
   <p>The rules concerning the definition and use of aliases are somewhat confusing. <strong>Bash</strong> always reads at least one complete line of input before executing any of the commands on that line. Aliases are expanded when a command is read, not when it is executed. Therefore, an alias definition appearing on the same line as another command does not take effect until the next line of input is read. The commands following the alias definition on that line are not affected by the new alias. This behavior is also an issue when functions are executed. Aliases are expanded when a function definition is read, not when the function is executed, because a function definition is itself a command. As a consequence, aliases defined in a function are not available until after that function is executed. To be safe, always put alias definitions on a separate line, and do not use <strong>alias</strong> in compound commands.
   <p>For almost every purpose, aliases are superseded by shell functions.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FUNCTIONS</h2>
   <p>A shell function, defined as described above under <small><strong>SHELL GRAMMAR</strong>,</small> stores a series of commands for later execution. When the name of a shell function is used as a simple command name, the list of commands associated with that function name is executed. Functions are executed in the context of the current shell; no new process is created to interpret them (contrast this with the execution of a shell script). When a function is executed, the arguments to the function become the positional parameters during its execution. The special parameter <strong>#</strong> is updated to reflect the change. Special parameter <strong>0</strong> is unchanged. The first element of the <small><strong>FUNCNAME</strong></small> variable is set to the name of the function while the function is executing.
   <p>All other aspects of the shell execution environment are identical between a function and its caller with these exceptions: the <small><strong>DEBUG</strong></small> and <strong>RETURN</strong> traps (see the description of the <strong>trap</strong> builtin under <small><strong>SHELL BUILTIN COMMANDS</strong></small> below) are not inherited unless the function has been given the <strong>trace</strong> attribute (see the description of the <small><strong>declare</strong></small> builtin below) or the <strong>-o functrace</strong> shell option has been enabled with the <strong>set</strong> builtin (in which case all functions inherit the <strong>DEBUG</strong> and <strong>RETURN</strong> traps), and the <small><strong>ERR</strong></small> trap is not inherited unless the <strong>-o errtrace</strong> shell option has been enabled.
@@ -881,8 +881,8 @@
   <p>If the builtin command <strong>return</strong> is executed in a function, the function completes and execution resumes with the next command after the function call. Any command associated with the <strong>RETURN</strong> trap is executed before execution resumes. When a function completes, the values of the positional parameters and the special parameter <strong>#</strong> are restored to the values they had prior to the function's execution.
   <p>Function names and definitions may be listed with the <strong>-f</strong> option to the <strong>declare</strong> or <strong>typeset</strong> builtin commands. The <strong>-F</strong> option to <strong>declare</strong> or <strong>typeset</strong> will list the function names only (and optionally the source file and line number, if the <strong>extdebug</strong> shell option is enabled). Functions may be exported so that subshells automatically have them defined with the <strong>-f</strong> option to the <strong>export</strong> builtin. A function definition may be deleted using the <strong>-f</strong> option to the <strong>unset</strong> builtin. Note that shell functions and variables with the same name may result in multiple identically-named entries in the environment passed to the shell's children. Care should be taken in cases where this may cause a problem.
   <p>Functions may be recursive. The <strong>FUNCNEST</strong> variable may be used to limit the depth of the function call stack and restrict the number of function invocations. By default, no limit is imposed on the number of recursive calls.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ARITHMETIC EVALUATION</h2>
   <p>The shell allows arithmetic expressions to be evaluated, under certain circumstances (see the <strong>let</strong> and <strong>declare</strong> builtin commands, the <strong>((</strong> compound command, and <strong>Arithmetic Expansion</strong>). Evaluation is done in fixed-width integers with no check for overflow, though division by 0 is trapped and flagged as an error. The operators and their precedence, associativity, and values are the same as in the C language. The following list of operators is grouped into levels of equal-precedence operators. The levels are listed in order of decreasing precedence.
   <dl>
@@ -926,8 +926,8 @@
   <p>Shell variables are allowed as operands; parameter expansion is performed before the expression is evaluated. Within an expression, shell variables may also be referenced by name without using the parameter expansion syntax. A shell variable that is null or unset evaluates to 0 when referenced by name without using the parameter expansion syntax. The value of a variable is evaluated as an arithmetic expression when it is referenced, or when a variable which has been given the <em>integer</em> attribute using <strong>declare -i</strong> is assigned a value. A null value evaluates to 0. A shell variable need not have its <em>integer</em> attribute turned on to be used in an expression.
   <p>Constants with a leading 0 are interpreted as octal numbers. A leading 0x or 0X denotes hexadecimal. Otherwise, numbers take the form [<em>base#</em>]n, where the optional <em>base</em> is a decimal number between 2 and 64 representing the arithmetic base, and <em>n</em> is a number in that base. If <em>base#</em> is omitted, then base 10 is used. When specifying <em>n</em>, the digits greater than 9 are represented by the lowercase letters, the uppercase letters, @, and _, in that order. If <em>base</em> is less than or equal to 36, lowercase and uppercase letters may be used interchangeably to represent numbers between 10 and 35.
   <p>Operators are evaluated in order of precedence. Sub-expressions in parentheses are evaluated first and may override the precedence rules above.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONDITIONAL EXPRESSIONS</h2>
   <p>Conditional expressions are used by the <strong>[[</strong> compound command and the <strong>test</strong> and <strong>[</strong> builtin commands to test file attributes and perform string and arithmetic comparisons. Expressions are formed from the following unary or binary primaries. <strong>Bash</strong> handles several filenames specially when they are used in expressions. If the operating system on which <strong>bash</strong> is running provides these special files, bash will use them; otherwise it will emulate them internally with this behavior: If any <em>file</em> argument to one of the primaries is of the form <em>/dev/fd/n</em>, then file descriptor <em>n</em> is checked. If the <em>file</em> argument to one of the primaries is one of <em>/dev/stdin</em>, <em>/dev/stdout</em>, or <em>/dev/stderr</em>, file descriptor 0, 1, or 2, respectively, is checked.
   <p>Unless otherwise specified, primaries that operate on files follow symbolic links and operate on the target of the link, rather than the link itself.<br>
@@ -1005,8 +1005,8 @@
     <dt><em>arg1 <strong>OP</strong> arg2</em>
     <dd><small><strong>OP</strong></small> is one of <strong>-eq</strong>, <strong>-ne</strong>, <strong>-lt</strong>, <strong>-le</strong>, <strong>-gt</strong>, or <strong>-ge</strong>. These arithmetic binary operators return true if <em>arg1</em> is equal to, not equal to, less than, less than or equal to, greater than, or greater than or equal to <em>arg2</em>, respectively. <em>Arg1</em> and <em>arg2</em> may be positive or negative integers.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SIMPLE COMMAND EXPANSION</h2>
   <p>When a simple command is executed, the shell performs the following expansions, assignments, and redirections, from left to right.
   <dl>
@@ -1022,8 +1022,8 @@
   <p>If no command name results, the variable assignments affect the current shell environment. Otherwise, the variables are added to the environment of the executed command and do not affect the current shell environment. If any of the assignments attempts to assign a value to a readonly variable, an error occurs, and the command exits with a non-zero status.
   <p>If no command name results, redirections are performed, but do not affect the current shell environment. A redirection error causes the command to exit with a non-zero status.
   <p>If there is a command name left after expansion, execution proceeds as described below. Otherwise, the command exits. If one of the expansions contained a command substitution, the exit status of the command is the exit status of the last command substitution performed. If there were no command substitutions, the command exits with a status of zero.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND EXECUTION</h2>
   <p>After a command has been split into words, if it results in a simple command and an optional list of arguments, the following actions are taken.
   <p>If the command name contains no slashes, the shell attempts to locate it. If there exists a shell function by that name, that function is invoked as described above in <small><strong>FUNCTIONS</strong>.</small> If the name does not match a function, the shell searches for it in the list of shell builtins. If a match is found, that builtin is invoked.
@@ -1031,8 +1031,8 @@
   <p>If the search is successful, or if the command name contains one or more slashes, the shell executes the named program in a separate execution environment. Argument 0 is set to the name given, and the remaining arguments to the command are set to the arguments given, if any.
   <p>If this execution fails because the file is not in executable format, and the file is not a directory, it is assumed to be a <em>shell script</em>, a file containing shell commands. A subshell is spawned to execute it. This subshell reinitializes itself, so that the effect is as if a new shell had been invoked to handle the script, with the exception that the locations of commands remembered by the parent (see <strong>hash</strong> below under <small><strong>SHELL BUILTIN COMMANDS</strong>)</small> are retained by the child.
   <p>If the program is a file beginning with <strong>#!</strong>, the remainder of the first line specifies an interpreter for the program. The shell executes the specified interpreter on operating systems that do not handle this executable format themselves. The arguments to the interpreter consist of a single optional argument following the interpreter name on the first line of the program, followed by the name of the program, followed by the command arguments, if any.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND EXECUTION ENVIRONMENT</h2>
   <p>The shell has an <em>execution environment</em>, which consists of the following:
   <dl>
@@ -1074,16 +1074,16 @@
   <p>Command substitution, commands grouped with parentheses, and asynchronous commands are invoked in a subshell environment that is a duplicate of the shell environment, except that traps caught by the shell are reset to the values that the shell inherited from its parent at invocation. Builtin commands that are invoked as part of a pipeline are also executed in a subshell environment. Changes made to the subshell environment cannot affect the shell's execution environment.
   <p>Subshells spawned to execute command substitutions inherit the value of the <strong>-e</strong> option from the parent shell. When not in <em>posix</em> mode, <strong>bash</strong> clears the <strong>-e</strong> option in such subshells.
   <p>If a command is followed by a <strong>&</strong> and job control is not active, the default standard input for the command is the empty file <em>/dev/null</em>. Otherwise, the invoked command inherits the file descriptors of the calling shell as modified by redirections.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>When a program is invoked it is given an array of strings called the <em>environment</em>. This is a list of <em>name</em>-<em>value</em> pairs, of the form <em>name=value</em>.
   <p>The shell provides several ways to manipulate the environment. On invocation, the shell scans its own environment and creates a parameter for each name found, automatically marking it for <em>export</em> to child processes. Executed commands inherit the environment. The <strong>export</strong> and <strong>declare -x</strong> commands allow parameters and functions to be added to and deleted from the environment. If the value of a parameter in the environment is modified, the new value becomes part of the environment, replacing the old. The environment inherited by any executed command consists of the shell's initial environment, whose values may be modified in the shell, less any pairs removed by the <strong>unset</strong> command, plus any additions via the <strong>export</strong> and <strong>declare -x</strong> commands.
   <p>The environment for any <em>simple command</em> or function may be augmented temporarily by prefixing it with parameter assignments, as described above in <small><strong>PARAMETERS</strong>.</small> These assignment statements affect only the environment seen by that command.
   <p>If the <strong>-k</strong> option is set (see the <strong>set</strong> builtin command below), then <em>all</em> parameter assignments are placed in the environment for a command, not just those that precede the command name.
   <p>When <strong>bash</strong> invokes an external command, the variable <strong>_</strong> is set to the full filename of the command and passed to that command in its environment.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p>The exit status of an executed command is the value returned by the <em>waitpid</em> system call or equivalent function. Exit statuses fall between 0 and 255, though, as explained below, the shell may use values above 125 specially. Exit statuses from shell builtins and compound commands are also limited to this range. Under certain circumstances, the shell will use special values to indicate specific failure modes.
   <p>For the shell's purposes, a command which exits with a zero exit status has succeeded. An exit status of zero indicates success. A non-zero exit status indicates failure. When a command terminates on a fatal signal <em>N</em>, <strong>bash</strong> uses the value of 128+<em>N</em> as the exit status.
@@ -1091,16 +1091,16 @@
   <p>If a command fails because of an error during expansion or redirection, the exit status is greater than zero.
   <p>Shell builtin commands return a status of 0 (<em>true</em>) if successful, and non-zero (<em>false</em>) if an error occurs while they execute. All builtins return an exit status of 2 to indicate incorrect usage, generally invalid options or missing arguments.
   <p><strong>Bash</strong> itself returns the exit status of the last command executed, unless a syntax error occurs, in which case it exits with a non-zero value. See also the <strong>exit</strong> builtin command below.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SIGNALS</h2>
   <p>When <strong>bash</strong> is interactive, in the absence of any traps, it ignores <small><strong>SIGTERM</strong></small> (so that <strong>kill 0</strong> does not kill an interactive shell), and <small><strong>SIGINT</strong></small> is caught and handled (so that the <strong>wait</strong> builtin is interruptible). In all cases, <strong>bash</strong> ignores <small><strong>SIGQUIT</strong>.</small> If job control is in effect, <strong>bash</strong> ignores <small><strong>SIGTTIN</strong>,</small> <small><strong>SIGTTOU</strong>,</small> and <small><strong>SIGTSTP</strong>.</small>
   <p>Non-builtin commands run by <strong>bash</strong> have signal handlers set to the values inherited by the shell from its parent. When job control is not in effect, asynchronous commands ignore <small><strong>SIGINT</strong></small> and <small><strong>SIGQUIT</strong></small> in addition to these inherited handlers. Commands run as a result of command substitution ignore the keyboard-generated job control signals <small><strong>SIGTTIN</strong>,</small> <small><strong>SIGTTOU</strong>,</small> and <small><strong>SIGTSTP</strong>.</small>
   <p>The shell exits by default upon receipt of a <small><strong>SIGHUP</strong>.</small> Before exiting, an interactive shell resends the <small><strong>SIGHUP</strong></small> to all jobs, running or stopped. Stopped jobs are sent <small><strong>SIGCONT</strong></small> to ensure that they receive the <small><strong>SIGHUP</strong>.</small> To prevent the shell from sending the signal to a particular job, it should be removed from the jobs table with the <strong>disown</strong> builtin (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below) or marked to not receive <small><strong>SIGHUP</strong></small> using <strong>disown -h</strong>.
   <p>If the <strong>huponexit</strong> shell option has been set with <strong>shopt</strong>, <strong>bash</strong> sends a <small><strong>SIGHUP</strong></small> to all jobs when an interactive login shell exits.
   <p>If <strong>bash</strong> is waiting for a command to complete and receives a signal for which a trap has been set, the trap will not be executed until the command completes. When <strong>bash</strong> is waiting for an asynchronous command via the <strong>wait</strong> builtin, the reception of a signal for which a trap has been set will cause the <strong>wait</strong> builtin to return immediately with an exit status greater than 128, immediately after which the trap is executed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>JOB CONTROL</h2>
   <p><em>Job control</em> refers to the ability to selectively stop (<em>suspend</em>) the execution of processes and continue (<em>resume</em>) their execution at a later point. A user typically employs this facility via an interactive interface supplied jointly by the operating system kernel's terminal driver and <strong>bash</strong>.
   <p>The shell associates a <em>job</em> with each pipeline. It keeps a table of currently executing jobs, which may be listed with the <strong>jobs</strong> command. When <strong>bash</strong> starts a job asynchronously (in the <em>background</em>), it prints a line that looks like:
@@ -1112,8 +1112,8 @@
   <p>Simply naming a job can be used to bring it into the foreground: <strong>%1</strong> is a synonym for <strong>``fg %1''</strong>, bringing job 1 from the background into the foreground. Similarly, <strong>``%1 &amp;''</strong> resumes job 1 in the background, equivalent to <strong>``bg %1''</strong>.
   <p>The shell learns immediately whenever a job changes state. Normally, <strong>bash</strong> waits until it is about to print a prompt before reporting changes in a job's status so as to not interrupt any other output. If the <strong>-b</strong> option to the <strong>set</strong> builtin command is enabled, <strong>bash</strong> reports such changes immediately. Any trap on <small><strong>SIGCHLD</strong></small> is executed for each child that exits.
   <p>If an attempt to exit <strong>bash</strong> is made while jobs are stopped (or, if the <strong>checkjobs</strong> shell option has been enabled using the <strong>shopt</strong> builtin, running), the shell prints a warning message, and, if the <strong>checkjobs</strong> option is enabled, lists the jobs and their statuses. The <strong>jobs</strong> command may then be used to inspect their status. If a second attempt to exit is made without an intervening command, the shell does not print another warning, and any stopped jobs are terminated.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROMPTING</h2>
   <p>When executing interactively, <strong>bash</strong> displays the primary prompt <small><strong>PS1</strong></small> when it is ready to read a command, and the secondary prompt <small><strong>PS2</strong></small> when it needs more input to complete a command. <strong>Bash</strong> displays <strong>PS0</strong> after it reads a command but before executing it. <strong>Bash</strong> allows these prompt strings to be customized by inserting a number of backslash-escaped special characters that are decoded as follows:
   <dl>
@@ -1173,17 +1173,17 @@
     <dd>end a sequence of non-printing characters
   </dl>
   <p>The command number and the history number are usually different: the history number of a command is its position in the history list, which may include commands restored from the history file (see <small><strong>HISTORY</strong></small> below), while the command number is the position in the sequence of commands executed during the current shell session. After the string is decoded, it is expanded via parameter expansion, command substitution, arithmetic expansion, and quote removal, subject to the value of the <strong>promptvars</strong> shell option (see the description of the <strong>shopt</strong> command under <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>READLINE</h2>
   <p>This is the library that handles reading input when using an interactive shell, unless the <strong>--noediting</strong> option is given at shell invocation. Line editing is also used when using the <strong>-e</strong> option to the <strong>read</strong> builtin. By default, the line editing commands are similar to those of Emacs. A vi-style line editing interface is also available. Line editing can be enabled at any time using the <strong>-o emacs</strong> or <strong>-o vi</strong> options to the <strong>set</strong> builtin (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below). To turn off line editing after the shell is running, use the <strong>+o emacs</strong> or <strong>+o vi</strong> options to the <strong>set</strong> builtin.
-  <div class="subsection">
+  <section>
     <h3>Readline Notation</h3>
     <p>In this section, the Emacs-style notation is used to denote keystrokes. Control keys are denoted by C-<em>key</em>, e.g., C-n means Control-N. Similarly, <em>meta</em> keys are denoted by M-<em>key</em>, so M-x means Meta-X. (On keyboards without a <em>meta</em> key, M-<em>x</em> means ESC <em>x</em>, i.e., press the Escape key then the <em>x</em> key. This makes ESC the <em>meta prefix</em>. The combination M-C-<em>x</em> means ESC-Control-<em>x</em>, or press the Escape key then hold the Control key while pressing the <em>x</em> key.)
     <p>Readline commands may be given numeric <em>arguments</em>, which normally act as a repeat count. Sometimes, however, it is the sign of the argument that is significant. Passing a negative argument to a command that acts in the forward direction (e.g., <strong>kill-line</strong>) causes that command to act in a backward direction. Commands whose behavior with arguments deviates from this are noted below.
     <p>When a command is described as <em>killing</em> text, the text deleted is saved for possible future retrieval (<em>yanking</em>). The killed text is saved in a <em>kill ring</em>. Consecutive kills cause the text to be accumulated into one unit, which can be yanked all at once. Commands which do not kill text separate the chunks of text on the kill ring.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Readline Initialization</h3>
     <p>Readline is customized by putting commands in an initialization file (the <em>inputrc</em> file). The name of this file is taken from the value of the <small><strong>INPUTRC</strong></small> variable. If that variable is unset, the default is <em>~/.inputrc</em>. When a program which uses the readline library starts up, the initialization file is read, and the key bindings and variables are set. There are only a few basic constructs allowed in the readline initialization file. Blank lines are ignored. Lines beginning with a <strong>#</strong> are comments. Lines beginning with a <strong>$</strong> indicate conditional constructs. Other lines denote key bindings and variable settings.
     <p>The default key-bindings may be changed with an <em>inputrc</em> file. Other programs that use this library may add their own commands and bindings.
@@ -1192,8 +1192,8 @@
     <p>C-Meta-u: universal-argument into the <em>inputrc</em> would make M-C-u execute the readline command <em>universal-argument</em>.
     <p>The following symbolic character names are recognized: <em>RUBOUT</em>, <em>DEL</em>, <em>ESC</em>, <em>LFD</em>, <em>NEWLINE</em>, <em>RET</em>, <em>RETURN</em>, <em>SPC</em>, <em>SPACE</em>, and <em>TAB</em>.
     <p>In addition to command names, readline allows keys to be bound to a string that is inserted when the key is pressed (a <em>macro</em>).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Readline Key Bindings</h3>
     <p>The syntax for controlling key bindings in the <em>inputrc</em> file is simple. All that is required is the name of the command or the text of a macro and a key sequence to which it should be bound. The name may be specified in one of two ways: as a symbolic key name, possibly with <em>Meta-</em> or <em>Control-</em> prefixes, or as a key sequence.
     <p>When using the form <strong>keyname</strong>:<em>function-name</em> or <em>macro</em>, <em>keyname</em> is the name of a key spelled out in English. For example:
@@ -1246,8 +1246,8 @@
     </dl>
     <p>When entering the text of a macro, single or double quotes must be used to indicate a macro definition. Unquoted text is assumed to be a function name. In the macro body, the backslash escapes described above are expanded. Backslash will quote any other character in the macro text, including " and '.
     <p><strong>Bash</strong> allows the current readline key bindings to be displayed or modified with the <strong>bind</strong> builtin command. The editing mode may be switched during interactive use by using the <strong>-o</strong> option to the <strong>set</strong> builtin command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Readline Variables</h3>
     <p>Readline has variables that can be used to further customize its behavior. A variable may be set in the <em>inputrc</em> file with a statement of the form
     <p><strong>set</strong> <em>variable-name</em> <em>value</em>
@@ -1340,8 +1340,8 @@
       <dt><strong>visible-stats (Off)</strong>
       <dd>If set to <strong>On</strong>, a character denoting a file's type as reported by <em>stat</em>(2) is appended to the filename when listing possible completions.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Readline Conditional Constructs</h3>
     <p>Readline implements a facility similar in spirit to the conditional compilation features of the C preprocessor which allows key bindings and variable settings to be performed as the result of tests. There are four parser directives used.
     <dl>
@@ -1372,20 +1372,20 @@
         <br>
         <pre><strong>$include</strong>  <em>/etc/inputrc</em></pre>
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Searching</h3>
     <p>Readline provides commands for searching through the command history (see <small><strong>HISTORY</strong></small> below) for lines containing a specified string. There are two search modes: <em>incremental</em> and <em>non-incremental</em>.
     <p>Incremental searches begin before the user has finished typing the search string. As each character of the search string is typed, readline displays the next entry from the history matching the string typed so far. An incremental search requires only as many characters as needed to find the desired history entry. The characters present in the value of the <strong>isearch-terminators</strong> variable are used to terminate an incremental search. If that variable has not been assigned a value the Escape and Control-J characters will terminate an incremental search. Control-G will abort an incremental search and restore the original line. When the search is terminated, the history entry containing the search string becomes the current line.
     <p>To find other matching entries in the history list, type Control-S or Control-R as appropriate. This will search backward or forward in the history for the next entry matching the search string typed so far. Any other key sequence bound to a readline command will terminate the search and execute that command. For instance, a <em>newline</em> will terminate the search and accept the line, thereby executing the command from the history list.
     <p>Readline remembers the last incremental search string. If two Control-Rs are typed without any intervening characters defining a new search string, any remembered search string is used.
     <p>Non-incremental searches read the entire search string before starting to search for matching history lines. The search string may be typed by the user or be part of the contents of the current line.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Readline Command Names</h3>
     <p>The following is a list of the names of the commands and the default key sequences to which they are bound. Command names without an accompanying key sequence are unbound by default. In the following descriptions, <em>point</em> refers to the current cursor position, and <em>mark</em> refers to a cursor position saved by the <strong>set-mark</strong> command. The text between the point and mark is referred to as the <em>region</em>.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Commands for Moving</h3>
     <dl>
       <dt><strong>beginning-of-line (C-a)</strong>
@@ -1409,8 +1409,8 @@
       <dt><strong>redraw-current-line</strong>
       <dd>Refresh the current line.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Commands for Manipulating the History</h3>
     <dl>
       <dt><strong>accept-line (Newline, Return)</strong>
@@ -1456,8 +1456,8 @@
       <dt><strong>edit-and-execute-command (C-xC-e)</strong>
       <dd>Invoke an editor on the current command line, and execute the result as shell commands. <strong>Bash</strong> attempts to invoke <small><strong>$VISUAL</strong>,</small> <small><strong>$EDITOR</strong>,</small> and <em>emacs</em> as the editor, in that order.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Commands for Changing Text</h3>
     <dl>
       <dt><strong><em>end-of-file</em> (usually C-d)</strong>
@@ -1487,8 +1487,8 @@
       <dt><strong>overwrite-mode</strong>
       <dd>Toggle overwrite mode. With an explicit positive numeric argument, switches to overwrite mode. With an explicit non-positive numeric argument, switches to insert mode. This command affects only <strong>emacs</strong> mode; <strong>vi</strong> mode does overwrite differently. Each call to <em>readline()</em> starts in insert mode. In overwrite mode, characters bound to <strong>self-insert</strong> replace the text at point rather than pushing the text to the right. Characters bound to <strong>backward-delete-char</strong> replace the character before point with a space. By default, this command is unbound.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Killing and Yanking</h3>
     <dl>
       <dt><strong>kill-line (C-k)</strong>
@@ -1526,8 +1526,8 @@
       <dt><strong>yank-pop (M-y)</strong>
       <dd>Rotate the kill ring, and yank the new top. Only works following <strong>yank</strong> or <strong>yank-pop</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Numeric Arguments</h3>
     <dl>
       <dt><strong>digit-argument (M-0, M-1, ..., M--)</strong>
@@ -1535,8 +1535,8 @@
       <dt><strong>universal-argument</strong>
       <dd>This is another way to specify an argument. If this command is followed by one or more digits, optionally with a leading minus sign, those digits define the argument. If the command is followed by digits, executing <strong>universal-argument</strong> again ends the numeric argument, but is otherwise ignored. As a special case, if this command is immediately followed by a character that is neither a digit nor minus sign, the argument count for the next command is multiplied by four. The argument count is initially one, so executing this function the first time makes the argument count four, a second time makes the argument count sixteen, and so on.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Completing</h3>
     <dl>
       <dt><strong>complete (TAB)</strong>
@@ -1578,8 +1578,8 @@
       <dt><strong>complete-into-braces (M-{)</strong>
       <dd>Perform filename completion and insert the list of possible completions enclosed within braces so the list is available to the shell (see <strong>Brace Expansion</strong> above).
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Keyboard Macros</h3>
     <dl>
       <dt><strong>start-kbd-macro (C-x ()</strong>
@@ -1591,8 +1591,8 @@
       <dt><strong>print-last-kbd-macro ()</strong>
       <dd>Print the last keyboard macro defined in a format suitable for the <em>inputrc</em> file.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Miscellaneous</h3>
     <dl>
       <dt><strong>re-read-init-file (C-x C-r)</strong>
@@ -1636,8 +1636,8 @@
       <dt><strong>display-shell-version (C-x C-v)</strong>
       <dd>Display version information about the current instance of <strong>bash</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Programmable Completion</h3>
     <p>When word completion is attempted for an argument to a command for which a completion specification (a <em>compspec</em>) has been defined using the <strong>complete</strong> builtin (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below), the programmable completion facilities are invoked.
     <p>First, the command name is identified. If the command word is the empty string (completion attempted at the beginning of an empty line), any compspec defined with the <strong>-E</strong> option to <strong>complete</strong> is used. If a compspec has been defined for that command, the compspec is used to generate the list of possible completions for the word. If the command word is a full pathname, a compspec for the full pathname is searched for first. If no compspec is found for the full pathname, an attempt is made to find a compspec for the portion following the final slash. If those searches do not result in a compspec, any compspec defined with the <strong>-D</strong> option to <strong>complete</strong> is used as the default.
@@ -1661,16 +1661,16 @@
     . "/etc/bash_completion.d/$1.sh" &gt;/dev/null 2&gt;&amp;1 &amp;& return 124<br>
     }<br>
     complete -D -F _completion_loader -o bashdefault -o default<br>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>HISTORY</h2>
   <p>When the <strong>-o history</strong> option to the <strong>set</strong> builtin is enabled, the shell provides access to the <em>command history</em>, the list of commands previously typed. The value of the <small><strong>HISTSIZE</strong></small> variable is used as the number of commands to save in a history list. The text of the last <small><strong>HISTSIZE</strong></small> commands (default 500) is saved. The shell stores each command in the history list prior to parameter and variable expansion (see <small><strong>EXPANSION</strong></small> above) but after history expansion is performed, subject to the values of the shell variables <small><strong>HISTIGNORE</strong></small> and <small><strong>HISTCONTROL</strong>.</small>
   <p>On startup, the history is initialized from the file named by the variable <small><strong>HISTFILE</strong></small> (default <em>~/.bash_history</em>). The file named by the value of <small><strong>HISTFILE</strong></small> is truncated, if necessary, to contain no more than the number of lines specified by the value of <small><strong>HISTFILESIZE</strong>.</small> If <strong>HISTFILESIZE</strong> is unset, or set to null, a non-numeric value, or a numeric value less than zero, the history file is not truncated. When the history file is read, lines beginning with the history comment character followed immediately by a digit are interpreted as timestamps for the preceding history line. These timestamps are optionally displayed depending on the value of the <small><strong>HISTTIMEFORMAT</strong></small> variable. When a shell with history enabled exits, the last <small><strong>$HISTSIZE</strong></small> lines are copied from the history list to <small><strong>$HISTFILE</strong>.</small> If the <strong>histappend</strong> shell option is enabled (see the description of <strong>shopt</strong> under <small><strong>SHELL BUILTIN COMMANDS</strong></small> below), the lines are appended to the history file, otherwise the history file is overwritten. If <small><strong>HISTFILE</strong></small> is unset, or if the history file is unwritable, the history is not saved. If the <small><strong>HISTTIMEFORMAT</strong></small> variable is set, time stamps are written to the history file, marked with the history comment character, so they may be preserved across shell sessions. This uses the history comment character to distinguish timestamps from other history lines. After saving the history, the history file is truncated to contain no more than <small><strong>HISTFILESIZE</strong></small> lines. If <small><strong>HISTFILESIZE</strong></small> is unset, or set to null, a non-numeric value, or a numeric value less than zero, the history file is not truncated.
   <p>The builtin command <strong>fc</strong> (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below) may be used to list or edit and re-execute a portion of the history list. The <strong>history</strong> builtin may be used to display or modify the history list and manipulate the history file. When using command-line editing, search commands are available in each editing mode that provide access to the history list.
   <p>The shell allows control over which commands are saved on the history list. The <small><strong>HISTCONTROL</strong></small> and <small><strong>HISTIGNORE</strong></small> variables may be set to cause the shell to save only a subset of the commands entered. The <strong>cmdhist</strong> shell option, if enabled, causes the shell to attempt to save each line of a multi-line command in the same history entry, adding semicolons where necessary to preserve syntactic correctness. The <strong>lithist</strong> shell option causes the shell to save the command with embedded newlines instead of semicolons. See the description of the <strong>shopt</strong> builtin below under <small><strong>SHELL BUILTIN COMMANDS</strong></small> for information on setting and unsetting shell options.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HISTORY EXPANSION</h2>
   <p>The shell supports a history expansion feature that is similar to the history expansion in <strong>csh.</strong> This section describes what syntax features are available. This feature is enabled by default for interactive shells, and can be disabled using the <strong>+H</strong> option to the <strong>set</strong> builtin command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below). Non-interactive shells do not perform history expansion by default.
   <p>History expansions introduce words from the history list into the input stream, making it easy to repeat commands, insert the arguments to a previous command into the current input line, or fix errors in previous commands quickly.
@@ -1678,7 +1678,7 @@
   <p>Several characters inhibit history expansion if found immediately following the history expansion character, even if it is unquoted: space, tab, newline, carriage return, and <strong>=</strong>. If the <strong>extglob</strong> shell option is enabled, <strong>(</strong> will also inhibit expansion.
   <p>Several shell options settable with the <strong>shopt</strong> builtin may be used to tailor the behavior of history expansion. If the <strong>histverify</strong> shell option is enabled (see the description of the <strong>shopt</strong> builtin below), and <strong>readline</strong> is being used, history substitutions are not immediately passed to the shell parser. Instead, the expanded line is reloaded into the <strong>readline</strong> editing buffer for further modification. If <strong>readline</strong> is being used, and the <strong>histreedit</strong> shell option is enabled, a failed history substitution will be reloaded into the <strong>readline</strong> editing buffer for correction. The <strong>-p</strong> option to the <strong>history</strong> builtin command may be used to see what a history expansion will do before using it. The <strong>-s</strong> option to the <strong>history</strong> builtin may be used to add commands to the end of the history list without actually executing them, so that they are available for subsequent recall.
   <p>The shell allows control of the various characters used by the history expansion mechanism (see the description of <strong>histchars</strong> above under <strong>Shell Variables</strong>). The shell uses the history comment character to mark history timestamps when writing the history file.
-  <div class="subsection">
+  <section>
     <h3>Event Designators</h3>
     <p>An event designator is a reference to a command line entry in the history list. Unless the reference is absolute, events are relative to the current position in the history list.
     <dl>
@@ -1699,8 +1699,8 @@
       <dt><strong>!#</strong>
       <dd>The entire command line typed so far.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Word Designators</h3>
     <p>Word designators are used to select desired words from the event. A <strong>:</strong> separates the event specification from the word designator. It may be omitted if the word designator begins with a <strong>^</strong>, <strong>$</strong>, <strong>*</strong>, <strong>-</strong>, or <strong>%</strong>. Words are numbered from the beginning of the line, with the first word being denoted by 0 (zero). Words are inserted into the current line separated by single spaces.
     <dl>
@@ -1724,8 +1724,8 @@
       <dd>Abbreviates <em>x-$</em> like <strong>x*</strong>, but omits the last word.
     </dl>
     <p>If a word designator is supplied without an event specification, the previous command is used as the event.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Modifiers</h3>
     <p>After the optional word designator, there may appear a sequence of one or more of the following modifiers, each preceded by a `:'.
     <dl>
@@ -1752,9 +1752,9 @@
       <dt><strong>G</strong>
       <dd>Apply the following `<strong>s</strong>' modifier once to each word in the event line.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>SHELL BUILTIN COMMANDS</h2>
   <p>Unless otherwise noted, each builtin command documented in this section as accepting options preceded by <strong>-</strong> accepts <strong>--</strong> to signify the end of the options. The <strong>:</strong>, <strong>true</strong>, <strong>false</strong>, and <strong>test</strong> builtins do not accept options and do not treat <strong>--</strong> specially. The <strong>exit</strong>, <strong>logout</strong>, <strong>return</strong>, <strong>break</strong>, <strong>continue</strong>, <strong>let</strong>, and <strong>shift</strong> builtins accept and process arguments beginning with <strong>-</strong> without requiring <strong>--</strong>. Other builtins that accept arguments but are not specified as accepting options interpret arguments beginning with <strong>-</strong> as invalid options and require <strong>--</strong> to prevent this interpretation.
   <dl>
@@ -2591,8 +2591,8 @@
     <dt><strong>wait</strong> [<strong>-n</strong>] [<em>n ...</em>]
     <dd>Wait for each specified child process and return its termination status. Each <em>n</em> may be a process ID or a job specification; if a job spec is given, all processes in that job's pipeline are waited for. If <em>n</em> is not given, all currently active child processes are waited for, and the return status is zero. If the <strong>-n</strong> option is supplied, <strong>wait</strong> waits for any job to terminate and returns its exit status. If <em>n</em> specifies a non-existent process or job, the return status is 127. Otherwise, the return status is the exit status of the last process or job waited for.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RESTRICTED SHELL</h2>
   <p>If <strong>bash</strong> is started with the name <strong>rbash</strong>, or the <strong>-r</strong> option is supplied at invocation, the shell becomes restricted. A restricted shell is used to set up an environment more controlled than the standard shell. It behaves identically to <strong>bash</strong> with the exception that the following are disallowed or not performed:
   <dl>
@@ -2625,8 +2625,8 @@
   </dl>
   <p>These restrictions are enforced after any startup files are read.
   <p>When a command that is found to be a shell script is executed (see <small><strong>COMMAND EXECUTION</strong></small> above), <strong>rbash</strong> turns off any restrictions in the shell spawned to execute the script.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <dl>
     <dt><em>Bash Reference Manual</em>, Brian Fox and Chet Ramey
@@ -2639,8 +2639,8 @@
   <p><em>sh</em>(1), <em>ksh</em>(1), <em>csh</em>(1)
   <p><em>emacs</em>(1), <em>vi</em>(1)
   <p><em>readline</em>(3)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl>
     <dt><em>/bin/bash</em>
@@ -2656,15 +2656,15 @@
     <dt><em>~/.inputrc</em>
     <dd>Individual <em>readline</em> initialization file
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHORS</h2>
   <p>Brian Fox, Free Software Foundation<br>
   bfox@gnu.org
   <p>Chet Ramey, Case Western Reserve University<br>
   chet.ramey@case.edu
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUG REPORTS</h2>
   <p>If you find a bug in <strong>bash,</strong> you should report it. But first, you should make sure that it really is a bug, and that it appears in the latest version of <strong>bash</strong>. The latest version is always available from <em>ftp://ftp.gnu.org/pub/gnu/bash/</em>.
   <p>Once you have determined that a bug actually exists, use the <em>bashbug</em> command to submit a bug report. If you have a fix, you are encouraged to mail that as well! Suggestions and `philosophical' bug reports may be mailed to <em>bug-bash@gnu.org</em> or posted to the Usenet newsgroup <strong>gnu.bash.bug</strong>.
@@ -2676,8 +2676,8 @@
   <p class="indent-20">A short script or `recipe' which exercises the bug
   <p><em>bashbug</em> inserts the first three items automatically into the template it provides for filing a bug report.
   <p>Comments and bug reports concerning this manual page should be directed to <em>chet.ramey@case.edu</em>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>It's too big and too slow.
   <p>There are some subtle differences between <strong>bash</strong> and traditional versions of <strong>sh</strong>, mostly because of the <small><strong>POSIX</strong></small> specification.
@@ -2686,5 +2686,5 @@
   <p>Compound commands and command sequences of the form `a ; b ; c' are not handled gracefully when process suspension is attempted. When a process is stopped, the shell immediately executes the next command in the sequence. It suffices to place the sequence of commands between parentheses to force it into a subshell, which may be stopped as a unit.
   <p>Array variables may not (yet) be exported.
   <p>There may be only one active coprocess at a time.
-</div>
+</section>
 

@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="2015-07-05" data-extra2="Debian Project" data-extra3="dpkg utilities">
 <title>dpkg-buildpackage</title>
 <h1>dpkg-buildpackage</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>dpkg-buildpackage - build binary or source packages from sources
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dpkg-buildpackage</strong> [<em>option</em>...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dpkg-buildpackage</strong> is a program that automates the process of building a Debian package. It consists of the following steps:
   <dl class="indent-3">
@@ -38,8 +38,8 @@
     <dt><strong>11.</strong>
     <dd>It runs the <strong>done</strong> hook.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <p>All long options can be specified both on the command line and in the <strong>dpkg-buildpackage</strong> system and user configuration files. Each line in the configuration file is either an option (exactly the same as the command line option but without leading hyphens) or a comment (if it starts with a ‘<strong>#</strong>’).
   <dl>
@@ -178,10 +178,10 @@
     <dt><strong>--version</strong>
     <dd>Show the version and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
-  <div class="subsection">
+  <section>
     <h3>External environment</h3>
     <dl>
       <dt><strong>DEB_CHECK_COMMAND</strong>
@@ -195,8 +195,8 @@
       <dt><strong>DPKG_COLORS</strong>
       <dd>Sets the color mode (since dpkg 1.18.5). The currently accepted values are: <strong>auto</strong>, <strong>always</strong> and <strong>never</strong> (default).
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Internal environment</h3>
     <p>Even if <strong>dpkg-buildpackage</strong> exports some variables, <strong>debian/rules</strong> should not rely on their presence and should instead use the respective interface to retrieve the needed values, because that file is the main entry point to build packages and running it standalone should be supported.
     <dl>
@@ -207,9 +207,9 @@
       <dt><strong>SOURCE_DATE_EPOCH</strong>
       <dd>This variable is set to the Unix timestamp since the epoch of the latest entry in <em>debian/changelog</em>, if it is not already defined.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>FILES</h2>
   <dl>
     <dt><em>/etc/dpkg/buildpackage.conf</em>
@@ -218,24 +218,24 @@
     <dt><em>$HOME/.config/dpkg/buildpackage.conf</em>
     <dd>User configuration file.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NOTES</h2>
-  <div class="subsection">
+  <section>
     <h3>Compiler flags are no longer exported</h3>
     <p>Between dpkg 1.14.17 and 1.16.1, <strong>dpkg-buildpackage</strong> exported compiler flags (<strong>CFLAGS</strong>, <strong>CXXFLAGS</strong>, <strong>FFLAGS</strong>, <strong>CPPFLAGS</strong> and <strong>LDFLAGS</strong>) with values as returned by <strong>dpkg-buildflags</strong>. This is no longer the case.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Default build targets</h3>
     <p><strong>dpkg-buildpackage</strong> is using the <strong>build-arch</strong> and <strong>build-indep</strong> targets since dpkg 1.16.2. Those targets are thus mandatory. But to avoid breakages of existing packages, and ease the transition, if the source package does not build both architecture independent and dependent binary packages (since dpkg 1.18.8) it will fallback to use the <strong>build</strong> target if <strong>make -f debian/rules -qn</strong> <em>build-target</em> returns 2 as exit code.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>BUGS</h2>
   <p>It should be possible to specify spaces and shell metacharacters and initial arguments for <em>gain-root-command</em> and <em>sign-command</em>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>dpkg-source</strong>(1), <strong>dpkg-architecture</strong>(1), <strong>dpkg-buildflags</strong>(1), <strong>dpkg-genchanges</strong>(1), <strong>fakeroot</strong>(1), <strong>lintian</strong>(1), <strong>gpg2</strong>(1), <strong>gpg</strong>(1).
-</div>
+</section>
 

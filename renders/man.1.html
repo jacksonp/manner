@@ -3,11 +3,11 @@
 <meta name="man-page-info" data-extra1="2013-06-27" data-extra2="2.6.5" data-extra3="Manual pager utils">
 <title>MAN</title>
 <h1>MAN</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>man - an interface to the on-line reference manuals
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>man</strong> [<strong>-C</strong> <em>file</em>] [<strong>-d</strong>] [<strong>-D</strong>] [<strong>--warnings</strong>[=<em>warnings</em>]] [<strong>-R</strong> <em>encoding</em>] [<strong>-L</strong> <em>locale</em>] [<strong>-m</strong> <em>system</em>[,...]] [<strong>-M</strong> <em>path</em>] [<strong>-S</strong> <em>list</em>] [<strong>-e</strong> <em>extension</em>] [<strong>-i</strong>|<strong>-I</strong>] [<strong>--regex</strong>|<strong>--wildcard</strong>] [<strong>--names-only</strong>] [<strong>-a</strong>] [<strong>-u</strong>] [<strong>--no-subpages</strong>] [<strong>-P</strong> <em>pager</em>] [<strong>-r</strong> <em>prompt</em>] [<strong>-7</strong>] [<strong>-E</strong> <em>encoding</em>] [<strong>--no-hyphenation</strong>] [<strong>--no-justification</strong>] [<strong>-p</strong> <em>string</em>] [<strong>-t</strong>] [<strong>-T</strong>[<em>device</em>]] [<strong>-H</strong>[<em>browser</em>]] [<strong>-X</strong>[<em>dpi</em>]] [<strong>-Z</strong>] [[<em>section</em>] <em>page</em>&nbsp;...]&nbsp;...<br>
   <strong>man</strong> <strong>-k</strong> [<em>apropos</em> <em>options</em>] <em>regexp</em> ...<br>
@@ -17,8 +17,8 @@
   <strong>man</strong> <strong>-w</strong>|<strong>-W</strong> [<strong>-C</strong> <em>file</em>] [<strong>-d</strong>] [<strong>-D</strong>] <em>page</em> ...<br>
   <strong>man</strong> <strong>-c</strong> [<strong>-C</strong> <em>file</em>] [<strong>-d</strong>] [<strong>-D</strong>] <em>page</em> ...<br>
   <strong>man</strong> [<strong>-hV</strong>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>man</strong> is the system's manual pager. Each <em>page</em> argument given to <strong>man</strong> is normally the name of a program, utility or function. The <em>manual page</em> associated with each of these arguments is then found and displayed. A <em>section</em>, if provided, will direct <strong>man</strong> to look only in that <em>section</em> of the manual. The default action is to search in all of the available <em>sections</em> following a pre-defined order ("1 n l 8 3 2 5 4 9 6 7" by default, unless overridden by the <strong>SECTION</strong> directive in <em>/usr/local/etc/man_db.conf</em>), and to show only the first <em>page</em> found, even if <em>page</em> exists in several <em>sections</em>.
   <p>The table below shows the <em>section</em> numbers of the manual followed by the types of pages they contain.
@@ -76,8 +76,8 @@
   </table>
   <p>Exact rendering may vary depending on the output device. For instance, man will usually not be able to render italics when running in a terminal, and will typically use underlined or coloured text instead.
   <p>The command or function illustration is a pattern that should match all possible invocations. In some cases it is advisable to illustrate several exclusive invocations as is shown in the <strong>SYNOPSIS</strong> section of this manual page.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <dl class="indent-7">
     <dt><strong>man</strong><em>&nbsp;ls</em>
@@ -93,8 +93,8 @@
     <dt><strong>man&nbsp;-f</strong><em>&nbsp;smail</em>
     <dd>Lookup the manual pages referenced by <em>smail</em> and print out the short descriptions of any found. Equivalent to <strong>whatis&nbsp;-r</strong><em>&nbsp;smail</em><strong>.</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OVERVIEW</h2>
   <p>Many options are available to <strong>man</strong> in order to give as much flexibility as possible to the user. Changes can be made to the search path, section order, output processor, and other behaviours and operations detailed below.
   <p>If set, various environment variables are interrogated to determine the operation of <strong>man</strong>. It is possible to set the `catch all' variable $<strong>MANOPT</strong> to any string in command line format with the exception that any spaces used as part of an option's argument must be escaped (preceded by a backslash). <strong>man</strong> will parse $<strong>MANOPT</strong> prior to parsing its own command line. Those options requiring an argument will be overridden by the same options found on the command line. To reset all of the options set in $<strong>MANOPT</strong>, <strong>-D</strong> can be specified as the initial command line option. This will allow man to `forget' about the options specified in $<strong>MANOPT</strong> although they must still have been valid.
@@ -106,8 +106,8 @@
   <p>If the desired page is available in your <em>locale</em>, it will be displayed in lieu of the standard (usually American English) page.
   <p>Support for international message catalogues is also featured in this package and can be activated in the same way, again if available. If you find that the manual pages and message catalogues supplied with this package are not available in your native language and you would like to supply them, please contact the maintainer who will be coordinating such activity.
   <p>For information regarding other features and extensions available with this manual pager, please read the documents supplied with the package.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEFAULTS</h2>
   <p><strong>man</strong> will search for the desired manual pages within the <em>index</em> database caches. If the <strong>-u</strong> option is given, a cache consistency check is performed to ensure the databases accurately reflect the filesystem. If this option is always given, it is not generally necessary to run <strong>mandb</strong> after the caches are initially created, unless a cache becomes corrupt. However, the cache consistency check can be slow on systems with many manual pages installed, so it is not performed by default, and system administrators may wish to run <strong>mandb</strong> every week or so to keep the database caches fresh. To forestall problems caused by outdated caches, <strong>man</strong> will fall back to file globbing if a cache lookup fails, just as it would if no cache was present.
   <p>Once a manual page has been located, a check is performed to find out if a relative preformatted `cat' file already exists and is newer than the nroff file. If it does and is, this preformatted file is (usually) decompressed and then displayed, via use of a pager. The pager can be specified in a number of ways, or else will fall back to a default is used (see option <strong>-P</strong> for details). If no cat is found or is older than the nroff file, the nroff is filtered through various programs and is shown immediately.
@@ -117,11 +117,11 @@
   <p>where <strong>string</strong> can be any combination of letters described by option <strong>-p</strong> below.
   <p>If none of the above methods provide any filter information, a default set is used.
   <p>A formatting pipeline is formed from the filters and the primary formatter (<strong>nroff</strong> or [<strong>tg</strong>]<strong>roff</strong> with <strong>-t</strong>) and executed. Alternatively, if an executable program <em>mandb_nfmt</em> (or <em>mandb_tfmt</em> with <strong>-t</strong>) exists in the man tree root, it is executed instead. It gets passed the manual source file, the preprocessor string, and optionally the device specified with <strong>-T</strong> or <strong>-E</strong> as arguments.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <p>Non argument options that are duplicated either on the command line, in $<strong>MANOPT</strong>, or both, are not harmful. For options that require an argument, each duplication will override the previous argument value.
-  <div class="subsection">
+  <section>
     <h3>General options</h3>
     <dl>
       <dt><strong>-C&nbsp;</strong><em>file</em><strong>,&nbsp;--config-file=</strong><em>file</em>
@@ -133,8 +133,8 @@
       <dt><strong>--warnings</strong>[=<em>warnings</em>]
       <dd>Enable warnings from <em>groff</em>. This may be used to perform sanity checks on the source text of manual pages. <em>warnings</em> is a comma-separated list of warning names; if it is not supplied, the default is "mac". See the “Warnings” node in <strong>info groff</strong> for a list of available warning names.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Main modes of operation</h3>
     <dl>
       <dt><strong>-f</strong>, <strong>--whatis</strong>
@@ -154,8 +154,8 @@
       <dt><strong>-R&nbsp;</strong><em>encoding,&nbsp;</em><strong>--recode=<em>encoding</em></strong>
       <dd>Instead of formatting the manual page in the usual way, output its source converted to the specified <em>encoding</em>. If you already know the encoding of the source file, you can also use <strong>manconv</strong>(1) directly. However, this option allows you to convert several manual pages to a single encoding without having to explicitly state the encoding of each, provided that they were already installed in a structure similar to a manual page hierarchy.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Finding manual pages</h3>
     <dl>
       <dt><strong>-L&nbsp;</strong><em>locale</em><strong>,&nbsp;--locale=</strong><em>locale</em>
@@ -200,8 +200,8 @@
   /usr/share/man/man3/Git.3pm.gz
   /usr/share/man/man1/diff.1.gz</pre>
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Controlling formatted output</h3>
     <dl>
       <dt><strong>-P&nbsp;</strong><em>pager</em><strong>,&nbsp;--pager=</strong><em>pager</em>
@@ -274,8 +274,8 @@
       <dt><strong>-Z</strong>, <strong>--ditroff</strong>
       <dd><strong>groff</strong> will run <strong>troff</strong> and then use an appropriate post-processor to produce output suitable for the chosen device. If <em>groff -mandoc</em> is <strong>groff</strong>, this option is passed to <strong>groff</strong> and will suppress the use of a post-processor. It implies <strong>-t</strong>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Getting help</h3>
     <dl>
       <dt><strong>-h</strong>, <strong>--help</strong>
@@ -283,9 +283,9 @@
       <dt><strong>-V</strong>, <strong>--version</strong>
       <dd>Display version information.
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <dl>
     <dt><strong>0</strong>
@@ -299,8 +299,8 @@
     <dt><strong>16</strong>
     <dd>At least one of the pages/files/keywords didn't exist or wasn't matched.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <dl>
     <dt><strong>MANPATH</strong>
@@ -332,8 +332,8 @@
     <dt><strong>LANG</strong>, <strong>LC_MESSAGES</strong>
     <dd>Depending on system and implementation, either or both of $<strong>LANG</strong> and $<strong>LC_MESSAGES</strong> will be interrogated for the current message locale. <strong>man</strong> will display its messages in that locale (if available). See <strong>setlocale</strong>(3) for precise details.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl>
     <dt><em>/usr/local/etc/man_db.conf</em>
@@ -345,17 +345,17 @@
     <dt><em>/var/cache/man/index.(bt|db|dir|pag)</em>
     <dd>An FHS compliant global <em>index</em> database cache.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>apropos</strong>(1), <strong>groff</strong>(1), <strong>less</strong>(1), <strong>manpath</strong>(1), <strong>nroff</strong>(1), <strong>troff</strong>(1), <strong>whatis</strong>(1), <strong>zsoelim</strong>(1), <strong>setlocale</strong>(3), <strong>manpath</strong>(5), <strong>ascii</strong>(7), <strong>latin1</strong>(7), <strong>man</strong>(7), <strong>catman</strong>(8), <strong>mandb</strong>(8), the man-db package manual, <strong>FSSTND</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HISTORY</h2>
   <p>1990, 1991 - Originally written by John W. Eaton (jwe@che.utexas.edu).
   <p>Dec 23 1992: Rik Faith (faith@cs.unc.edu) applied bug fixes supplied by Willem Kasdorp (wkasdo@nikhefk.nikef.nl).
   <p>30th April 1994 - 23rd February 2000: Wilf. (G.Wilford@ee.surrey.ac.uk) has been developing and maintaining this package with the help of a few dedicated people.
   <p>30th October 1996 - 30th March 2001: Fabrizio Polacco &lt;fpolacco@debian.org&gt; maintained and enhanced this package for the Debian project, with the help of all the community.
   <p>31st March 2001 - present day: Colin Watson &lt;cjwatson@debian.org&gt; is now developing and maintaining man-db.
-</div>
+</section>
 

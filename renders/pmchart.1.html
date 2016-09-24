@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMCHART</title>
 <h1>PMCHART</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmchart</strong> - strip chart tool for Performance Co-Pilot
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmchart</strong> [<strong>-CVWz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>] [<strong>-c</strong> <em>configfile</em>] [<strong>-f</strong> <em>fontfamily</em>] [<strong>-F</strong> <em>fontsize</em>] [<strong>-g</strong> <em>geometry</em>] [<strong>-h</strong> <em>host</em>] [<strong>-o</strong> <em>outfile</em>] [<strong>-O</strong> <em>offset</em>] [<strong>-p</strong> <em>port</em>] [<strong>-s</strong> <em>samples</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-v</strong> <em>visible</em>] [<strong>-Z</strong> <em>timezone</em>] [<strong>-geometry</strong> <em>geometry</em>] [<em>sources</em>...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmchart</strong> is a graphical utility that plots performance metrics values available through the facilities of the Performance Co-Pilot (PCP). Multiple charts can be displayed simultaneously, either aligned on the unified time axis (X-axis), and through the use of multiple interface Tabs.
   <p>Metric values can be sourced from one or more live hosts (simultaneously). Alternatively, one or more sets of PCP archives can be used as a source of historical data. See <strong>PCPIntro</strong>(1) for an in-depth discussion of the capabilities of the PCP framework, many of which are used by <strong>pmchart.</strong>
@@ -53,35 +53,35 @@
     <dd>Change the reporting timezone to the local timezone at the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> or <strong>-a</strong> options.
   </dl>
   <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a "natural" alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>VIEWS</h2>
   <p>The primary <strong>pmchart</strong> configuration file is the "view", which allows the metadata associated with one or more charts to be saved in the filesystem. This metadata describes all aspects of the charts, including which PCP metrics and instances are to be used, which hosts, which colors, the chart titles, use of chart legends, and much more.
   <p>From a conceptual point of view, there are two classes of view. These views share the same configuration file format - refer to a later section for a complete description of this format. The differences lie in where they are installed and how they are manipulated.
   <p>The first class, the "system" view, is simply any view that is installed as part of the <strong>pmchart</strong> package. These are stored in <em>$PCP_VAR_DIR/config/pmchart.</em> When the <em>File→Open View</em> dialog is displayed, it is these views that are initially listed. The system views cannot be modified by a normal user, and should not be modified even by a user with suitable privileges, as they will be overwritten during an upgrade.
   <p>The second class of view is the "user" view. These views are created on-the-fly using the <em>File→Save View</em> dialog. This is a mechanism for individual users to save their commonly used views. Access to these views is achieved through the <em>File→Open View</em> dialog, as with the system views. Once the dialog is opened, the list of views can be toggled between user and system views by clicking on the two toggle buttons in the top right corner. User views are stored in <em>$HOME/.pcp/pmchart.</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>TABS</h2>
   <p><strong>pmchart</strong> provides the common user interface concept of the Tab, which is most prevalent in modern web browsers. Tabs allow <strong>pmchart</strong> to update many more charts than the available screen real estate allows, by providing a user interface mechanism to stack (and switch between) different vertical sets of charts. Switching between Tabs is achieved by clicking on the Tab labels, which are located along the top of the display beneath the Menu and Tool bars).
   <p>Each Tab has a mode of operation (either live or archive - <strong>pmchart</strong> can support both modes simultaneously), the total number of samples and currently visible points, and a label describing the Tab which is displayed at the top of the <strong>pmchart</strong> window. New Tabs can be created using the <em>File→Add Tab</em> dialog.
   <p>In order to save on vertical screen real estate, note that the user interface element for changing between different Tabs (and its label) are only displayed when more than one Tab exists. A Tab can be dismissed using the <em>File→Close Tab</em> menu, which removes the current Tab and any charts it contained.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>IMAGES and PRINTING</h2>
   <p>A static copy of the currently displayed vertical series of charts can be captured in two ways.
   <p>When the intended display device is the screen, the <em>File→Export</em> menu option should be used. This allows exporting the charts in a variety of image formats, including PNG, JPEG, GIF, and BMP. The image size can be scaled up or down in any dimension.
   <p>Alternatively, when the intended display device is paper, the <em>File→Print</em> menu option can be used. This supports the usual set of printing options (choice of printer, grayscale/color, landscape/portrait, scaling to different paper sizes, etc), and in addition allows printing to the intermediate printer formats of PostScript and Portable Document Format (PDF).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RECORDING</h2>
   <p>It is possible to make a recording of a set of displayed charts, for later playback through <strong>pmchart</strong> or any of the other Performance Co-Pilot tools. The <em>Record→Start</em> functionality is simple to configure through the user interface, and allows fine-tuning of the recording process (including record frequencies that differ to the <strong>pmchart</strong> update interval, alternate file locations, etc).
   <p><strong>pmchart</strong> produces recordings that are compatible with the PCP <strong>pmafm</strong>(1) replay mechanism, for later playback via a new instance of <strong>pmchart</strong>. In addition, when recording through <strong>pmchart</strong> one can also replay the recording immediately, as on termination of the recording (through the <em>Record→Stop</em> menu item), an archive mode Tab will be created with the captured view.
   <p>Once recording is active in a Live Tab, the Time Control status button in the bottom left corner of the <strong>pmchart</strong> window is displayed with a distinctive red dot. At any time during a <strong>pmchart</strong> recording session, the amount of space used in the filesystem by that recording can be displayed using the <em>Record→Query</em> menu item.
   <p>Finally, the <em>Record→Detach</em> menu option provides a mechanism whereby the recording process can be completely divorced from the running <strong>pmchart</strong> process, and allowed to continue on when <strong>pmchart</strong> exits. A dialog displaying the current size and estimated rate of growth for the recording is presented. On the other hand, if <strong>pmchart</strong> is terminated while recording is in process, then the recording process will prompt the user to choose immediate cessation of recording or for it to continue on independently.
   <p>All of the record mode services available from <strong>pmchart</strong> are implemented with the assistance of the base Performance Co-Pilot logging services - refer to <strong>pmlogger</strong>(1) and <strong>pmafm</strong>(1) for an extensive description of the capabilities of these tools.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION FILE SYNTAX</h2>
   <p><strong>pmchart</strong> loads predefined chart configurations (or "views") from external files that conform to the following rules. In the descriptions below keywords (shown in <code><strong>bold</strong></code>) may appear in upper, lower or mixed case, elements shown in <code>[stuff]</code> are optional, and user-supplied elements are shown as <code>&lt;other stuff&gt;</code>. A vertical bar (|) is used where syntactic elements are alternatives. Quotes (") may be used to enclose lexical elements that may contain white space, such as titles, labels and instance names.
   <dl class="indent-23">
@@ -161,14 +161,14 @@
 on the new Tab, until the end of the configuration file or until
 another <code><strong>tab</strong></code> keyword is encountered.</pre>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
   <p>Of particular note, the <strong>$PCP_XCONFIRM_PROG</strong> setting is explicitly and unconditionally overridden by <strong>pmchart.</strong> This is set to the <strong>pmconfirm</strong>(1), utility, in order that some popup dialogs (particularly in the area of Recording) maintain a consistent look-and-feel with the rest of the <strong>pmchart</strong> application.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmtime</strong>(1), <strong>pmconfirm</strong>(1), <strong>pmdumptext</strong>(1), <strong>PCPIntro</strong>(1), <strong>pmafm</strong>(1), <strong>pmrep</strong>(1), <strong>pmval</strong>(1), <strong>pmcd</strong>(1), <strong>pminfo</strong>(1), <strong>pcp.conf</strong>(5), <strong>pcp.env</strong>(5) and <strong>pmns</strong>(5).
-</div>
+</section>
 

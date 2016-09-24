@@ -3,11 +3,11 @@
 <meta name="man-page-info" data-extra1="Extended Attributes" data-extra2="Dec 2001" data-extra3="XFS Compatibility API">
 <title>ATTR</title>
 <h1>ATTR</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>attr - extended attributes on XFS filesystem objects
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <pre><strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-s attrname</strong> [ <strong>-V attrvalue</strong> ]  <strong>pathname</strong>
 
@@ -16,8 +16,8 @@
 <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-r attrname pathname</strong>
 
 <strong>attr</strong> [ <strong>-LRSq</strong> ] <strong>-l pathname</strong></pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OVERVIEW</h2>
   <p>Extended attributes implement the ability for a user to attach name:value pairs to objects within the XFS filesystem.
   <p>This document describes the <em>attr</em> command, which is mostly compatible with the IRIX command of the same name. It is thus aimed specifically at users of the XFS filesystem - for filesystem independent extended attribute manipulation, consult the <em>getfattr</em>(1) and <em>setfattr</em>(1) documentation.
@@ -25,8 +25,8 @@
   <p>In the XFS filesystem, the <em>names</em> can be up to 256 bytes in length, terminated by the first 0 byte. The intent is that they be printable ASCII (or other character set) names for the attribute. The <em>values</em> can be up to 64KB of arbitrary binary data.
   <p>Attributes can be attached to all types of XFS inodes: regular files, directories, symbolic links, device nodes, etc.
   <p>XFS uses 2 disjoint attribute name spaces associated with every filesystem object. They are the <strong>root</strong> and <strong>user</strong> address spaces. The <strong>root</strong> address space is accessible only to the superuser, and then only by specifying a flag argument to the function call. Other users will not see or be able to modify attributes in the <strong>root</strong> address space. The <strong>user</strong> address space is protected by the normal file permissions mechanism, so the owner of the file can decide who is able to see and/or modify the value of attributes on any particular file.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>The <em>attr</em> utility allows the manipulation of extended attributes associated with filesystem objects from within shell scripts.
   <p>There are four main operations that <em>attr</em> can perform:
@@ -44,17 +44,17 @@
   <p>When the <strong>-R</strong> option is given and the process has appropriate privileges, operate in the <em>root</em> attribute namespace rather that the <em>USER</em> attribute namespace.
   <p>The <strong>-S</strong> option is similar, except it specifies use of the <em>security</em> attribute namespace.
   <p>When the <strong>-q</strong> option is given <em>attr</em> will try to keep quiet. It will output error messages (to <strong><em>stderr</em></strong>) but will not print status messages (to <strong><em>stdout</em></strong>).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NOTES</h2>
   <p>The standard file interchange/archive programs <em>tar</em>(1), and <em>cpio</em>(1) will not archive or restore extended attributes, while the <em>xfsdump</em>(8) program will.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>The list option present in the IRIX version of this command is not supported. <em>getfattr</em> provides a mechanism to retrieve all of the attribute names.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p>getfattr(1), setfattr(1), attr_get(3), attr_set(3), attr_multi(3), attr_remove(3), attr(5), and xfsdump(8).
-</div>
+</section>
 

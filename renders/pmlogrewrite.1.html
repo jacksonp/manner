@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGREWRITE</title>
 <h1>PMLOGREWRITE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogrewrite</strong> - rewrite Performance Co-Pilot archives
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_BINADM_DIR/pmlogrewrite</strong> [<strong>-Cdiqsvw</strong> ] [<strong>-c</strong> <em>config</em>] <em>inlog</em> [<em>outlog</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlogrewrite</strong> reads a set of Performance Co-Pilot (PCP) archive logs identified by <em>inlog</em> and creates a PCP archive log in <em>outlog</em>. Under normal usage, the <strong>-c</strong> option will be used to nominate a configuration file or files that contains specifications (see the <strong>REWRITING RULES SYNTAX</strong> section below) that describe how the data and metadata from <em>inlog</em> should be transformed to produce <em>outlog</em>.
   <p>The typical uses for <strong>pmlogrewrite</strong> would be to accommodate the evolution of Performance Metric Domain Agents (PMDAs) where the names, metadata and semantics of metrics and their associated instance domains may change over time, e.g. promoting the type of a metric from a 32-bit to a 64-bit integer, or renaming a group of metrics. Refer to the <strong>EXAMPLES</strong> section for some additional use cases.
@@ -19,8 +19,8 @@
   <p>The input <em>inlog</em> must be a set of PCP archive logs created by <strong>pmlogger</strong>(1), or possibly one of the tools that read and create PCP archives, e.g. <strong>pmlogextract</strong>(1) and <strong>pmlogreduce</strong>(1). <em>inlog</em> is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives.
   <p>If no <strong>-c</strong> option is specified, then the default behavior simply creates <em>outlog</em> as a copy of <em>inlog</em>. This is a little more complicated than <strong>cat</strong>(1), as each PCP archive is made up of several physical files.
   <p>While <strong>pmlogrewrite</strong> may be used to repair some data consistency issues in PCP archives, there is also a class of repair tasks that cannot be handled by <strong>pmlogrewrite</strong> and <strong>pmloglabel</strong>(1) may be a useful tool in these cases.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COMMAND LINE OPTIONS</h2>
   <p>The command line options for <strong>pmlogrewrite</strong> are as follows:
   <dl class="indent-7">
@@ -42,8 +42,8 @@
     <dd>Emit warnings. Normally <strong>pmlogrewrite</strong> remains silent for any warning that is not fatal and it is expected that for a particular archive, some (or indeed, all) of the rewriting specifications may not apply. For example, changes to a PMDA may be captured in a set of rewriting rules, but a single archive may not contain all of the modified metrics nor all of the modified instance domains and/or instances. Because these cases are expected, they do not prevent <strong>pmlogrewrite</strong> executing, and rules that do not apply to <em>inlog</em> are silently ignored by default. Similarly, some rewriting rules may involve no change because the metadata in <em>inlog</em> already matches the intent of the rewriting rule to correct data from a previous version of a PMDA. The <strong>-w</strong> flag forces warnings to be emitted for all of these cases.
   </dl>
   <p>The argument <em>outlog</em> is required in all cases, except when <strong>-i</strong> is specified.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>REWRITING RULES SYNTAX</h2>
   <p>A configuration file contains zero or more rewriting rules as defined below.
   <p>Keywords and special punctuation characters are shown below in <strong><em>bolditalic</em></strong> font and are case-insensitive, so <strong><em>METRIC</em></strong>, <strong><em>metric</em></strong> and <strong><em>Metric</em></strong> are all equivalent in rewriting rules.
@@ -174,8 +174,8 @@ metric sample.bin { indom -&gt; 123.2 }</pre>
     </div>
     <p>When changing the domain number for a metric or instance domain, the new domain number will usually match an existing PMDA's domain number. If this is not the case, then the new domain number should not be randomly chosen; consult <strong>$PCP_VAR_DIR/pmns/stdpmid</strong> for domain numbers that are already assigned to PMDAs.
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>To promote the values of the per-disk IOPS metrics to 64-bit to allow aggregation over a long time period for capacity planning, or because the PMDA has changed to export 64-bit counters and we want to convert old archives so they can be processed alongside new archives.
   <div class="indent-4">
@@ -206,8 +206,8 @@ metric 60.51.* { pmid -&gt; 123.*.* }
 # only one instance domain for Linux proc metrics
 indom 60.9 { indom -&gt; 123.0 }</pre>
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <p>For each of the <em>inlog</em> and <em>outlog</em> archive logs, several physical files are used.
   <dl class="indent-10">
@@ -218,19 +218,19 @@ indom 60.9 { indom -&gt; 123.0 }</pre>
     <dt><em>archive</em><strong>.index</strong>
     <dd>temporal index to support rapid random access to the other files in the archive log.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmdaInstance</strong>(3), <strong>pmdumplog</strong>(1), <strong>pmlogger</strong>(1), <strong>pmlogextract</strong>(1), <strong>pmloglabel</strong>(1), <strong>pmlogreduce</strong>(1), <strong>pmLookupDesc</strong>(3), <strong>pmns</strong>(5), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>All error conditions detected by <strong>pmlogrewrite</strong> are reported on <em>stderr</em> with textual (if sometimes terse) explanation.
   <p>Should the input archive log be corrupted (this can happen if the <strong>pmlogger</strong> instance writing the log suddenly dies), then <strong>pmlogrewrite</strong> will detect and report the position of the corruption in the file, and any subsequent information from that archive log will not be processed.
   <p>If any error is detected, <strong>pmlogrewrite</strong> will exit with a non-zero status.
-</div>
+</section>
 

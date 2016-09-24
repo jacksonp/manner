@@ -3,17 +3,17 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGGER_CHECK</title>
 <h1>PMLOGGER_CHECK</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogger_check</strong>, <strong>pmlogger_daily</strong>, <strong>pmlogger_merge</strong> - administration of Performance Co-Pilot archive log files
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_BINADM_DIR/pmlogger_check</strong> [<strong>-CNsTV</strong>] [<strong>-c</strong> <em>control</em>] [<strong>-l</strong> <em>logfile</em>]<br>
   <strong>$PCP_BINADM_DIR/pmlogger_daily</strong> [<strong>-NorV</strong>] [<strong>-c</strong> <em>control</em>] [<strong>-k</strong> <em>discard</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-m</strong> <em>addresses</em>] [<strong>-s</strong> <em>size</em>] [<strong>-t</strong> <em>want</em>] [<strong>-x</strong> <em>compress</em>] [<strong>-X</strong> <em>program</em>] [<strong>-Y</strong> <em>regex</em>]<br>
   <strong>$PCP_BINADM_DIR/pmlogger_merge</strong> [<strong>-fNV</strong>] [<em>input-basename</em> ... <em>output-name</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>This series of shell scripts and associated control files may be used to create a customized regime of administration and management for Performance Co-Pilot (see <strong>PCPintro</strong>(1)) archive log files.
   <p><strong>pmlogger_daily</strong> is intended to be run once per day, preferably in the early morning, as soon after midnight as practicable. Its task is to aggregate and rotate one or more sets of PCP archives. After some period, old PCP archives are discarded. This period is 14 days by default, but may be changed using the <strong>-k</strong> option. Two special values are recognized for the period (<em>discard</em>), namely <strong>0</strong> to keep no archives beyond the current one, and <strong>forever</strong> to prevent any archives being discarded.
@@ -87,8 +87,8 @@ boing  n  n  $PCP_LOG_DIR/pmlogger/boing  -c ./pmlogger.config</code></pre>
 25,55   *       *       *       *       $PCP_BINADM_DIR/pmlogger_check</code></pre>
   <p>In order to ensure that mail is not unintentionally sent when these scripts are run from <strong>cron</strong>(8) diagnostics are always sent to a log file. By default, this file is <strong>$PCP_LOG_DIR/pmlogger/pmlogger_daily.log</strong> or <strong>$PCP_LOG_DIR/pmlogger/pmlogger_check.log</strong> but this can be changed using the <strong>-l</strong> option. If this log file already exists when the script starts, it will be renamed with a <em>.prev</em> suffix (overwriting any log file saved earlier) before diagnostics are generated to the log file. The <strong>-l</strong> and <strong>-t</strong> options cannot be used together.
   <p>The output from the <strong>cron</strong> execution of the scripts may be extended using the <strong>-V</strong> option to the scripts which will enable verbose tracing of their activity. By default the scripts generate no output unless some error or warning condition is encountered.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMLOGGERCONTROL_PATH</strong>
@@ -110,13 +110,13 @@ boing  n  n  $PCP_LOG_DIR/pmlogger/boing  -c ./pmlogger.config</code></pre>
     <dt><strong>$PCP_LOG_DIR/NOTICES</strong>
     <dd>PCP ``notices'' file used by <strong>pmie</strong>(1) and friends
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <strong>/etc/pcp.conf</strong> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>egrep</strong>(1), <strong>PCPIntro</strong>(1), <strong>pmlc</strong>(1), <strong>pmlogconf</strong>(1), <strong>pmlogger</strong>(1), <strong>pmlogextract</strong>(1), <strong>pmlogmv</strong>(1), <strong>pmlogrewrite</strong>(1), <strong>pmnewlog</strong>(1), <strong>pmsocks</strong>(1), <strong>xz</strong>(1) and <strong>cron</strong>(8).
-</div>
+</section>
 

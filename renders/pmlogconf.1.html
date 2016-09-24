@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMLOGCONF</title>
 <h1>PMLOGCONF</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmlogconf</strong> - create/edit a pmlogger configuration file
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmlogconf</strong> [<strong>-cqrv</strong>] [<strong>-d</strong> <em>groupsdir</em>] [<strong>-h</strong> <em>hostname</em>] <em>configfile</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmlogconf</strong> may be used to create and modify a generic configuration file for the PCP archive logger, <strong>pmlogger</strong>(1).
   <p>If <em>configfile</em> does not exist, <strong>pmlogconf</strong> will create a generic configuration file with a default set of enabled metrics and logging intervals.
@@ -31,8 +31,8 @@
   <p>When run from automated logging setup processes, the <strong>-c</strong> option is used to add a message and timestamp indicating this fact. This option is not appropriate for interactive use of the tool.
   <p>The <strong>-q</strong> option suppresses the logging interval dialog and preserves the current interval from <em>configfile</em>.
   <p>More verbose output may be enabled with the <strong>-v</strong> option.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SETUP GROUP FILES</h2>
   <p>When an initial <em>configfile</em> is created, the default specifications come from a set of group files below the <em>groupsdir</em> specified with the <strong>-d</strong> option (the default <em>groupsdir</em> is <strong>$PCP_VAR_DIR/config/pmlogconf</strong> which is most commonly correct, so the <strong>-d</strong> option is rarely used in practice).
   <p>The directory structure below <em>groupsdir</em> is arbitrary as all regular files will be found by recursive descent and considered, so add-on products and PMDA developers can easily extend the available defaults to <strong>pmlogconf</strong> by adding new directories and/or group files below <em>groupsdir</em>.
@@ -87,8 +87,8 @@
     <dd><strong>force</strong> control lines begin with the keyword <strong>force</strong> followed by one of the states defined above, so one of the actions <strong>include</strong>, <strong>exclude</strong> or <strong>available</strong> is applied unconditionally to the group.
   </dl>
   <p>Probing is only done when a new group is being added to <em>configfile</em> or when the <strong>-r</strong> command line option is specified. The evaluation of the probing conditions is done by contacting <strong>pmcd</strong>(1) on <em>hostname</em> (defaults to local:).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLE</h2>
   <p>The following group file demonstrates all of the supported syntactic elements.
   <pre>#pmlogconf-setup 2.0
@@ -99,17 +99,17 @@ probe   sample.secret.foo.one values ? include : exclude
         sample.secret.foo.one
         sample.secret.foo.bar   # non-leaf in the PMNS
         sample.colour [ red green ]</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MIGRATION</h2>
   <p>The current version of <strong>pmlogconf</strong> (2.0) supports a slightly different format for <em>configfile</em> compared to earlier versions. If an old version <em>configfile</em> is presented to <strong>pmlogconf</strong> it will be converted to the new format.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmcd</strong>(1), <strong>pmlogger</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

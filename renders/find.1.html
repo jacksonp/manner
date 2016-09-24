@@ -3,20 +3,20 @@
 <meta name="man-page-info" data-extra1="" data-extra2="" data-extra3="">
 <title>FIND</title>
 <h1>FIND</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>find - search for files in a directory hierarchy
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>find</strong> [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>This manual page documents the GNU version of <strong>find</strong>. GNU <strong>find</strong> searches the directory tree rooted at each given starting-point by evaluating the given expression from left to right, according to the rules of precedence (see section OPERATORS), until the outcome is known (the left hand side is false for <em>and</em> operations, true for <em>or</em>), at which point <strong>find</strong> moves on to the next file name. If no starting-point is specified, `.' is assumed.
   <p>If you are using <strong>find</strong> in an environment where security is important (for example if you are using it to search directories that are writable by other users), you should read the `Security Considerations' chapter of the findutils documentation, which is called <strong>Finding Files</strong> and comes with findutils. That document also includes a lot more detail and discussion than this manual page, so you may find it a more useful source of information.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <p>The <strong>-H</strong>, <strong>-L</strong> and <strong>-P</strong> options control the treatment of symbolic links. Command-line arguments following these are taken to be names of files or directories to be examined, up to the first argument that begins with `-', or the argument `(' or `!'. That argument and any following arguments are taken to be the expression describing what is to be searched for. If no paths are given, the current directory is used. If no expression is given, the expression <strong>-print</strong> is used (but you should probably consider using <strong>-print0</strong> instead, anyway).
   <p>This manual page talks about `options' within the expression list. These options control the behaviour of <strong>find</strong> but are specified immediately after the last path name. The five `real' options <strong>-H</strong>, <strong>-L</strong>, <strong>-P</strong>, <strong>-D</strong> and <strong>-O</strong> must appear before the first path name, if at all. A double dash <strong>--</strong> can also be used to signal that any remaining arguments are not options (though ensuring that all start points begin with either `./' or `/' is generally safer if you use wildcards in the list of start points).
@@ -69,8 +69,8 @@
       </dl>
       <p>The cost-based optimiser has a fixed idea of how likely any given test is to succeed. In some cases the probability takes account of the specific nature of the test (for example, <strong>-type f</strong> is assumed to be more likely to succeed than <strong>-type c</strong>). The cost-based optimiser is currently being evaluated. If it does not actually improve the performance of <strong>find</strong>, it will be removed again. Conversely, optimisations that prove to be reliable, robust and effective may be enabled at lower optimisation levels over time. However, the default behaviour (i.e. optimisation level 1) will not be changed in the 4.3.x release series. The findutils test suite runs all the tests on <strong>find</strong> at each optimisation level and ensures that the result is the same.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXPRESSION</h2>
   <p>The part of the command line after the list of starting points is the <em>expression</em>. This is a kind of query specification describing how we match files and what we do with the files that were matched. An expression is composed of a sequence of things:
   <dl>
@@ -87,7 +87,7 @@
   </dl>
   <p>If the whole expression contains no actions other than <strong>-prune</strong> or <strong>-print</strong>, <strong>-print</strong> is performed on all files for which the whole expression is true.
   <p>The <strong>-delete</strong> action also acts like an option (since it implies <strong>-depth</strong>).
-  <div class="subsection">
+  <section>
     <h3>POSITIONAL OPTIONS</h3>
     <p>Positional options always return true. They affect only tests occurring later on the command line.
     <dl>
@@ -100,8 +100,8 @@
       <dt>-warn, -nowarn
       <dd>Turn warning messages on or off. These warnings apply only to the command line usage, not to any conditions that <strong>find</strong> might encounter when it searches directories. The default behaviour corresponds to <strong>-warn</strong> if standard input is a tty, and to <strong>-nowarn</strong> otherwise. If a warning message relating to command-line usage is produced, the exit status of <strong>find</strong> is not affected. If the POSIXLY_CORRECT environment variable is set, and <strong>-warn is also used, it is not specified which, if any, warnings will be active.</strong>
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>GLOBAL OPTIONS</h3>
     <p>Global options always return true. Global options take effect even for tests which occur earlier on the command line. To prevent confusion, global options should specified on the command-line after the list of start points, just before the first test, positional option or action. If you specify a global option in some other place, <strong>find</strong> will issue a warning message explaining that this can be confusing.
     <p>The global options occur after the list of start points, and so are not the same kind of option as <strong>-L</strong>, for example.
@@ -130,8 +130,8 @@
       <dt>-xdev
       <dd>Don't descend directories on other filesystems.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>TESTS</h3>
     <p>Some tests, for example <strong>-newerXY</strong> and <strong>-samefile</strong>, allow comparison between the file currently being examined and some reference file specified on the command line. When these tests are used, the interpretation of the reference file is determined by the options <strong>-H</strong>, <strong>-L</strong> and <strong>-P</strong> and any previous <strong>-follow</strong>, but the reference file is only examined once, at the time the command line is parsed. If the reference file cannot be examined (for example, the <strong>stat</strong>(2) system call fails for it), an error message is issued, and <strong>find</strong> exits with a nonzero status.
     <p>Numeric arguments can be specified as
@@ -297,8 +297,8 @@
       <dt>-context <em>pattern</em>
       <dd>(SELinux only) Security context of the file matches glob <em>pattern</em>.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>ACTIONS</h3>
     <dl>
       <dt>-delete
@@ -500,8 +500,8 @@
       <dt>-quit
       <dd>Exit immediately. No child processes will be left running, but no more paths specified on the command line will be processed. For example, <strong>find /tmp/foo /tmp/bar -print -quit</strong> will print only <strong>/tmp/foo</strong>. Any command lines which have been built up with <strong>-execdir ... {} +</strong> will be invoked before <strong>find</strong> exits. The exit status may or may not be zero, depending on whether an error has already occurred.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>OPERATORS</h3>
     <p>Listed in order of decreasing precedence:
     <dl>
@@ -525,9 +525,9 @@
       <dd>List; both <em>expr1</em> and <em>expr2</em> are always evaluated. The value of <em>expr1</em> is discarded; the value of the list is the value of <em>expr2</em>. The comma operator can be useful for searching for several different types of thing, but traversing the filesystem hierarchy only once. The <strong>-fprintf</strong> action can be used to list the various matched items into several different output files.
     </dl>
     <p>Please note that <strong>-a</strong> when specified implicitly (for example by two tests appearing without an explicit operator between them) or explicitly has higher precedence than <strong>-o</strong>. This means that <strong>find . -name afile -o -name bfile -print</strong> will never print <em>afile</em>.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>UNUSUAL FILENAMES</h2>
   <p>Many of the actions of <strong>find</strong> result in the printing of data which is under the control of other users. This includes file names, sizes, modification times and so forth. File names are a potential problem since they can contain any character except `\0' and `/'. Unusual characters in file names can do unexpected and often undesirable things to your terminal (for example, changing the settings of your function keys on some terminals). Unusual characters are handled differently by various actions, as described below.
   <dl>
@@ -541,8 +541,8 @@
     <dd>Quoting is handled in the same way as for <strong>-printf</strong> and <strong>-fprintf</strong>. If you are using <strong>find</strong> in a script or in a situation where the matched files might have arbitrary names, you should consider using <strong>-print0</strong> instead of <strong>-print</strong>.
   </dl>
   <p>The <strong>-ok</strong> and <strong>-okdir</strong> actions print the current filename as-is. This may change in a future release.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>STANDARDS CONFORMANCE</h2>
   <p>For closest compliance to the POSIX standard, you should set the POSIXLY_CORRECT environment variable. The following options are specified in the POSIX standard (IEEE Std 1003.1, 2003 Edition):
   <dl>
@@ -572,8 +572,8 @@
   <p>GNU <strong>find</strong> complies with these requirements. The link count of directories which contain entries which are hard links to an ancestor will often be lower than they otherwise should be. This can mean that GNU find will sometimes optimise away the visiting of a subdirectory which is actually a link to an ancestor. Since <strong>find</strong> does not actually enter such a subdirectory, it is allowed to avoid emitting a diagnostic message. Although this behaviour may be somewhat confusing, it is unlikely that anybody actually depends on this behaviour. If the leaf optimisation has been turned off with <strong>-noleaf</strong>, the directory entry will always be examined and the diagnostic message will be issued where it is appropriate. Symbolic links cannot be used to create filesystem cycles as such, but if the <strong>-L</strong> option or the <strong>-follow</strong> option is in use, a diagnostic message is issued when <strong>find</strong> encounters a loop of symbolic links. As with loops containing hard links, the leaf optimisation will often mean that <strong>find</strong> knows that it doesn't need to call <em>stat()</em> or <em>chdir()</em> on the symbolic link, so this diagnostic is frequently not necessary.
   <p>The <strong>-d</strong> option is supported for compatibility with various BSD systems, but you should use the POSIX-compliant option <strong>-depth</strong> instead.
   <p>The POSIXLY_CORRECT environment variable does not affect the behaviour of the <strong>-regex</strong> or <strong>-iregex</strong> tests because those tests aren't specified in the POSIX standard.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <dl>
     <dt>LANG
@@ -599,8 +599,8 @@
     <dt>TZ
     <dd>Affects the time zone used for some of the time-related format directives of <strong>-printf</strong> and <strong>-fprintf</strong>.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <pre><strong>find /tmp -name core -type f -print | xargs /bin/rm -f</strong></pre>
   <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them. Note that this will work incorrectly if there are any filenames containing newlines, single or double quotes, or spaces.
@@ -648,18 +648,18 @@
   <pre><strong>find /tmp -type f,d,l</strong></pre>
   <p>Search for files, directories, and symbolic links in the directory <strong>/tmp</strong> passing these types as a comma-separated list (GNU extension), which is otherwise equivalent to the longer, yet more portable:
   <pre><strong>find /tmp \( -type f -o -type d -o -type l \)</strong></pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p><strong>find</strong> exits with status 0 if all files are processed successfully, greater than 0 if errors occur. This is deliberately a very broad description, but if the return value is non-zero, you should not rely on the correctness of the results of <strong>find</strong>.
   <p>When some error occurs, <strong>find</strong> may stop immediately, without completing all the actions specified. For example, some starting points may not have been examined or some pending program invocations for <strong>-exec ... {} +</strong> or <strong>-execdir ... {} +</strong> may not have been performed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>locate</strong>(1), <strong>locatedb</strong>(5), <strong>updatedb</strong>(1), <strong>xargs</strong>(1), <strong>chmod</strong>(1), <strong>fnmatch</strong>(3), <strong>regex</strong>(7), <strong>stat</strong>(2), <strong>lstat</strong>(2), <strong>ls</strong>(1), <strong>printf</strong>(3), <strong>strftime</strong>(3), <strong>ctime</strong>(3)
   <p>The full documentation for <strong>find</strong> is maintained as a Texinfo manual. If the <strong>info</strong> and <strong>find</strong> programs are properly installed at your site, the command <strong>info find</strong> should give you access to the complete manual.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HISTORY</h2>
   <p>As of findutils-4.2.2, shell metacharacters (`*', `?' or `[]' for example) used in filename patterns will match a leading `.', because IEEE POSIX interpretation 126 requires this.
   <p>As of findutils-4.3.3, <strong>-perm /000</strong> now matches all files instead of none.
@@ -754,14 +754,14 @@
       <td>3.8
   </table>
   <p>The syntax <strong>-perm +MODE</strong> was removed in findutils-4.5.12, in favour of <strong>-perm</strong> <strong>/MODE</strong>. The <strong>+MODE</strong> syntax had been deprecated since findutils-4.2.21 which was released in 2005.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NON-BUGS</h2>
-  <div class="subsection">
+  <section>
     <h3>Operator precedence surprises</h3>
     <p>The command <strong>find . -name afile -o -name bfile -print</strong> will never print <em>afile</em> because this is actually equivalent to <strong>find . -name afile -o \( -name bfile -a -print \)</strong>. Remember that the precedence of <strong>-a</strong> is higher than that of <strong>-o</strong> and when there is no operator specified between tests, <strong>-a</strong> is assumed.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>“paths must precede expression” error message</h3>
     <pre><strong>$ find . -name *.c -print</strong>
 find: paths must precede expression
@@ -771,12 +771,12 @@ Usage: find [-H] [-L] [-P] [-Olevel] [-D ... [path...] [expression]</pre>
     <p>That command is of course not going to work. Instead of doing things this way, you should enclose the pattern in quotes or escape the wildcard:
     <pre><strong>$ find . -name '*.c' -print</strong>
 <strong>$ find . -name \*.c -print</strong></pre>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>BUGS</h2>
   <p>There are security problems inherent in the behaviour that the POSIX standard specifies for <strong>find</strong>, which therefore cannot be fixed. For example, the <strong>-exec</strong> action is inherently insecure, and <strong>-execdir</strong> should be used instead. Please see <strong>Finding Files</strong> for more information.
   <p>The environment variable <strong>LC_COLLATE</strong> has no effect on the <strong>-ok</strong> action.
   <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. Other comments about <strong>find</strong>(1) and about the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
-</div>
+</section>
 

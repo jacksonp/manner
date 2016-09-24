@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="May 2015" data-extra2="E2fsprogs version 1.43-WIP" data-extra3="">
 <title>CHATTR</title>
 <h1>CHATTR</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>chattr - change file attributes on a Linux file system
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>chattr</strong> [ <strong>-RVf</strong> ] [ <strong>-v</strong> <em>version</em> ] [ <em>mode</em> ] <em>files...</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>chattr</strong> changes the file attributes on a Linux file system.
   <p>The format of a symbolic mode is +-=[aAcCdDeijsStTu].
@@ -19,8 +19,8 @@
   <p>The letters 'aAcCdDeijsStTu' select the new attributes for the files: append only (a), no atime updates (A), compressed (c), no copy on write (C), no dump (d), synchronous directory updates (D), extent format (e), immutable (i), data journalling (j), secure deletion (s), synchronous updates (S), no tail-merging (t), top of directory hierarchy (T), and undeletable (u).
   <p>The following attributes are read-only, and may be listed by <strong>lsattr</strong>(1) but not modified by chattr: compression error (E), huge file (h), indexed directory (I), inline data (N), compression raw access (X), and compressed dirty file (Z).
   <p>Not all flags are supported or utilized by all filesystems; refer to filesystem-specific man pages such as <strong>btrfs</strong>(5), <strong>ext4</strong>(5), and <strong>xfs</strong>(5) for more filesystem-specific details.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-R</strong>
@@ -32,8 +32,8 @@
     <dt><strong>-v</strong> <em>version</em>
     <dd>Set the file's version/generation number.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ATTRIBUTES</h2>
   <p>A file with the 'a' attribute set can only be open in append mode for writing. Only the superuser or a process possessing the CAP_LINUX_IMMUTABLE capability can set or clear this attribute.
   <p>When a file with the 'A' attribute set is accessed, its atime record is not modified. This avoids a certain amount of disk I/O for laptop systems.
@@ -55,23 +55,23 @@
   <p>When a file with the 'u' attribute set is deleted, its contents are saved. This allows the user to ask for its undeletion. Note: please make sure to read the bugs and limitations section at the end of this document.
   <p>The 'X' attribute is used by the experimental compression patches to indicate that the raw contents of a compressed file can be accessed directly. It currently may not be set or reset using <strong>chattr</strong>(1), although it can be displayed by <strong>lsattr</strong>(1).
   <p>The 'Z' attribute is used by the experimental compression patches to indicate a compressed file is dirty. It may not be set or reset using <strong>chattr</strong>(1), although it can be displayed by <strong>lsattr</strong>(1).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p><strong>chattr</strong> was written by Remy Card &lt;Remy.Card@linux.org&gt;. It is currently being maintained by Theodore Ts'o &lt;tytso@alum.mit.edu&gt;.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS AND LIMITATIONS</h2>
   <p>The 'c', 's', and 'u' attributes are not honored by the ext2, ext3, and ext4 filesystems as implemented in the current mainline Linux kernels.
   <p>The 'j' option is only useful if the filesystem is mounted as ext3 or ext4.
   <p>The 'D' option is only useful on Linux kernel 2.5.19 and later.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AVAILABILITY</h2>
   <p><strong>chattr</strong> is part of the e2fsprogs package and is available from http://e2fsprogs.sourceforge.net.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>lsattr</strong>(1), <strong>btrfs</strong>(5), <strong>ext4</strong>(5), <strong>xfs</strong>(5).
-</div>
+</section>
 

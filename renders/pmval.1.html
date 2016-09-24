@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMVAL</title>
 <h1>PMVAL</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmval</strong>, <strong>pmevent</strong> - arbitrary performance metrics value dumper
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmval</strong> [<strong>-dgLrvz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>] [<strong>-f</strong> <em>N</em>] [<strong>-h</strong> <em>host</em>] [<strong>-i</strong> <em>instances</em>] [<strong>-K</strong> <em>spec</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-O</strong> <em>offset</em>] [<strong>-p</strong> <em>port</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-s</strong> <em>samples</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-U</strong> <em>archive</em>] [<strong>-w</strong> <em>width</em>] [<strong>-x</strong> <em>pattern</em>] [<strong>-Z</strong> <em>timezone</em>] <em>metricname</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmval</strong> prints current or archived values for the nominated performance metric. The metric of interest is named in the <em>metricname</em> argument, subject to instance qualification with the <strong>-i</strong> flag as described below.
   <p>Unless directed to another host by the <strong>-h</strong> option, or to a set of archives by the <strong>-a</strong> or <strong>-U</strong> options, <strong>pmval</strong> will contact the Performance Metrics Collector Daemon (PMCD) on the local host to obtain the required information.
@@ -75,27 +75,27 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
   </dl>
   <p>The following symbols may occasionally appear, in place of a metric value, in <strong>pmval</strong> output: A question mark symbol (?) indicates that a value is no longer available for that metric instance. An exclamation mark (!) indicates that a 64-bit counter wrapped during the sample.
   <p>The output from <strong>pmval</strong> is directed to standard output.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
     <dd>default PMNS specification files
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmchart</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmdumptext</strong>(1), <strong>pminfo</strong>(1), <strong>pmlogger</strong>(1), <strong>pmrep</strong>(1), <strong>pmtime</strong>(1), <strong>PMAPI</strong>(3), <strong>pmStore</strong>(3), <strong>__pmSpecLocalPMDA</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>All are generated on standard error and are intended to be self-explanatory.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>By default, <strong>pmval</strong> attempts to display non-integer numeric values in a way that does not distort the inherent precision (rarely more than 4 significant digits), and tries to maintain a tabular format in the output. These goals are sometimes in conflict.
   <p>In the absence of the <strong>-f</strong> option (described above), the following table describes the formats used for different ranges of numeric values for any metric that is of type <strong>PM_TYPE_FLOAT</strong> or <strong>PM_TYPE_DOUBLE</strong>, or any metric that has the semantics of a counter (for which <strong>pmval</strong> reports the rate converted value):
@@ -131,5 +131,5 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
       <td class="rf(CW)">9.999E+99
       <td class="f(R)">&gt; 9999
   </table>
-</div>
+</section>
 

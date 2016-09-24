@@ -3,11 +3,11 @@
 <meta name="man-page-info" data-extra1="17 September 2015" data-extra2="" data-extra3="">
 <title>TCPDUMP</title>
 <h1>TCPDUMP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>tcpdump - dump traffic on a network
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>tcpdump</strong> [ <strong>-AbdDefhHIJKlLnNOpqStuUvxX#</strong> ] [ <strong>-B</strong> <em>buffer_size</em> ]<br>
   <blockquote>
@@ -29,8 +29,8 @@
     [ <strong>--immediate-mode</strong> ] [ <strong>--version</strong> ]<br>
     [ <em>expression</em> ]
   </blockquote>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><em>Tcpdump</em> prints out a description of the contents of packets on a network interface that match the boolean <em>expression</em>; the description is preceded by a time stamp, printed, by default, as hours, minutes, seconds, and fractions of a second since midnight. It can also be run with the <strong>-w</strong> flag, which causes it to save the packet data to a file for later analysis, and/or with the <strong>-r</strong> flag, which causes it to read from a saved packet file rather than to read packets from a network interface. It can also be run with the <strong>-V</strong> flag, which causes it to read a list of saved packet files. In all cases, only packets that match <em>expression</em> will be processed by <em>tcpdump</em>.
   <p><em>Tcpdump</em> will, if not run with the <strong>-c</strong> flag, continue capturing packets until it is interrupted by a SIGINT signal (generated, for example, by typing your interrupt character, typically control-C) or a SIGTERM signal (typically generated with the <strong>kill</strong>(1) command); if run with the <strong>-c</strong> flag, it will capture packets until it is interrupted by a SIGINT or SIGTERM signal or the specified number of packets have been processed.
@@ -42,8 +42,8 @@
   </blockquote>
   <p>On platforms that support the SIGINFO signal, such as most BSDs (including Mac OS X) and Digital/Tru64 UNIX, it will report those counts when it receives a SIGINFO signal (generated, for example, by typing your ``status'' character, typically control-T, although on some platforms, such as Mac OS X, the ``status'' character is not set by default, so you must set it with <strong>stty</strong>(1) in order to use it) and will continue capturing packets. On platforms that do not support the SIGINFO signal, the same can be achieved by using the SIGUSR1 signal.
   <p>Reading packets from a network interface may require that you have special privileges; see the <strong>pcap (3PCAP)</strong> man page for details. Reading a saved packet file doesn't require special privileges.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-A</strong>
@@ -240,8 +240,8 @@
         <p>The <em>expression</em> argument can be passed to <em>tcpdump</em> as either a single Shell argument, or as multiple Shell arguments, whichever is more convenient. Generally, if the expression contains Shell metacharacters, such as backslashes used to escape protocol names, it is easier to pass it as a single, quoted argument rather than to escape the Shell metacharacters. Multiple arguments are concatenated with spaces before being parsed.
       </div>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>To print all packets arriving at or departing from <em>sundown</em>:
   <pre><strong>tcpdump host sundown</strong></pre>
@@ -265,8 +265,8 @@
   <pre><strong>tcpdump 'ether[0] & 1 = 0 and ip[16] &gt;= 224'</strong></pre>
   <p>To print all ICMP packets that are not echo requests/replies (i.e., not ping packets):
   <pre><strong>tcpdump 'icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply'</strong></pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT FORMAT</h2>
   <p>The output of <em>tcpdump</em> is protocol dependent. The following gives a brief description and examples of most of the formats.<br>
   <br>
@@ -535,13 +535,13 @@ rtsg.1170 &gt; arizona.ftp-data: . ack 1536 win 2560</pre>
   <p>By default, all output lines are preceded by a timestamp. The timestamp is the current clock time in the form
   <pre><em>hh:mm:ss.frac</em></pre>
   <p>and is as accurate as the kernel's clock. The timestamp reflects the time the kernel applied a time stamp to the packet. No attempt is made to account for the time lag between when the network interface finished receiving the packet from the network and when the kernel applied a time stamp to the packet; that time lag could include a delay between the time when the network interface finished receiving a packet from the network and the time when an interrupt was delivered to the kernel to get it to read the packet and a delay between the time when the kernel serviced the `new packet' interrupt and the time when it applied a time stamp to the packet.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p>stty(1), pcap(3PCAP), bpf(4), nit(4P), pcap-savefile(@MAN_FILE_FORMATS@), pcap-filter(@MAN_MISC_INFO@), pcap-tstamp(@MAN_MISC_INFO@)
   <p><em>http://www.iana.org/assignments/media-types/application/vnd.tcpdump.pcap</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHORS</h2>
   <p>The original authors are:
   <p>Van Jacobson, Craig Leres and Steven McCanne, all of the Lawrence Berkeley National Laboratory, University of California, Berkeley, CA.
@@ -551,8 +551,8 @@ rtsg.1170 &gt; arizona.ftp-data: . ack 1536 win 2560</pre>
   <p>The original distribution is available via anonymous ftp:
   <p><em>ftp://ftp.ee.lbl.gov/old/tcpdump.tar.Z</em>
   <p>IPv6/IPsec support is added by WIDE/KAME project. This program uses Eric Young's SSLeay library, under specific configurations.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Please send problems, bugs, questions, desirable enhancements, patches etc. to:
   <p>tcpdump-workers@lists.tcpdump.org
@@ -572,5 +572,5 @@ rtsg.1170 &gt; arizona.ftp-data: . ack 1536 win 2560</pre>
   <p>Filter expressions on fields other than those in 802.11 headers will not correctly handle 802.11 data packets with both To DS and From DS set.
   <p><strong>ip6 proto</strong> should chase header chain, but at this moment it does not. <strong>ip6 protochain</strong> is supplied for this behavior.
   <p>Arithmetic expression against transport layer headers, like <strong>tcp[0]</strong>, does not work against IPv6 packets. It only looks at IPv4 packets.
-</div>
+</section>
 

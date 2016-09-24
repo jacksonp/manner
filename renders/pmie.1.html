@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMIE</title>
 <h1>PMIE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmie</strong> - inference engine for performance metrics
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>pmie</strong> [<strong>-bCdefHqVvWxz</strong>] [<strong>-A</strong> <em>align</em>] [<strong>-a</strong> <em>archive</em>] [<strong>-c</strong> <em>filename</em>] [<strong>-h</strong> <em>host</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-j</strong> <em>stompfile</em>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-O</strong> <em>offset</em>] [<strong>-S</strong> <em>starttime</em>] [<strong>-T</strong> <em>endtime</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-U</strong> <em>username</em>] [<strong>-Z</strong> <em>timezone</em>] [<em>filename ...</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmie</strong> accepts a collection of arithmetic, logical, and rule expressions to be evaluated at specified frequencies. The base data for the expressions consists of performance metrics values delivered in real-time from any host running the Performance Metrics Collection Daemon (PMCD), or using historical data from Performance Co-Pilot (PCP) archive logs.
   <p>As well as computing arithmetic and logical values, <strong>pmie</strong> can execute actions (popup alarms, write system log messages, and launch programs) in response to specified conditions. Such actions are extremely useful in detecting, monitoring and correcting performance related problems.
@@ -31,7 +31,7 @@
     <dt><strong>-e</strong>
     <dd>
       <p>When used with <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong>, this option forces timestamps to be reported with each expression. The timestamps are in <strong>ctime</strong>(3) format, enclosed in parenthesis and appear after the expression name and before the expression value, e.g.
-      <pre>        expr_1 (Tue Feb  6 19:55:10 2001): 12</pre>
+      <pre>    expr_1 (Tue Feb  6 19:55:10 2001): 12</pre>
     <dt><strong>-f</strong>
     <dd>If the <strong>-l</strong> option is specified and there is no <strong>-a</strong> option (ie. real-time monitoring) then <strong>pmie</strong> is run as a daemon in the background (in all other cases foreground is the default). The <strong>-f</strong> option forces <strong>pmie</strong> to be run in the foreground, independent of any other options.
     <dt><strong>-h</strong>
@@ -69,8 +69,8 @@
     <dt><strong>stderr</strong>
     <dd>Error and warning messages for any syntactic or semantic problems during expression parsing, and any semantic or performance metrics availability problems during expression evaluation.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>The following example expressions demonstrate some of the capabilities of the inference engine.
   <p>The directory <em>$PCP_DEMOS_DIR/pmie</em> contains a number of other annotated examples of <strong>pmie</strong> expressions.
@@ -145,14 +145,14 @@ otherwise -&gt;
   <p>If the metric <code>mypmda.errors</code> counts errors then the following rule will emit a message if the rate of errors exceeds 1 per second provided the error count is less than 100.
   <pre>mypmda.errors &gt; 1 &amp;& instant mypmda.errors &lt; 100
 -&gt; print "high error rate: %v";</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>QUICK START</h2>
   <p>The <strong>pmie</strong> specification language is powerful and large.
   <p>To expedite rapid development of <strong>pmie</strong> rules, the <strong>pmieconf</strong>(1) tool provides a facility for generating a <strong>pmie</strong> configuration file from a set of generalized <strong>pmie</strong> rules. The supplied set of rules covers a wide range of performance scenarios.
   <p>The <em>Performance Co-Pilot User's and Administrator's Guide</em> provides a detailed tutorial-style chapter covering <strong>pmie</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXPRESSION SYNTAX</h2>
   <p>This description is terse and informal. For a more comprehensive description see the <em>Performance Co-Pilot User's and Administrator's Guide</em>.
   <p>A <strong>pmie</strong> specification is a sequence of semicolon terminated expressions.
@@ -310,8 +310,8 @@ otherwise -&gt;
   <p>were executed under the same circumstances, then <strong>myscript</strong> would be executed with the argument string "Warning! busy: mumble:grunt mumble:snort fumble:puff".
   <p>The semantics of the expansion of the special selectors leads to a common usage pattern in an action, where one argument is a constant (contains no special selectors) the second argument contains the desired special selectors with minimal separator characters, and an optional third argument provides a constant postscript (e.g. to terminate any argument quoting from the first argument). If necessary post-processing (eg. in <strong>myscript</strong>) can provide the necessary enumeration over each unique expansion of the string containing just the special selectors.
   <p>For complex conditions, the bindings to these selectors is not obvious. It is strongly recommended that <strong>pmie</strong> be used in the debugging mode (specify the <strong>-W</strong> command line option in particular) during rule development.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BOOLEAN EXPRESSIONS</h2>
   <p><strong>pmie</strong> expressions that have the semantics of a Boolean, e.g. <code>foo.bar &gt; 10</code> or <code><strong>some_inst</strong></code> <code>( my.table &lt; 0 )</code> are assigned the values <code><strong>true</strong></code> or <code><strong>false</strong></code> or <code><strong>unknown</strong></code>. A value is <code><strong>unknown</strong></code> if one or more of the underlying metric values is unavailable, e.g. <strong>pmcd</strong>(1) on the host cannot be contacted, the metric is not in the PCP archive, no values are currently available, insufficient values have been fetched to allow a rate converted value to be computed or insufficient values have been fetched to instantiate the required number of samples in the temporal domain.
   <p>Boolean operators follow the normal rules of Kleene logic (aka 3-valued logic) when combining values that include <code><strong>unknown</strong></code>:
@@ -433,8 +433,8 @@ otherwise -&gt;
       <td class="c"><code><strong>unknown</strong></code>
       <td class="c"><code><strong>unknown</strong></code>
   </table>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RULESETS</h2>
   <p>The <code><strong>ruleset</strong></code> clause is used to define a set of rules and actions that are evaluated in order until some action is executed, at which point the remaining rules and actions are skipped until the <code><strong>ruleset</strong></code> is again scheduled for evaluation. The keyword <code><strong>else</strong></code> is used to separate rules. After one or more regular rules (with a predicate and an action), a <code><strong>ruleset</strong></code> may include an optional<br>
   <blockquote>
@@ -446,12 +446,12 @@ otherwise -&gt;
   </blockquote>
   <p>If all of the predicates in the rules evaluate to <code><strong>unknown</strong></code> and an <code><strong>unknown</strong></code> clause has been specified then action associated with the <code><strong>unknown</strong></code> clause will be executed.
   <p>If no rule predicate is <code><strong>true</strong></code> and the <code><strong>unknown</strong></code> action is either not specified or not executed and an <code><strong>otherwise</strong></code> clause has been specified, then the action associated with the <code><strong>otherwise</strong></code> clause will be executed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SCALE FACTORS</h2>
   <p>Scale factors may be appended to arithmetic expressions and force linear scaling of the value to canonical units. Simple scale factors are constructed from the keywords: <code><strong>nanosecond</strong></code>, <code><strong>nanosec</strong></code>, <code><strong>nsec</strong></code>, <code><strong>microsecond</strong></code>, <code><strong>microsec</strong></code>, <code><strong>usec</strong></code>, <code><strong>millisecond</strong></code>, <code><strong>millisec</strong></code>, <code><strong>msec</strong></code>, <code><strong>second</strong></code>, <code><strong>sec</strong></code>, <code><strong>minute</strong></code>, <code><strong>min</strong></code>, <code><strong>hour</strong></code>, <code><strong>byte</strong></code>, <code><strong>Kbyte</strong></code>, <code><strong>Mbyte</strong></code>, <code><strong>Gbyte</strong></code>, <code><strong>Tbyte</strong></code>, <code><strong>count</strong></code>, <code><strong>Kcount</strong></code> and <code><strong>Mcount</strong></code>, and the operator <code>/</code>, for example ``<code><strong>Kbytes / hour</strong></code>''.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MACROS</h2>
   <p>Macros are defined using expressions of the form:
   <p><em>name</em> = <em>constexpr</em>;
@@ -475,12 +475,12 @@ otherwise -&gt;
     <dd>Sample interval in effect for this expression.
   </dl>
   <p>Dates and times are presented in the reporting time zone (see description of <strong>-Z</strong> and <strong>-z</strong> command line options above).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTOMATIC RESTART</h2>
   <p>It is often useful for <strong>pmie</strong> processes to be started and stopped when the local host is booted or shutdown, or when they have been detected as no longer running (when they have unexpectedly exited for some reason). Refer to <strong>pmie_check</strong>(1) for details on automating this process.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EVENT MONITORING</h2>
   <p>It is common for production systems to be monitored in a central location. Traditionally on UNIX systems this has been performed by the system log facilities - see <strong>logger</strong>(1), and <strong>syslogd</strong>(1). On Windows, communication with the system event log is handled by <strong>pcp-eventlog</strong>(1).
   <p><strong>pmie</strong> fits into this model when rules use the <em>syslog</em> action. Note that if the action string begins with -p (priority) and/or -t (tag) then these are extracted from the string and treated in the same way as in <strong>logger</strong>(1) and <strong>pcp-eventlog</strong>(1).
@@ -494,8 +494,8 @@ username=joe            # (required)
 password=j03ST0MP       # (required)
 topic=PMIE              # JMS topic for pmie messages (optional)</pre>
   <p>The timeout value specifies the time (in seconds) that <strong>pmie</strong> should wait for acknowledgements from the JMS server after sending a message (as required by the STOMP protocol). Note that on startup, <strong>pmie</strong> will wait indefinitely for a connection, and will not begin rule evaluation until that initial connection has been established. Should the connection to the JMS server be lost at any time while <strong>pmie</strong> is running, <strong>pmie</strong> will attempt to reconnect on each subsequent truthful evaluation of a rule with a <em>stomp</em> action, but not more than once per minute. This is to avoid contributing to network congestion. In this situation, where the STOMP connection to the JMS server has been severed, the <em>stomp</em> action will return a non-zero error value.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_DEMOS_DIR/pmie/</strong><em>*</em>
@@ -507,32 +507,32 @@ topic=PMIE              # JMS topic for pmie messages (optional)</pre>
     <dt><strong>$PCP_PMIECONTROL_PATH</strong>
     <dd>the default set of <strong>pmie</strong> instances to start at boot time - refer to <strong>pmie_check</strong>(1) for details
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>The lexical scanner and parser will attempt to recover after an error in the input expressions. Parsing resumes after skipping input up to the next semi-colon (;), however during this skipping process the scanner is ignorant of comments and strings, so an embedded semi-colon may cause parsing to resume at an unexpected place. This behavior is largely benign, as until the initial syntax error is corrected, <strong>pmie</strong> will not attempt any expression evaluation.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
   <p>When executing shell actions, <strong>pmie</strong> overrides two variables - IFS and PATH - in the environment of the child process. IFS is set to "\t\n". The PATH is set to a combination of a default path for all platforms ("/usr/sbin:/sbin:/usr/bin:/usr/sbin") and several configurable components. These are (in this order): <strong>$PCP_BIN_DIR</strong>, <strong>$PCP_BINADM_DIR</strong> and <strong>$PCP_PLATFORM_PATHS</strong>.
   <p>When executing popup alarm actions, <strong>pmie</strong> will use the value of <strong>$PCP_XCONFIRM_PROG</strong> as the visual notification program to run. This is typically set to <strong>pmconfirm</strong>(1), a cross-platform dialog box.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>UNIX SEE ALSO</h2>
   <p><strong>logger</strong>(1).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>WINDOWS SEE ALSO</h2>
   <p><strong>pcp-eventlog</strong>(1).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmcd</strong>(1), <strong>pmconfirm</strong>(1), <strong>pmdumplog</strong>(1), <strong>pmieconf</strong>(1), <strong>pmie_check</strong>(1), <strong>pminfo</strong>(1), <strong>pmlogger</strong>(1), <strong>pmval</strong>(1), <strong>PMAPI</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>USER GUIDE</h2>
   <p>For a more complete description of the <strong>pmie</strong> language, refer to the <strong>Performance Co-Pilot Users and Administrators Guide</strong>. This is available online from:
   <pre>http://www.pcp.io/doc/pcp-users-and-administrators-guide.pdf</pre>
-</div>
+</section>
 

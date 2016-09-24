@@ -3,17 +3,17 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMDACISCO</title>
 <h1>PMDACISCO</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmdacisco</strong> - Cisco router performance metrics domain agent (PMDA)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_PMDAS_DIR/cisco/pmdacisco</strong> [<strong>-d</strong> <em>domain</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-U</strong> <em>username</em>] [<strong>-P</strong> <em>password</em>] [<strong>-r</strong> <em>refresh</em>] [<strong>-s</strong> <em>prompt</em>] [<strong>-M</strong> <em>username</em>] [<strong>-x</strong> <em>port</em>] <em>host:interface-spec</em> [...]<br>
   <strong>$PCP_PMDAS_DIR/cisco/parse</strong> [options] <em>host:interface-spec</em> [...]<br>
   <strong>$PCP_PMDAS_DIR/cisco/probe</strong> [<strong>-P</strong> <em>password</em>] [<strong>-s</strong> <em>prompt</em>] [<strong>-U</strong> <em>username</em>] [<strong>-x</strong> <em>port</em>] <em>host</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmdacisco</strong> is a Performance Metrics Domain Agent (PMDA) which extracts performance metrics from one or more Cisco routers.
   <p>A brief description of the <strong>pmdacisco</strong> command line options follows:
@@ -36,8 +36,8 @@
     <dd>Connect to the Cisco via TCP port number <em>port</em> rather than the default 23 for a telnet connection.
   </dl>
   <p>For each interface, once the telnet connection is established, <strong>pmdacisco</strong> is willing to wait up to 5 seconds for the Cisco to provide a new snapshot of the requested information. If this does not happen, the telnet connection is broken and no values are returned. This prevents <strong>pmdacisco</strong> tying up the Cisco's telnet ports waiting indefinitely when the response from the router is not what is expected, e.g. if the format of the ``show int'' output changes, or the command is in error because an interface is no longer configured on the router.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INTERFACE IDENTIFICATION</h2>
   <p>As each Cisco router can support multiple network interfaces and/or multiple communications protocols, it is necessary to tell <strong>pmdacisco</strong> which interfaces are to be monitored.
   <p>The <em>host:interface-spec</em> arguments on the command line define a particular interface on a particular Cisco router. <em>host</em> should be a hostname or a ``dot-notation'' IP address that identifies the telnet port of a particular Cisco router. There are several components of the <em>interface-spec</em> as follows.
@@ -67,14 +67,14 @@ cisco34.foo.bar.com:e2?way2cool
 mycisco:s2/2.1@mylogin
 yourcisco:E0/0@yourlogin?yourpassword
 mycisco:E0/0@mylogin?mypassword!myprompt</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HELPER UTILITIES</h2>
   <p>The <strong>probe</strong> command may be used to discover the names of all interfaces for a particular Cisco router identified by <em>host</em>. The <strong>-P</strong> argument is the same as for <strong>pmdacisco</strong>.
   <p>The <strong>parse</strong> command takes exactly the same arguments as <strong>pmdacisco</strong>, but executes outside the control of any <strong>pmcd</strong>(1) and so may be used to diagnose problems with handling a particular Cisco router and/or one of its interfaces.
   <p>Additional diagnostic verbosity may be produced using the <strong>-D appl0,appl1,appl2</strong> command line option. <strong>appl0</strong> logs connect and disconnect events, login progress, high-level flow of control and extracted statistics. <strong>appl1</strong> traces all commands sent to the Cisco device. <strong>appl2</strong> logs tokenizing and parsing of the output from the Cisco device. Diagnostics are generated on standard error as each sample is fetched and parsed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INSTALLATION</h2>
   <p>If you want access to the names, help text and values for the Cisco performance metrics, do the following as root:
   <pre># cd $PCP_PMDAS_DIR/cisco
@@ -83,8 +83,8 @@ mycisco:E0/0@mylogin?mypassword!myprompt</pre>
   <pre># cd $PCP_PMDAS_DIR/cisco
 # ./Remove</pre>
   <p><strong>pmdacisco</strong> is launched by <strong>pmcd</strong>(1) and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong>(1) when the agent is installed or removed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
@@ -98,13 +98,13 @@ mycisco:E0/0@mylogin?mypassword!myprompt</pre>
     <dt><strong>$PCP_LOG_DIR/pmcd/cisco.log</strong>
     <dd>default log file for error messages and other information from <strong>pmdacisco</strong>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmcd</strong>(1), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

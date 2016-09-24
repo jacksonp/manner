@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="June 2012" data-extra2="util-linux" data-extra3="User Commands">
 <title>LOGIN</title>
 <h1>LOGIN</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>login - begin session on the system
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>login</strong> [ <strong>-p</strong> ] [ <strong>-h</strong> <em>host</em> ] [ <strong>-H</strong> ] [ <strong>-f</strong> <em>username</em> | <em>username</em> ]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>login</strong> is used when signing onto a system. If no argument is given, <strong>login</strong> prompts for the username.
   <p>The user is then prompted for a password, where appropriate. Echoing is disabled to prevent revealing the password. Only a small number of password failures are permitted before <strong>login</strong> exits and the communications link is severed.
@@ -20,8 +20,8 @@
   <p>The environment variable <strong>$TERM</strong> will be preserved, if it exists (other environment variables are preserved if the <strong>-p</strong> option is given), else it will be initialized to the terminal type on your tty.
   <p>Then the user's shell is started. If no shell is specified for the user in <strong>/etc/passwd</strong>, then <strong>/bin/sh</strong> is used. If there is no directory specified in <em>/etc/passwd</em>, then <em>/</em> is used (the home directory is checked for the <em>.hushlogin</em> file described below).
   <p>If the file <em>.hushlogin</em> exists, then a "quiet" login is performed (this disables the checking of mail and the printing of the last login time and message of the day). Otherwise, if <em>/var/log/lastlog</em> exists, the last login time is printed (and the current login is recorded).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-p</strong>
@@ -37,8 +37,8 @@
     <dt><strong>-V</strong>
     <dd>Display version information and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIG FILE ITEMS</h2>
   <p><strong>login</strong> reads the <em>/etc/login.defs</em>(5) configuration file. Note that the configuration file could be distributed with another package (e.g. shadow-utils). The following configuration items are relevant for <strong>login</strong>(1):
   <p><strong>MOTD_FILE</strong> (string)
@@ -91,8 +91,8 @@
   <div class="indent-4">
     <p>If set, it will be used to define the PATH environment variable when the superuser logs in. The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>
   </div>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <pre><em>/var/run/utmp</em>
 <em>/var/log/wtmp</em>
@@ -105,24 +105,24 @@
 <em>/etc/pam.d/remote</em>
 <em>/etc/hushlogins</em>
 <em>.hushlogin</em></pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>init</strong>(8), <strong>getty</strong>(8), <strong>mail</strong>(1), <strong>passwd</strong>(1), <strong>passwd</strong>(5), <strong>environ</strong>(7), <strong>shutdown</strong>(8)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>The undocumented BSD <strong>-r</strong> option is not supported. This may be required by some <strong>rlogind</strong>(8) programs.
   <p>A recursive login, as used to be possible in the good old days, no longer works; for most purposes <strong>su</strong>(1) is a satisfactory substitute. Indeed, for security reasons, login does a vhangup() system call to remove any possible listening processes on the tty. This is to avoid password sniffing. If one uses the command <strong>login</strong>, then the surrounding shell gets killed by vhangup() because it's no longer the true owner of the tty. This can be avoided by using <strong>exec login</strong> in a top-level shell or xterm.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Derived from BSD login 5.40 (5/9/89) by <a href="mailto:glad@daimi.dk">Michael Glad</a> for HP-UX<br>
   Ported to Linux 0.12: <a href="mailto:poe@daimi.aau.dk">Peter Orbaek</a><br>
   Rewritten to a PAM-only version by <a href="mailto:kzak@redhat.com">Karel Zak</a>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AVAILABILITY</h2>
   <p>The login command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>.
-</div>
+</section>
 

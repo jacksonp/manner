@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>SHEET2PCP</title>
 <h1>SHEET2PCP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>sheet2pcp</strong> - import spreadsheet data and create a PCP archive
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>sheet2pcp</strong> [<strong>-h</strong> <em>host</em>] [<strong>-Z</strong> <em>timezone</em>] <em>infile</em> <em>mapfile</em> <em>outfile</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>sheet2pcp</strong> is intended to read a data spreadsheet (<em>infile</em>) translate this into a Performance Co-Pilot (PCP) archive with the basename <em>outfile</em>.
   <p>The input spreadsheet can be in any of the common formats, provided the appropriate Perl modules have been installed (see the <strong>CAVEATS</strong> section below). The spreadsheet must be normalized so that each row contains data for the same time interval, and one of the columns contains the date and time for the data in each row.
@@ -21,8 +21,8 @@
   <p>The <strong>-h</strong> option is an alternate to the <strong>hostname</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. If both are specified, the value from <em>mapfile</em> is used.
   <p>The <strong>-Z</strong> option is an alternate to the <strong>timezone</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. If both are specified, the value from <em>mapfile</em> is used.
   <p><strong>sheet2pcp</strong> is a Perl script that uses the PCP::LogImport Perl wrapper around the PCP <em>libpcp_import</em> library, and as such could be used as an example to develop new tools to import other types of performance data and create PCP archives.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MAPPING CONFIGURATION</h2>
   <p>The <em>mapfile</em> contains specifications in standard XML format.
   <p>The whole specification is wrapped in a <strong>&lt;sheet&gt;</strong> ... <strong>&lt;/sheet&gt;</strong> element. The <strong>sheet</strong> tag supports the following optional attributes:
@@ -54,7 +54,7 @@
   <p>For the <strong>&lt;data&gt;</strong> element, a <em>metricspec</em> consists of a metric name (as defined in an earlier <strong>&lt;metric&gt;</strong> element), optionally followed by an instance name that is enclosed by square brackets, e.g. &lt;data&gt;hinv.ncpu&lt;/data&gt;, &lt;data&gt;kernel.all.load[1 minute]&lt;/data&gt;.
   <p>The <strong>skip</strong> tag defines the column that should be skipped when preparing data for the PCP archive.
   <p>The order of the <strong>&lt;datetime&gt;</strong>, <strong>&lt;data&gt;</strong> and <strong>&lt;skip&gt;</strong> elements matches the order of columns in the spreadsheet. If the number of elements is not the same as the number of columns a warning is issued, and the extra elements or columns generate no metric values in the output archive.
-  <div class="subsection">
+  <section>
     <h3>EXAMPLE</h3>
     <p>The <em>mapfile</em> ...
     <pre>    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -73,9 +73,9 @@
     26/01/2001 14:05:22;"Some Busy";0.750;0.133
     26/01/2001 14:05:37;"OK";0.150;0.273
     26/01/2001 14:05:52;"All Busy";0.733;0.653</pre>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>Only the first sheet from <em>infile</em> will be processed.
   <p>Additional Perl modules must be installed for the various spreadsheet formats, although these are checked for ar run-time so only the modules required for the specific types of spreadsheets you wish to process need be installed:
@@ -89,13 +89,13 @@
     <dt><strong>*.xlsx</strong>
     <dd>Microsoft OpenXML documents require <strong>Spreadsheet::XLSX</strong>(3pm). <strong>sheet2pcp</strong> does not appear to work with OpenXML documents saved from OpenOffice.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>pmchart</strong>(1), <strong>pmie</strong>(1), <strong>pmlogger</strong>(1), <strong>sed</strong>(1), <strong>pmiAddMetric</strong>(3), <strong>pmLookupDesc</strong>(3), <strong>pmiUnits</strong>(3), <strong>Archive::Zip</strong>(3pm), <strong>Date::Format</strong>(3pm), <strong>Date::Parse</strong>(3pm), <strong>PCP::LogImport</strong>(3pm), <strong>OLE::Storage_Lite</strong>(3pm), <strong>Spreadsheet::ParseExcel</strong>(3pm), <strong>Spreadsheet::ReadSXC</strong>(3pm), <strong>Spreadsheet::XLSX</strong>(3pm), <strong>Text::CSV_XS</strong>(3pm), <strong>XML::TokeParser</strong>(3pm) and <strong>LOGIMPORT</strong>(3).
-</div>
+</section>
 

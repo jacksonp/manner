@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>IOSTAT2PCP</title>
 <h1>IOSTAT2PCP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>iostat2pcp</strong> - import iostat data and create a PCP archive
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>iostat2pcp</strong> [<strong>-v</strong>] [<strong>-S</strong> <em>start</em>] [<strong>-t</strong> <em>interval</em>] [<strong>-Z</strong> <em>timezone</em>] <em>infile</em> <em>outfile</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>iostat2pcp</strong> reads a text file created with <strong>iostat</strong>(1) (<em>infile</em>) and translates this into a Performance Co-Pilot (PCP) archive with the basename <em>outfile</em>. If <em>infile</em> is - then <em>iostat2pcp</em> reads from standard input, allowing easy preprocessing of the <em>iostat</em>(1) output with <em>sed</em>(1) or similar.
   <p>The resultant PCP archive may be used with all the PCP client tools to graph subsets of the data using <strong>pmchart</strong>(1), perform data reduction and reporting, filter with the PCP inference engine <strong>pmie</strong>(1), etc.
@@ -33,18 +33,18 @@
   <p>The <strong>-Z</strong> option may be used to specify a timezone. It must have the format +HHMM (for hours and minutes East of UTC) or -HHMM (for hours and minutes West of UTC). Note in particular that <strong>neither</strong> the <strong>zoneinfo</strong> (aka Olson) format, e.g. Europe/Paris, nor the Posix <strong>TZ</strong> format, e.g. EST+5 is allowed for the <strong>-Z</strong> option. This option is ignored if ISO timestamps are found in the input stream. If the timezone is not specified and cannot be deduced, it defaults to UTC.
   <p>Some additional diagnostic output is generated with the <strong>-v</strong> option.
   <p><strong>iostat2pcp</strong> is a Perl script that uses the PCP::LogImport Perl wrapper around the PCP <em>libpcp_import</em> library, and as such could be used as an example to develop new tools to import other types of performance data and create PCP archives.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEAT</h2>
   <p><strong>iostat2pcp</strong> requires <em>infile</em> to have been created by the version of <strong>iostat</strong>(1) from &lt;http://freshmeat.net/projects/sysstat&gt;.
   <p><strong>iostat2pcp</strong> handles the <strong>-c</strong> (CPU), <strong>-d</strong> (Disk), <strong>-x</strong> (eXtended Disk) and <strong>-p</strong> (Partition) report formats (including their <strong>-k</strong>, <strong>-m</strong>, <strong>-z</strong> and <strong>ALL</strong> variants), but does not accommodate the <strong>-n</strong> (Network Filesystem) report format from <strong>iostat</strong>(1); this is a demand-driven limitation rather than a technical limitation.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>iostat</strong>(1), <strong>pmchart</strong>(1), <strong>pmie</strong>(1), <strong>pmlogger</strong>(1), <strong>sed</strong>(1), <strong>Date::Format</strong>(3pm), <strong>Date::Parse</strong>(3pm), <strong>PCP::LogImport</strong>(3pm) and <strong>LOGIMPORT</strong>(3).
-</div>
+</section>
 

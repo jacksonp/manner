@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="2014-12-29" data-extra2="Debian Project" data-extra3="dpkg utilities">
 <title>dpkg-gensymbols</title>
 <h1>dpkg-gensymbols</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>dpkg-gensymbols - generate symbols files (shared library dependency information)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dpkg-gensymbols</strong> [<em>option</em>...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dpkg-gensymbols</strong> scans a temporary build tree (debian/tmp by default) looking for libraries and generates a <em>symbols</em> file describing them. This file, if non-empty, is then installed in the DEBIAN subdirectory of the build tree so that it ends up included in the control information of the package.
   <p>When generating those files, it uses as input some symbols files provided by the maintainer. It looks for the following files (and uses the first that is found):
@@ -27,18 +27,18 @@
   </dl>
   <p>The main interest of those files is to provide the minimal version associated to each symbol provided by the libraries. Usually it corresponds to the first version of that package that provided the symbol, but it can be manually incremented by the maintainer if the ABI of the symbol is extended without breaking backwards compatibility. It's the responsibility of the maintainer to keep those files up-to-date and accurate, but <strong>dpkg-gensymbols</strong> helps with that.
   <p>When the generated symbols files differ from the maintainer supplied one, <strong>dpkg-gensymbols</strong> will print a diff between the two versions. Furthermore if the difference is too significant, it will even fail (you can customize how much difference you can tolerate, see the <strong>-c</strong> option).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MAINTAINING SYMBOLS FILES</h2>
   <p>The symbols files are really useful only if they reflect the evolution of the package through several releases. Thus the maintainer has to update them every time that a new symbol is added so that its associated minimal version matches reality. The diffs contained in the build logs can be used as a starting point, but the maintainer, additionally, has to make sure that the behaviour of those symbols has not changed in a way that would make anything using those symbols and linking against the new version, stop working with the old version. In most cases, the diff applies directly to the debian/<em>package</em>.symbols file. That said, further tweaks are usually needed: it's recommended for example to drop the Debian revision from the minimal version so that backports with a lower version number but the same upstream version still satisfy the generated dependencies. If the Debian revision can't be dropped because the symbol really got added by the Debian specific change, then one should suffix the version with ‘<strong>~</strong>’.
   <p>Before applying any patch to the symbols file, the maintainer should double-check that it's sane. Public symbols are not supposed to disappear, so the patch should ideally only add new lines.
   <p>Note that you can put comments in symbols files: any line with ‘#’ as the first character is a comment except if it starts with ‘#include’ (see section <strong>Using includes</strong>). Lines starting with ‘#MISSING:’ are special comments documenting symbols that have disappeared.
   <p>Do not forget to check if old symbol versions need to be increased. There is no way <strong>dpkg-gensymbols</strong> can warn about this. Blindly applying the diff or assuming there is nothing to change if there is no diff, without checking for such changes, can lead to packages with loose dependencies that claim they can work with older packages they cannot work with. This will introduce hard to find bugs with (partial) upgrades.
-  <div class="subsection">
+  <section>
     <h3>Using #PACKAGE# substitution</h3>
     <p>In some rare cases, the name of the library varies between architectures. To avoid hardcoding the name of the package in the symbols file, you can use the marker <em>#PACKAGE#</em>. It will be replaced by the real package name during installation of the symbols files. Contrary to the <em>#MINVER#</em> marker, <em>#PACKAGE#</em> will never appear in a symbols file inside a binary package.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Using symbol tags</h3>
     <p>Symbol tagging is useful for marking symbols that are special in some way. Any symbol can have an arbitrary number of tags associated with it. While all tags are parsed and stored, only some of them are understood by <strong>dpkg-gensymbols</strong> and trigger special handling of the symbols. See subsection <strong>Standard symbol tags</strong> for reference of these tags.
     <p>Tag specification comes right before the symbol name (no whitespace is allowed in between). It always starts with an opening bracket <strong>(</strong>, ends with a closing bracket <strong>)</strong> and must contain at least one tag. Multiple tags are separated by the <strong>|</strong> character. Each tag can optionally have a value which is separated form the tag name by the <strong>=</strong> character. Tag names and values can be arbitrary strings except they cannot contain any of the special <strong>)</strong> <strong>|</strong> <strong>=</strong> characters. Symbol names following a tag specification can optionally be quoted with either <strong>'</strong> or <strong>"</strong> characters to allow whitespaces in them. However, if there are no tags specified for the symbol, quotes are treated as part of the symbol name which continues up until the first space.
@@ -47,8 +47,8 @@
     untagged_symbol@Base 1.0
     <p>The first symbol in the example is named <em>tagged quoted symbol</em> and has two tags: <em>tag1</em> with value <em>i am marked</em> and <em>tag name with space</em> that has no value. The second symbol named <em>tagged_unquoted_symbol</em> is only tagged with the tag named <em>optional</em>. The last symbol is an example of the normal untagged symbol.
     <p>Since symbol tags are an extension of the <strong>deb-symbols</strong>(5) format, they can only be part of the symbols files used in source packages (those files should then be seen as templates used to build the symbols files that are embedded in binary packages). When <strong>dpkg-gensymbols</strong> is called without the <strong>-t</strong> option, it will output symbols files compatible to the <strong>deb-symbols</strong>(5) format: it fully processes symbols according to the requirements of their standard tags and strips all tags from the output. On the contrary, in template mode (<strong>-t</strong>) all symbols and their tags (both standard and unknown ones) are kept in the output and are written in their original form as they were loaded.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Standard symbol tags</h3>
     <dl>
       <dt><strong>optional</strong>
@@ -82,8 +82,8 @@
       <dt><strong>regex</strong>
       <dd>Denotes <em>regex</em> symbol pattern. See <strong>Using symbol patterns</strong> subsection below.
     </dl>
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Using symbol patterns</h3>
     <p>Unlike a standard symbol specification, a pattern may cover multiple real symbols from the library. <strong>dpkg-gensymbols</strong> will attempt to match each pattern against each real symbol that does <em>not</em> have a specific symbol counterpart defined in the symbol file. Whenever the first matching pattern is found, all its tags and properties will be used as a basis specification of the symbol. If none of the patterns matches, the symbol will be considered as new.
     <p>A pattern is considered lost if it does not match any symbol in the library. By default this will trigger a <strong>dpkg-gensymbols</strong> failure under <strong>-c1</strong> or higher level. However, if the failure is undesired, the pattern may be marked with the <em>optional</em> tag. Then if the pattern does not match anything, it will only appear in the diff as MISSING. Moreover, like any symbol, the pattern may be limited to the specific architectures with the <em>arch</em> tag. Please refer to <strong>Standard symbol tags</strong> subsection above for more information.
@@ -130,8 +130,8 @@
     <p>will match symbols "_ZN3NSA6ClassA7Private11privmethod1Ei@Base" and "_ZN3NSA6ClassA7Private11privmethod2Ei@Base". When matching the first pattern, the raw symbol is first demangled as C++ symbol, then the demangled name is matched against the regular expression. On the other hand, when matching the second pattern, regular expression is matched against the raw symbol name, then the symbol is tested if it is C++ one by attempting to demangle it. A failure of any basic pattern will result in the failure of the whole pattern. Therefore, for example, "__N3NSA6ClassA7Private11privmethod\dEi@Base" will not match either of the patterns because it is not a valid C++ symbol.
     <p>In general, all patterns are divided into two groups: aliases (basic <em>c++</em> and <em>symver</em>) and generic patterns (<em>regex</em>, all combinations of multiple basic patterns). Matching of basic alias-based patterns is fast (O(1)) while generic patterns are O(N) (N - generic pattern count) for each symbol. Therefore, it is recommended not to overuse generic patterns.
     <p>When multiple patterns match the same real symbol, aliases (first <em>c++</em>, then <em>symver</em>) are preferred over generic patterns. Generic patterns are matched in the order they are found in the symbol file template until the first success. Please note, however, that manual reordering of template file entries is not recommended because <strong>dpkg-gensymbols</strong> generates diffs based on the alphanumerical order of their names.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Using includes</h3>
     <p>When the set of exported symbols differ between architectures, it may become inefficient to use a single symbol file. In those cases, an include directive may prove to be useful in a couple of ways:
     <dl class="indent-4">
@@ -153,8 +153,8 @@
     <p>An included file can repeat the header line containing the SONAME of the library. In that case, it overrides any header line previously read. However, in general it's best to avoid duplicating header lines. One way to do it is the following:
     <p>#include "libsomething1.symbols.common"<br>
     arch_specific_symbol@Base 1.0
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>Good library management</h3>
     <p>A well-maintained library has the following features:
     <dl class="indent-4">
@@ -166,9 +166,9 @@
       <dd>it doesn't export private symbols (such symbols can be tagged optional as workaround).
     </dl>
     <p>While maintaining the symbols file, it's easy to notice appearance and disappearance of symbols. But it's more difficult to catch incompatible API and ABI change. Thus the maintainer should read thoroughly the upstream changelog looking for cases where the rules of good library management have been broken. If potential problems are discovered, the upstream author should be notified as an upstream fix is always better than a Debian specific work-around.
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-P</strong><em>package-build-dir</em>
@@ -202,12 +202,12 @@
     <dt><strong>--version</strong>
     <dd>Show the version and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>https://people.redhat.com/drepper/symbol-versioning</strong><br>
   <strong>https://people.redhat.com/drepper/goodpractice.pdf</strong><br>
   <strong>https://people.redhat.com/drepper/dsohowto.pdf</strong><br>
   <strong>deb-symbols</strong>(5), <strong>dpkg-shlibdeps</strong>(1).
-</div>
+</section>
 

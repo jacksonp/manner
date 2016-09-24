@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>PMDAPIPE</title>
 <h1>PMDAPIPE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>pmdapipe</strong> - command output capture performance metrics domain agent (PMDA)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>$PCP_PMDAS_DIR/pipe/pmdapipe</strong> [<strong>-c</strong> <em>configfile</em>] [<strong>-d</strong> <em>domain</em>] [<strong>-l</strong> <em>logfile</em>] [<strong>-m</strong> <em>memory</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmdapipe</strong> is a configurable command output monitoring Performance Metrics Domain Agent (PMDA). It can be seen as analogous to a restricted shell, where options can be passed to preset commands, and each line of their output is converted into a performance event. These events can be consumed by client tools like <strong>pmval</strong>(1).
   <p>The <strong>pipe</strong> PMDA exports both event-style metrics reflecting timestamped event records for text-oriented command output, as well as the more orthodox sample-style metrics such as event counts and throughput size values.
@@ -27,8 +27,8 @@
     <dt><strong>-m</strong>
     <dd>Limit the physical memory used by the PMDA to buffer event records to <em>maxsize</em> bytes. As log events arrive at the PMDA, they must be buffered until individual client tools request the next batch since their previous batch of events. The default maximum is 2 megabytes.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFIGURATION</h2>
   <p>The set of allowed pipe commands is configured by simple text file(s). The format is a single line for each command followed by an optional access control section.
   <p>Blank lines and comments are permitted (even encouraged) in the configuration file. A comment begins with a ``#'' character and finishes at the end of the line.
@@ -64,8 +64,8 @@
   </blockquote>
   <p>The <em>username</em> and <em>groupname</em> names will be verified using the local <strong>/etc/passwd</strong> and <strong>/etc/groups</strong> files (or an alternative directory service), using the <strong>getpwent</strong>(3) and <strong>getgrent</strong>(3) routines.
   <p>The wildcard ``*'' can be used to refer to all <em>instance</em> names.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INSTALLATION</h2>
   <p>If you want access to the names, help text and values for the pipe performance metrics, do the following as root:
   <pre># cd $PCP_PMDAS_DIR/pipe
@@ -75,8 +75,8 @@
   <pre># cd $PCP_PMDAS_DIR/pipe
 # ./Remove</pre>
   <p><strong>pmdapipe</strong> is launched by <strong>pmcd</strong> and should never be executed directly. The Install and Remove scripts notify <strong>pmcd</strong> when the agent is installed or removed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>Following is a simple example of <strong>pmdapipe</strong> configuration and use of the pipe metrics to run the <strong>btrace</strong> command, by user <strong>bob</strong>:
   <pre>bob&gt; cat $PCP_PMDAS_DIR/pipe/pipe.conf
@@ -95,8 +95,8 @@ bob&gt; pmval -i bdev_trace -x '5 sda' pipe.firehose
  8,0  5  3  0.000000756 25227  Q  WS 735358432 + 24 [qemu-kvm]
  [...5 seconds worth]
 bob&gt;</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
@@ -114,13 +114,13 @@ bob&gt;</pre>
     <dt><strong>$PCP_SYSCONF_DIR/pipe.conf.d</strong>
     <dd>directory containing additional configuration files for the pipe metrics
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>PCPIntro</strong>(1), <strong>pmval</strong>(1), <strong>pmcd</strong>(1), <strong>getpwent</strong>(3), <strong>getgrent</strong>(3), <strong>pmStore</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

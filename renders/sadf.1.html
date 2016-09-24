@@ -3,23 +3,23 @@
 <meta name="man-page-info" data-extra1="MAY 2016" data-extra2="Linux" data-extra3="Linux User's Manual">
 <title>SADF</title>
 <h1>SADF</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>sadf - Display data collected by sar in multiple formats.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>sadf [ -C ] [ -c | -d | -g | -j | -p | -x ] [ -H ] [ -h ] [ -T | -t | -U ] [ -V ] [ -O</strong> <em>opts</em> <strong>[,...] ] [ -P {</strong> <em>cpu</em> <strong>[,...] | ALL } ] [ -s [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ -e [</strong> <em>hh:mm[:ss]</em> <strong>] ] [ --</strong> <em>sar_options</em> <strong>] [</strong> <em>interval</em> <strong>[</strong> <em>count</em> <strong>] ] [</strong> <em>datafile</em> | <em>-[0-9]+</em> <strong>]</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>The <strong>sadf</strong> command is used for displaying the contents of data files created by the <strong>sar</strong>(1) command. But unlike <strong>sar</strong>, <strong>sadf</strong> can write its data in many different formats (CSV, XML, etc.) The default format is one that can easily be handled by pattern processing commands like awk (see option -p). The <strong>sadf</strong> command can also be used to draw graphs for the various activities collected by <strong>sar</strong> and display them as SVG (Scalable Vector Graphics) graphics in your web browser (see option -g).
   <p>The <strong>sadf</strong> command extracts and writes to standard output records saved in the <em>datafile</em> file. This file must have been created by a version of <strong>sar</strong> which is compatible with that of <strong>sadf.</strong> If <em>datafile</em> is omitted, <strong>sadf</strong> uses the standard system activity daily data file. It is also possible to enter -1, -2 etc. as an argument to <strong>sadf</strong> to display data of that days ago. For example, -1 will point at the standard system activity file of yesterday.
   <p>The standard system activity daily data file is named <em>saDD</em> or <em>saYYYYMMDD</em>, where YYYY stands for the current year, MM for the current month and DD for the current day. <strong>sadf</strong> will look for the most recent of <em>saDD</em> and <em>saYYYYMMDD</em>, and use it. By default it is located in the <em>/var/log/sa</em> directory. Yet it is possible to specify an alternate location for it: If <em>datafile</em> is a directory (instead of a plain file) then it will be considered as the directory where the standard system activity daily data file is located.
   <p>The <em>interval</em> and <em>count</em> parameters are used to tell <strong>sadf</strong> to select <em>count</em> records at <em>interval</em> seconds apart. If the <em>count</em> parameter is not set, then all the records saved in the data file will be displayed.
   <p>All the activity flags of <strong>sar</strong> may be entered on the command line to indicate which activities are to be reported. Before specifying them, put a pair of dashes (--) on the command line in order not to confuse the flags with those of <strong>sadf.</strong> Not specifying any flags selects only CPU activity.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt>-C
@@ -71,39 +71,39 @@
     <dt>-x
     <dd>Print the contents of the data file in XML format. Timestamps can be controlled by options -T and -t. The corresponding DTD (Document Type Definition) and XML Schema are included in the sysstat source package. They are also available at <em>http://pagesperso-orange.fr/sebastien.godard/download.html</em>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT</h2>
   <p>The <strong>sadf</strong> command takes into account the following environment variable:
   <dl>
     <dt>S_TIME_DEF_TIME
     <dd>If this variable exists and its value is <strong>UTC</strong> then <strong>sadf</strong> will use UTC time instead of local time to determine the current daily data file located in the <em>/var/log/sa</em> directory.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p><strong>sadf -d /var/log/sa/sa21 -- -r -n DEV</strong>
   <p>Extract memory and network statistics from system activity file 'sa21', and display them in a format that can be ingested by a database.
   <p><strong>sadf -p -P 1</strong>
   <p>Extract CPU statistics for processor 1 (the second processor) from current daily data file, and display them in a format that can easily be handled by a pattern processing command.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>SVG output (as created by option -g) is fully compliant with SVG 1.1 standard. Graphics have been succesfully displayed in various web browsers, including Firefox, Chrome and Opera. Yet SVG rendering is broken on Microsoft browsers (tested on Internet Explorer 11 and Edge 13.1): So please don't use them.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <p><em>/var/log/sa/saDD</em><br>
   <em>/var/log/sa/saYYYYMMDD</em>
   <p>The standard system activity daily data files and their default location. YYYY stands for the current year, MM for the current month and DD for the current day.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Sebastien Godard (sysstat &lt;at&gt; orange.fr)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>sar</strong>(1), <strong>sadc</strong>(8), <strong>sa1</strong>(8), <strong>sa2</strong>(8), <strong>sysstat</strong>(5)
   <p><em>http://pagesperso-orange.fr/sebastien.godard/</em>
-</div>
+</section>
 

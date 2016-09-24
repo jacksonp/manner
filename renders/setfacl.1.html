@@ -3,16 +3,16 @@
 <meta name="man-page-info" data-extra1="ACL File Utilities" data-extra2="May 2000" data-extra3="Access Control Lists">
 <title>SETFACL</title>
 <h1>SETFACL</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>setfacl - set file access control lists
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>setfacl</strong> [-bkndRLPvh] [{-m|-x} acl_spec] [{-M|-X} acl_file] file ...
   <p><strong>setfacl</strong> --restore=file
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>This utility sets Access Control Lists (ACLs) of files and directories. On the command line, a sequence of commands is followed by a sequence of files (which in turn can be followed by another sequence of commands, ...).
   <p>The <em>-m</em> and <em>-x</em> options expect an ACL on the command line. Multiple ACL entries are separated by comma characters (`,'). The <em>-M</em> and <em>-X</em> options read an ACL from a file or from standard input. The ACL entry format is described in Section ACL ENTRIES.
@@ -21,12 +21,12 @@
   <p>The <em>-x (--remove)</em> and <em>-X (--remove-file)</em> options remove ACL entries. It is not an error to remove an entry which does not exist. Only ACL entries without the <em>perms</em> field are accepted as parameters, unless POSIXLY_CORRECT is defined.
   <p>When reading from files using the <em>-M</em> and <em>-X</em> options, setfacl accepts the output getfacl produces. There is at most one ACL entry per line. After a Pound sign (`#'), everything up to the end of the line is treated as a comment.
   <p>If setfacl is used on a file system which does not support ACLs, setfacl operates on the file mode permission bits. If the ACL does not fit completely in the permission bits, setfacl modifies the file mode permission bits to reflect the ACL as closely as possible, writes an error message to standard error, and returns with an exit status greater than 0.
-  <div class="subsection">
+  <section>
     <h3>PERMISSIONS</h3>
     <p>The file owner and processes capable of CAP_FOWNER are granted the right to modify ACLs of a file. This is analogous to the permissions required for accessing the file mode. (On current Linux systems, root is the only user with the CAP_FOWNER capability.)
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl class="indent-4">
     <dt><em>-b, --remove-all</em>
@@ -58,7 +58,7 @@
     <dt><em>-</em>
     <dd>If the file name parameter is a single dash, setfacl reads a list of files from standard input.
   </dl>
-  <div class="subsection">
+  <section>
     <h3>ACL ENTRIES</h3>
     <p>The setfacl utility recognizes the following ACL entry formats (blanks inserted for clarity):
     <dl>
@@ -75,8 +75,8 @@
     <p>Proper ACL entries including permissions are used in modify and set operations. (options <em>-m</em>, <em>-M</em>, <em>--set</em> and <em>--set-file</em>). Entries without the <em>perms</em> field are used for <em>deletion</em> of entries (options <em>-x</em> and <em>-X</em>).
     <p>For <em>uid</em> and <em>gid</em> you can specify either a name or a number. Character literals may be specified with a backslash followed by the 3-digit octal digits corresponding to the ASCII code for the character (e.g., <em>\101</em> for 'A'). If the name contains a literal backslash followed by 3 digits, the backslash must be escaped (i.e., <em>\\</em>).
     <p>The <em>perms</em> field is a combination of characters that indicate the read <em>(r)</em>, write <em>(w)</em>, execute <em>(x)</em> permissions. Dash characters in the <em>perms</em> field <em>(-)</em> are ignored. The character <em>X</em> stands for the execute permission if the file is a directory or already has execute permission for some user. Alternatively, the <em>perms</em> field can define the permissions numerically, as a bit-wise combination of read <em>(4)</em>, write <em>(2)</em>, and execute <em>(1)</em>. Zero <em>perms</em> fields or <em>perms</em> fields that only consist of dashes indicate no permissions.
-  </div>
-  <div class="subsection">
+  </section>
+  <section>
     <h3>AUTOMATICALLY CREATED ENTRIES</h3>
     <p>Initially, files and directories contain only the three base ACL entries for the owner, the group, and others. There are some rules that need to be satisfied in order for an ACL to be valid:
     <dl class="indent-4">
@@ -98,9 +98,9 @@
       <dt>*
       <dd>If a Default ACL contains named user entries or named group entries, and no mask entry exists, a mask entry containing the same permissions as the default Default ACL's group entry is added. Unless the <em>-n</em> option is given, the permissions of the mask entry are further adjusted to include the union of all permissions affected by the mask entry. (See the <em>-n</em> option description).
     </dl>
-  </div>
-</div>
-<div class="section">
+  </section>
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>Granting an additional user read access
   <p>setfacl -m u:lisa:r file
@@ -112,18 +112,18 @@
   <p>getfacl file1 | setfacl --set-file=- file2
   <p>Copying the access ACL into the Default ACL
   <p>getfacl --access dir | setfacl -d -M- dir
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CONFORMANCE TO POSIX 1003.1e DRAFT STANDARD 17</h2>
   <p>If the environment variable POSIXLY_CORRECT is defined, the default behavior of setfacl changes as follows: All non-standard options are disabled. The ``default:'' prefix is disabled. The <em>-x</em> and <em>-X</em> options also accept permission fields (and ignore them).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Andreas Gruenbacher, &lt;<em>a.gruenbacher@bestbits.at</em>&gt;.
   <p>Please send your bug reports, suggested features and comments to the above address.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>getfacl</strong>(1), <strong>chmod</strong>(1), <strong>umask</strong>(1), <strong>acl</strong>(5)
-</div>
+</section>
 

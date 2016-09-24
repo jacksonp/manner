@@ -3,22 +3,22 @@
 <meta name="man-page-info" data-extra1="" data-extra2="" data-extra3="">
 <title>mono-shlib-cop</title>
 <h1>mono-shlib-cop</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>mono-shlib-cop - Shared Library Usage Checker
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>mono-shlib-cop</strong> [OPTIONS]* [ASSEMBLY-FILE-NAME]*
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><em>-p, --prefixes=PREFIX</em>
     <dd>Mono installation prefixes. This is to find $prefix/etc/mono/config. The default is based upon the location of mscorlib.dll, and is normally correct.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><em>mono-shlib-cop</em> is a tool that inspects a managed assembly looking for erroneous or suspecious usage of shared libraries.
   <p>The tool takes one or more assembly filenames, and inspects each assembly specified.
@@ -43,11 +43,11 @@
     <dt>3.
     <dd>Provide an <em>assembly.config</em> file which contains &lt;dllmap/&gt; elements to remap the shared library name used by your assembly to the actual versioned shared library present on the users system. Mono provides a number of pre-existing &lt;dllmap/&gt; entries, including ones for <em>libc.so</em> and <em>libX11.so.</em>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLE</h2>
   <p>The following code contains examples of the above errors and warnings:
-  <pre>  using System.Runtime.InteropServices; // for DllImport
+  <pre>      using System.Runtime.InteropServices; // for DllImport
         class Demo {
                 [DllImport ("bad-library-name")]
                 private static extern void BadLibraryName ();
@@ -66,8 +66,8 @@
     <dt>Unversioned library dependency
     <dd>Assuming you have the file <em>libcap.so</em> , <em>Demo.cap_clear</em> will generate a warning because, while <em>libcap.so</em> could be loaded, <em>libcap.so</em> might not exist on the users machine (on FC2, <em>/lib/libcap.so</em> is provided by <em>libcap-devel</em> , and you can't assume that end users will have any <em>-devel</em> packages installed).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FIXING CODE</h2>
   <p>The fix depends on the warning or error:
   <dl>
@@ -78,8 +78,8 @@
     <dt>Unversioned library dependency
     <dd>Provide a &lt;dllmap/&gt; entry to reference a properly versioned library, or ignore the warning (see <strong>BUGS</strong> ).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DLLMAP ENTRIES</h2>
   <p>Mono looks for an <em>ASSEMBLY-NAME</em> .config file for each assembly loaded, and reads this file to find Dll mapping information. For example, with <em>mcs.exe</em> , Mono would read <em>mcs.exe.config</em> , and for <em>Mono.Posix.dll</em> , Mono would read <em>Mono.Posix.dll.config</em>
   <p>The <em>.config</em> file is an XML document containing a top-level &lt;configuration/&gt; section with nested &lt;dllmap/&gt; entries, which contains <strong>dll</strong> and <strong>target</strong> attributes. The dll attribute should contain the same string used in your <strong>DllImport</strong> attribute value, and the target attribute specifies which shared library mono should <em>actually</em> load at runtime.
@@ -87,8 +87,8 @@
   <pre> &lt;configuration&gt;
                 &lt;dllmap dll="gtkembedmoz" target="libgtkembedmoz.so" /&gt;
         &lt;/configuration&gt;</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <dl>
     <dt>*
@@ -120,13 +120,13 @@
     <br>
     Windows and Mac OS X will never generate warnings, as these platforms use different shared library extensions.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MAILING LISTS</h2>
   <p>Visit http://lists.ximian.com/mailman/listinfo/mono-devel-list for details.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>WEB SITE</h2>
   <p>Visit http://www.mono-project.com for details
-</div>
+</section>
 

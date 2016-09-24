@@ -3,23 +3,23 @@
 <meta name="man-page-info" data-extra1="Version @catdoc_version@" data-extra2="MS-Word reader" data-extra3="">
 <title>catdoc</title>
 <h1>catdoc</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>catdoc - reads MS-Word file and puts its content as plain text on standard output
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>catdoc</strong> [<strong>-vlu8btawxV</strong>] [<strong>-m</strong> <em>number</em>] [ <strong>-s</strong> <em>charset</em>] [ <strong>-d</strong> <em>charset</em>] [ <strong>-f</strong> <em>output-format</em>] <em>file</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>catdoc</strong> behaves much like <strong>cat</strong>(1) but it reads MS-Word file and produces human-readable text on standard output. Optionally it can use <strong>latex</strong>(1) escape sequences for characters which have special meaning for LaTeX. It also makes some effort to recognize MS-Word tables, although it never tries to write correct headers for LaTeX tabular environment. Additional output formats, such is HTML can be easily defined.
   <p><strong>catdoc</strong> doesn't attempt to extract formatting information other than tables from MS-Word document, so different output modes means mainly that different characters should be escaped and different ways used to represent characters, missing from output charset. See CHARACTER SUBSTITUTION below
   <p><strong>catdoc</strong> uses internal <strong>unicode</strong>(7) representation of text, so it is able to convert texts when charset in source document doesn't match charset on target system. See CHARACTER SETS below.
   <p>If no file names supplied, <strong>catdoc</strong> processes its standard input unless it is terminal. It is unlikely that somebody could type Word document from keyboard, so if <strong>catdoc</strong> invoked without arguments and stdin is not redirected, it prints brief usage message and exits. Processing of standard input (even among other files) can be forced using dash '-' as file name.
   <p>By default, <strong>catdoc</strong> wraps lines which are more than 72 chars long and separates paragraphs by blank lines. This behavior can be turned of by <strong>-w</strong> switch. In <em>wide</em> mode <strong>catdoc prints each paragraph as one long line, suitable for import into</strong> word processors which perform word wrapping.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl class="indent-8">
     <dt><strong>-a</strong>
@@ -53,16 +53,16 @@
     <dt><strong>-V</strong>
     <dd>outputs catdoc version
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CHARACTER SETS</h2>
   <p>When processing MS-Word file <strong>catdoc</strong> uses information about two character sets, typically different<br>
   - input and output. They are stored in plain text files in <strong>catdoc</strong> data directory. Character set files should contain two whitespace-separated hexadecimal numbers - 8-bit code in character set and 16-bit Unicode code. Anything from hash mark to end of line is ignored, as well as blank lines.
   <p><strong>catdoc</strong> distribution includes some of these character sets. Additional character set definitions, directly usable by <strong>catdoc</strong> can be obtained from ftp.unicode.org. Charset files have <strong>.txt</strong> suffix, which shouldn't be specified in command-line or configuration files.
   <p>Note that <strong>catdoc</strong> is distributed with Cyrillic charsets as default. If you are not Russian, you probably don't want it, an should reconfigure catdoc at compile time or in runtime configuration file.
   <p>When dealing with documents with charsets other than default, remember that Microsoft never uses ISO charsets. While letters in, say cp1252 are at the same position as in ISO-8859-1, some punctuation signs would be lost, if you specify ISO-8859-1 as input charset. If you use cp1252, catdoc would deal with those signs as described in CHARACTER SUBSTITUTION below.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CHARACTER SUBSTITUTION</h2>
   <p><strong>catdoc</strong> converts MS-Word file into following internal Unicode representation:
   <dl class="indent-4">
@@ -85,8 +85,8 @@
   <p>Lists of special characters and list of substitution are character set-independent, because special chars should be escaped regardless of their existence in target character set (usually, they are parts of US-ASCII, and therefore exist in any character set) and replacement list is searched only for those characters, which are not found in target character set.
   <p>These lists are stored in <strong>catdoc</strong> data directory in files with prefix of format name. These files have following format:
   <p>Each line can be either comment (starting with hash mark) or contain hexadecimal UNICODE value, separated by whitespace from string, which would be substituted instead of it. If string contain no whitespace it can be used as is, otherwise it should be enclosed in single or double quotes. Usual backslash sequences like <em>'\n'</em>,<em>'\t'</em> can be used in these string.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RUNTIME CONFIGURATION</h2>
   <p>Upon startup catdoc reads its system-wide configuration file <strong>/etc/catdocrc and then</strong> user-specific configuration file <strong>${HOME}/.catdocrc.</strong>
   <p>These files can contain following directives:
@@ -107,17 +107,17 @@
     <dd>Enables or disables automatic selection of output charset (default <strong>yes</strong>),<br>
     based on system locale settings (if enabled at compile time). If automatic detection is enabled, than output charset settings in the configuration files (but not in the command line) are ignored, and current system locale charset is used instead. There are no automatic choice of input charset, based of locale language, because most modern Word files (since Word 97) are Unicode anyway
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Doesn't handle fast-saves properly. Prints footnotes as separate paragraphs at the end of file, instead of producing correct LaTeX commands. Cannot distinguish between empty table cell and end of table row.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>xls2csv</strong>(1), <strong>cat</strong>(1), <strong>strings</strong>(1), <strong>utf</strong>(4), <strong>unicode</strong>(7)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>V.B.Wagner &lt;vitus@45.free.net&gt;
-</div>
+</section>
 

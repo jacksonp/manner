@@ -3,19 +3,19 @@
 <meta name="man-page-info" data-extra1="April 2015" data-extra2="Linux" data-extra3="">
 <title>ATOP</title>
 <h1>ATOP</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>atop</strong> - Advanced System & Process Monitor
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p>Interactive Usage:
   <p><strong>atop</strong> [-g|-m|-d|-n|-u|-p|-s|-c|-v|-o|-y] [-C|-M|-D|-N|-A] [-afFG1xR] [-L linelen] [-Plabel[,label]...] [ <em>interval</em> [ <em>samples</em> ]]
   <p>Writing and reading raw logfiles:
   <p><strong>atop</strong> -w <em>rawfile</em> [-a] [-S] [ <em>interval</em> [ <em>samples</em> ]]<br>
   <strong>atop</strong> -r [ <em>rawfile</em> ] [-b <em>hh:mm</em> ] [-e <em>hh:mm</em> ] [-g|-m|-d|-n|-u|-p|-s|-c|-v|-o|-y] [-C|-M|-D|-N|-A] [-fFG1xR] [-L linelen] [-Plabel[,label]...]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>The program <em>atop</em> is an interactive monitor to view the load on a Linux system. It shows the occupation of the most critical hardware resources (from a performance point of view) on system level, i.e. cpu, memory, disk and network.<br>
   It also shows which processes are responsible for the indicated load with respect to cpu and memory load on process level. Disk load is shown per process if "storage accounting" is active in the kernel. Network load is shown per process if the kernel module `netatop' has been installed.
@@ -27,8 +27,8 @@
   If the window is resized vertically, lines of the process/thread list will be added or removed automatically.
   <p>Furthermore in interactive mode the output of <em>atop</em> can be controlled by pressing particular keys. However it is also possible to specify such key as <strong>flag</strong> on the command line. In that case <em>atop</em> switches to the indicated mode on beforehand; this mode can be modified again interactively. Specifying such key as flag is especially useful when running <em>atop</em> with output to a pipe or file (non-interactively). These flags are the same as the keys that can be pressed in interactive mode (see section INTERACTIVE COMMANDS).<br>
   Additional flags are available to support storage of atop-data in raw format (see section RAW DATA STORAGE).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROCESS ACCOUNTING</h2>
   <p>With every interval, <em>atop</em> reads the kernel administration to obtain information about all running processes. However, it is likely that during the interval also processes have terminated. These processes might have consumed system resources during this interval as well before they terminated. Therefor, <em>atop</em> tries to read the process accounting records that contain the accounting information of terminated processes and report these processes too. Only when the process accounting mechanism in the kernel is activated, the kernel writes such process accounting record to a file for every process that terminates.
   <p>There are various ways for <em>atop</em> to get access to the process accounting records (tried in this order):
@@ -50,8 +50,8 @@
       If <em>atop</em> does not run with root-privileges, it does not show information about finished processes. It indicates this situation with the message message `no procacct` in the top-right corner (instead of the counter that shows the number of exited processes).
   </dl>
   <p>When during one interval a lot of processes have finished, <em>atop</em> might grow tremendously in memory when reading all process accounting records at the end of the interval. To avoid such excessive growth, <em>atop</em> will never read more than 50 MiB with process information from the process accounting file per interval (approx. 70000 finished processes). In interactive mode a warning is given whenever processes have been skipped for this reason.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COLORS</h2>
   <p>For the resource consumption on system level, <em>atop</em> uses colors to indicate that a critical occupation percentage has been (almost) reached. A critical occupation percentage means that is likely that this load causes a noticeable negative performance influence for applications using this resource. The critical percentage depends on the type of resource: e.g. the performance influence of a disk with a busy percentage of 80% might be more noticeable for applications/user than a CPU with a busy percentage of 90%.<br>
   Currently <em>atop</em> uses the following default values to calculate a weighted percentage per resource:
@@ -74,15 +74,15 @@
   When a resource exceeded (default) 80% of its critical percentage (so it is almost critical), the concerning values in the screen line are colored cyan by default. This `almost critical percentage' (one value for all resources) can be modified in the configuration file (see separate man-page of atoprc).<br>
   The default colors red and cyan can be modified in the configuration file as well (see separate man-page of atoprc).
   <p>With the key 'x' (or flag -x), the use of colors can be suppressed.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NETATOP MODULE</h2>
   <p>Per-process and per-thread network activity can be measured by the <em>netatop</em> kernel module. You can download this kernel module from the website (mentioned at the end of this manual page) and install it on your system if the kernel version is 2.6.24 or newer.<br>
   When <em>atop</em> gathers counters for a new interval, it verifies if the <em>netatop</em> module is currently active. If so, <em>atop</em> obtains the relevant network counters from this module and shows the number of sent and received packets per process/thread in the generic screen. Besides, detailed counters can be requested by pressing the `n' key.<br>
   When the <em>netatopd</em> daemon is running as well, <em>atop</em> also reads the network counters of exited processes that are logged by this daemon (comparable with process accounting).
   <p>More information about the optional <em>netatop</em> kernel module and the <em>netatopd</em> daemon can be found in the concerning man-pages and on the website mentioned at the end of this manual page.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>INTERACTIVE COMMANDS</h2>
   <p>When running <em>atop</em> interactively (no output redirection), keys can be pressed to control the output. In general, lower case keys can be used to show other information for the active processes and upper case keys can be used to influence the sort order of the active process/thread list.
   <dl class="indent-5">
@@ -239,8 +239,8 @@
     <dt><strong>^L</strong>
     <dd>Redraw the screen.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RAW DATA STORAGE</h2>
   <p>In order to store system and process level statistics for long-term analysis (e.g. to check the system load and the active processes running yesterday between 3:00 and 4:00 PM), <em>atop</em> can store the system and process level statistics in compressed binary format in a raw file with the flag <strong>-w</strong> followed by the filename. If this file already exists and is recognized as a raw data file, <em>atop</em> will append new samples to the file (starting with a sample which reflects the activity since boot); if the file does not exist, it will be created.<br>
   By default only processes which have been active during the interval are stored in the raw file. When the flag <strong>-a</strong> is specified, all processes will be stored.<br>
@@ -254,15 +254,15 @@
   The script is activated via the <strong>cron</strong> daemon using the file <em>/etc/cron.d/atop</em> with the contents<br>
   <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 * * * root /etc/atop/atop.daily</strong>
   <p>When the package <strong>psacct</strong> is installed, the process accounting is automatically restarted via the <strong>logrotate</strong> mechanism. The file <strong>/etc/logrotate.d/psaccs_atop</strong> takes care that <strong>atop</strong> is finished just before the rotation of the process accounting file and the file <strong>/etc/logrotate.d/psaccu_atop</strong> takes care that <strong>atop</strong> is restarted again after the rotation. When the package <strong>psacct</strong> is not installed, these logrotate-files have no effect.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT DESCRIPTION</h2>
   <p>The first sample shows the system level activity since boot (the elapsed time in the header shows the time since boot). Note that particular counters could have reached their maximum value (several times) and started by zero again, so do not rely on these figures.
   <p>For every sample <em>atop</em> first shows the lines related to system level activity. If a particular system resource has not been used during the interval, the entire line related to this resource is suppressed. So the number of system level lines may vary for each sample.<br>
   After that a list is shown of processes which have been active during the last interval. This list is by default sorted on cpu consumption, but this order can be changed by the keys which are previously described.
   <p>If values have to be shown by <em>atop</em> which do not fit in the column width, another format is used. If e.g. a cpu-consumption of 233216 milliseconds should be shown in a column width of 4 positions, it is shown as `233s' (in seconds). For large memory figures, another unit is chosen if the value does not fit (Mb instead of Kb, Gb instead of Mb, Tb instead of Gb, ...). For other values, a kind of exponent notation is used (value 123456789 shown in a column of 5 positions gives 123e6).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT DESCRIPTION - SYSTEM LEVEL</h2>
   <p>The system level information consists of the following output lines:
   <dl class="indent-5">
@@ -331,8 +331,8 @@
       If the screen-width does not allow all of these counters, only a relevant subset is shown.<br>
       The number of lines showing the network interfaces can be limited.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OUTPUT DESCRIPTION - PROCESS LEVEL</h2>
   <p>Following the system level information, the processes are shown from which the resource utilization has changed during the last interval. These processes might have used cpu time or issued disk or network requests. However a process is also shown if part of it has been paged out due to lack of memory (while the process itself was in sleep state).
   <p>Per process the following fields may be shown (in alphabetical order), depending on the current output mode as described in the section INTERACTIVE COMMANDS and depending on the current width of your window:
@@ -501,8 +501,8 @@
     <dd>When the kernel maintains standard io statistics (&gt;= 2.6.20):<br>
     The write data transfer previously accounted for this process or another process that has been cancelled. Suppose that a process writes new data to a file and that data is removed again before the cache buffers have been flushed to disk. Then the original process shows the written data as WRDSK, while the process that removes/truncates the file shows the unflushed removed data as WCANCL.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PARSEABLE OUTPUT</h2>
   <p>With the flag <strong>-P</strong> followed by a list of one or more labels (comma-separated), parseable output is produced for each sample. The labels that can be specified for system-level statistics correspond to the labels (first verb of each line) that can be found in the interactive output: "CPU", "cpu" "CPL" "MEM", "SWP", "PAG", "LVM", "MDD", "DSK", "NFM", "NFC", "NFS" and "NET".<br>
   For process-level statistics special labels are introduced: "PRG" (general), "PRC" (cpu), "PRM" (memory), "PRD" (disk, only if "storage accounting" is active) and "PRN" (network, only if the kernel module 'netatop' has been installed).<br>
@@ -557,8 +557,8 @@
     Subsequent fields: PID, name (between brackets), state, kernel module 'netatop' loaded ('y' or 'n'), number of TCP-packets transmitted, cumulative size of TCP-packets transmitted, number of TCP-packets received, cumulative size of TCP-packets received, number of UDP-packets transmitted, cumulative size of UDP-packets transmitted, number of UDP-packets received, cumulative size of UDP-packets transmitted, number of raw packets transmitted (obsolete, always 0), number of raw packets received (obsolete, always 0), TGID (group number of related tasks/threads) and is_process (y/n).<br>
     If the kernel module is not active, the network I/O counters per process are not relevant.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <p>To monitor the current system load interactively with an interval of 5 seconds:
   <p class="indent-12"><strong>&nbsp; atop 5</strong>
@@ -576,8 +576,8 @@
   <p><strong>&nbsp; atop -r yy</strong>
   <p>View the contents of the standard logfile of 2014, June 7 from 02:00 PM onwards interactively:
   <p><strong>&nbsp; atop -r 20140607 -b 14:00</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-5">
     <dt><strong>/var/run/pacct_shadow.d/</strong>
@@ -594,15 +594,15 @@
     <dt><strong>/var/run/netatop.log</strong>
     <dd>File that contains the netpertask structs containing the network counters of exited processes. These structs are written by the <em>netatopd</em> daemon and read by <em>atop</em> after reading the standard process accounting records.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>atopsar(1),</strong> <strong>atoprc(5),</strong> <strong>atopacctd(8),</strong> <strong>netatop(4),</strong> <strong>netatopd(8),</strong> <strong>logrotate(8)</strong><br>
   <strong>http://www.atoptool.nl</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Gerlof Langeveld (gerlof.langeveld@atoptool.nl)<br>
   JC van Winkel
-</div>
+</section>
 

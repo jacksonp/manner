@@ -3,24 +3,24 @@
 <meta name="man-page-info" data-extra1="January 2013" data-extra2="" data-extra3="User Commands">
 <title>LTRACE</title>
 <h1>LTRACE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>ltrace - A library call tracer
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>ltrace</strong> [-e <em>filter</em>|-L] [-l|--library=<em>library_pattern</em>] [-x <em>filter</em>] [-S] [-b|--no-signals] [-i] [-w|--where=<em>nr</em>] [-r|-t|-tt|-ttt] [-T] [[-F|--config] <em>pathlist</em>] [-A <em>maxelts</em>] [-s <em>strsize</em>] [-C|--demangle] [-a|--align <em>column</em>] [-n|--indent <em>nr</em>] [-o|--output <em>filename</em>] [-D|--debug <em>mask</em>] [-u <em>username</em>] [-f] [-p <em>pid</em>] [[--] <em>command [arg ...]</em>]
   <p><strong>ltrace</strong> -c [-e <em>filter</em>|-L] [-l|--library=<em>library_pattern</em>] [-x <em>filter</em>] [-S] [-o|--output <em>filename</em>] [-f] [-p <em>pid</em>] [[--] <em>command [arg ...]</em>]
   <p><strong>ltrace</strong> -V|--version
   <p><strong>ltrace</strong> -h|--help
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>ltrace</strong> is a program that simply runs the specified <em>command</em> until it exits. It intercepts and records the dynamic library calls which are called by the executed process and the signals which are received by that process. It can also intercept and print the system calls executed by the program.
   <p>Its use is very similar to <strong>strace(1)</strong>.
   <p><strong>ltrace</strong> shows parameters of invoked functions and system calls. To determine what arguments each function has, it needs external declaration of function prototypes. Those are stored in files called <em>prototype libraries</em>--see ltrace.conf(5) for details on the syntax of these files. See the section <strong>PROTOTYPE LIBRARY DISCOVERY</strong> to learn how <strong>ltrace</strong> finds prototype libraries.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt>-a, --align <em>column</em>
@@ -80,8 +80,8 @@
     <dt>-V, --version
     <dd>Show the version number of ltrace and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILTER SPECIFICATIONS</h2>
   <p>Filters are specified with the -l, -e and -x options. In short they mean:
   <p><em>-x</em> is ´show me what calls these symbols (including local calls)´
@@ -139,8 +139,8 @@
   <pre> <strong>$ ltrace -l tstlib.so ./tst</strong>
  tst-&gt;func_f_lib()                         = &lt;void&gt;
  +++ exited (status 163) +++</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILTER EXPRESSIONS</h2>
   <p>Filter expression is a chain of glob- or regexp-based rules that are used to pick symbols for tracing from libraries that the process uses. Most of it is intuitive, so as an example, the following would trace calls to malloc and free, except those done by libc:
   <p>-e malloc+free-@libc.so*
@@ -153,8 +153,8 @@
   <p>If the library pattern starts with a slash, it is not a SONAME expression, but a path expression, and is matched against the library path name.
   <p>The first rule may lack a sign, in which case <strong>+</strong> is assumed. If, on the other hand, the first rule has a <strong>-</strong> sign, it is as if there was another rule <strong>@</strong> in front of it, which has the effect of tracing complement of given rule.
   <p>The above rules are used to construct the set of traced symbols. Each candidate symbol is passed through the chain of above rules. Initially, the symbol is <em>unmarked</em>. If it matches a <strong>+</strong> rule, it becomes <em>marked</em>, if it matches a <strong>-</strong> rule, it becomes <em>unmarked</em> again. If, after applying all rules, the symbol is <em>marked</em>, it will be traced.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROTOTYPE LIBRARY DISCOVERY</h2>
   <p>When a library is mapped into the address space of a traced process, ltrace needs to know what the prototypes are of functions that this library implements. For purposes of ltrace, prototype really is a bit more than just type signature: it's also formatting of individual parameters and of return value. These prototypes are stored in files called prototype libraries.
   <p>After a library is mapped, ltrace finds out what its SONAME is. It then looks for a file named SONAME.conf--e.g. protolib for libc.so.6 would be in a file called libc.so.6.conf. When such file is found (more about where ltrace looks for these files is below), ltrace reads all prototypes stored therein. When a symbol table entry point (such as those traced by -x) is hit, the prototype is looked up in a prototype library corresponding to the library where the hit occurred. When a library call (such as those traced by -e and -l) is hit, the prototype is looked up in all prototype libraries loaded for given process. That is necessary, because a library call is traced in a PLT table of a caller library, but the prototype is described at callee library.
@@ -163,14 +163,14 @@
   <p>There's also a mechanism for loading legacy config files. If $HOME/.ltrace.conf exists it is imported to every loaded prototype library. Similarly for /etc/ltrace.conf. If both exist, both are imported, and $HOME/.ltrace.conf is consulted before /etc/ltrace.conf.
   <p>If -F contains any directories, those are searched in precedence to the above system directories, in the same order in which they are mentioned in -F. Any files passed in -F are imported similarly to above legacy config files, before them.
   <p>See ltrace.conf(5) for details on the syntax of ltrace prototype library files.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>It has most of the bugs stated in <strong>strace(1)</strong>.
   <p>It only works on Linux and in some architectures.
   <p>If you would like to report a bug, send a message to the mailing list (ltrace-devel@lists.alioth.debian.org), or use the <strong>reportbug(1)</strong> program if you are under the Debian GNU/Linux distribution.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl>
     <dt><em>/etc/ltrace.conf</em>
@@ -178,14 +178,14 @@
     <dt><em>~/.ltrace.conf</em>
     <dd>Personal config file, overrides <em>/etc/ltrace.conf</em>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p>Juan Cespedes &lt;cespedes@debian.org&gt;<br>
   Petr Machata &lt;pmachata@redhat.com&gt;
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>ltrace.conf(5),</strong> <strong>strace(1)</strong>, <strong>ptrace(2)</strong>
-</div>
+</section>
 

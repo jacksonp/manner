@@ -3,16 +3,16 @@
 <meta name="man-page-info" data-extra1="" data-extra2="" data-extra3="">
 <title>Mono</title>
 <h1>Mono</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>mono - Mono's ECMA-CLI native code generator (Just-in-Time and Ahead-of-Time)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>mono [options] file [arguments...]</strong>
   <p><strong>mono-sgen [options] file [arguments...]</strong>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><em>mono</em> is a runtime implementation of the ECMA Common Language Infrastructure. This can be used to run ECMA and .NET applications.
   <p>The runtime contains a native code generator that transforms the Common Intermediate Language into native code.
@@ -20,14 +20,14 @@
   <p>The runtime loads the specified <em>file</em> and optionally passes the <em>arguments</em> to it. The <em>file</em> is an ECMA assembly. They typically have a .exe or .dll extension.
   <p>The runtime provides a number of configuration options for running applications, for developing and debugging, and for testing and debugging the runtime itself.
   <p>The <em>mono</em> command uses the Boehm conservative garbage collector while the <em>mono-sgen</em> command uses a moving and generational garbage collector.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PORTABILITY</h2>
   <p>On Unix-based systems, Mono provides a mechanism to emulate the Windows-style file access, this includes providing a case insensitive view of the file system, directory separator mapping (from \ to /) and stripping the drive letters.
   <p>This functionality is enabled by setting the <strong>MONO_IOMAP</strong> environment variable to one of <strong>all, drive</strong> and <strong>case.</strong>
   <p>See the description for <strong>MONO_IOMAP</strong> in the environment variables section for more details.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>RUNTIME OPTIONS</h2>
   <p>The following options are available:
   <dl>
@@ -197,8 +197,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>Prints JIT version information (system configuration, release number and branch names if available).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEVELOPMENT OPTIONS</h2>
   <p>The following options are used to help when developing a JITed application.
   <dl>
@@ -247,8 +247,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       <pre>      HEXADDR HEXSIZE methodname</pre>
       <p>Currently this option is only supported on Linux.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>JIT MAINTAINER OPTIONS</h2>
   <p>The maintainer options are only used by those developing the runtime itself, and not typically of interest to runtime users or developers.
   <dl>
@@ -280,15 +280,15 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>-v</strong>, <strong>--verbose</strong>
     <dd>Increases the verbosity level, each time it is listed, increases the verbosity level to include more information (including, for example, a disassembly of the native code produced, code selector info etc.).
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ATTACH SUPPORT</h2>
   <p>The Mono runtime allows external processes to attach to a running process and load assemblies into the running program. To attach to the process, a special protocol is implemented in the Mono.Management assembly.
   <p>With this support it is possible to load assemblies that have an entry point (they are created with -target:exe or -target:winexe) to be loaded and executed in the Mono process.
   <p>The code is loaded into the root domain, and it starts execution on the special runtime attach thread. The attached program should create its own threads and return after invocation.
   <p>This support allows for example debugging applications by having the csharp shell attach to running processes.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROFILING</h2>
   <p>The mono runtime includes a profiler that can be used to explore various performance related problems in your application. The profiler is activated by passing the --profile command line argument to the Mono runtime, the format is:
   <pre>      --profile[=profiler[:profiler_args]]</pre>
@@ -299,15 +299,15 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <p>That will run the program with the default profiler and will do time and allocation profiling.
   <pre>      mono --profile=default:stat,alloc,file=prof.out program.exe</pre>
   <p>Will do sample statistical profiling and allocation profiling on program.exe. The profile data is put in prof.out. Note that the statistical profiler has a very low overhead and should be the preferred profiler to use (for better output use the full path to the mono binary when running and make sure you have installed the addr2line utility that comes from the binutils package).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>LOG PROFILER</h2>
   <p>This is the most advanced profiler.
   <p>The Mono <em>log</em> profiler can be used to collect a lot of information about a program running in the Mono runtime. This data can be used (both while the process is running and later) to do analyses of the program behaviour, determine resource usage, performance issues or even look for particular execution patterns.
   <p>This is accomplished by logging the events provided by the Mono runtime through the profiling interface and periodically writing them to a file which can be later inspected with the mprof-report(1) tool.
   <p>More information about how to use the log profiler is available on the mprof-report(1) page.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CUSTOM PROFILERS</h2>
   <p>Mono provides a mechanism for loading other profiling modules which in the form of shared libraries. These profiling modules can hook up to various parts of the Mono runtime to gather information about the code being executed.
   <p>To use a third party profiler you must pass the name of the profiler to Mono, like this:
@@ -316,8 +316,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <p>A list of other third party profilers is available from Mono's web site (www.mono-project.com/docs/advanced/performance-tips/)
   <p>Custom profiles are written as shared libraries. The shared library must be called `mono-profiler-NAME.so' where `NAME' is the name of your profiler.
   <p>For a sample of how to write your own custom profiler look in the Mono source tree for in the samples/profiler.c.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CODE COVERAGE</h2>
   <p>Mono ships with a code coverage module. This module is activated by using the Mono --profile=cov option. The format is: <strong>--profile=cov[:assembly-name[/namespace]] test-suite.exe</strong>
   <p>By default code coverage will default to all the assemblies loaded, you can limit this by specifying the assembly name, for example to perform code coverage in the routines of your program use, for example the following command line limits the code coverage to routines in the "demo" assembly:
@@ -335,8 +335,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
                 offset 0x000a</pre>
   <p>The offsets displayed are IL offsets.
   <p>A more powerful coverage tool is available in the module `monocov'. See the monocov(1) man page for details.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEBUGGING AIDS</h2>
   <p>To debug managed applications, you can use the <strong>mdb</strong> command, a command line debugger.
   <p>It is possible to obtain a stack trace of all the active threads in Mono by sending the QUIT signal to Mono, you can do this from the command line, like this:
@@ -350,8 +350,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <p>Use the <em>MONO_LOG_MASK</em> environment variable to limit the extent of the messages you get: If set, the log mask is changed to the set value. Possible values are "asm" (assembly loader), "type", "dll" (native library loader), "gc" (garbage collector), "cfg" (config file loader), "aot" (precompiler), "security" (e.g. Moonlight CoreCLR support), "threadpool" (thread pool generic), "io-threadpool" (thread pool I/O), "io-layer" (I/O layer - sockets, handles, shared memory etc) and "all". The default value is "all". Changing the mask value allows you to display only messages for a certain component. You can use multiple masks by comma separating them. For example to see config file messages and assembly loader messages set you mask to "asm,cfg".
   <p>The following is a common use to track down problems with P/Invoke:
   <pre> $ MONO_LOG_LEVEL="debug" MONO_LOG_MASK="dll" mono glue.exe</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DEBUGGING WITH LLDB</h2>
   <p>If you are using LLDB, you can use the <strong>mono.py</strong> script to print some internal data structures with it. To use this, add this to your <strong>$HOME/.lldbinit</strong> file:
   <pre>command script import $PREFIX/lib/mono/lldb/mono.py</pre>
@@ -360,14 +360,14 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
   <pre>(lldb) p method
 
 (MonoMethod *) $0 = 0x05026ac0 [mscorlib]System.OutOfMemoryException:.ctor()</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SERIALIZATION</h2>
   <p>Mono's XML serialization engine by default will use a reflection-based approach to serialize which might be slow for continuous processing (web service applications). The serialization engine will determine when a class must use a hand-tuned serializer based on a few parameters and if needed it will produce a customized C# serializer for your types at runtime. This customized serializer then gets dynamically loaded into your application.
   <p>You can control this with the MONO_XMLSERIALIZER_THS environment variable.
   <p>The possible values are <strong>`no'</strong> to disable the use of a C# customized serializer, or an integer that is the minimum number of uses before the runtime will produce a custom serializer (0 will produce a custom serializer on the first access, 50 will produce a serializer on the 50th use). Mono will fallback to an interpreted serializer if the serializer generation somehow fails. This behavior can be disabled by setting the option <strong>`nofallback'</strong> (for example: MONO_XMLSERIALIZER_THS=0,nofallback).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <dl>
     <dt><strong>GC_DONT_GC</strong>
@@ -574,8 +574,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>NO_PROXY</strong>
     <dd>(Also <strong>no_proxy</strong>) If both <strong>HTTP_PROXY</strong> and <strong>NO_PROXY</strong> are set, <strong>NO_PROXY</strong> will be treated as a comma-separated list of "bypass" domains which will not be sent through the proxy. Domains in <strong>NO_PROXY</strong> may contain wildcards, as in "*.mono-project.com" or "build????.local". Not supported on Windows, Mac OS, iOS or Android.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>ENVIRONMENT VARIABLES FOR DEBUGGING</h2>
   <dl>
     <dt><strong>MONO_ASPNET_NODELETE</strong>
@@ -672,13 +672,13 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_CONSERVATIVE_HWCAP</strong>
     <dd>If set, the JIT will not perform any hardware capability detection. This may be useful to pinpoint the cause of JIT issues. This is the default when Mono is built as an AOT cross compiler, so that the generated code will run on most hardware.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>VALGRIND</h2>
   <p>If you want to use Valgrind, you will find the file `mono.supp' useful, it contains the suppressions for the GC which trigger incorrect warnings. Use it like this:
   <pre>    valgrind --suppressions=mono.supp mono ...</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DTRACE</h2>
   <p>On some platforms, Mono can expose a set of DTrace probes (also known as user-land statically defined, USDT Probes).
   <dl>
@@ -693,14 +693,14 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dd>
       <pre>    dtrace -P mono'$target' -l -c mono</pre>
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PERMISSIONS</h2>
   <p>Mono's Ping implementation for detecting network reachability can create the ICMP packets itself without requiring the system ping command to do the work. If you want to enable this on Linux for non-root users, you need to give the Mono binary special permissions.
   <p>As root, run this command:
   <pre>   # setcap cap_net_raw=+ep /usr/bin/mono</pre>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <p>On Unix assemblies are loaded from the installation lib directory. If you set `prefix' to /usr, the assemblies will be located in /usr/lib. On Windows, the assemblies are loaded from the directory where mono and mint live.
   <dl>
@@ -721,19 +721,19 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>Web.config, web.config</strong>
     <dd>ASP.NET applications are configured through these files, the configuration is done on a per-directory basis. For more information on this subject see the http://www.mono-project.com/Config_system.web page.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>MAILING LISTS</h2>
   <p>Mailing lists are listed at the http://www.mono-project.com/community/help/mailing-lists/
-</div>
-<div class="section">
+</section>
+<section>
   <h2>WEB SITE</h2>
   <p>http://www.mono-project.com
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p>certmgr(1), csharp(1), mcs(1), mdb(1), monocov(1), monodis(1), mono-config(5), mozroots(1), mprof-report(1), pdb2mdb(1), xsp(1), mod_mono(8).
   <p>For more information on AOT: http://www.mono-project.com/docs/advanced/aot/
   <p>For ASP.NET-related documentation, see the xsp(1) manual page
-</div>
+</section>
 

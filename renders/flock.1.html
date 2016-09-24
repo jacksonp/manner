@@ -3,23 +3,23 @@
 <meta name="man-page-info" data-extra1="July 2014" data-extra2="util-linux" data-extra3="User Commands">
 <title>FLOCK</title>
 <h1>FLOCK</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>flock - manage locks from shell scripts
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>flock</strong> [options] <em>file</em>|<em>directory command</em> [<em>arguments</em>]<br>
   <strong>flock</strong> [options] <em>file</em>|<em>directory</em> <strong>-c</strong> <em>command</em><br>
   <strong>flock</strong> [options] <em>number</em>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>This utility manages <strong>flock</strong>(2) locks from within shell scripts or from the command line.
   <p>The first and second of the above forms wrap the lock around the execution of a <em>command</em>, in a manner similar to <strong>su</strong>(1) or <strong>newgrp</strong>(1). They lock a specified <em>file</em> or <em>directory</em>, which is created (assuming appropriate permissions) if it does not already exist. By default, if the lock cannot be immediately acquired, <strong>flock</strong> waits until the lock is available.
   <p>The third form uses an open file by its file descriptor <em>number</em>. See the examples below for how that can be used.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-c</strong>, <strong>--command</strong> <em>command</em>
@@ -47,8 +47,8 @@
     <dt><strong>-h</strong>, <strong>--help</strong>
     <dd>Display help text and exit.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLES</h2>
   <dl>
     <dt>shell1&gt; flock /tmp -c cat
@@ -67,27 +67,27 @@
     <dt>[ "${FLOCKER}" != "$0" ] &amp;& exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
     <dd>This is useful boilerplate code for shell scripts. Put it at the top of the shell script you want to lock and it'll automatically lock itself on the first run. If the env var $FLOCKER is not set to the shell script that is being run, then execute flock and grab an exclusive non-blocking lock (using the script itself as the lock file) before re-execing itself with the right arguments. It also sets the FLOCKER env var to the right value so it doesn't run again.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXIT STATUS</h2>
   <p>The command uses <strong>sysexits.h</strong> return values for everything, except when using either of the options <strong>-n</strong> or <strong>-w</strong> which report a failure to acquire the lock with a return value given by the <strong>-E</strong> option, or 1 by default.
   <p>When using the <em>command</em> variant, and executing the child worked, then the exit status is that of the child command.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AUTHOR</h2>
   <p><a href="mailto:hpa@zytor.com">H. Peter Anvin</a>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>COPYRIGHT</h2>
   <p>Copyright © 2003-2006 H. Peter Anvin.<br>
   This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>flock</strong>(2)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>AVAILABILITY</h2>
   <p>The flock command is part of the util-linux package and is available from <a href="ftp://ftp.kernel.org/pub/linux/utils/util-linux/">Linux Kernel Archive</a>.
-</div>
+</section>
 

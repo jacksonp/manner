@@ -40,8 +40,7 @@ class Block_SS
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
 
-        $subsection = $dom->createElement('div');
-        $subsection->setAttribute('class', 'subsection');
+        $subsection = $dom->createElement('section');
         $subsection->appendChild($headingNode);
 
         $blockLines = [];

@@ -3,17 +3,17 @@
 <meta name="man-page-info" data-extra1="2010-03-30" data-extra2="" data-extra3="">
 <title>STRACE</title>
 <h1>STRACE</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p>strace - trace system calls and signals
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>strace</strong> [<strong>-CdffhikqrtttTvVxxy</strong>] [<strong>-I</strong><em>n</em>] [<strong>-b</strong><em>execve</em>] [<strong>-e</strong><em>expr</em>]... [<strong>-a</strong><em>column</em>] [<strong>-o</strong><em>file</em>] [<strong>-s</strong><em>strsize</em>] [<strong>-P</strong><em>path</em>]... <strong>-p</strong><em>pid</em>... / [<strong>-D</strong>] [<strong>-E</strong><em>var</em>[=<em>val</em>]]... [<strong>-u</strong><em>username</em>] <em>command</em> [<em>args</em>]<br>
   <br>
   <strong>strace</strong> <strong>-c</strong>[<strong>df</strong>] [<strong>-I</strong><em>n</em>] [<strong>-b</strong><em>execve</em>] [<strong>-e</strong><em>expr</em>]... [<strong>-O</strong><em>overhead</em>] [<strong>-S</strong><em>sortby</em>] <strong>-p</strong><em>pid</em>... / [<strong>-D</strong>] [<strong>-E</strong><em>var</em>[=<em>val</em>]]... [<strong>-u</strong><em>username</em>] <em>command</em> [<em>args</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p>In the simplest case <strong>strace</strong> runs the specified <em>command</em> until it exits. It intercepts and records the system calls which are called by a process and the signals which are received by a process. The name of each system call, its arguments and its return value are printed on standard error or to the file specified with the <strong>-o</strong> option.
   <p><strong>strace</strong> is a useful diagnostic, instructional, and debugging tool. System administrators, diagnosticians and trouble-shooters will find it invaluable for solving problems with programs for which the source is not readily available since they do not need to be recompiled in order to trace them. Students, hackers and the overly-curious will find that a great deal can be learned about a system and its system calls by tracing even ordinary programs. And programmers will find that since system calls and signals are events that happen at the user/kernel interface, a close examination of this boundary is very useful for bug isolation, sanity checking and attempting to capture race conditions.
@@ -60,8 +60,8 @@ read(0, "", 1)                          = 0</code></pre>
   <br>
   <pre><code>sigprocmask(SIG_UNBLOCK, ~[], NULL) = 0</code></pre>
   <p>Here the second argument represents the full set of all signals.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-c</strong>
@@ -173,41 +173,41 @@ read(0, "", 1)                          = 0</code></pre>
     <dt><strong>-E</strong> <em>var</em>
     <dd>Remove <em>var</em> from the inherited list of environment variables before passing it on to the command.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DIAGNOSTICS</h2>
   <p>When <em>command</em> exits, <strong>strace</strong> exits with the same exit status. If <em>command</em> is terminated by a signal, <strong>strace</strong> terminates itself with the same signal, so that <strong>strace</strong> can be used as a wrapper process transparent to the invoking parent process. Note that parent-child relationship (signal stop notifications, getppid() value, etc) between traced process and its parent are not preserved unless <strong>-D</strong> is used.
   <p>When using <strong>-p</strong> without a <em>command</em>, the exit status of <strong>strace</strong> is zero unless no processes has been attached or there was an unexpected error in doing the tracing.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SETUID INSTALLATION</h2>
   <p>If <strong>strace</strong> is installed setuid to root then the invoking user will be able to attach to and trace processes owned by any user. In addition setuid and setgid programs will be executed and traced with the correct effective privileges. Since only users trusted with full root privileges should be allowed to do these things, it only makes sense to install <strong>strace</strong> as setuid to root when the users who can execute it are restricted to those users who have this trust. For example, it makes sense to install a special version of <strong>strace</strong> with mode 'rwsr-xr--', user <strong>root</strong> and group <strong>trace</strong>, where members of the <strong>trace</strong> group are trusted users. If you do use this feature, please remember to install a non-setuid version of <strong>strace</strong> for ordinary lusers to use.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>ltrace</strong>(1), <strong>time</strong>(1), <strong>ptrace</strong>(2), <strong>proc</strong>(5)
-</div>
-<div class="section">
+</section>
+<section>
   <h2>NOTES</h2>
   <p>It is a pity that so much tracing clutter is produced by systems employing shared libraries.
   <p>It is instructive to think about system call inputs and outputs as data-flow across the user/kernel boundary. Because user-space and kernel-space are separate and address-protected, it is sometimes possible to make deductive inferences about process behavior using inputs and outputs as propositions.
   <p>In some cases, a system call will differ from the documented behavior or have a different name. For example, on System V-derived systems the true <strong>time</strong>(2) system call does not take an argument and the <strong>stat</strong> function is called <strong>xstat</strong> and takes an extra leading argument. These discrepancies are normal but idiosyncratic characteristics of the system call interface and are accounted for by C library wrapper functions.
   <p>Some system calls have different names in different architectures and personalities. In these cases, system call filtering and printing uses the names that match corresponding <strong>__NR_</strong>* kernel macros of the tracee's architecture and personality. There are two exceptions from this general rule: <strong>arm_fadvise64_64</strong>(2) ARM syscall and <strong>xtensa_fadvise64_64</strong>(2) Xtensa syscall are filtered and printed as <strong>fadvise64_64</strong>(2).
   <p>On some platforms a process that is attached to with the <strong>-p</strong> option may observe a spurious EINTR return from the current system call that is not restartable. (Ideally, all system calls should be restarted on strace attach, making the attach invisible to the traced process, but a few system calls aren't. Arguably, every instance of such behavior is a kernel bug.) This may have an unpredictable effect on the process if the process takes no action to restart the system call.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>BUGS</h2>
   <p>Programs that use the <em>setuid</em> bit do not have effective user <small>ID</small> privileges while being traced.
   <p>A traced process runs slowly.
   <p>Traced processes which are descended from <em>command</em> may be left running after an interrupt signal (<small>CTRL-C).</small>
   <p>The <strong>-i</strong> option is weakly supported.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>HISTORY</h2>
   <p>The original <strong>strace</strong> was written by Paul Kranenburg for SunOS and was inspired by its trace utility. The SunOS version of <strong>strace</strong> was ported to Linux and enhanced by Branko Lankester, who also wrote the Linux kernel support. Even though Paul released <strong>strace</strong> 2.5 in 1992, Branko's work was based on Paul's <strong>strace</strong> 1.5 release from 1991. In 1993, Rick Sladkey merged <strong>strace</strong> 2.5 for SunOS and the second release of <strong>strace</strong> for Linux, added many of the features of <strong>truss</strong>(1) from SVR4, and produced an <strong>strace</strong> that worked on both platforms. In 1994 Rick ported <strong>strace</strong> to SVR4 and Solaris and wrote the automatic configuration support. In 1995 he ported <strong>strace</strong> to Irix and tired of writing about himself in the third person.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PROBLEMS</h2>
   <p>Problems with <strong>strace</strong> should be reported to the <strong>strace</strong> mailing list at &lt;strace-devel@lists.sourceforge.net&gt;.
-</div>
+</section>
 

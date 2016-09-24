@@ -3,15 +3,15 @@
 <meta name="man-page-info" data-extra1="PCP" data-extra2="Performance Co-Pilot" data-extra3="">
 <title>DBPMDA</title>
 <h1>DBPMDA</h1>
-<div class="section">
+<section>
   <h2>NAME</h2>
   <p><strong>dbpmda</strong> - debugger for Performance Co-Pilot PMDAs
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SYNOPSIS</h2>
   <p><strong>dbpmda</strong> [<strong>-efi</strong>] [<strong>-n</strong> <em>pmnsfile</em>] [<strong>-q</strong> <em>timeout</em>] [<strong>-U</strong> <em>username</em>]
-</div>
-<div class="section">
+</section>
+<section>
   <h2>DESCRIPTION</h2>
   <p><strong>dbpmda</strong> is an interactive interface to the interactions between a Performance Metric Domain Agent (<strong>PMDA</strong>(3)) and the Performance Metric Collector Daemon (<strong>pmcd</strong>(1)). This allows PMDAs to be attached, initialized and exercised to test for correctness.
   <p><strong>dbpmda</strong> interactively prompts the user for commands, many of which emulate the Protocol Data Units (PDUs) that may be sent by a <strong>pmcd</strong>(1) process. After running <strong>dbpmda</strong>, enter the command <strong>help</strong> to get a list of the available commands. The example section below illustrates a session using <strong>dbpmda</strong> to test a PMDA.
@@ -32,8 +32,8 @@
     <dd>User account under which to run <strong>dbpmda</strong>.
   </dl>
   <p>As there are no timeout constraints on a PMDA while using <strong>dbpmda</strong> (as compared to <strong>pmcd</strong>(1)), another debugger like <strong>gdb</strong>(1) can be used on the PMDA process once it has been attached to <strong>dbpmda</strong>.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>EXAMPLE</h2>
   <p>Below is a <strong>dbpmda</strong> session using the <em>simple</em> PMDA. A <strong>.dbpmdarc</strong> file is used to set the debugging flag, open the PMDA and display the current status of the debugger:
   <pre><code>$ cat .dbpmdarc
@@ -186,25 +186,25 @@ dbpmda&gt; </code></pre>
   <p>The <strong>attr</strong> command passes connection attributes (PCP_ATTR keys) and their values into a PMDA in much the same way that PMCD would for a client connection. <strong>dbpmda</strong> always passes a client context identifier of zero, and while no validity checking on values is performed only recognised attributes can be set.
   <p>In the example above the <em>AUTH</em> debug flag is set for the PMDA, which uses this in its attribute callback and records each attribute and value pair sent to it in its <em>logfile</em>.
   <p>Note that authentication checks have already been performed by PMCD by the time a PMDA is presented with these attributes, so no further verification is necessary by the PMDA.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>CAVEATS</h2>
   <p>A value cannot be stored into metrics of type <strong>PM_TYPE_AGGREGATE</strong> or <strong>PM_TYPE_EVENT</strong>.
   <p><strong>dbpmda</strong> uses <strong>fork</strong>(2) and <strong>exec</strong>(2) to attach to daemon PMDAs. <strong>dbpmda</strong> makes no attempt to detect the termination of the daemon PMDA process, so it is possible for a PMDA to exit unexpectedly without any notification. However, any further communication attempts with the PMDA will result in errors which will indicate that the PMDA is no longer responding.
-</div>
-<div class="section">
+</section>
+<section>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><em>./.dbpmdarc</em>
     <dd>List of commands to do on startup.
   </dl>
-</div>
-<div class="section">
+</section>
+<section>
   <h2>PCP ENVIRONMENT</h2>
   <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
-</div>
-<div class="section">
+</section>
+<section>
   <h2>SEE ALSO</h2>
   <p><strong>gdb</strong>(1), <strong>pmcd</strong>(1), <strong>pmdbg</strong>(1), <strong>exec</strong>(2), <strong>fork</strong>(2), <strong>PMAPI</strong>(3), <strong>PMDA</strong>(3), <strong>pcp.conf</strong>(5) and <strong>pcp.env</strong>(5).
-</div>
+</section>
 

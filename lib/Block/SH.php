@@ -34,8 +34,7 @@ class Block_SH
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
 
-        $section = $dom->createElement('div');
-        $section->setAttribute('class', 'section');
+        $section = $dom->createElement('section');
         $section->appendChild($headingNode);
 
         $blockLines = [];
