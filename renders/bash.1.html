@@ -85,9 +85,10 @@
   <p>When an interactive login shell exits, or a non-interactive login shell executes the <strong>exit</strong> builtin command, <strong>bash</strong> reads and executes commands from the file <em>~/.bash_logout</em>, if it exists.
   <p>When an interactive shell that is not a login shell is started, <strong>bash</strong> reads and executes commands from <em>~/.bashrc</em>, if that file exists. This may be inhibited by using the <strong>--norc</strong> option. The <strong>--rcfile</strong> <em>file</em> option will force <strong>bash</strong> to read and execute commands from <em>file</em> instead of <em>~/.bashrc</em>.
   <p>When <strong>bash</strong> is started non-interactively, to run a shell script, for example, it looks for the variable <small><strong>BASH_ENV</strong></small> in the environment, expands its value if it appears there, and uses the expanded value as the name of a file to read and execute. <strong>Bash</strong> behaves as if the following command were executed:
-  <p>if [ -n "$BASH_ENV" ]; then . "$BASH_ENV"; fi<br>
-  <br>
-  but the value of the <small><strong>PATH</strong></small> variable is not used to search for the filename.
+  <div class="indent">
+    <p>if [ -n "$BASH_ENV" ]; then . "$BASH_ENV"; fi
+  </div>
+  <p>but the value of the <small><strong>PATH</strong></small> variable is not used to search for the filename.
   <p>If <strong>bash</strong> is invoked with the name <strong>sh</strong>, it tries to mimic the startup behavior of historical versions of <strong>sh</strong> as closely as possible, while conforming to the POSIX standard as well. When invoked as an interactive login shell, or a non-interactive shell with the <strong>--login</strong> option, it first attempts to read and execute commands from <em>/etc/profile</em> and <em>~/.profile</em>, in that order. The <strong>--noprofile</strong> option may be used to inhibit this behavior. When invoked as an interactive shell with the name <strong>sh</strong>, <strong>bash</strong> looks for the variable <small><strong>ENV</strong>,</small> expands its value if it is defined, and uses the expanded value as the name of a file to read and execute. Since a shell invoked as <strong>sh</strong> does not attempt to read and execute commands from any other startup files, the <strong>--rcfile</strong> option has no effect. A non-interactive shell invoked with the name <strong>sh</strong> does not attempt to read any other startup files. When invoked as <strong>sh</strong>, <strong>bash</strong> enters <em>posix</em> mode after the startup files are read.
   <p>When <strong>bash</strong> is started in <em>posix</em> mode, as with the <strong>--posix</strong> command line option, it follows the POSIX standard for startup files. In this mode, interactive shells expand the <small><strong>ENV</strong></small> variable and commands are read and executed from the file whose name is the expanded value. No other startup files are read.
   <p><strong>Bash</strong> attempts to determine when it is being run with its standard input connected to a network connection, as when executed by the remote shell daemon, usually <em>rshd</em>, or the secure shell daemon <em>sshd</em>. If <strong>bash</strong> determines it is being run in this fashion, it reads and executes commands from <em>~/.bashrc</em>, if that file exists and is readable. It will not do this if invoked as <strong>sh</strong>. The <strong>--norc</strong> option may be used to inhibit this behavior, and the <strong>--rcfile</strong> option may be used to force another file to be read, but neither <em>rshd</em> nor <em>sshd</em> generally invoke the shell with those options or allow them to be specified.
@@ -106,11 +107,15 @@
     <dt><strong>metacharacter</strong>
     <dd>
       <p>A character that, when unquoted, separates words. One of the following:<br>
-      <p><strong>| & ; ( ) &lt; &gt; space tab newline</strong>
+      <div class="indent">
+        <p><strong>| & ; ( ) &lt; &gt; space tab newline</strong>
+      </div>
     <dt><strong>control operator</strong>
     <dd>
       <p>A <em>token</em> that performs a control function. It is one of the following symbols:
-      <p><strong>|| & &amp;& ; ;; ;& ;;& ( ) | |& &lt;newline&gt;</strong>
+      <div class="indent">
+        <p><strong>|| & &amp;& ; ;; ;& ;;& ( ) | |& &lt;newline&gt;</strong>
+      </div>
   </dl>
 </section>
 <section>
@@ -128,7 +133,9 @@
   <section>
     <h3>Pipelines</h3>
     <p>A <em>pipeline</em> is a sequence of one or more commands separated by one of the control operators <strong>|</strong> or <strong>|&</strong>. The format for a pipeline is:
-    <p>[<strong>time</strong> [<strong>-p</strong>]] [ ! ] <em>command</em> [ [<strong>|</strong>⎪<strong>|&</strong>] <em>command2</em> ... ]
+    <div class="indent">
+      <p>[<strong>time</strong> [<strong>-p</strong>]] [ ! ] <em>command</em> [ [<strong>|</strong>⎪<strong>|&</strong>] <em>command2</em> ... ]
+    </div>
     <p>The standard output of <em>command</em> is connected via a pipe to the standard input of <em>command2</em>. This connection is performed before any redirections specified by the command (see <small><strong>REDIRECTION</strong></small> below). If <strong>|&</strong> is used, <em>command</em>'s standard error, in addition to its standard output, is connected to <em>command2</em>'s standard input through the pipe; it is shorthand for <strong>2&gt;&amp;1 |</strong>. This implicit redirection of the standard error to the standard output is performed after any redirections specified by the command.
     <p>The return status of a pipeline is the exit status of the last command, unless the <strong>pipefail</strong> option is enabled. If <strong>pipefail</strong> is enabled, the pipeline's return status is the value of the last (rightmost) command to exit with a non-zero status, or zero if all commands exit successfully. If the reserved word <strong>!</strong> precedes a pipeline, the exit status of that pipeline is the logical negation of the exit status as described above. The shell waits for all commands in the pipeline to terminate before returning a value.
     <p>If the <strong>time</strong> reserved word precedes a pipeline, the elapsed as well as user and system time consumed by its execution are reported when the pipeline terminates. The <strong>-p</strong> option changes the output format to that specified by POSIX. When the shell is in <em>posix mode</em>, it does not recognize <strong>time</strong> as a reserved word if the next token begins with a `-'. The <small><strong>TIMEFORMAT</strong></small> variable may be set to a format string that specifies how the timing information should be displayed; see the description of <small><strong>TIMEFORMAT</strong></small> under <strong>Shell Variables</strong> below.
@@ -142,10 +149,14 @@
     <p>A sequence of one or more newlines may appear in a <em>list</em> instead of a semicolon to delimit commands.
     <p>If a command is terminated by the control operator <strong>&</strong>, the shell executes the command in the <em>background</em> in a subshell. The shell does not wait for the command to finish, and the return status is 0. Commands separated by a <strong>;</strong> are executed sequentially; the shell waits for each command to terminate in turn. The return status is the exit status of the last command executed.
     <p>AND and OR lists are sequences of one or more pipelines separated by the <strong>&amp;&</strong> and <strong>||</strong> control operators, respectively. AND and OR lists are executed with left associativity. An AND list has the form
-    <p><em>command1</em> <strong>&amp;&</strong> <em>command2</em>
+    <div class="indent">
+      <p><em>command1</em> <strong>&amp;&</strong> <em>command2</em>
+    </div>
     <p><em>command2</em> is executed if, and only if, <em>command1</em> returns an exit status of zero.
     <p>An OR list has the form
-    <p><em>command1</em> <strong>||</strong> <em>command2</em>
+    <div class="indent">
+      <p><em>command1</em> <strong>||</strong> <em>command2</em>
+    </div>
     <p><em>command2</em> is executed if and only if <em>command1</em> returns a non-zero exit status. The return status of AND and OR lists is the exit status of the last command executed in the list.
   </section>
   <section>
@@ -202,7 +213,9 @@
     <h3>Coprocesses</h3>
     <p>A <em>coprocess</em> is a shell command preceded by the <strong>coproc</strong> reserved word. A coprocess is executed asynchronously in a subshell, as if the command had been terminated with the <strong>&</strong> control operator, with a two-way pipe established between the executing shell and the coprocess.
     <p>The format for a coprocess is:
-    <p><strong>coproc</strong> [<em>NAME</em>] <em>command</em> [<em>redirections</em>]
+    <div class="indent">
+      <p><strong>coproc</strong> [<em>NAME</em>] <em>command</em> [<em>redirections</em>]
+    </div>
     <p>This creates a coprocess named <em>NAME</em>. If <em>NAME</em> is not supplied, the default name is <strong>COPROC</strong>. <em>NAME</em> must not be supplied if <em>command</em> is a <em>simple command</em> (see above); otherwise, it is interpreted as the first word of the simple command. When the coprocess is executed, the shell creates an array variable (see <strong>Arrays</strong> below) named <em>NAME</em> in the context of the executing shell. The standard output of <em>command</em> is connected via a pipe to a file descriptor in the executing shell, and that file descriptor is assigned to <em>NAME</em>[0]. The standard input of <em>command</em> is connected via a pipe to a file descriptor in the executing shell, and that file descriptor is assigned to <em>NAME</em>[1]. This pipe is established before any redirections specified by the command (see <small><strong>REDIRECTION</strong></small> below). The file descriptors can be utilized as arguments to shell commands and redirections using standard word expansions. The file descriptors are not available in subshells. The process ID of the shell spawned to execute the coprocess is available as the value of the variable <em>NAME</em>_PID. The <strong>wait</strong> builtin command may be used to wait for the coprocess to terminate.
     <p>Since the coprocess is created as an asynchronous command, the <strong>coproc</strong> command always returns success. The return status of a coprocess is the exit status of <em>command</em>.
   </section>
@@ -276,13 +289,16 @@
   <p>A <em>parameter</em> is an entity that stores values. It can be a <em>name</em>, a number, or one of the special characters listed below under <strong>Special Parameters</strong>. A <em>variable</em> is a parameter denoted by a <em>name</em>. A variable has a <em>value</em> and zero or more <em>attributes</em>. Attributes are assigned using the <strong>declare</strong> builtin command (see <strong>declare</strong> below in <small><strong>SHELL BUILTIN COMMANDS</strong>).</small>
   <p>A parameter is set if it has been assigned a value. The null string is a valid value. Once a variable is set, it may be unset only by using the <strong>unset</strong> builtin command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
   <p>A <em>variable</em> may be assigned to by a statement of the form
-  <p><em>name</em>=[<em>value</em>]
+  <div class="indent">
+    <p><em>name</em>=[<em>value</em>]
+  </div>
   <p>If <em>value</em> is not given, the variable is assigned the null string. All <em>values</em> undergo tilde expansion, parameter and variable expansion, command substitution, arithmetic expansion, and quote removal (see <small><strong>EXPANSION</strong></small> below). If the variable has its <strong>integer</strong> attribute set, then <em>value</em> is evaluated as an arithmetic expression even if the $((...)) expansion is not used (see <strong>Arithmetic Expansion</strong> below). Word splitting is not performed, with the exception of <strong>"$@"</strong> as explained below under <strong>Special Parameters</strong>. Pathname expansion is not performed. Assignment statements may also appear as arguments to the <strong>alias</strong>, <strong>declare</strong>, <strong>typeset</strong>, <strong>export</strong>, <strong>readonly</strong>, and <strong>local</strong> builtin commands (<em>declaration</em> commands). When in <em>posix mode</em>, these builtins may appear in a command after one or more instances of the <strong>command</strong> builtin and retain these assignment statement properties.
   <p>In the context where an assignment statement is assigning a value to a shell variable or array index, the += operator can be used to append to or add to the variable's previous value. This includes arguments to builtin commands such as <strong>declare</strong> that accept assignment statements (<em>declaration</em> commands). When += is applied to a variable for which the <em>integer</em> attribute has been set, <em>value</em> is evaluated as an arithmetic expression and added to the variable's current value, which is also evaluated. When += is applied to an array variable using compound assignment (see <strong>Arrays</strong> below), the variable's value is not unset (as it is when using =), and new values are appended to the array beginning at one greater than the array's maximum index (for indexed arrays) or added as additional key-value pairs in an associative array. When applied to a string-valued variable, <em>value</em> is expanded and appended to the variable's value.
   <p>A variable can be assigned the <em>nameref</em> attribute using the <strong>-n</strong> option to the <strong>declare</strong> or <strong>local</strong> builtin commands (see the descriptions of <strong>declare</strong> and <strong>local</strong> below) to create a <em>nameref</em>, or a reference to another variable. This allows variables to be manipulated indirectly. Whenever the nameref variable is referenced, assigned to, unset, or has its attributes modified (other than using or changing the <em>nameref</em> attribute itself), the operation is actually performed on the variable specified by the nameref variable's value. A nameref is commonly used within shell functions to refer to a variable whose name is passed as an argument to the function. For instance, if a variable name is passed to a shell function as its first argument, running
-  <p>declare -n ref=$1<br>
-  <br>
-  inside the function creates a nameref variable <strong>ref</strong> whose value is the variable name passed as the first argument. References and assignments to <strong>ref</strong>, and changes to its attributes, are treated as references, assignments, and attribute modifications to the variable whose name was passed as <strong>$1</strong>. If the control variable in a <strong>for</strong> loop has the nameref attribute, the list of words can be a list of shell variables, and a name reference will be established for each word in the list, in turn, when the loop is executed. Array variables cannot be given the <strong>nameref</strong> attribute. However, nameref variables can reference array variables and subscripted array variables. Namerefs can be unset using the <strong>-n</strong> option to the <strong>unset</strong> builtin. Otherwise, if <strong>unset</strong> is executed with the name of a nameref variable as an argument, the variable referenced by the nameref variable will be unset.
+  <div class="indent">
+    <p>declare -n ref=$1
+  </div>
+  <p>inside the function creates a nameref variable <strong>ref</strong> whose value is the variable name passed as the first argument. References and assignments to <strong>ref</strong>, and changes to its attributes, are treated as references, assignments, and attribute modifications to the variable whose name was passed as <strong>$1</strong>. If the control variable in a <strong>for</strong> loop has the nameref attribute, the list of words can be a list of shell variables, and a name reference will be established for each word in the list, in turn, when the loop is executed. Array variables cannot be given the <strong>nameref</strong> attribute. However, nameref variables can reference array variables and subscripted array variables. Namerefs can be unset using the <strong>-n</strong> option to the <strong>unset</strong> builtin. Otherwise, if <strong>unset</strong> is executed with the name of a nameref variable as an argument, the variable referenced by the nameref variable will be unset.
   <section>
     <h3>Positional Parameters</h3>
     <p>A <em>positional parameter</em> is a parameter denoted by one or more digits, other than the single digit 0. Positional parameters are assigned from the shell's arguments when it is invoked, and may be reassigned using the <strong>set</strong> builtin command. Positional parameters may not be assigned to with assignment statements. The positional parameters are temporarily replaced when a shell function is executed (see <small><strong>FUNCTIONS</strong></small> below).
@@ -595,8 +611,13 @@
     <p>Brace expansion is performed before any other expansions, and any characters special to other expansions are preserved in the result. It is strictly textual. <strong>Bash</strong> does not apply any syntactic interpretation to the context of the expansion or the text between the braces.
     <p>A correctly-formed brace expansion must contain unquoted opening and closing braces, and at least one unquoted comma or a valid sequence expression. Any incorrectly formed brace expansion is left unchanged. A <strong>{</strong> or <strong>,</strong> may be quoted with a backslash to prevent its being considered part of a brace expression. To avoid conflicts with parameter expansion, the string <strong>${</strong> is not considered eligible for brace expansion.
     <p>This construct is typically used as shorthand when the common prefix of the strings to be generated is longer than in the above example:
-    <p>mkdir /usr/local/src/bash/{old,new,dist,bugs} or
-    <p>chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
+    <div class="indent">
+      <p>mkdir /usr/local/src/bash/{old,new,dist,bugs}
+    </div>
+    <p>or
+    <div class="indent">
+      <p>chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
+    </div>
     <p>Brace expansion introduces a slight incompatibility with historical versions of <strong>sh</strong>. <strong>sh</strong> does not treat opening or closing braces specially when they appear as part of a word, and preserves them in the output. <strong>Bash</strong> removes braces from words as a consequence of brace expansion. For example, a word entered to <strong>sh</strong> as <em>file{1,2}</em> appears identically in the output. The same word is output as <em>file1 file2</em> after expansion by <strong>bash</strong>. If strict compatibility with <strong>sh</strong> is desired, start <strong>bash</strong> with the <strong>+B</strong> option or disable brace expansion with the <strong>+B</strong> option to the <strong>set</strong> command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below).
   </section>
   <section>
@@ -686,8 +707,13 @@
   <section>
     <h3>Command Substitution</h3>
     <p><em>Command substitution</em> allows the output of a command to replace the command name. There are two forms:
-    <p><strong>$(</strong><em>command</em><strong>)</strong> or
-    <p><strong>`</strong><em>command</em><strong>`</strong>
+    <div class="indent">
+      <p><strong>$(</strong><em>command</em><strong>)</strong>
+    </div>
+    <p>or
+    <div class="indent">
+      <p><strong>`</strong><em>command</em><strong>`</strong>
+    </div>
     <p><strong>Bash</strong> performs the expansion by executing <em>command</em> in a subshell environment and replacing the command substitution with the standard output of the command, with any trailing newlines deleted. Embedded newlines are not deleted, but they may be removed during word splitting. The command substitution <strong>$(cat</strong> <em>file</em>) can be replaced by the equivalent but faster <strong>$(&lt;</strong> <em>file</em>).
     <p>When the old-style backquote form of substitution is used, backslash retains its literal meaning except when followed by <strong>$</strong>, <strong>`</strong>, or <strong>\</strong>. The first backquote not preceded by a backslash terminates the command substitution. When using the $(<em>command</em>) form, all characters between the parentheses make up the command; none are treated specially.
     <p>Command substitutions may be nested. To nest when using the backquoted form, escape the inner backquotes with backslashes.
@@ -696,7 +722,9 @@
   <section>
     <h3>Arithmetic Expansion</h3>
     <p>Arithmetic expansion allows the evaluation of an arithmetic expression and the substitution of the result. The format for arithmetic expansion is:
-    <p><strong>$((</strong><em>expression</em><strong>))</strong>
+    <div class="indent">
+      <p><strong>$((</strong><em>expression</em><strong>))</strong>
+    </div>
     <p>The <em>expression</em> is treated as if it were within double quotes, but a double quote inside the parentheses is not treated specially. All tokens in the expression undergo parameter and variable expansion, command substitution, and quote removal. The result is treated as the arithmetic expression to be evaluated. Arithmetic expansions may be nested.
     <p>The evaluation is performed according to the rules listed below under <small><strong>ARITHMETIC EVALUATION</strong>.</small> If <em>expression</em> is invalid, <strong>bash</strong> prints a message indicating failure and no substitution occurs.
   </section>
@@ -730,12 +758,14 @@
         <br>
         Within <strong>[</strong> and <strong>]</strong>, <em>character classes</em> can be specified using the syntax <strong>[:</strong><em>class</em><strong>:]</strong>, where <em>class</em> is one of the following classes defined in the POSIX standard:
       </dl>
-      <p><strong>alnum alpha ascii blank cntrl digit graph lower print punct space upper word xdigit</strong><br>
-      A character class matches any character belonging to that class. The <strong>word</strong> character class matches letters, digits, and the character _.<br>
-      <br>
-      Within <strong>[</strong> and <strong>]</strong>, an <em>equivalence class</em> can be specified using the syntax <strong>[=</strong><em>c</em><strong>=]</strong>, which matches all characters with the same collation weight (as defined by the current locale) as the character <em>c</em>.<br>
-      <br>
-      Within <strong>[</strong> and <strong>]</strong>, the syntax <strong>[.</strong><em>symbol</em><strong>.]</strong> matches the collating symbol <em>symbol</em>.
+      <div class="indent">
+        <p><strong>alnum alpha ascii blank cntrl digit graph lower print punct space upper word xdigit</strong><br>
+        A character class matches any character belonging to that class. The <strong>word</strong> character class matches letters, digits, and the character _.<br>
+        <br>
+        Within <strong>[</strong> and <strong>]</strong>, an <em>equivalence class</em> can be specified using the syntax <strong>[=</strong><em>c</em><strong>=]</strong>, which matches all characters with the same collation weight (as defined by the current locale) as the character <em>c</em>.<br>
+        <br>
+        Within <strong>[</strong> and <strong>]</strong>, the syntax <strong>[.</strong><em>symbol</em><strong>.]</strong> matches the collating symbol <em>symbol</em>.
+      </div>
     </div>
     <p>If the <strong>extglob</strong> shell option is enabled using the <strong>shopt</strong> builtin, several extended pattern matching operators are recognized. In the following description, a <em>pattern-list</em> is a list of one or more patterns separated by a <strong>|</strong>. Composite patterns may be formed using one or more of the following sub-patterns:
     <dl>
@@ -763,9 +793,13 @@
   <p>In the following descriptions, if the file descriptor number is omitted, and the first character of the redirection operator is <strong>&lt;</strong>, the redirection refers to the standard input (file descriptor 0). If the first character of the redirection operator is <strong>&gt;</strong>, the redirection refers to the standard output (file descriptor 1).
   <p>The word following the redirection operator in the following descriptions, unless otherwise noted, is subjected to brace expansion, tilde expansion, parameter and variable expansion, command substitution, arithmetic expansion, quote removal, pathname expansion, and word splitting. If it expands to more than one word, <strong>bash</strong> reports an error.
   <p>Note that the order of redirections is significant. For example, the command
-  <p>ls <strong>&gt;</strong> dirlist 2<strong>&gt;&</strong>1
+  <div class="indent">
+    <p>ls <strong>&gt;</strong> dirlist 2<strong>&gt;&</strong>1
+  </div>
   <p>directs both standard output and standard error to the file <em>dirlist</em>, while the command
-  <p>ls 2<strong>&gt;&</strong>1 <strong>&gt;</strong> dirlist
+  <div class="indent">
+    <p>ls 2<strong>&gt;&</strong>1 <strong>&gt;</strong> dirlist
+  </div>
   <p>directs only the standard output to file <em>dirlist</em>, because the standard error was duplicated from the standard output before the standard output was redirected to <em>dirlist</em>.
   <p><strong>Bash</strong> handles several filenames specially when they are used in redirections, as described in the following table. If the operating system on which <strong>bash</strong> is running provides these special files, bash will use them; otherwise it will emulate them internally with the behavior described below.
   <dl>
@@ -788,78 +822,109 @@
     <h3>Redirecting Input</h3>
     <p>Redirection of input causes the file whose name results from the expansion of <em>word</em> to be opened for reading on file descriptor <em>n</em>, or the standard input (file descriptor 0) if <em>n</em> is not specified.
     <p>The general format for redirecting input is:
-    <p>[<em>n</em>]<strong>&lt;</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&lt;</strong><em>word</em>
+    </div>
   </section>
   <section>
     <h3>Redirecting Output</h3>
     <p>Redirection of output causes the file whose name results from the expansion of <em>word</em> to be opened for writing on file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified. If the file does not exist it is created; if it does exist it is truncated to zero size.
     <p>The general format for redirecting output is:
-    <p>[<em>n</em>]<strong>&gt;</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&gt;</strong><em>word</em>
+    </div>
     <p>If the redirection operator is <strong>&gt;</strong>, and the <strong>noclobber</strong> option to the <strong>set</strong> builtin has been enabled, the redirection will fail if the file whose name results from the expansion of <em>word</em> exists and is a regular file. If the redirection operator is <strong>&gt;|</strong>, or the redirection operator is <strong>&gt;</strong> and the <strong>noclobber</strong> option to the <strong>set</strong> builtin command is not enabled, the redirection is attempted even if the file named by <em>word</em> exists.
   </section>
   <section>
     <h3>Appending Redirected Output</h3>
     <p>Redirection of output in this fashion causes the file whose name results from the expansion of <em>word</em> to be opened for appending on file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified. If the file does not exist it is created.
     <p>The general format for appending output is:
-    <p>[<em>n</em>]<strong>&gt;&gt;</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&gt;&gt;</strong><em>word</em>
+    </div>
   </section>
   <section>
     <h3>Redirecting Standard Output and Standard Error</h3>
     <p>This construct allows both the standard output (file descriptor 1) and the standard error output (file descriptor 2) to be redirected to the file whose name is the expansion of <em>word</em>.
     <p>There are two formats for redirecting standard output and standard error:
-    <p><strong>&amp;&gt;</strong><em>word</em> and
-    <p><strong>&gt;&</strong><em>word</em>
+    <div class="indent">
+      <p><strong>&amp;&gt;</strong><em>word</em>
+    </div>
+    <p>and
+    <div class="indent">
+      <p><strong>&gt;&</strong><em>word</em>
+    </div>
     <p>Of the two forms, the first is preferred. This is semantically equivalent to
-    <p><strong>&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
+    <div class="indent">
+      <p><strong>&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
+    </div>
     <p>When using the second form, <em>word</em> may not expand to a number or <strong>-</strong>. If it does, other redirection operators apply (see <strong>Duplicating File Descriptors</strong> below) for compatibility reasons.
   </section>
   <section>
     <h3>Appending Standard Output and Standard Error</h3>
     <p>This construct allows both the standard output (file descriptor 1) and the standard error output (file descriptor 2) to be appended to the file whose name is the expansion of <em>word</em>.
     <p>The format for appending standard output and standard error is:
-    <p><strong>&amp;&gt;&gt;</strong><em>word</em>
+    <div class="indent">
+      <p><strong>&amp;&gt;&gt;</strong><em>word</em>
+    </div>
     <p>This is semantically equivalent to
-    <p><strong>&gt;&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
+    <div class="indent">
+      <p><strong>&gt;&gt;</strong><em>word</em> 2<strong>&gt;&</strong>1
+    </div>
     <p>(see <strong>Duplicating File Descriptors</strong> below).
   </section>
   <section>
     <h3>Here Documents</h3>
     <p>This type of redirection instructs the shell to read input from the current source until a line containing only <em>delimiter</em> (with no trailing blanks) is seen. All of the lines read up to that point are then used as the standard input (or file descriptor <em>n</em> if <em>n</em> is specified) for a command.
     <p>The format of here-documents is:
-    <pre>[<em>n</em>]<strong>&lt;&lt;</strong>[<strong>-</strong>]<em>word</em>
+    <div class="indent">
+      <pre>[<em>n</em>]<strong>&lt;&lt;</strong>[<strong>-</strong>]<em>word</em>
         <em>here-document</em>
 <em>delimiter</em></pre>
+    </div>
     <p>No parameter and variable expansion, command substitution, arithmetic expansion, or pathname expansion is performed on <em>word</em>. If any part of <em>word</em> is quoted, the <em>delimiter</em> is the result of quote removal on <em>word</em>, and the lines in the here-document are not expanded. If <em>word</em> is unquoted, all lines of the here-document are subjected to parameter expansion, command substitution, and arithmetic expansion, the character sequence <strong>\&lt;newline&gt;</strong> is ignored, and <strong>\</strong> must be used to quote the characters <strong>\</strong>, <strong>$</strong>, and <strong>`</strong>.
     <p>If the redirection operator is <strong>&lt;&lt;-</strong>, then all leading tab characters are stripped from input lines and the line containing <em>delimiter</em>. This allows here-documents within shell scripts to be indented in a natural fashion.
   </section>
   <section>
     <h3>Here Strings</h3>
     <p>A variant of here documents, the format is:
-    <pre>[<em>n</em>]<strong>&lt;&lt;&lt;</strong><em>word</em></pre>
+    <div class="indent">
+      <pre>[<em>n</em>]<strong>&lt;&lt;&lt;</strong><em>word</em></pre>
+    </div>
     <p>The <em>word</em> undergoes brace expansion, tilde expansion, parameter and variable expansion, command substitution, arithmetic expansion, and quote removal. Pathname expansion and word splitting are not performed. The result is supplied as a single string, with a newline appended, to the command on its standard input (or file descriptor <em>n</em> if <em>n</em> is specified).
   </section>
   <section>
     <h3>Duplicating File Descriptors</h3>
     <p>The redirection operator
-    <p>[<em>n</em>]<strong>&lt;&</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&lt;&</strong><em>word</em>
+    </div>
     <p>is used to duplicate input file descriptors. If <em>word</em> expands to one or more digits, the file descriptor denoted by <em>n</em> is made to be a copy of that file descriptor. If the digits in <em>word</em> do not specify a file descriptor open for input, a redirection error occurs. If <em>word</em> evaluates to <strong>-</strong>, file descriptor <em>n</em> is closed. If <em>n</em> is not specified, the standard input (file descriptor 0) is used.
     <p>The operator
-    <p>[<em>n</em>]<strong>&gt;&</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&gt;&</strong><em>word</em>
+    </div>
     <p>is used similarly to duplicate output file descriptors. If <em>n</em> is not specified, the standard output (file descriptor 1) is used. If the digits in <em>word</em> do not specify a file descriptor open for output, a redirection error occurs. If <em>word</em> evaluates to <strong>-</strong>, file descriptor <em>n</em> is closed. As a special case, if <em>n</em> is omitted, and <em>word</em> does not expand to one or more digits or <strong>-</strong>, the standard output and standard error are redirected as described previously.
   </section>
   <section>
     <h3>Moving File Descriptors</h3>
     <p>The redirection operator
-    <p>[<em>n</em>]<strong>&lt;&</strong><em>digit</em><strong>-</strong>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&lt;&</strong><em>digit</em><strong>-</strong>
+    </div>
     <p>moves the file descriptor <em>digit</em> to file descriptor <em>n</em>, or the standard input (file descriptor 0) if <em>n</em> is not specified. <em>digit</em> is closed after being duplicated to <em>n</em>.
     <p>Similarly, the redirection operator
-    <p>[<em>n</em>]<strong>&gt;&</strong><em>digit</em><strong>-</strong>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&gt;&</strong><em>digit</em><strong>-</strong>
+    </div>
     <p>moves the file descriptor <em>digit</em> to file descriptor <em>n</em>, or the standard output (file descriptor 1) if <em>n</em> is not specified.
   </section>
   <section>
     <h3>Opening File Descriptors for Reading and Writing</h3>
     <p>The redirection operator
-    <p>[<em>n</em>]<strong>&lt;&gt;</strong><em>word</em>
+    <div class="indent">
+      <p>[<em>n</em>]<strong>&lt;&gt;</strong><em>word</em>
+    </div>
     <p>causes the file whose name is the expansion of <em>word</em> to be opened for both reading and writing on file descriptor <em>n</em>, or on file descriptor 0 if <em>n</em> is not specified. If the file does not exist, it is created.
   </section>
 </section>
@@ -1104,7 +1169,9 @@
   <h2>JOB CONTROL</h2>
   <p><em>Job control</em> refers to the ability to selectively stop (<em>suspend</em>) the execution of processes and continue (<em>resume</em>) their execution at a later point. A user typically employs this facility via an interactive interface supplied jointly by the operating system kernel's terminal driver and <strong>bash</strong>.
   <p>The shell associates a <em>job</em> with each pipeline. It keeps a table of currently executing jobs, which may be listed with the <strong>jobs</strong> command. When <strong>bash</strong> starts a job asynchronously (in the <em>background</em>), it prints a line that looks like:
-  <p>[1] 25647
+  <div class="indent">
+    <p>[1] 25647
+  </div>
   <p>indicating that this job is job number 1 and that the process ID of the last process in the pipeline associated with this job is 25647. All of the processes in a single pipeline are members of the same job. <strong>Bash</strong> uses the <em>job</em> abstraction as the basis for job control.
   <p>To facilitate the implementation of the user interface to job control, the operating system maintains the notion of a <em>current terminal process group ID</em>. Members of this process group (processes whose process group ID is equal to the current terminal process group ID) receive keyboard-generated signals such as <small><strong>SIGINT</strong>.</small> These processes are said to be in the <em>foreground</em>. <em>Background</em> processes are those whose process group ID differs from the terminal's; such processes are immune to keyboard-generated signals. Only foreground processes are allowed to read from or, if the user so specifies with <code>stty tostop</code>, write to the terminal. Background processes which attempt to read from (write to when <code>stty tostop</code> is in effect) the terminal are sent a <small><strong>SIGTTIN (SIGTTOU)</strong></small> signal by the kernel's terminal driver, which, unless caught, suspends the process.
   <p>If the operating system on which <strong>bash</strong> is running supports job control, <strong>bash</strong> contains facilities to use it. Typing the <em>suspend</em> character (typically <strong>^Z</strong>, Control-Z) while a process is running causes that process to be stopped and returns control to <strong>bash</strong>. Typing the <em>delayed suspend</em> character (typically <strong>^Y</strong>, Control-Y) causes the process to be stopped when it attempts to read input from the terminal, and control to be returned to <strong>bash</strong>. The user may then manipulate the state of this job, using the <strong>bg</strong> command to continue it in the background, the <strong>fg</strong> command to continue it in the foreground, or the <strong>kill</strong> command to kill it. A <strong>^Z</strong> takes effect immediately, and has the additional side effect of causing pending output and typeahead to be discarded.
@@ -1188,8 +1255,14 @@
     <p>Readline is customized by putting commands in an initialization file (the <em>inputrc</em> file). The name of this file is taken from the value of the <small><strong>INPUTRC</strong></small> variable. If that variable is unset, the default is <em>~/.inputrc</em>. When a program which uses the readline library starts up, the initialization file is read, and the key bindings and variables are set. There are only a few basic constructs allowed in the readline initialization file. Blank lines are ignored. Lines beginning with a <strong>#</strong> are comments. Lines beginning with a <strong>$</strong> indicate conditional constructs. Other lines denote key bindings and variable settings.
     <p>The default key-bindings may be changed with an <em>inputrc</em> file. Other programs that use this library may add their own commands and bindings.
     <p>For example, placing
-    <p>M-Control-u: universal-argument or
-    <p>C-Meta-u: universal-argument into the <em>inputrc</em> would make M-C-u execute the readline command <em>universal-argument</em>.
+    <div class="indent">
+      <p>M-Control-u: universal-argument
+    </div>
+    <p>or
+    <div class="indent">
+      <p>C-Meta-u: universal-argument
+    </div>
+    <p>into the <em>inputrc</em> would make M-C-u execute the readline command <em>universal-argument</em>.
     <p>The following symbolic character names are recognized: <em>RUBOUT</em>, <em>DEL</em>, <em>ESC</em>, <em>LFD</em>, <em>NEWLINE</em>, <em>RET</em>, <em>RETURN</em>, <em>SPC</em>, <em>SPACE</em>, and <em>TAB</em>.
     <p>In addition to command names, readline allows keys to be bound to a string that is inserted when the key is pressed (a <em>macro</em>).
   </section>
@@ -1197,14 +1270,18 @@
     <h3>Readline Key Bindings</h3>
     <p>The syntax for controlling key bindings in the <em>inputrc</em> file is simple. All that is required is the name of the command or the text of a macro and a key sequence to which it should be bound. The name may be specified in one of two ways: as a symbolic key name, possibly with <em>Meta-</em> or <em>Control-</em> prefixes, or as a key sequence.
     <p>When using the form <strong>keyname</strong>:<em>function-name</em> or <em>macro</em>, <em>keyname</em> is the name of a key spelled out in English. For example:
-    <p>Control-u: universal-argument<br>
-    Meta-Rubout: backward-kill-word<br>
-    Control-o: "&gt; output"
+    <div class="indent">
+      <p>Control-u: universal-argument<br>
+      Meta-Rubout: backward-kill-word<br>
+      Control-o: "&gt; output"
+    </div>
     <p>In the above example, <em>C-u</em> is bound to the function <strong>universal-argument</strong>, <em>M-DEL</em> is bound to the function <strong>backward-kill-word</strong>, and <em>C-o</em> is bound to run the macro expressed on the right hand side (that is, to insert the text ``&gt; output'' into the line).
     <p>In the second form, <strong>"keyseq"</strong>:<em>function-name</em> or <em>macro</em>, <strong>keyseq</strong> differs from <strong>keyname</strong> above in that strings denoting an entire key sequence may be specified by placing the sequence within double quotes. Some GNU Emacs style key escapes can be used, as in the following example, but the symbolic character names are not recognized.
-    <p>"\C-u": universal-argument<br>
-    "\C-x\C-r": re-read-init-file<br>
-    "\e[11~": "Function Key 1"
+    <div class="indent">
+      <p>"\C-u": universal-argument<br>
+      "\C-x\C-r": re-read-init-file<br>
+      "\e[11~": "Function Key 1"
+    </div>
     <p>In this example, <em>C-u</em> is again bound to the function <strong>universal-argument</strong>. <em>C-x C-r</em> is bound to the function <strong>re-read-init-file</strong>, and <em>ESC [ 1 1 ~</em> is bound to insert the text ``Function Key 1''.
     <p>The full set of GNU Emacs style escape sequences is
     <dl>
@@ -1250,7 +1327,9 @@
   <section>
     <h3>Readline Variables</h3>
     <p>Readline has variables that can be used to further customize its behavior. A variable may be set in the <em>inputrc</em> file with a statement of the form
-    <p><strong>set</strong> <em>variable-name</em> <em>value</em>
+    <div class="indent">
+      <p><strong>set</strong> <em>variable-name</em> <em>value</em>
+    </div>
     <p>Except where noted, readline variables can take the values <strong>On</strong> or <strong>Off</strong> (without regard to case). Unrecognized variable names are ignored. When a variable value is read, empty or null values, "on" (case-insensitive), and "1" are equivalent to <strong>On</strong>. All other values are equivalent to <strong>Off</strong>. The variables and their default values are:
     <dl>
       <dt><strong>bell-style (audible)</strong>
@@ -1370,7 +1449,9 @@
       <dd>
         <p>This directive takes a single filename as an argument and reads commands and bindings from that file. For example, the following directive would read <em>/etc/inputrc</em>:<br>
         <br>
-        <pre><strong>$include</strong>  <em>/etc/inputrc</em></pre>
+        <div class="indent">
+          <pre><strong>$include</strong>  <em>/etc/inputrc</em></pre>
+        </div>
     </dl>
   </section>
   <section>

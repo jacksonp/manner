@@ -67,7 +67,7 @@ class Block_RS
             if ($className === 'indent' &&
               $rsBlock->childNodes->length === 1 &&
               $rsBlock->firstChild instanceof DOMElement &&
-              !in_array($rsBlock->firstChild->tagName, ['strong', 'em', 'small', 'a', 'code'])
+              in_array($rsBlock->firstChild->tagName, ['dl', 'div'])
             ) {
                 $parentNode->appendChild($rsBlock->firstChild);
             } else {

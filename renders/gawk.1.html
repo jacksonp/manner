@@ -132,10 +132,12 @@
 <section>
   <h2>AWK PROGRAM EXECUTION</h2>
   <p>An AWK program consists of a sequence of pattern-action statements and optional function definitions.
-  <p><strong>@include "</strong><em>filename</em><strong>"</strong><br>
-  <strong>@load "</strong><em>filename</em><strong>"</strong><br>
-  <em>pattern</em> <strong>{</strong> <em>action statements</em> <strong>}</strong><br>
-  <strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
+  <div class="indent">
+    <p><strong>@include "</strong><em>filename</em><strong>"</strong><br>
+    <strong>@load "</strong><em>filename</em><strong>"</strong><br>
+    <em>pattern</em> <strong>{</strong> <em>action statements</em> <strong>}</strong><br>
+    <strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
+  </div>
   <p><em>Gawk</em> first reads the program source from the <em>program-file</em>(s) if specified, from arguments to <strong>--source</strong>, or from the first non-option argument on the command line. The <strong>-f</strong> and <strong>--source</strong> options may be used multiple times on the command line. <em>Gawk</em> reads the program text as if all the <em>program-file</em>s and command line source texts had been concatenated together. This is useful for building libraries of AWK functions, without having to include them in each new AWK program that uses them. It also provides the ability to mix library functions with command line programs.
   <p>In addition, lines beginning with <strong>@include</strong> may be used to include other source files into your program, making library use even easier. This is equivalent to using the <strong>-i</strong> option.
   <p>Lines beginning with <strong>@load</strong> may be used to load shared libraries into your program. This is equivalent to using the <strong>-l</strong> option.
@@ -166,8 +168,10 @@
     <p>If the <strong>FIELDWIDTHS</strong> variable is set to a space separated list of numbers, each field is expected to have fixed width, and <em>gawk</em> splits up the record using the specified widths. The value of <strong>FS</strong> is ignored. Assigning a new value to <strong>FS</strong> or <strong>FPAT</strong> overrides the use of <strong>FIELDWIDTHS</strong>.
     <p>Similarly, if the <strong>FPAT</strong> variable is set to a string representing a regular expression, each field is made up of text that matches that regular expression. In this case, the regular expression describes the fields themselves, instead of the text that separates the fields. Assigning a new value to <strong>FS</strong> or <strong>FIELDWIDTHS</strong> overrides the use of <strong>FPAT</strong>.
     <p>Each field in the input record may be referenced by its position: <strong>$1</strong>, <strong>$2</strong>, and so on. <strong>$0</strong> is the whole record. Fields need not be referenced by constants:
-    <p><strong>n = 5<br>
-    print $n</strong>
+    <div class="indent">
+      <p><strong>n = 5<br>
+      print $n</strong>
+    </div>
     <p>prints the fifth field in the input record.
     <p>The variable <strong>NF</strong> is set to the total number of fields in the input record.
     <p>References to non-existent fields (i.e., fields after <strong>$NF</strong>) produce the null-string. However, assigning to a non-existent field (e.g., <strong>$(NF+2) = 5</strong>) increases the value of <strong>NF</strong>, creates any intervening fields with the null string as their values, and causes the value of <strong>$0</strong> to be recomputed, with the fields being separated by the value of <strong>OFS</strong>. References to negative numbered fields cause a fatal error. Decrementing <strong>NF</strong> causes the values of fields past the new value to be lost, and the value of <strong>$0</strong> to be recomputed, with the fields being separated by the value of <strong>OFS</strong>.
@@ -333,19 +337,25 @@ print foo    # prints 4</pre>
   <section>
     <h3>Arrays</h3>
     <p>Arrays are subscripted with an expression between square brackets (<strong>[</strong> and <strong>]</strong>). If the expression is an expression list (<em>expr</em>, <em>expr</em> ...) then the array subscript is a string consisting of the concatenation of the (string) value of each expression, separated by the value of the <strong>SUBSEP</strong> variable. This facility is used to simulate multiply dimensioned arrays. For example:
-    <p><strong>i = "A"; j = "B"; k = "C"<br>
-    x[i, j, k] = "hello, world\n"</strong>
+    <div class="indent">
+      <p><strong>i = "A"; j = "B"; k = "C"<br>
+      x[i, j, k] = "hello, world\n"</strong>
+    </div>
     <p>assigns the string <strong>"hello, world\n"</strong> to the element of the array <strong>x</strong> which is indexed by the string <strong>"A\034B\034C"</strong>. All arrays in AWK are associative, i.e., indexed by string values.
     <p>The special operator <strong>in</strong> may be used to test if an array has an index consisting of a particular value:
-    <pre>if (val in array)
+    <div class="indent">
+      <pre>if (val in array)
         print array[val]</pre>
+    </div>
     <p>If the array has multiple subscripts, use <strong>(i, j) in array</strong>.
     <p>The <strong>in</strong> construct may also be used in a <strong>for</strong> loop to iterate over all the elements of an array. However, the <strong>(i, j) in array</strong> construct only works in tests, not in <strong>for</strong> loops.
     <p>An element may be deleted from an array using the <strong>delete</strong> statement. The <strong>delete</strong> statement may also be used to delete the entire contents of an array, just by specifying the array name without a subscript.
     <p><em>gawk</em> supports true multidimensional arrays. It does not require that such arrays be ``rectangular'' as in C or C++. For example:
-    <pre>a[1] = 5
+    <div class="indent">
+      <pre>a[1] = 5
 a[2][1] = 6
 a[2][2] = 7</pre>
+    </div>
     <p><strong>NOTE</strong>: You may need to tell <em>gawk</em> that an array element is really a subarray in order to use it where <em>gawk</em> expects an array (such as in the second argument to <strong>split()</strong>). You can do this by creating an element in the subarray and then deleting it with the <strong>delete</strong> statement.
   </section>
   <section>
@@ -354,9 +364,11 @@ a[2][2] = 7</pre>
     <p>To force a variable to be treated as a number, add 0 to it; to force it to be treated as a string, concatenate it with the null string.
     <p>Uninitialized variables have the numeric value 0 and the string value "" (the null, or empty, string).
     <p>When a string must be converted to a number, the conversion is accomplished using <em>strtod</em>(3). A number is converted to a string by using the value of <strong>CONVFMT</strong> as a format string for <em>sprintf</em>(3), with the numeric value of the variable as the argument. However, even though all numbers in AWK are floating-point, integral values are <em>always</em> converted as integers. Thus, given
-    <pre>CONVFMT = "%2.2f"
+    <div class="indent">
+      <pre>CONVFMT = "%2.2f"
 a = 12
 b = a ""</pre>
+    </div>
     <p>the variable <strong>b</strong> has a string value of <strong>"12"</strong> and not <strong>"12.00"</strong>.
     <p><strong>NOTE</strong>: When operating in POSIX mode (such as with the <strong>--posix</strong> option), beware that locale settings may interfere with the way decimal numbers are treated: the decimal separator of the numbers you are feeding to <em>gawk</em> must conform to what your locale would expect, be it a comma (,) or a period (.).
     <p><em>Gawk</em> performs comparisons as follows: If two variables are numeric, they are compared numerically. If one value is numeric and the other has a string value that is a “numeric string,” then comparisons are also done numerically. Otherwise, the numeric value is converted to a string and a string comparison is performed. Two strings are compared, of course, as strings.
@@ -400,14 +412,17 @@ b = a ""</pre>
 <section>
   <h2>PATTERNS AND ACTIONS</h2>
   <p>AWK is a line-oriented language. The pattern comes first, and then the action. Action statements are enclosed in <strong>{</strong> and <strong>}</strong>. Either the pattern may be missing, or the action may be missing, but, of course, not both. If the pattern is missing, the action is executed for every single record of input. A missing action is equivalent to
-  <p><strong>{ print }</strong>
+  <div class="indent">
+    <p><strong>{ print }</strong>
+  </div>
   <p>which prints the entire record.
   <p>Comments begin with the <strong>#</strong> character, and continue until the end of the line. Blank lines may be used to separate statements. Normally, a statement ends with a newline, however, this is not the case for lines ending in a comma, <strong>{</strong>, <strong>?</strong>, <strong>:</strong>, <strong>&amp;&</strong>, or <strong>||</strong>. Lines ending in <strong>do</strong> or <strong>else</strong> also have their statements automatically continued on the following line. In other cases, a line can be continued by ending it with a “\”, in which case the newline is ignored.
   <p>Multiple statements may be put on one line by separating them with a “;”. This applies to both the statements within the action part of a pattern-action pair (the usual case), and to the pattern-action statements themselves.
   <section>
     <h3>Patterns</h3>
     <p>AWK patterns may be one of the following:
-    <pre><strong>BEGIN</strong>
+    <div class="indent">
+      <pre><strong>BEGIN</strong>
 <strong>END</strong>
 <strong>BEGINFILE</strong>
 <strong>ENDFILE</strong>
@@ -419,6 +434,7 @@ b = a ""</pre>
 <strong>(</strong><em>pattern</em><strong>)</strong>
 <strong>!</strong><em> pattern</em>
 <em>pattern1</em><strong>, </strong><em>pattern2</em></pre>
+    </div>
     <p><strong>BEGIN</strong> and <strong>END</strong> are two special kinds of patterns which are not tested against the input. The action parts of all <strong>BEGIN</strong> patterns are merged as if all the statements had been written in a single <strong>BEGIN</strong> rule. They are executed before any of the input is read. Similarly, all the <strong>END</strong> rules are merged, and executed when all the input is exhausted (or when an <strong>exit</strong> statement is executed). <strong>BEGIN</strong> and <strong>END</strong> patterns cannot be combined with other patterns in pattern expressions. <strong>BEGIN</strong> and <strong>END</strong> patterns cannot have missing action parts.
     <p><strong>BEGINFILE</strong> and <strong>ENDFILE</strong> are additional special patterns whose bodies are executed before reading the first record of each command line input file and after reading the last record of each file. Inside the <strong>BEGINFILE</strong> rule, the value of <strong>ERRNO</strong> will be the empty string if the file was opened successfully. Otherwise, there is some problem with the file and the code should use <strong>nextfile</strong> to skip it. If that is not done, <em>gawk</em> produces its usual fatal error for files that cannot be opened.
     <p>For <strong>/</strong><em>regular expression</em><strong>/</strong> patterns, the associated statement is executed for each input record that matches the regular expression. Regular expressions are the same as those in <em>egrep</em>(1), and are summarized below.
@@ -578,7 +594,8 @@ b = a ""</pre>
   <section>
     <h3>Control Statements</h3>
     <p>The control statements are as follows:
-    <pre><strong>if (</strong><em>condition</em><strong>) </strong><em>statement</em> [ <strong>else</strong><em> statement </em>]
+    <div class="indent">
+      <pre><strong>if (</strong><em>condition</em><strong>) </strong><em>statement</em> [ <strong>else</strong><em> statement </em>]
 <strong>while (</strong><em>condition</em><strong>) </strong><em>statement </em>
 <strong>do </strong><em>statement </em><strong>while (</strong><em>condition</em><strong>)</strong>
 <strong>for (</strong><em>expr1</em><strong>; </strong><em>expr2</em><strong>; </strong><em>expr3</em><strong>) </strong><em>statement</em>
@@ -594,6 +611,7 @@ b = a ""</pre>
 ...
 [ <strong>default: </strong><em>statement </em>]
 <strong>}</strong></pre>
+    </div>
   </section>
   <section>
     <h3>I/O Statements</h3>
@@ -708,9 +726,13 @@ b = a ""</pre>
       <dd>The file associated with the open file descriptor <em>n</em>.
     </dl>
     <p>These are particularly useful for error messages. For example:
-    <p><strong>print "You blew it!" &gt; "/dev/stderr"</strong>
+    <div class="indent">
+      <p><strong>print "You blew it!" &gt; "/dev/stderr"</strong>
+    </div>
     <p>whereas you would otherwise have to use
-    <p><strong>print "You blew it!" | "cat 1&gt;&amp;2"</strong>
+    <div class="indent">
+      <p><strong>print "You blew it!" | "cat 1&gt;&amp;2"</strong>
+    </div>
     <p>The following special filenames may be used with the <strong>|&</strong> co-process operator for creating TCP/IP network connections:
     <dl>
       <dt><strong>/inet/tcp/</strong><em>lport</em><strong>/</strong><em>rhost</em><strong>/</strong><em>rport</em>
@@ -851,20 +873,25 @@ b = a ""</pre>
 <section>
   <h2>USER-DEFINED FUNCTIONS</h2>
   <p>Functions in AWK are defined as follows:
-  <p><strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
+  <div class="indent">
+    <p><strong>function</strong> <em>name</em><strong>(</strong><em>parameter list</em><strong>) {</strong> <em>statements</em> <strong>}</strong>
+  </div>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. The convention is to separate local variables from real parameters by extra spaces in the parameter list. For example:
-  <pre>function  f(p, q,     a, b) # a and b are local
+  <div class="indent">
+    <pre>function  f(p, q,     a, b) # a and b are local
 {
         ...
 }
 
 /abc/   { ... ; f(1, 2) ; ... }</pre>
+  </div>
   <p>The left parenthesis in a function call is required to immediately follow the function name, without any intervening whitespace. This avoids a syntactic ambiguity with the concatenation operator. This restriction does not apply to the built-in functions listed above.
   <p>Functions may call each other and may be recursive. Function parameters used as local variables are initialized to the null string and the number zero upon function invocation.
   <p>Use <strong>return</strong> <em>expr</em> to return a value from a function. The return value is undefined if no value is provided, or if the function returns by “falling off” the end.
   <p>As a <em>gawk</em> extension, functions may be called indirectly. To do this, assign the name of the function to be called, as a string, to a variable. Then use the variable as if it were the name of a function, prefixed with an <strong>@</strong> sign, like so:
-  <pre>function myfunc()
+  <div class="indent">
+    <pre>function myfunc()
 {
         print "myfunc called"
         ...
@@ -875,6 +902,7 @@ b = a ""</pre>
         @the_func()     # call through the_func to myfunc
         ...
 }</pre>
+  </div>
   <p>As of version 4.1.2, this works with user-defined functions, built-in functions, and extension functions.
   <p>If <strong>--lint</strong> has been provided, <em>gawk</em> warns about calls to undefined functions at parse time, instead of at run time. Calling an undefined function at run time is a fatal error.
   <p>The word <strong>func</strong> may be used in place of <strong>function</strong>, although this is deprecated.
@@ -890,13 +918,15 @@ b = a ""</pre>
 <section>
   <h2>INTERNATIONALIZATION</h2>
   <p>String constants are sequences of characters enclosed in double quotes. In non-English speaking environments, it is possible to mark strings in the AWK program as requiring translation to the local natural language. Such strings are marked in the AWK program with a leading underscore (“_”). For example,
-  <p><strong>gawk 'BEGIN { print "hello, world" }'</strong><br>
+  <div class="indent">
+    <p><strong>gawk 'BEGIN { print "hello, world" }'</strong>
+  </div>
+  <p>always prints <strong>hello, world</strong>. But,<br>
   <br>
-  always prints <strong>hello, world</strong>. But,<br>
-  <br>
-  <p><strong>gawk 'BEGIN { print _"hello, world" }'</strong><br>
-  <br>
-  might print <strong>bonjour, monde</strong> in France.
+  <div class="indent">
+    <p><strong>gawk 'BEGIN { print _"hello, world" }'</strong>
+  </div>
+  <p>might print <strong>bonjour, monde</strong> in France.
   <p>There are several steps involved in producing and running a localizable AWK program.
   <dl class="indent-18">
     <dt>1.
@@ -927,10 +957,14 @@ b = a ""</pre>
 <section>
   <h2>HISTORICAL FEATURES</h2>
   <p>There is one feature of historical AWK implementations that <em>gawk</em> supports: It is possible to call the <strong>length()</strong> built-in function not only with no argument, but even without parentheses! Thus,
-  <p><strong>a = length # Holy Algol 60, Batman!</strong>
+  <div class="indent">
+    <p><strong>a = length # Holy Algol 60, Batman!</strong>
+  </div>
   <p>is the same as either of
-  <p><strong>a = length()<br>
-  a = length($0)</strong>
+  <div class="indent">
+    <p><strong>a = length()<br>
+    a = length($0)</strong>
+  </div>
   <p>Using this feature is poor practice, and <em>gawk</em> issues a warning about its use if <strong>--lint</strong> is specified on the command line.
 </section>
 <section>
