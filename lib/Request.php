@@ -164,7 +164,12 @@ ROFF;
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            $return['class'] = 'Block_P';
+            if ($i === 0) {
+                $return['class'] = 'Request_Skippable';
+            } else {
+                $return['request'] = 'sp';
+                $return['class'] = 'Inline_VerticalSpace';
+            }
         } elseif (self::isEmptyRequest($lines[$i])) {
             $return['class'] = 'Request_Skippable';
         } elseif (self::canSkip($lines[$i], $request)) {

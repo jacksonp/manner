@@ -34,7 +34,7 @@ class Blocks
             return true;
         }
 
-        return $lines[$i] === '' || Block_TabTable::isStart($lines, $i);
+        return Block_TabTable::isStart($lines, $i);
     }
 
     static function handle(DOMElement $parentNode, array $lines)
