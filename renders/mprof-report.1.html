@@ -46,7 +46,7 @@
   <section>
     <h3>Profiler option documentation</h3>
     <p>By default the <em>log</em> profiler will gather all the events provided by the Mono runtime and write them to a file named <em>output.mlpd</em>. When no option is specified, it is equivalent to using:
-    <p><strong>--profile=log:calls,alloc,output=output.mlpd,maxframes=8,calldepth=100</strong>
+    <p><strong>--profile=log:calls,alloc,output=output.mlpd,maxframes=32,calldepth=100</strong>
     <p>The following options can be used to modify this default behaviour. Each option is separated from the next by a <strong>,</strong> character, with no spaces and all the options are included after the <em>log:</em> profile module specifier.
     <dl class="indent-2">
       <dt>·
@@ -69,35 +69,9 @@
           </dl>
         </div>
       <dt>·
-      <dd>
-        <p><em>sample[=TYPE[/FREQ]]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “cycles/100”. A value of zero for <em>FREQ</em> effectively disables sampling. On some systems, like with recent Linux kernels, it is possible to cause the sampling to happen for other events provided by the performance counters of the cpu. In this case, <em>TYPE</em> can be one of:
-        <div class="indent-2">
-          <dl class="indent-2">
-            <dt>·
-            <dd><em>cycles</em>: processor cycles
-            <dt>·
-            <dd><em>instr</em>: executed instructions
-            <dt>·
-            <dd><em>cacherefs</em>: cache references
-            <dt>·
-            <dd><em>cachemiss</em>: cache misses
-            <dt>·
-            <dd><em>branches</em>: executed branches
-            <dt>·
-            <dd><em>branchmiss</em>: mispredicted branches
-          </dl>
-        </div>
+      <dd><em>sample[=FREQ]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “100”. A value of zero for <em>FREQ</em> effectively disables sampling.
       <dt>·
-      <dd>
-        <p><em>time=TIMER</em>: use the TIMER timestamp mode. TIMER can have the following values:
-        <div class="indent-2">
-          <dl class="indent-2">
-            <dt>·
-            <dd><em>fast</em>: a usually faster but possibly more inaccurate timer
-          </dl>
-        </div>
-      <dt>·
-      <dd><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 8.
+      <dd><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 32.
       <dt>·
       <dd><em>maxsamples=NUM</em>: stop allocating reusable sample events once <em>NUM</em> events have been allocated (a value of zero for all intents and purposes means unlimited). By default, the value of this setting is the number of CPU cores multiplied by 1000. This is usually a good enough value for typical desktop and mobile apps. If you're losing too many samples due to this default (which is possible in apps with an unusually high amount of threads), you may want to tinker with this value to find a good balance between sample hit rate and performance impact on the app. The way it works is that sample events are enqueued for reuse after they're flushed to the output file; if a thread gets a sampling signal but there are no sample events in the reuse queue and the profiler has reached the maximum number of sample allocations, the sample gets dropped. So a higher number for this setting will increase the chance that a thread is able to collect a sample, but also necessarily means that there will be more work done by the profiler. You can run Mono with the <em>--stats</em> option to see statistics about sample events.
       <dt>·
@@ -129,9 +103,11 @@
           </dl>
         </div>
       <dt>·
-      <dd><em>counters</em>: sample counters values every 1 second. This allow a really lightweight way to have insight in some of the runtime key metrics. Counters displayed in non verbose mode are : Methods from AOT, Methods JITted using mono JIT, Methods JITted using LLVM, Total time spent JITting (sec), User Time, System Time, Total Time, Working Set, Private Bytes, Virtual Bytes, Page Faults and CPU Load Average (1min, 5min and 15min).
+      <dd><em>nocounters</em>: disables sampling of runtime and performance counters, which is normally done every 1 second.
       <dt>·
       <dd><em>coverage</em>: collect code coverage data. This implies enabling the <em>calls</em> option.
+      <dt>·
+      <dd><em>onlycoverage</em>: can only be used with <em>coverage</em>. This disables most other events so that the profiler mostly only collects coverage data.
     </dl>
   </section>
   <section>
@@ -146,7 +122,7 @@
     <p><strong>mprof-report&nbsp;--traces&nbsp;output.mlpd</strong>
     <p>The maximum number of methods in each stack trace can be specified with the <em>--maxframes=NUM</em> option:
     <p><strong>mprof-report&nbsp;--traces&nbsp;--maxframes=4&nbsp;output.mlpd</strong>
-    <p>The stack trace info will be available if method enter/leave events have been recorded or if stack trace collection wasn't explicitly disabled with the <em>maxframes=0</em> profiler option. Note that the profiler will collect up to 8 frames by default at specific events when the <em>nocalls</em> option is used, so in that case, if more stack frames are required in mprof-report, a bigger value for maxframes when profiling must be used, too.
+    <p>The stack trace info will be available if method enter/leave events have been recorded or if stack trace collection wasn't explicitly disabled with the <em>maxframes=0</em> profiler option.
     <p>The <em>--traces</em> option also controls the reverse reference feature in the heapshot report: for each class it reports how many references to objects of that class come from other classes.
   </section>
   <section>
@@ -270,8 +246,6 @@
       Object allocation information is expensive as well, though much less than method enter/leave events. If it's not needed, it can be skipped with the <em>noalloc</em> profiler option. Note that when method enter/leave events are discarded, by default stack traces are collected at each allocation and this can be expensive as well. The impact of stack trace information can be reduced by setting a low value with the <em>maxframes</em> option or by eliminating them completely, by setting it to 0.<br>
       <br>
       The other major source of data is the <em>heapshot</em> profiler option: especially if the managed heap is big, since every object needs to be inspected. The <em>MODE</em> parameter of the <em>heapshot</em> option can be used to reduce the frequency of the heap shots.
-      <dt><em>Reduce the timestamp overhead</em>
-      <dd>On many operating systems or architectures what actually slows down profiling is the function provided by the system to get timestamp information. The <em>time=fast</em> profiler option can be usually used to speed up this operation, but, depending on the system, time accounting may have some level of approximation (though statistically the data should be still fairly valuable).
     </dl>
   </section>
   <section>

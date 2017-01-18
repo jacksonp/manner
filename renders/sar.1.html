@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="man-page-info" data-extra1="JUNE 2016" data-extra2="Linux" data-extra3="Linux User's Manual">
+<meta name="man-page-info" data-extra1="NOVEMBER 2016" data-extra2="Linux" data-extra3="Linux User's Manual">
 <title>SAR</title>
 <h1>SAR</h1>
 <section>
@@ -186,7 +186,7 @@
     <dt>-n { keyword [,...] | ALL }
     <dd>
       <p>Report network statistics.
-      <p>Possible keywords are <strong>DEV</strong>, <strong>EDEV</strong>, <strong>NFS</strong>, <strong>NFSD</strong>, <strong>SOCK</strong>, <strong>IP</strong>, <strong>EIP</strong>, <strong>ICMP</strong>, <strong>EICMP</strong>, <strong>TCP</strong>, <strong>ETCP</strong>, <strong>UDP</strong>, <strong>SOCK6</strong>, <strong>IP6</strong>, <strong>EIP6</strong>, <strong>ICMP6</strong>, <strong>EICMP6</strong>, <strong>UDP6</strong> and <strong>FC</strong>.
+      <p>Possible keywords are <strong>DEV</strong>, <strong>EDEV</strong>, <strong>NFS</strong>, <strong>NFSD</strong>, <strong>SOCK</strong>, <strong>IP</strong>, <strong>EIP</strong>, <strong>ICMP</strong>, <strong>EICMP</strong>, <strong>TCP</strong>, <strong>ETCP</strong>, <strong>UDP</strong>, <strong>SOCK6</strong>, <strong>IP6</strong>, <strong>EIP6</strong>, <strong>ICMP6</strong>, <strong>EICMP6</strong>, <strong>UDP6</strong>, <strong>FC</strong> and <strong>SOFT</strong>.
       <p>With the <strong>DEV</strong> keyword, statistics from the network devices are reported. The following values are displayed:
       <p><strong>IFACE</strong>
       <div class="indent">
@@ -525,6 +525,17 @@
         The total number of transmission words received per second.
         <p><strong>fch_txw/s</strong><br>
         The total number of transmission words transmitted per second.
+        <p>With the <strong>SOFT</strong> keyword, statistics about software-based network processing are reported. The following values are displayed:
+        <p><strong>total/s</strong><br>
+        The total number of network frames processed per second.
+        <p><strong>dropd/s</strong><br>
+        The total number of network frames dropped per second because there was no room on the processing queue.
+        <p><strong>squeezd/s</strong><br>
+        The number of times the softirq handler function terminated per second because its budget was consumed or the time limit was reached, but more work could have been done.
+        <p><strong>rx_rps/s</strong><br>
+        The number of times the CPU has been woken up per second to process packets via an inter-processor interrupt.
+        <p><strong>flw_lim/s</strong><br>
+        The number of times the flow limit has been reached per second. Flow limiting is an optional RPS feature that can be used to limit the number of packets queued to the backlog for each flow to a certain amount. This can help ensure that smaller flows are processed even though much larger flows are pushing packets in.
         <p>The <strong>ALL</strong> keyword is equivalent to specifying all the keywords above and therefore all the network activities are reported.
       </div>
     <dt>-o [ filename ]
@@ -567,6 +578,8 @@
       <p><strong>kbmemfree</strong>
       <div class="indent">
         <p>Amount of free memory available in kilobytes.
+        <p><strong>kbavail</strong><br>
+        Estimate of how much memory in kilobytes is available for starting new applications, without swapping. The estimate takes into account that the system needs some page cache to function well, and that not all reclaimable slab will be reclaimable, due to items being in use. The impact of those factors will vary from system to system.
         <p><strong>kbmemused</strong><br>
         Amount of used memory in kilobytes. This does not take into account memory used by the kernel itself.
         <p><strong>%memused</strong><br>

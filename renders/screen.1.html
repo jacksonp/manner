@@ -781,6 +781,11 @@
       <div class="indent">
         <p>Like the <strong>charset</strong> command except that the default setting for new windows is changed. Shows current default if called without argument.
       </div>
+    <dt><strong>defdynamictitle on</strong>|<strong>off</strong>
+    <dd>
+      <div class="indent">
+        <p>Set default behaviour for new windows regarding if screen should change window title when seeing proper escape sequence. See also "TITLES (naming windows)" section.
+      </div>
     <dt><strong>defescape</strong> <em>xy</em>
     <dd>
       <div class="indent">
@@ -971,6 +976,11 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
             <dd>
               <div class="indent">
                 <p>Write the termcap entry for the virtual terminal optimized for the currently active window to the file “.termcap” in the user's “$HOME/.screen” directory (or wherever <em>screen</em> stores its sockets. See the “FILES” section below). This termcap entry is identical to the value of the environment variable $TERMCAP that is set up by <em>screen</em> for each window. For terminfo based systems you will need to run a converter like <em>captoinfo</em> and then compile the entry with <em>tic</em>.
+              </div>
+            <dt><strong>dynamictitle on</strong>|<strong>off</strong>
+            <dd>
+              <div class="indent">
+                <p>Change behaviour for windows regarding if screen should change window title when seeing proper escape sequence. See also "TITLES (naming windows)" section.
               </div>
             <dt><strong>echo</strong> [<strong>-n</strong>] <strong><em>message</em></strong>
             <dd>
@@ -1975,7 +1985,7 @@ C-a : paste p</pre>
 <section>
   <h2>TITLES (naming windows)</h2>
   <p>You can customize each window's name in the window display (viewed with the “windows” command (C-a w)) by setting it with one of the title commands. Normally the name displayed is the actual command name of the program created in the window. However, it is sometimes useful to distinguish various programs of the same name or to change the name on-the-fly to reflect the current state of the window.
-  <p>The default name for all shell windows can be set with the “shelltitle” command in the .screenrc file, while all other windows are created with a “screen” command and thus can have their name set with the <strong>-t</strong> option. Interactively, there is the title-string escape-sequence (&lt;esc&gt;k<em>name</em>&lt;esc&gt;\) and the “title” command (C-a A). The former can be output from an application to control the window's name under software control, and the latter will prompt for a name when typed. You can also bind pre-defined names to keys with the “title” command to set things quickly without prompting.
+  <p>The default name for all shell windows can be set with the “shelltitle” command in the .screenrc file, while all other windows are created with a “screen” command and thus can have their name set with the <strong>-t</strong> option. Interactively, there is the title-string escape-sequence (&lt;esc&gt;k<em>name</em>&lt;esc&gt;\) and the “title” command (C-a A). The former can be output from an application to control the window's name under software control, and the latter will prompt for a name when typed. You can also bind pre-defined names to keys with the “title” command to set things quickly without prompting. Changing title bythis escape sequence can be controlled by <strong>defdynamictitle</strong> and <strong>dynamictitle</strong> commands.
   <p>Finally, <em>screen</em> has a shell-specific heuristic that is enabled by setting the window's name to “<em>search|name</em>” and arranging to have a null title escape-sequence output as a part of your prompt. The <em>search</em> portion specifies an end-of-prompt search string, while the <em>name</em> portion specifies the default shell name for the window. If the <em>name</em> ends in a `:' <em>screen</em> will add what it believes to be the current command running in the window to the end of the window's shell name (e.g. “<em>name:cmd</em>”). Otherwise the current command name supersedes the shell name while it is running.
   <p>Here's how it works: you must modify your shell prompt to output a null title-escape-sequence (&lt;esc&gt;k&lt;esc&gt;\) as a part of your prompt. The last part of your prompt must be the same as the string you specified for the <em>search</em> portion of the title. Once this is set up, <em>screen</em> will use the title-escape-sequence to clear the previous command name and get ready for the next command. Then, when a newline is received from the shell, a search is made for the end of the prompt. If found, it will grab the first word after the matched string and use it as the command name. If the command name begins with either '!', '%', or '^' <em>screen</em> will use the first word on the following line (if found) in preference to the just-found name. This helps csh users get better command names when using job control or history recall commands.
   <p>Here's some .screenrc examples:
@@ -1983,7 +1993,7 @@ C-a : paste p</pre>
     screen -t top 2 nice top
   </blockquote>
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre>  shelltitle '&gt; |csh'
+  <pre> shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
   <blockquote>

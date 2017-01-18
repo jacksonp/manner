@@ -14,7 +14,7 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. By default only the assemblies specified in the command line will be included in the bundle. To automatically include all of the dependencies referenced, use the "--deps" command line option.
-  <p>There are two modes of operation, one uses an existing Mono binary or a server-hosted list of binaries and is enabled when you use either the <strong>--cross</strong> or the <strong>--runtime</strong> command line options.
+  <p>There are two modes of operation, one uses an existing Mono binary or a server-hosted list of binaries and is enabled when you use either the <strong>--cross,</strong> <strong>--sdk</strong> or the <strong>--runtime</strong> command line options.
   <p>An older mechanism creates a small C stub that links against the libmono library to produce a self-contained executable and requires a C compiler. It is described in the "OLD EMBEDDING" section below.
   <p>For example, to create a bundle for hello world, use the following command:
   <pre>        $ mkbundle -o hello --simple hello.exe</pre>
@@ -64,7 +64,9 @@ targets, and the "--cross" argument to specify the target, like this:
     <dt><em>--config-dir DIR</em>
     <dd>When passed, DIR will be set for the MONO_CFG_DIR environment variable
     <dt><em>--cross target</em>
-    <dd>Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains a "mono" binary. You can fetch various targets using the --fetch-target command line option.
+    <dd>Use this to request mkbundle generate a cross-compiled binary. It Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains an SDK installation as produced by the mono-package-runtime tool. You can get a list of the precompiled versions of the runtime using --list-targets and you can fetch a specific target using the --fetch-target command line option.<br>
+    <br>
+    This flag is mutually exclusive with <em>--sdk</em> which is used to specify an absolute path to resolve the Mono runtime from and the --runtime option which is used to manually construct the cross-platform package.
     <dt><em>--deps</em>
     <dd>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
     <dt><em>--env KEY=VALUE</em>
@@ -99,6 +101,12 @@ targets, and the "--cross" argument to specify the target, like this:
     You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed.<br>
     <br>
     Additionally, users of your binary can still configure their own options by setting the <em>MONO_ENV_OPTIONS</em> environment variable.
+    <dt><em>--sdk SDK_PATH</em>
+    <dd>Use this flag to specify a path from which mkbundle will resolve the Mono SDK from. The SDK path should be the prefix path that you used to configure a Mono installation. And would typically contain files lik <em>SDK_PATH/bin/mono</em> , <em>SDK_PATH/lib/mono/4.5</em> and so on.<br>
+    <br>
+    When this flag is specified, <em>mkbundle</em> will resolve the runtime, the framework libraries, unmanaged resources and configuration files from the files located in this directory.<br>
+    <br>
+    This flag is mutually exlusive with <em>--cross</em>
     <dt><em>--target-server SERVER</em>
     <dd>By default the mkbundle tool will download from a Mono server the target runtimes, you can specify a different server to provide cross-compiled runtimes.
   </dl>

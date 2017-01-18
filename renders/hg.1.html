@@ -723,7 +723,7 @@ hg bisect --command "make &amp;& make tests"</code></pre>
       <dd>
         <p>clone a remote repository to a new directory named hg/:<br>
         <br>
-        <pre><code>hg clone http://selenic.com/hg</code></pre>
+        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/</code></pre>
       <dt>·
       <dd>
         <p>create a lightweight local clone:<br>
@@ -748,7 +748,7 @@ hg bisect --command "make &amp;& make tests"</code></pre>
       <dd>
         <p>clone (and track) a particular named branch:<br>
         <br>
-        <pre><code>hg clone http://selenic.com/hg#stable</code></pre>
+        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/#stable</code></pre>
         <p>See <strong>hg help urls</strong> for details on specifying URLs.<br>
         <br>
         Returns 0 on success.<br>
@@ -1272,14 +1272,16 @@ hg graft --edit 9393</code></pre>
   </section>
   <section>
     <h3>grep</h3>
-    <p>search for a pattern in specified files and revisions:<br>
+    <p>search revision history for a pattern in specified files:<br>
     <br>
     <pre><code>hg grep [OPTION]... PATTERN [FILE]...</code></pre>
-    <p>Search revisions of files for a regular expression.<br>
+    <p>Search revision history for a regular expression in the specified files or the entire project.<br>
     <br>
-    This command behaves differently than Unix grep. It only accepts Python/Perl regexps. It searches repository history, not the working directory. It always prints the revision number in which a match appears.<br>
+    By default, grep prints the most recent revision number for each file in which it finds a match. To get it to print every revision that contains a change in match status ("-" for a match that becomes a non-match, or "+" for a non-match that becomes a match), use the --all flag.<br>
     <br>
-    By default, grep only prints output for the first revision of a file in which it finds a match. To get it to print every revision that contains a change in match status ("-" for a match that becomes a non-match, or "+" for a non-match that becomes a match), use the --all flag.<br>
+    PATTERN can be any Python (roughly Perl-compatible) regular expression.<br>
+    <br>
+    If no FILEs are specified (and -f/--follow isn't set), all files in the repository are searched, including those that don't exist in the current branch or have been deleted in a prior changeset.<br>
     <br>
     Returns 0 if a match is found, 1 otherwise.<br>
     <br>
@@ -1398,7 +1400,7 @@ hg graft --edit 9393</code></pre>
       <dd>
         <p>check the most recent revision of a remote repository:<br>
         <br>
-        <pre><code>hg id -r tip http://selenic.com/hg/</code></pre>
+        <pre><code>hg id -r tip https://www.mercurial-scm.org/repo/hg/</code></pre>
     </dl>
     <p>See <strong>hg log</strong> for generating more information about specific revisions, including full hash identifiers.<br>
     <br>
@@ -1468,7 +1470,7 @@ hg graft --edit 9393</code></pre>
       <dd>
         <p>import a changeset from an hgweb server:<br>
         <br>
-        <pre><code>hg import http://www.selenic.com/hg/rev/5ca8c111e9aa</code></pre>
+        <pre><code>hg import https://www.mercurial-scm.org/repo/hg/rev/5ca8c111e9aa</code></pre>
       <dt>·
       <dd>
         <p>import all the patches in an Unix-style mbox:<br>
@@ -4438,6 +4440,8 @@ b56ce7b07c52de7d5fd79fb89701ea538af65746</code></pre>
     <dd>List of strings. Updated subrepositories in the changeset.
     <dt><strong>tags</strong>
     <dd>List of strings. Any tags associated with the changeset.
+    <dt><strong>termwidth</strong>
+    <dd>Integer. The width of the current terminal.
   </dl>
   <p>The "date" keyword does not produce human-readable output. If you want to use a date in your output, you can use a filter to process it. Filters are functions which return a string based on the input variable. Be sure to use the stringify filter first when you're applying a string-input filter to a list-like input variable. You can also use a chain of filters to get the desired output:<br>
   <br>
@@ -4528,8 +4532,8 @@ b56ce7b07c52de7d5fd79fb89701ea538af65746</code></pre>
     <dd>Get an attribute/key from an object. Some keywords are complex types. This function allows you to obtain the value of an attribute on these types.
     <dt><strong>if(expr, then[, else])</strong>
     <dd>Conditionally execute based on the result of an expression.
-    <dt><strong>ifcontains(search, thing, then[, else])</strong>
-    <dd>Conditionally execute based on whether the item "search" is in "thing".
+    <dt><strong>ifcontains(needle, haystack, then[, else])</strong>
+    <dd>Conditionally execute based on whether the item "needle" is in "haystack".
     <dt><strong>ifeq(expr1, expr2, then[, else])</strong>
     <dd>Conditionally execute based on whether 2 items are equivalent.
     <dt><strong>indent(text, indentchars[, firstline])</strong>
@@ -4542,12 +4546,16 @@ b56ce7b07c52de7d5fd79fb89701ea538af65746</code></pre>
     <dd>The global tags matching the given pattern on the most recent globally tagged ancestor of this changeset.
     <dt><strong>localdate(date[, tz])</strong>
     <dd>Converts a date to the specified timezone. The default is local date.
+    <dt><strong>mod(a, b)</strong>
+    <dd>Calculate a mod b such that a / b + a mod b == a
     <dt><strong>pad(text, width[, fillchar=' '[, left=False]])</strong>
     <dd>Pad text with a fill character.
+    <dt><strong>relpath(path)</strong>
+    <dd>Convert a repository-absolute path into a filesystem path relative to the current working directory.
     <dt><strong>revset(query[, formatargs...])</strong>
     <dd>Execute a revision set query. See <strong>hg help revset</strong>.
     <dt><strong>rstdoc(text, style)</strong>
-    <dd>Format ReStructuredText.
+    <dd>Format reStructuredText.
     <dt><strong>separate(sep, args)</strong>
     <dd>Add a separator between non-empty arguments.
     <dt><strong>shortest(node, minlength=4)</strong>
@@ -4561,7 +4569,15 @@ b56ce7b07c52de7d5fd79fb89701ea538af65746</code></pre>
     <dt><strong>word(number, text[, separator])</strong>
     <dd>Return the nth word from a string.
   </dl>
-  <p>Also, for any expression that returns a list, there is a list operator:<br>
+  <p>We provide a limited set of infix arithmetic operations on integers:<br>
+  <br>
+  <pre><code>+ for addition
+- for subtraction
+* for multiplication
+/ for floor division (division rounded to integer nearest -infinity)</code></pre>
+  <p>Division fulfils the law x = x / y + mod(x, y).<br>
+  <br>
+  Also, for any expression that returns a list, there is a list operator:<br>
   <br>
   <pre><code>expr % "{template}"</code></pre>
   <p>As seen in the above example, <strong>{template}</strong> is interpreted as a template. To prevent it from being interpreted, you can use an escape character <strong>\{</strong> or a raw string prefix, <strong>r'...'</strong>.<br>
@@ -5380,7 +5396,13 @@ hg churn -f "%Y" -s</pre>
     <h3>Effects</h3>
     <p>Other effects in addition to color, like bold and underlined text, are also available. By default, the terminfo database is used to find the terminal codes used to change color and effect. If terminfo is not available, then effects are rendered with the ECMA-48 SGR control function (aka ANSI escape codes).<br>
     <br>
-    The available effects in terminfo mode are 'blink', 'bold', 'dim', 'inverse', 'invisible', 'italic', 'standout', and 'underline'; in ECMA-48 mode, the options are 'bold', 'inverse', 'italic', and 'underline'. How each is rendered depends on the terminal emulator. Some may not be available for a given terminal type, and will be silently ignored.
+    The available effects in terminfo mode are 'blink', 'bold', 'dim', 'inverse', 'invisible', 'italic', 'standout', and 'underline'; in ECMA-48 mode, the options are 'bold', 'inverse', 'italic', and 'underline'. How each is rendered depends on the terminal emulator. Some may not be available for a given terminal type, and will be silently ignored.<br>
+    <br>
+    If the terminfo entry for your terminal is missing codes for an effect or has the wrong codes, you can add or override those codes in your configuration:<br>
+    <br>
+    <pre><code>[color]
+terminfo.dim = \E[2m</code></pre>
+    <p>where 'E' is substituted with an escape character.
   </section>
   <section>
     <h3>Labels</h3>
@@ -6618,7 +6640,7 @@ patterns =
 commandexception = echo "$MSG2$MSG3" &gt; /var/log/mercurial_exceptions.log</code></pre>
     <p>would log the warning message and traceback of any failed command dispatch.<br>
     <br>
-    Scripts are run asychronously as detached daemon processes; mercurial will not ensure that they exit cleanly.
+    Scripts are run asynchronously as detached daemon processes; mercurial will not ensure that they exit cleanly.
   </section>
   <section>
     <h3>mq</h3>
@@ -8266,9 +8288,9 @@ zc-test = http://example.com:8000/test</code></pre>
   <h2>RESOURCES</h2>
   <p>Main Web Site: https://mercurial-scm.org/<br>
   <br>
-  Source code repository: http://selenic.com/hg<br>
+  Source code repository: https://www.mercurial-scm.org/repo/hg<br>
   <br>
-  Mailing list: http://selenic.com/mailman/listinfo/mercurial
+  Mailing list: https://www.mercurial-scm.org/mailman/listinfo/mercurial/
 </section>
 <section>
   <h2>COPYING</h2>

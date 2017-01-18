@@ -822,7 +822,9 @@ b = a ""</pre>
   </section>
   <section>
     <h3>Bit Manipulations Functions</h3>
-    <p><em>Gawk</em> supplies the following bit manipulation functions. They work by converting double-precision floating point values to <strong>uintmax_t</strong> integers, doing the operation, and then converting the result back to floating point. The functions are:
+    <p><em>Gawk</em> supplies the following bit manipulation functions. They work by converting double-precision floating point values to <strong>uintmax_t</strong> integers, doing the operation, and then converting the result back to floating point.
+    <p><strong>NOTE</strong>: Passing negative operands to any of these functions causes a fatal error.
+    <p>The functions are:
     <dl class="indent-46">
       <dt><strong>and(</strong><em>v1</em><strong>,</strong> <em>v2</em> [, ...]<strong>)</strong>
       <dd>Return the bitwise AND of the values provided in the argument list. There must be at least two.
@@ -879,7 +881,7 @@ b = a ""</pre>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. The convention is to separate local variables from real parameters by extra spaces in the parameter list. For example:
   <div class="indent">
-    <pre>function  f(p, q,     a, b) # a and b are local
+    <pre>function  f(p, q,     a, b)    # a and b are local
 {
         ...
 }

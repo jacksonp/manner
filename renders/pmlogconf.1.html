@@ -70,7 +70,7 @@
         <div class="center">
           <p><strong>probe</strong> <em>metric</em> [<em>condition</em> [<em>state_rule</em>] ]
         </div>
-        <p>where <em>metric</em> is the name of a PCP metric (must be a leaf node in the PMNS and no instance specification is allowed) and the optional <em>condition</em> is the keyword <strong>exists</strong> (true if <em>metric</em> exists, i.e. is defined in the PMNS) or the keyword <strong>values</strong> (true if <em>metric</em> exists in the PMNS and has one or more current values) or an expression of the form<br>
+        <p>where <em>metric</em> is the name of a PCP metric (must be a leaf node in the PMNS, no instance specification is allowed, and it must not be a derived metric) and the optional <em>condition</em> is the keyword <strong>exists</strong> (true if <em>metric</em> exists, i.e. is defined in the PMNS) or the keyword <strong>values</strong> (true if <em>metric</em> exists in the PMNS and has one or more current values) or an expression of the form<br>
         <div class="center">
           <p><em>op</em> <em>val</em>
         </div>
@@ -106,7 +106,7 @@ probe   sample.secret.foo.one values ? include : exclude
 </section>
 <section>
   <h2>PCP ENVIRONMENT</h2>
-  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5).
+  <p>Environment variables with the prefix <strong>PCP_</strong> are used to parameterize the file and directory names used by PCP. On each installation, the file <em>/etc/pcp.conf</em> contains the local values for these variables. The <strong>$PCP_CONF</strong> variable may be used to specify an alternative configuration file, as described in <strong>pcp.conf</strong>(5). Note that <strong>pmlogconf</strong> specifically overrides its own <strong>$PCP_DERIVED_CONFIG</strong> environment variable to an empty string, for performance reasons.
 </section>
 <section>
   <h2>SEE ALSO</h2>
