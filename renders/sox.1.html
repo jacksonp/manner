@@ -244,12 +244,17 @@
   </section>
   <section>
     <h3>Output Files</h3>
-    <p>SoX's default behaviour is to take one or more input files and write them to a single output file.
-    <p>This behaviour can be changed by specifying the pseudo-effect `newfile' within the effects list. SoX will then enter multiple output mode.
-    <p>In multiple output mode, a new file is created when the effects prior to the `newfile' indicate they are done. The effects chain listed after `newfile' is then started up and its output is saved to the new file.
-    <p>In multiple output mode, a unique number will automatically be appended to the end of all filenames. If the filename has an extension then the number is inserted before the extension. This behaviour can be customized by placing a %n anywhere in the filename where the number should be substituted. An optional number can be placed after the % to indicate a minimum fixed width for the number.
-    <p>Multiple output mode is not very useful unless an effect that will stop the effects chain early is specified before the `newfile'. If end of file is reached before the effects chain stops itself then no new file will be created as it would be empty.
-    <p>The following is an example of splitting the first 60 seconds of an input file into two 30 second files and ignoring the rest.
+    <p>SoX's default behaviour is to take one or more input files and write them to a single output file.<br>
+    <br>
+    This behaviour can be changed by specifying the pseudo-effect `newfile' within the effects list. SoX will then enter multiple output mode.<br>
+    <br>
+    In multiple output mode, a new file is created when the effects prior to the `newfile' indicate they are done. The effects chain listed after `newfile' is then started up and its output is saved to the new file.<br>
+    <br>
+    In multiple output mode, a unique number will automatically be appended to the end of all filenames. If the filename has an extension then the number is inserted before the extension. This behaviour can be customized by placing a %n anywhere in the filename where the number should be substituted. An optional number can be placed after the % to indicate a minimum fixed width for the number.<br>
+    <br>
+    Multiple output mode is not very useful unless an effect that will stop the effects chain early is specified before the `newfile'. If end of file is reached before the effects chain stops itself then no new file will be created as it would be empty.<br>
+    <br>
+    The following is an example of splitting the first 60 seconds of an input file into two 30 second files and ignoring the rest.
     <pre><code>   sox song.wav ringtone%1n.wav trim 0 30 : newfile : trim 0 30</code></pre>
   </section>
   <section>
@@ -460,7 +465,8 @@
       <dd>
         <p>Set verbosity. This is particularly useful for seeing how any automatic effects have been invoked by SoX.<br>
         <br>
-        SoX displays messages on the console (stderr) according to the following verbosity levels:
+        SoX displays messages on the console (stderr) according to the following verbosity levels:<br>
+        <br>
         <dl>
           <dt>0
           <dd>No messages are shown at all; use the exit status to determine if an error has occurred.
@@ -547,9 +553,9 @@
         For an input file, the most common use for this option is to inform SoX of the encoding of a `raw' (`headerless') audio file (see the examples in <strong>-b</strong> and <strong>-c</strong> above).<br>
         <br>
         For an output file, this option can be used (perhaps along with <strong>-b</strong>) to set the output encoding type For example
-        <pre><code>   sox input.cdda -e float output1.wav</code>
+        <pre><code>   sox input.cdda -e float output1.wav
 
-   sox input.cdda -b 64 -e float output2.wav</pre>
+   sox input.cdda -b 64 -e float output2.wav</code></pre>
         <p>convert raw CD digital audio (16-bit, signed-integer) to floating-point `WAV' files (single & double precision respectively).<br>
         <br>
         By default (i.e. if this option is not given), the output encoding type will (providing it is supported by the output file type) be set to the input encoding type.
@@ -573,9 +579,9 @@
       <dt><strong>-t</strong>, <strong>--type</strong> <em>FILE-TYPE</em>
       <dd>
         <p>Gives the type of the audio file. For both input and output files, this option is commonly used to inform SoX of the type a `headerless' audio file (e.g. raw, mp3) where the actual/desired type cannot be determined from a given filename extension. For example:
-        <pre><code>   another-command | sox -t mp3 - output.wav</code>
+        <pre><code>   another-command | sox -t mp3 - output.wav
 
-   sox input.wav -t raw output.bin</pre>
+   sox input.wav -t raw output.bin</code></pre>
         <p>It can also be used to override the type implied by an input filename extension, but if overriding with a type that has a header, SoX will exit with an appropriate error message if such a header is not actually present.<br>
         <br>
         See <strong>soxformat</strong>(7) for a list of supported file types.
@@ -1487,9 +1493,7 @@ done</code></pre>
         <p>To perform a splice, first use the <strong>trim</strong> effect to select the audio sections to be joined together. As when performing a tape splice, the end of the section to be spliced onto should be trimmed with a small <em>excess</em> (default 0.005 seconds) of audio after the ideal joining point. The beginning of the audio section to splice on should be trimmed with the same <em>excess</em> (before the ideal joining point), plus an additional <em>leeway</em> (default 0.005 seconds). Any time specification may be used for these parameters. SoX should then be invoked with the two audio sections as input files and the <strong>splice</strong> effect given with the position at which to perform the splice - this is length of the first audio section (including the excess).<br>
         <br>
         The following diagram uses the tape analogy to illustrate the splice operation. The effect simulates the diagonal cuts and joins the two pieces:
-        <pre>
-
-      length1   excess
+        <pre><code>      length1   excess
     -----------&gt;&lt;---&gt;
     _________   :   :  _________________
              \  :   : :\     `         
@@ -1501,7 +1505,7 @@ done</code></pre>
     _______________\: :   :  \_____`____
                       :   :   :     :
                       &lt;---&gt;   &lt;-----&gt;
-                      excess  leeway</pre>
+                      excess  leeway</code></pre>
         <p>where * indicates the joining points.<br>
         <br>
         For example, a long song begins with two verses which start (as determined e.g. by using the <strong>play</strong> command with the <strong>trim</strong> (<em>start</em>) effect) at times 0:30.125 and 1:03.432. The following commands cut out the first verse:

@@ -20,7 +20,8 @@
   <br>
   Options that result in an output table have a <em>list</em> argument. Use this argument to customize the command output. Specify a comma-separated list of column labels to limit the output table to only the specified columns, arranged in the specified order. See <strong>COLUMNS</strong> for a list of valid column labels. The column labels are not case sensitive.<br>
   <br>
-  Not all columns are supported on all architectures. If an unsupported column is specified, <strong>lscpu</strong> prints the column but does not provide any data for it.
+  Not all columns are supported on all architectures. If an unsupported column is specified, <strong>lscpu</strong> prints the column but does not provide any data for it.<br>
+  <br>
   <section>
     <h3>COLUMNS</h3>
     <p>Note that topology elements (core, socket, etc.) use a sequential unique ID starting from zero, but CPU logical numbers follow the kernel where there is no guarantee of sequential numbering.
@@ -74,35 +75,39 @@
     <dt><strong>-c</strong>, <strong>--offline</strong>
     <dd>Limit the output to offline CPUs. This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
     <dt><strong>-e</strong>, <strong>--extended</strong>[=<em>list</em>]
-    <dd>
-      <p>Display the CPU information in human-readable format.
-      <p>If the <em>list</em> argument is omitted, all columns for which data is available are included in the command output.
-      <p>When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-e=cpu,node</strong>' or '<strong>--extended=cpu,node</strong>'.
+    <dd>Display the CPU information in human-readable format.<br>
+    <br>
+    If the <em>list</em> argument is omitted, all columns for which data is available are included in the command output.<br>
+    <br>
+    When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-e=cpu,node</strong>' or '<strong>--extended=cpu,node</strong>'.
     <dt><strong>-h</strong>, <strong>--help</strong>
     <dd>Display help text and exit.
     <dt><strong>-p</strong>, <strong>--parse</strong>[=<em>list</em>]
-    <dd>
-      <p>Optimize the command output for easy parsing.
-      <p>If the <em>list</em> argument is omitted, the command output is compatible with earlier versions of <strong>lscpu</strong>. In this compatible format, two commas are used to separate CPU cache columns. If no CPU caches are identified the cache column is omitted.<br>
-      If the <em>list</em> argument is used, cache columns are separated with a colon (:).
-      <p>When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-p=cpu,node</strong>' or '<strong>--parse=cpu,node</strong>'.
+    <dd>Optimize the command output for easy parsing.<br>
+    <br>
+    If the <em>list</em> argument is omitted, the command output is compatible with earlier versions of <strong>lscpu</strong>. In this compatible format, two commas are used to separate CPU cache columns. If no CPU caches are identified the cache column is omitted.<br>
+    If the <em>list</em> argument is used, cache columns are separated with a colon (:).<br>
+    <br>
+    When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-p=cpu,node</strong>' or '<strong>--parse=cpu,node</strong>'.
     <dt><strong>-s</strong>, <strong>--sysroot</strong> <em>directory</em>
     <dd>Gather CPU data for a Linux instance other than the instance from which the <strong>lscpu</strong> command is issued. The specified <em>directory</em> is the system root of the Linux instance to be inspected.
     <dt><strong>-x</strong>, <strong>--hex</strong>
     <dd>Use hexadecimal masks for CPU sets (for example 0x3). The default is to print the sets in list format (for example 0,1).
     <dt><strong>-y</strong>, <strong>--physical</strong>
-    <dd>
-      <p>Display physical IDs for all columns with topology elements (core, socket, etc.). Other than logical IDs, which are assigned by <strong>lscpu</strong>, physical IDs are platform-specific values that are provided by the kernel. Physical IDs are not necessarily unique and they might not be arranged sequentially. If the kernel could not retrieve a physical ID for an element <strong>lscpu</strong> prints the dash (-) character.
-      <p>The CPU logical numbers are not affected by this option.
+    <dd>Display physical IDs for all columns with topology elements (core, socket, etc.). Other than logical IDs, which are assigned by <strong>lscpu</strong>, physical IDs are platform-specific values that are provided by the kernel. Physical IDs are not necessarily unique and they might not be arranged sequentially. If the kernel could not retrieve a physical ID for an element <strong>lscpu</strong> prints the dash (-) character.<br>
+    <br>
+    The CPU logical numbers are not affected by this option.
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>Display version information and exit.
   </dl>
 </section>
 <section>
   <h2>BUGS</h2>
-  <p>The basic overview of CPU family, model, etc. is always based on the first CPU only.
-  <p>Sometimes in Xen Dom0 the kernel reports wrong data.
-  <p>On virtual hardware the number of cores per socket, etc. can be wrong.
+  <p>The basic overview of CPU family, model, etc. is always based on the first CPU only.<br>
+  <br>
+  Sometimes in Xen Dom0 the kernel reports wrong data.<br>
+  <br>
+  On virtual hardware the number of cores per socket, etc. can be wrong.
 </section>
 <section>
   <h2>AUTHOR</h2>

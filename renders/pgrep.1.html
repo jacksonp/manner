@@ -11,19 +11,25 @@
   <h2>SYNOPSIS</h2>
   <p>pgrep [-flvx] [-d <em>delimiter</em>] [-n|-o] [-P <em>ppid</em>,...] [-g <em>pgrp</em>,...]<br>
   [-s <em>sid</em>,...] [-u <em>euid</em>,...] [-U <em>uid</em>,...] [-G <em>gid</em>,...]<br>
-  [-t <em>term</em>,...] [<em>pattern</em>]
-  <p>pkill [-<em>signal</em>] [-fvx] [-n|-o] [-P <em>ppid</em>,...] [-g <em>pgrp</em>,...]<br>
+  [-t <em>term</em>,...] [<em>pattern</em>]<br>
+  <br>
+  pkill [-<em>signal</em>] [-fvx] [-n|-o] [-P <em>ppid</em>,...] [-g <em>pgrp</em>,...]<br>
   [-s <em>sid</em>,...] [-u <em>euid</em>,...] [-U <em>uid</em>,...] [-G <em>gid</em>,...]<br>
   [-t <em>term</em>,...] [<em>pattern</em>]
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p><strong>pgrep</strong> looks through the currently running processes and lists the process IDs which matches the selection criteria to stdout. All the criteria have to match. For example,
-  <p>pgrep -u root sshd
-  <p>will only list the processes called <strong>sshd</strong> AND owned by <strong>root</strong>. On the other hand,
-  <p>pgrep -u root,daemon
-  <p>will list the processes owned by <strong>root</strong> OR <strong>daemon</strong>.
-  <p><strong>pkill</strong> will send the specified signal (by default <strong>SIGTERM</strong>) to each process instead of listing them on stdout.
+  <p><strong>pgrep</strong> looks through the currently running processes and lists the process IDs which matches the selection criteria to stdout. All the criteria have to match. For example,<br>
+  <br>
+  pgrep -u root sshd<br>
+  <br>
+  will only list the processes called <strong>sshd</strong> AND owned by <strong>root</strong>. On the other hand,<br>
+  <br>
+  pgrep -u root,daemon<br>
+  <br>
+  will list the processes owned by <strong>root</strong> OR <strong>daemon</strong>.<br>
+  <br>
+  <strong>pkill</strong> will send the specified signal (by default <strong>SIGTERM</strong>) to each process instead of listing them on stdout.
 </section>
 <section>
   <h2>OPTIONS</h2>
@@ -69,14 +75,21 @@
 </section>
 <section>
   <h2>EXAMPLES</h2>
-  <p>Example 1: Find the process ID of the <strong>named</strong> daemon:
-  <p>unix$ pgrep -u root named
-  <p>Example 2: Make <strong>syslog</strong> reread its configuration file:
-  <p>unix$ pkill -HUP syslogd
-  <p>Example 3: Give detailed information on all <strong>xterm</strong> processes:
-  <p>unix$ ps -fp $(pgrep -d, -x xterm)
-  <p>Example 4: Make all <strong>netscape</strong> processes run nicer:
-  <p>unix$ renice +4 `pgrep netscape`
+  <p>Example 1: Find the process ID of the <strong>named</strong> daemon:<br>
+  <br>
+  unix$ pgrep -u root named<br>
+  <br>
+  Example 2: Make <strong>syslog</strong> reread its configuration file:<br>
+  <br>
+  unix$ pkill -HUP syslogd<br>
+  <br>
+  Example 3: Give detailed information on all <strong>xterm</strong> processes:<br>
+  <br>
+  unix$ ps -fp $(pgrep -d, -x xterm)<br>
+  <br>
+  Example 4: Make all <strong>netscape</strong> processes run nicer:<br>
+  <br>
+  unix$ renice +4 `pgrep netscape`
 </section>
 <section>
   <h2>EXIT STATUS</h2>
@@ -93,13 +106,15 @@
 </section>
 <section>
   <h2>NOTES</h2>
-  <p>The process name used for matching is limited to the 15 characters present in the output of /proc/<em>pid</em>/stat. Use the -f option to match against the complete command line, /proc/<em>pid</em>/cmdline.
-  <p>The running <strong>pgrep</strong> or <strong>pkill</strong> process will never report itself as a match.
+  <p>The process name used for matching is limited to the 15 characters present in the output of /proc/<em>pid</em>/stat. Use the -f option to match against the complete command line, /proc/<em>pid</em>/cmdline.<br>
+  <br>
+  The running <strong>pgrep</strong> or <strong>pkill</strong> process will never report itself as a match.
 </section>
 <section>
   <h2>BUGS</h2>
-  <p>The options -n and -o and -v can not be combined. Let me know if you need to do this.
-  <p>Defunct processes are reported.
+  <p>The options -n and -o and -v can not be combined. Let me know if you need to do this.<br>
+  <br>
+  Defunct processes are reported.
 </section>
 <section>
   <h2>SEE ALSO</h2>
@@ -111,8 +126,10 @@
 </section>
 <section>
   <h2>AUTHOR</h2>
-  <p>Kjetil Torgrim Homme &lt;kjetilho@ifi.uio.no&gt;
-  <p>Albert Cahalan &lt;albert@users.sf.net&gt; is the current maintainer of the procps package.
-  <p>Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;
+  <p>Kjetil Torgrim Homme &lt;kjetilho@ifi.uio.no&gt;<br>
+  <br>
+  Albert Cahalan &lt;albert@users.sf.net&gt; is the current maintainer of the procps package.<br>
+  <br>
+  Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;
 </section>
 

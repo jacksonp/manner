@@ -97,15 +97,21 @@
   <p>There are four menus in <strong>pmview</strong>'s user interface which allow scenes to be recorded, saved and printed (<strong>File</strong>), access to the time controls (<strong>Options</strong>), launching other tools (<strong>Launch</strong>) and online help (<strong>Help</strong>).
   <dl class="indent-26">
     <dt><strong>File/Record</strong>
-    <dd>
-      <p>When in ``live'' mode, this option will launch <strong>pmlogger</strong>(1) processes to record the current scene into an archive folio (see <strong>pmafm(1))</strong> so that it may be replayed at a later time. This option is not available in ``replay'' mode.
-      <p>When <strong>File/Record</strong> is selected, a file chooser dialog will prompt for the name of the new archive folio. If the directory to the folio does not exist, <strong>pmview</strong> will attempt to create it. It is usually convenient to keep each folio within its own directory as there will be several other files associated with the folio, including the generated archives.
-      <p>Once a valid folio has been created, <strong>pmview</strong> will launch a <strong>pmlogger</strong>(1) process for each host to collect the metrics required from that host in the current scene. The current selections do not affect the set of metrics that are recorded.
-      <p>While recording is in progress, a red dot will appear in the time controls button in the top left-hand corner of the <strong>pmview</strong> window. The <strong>File/Record</strong> option will also change to <strong>File/Stop Recording</strong> as only one recording session is possible at any one time. Selecting blocks or launching other tools will have no affect on the recording session.
-      <p>The record session may be terminated by selecting <strong>File/Stop Recording</strong>. This will display dialogs for each <strong>pmlogger</strong>(1) instance describing the size and location of the archive files before terminating each process. When all <strong>pmlogger</strong>(1) processes have been terminated, the red dot is removed from the time controls button, and the menu reverts back to <strong>File/Record</strong> to allow another recording session to take place.
-      <p>If the application exists while recording, a dialog will appear allowing you to terminate each <strong>pmlogger</strong>(1) process, or leave it running unattached.
-      <p>An archive folio may be replayed using the command: ``<strong>pmafm</strong> <em>folio</em> <strong>replay</strong>''. See <strong>pmafm</strong>(1) for more details.
-      <p>It is not uncommon for a front-end script which generates a <strong>pmview</strong> scene to use metrics that are not contained in the scene. For example, <strong>osvis</strong>(1) uses several <em>hinv</em> metrics to determine the size and layout of some objects. As these metrics are also needed when replaying the generated archive with the front-end script, a complete <strong>pmlogger</strong>(1) config can be specified (<strong>-R</strong>) that overrides the <strong>pmview</strong> generated config, or an additional config can be appended (<strong>-r</strong>) to the <strong>pmview</strong> generated config.
+    <dd>When in ``live'' mode, this option will launch <strong>pmlogger</strong>(1) processes to record the current scene into an archive folio (see <strong>pmafm(1))</strong> so that it may be replayed at a later time. This option is not available in ``replay'' mode.<br>
+    <br>
+    When <strong>File/Record</strong> is selected, a file chooser dialog will prompt for the name of the new archive folio. If the directory to the folio does not exist, <strong>pmview</strong> will attempt to create it. It is usually convenient to keep each folio within its own directory as there will be several other files associated with the folio, including the generated archives.<br>
+    <br>
+    Once a valid folio has been created, <strong>pmview</strong> will launch a <strong>pmlogger</strong>(1) process for each host to collect the metrics required from that host in the current scene. The current selections do not affect the set of metrics that are recorded.<br>
+    <br>
+    While recording is in progress, a red dot will appear in the time controls button in the top left-hand corner of the <strong>pmview</strong> window. The <strong>File/Record</strong> option will also change to <strong>File/Stop Recording</strong> as only one recording session is possible at any one time. Selecting blocks or launching other tools will have no affect on the recording session.<br>
+    <br>
+    The record session may be terminated by selecting <strong>File/Stop Recording</strong>. This will display dialogs for each <strong>pmlogger</strong>(1) instance describing the size and location of the archive files before terminating each process. When all <strong>pmlogger</strong>(1) processes have been terminated, the red dot is removed from the time controls button, and the menu reverts back to <strong>File/Record</strong> to allow another recording session to take place.<br>
+    <br>
+    If the application exists while recording, a dialog will appear allowing you to terminate each <strong>pmlogger</strong>(1) process, or leave it running unattached.<br>
+    <br>
+    An archive folio may be replayed using the command: ``<strong>pmafm</strong> <em>folio</em> <strong>replay</strong>''. See <strong>pmafm</strong>(1) for more details.<br>
+    <br>
+    It is not uncommon for a front-end script which generates a <strong>pmview</strong> scene to use metrics that are not contained in the scene. For example, <strong>osvis</strong>(1) uses several <em>hinv</em> metrics to determine the size and layout of some objects. As these metrics are also needed when replaying the generated archive with the front-end script, a complete <strong>pmlogger</strong>(1) config can be specified (<strong>-R</strong>) that overrides the <strong>pmview</strong> generated config, or an additional config can be appended (<strong>-r</strong>) to the <strong>pmview</strong> generated config.
     <dt><strong>File/Save</strong>
     <dd>Saves the current scene to a human-readable Open Inventor file (see <strong>inventor</strong>(1)). A file dialog will prompt for the location of the file. The default file extension is ``.iv'' which is recognized by <strong>ivview</strong>(1) and some Web browsers.
     <dt><strong>File/Print</strong>
@@ -117,11 +123,13 @@
     <dt><strong>Options/New Time Control</strong>
     <dd>Disconnect with the current time controls (which may be shared by other tools, see <strong>pmtime</strong>(1)) and use a new time control that is not connected to any other tools. The new time control will be immediately displayed.
     <dt><strong>Launch</strong>
-    <dd>
-      <p>The launch menu is generated from a menu specification file (see <strong>pmlaunch</strong>(5)). The menu contains tools that may be launched based on the sources and names of the selected metrics in the scene. For example, if the selected metrics are from three different hosts, then three copies of a tool may be launched, one for each host. The behavior of a launch depends on the selected metrics and the tools being launched.
-      <p>On selection of a <strong>Launch</strong> menu item <strong>pmview</strong> generates state information in the <strong>pmlaunch</strong>(5) metrics specification format. This provides a description of the selected metrics (or if there are no selections, all the metrics) in the scene without any geometry information.
-      <p>Tools which can monitor multiple hosts and user specified metrics may be launched only once for those metrics (eg <strong>pmdumptext</strong>(1)). Other tools which have a fixed view for one host (eg <strong>mpvis</strong>(1)), may be launched multiple times, once for each host in the selected metric list. If the launched tools have time controls, they will share the time controls with the launching <strong>pmview</strong>.
-      <p>The set of launched tools is configurable, and may include IRIX and user applications. See <strong>pmlaunch</strong>(5) for more details.
+    <dd>The launch menu is generated from a menu specification file (see <strong>pmlaunch</strong>(5)). The menu contains tools that may be launched based on the sources and names of the selected metrics in the scene. For example, if the selected metrics are from three different hosts, then three copies of a tool may be launched, one for each host. The behavior of a launch depends on the selected metrics and the tools being launched.<br>
+    <br>
+    On selection of a <strong>Launch</strong> menu item <strong>pmview</strong> generates state information in the <strong>pmlaunch</strong>(5) metrics specification format. This provides a description of the selected metrics (or if there are no selections, all the metrics) in the scene without any geometry information.<br>
+    <br>
+    Tools which can monitor multiple hosts and user specified metrics may be launched only once for those metrics (eg <strong>pmdumptext</strong>(1)). Other tools which have a fixed view for one host (eg <strong>mpvis</strong>(1)), may be launched multiple times, once for each host in the selected metric list. If the launched tools have time controls, they will share the time controls with the launching <strong>pmview</strong>.<br>
+    <br>
+    The set of launched tools is configurable, and may include IRIX and user applications. See <strong>pmlaunch</strong>(5) for more details.
     <dt><strong>Help/...</strong>
     <dd>If <em>pcp.books.help</em> has been installed, then the <strong>insight</strong>(1) books for <strong>pmview</strong> are displayed.
   </dl>

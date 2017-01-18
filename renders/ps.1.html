@@ -203,10 +203,10 @@
     <dt><strong>N</strong><em>&nbsp;namelist</em>
     <dd>Specify namelist file. Identical to <strong>-n</strong>, see <strong>-n</strong> above.
     <dt><strong>O</strong><em>&nbsp;order</em>
-    <dd>
-      <p>Sorting order. (overloaded)<br>
-      The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>).
-      <p>For sorting, obsolete BSD <strong>O</strong> option syntax is <strong>O</strong>[<strong>+</strong>|<strong>-</strong>]<em>k1</em>[,[<strong>+</strong>|<strong>-</strong>]<em>k2</em>[,...]]. It orders the processes listing according to the multilevel sort specified by the sequence of one-letter short keys <em>k1</em>, <em>k2</em>, ... described in the <strong>OBSOLETE SORT KEYS</strong> section below. The&nbsp;"+" is currently optional, merely re-iterating the default direction on a key, but may help to distinguish an <strong>O</strong> sort from an <strong>O</strong> format. The&nbsp;"-" reverses direction only on the key it precedes.
+    <dd>Sorting order. (overloaded)<br>
+    The BSD <strong>O</strong> option can act like <strong>-O</strong> (user-defined output format with some common fields predefined) or can be used to specify sort order. Heuristics are used to determine the behavior of this option. To ensure that the desired behavior is obtained (sorting or formatting), specify the option in some other way (e.g. with <strong>-O</strong> or <strong>--sort</strong>).<br>
+    <br>
+    For sorting, obsolete BSD <strong>O</strong> option syntax is <strong>O</strong>[<strong>+</strong>|<strong>-</strong>]<em>k1</em>[,[<strong>+</strong>|<strong>-</strong>]<em>k2</em>[,...]]. It orders the processes listing according to the multilevel sort specified by the sequence of one-letter short keys <em>k1</em>, <em>k2</em>, ... described in the <strong>OBSOLETE SORT KEYS</strong> section below. The&nbsp;"+" is currently optional, merely re-iterating the default direction on a key, but may help to distinguish an <strong>O</strong> sort from an <strong>O</strong> format. The&nbsp;"-" reverses direction only on the key it precedes.
     <dt><strong>S</strong>
     <dd>Sum up some information, such as CPU usage, from dead child processes into their parent. This is useful for examining a system where a parent process repeatedly forks off short-lived children to do work.
     <dt><strong>c</strong>
@@ -224,17 +224,17 @@
     <strong>ps&nbsp;axk&nbsp;comm&nbsp;o&nbsp;comm,args</strong><br>
     <strong>ps&nbsp;kstart_time&nbsp;-ef</strong>
     <dt><strong>-n</strong><em>&nbsp;namelist</em>
-    <dd>
-      <p>set namelist file. Identical to <strong>N</strong>.<br>
-      The namelist file is needed for a proper WCHAN display, and must match the current Linux kernel exactly for correct output. Without this option, the default search path for the namelist is:
-      <p>$PS_SYSMAP<br>
-      $PS_SYSTEM_MAP<br>
-      /proc/*/wchan<br>
-      /boot/System.map-`uname&nbsp;-r`<br>
-      /boot/System.map<br>
-      /lib/modules/`uname&nbsp;-r`/System.map<br>
-      /usr/src/linux/System.map<br>
-      /System.map
+    <dd>set namelist file. Identical to <strong>N</strong>.<br>
+    The namelist file is needed for a proper WCHAN display, and must match the current Linux kernel exactly for correct output. Without this option, the default search path for the namelist is:<br>
+    <br>
+    $PS_SYSMAP<br>
+    $PS_SYSTEM_MAP<br>
+    /proc/*/wchan<br>
+    /boot/System.map-`uname&nbsp;-r`<br>
+    /boot/System.map<br>
+    /lib/modules/`uname&nbsp;-r`/System.map<br>
+    /usr/src/linux/System.map<br>
+    /System.map
     <dt><strong>n</strong>
     <dd>Numeric output for WCHAN and USER. (including all types of UID and GID)
     <dt><strong>-w</strong>
@@ -297,11 +297,15 @@
 </section>
 <section>
   <h2>NOTES</h2>
-  <p>This <strong>ps</strong> works by reading the virtual files in&nbsp;/proc. This <strong>ps</strong> does not need to be setuid kmem or have any privileges to run. Do not give this <strong>ps</strong> any special permissions.
-  <p>This <strong>ps</strong> needs access to namelist data for proper WCHAN display. For kernels prior to 2.6, the System.map file must be installed.
-  <p>CPU usage is currently expressed as the percentage of time spent running during the entire lifetime of a process. This is not ideal, and&nbsp;it does not conform to the standards that <strong>ps</strong> otherwise conforms&nbsp;to. CPU&nbsp;usage is unlikely to add up to exactly&nbsp;100%.
-  <p>The SIZE and RSS fields don't count some parts of a process including the page tables, kernel stack, struct thread_info, and struct task_struct. This is usually at least 20&nbsp;KiB of memory that is always resident. SIZE is the virtual size of the process (code+data+stack).
-  <p>Processes marked &lt;defunct&gt; are dead processes (so-called&nbsp;"zombies") that remain because their parent has not destroyed them properly. These processes will be destroyed by <em>init</em>(8) if the parent process exits.
+  <p>This <strong>ps</strong> works by reading the virtual files in&nbsp;/proc. This <strong>ps</strong> does not need to be setuid kmem or have any privileges to run. Do not give this <strong>ps</strong> any special permissions.<br>
+  <br>
+  This <strong>ps</strong> needs access to namelist data for proper WCHAN display. For kernels prior to 2.6, the System.map file must be installed.<br>
+  <br>
+  CPU usage is currently expressed as the percentage of time spent running during the entire lifetime of a process. This is not ideal, and&nbsp;it does not conform to the standards that <strong>ps</strong> otherwise conforms&nbsp;to. CPU&nbsp;usage is unlikely to add up to exactly&nbsp;100%.<br>
+  <br>
+  The SIZE and RSS fields don't count some parts of a process including the page tables, kernel stack, struct thread_info, and struct task_struct. This is usually at least 20&nbsp;KiB of memory that is always resident. SIZE is the virtual size of the process (code+data+stack).<br>
+  <br>
+  Processes marked &lt;defunct&gt; are dead processes (so-called&nbsp;"zombies") that remain because their parent has not destroyed them properly. These processes will be destroyed by <em>init</em>(8) if the parent process exits.
 </section>
 <section>
   <h2>PROCESS FLAGS</h2>
@@ -530,11 +534,15 @@
 </section>
 <section>
   <h2>STANDARD FORMAT SPECIFIERS</h2>
-  <p>Here are the different keywords that may be used to control the output format (e.g. with option <strong>-o</strong>) or to sort the selected processes with the GNU-style <strong>--sort</strong> option.
-  <p>For example: <strong>ps&nbsp;-eo&nbsp;pid,user,args&nbsp;--sort&nbsp;user</strong>
-  <p>This version of <strong>ps</strong> tries to recognize most of the keywords used in other implementations of <strong>ps</strong>.
-  <p>The following user-defined format specifiers may contain spaces: <strong>args</strong>, <strong>cmd</strong>, <strong>comm</strong>, <strong>command</strong>, <strong>fname</strong>, <strong>ucmd</strong>, <strong>ucomm</strong>, <strong>lstart</strong>, <strong>bsdstart</strong>, <strong>start</strong>.
-  <p>Some keywords may not be available for sorting.
+  <p>Here are the different keywords that may be used to control the output format (e.g. with option <strong>-o</strong>) or to sort the selected processes with the GNU-style <strong>--sort</strong> option.<br>
+  <br>
+  For example: <strong>ps&nbsp;-eo&nbsp;pid,user,args&nbsp;--sort&nbsp;user</strong><br>
+  <br>
+  This version of <strong>ps</strong> tries to recognize most of the keywords used in other implementations of <strong>ps</strong>.<br>
+  <br>
+  The following user-defined format specifiers may contain spaces: <strong>args</strong>, <strong>cmd</strong>, <strong>comm</strong>, <strong>command</strong>, <strong>fname</strong>, <strong>ucmd</strong>, <strong>ucomm</strong>, <strong>lstart</strong>, <strong>bsdstart</strong>, <strong>start</strong>.<br>
+  <br>
+  Some keywords may not be available for sorting.
   <table class="tbl">
     <tr>
       <th class="1">CODE
@@ -1146,7 +1154,8 @@
 </section>
 <section>
   <h2>AUTHOR</h2>
-  <p><strong>ps</strong> was originally written by Branko Lankester &lt;lankeste@fwi.uva.nl&gt;. Michael K. Johnson &lt;johnsonm@redhat.com&gt; re-wrote it significantly to use the proc filesystem, changing a few things in the process. Michael Shields &lt;mjshield@nyx.cs.du.edu&gt; added the pid-list feature. Charles Blake &lt;cblake@bbn.com&gt; added multi-level sorting, the dirent-style library, the device name-to-number mmaped database, the approximate binary search directly on System.map, and many code and documentation cleanups. David Mossberger-Tang wrote the generic BFD support for psupdate. Albert Cahalan &lt;albert@users.sf.net&gt; rewrote ps for full Unix98 and BSD support, along with some ugly hacks for obsolete and foreign syntax.
-  <p>Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;. No&nbsp;subscription is required or suggested.
+  <p><strong>ps</strong> was originally written by Branko Lankester &lt;lankeste@fwi.uva.nl&gt;. Michael K. Johnson &lt;johnsonm@redhat.com&gt; re-wrote it significantly to use the proc filesystem, changing a few things in the process. Michael Shields &lt;mjshield@nyx.cs.du.edu&gt; added the pid-list feature. Charles Blake &lt;cblake@bbn.com&gt; added multi-level sorting, the dirent-style library, the device name-to-number mmaped database, the approximate binary search directly on System.map, and many code and documentation cleanups. David Mossberger-Tang wrote the generic BFD support for psupdate. Albert Cahalan &lt;albert@users.sf.net&gt; rewrote ps for full Unix98 and BSD support, along with some ugly hacks for obsolete and foreign syntax.<br>
+  <br>
+  Please send bug reports to &lt;procps-feedback@lists.sf.net&gt;. No&nbsp;subscription is required or suggested.
 </section>
 

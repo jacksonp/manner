@@ -3187,7 +3187,7 @@ baz = !</code></pre>
     <h3>Example</h3>
     <p>Here is an example ignore file.
     <pre><code># use glob syntax.
-syntax: glob</code>
+syntax: glob
 
 *.elc
 *.pyc
@@ -3195,7 +3195,7 @@ syntax: glob</code>
 
 # switch to regexp syntax.
 syntax: regexp
-^\.pc/</pre>
+^\.pc/</code></pre>
   </section>
 </section>
 <section>
@@ -3605,12 +3605,12 @@ new-commit = secret</code></pre>
     <h3>Phases and servers</h3>
     <p>Normally, all servers are <strong>publishing</strong> by default. This means:
     <pre><code>- all draft changesets that are pulled or cloned appear in phase
-public on the client</code>
+public on the client
 
 - all draft changesets that are pushed appear as public on both
 client and server
 
-- secret changesets are neither pushed, pulled, or cloned</pre>
+- secret changesets are neither pushed, pulled, or cloned</code></pre>
     <dl>
       <dt>Note
       <dd>
@@ -3720,12 +3720,12 @@ publish = False</code></pre>
         <br>
         For example:
         <pre><code>[revsetalias]
-issue(a1) = grep(r'\bissue[ :]?' ## a1 ## r'\b|\bbug\(' ## a1 ## r'\)')</code>
+issue(a1) = grep(r'\bissue[ :]?' ## a1 ## r'\b|\bbug\(' ## a1 ## r'\)')
 
 ``issue(1234)`` is equivalent to
 ``grep(r'\bissue[ :]?1234\b|\bbug\(1234\)')``
 in this case. This matches against all of "issue 1234", "issue:1234",
-"issue1234" and "bug(1234)".</pre>
+"issue1234" and "bug(1234)".</code></pre>
     </dl>
   </section>
   <section>
@@ -4603,7 +4603,7 @@ alias2 = URL2
   </section>
   <section>
     <h3>Example Configuration</h3>
-    <pre><code>[hooks]</code>
+    <pre><code>[hooks]
 
 # Use this if you want to check access restrictions at commit time
 pretxncommit.acl = python:hgext.acl.hook
@@ -4677,7 +4677,7 @@ images/** = jack, @designers
 # (except for 1 file. See acl.deny):
 src/main/resources/** = *
 
-.hgtags = release_engineer</pre>
+.hgtags = release_engineer</code></pre>
   </section>
   <section>
     <h3>Examples using the ! prefix</h3>
@@ -4687,7 +4687,7 @@ src/main/resources/** = *
     <br>
     In the examples below, we will: 1) Deny access to branch "ring" to anyone but user "gollum" 2) Deny access to branch "lake" to anyone but members of the group "hobbit" 3) Deny access to a file to anyone but user "gollum"
     <pre><code>[acl.allow.branches]
-# Empty</code>
+# Empty
 
 [acl.deny.branches]
 
@@ -4707,7 +4707,7 @@ lake = !@hobbit
 [acl.deny]
 # 3) only 'gollum' can change the file below;
 # 'gollum' and anyone else can still change any other file.
-/misty/mountains/cave/ring = !gollum</pre>
+/misty/mountains/cave/ring = !gollum</code></pre>
   </section>
   <section>
     <h3>automv</h3>
@@ -4730,7 +4730,7 @@ track = *
 # each log entry indicates `+` if the repository is dirty, like :hg:`id`.
 dirty = True
 # record the source of log messages
-logsource = True</code>
+logsource = True
 
 [blackbox]
 track = command, commandfinish, commandexception, exthook, pythonhook
@@ -4742,7 +4742,7 @@ track = incoming
 # limit the size of a log file
 maxsize = 1.5 MB
 # rotate up to N log files when the current one gets too big
-maxfiles = 3</pre>
+maxfiles = 3</code></pre>
   </section>
   <section>
     <h3>Commands</h3>
@@ -4879,11 +4879,11 @@ maxfiles = 3</pre>
     </dl>
     <p>Activating the extension:
     <pre><code>[extensions]
-bugzilla =</code>
+bugzilla =
 
 [hooks]
 # run bugzilla hook on every change pulled or pushed in here
-incoming.bugzilla = python:hgext.bugzilla.hook</pre>
+incoming.bugzilla = python:hgext.bugzilla.hook</code></pre>
     <p>Example configurations:<br>
     <br>
     XMLRPC example configuration. This uses the Bugzilla at <strong>http://my-project.org/bugzilla</strong>, logging in as user <strong>bugmail@my-project.org</strong> with password <strong>plugh</strong>. It is used with a collection of Mercurial repositories in <strong>/var/local/hg/repos/</strong>, with a web interface at <strong>http://my-project.org/hg</strong>.
@@ -4895,10 +4895,10 @@ version=xmlrpc
 template=Changeset {node|short} in {root|basename}.
          {hgweb}/{webroot}/rev/{node|short}\n
          {desc}\n
-strip=5</code>
+strip=5
 
 [web]
-baseurl=http://my-project.org/hg</pre>
+baseurl=http://my-project.org/hg</code></pre>
     <p>XMLRPC+email example configuration. This uses the Bugzilla at <strong>http://my-project.org/bugzilla</strong>, logging in as user <strong>bugmail@my-project.org</strong> with password <strong>plugh</strong>. It is used with a collection of Mercurial repositories in <strong>/var/local/hg/repos/</strong>, with a web interface at <strong>http://my-project.org/hg</strong>. Bug comments are sent to the Bugzilla email address <strong>bugzilla@my-project.org</strong>.
     <pre><code>[bugzilla]
 bzurl=http://my-project.org/bugzilla
@@ -4909,13 +4909,13 @@ bzemail=bugzilla@my-project.org
 template=Changeset {node|short} in {root|basename}.
          {hgweb}/{webroot}/rev/{node|short}\n
          {desc}\n
-strip=5</code>
+strip=5
 
 [web]
 baseurl=http://my-project.org/hg
 
 [usermap]
-user@emaildomain.com=user.name@bugzilladomain.com</pre>
+user@emaildomain.com=user.name@bugzilladomain.com</code></pre>
     <p>MySQL example configuration. This has a local Bugzilla 3.2 installation in <strong>/opt/bugzilla-3.2</strong>. The MySQL database is on <strong>localhost</strong>, the Bugzilla database name is <strong>bugs</strong> and MySQL is accessed with MySQL username <strong>bugs</strong> password <strong>XYZZY</strong>. It is used with a collection of Mercurial repositories in <strong>/var/local/hg/repos/</strong>, with a web interface at <strong>http://my-project.org/hg</strong>.
     <pre><code>[bugzilla]
 host=localhost
@@ -4926,18 +4926,18 @@ bzdir=/opt/bugzilla-3.2
 template=Changeset {node|short} in {root|basename}.
          {hgweb}/{webroot}/rev/{node|short}\n
          {desc}\n
-strip=5</code>
+strip=5
 
 [web]
 baseurl=http://my-project.org/hg
 
 [usermap]
-user@emaildomain.com=user.name@bugzilladomain.com</pre>
+user@emaildomain.com=user.name@bugzilladomain.com</code></pre>
     <p>All the above add a comment to the Bugzilla bug record of the form:
     <pre><code>Changeset 3b16791d6642 in repository-name.
-http://my-project.org/hg/repository-name/rev/3b16791d6642</code>
+http://my-project.org/hg/repository-name/rev/3b16791d6642
 
-Changeset commit comment. Bug 1234.</pre>
+Changeset commit comment. Bug 1234.</code></pre>
   </section>
   <section>
     <h3>censor</h3>
@@ -5038,7 +5038,7 @@ hg children -r REV =&gt; hg log -r "children(REV)"</code></pre>
     <br>
     Examples:
     <pre><code># display count of changed lines for every committer
-hg churn -t "{author|email}"</code>
+hg churn -t "{author|email}"
 
 # display daily activity graph
 hg churn -f "%H" -s -c
@@ -5047,7 +5047,7 @@ hg churn -f "%H" -s -c
 hg churn -f "%Y-%m" -s -c
 
 # display count of lines changed in every year
-hg churn -f "%Y" -s</pre>
+hg churn -f "%Y" -s</code></pre>
     <p>It is possible to map alternate email addresses to a main address by providing a file using the following format:
     <pre><code>&lt;alias email&gt; = &lt;actual email&gt;</code></pre>
     <p>Such a file may be specified with the --aliases option, otherwise a .hgchurn file will be looked for in the working directory root. Aliases will be split from the rightmost "=".<br>
@@ -5194,7 +5194,7 @@ status.added = green bold
 status.removed = red bold blue_background
 status.deleted = cyan bold underline
 status.unknown = magenta bold underline
-status.ignored = black bold</code>
+status.ignored = black bold
 
 # 'none' turns off all effects
 status.clean = none
@@ -5240,7 +5240,7 @@ shelve.age = cyan
 shelve.newest = green bold
 shelve.name = blue bold
 
-histedit.remaining = red bold</pre>
+histedit.remaining = red bold</code></pre>
   </section>
   <section>
     <h3>Custom colors</h3>
@@ -5331,11 +5331,11 @@ pagermode = ansi</code></pre>
     <p>Empty lines and lines starting with a <strong>#</strong> are ignored.<br>
     <br>
     The filemap is a file that allows filtering and remapping of files and directories. Each line can contain one of the following directives:
-    <pre><code>include path/to/file-or-dir</code>
+    <pre><code>include path/to/file-or-dir
 
 exclude path/to/file-or-dir
 
-rename path/to/source path/to/destination</pre>
+rename path/to/source path/to/destination</code></pre>
     <p>Comment lines start with <strong>#</strong>. A specified path matches if it equals the full relative name of a file or one of its parent directories. The <strong>include</strong> or <strong>exclude</strong> directive with the longest matching path applies, so line order does not matter.<br>
     <br>
     The <strong>include</strong> directive causes a file, or all files under a directory, to be included in the destination repository. The default if there are no <strong>include</strong> statements is to include everything. If there are any <strong>include</strong> statements, nothing else is included. The <strong>exclude</strong> directive causes files or directories to be omitted. The <strong>rename</strong> directive renames a file or directory if it is converted. To rename from a subdirectory into the root of the repository, use <strong>.</strong> as the path to rename to.<br>
@@ -5442,11 +5442,11 @@ rename path/to/source path/to/destination</pre>
     <br>
     An example showing how to convert a repository with subrepositories:
     <pre><code># so convert knows the type when it sees a non empty destination
-$ hg init converted</code>
+$ hg init converted
 
 $ hg convert orig/sub1 converted/sub1
 $ hg convert orig/sub2 converted/sub2
-$ hg convert orig converted</pre>
+$ hg convert orig converted</code></pre>
     <p>The following options are supported:
     <dl>
       <dt><strong>convert.hg.clonebranches</strong>
@@ -5517,10 +5517,10 @@ $ hg convert orig converted</pre>
 **.vcproj = CRLF
 **.txt = native
 Makefile = LF
-**.jpg = BIN</code>
+**.jpg = BIN
 
 [repository]
-native = LF</pre>
+native = LF</code></pre>
     <dl class="indent-2">
       <dt>Note
       <dd>The rules will first apply when files are touched in the working directory, e.g. by updating to null and back to tip to touch all files.<br>
@@ -5552,7 +5552,7 @@ native = LF</pre>
 cdiff = gdiff -Nprc5
 ## or the old way:
 #cmd.cdiff = gdiff
-#opts.cdiff = -Nprc5</code>
+#opts.cdiff = -Nprc5
 
 # add new command called meld, runs meld (no need to name twice).  If
 # the meld executable is not available, the meld tool in [merge-tools]
@@ -5564,7 +5564,7 @@ meld =
 # English user, be sure to put "let g:DirDiffDynamicDiffText = 1" in
 # your .vimrc
 vimdiff = gvim -f "+next" \
-          "+execute 'DirDiff' fnameescape(argv(0)) fnameescape(argv(1))"</pre>
+          "+execute 'DirDiff' fnameescape(argv(0)) fnameescape(argv(1))"</code></pre>
     <p>Tool arguments can include variables that are expanded at runtime:
     <pre><code>$parent1, $plabel1 - filename, descriptive label of first parent
 $child,   $clabel  - filename, descriptive label of child revision
@@ -5573,10 +5573,10 @@ $root              - repository root
 $parent is an alias for $parent1.</code></pre>
     <p>The extdiff extension will look in your [diff-tools] and [merge-tools] sections for diff tool arguments, when none are specified in [extdiff].
     <pre><code>[extdiff]
-kdiff3 =</code>
+kdiff3 =
 
 [diff-tools]
-kdiff3.diffargs=--L1 '$plabel1' --L2 '$clabel' $parent $child</pre>
+kdiff3.diffargs=--L1 '$plabel1' --L2 '$clabel' $parent $child</code></pre>
     <p>You can use -I/-X and list of file or directory names like normal <strong>hg diff</strong> command. The extdiff extension makes snapshots of only needed files, so running the external diff program will actually be pretty fast (at least faster than having to compare the entire tree).
   </section>
   <section>
@@ -5886,7 +5886,7 @@ o  0   d8d2fcd0e319   2009-04-27 18:04 -0500   durin42
     <p>If you were to run <strong>hg histedit c561b4e977df</strong>, you would see the following file open in your editor:
     <pre><code>pick c561b4e977df Add beta
 pick 030b686bedc4 Add gamma
-pick 7c2fd3b9020c Add delta</code>
+pick 7c2fd3b9020c Add delta
 
 # Edit history between c561b4e977df and 7c2fd3b9020c
 #
@@ -5899,11 +5899,11 @@ pick 7c2fd3b9020c Add delta</code>
 #  r, roll = like fold, but discard this commit's description
 #  d, drop = remove commit from history
 #  m, mess = edit commit message without changing commit content
-#</pre>
+#</code></pre>
     <p>In this file, lines beginning with <strong>#</strong> are ignored. You must specify a rule for each revision in your history. For example, if you had meant to add gamma before beta, and then wanted to add delta in the same revision as beta, you would reorganize the file to look like this:
     <pre><code>pick 030b686bedc4 Add gamma
 pick c561b4e977df Add beta
-fold 7c2fd3b9020c Add delta</code>
+fold 7c2fd3b9020c Add delta
 
 # Edit history between c561b4e977df and 7c2fd3b9020c
 #
@@ -5916,7 +5916,7 @@ fold 7c2fd3b9020c Add delta</code>
 #  r, roll = like fold, but discard this commit's description
 #  d, drop = remove commit from history
 #  m, mess = edit commit message without changing commit content
-#</pre>
+#</code></pre>
     <p>At which point you close the editor and <strong>histedit</strong> starts working. When you specify a <strong>fold</strong> operation, <strong>histedit</strong> will open an editor when it folds those revisions together, offering you a chance to clean up the commit message:
     <pre><code>Add beta
 ***
@@ -6125,11 +6125,11 @@ pick 252a1af424ad 2 Blorb a morgwazzle</code></pre>
     <pre><code>[keyword]
 # expand keywords in every python file except those matching "x*"
 **.py =
-x*    = ignore</code>
+x*    = ignore
 
 [keywordset]
 # prefer svn- over cvs-like default keywordmaps
-svn = True</pre>
+svn = True</code></pre>
     <dl>
       <dt>Note
       <dd>The more specific you are in your filename patterns the less you lose speed in huge repositories.<br>
@@ -6270,9 +6270,9 @@ $ hg commit -m "add randomdata as a largefile"</code></pre>
     <pre><code>$ hg lfconvert --size 10 oldrepo newrepo</code></pre>
     <p>In repositories that already have largefiles in them, any new file over 10MB will automatically be added as a largefile. To change this threshold, set <strong>largefiles.minsize</strong> in your Mercurial config file to the minimum size in megabytes to track as a largefile, or use the --lfsize option to the add command (also in megabytes):
     <pre><code>[largefiles]
-minsize = 2</code>
+minsize = 2
 
-$ hg add --lfsize 2</pre>
+$ hg add --lfsize 2</code></pre>
     <p>The <strong>largefiles.patterns</strong> config option allows you to specify a list of filename patterns (see <strong>hg help patterns</strong>) that should always be tracked as largefiles:
     <pre><code>[largefiles]
 patterns =
@@ -6364,14 +6364,14 @@ commandexception = echo "$MSG2$MSG3" &gt; /var/log/mercurial_exceptions.log</cod
     <br>
     Common tasks (use <strong>hg help command</strong> for more details):
     <pre><code>create new patch                          qnew
-import existing patch                     qimport</code>
+import existing patch                     qimport
 
 print patch series                        qseries
 print applied patches                     qapplied
 
 add known patch to applied stack          qpush
 remove patch from applied stack           qpop
-refresh contents of top applied patch     qrefresh</pre>
+refresh contents of top applied patch     qrefresh</code></pre>
     <p>By default, mq will automatically use git patches when required to avoid losing file mode changes, copy records, binary files or empty files creations or deletions. This behavior can be configured with:
     <pre><code>[mq]
 git = auto/keep/yes/no</code></pre>
@@ -6997,18 +6997,18 @@ qselect stable</code></pre>
 # one email for each incoming changeset
 incoming.notify = python:hgext.notify.hook
 # one email for all incoming changesets
-changegroup.notify = python:hgext.notify.hook</code>
+changegroup.notify = python:hgext.notify.hook
 
 # one email for all outgoing changesets
-outgoing.notify = python:hgext.notify.hook</pre>
+outgoing.notify = python:hgext.notify.hook</code></pre>
     <p>This registers the hooks. To enable notification, subscribers must be assigned to repositories. The <strong>[usersubs]</strong> section maps multiple repositories to a given recipient. The <strong>[reposubs]</strong> section maps multiple recipients to a single repository:
     <pre><code>[usersubs]
 # key is subscriber email, value is a comma-separated list of repo patterns
-user@host = pattern</code>
+user@host = pattern
 
 [reposubs]
 # key is repo pattern, value is a comma-separated list of subscriber emails
-pattern = user@host</pre>
+pattern = user@host</code></pre>
     <p>A <strong>pattern</strong> is a <strong>glob</strong> matching the absolute path to a repository, optionally combined with a revset expression. A revset expression, if present, is separated from the glob by a hash. Example:
     <pre><code>[reposubs]
 */widgets#branch(release) = qa-team@example.com</code></pre>
@@ -7181,7 +7181,7 @@ intro=always # always include an introduction message</code></pre>
     <pre><code>hg email -r 3000          # send patch 3000 only
 hg email -r 3000 -r 3001  # send patches 3000 and 3001
 hg email -r 3000:3005     # send patches 3000 through 3005
-hg email 3000             # send patch 3000 (deprecated)</code>
+hg email 3000             # send patch 3000 (deprecated)
 
 hg email -o               # send all patches not in default
 hg email -o DEST          # send all patches not in DEST
@@ -7197,7 +7197,7 @@ hg email -o -m mbox &amp;&    # generate an mbox file...
   mutt -R -f mbox         # ... and view it with mutt
 hg email -o -m mbox &amp;&    # generate an mbox file ...
   formail -s sendmail \   # ... and use formail to send from the mbox
-    -bm -t &lt; mbox         # ... using sendmail</pre>
+    -bm -t &lt; mbox         # ... using sendmail</code></pre>
     <p>Before using this command, you will need to enable email in your hgrc. See the [email] section in hgrc(5) for details.<br>
     <br>
     Options:
@@ -7460,7 +7460,7 @@ hg email -o -m mbox &amp;&    # generate an mbox file ...
     You will be prompted for whether to record changes to each modified file, and for files with multiple changes, for each change to use. For each query, the following responses are possible:
     <pre><code>y - record this change
 n - skip this change
-e - edit this change manually</code>
+e - edit this change manually
 
 s - skip remaining changes to this file
 f - record remaining changes to this file
@@ -7469,7 +7469,7 @@ d - done, skip remaining changes and files
 a - record all changes to all remaining files
 q - quit, recording no changes
 
-? - display help</pre>
+? - display help</code></pre>
     <p>This command is not available when committing a merge.<br>
     <br>
     Options:
@@ -7859,11 +7859,11 @@ encoding = sjis</code></pre>
 win32text =
 [encode]
 ** = cleverencode:
-# or ** = macencode:</code>
+# or ** = macencode:
 
 [decode]
 ** = cleverdecode:
-# or ** = macdecode:</pre>
+# or ** = macdecode:</code></pre>
     <p>If not doing conversion, to make sure you do not commit CRLF/CR by accident:
     <pre><code>[hooks]
 pretxncommit.crlf = python:hgext.win32text.forbidcrlf
@@ -7933,7 +7933,8 @@ zc-test = http://example.com:8000/test</code></pre>
 </section>
 <section>
   <h2>AUTHOR</h2>
-  <p>Matt Mackall &lt;mpm@selenic.com&gt;
-  <p>Organization: Mercurial
+  <p>Matt Mackall &lt;mpm@selenic.com&gt;<br>
+  <br>
+  Organization: Mercurial
 </section>
 

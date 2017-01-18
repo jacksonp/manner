@@ -91,25 +91,25 @@ or
     <p>The options listed in the table below tell GNU <strong>tar</strong> what operation it is to perform. Exactly one of them must be given. Meaning of non-optional arguments depends on the operation mode requested.
     <dl>
       <dt><strong>-A</strong>, <strong>--catenate</strong>, <strong>--concatenate</strong>
-      <dd>
-        <p>Append archive to the end of another archive. The arguments are treated as the names of archives to append. All archives must be of the same format as the archive they are appended to, otherwise the resulting archive might be unusable with non-GNU implementations of <strong>tar</strong>. Notice also that when more than one archive is given, the members from archives other than the first one will be accessible in the resulting archive only if using the <strong>-i</strong> (<strong>--ignore-zeros</strong>) option.
-        <p>Compressed archives cannot be concatenated.
+      <dd>Append archive to the end of another archive. The arguments are treated as the names of archives to append. All archives must be of the same format as the archive they are appended to, otherwise the resulting archive might be unusable with non-GNU implementations of <strong>tar</strong>. Notice also that when more than one archive is given, the members from archives other than the first one will be accessible in the resulting archive only if using the <strong>-i</strong> (<strong>--ignore-zeros</strong>) option.<br>
+      <br>
+      Compressed archives cannot be concatenated.
       <dt><strong>-c</strong>, <strong>--create</strong>
       <dd>Create a new archive. Arguments supply the names of the files to be archived. Directories are archived recursively, unless the <strong>--no-recursion</strong> option is given.
       <dt><strong>-d</strong>, <strong>--diff</strong>, <strong>--compare</strong>
       <dd>Find differences between archive and file system. The arguments are optional and specify archive members to compare. If not given, the current working directory is assumed.
       <dt><strong>--delete</strong>
-      <dd>
-        <p>Delete from the archive. The arguments supply names of the archive members to be removed. At least one argument must be given.
-        <p>This option does not operate on compressed archives. There is no short option equivalent.
+      <dd>Delete from the archive. The arguments supply names of the archive members to be removed. At least one argument must be given.<br>
+      <br>
+      This option does not operate on compressed archives. There is no short option equivalent.
       <dt><strong>-r</strong>, <strong>--append</strong>
       <dd>Append files to the end of an archive. Arguments have the same meaning as for <strong>-c</strong> (<strong>--create</strong>).
       <dt><strong>-t</strong>, <strong>--list</strong>
       <dd>List the contents of an archive. Arguments are optional. When given, they specify the names of the members to list.
       <dt><strong>--test-label</strong>
-      <dd>
-        <p>Test the archive volume label and exit. When used without arguments, it prints the volume label (if any) and exits with status <strong>0</strong>. When one or more command line arguments are given. <strong>tar</strong> compares the volume label with each argument. It exits with code <strong>0</strong> if a match is found, and with code <strong>1</strong> otherwise. No output is displayed, unless used together with the <strong>-v</strong> (<strong>--verbose</strong>) option.
-        <p>There is no short option equivalent for this option.
+      <dd>Test the archive volume label and exit. When used without arguments, it prints the volume label (if any) and exits with status <strong>0</strong>. When one or more command line arguments are given. <strong>tar</strong> compares the volume label with each argument. It exits with code <strong>0</strong> if a match is found, and with code <strong>1</strong> otherwise. No output is displayed, unless used together with the <strong>-v</strong> (<strong>--verbose</strong>) option.<br>
+      <br>
+      There is no short option equivalent for this option.
       <dt><strong>-u</strong>, <strong>--update</strong>
       <dd>Append files which are newer than the corresponding copy in the archive. Arguments have the same meaning as with <strong>-c</strong> and <strong>-r</strong> options.
       <dt><strong>-x</strong>, <strong>--extract</strong>, <strong>--get</strong>
@@ -133,9 +133,9 @@ or
       <dt><strong>--check-device</strong>
       <dd>Check device numbers when creating incremental archives (default).
       <dt><strong>-g</strong>, <strong>--listed-incremental</strong>=<em>FILE</em>
-      <dd>
-        <p>Handle new GNU-format incremental backups. <em>FILE</em> is the name of a <strong>snapshot file</strong>, where tar stores additional information which is used to decide which files changed since the previous incremental dump and, consequently, must be dumped again. If <em>FILE</em> does not exist when creating an archive, it will be created and all files will be added to the resulting archive (the <strong>level 0</strong> dump). To create incremental archives of non-zero level <strong>N</strong>, create a copy of the snapshot file created during the level <strong>N-1</strong>, and use it as <em>FILE</em>.
-        <p>When listing or extracting, the actual contents of <em>FILE</em> is not inspected, it is needed only due to syntactical requirements. It is therefore common practice to use <strong>/dev/null</strong> in its place.
+      <dd>Handle new GNU-format incremental backups. <em>FILE</em> is the name of a <strong>snapshot file</strong>, where tar stores additional information which is used to decide which files changed since the previous incremental dump and, consequently, must be dumped again. If <em>FILE</em> does not exist when creating an archive, it will be created and all files will be added to the resulting archive (the <strong>level 0</strong> dump). To create incremental archives of non-zero level <strong>N</strong>, create a copy of the snapshot file created during the level <strong>N-1</strong>, and use it as <em>FILE</em>.<br>
+      <br>
+      When listing or extracting, the actual contents of <em>FILE</em> is not inspected, it is needed only due to syntactical requirements. It is therefore common practice to use <strong>/dev/null</strong> in its place.
       <dt><strong>--hole-detection</strong>=<em>METHOD</em>
       <dd>Use <em>METHOD</em> to detect holes in sparse files. This option implies <strong>--sparse</strong>. Valid values for <em>METHOD</em> are <strong>seek</strong> and <strong>raw</strong>. Default is <strong>seek</strong> with fallback to <strong>raw</strong> when not applicable.
       <dt><strong>-G</strong>, <strong>--incremental</strong>
@@ -259,15 +259,16 @@ or
       <dt><strong>--delay-directory-restore</strong>
       <dd>Delay setting modification times and permissions of extracted directories until the end of extraction. Use this option when extracting from an archive which has unusual member ordering.
       <dt><strong>--group</strong>=<em>NAME</em>[:<em>GID</em>]
-      <dd>
-        <p>Force <em>NAME</em> as group for added files. If <em>GID</em> is not supplied, <em>NAME</em> can be either a user name or numeric GID. In this case the missing part (GID or name) will be inferred from the current host's group database.
-        <p>When used with <strong>--group-map</strong>=<em>FILE</em>, affects only those files whose owner group is not listed in <em>FILE</em>.
+      <dd>Force <em>NAME</em> as group for added files. If <em>GID</em> is not supplied, <em>NAME</em> can be either a user name or numeric GID. In this case the missing part (GID or name) will be inferred from the current host's group database.<br>
+      <br>
+      When used with <strong>--group-map</strong>=<em>FILE</em>, affects only those files whose owner group is not listed in <em>FILE</em>.
       <dt><strong>--group-map</strong>=<em>FILE</em>
       <dd>
         <p>Read group translation map from <em>FILE</em>. Empty lines are ignored. Comments are introduced with <strong>#</strong> sign and extend to the end of line. Each non-empty line in <em>FILE</em> defines translation for a single group. It must consist of two fields, delimited by any amount of whitespace:
         <pre><em>OLDGRP</em> <em>NEWGRP</em>[<strong>:</strong><em>NEWGID</em>]</pre>
-        <p><em>OLDGRP</em> is either a valid group name or a GID prefixed with <strong>+</strong>. Unless <em>NEWGID</em> is supplied, <em>NEWGRP</em> must also be either a valid group name or a <strong>+</strong><em>GID</em>. Otherwise, both <em>NEWGRP</em> and <em>NEWGID</em> need not be listed in the system group database.
-        <p>As a result, each input file with owner group <em>OLDGRP</em> will be stored in archive with owner group <em>NEWGRP</em> and GID <em>NEWGID</em>.
+        <p><em>OLDGRP</em> is either a valid group name or a GID prefixed with <strong>+</strong>. Unless <em>NEWGID</em> is supplied, <em>NEWGRP</em> must also be either a valid group name or a <strong>+</strong><em>GID</em>. Otherwise, both <em>NEWGRP</em> and <em>NEWGID</em> need not be listed in the system group database.<br>
+        <br>
+        As a result, each input file with owner group <em>OLDGRP</em> will be stored in archive with owner group <em>NEWGRP</em> and GID <em>NEWGID</em>.
       <dt><strong>--mode</strong>=<em>CHANGES</em>
       <dd>Force symbolic mode <em>CHANGES</em> for added files.
       <dt><strong>--mtime</strong>=<em>DATE-OR-FILE</em>
@@ -283,15 +284,16 @@ or
       <dt><strong>--numeric-owner</strong>
       <dd>Always use numbers for user/group names.
       <dt><strong>--owner</strong>=<em>NAME</em>[:<em>UID</em>]
-      <dd>
-        <p>Force <em>NAME</em> as owner for added files. If <em>UID</em> is not supplied, <em>NAME</em> can be either a user name or numeric UID. In this case the missing part (UID or name) will be inferred from the current host's user database.
-        <p>When used with <strong>--owner-map</strong>=<em>FILE</em>, affects only those files whose owner is not listed in <em>FILE</em>.
+      <dd>Force <em>NAME</em> as owner for added files. If <em>UID</em> is not supplied, <em>NAME</em> can be either a user name or numeric UID. In this case the missing part (UID or name) will be inferred from the current host's user database.<br>
+      <br>
+      When used with <strong>--owner-map</strong>=<em>FILE</em>, affects only those files whose owner is not listed in <em>FILE</em>.
       <dt><strong>--owner-map</strong>=<em>FILE</em>
       <dd>
         <p>Read owner translation map from <em>FILE</em>. Empty lines are ignored. Comments are introduced with <strong>#</strong> sign and extend to the end of line. Each non-empty line in <em>FILE</em> defines translation for a single UID. It must consist of two fields, delimited by any amount of whitespace:
         <pre><em>OLDUSR</em> <em>NEWUSR</em>[<strong>:</strong><em>NEWUID</em>]</pre>
-        <p><em>OLDUSR</em> is either a valid user name or a UID prefixed with <strong>+</strong>. Unless <em>NEWUID</em> is supplied, <em>NEWUSR</em> must also be either a valid user name or a <strong>+</strong><em>UID</em>. Otherwise, both <em>NEWUSR</em> and <em>NEWUID</em> need not be listed in the system user database.
-        <p>As a result, each input file owned by <em>OLDUSR</em> will be stored in archive with owner name <em>NEWUSR</em> and UID <em>NEWUID</em>.
+        <p><em>OLDUSR</em> is either a valid user name or a UID prefixed with <strong>+</strong>. Unless <em>NEWUID</em> is supplied, <em>NEWUSR</em> must also be either a valid user name or a <strong>+</strong><em>UID</em>. Otherwise, both <em>NEWUSR</em> and <em>NEWUID</em> need not be listed in the system user database.<br>
+        <br>
+        As a result, each input file owned by <em>OLDUSR</em> will be stored in archive with owner name <em>NEWUSR</em> and UID <em>NEWUID</em>.
       <dt><strong>-p</strong>, <strong>--preserve-permissions</strong>, <strong>--same-permissions</strong>
       <dd>extract information about file permissions (default for superuser)
       <dt><strong>--preserve</strong>
@@ -301,11 +303,13 @@ or
       <dt><strong>-s</strong>, <strong>--preserve-order</strong>, <strong>--same-order</strong>
       <dd>Sort names to extract to match archive
       <dt><strong>--sort=</strong><em>ORDER</em>
-      <dd>
-        <p>When creating an archive, sort directory entries according to <em>ORDER</em>, which is one of <strong>none</strong>, <strong>name</strong>, or <strong>inode</strong>.
-        <p>The default is <strong>--sort=none</strong>, which stores archive members in the same order as returned by the operating system.
-        <p>Using <strong>--sort=name</strong> ensures the member ordering in the created archive is uniform and reproducible.
-        <p>Using <strong>--sort=inode</strong> reduces the number of disk seeks made when creating the archive and thus can considerably speed up archivation. This sorting order is supported only if the underlying system provides the necessary information.
+      <dd>When creating an archive, sort directory entries according to <em>ORDER</em>, which is one of <strong>none</strong>, <strong>name</strong>, or <strong>inode</strong>.<br>
+      <br>
+      The default is <strong>--sort=none</strong>, which stores archive members in the same order as returned by the operating system.<br>
+      <br>
+      Using <strong>--sort=name</strong> ensures the member ordering in the created archive is uniform and reproducible.<br>
+      <br>
+      Using <strong>--sort=inode</strong> reduces the number of disk seeks made when creating the archive and thus can considerably speed up archivation. This sorting order is supported only if the underlying system provides the necessary information.
     </dl>
   </section>
   <section>
@@ -334,11 +338,13 @@ or
     <dl>
       <dt><strong>-f</strong>, <strong>--file</strong>=<em>ARCHIVE</em>
       <dd>
-        <p>Use archive file or device <em>ARCHIVE</em>. If this option is not given, <strong>tar</strong> will first examine the environment variable `TAPE'. If it is set, its value will be used as the archive name. Otherwise, <strong>tar</strong> will assume the compiled-in default. The default value can be inspected either using the <strong>--show-defaults</strong> option, or at the end of the <strong>tar --help</strong> output.
-        <p>An archive name that has a colon in it specifies a file or device on a remote machine. The part before the colon is taken as the machine name or IP address, and the part after it as the file or device pathname, e.g.:
+        <p>Use archive file or device <em>ARCHIVE</em>. If this option is not given, <strong>tar</strong> will first examine the environment variable `TAPE'. If it is set, its value will be used as the archive name. Otherwise, <strong>tar</strong> will assume the compiled-in default. The default value can be inspected either using the <strong>--show-defaults</strong> option, or at the end of the <strong>tar --help</strong> output.<br>
+        <br>
+        An archive name that has a colon in it specifies a file or device on a remote machine. The part before the colon is taken as the machine name or IP address, and the part after it as the file or device pathname, e.g.:
         <pre>--file=remotehost:/dev/sr0</pre>
-        <p>An optional username can be prefixed to the hostname, placing a <strong>@</strong> sign between them.
-        <p>By default, the remote host is accessed via the <strong>rsh</strong>(1) command. Nowadays it is common to use <strong>ssh</strong>(1) instead. You can do so by giving the following command line option:
+        <p>An optional username can be prefixed to the hostname, placing a <strong>@</strong> sign between them.<br>
+        <br>
+        By default, the remote host is accessed via the <strong>rsh</strong>(1) command. Nowadays it is common to use <strong>ssh</strong>(1) instead. You can do so by giving the following command line option:
         <pre>--rsh-command=/usr/bin/ssh</pre>
         <p>The remote machine should have the <strong>rmt</strong>(8) command installed. If its pathname does not match <strong>tar</strong>'s default, you can inform <strong>tar</strong> about the correct pathname using the <strong>--rmt-command</strong> option.
       <dt><strong>--force-local</strong>
@@ -366,9 +372,9 @@ or
           <p>If the info script fails, <strong>tar</strong> exits; otherwise, it begins writing the next volume.
         </div>
       <dt><strong>-L</strong>, <strong>--tape-length</strong>=<em>N</em>
-      <dd>
-        <p>Change tape after writing <em>N</em>x1024 bytes. If <em>N</em> is followed by a size suffix (see the subsection <strong>Size suffixes</strong> below), the suffix specifies the multiplicative factor to be used instead of 1024.
-        <p>This option implies <strong>-M</strong>.
+      <dd>Change tape after writing <em>N</em>x1024 bytes. If <em>N</em> is followed by a size suffix (see the subsection <strong>Size suffixes</strong> below), the suffix specifies the multiplicative factor to be used instead of 1024.<br>
+      <br>
+      This option implies <strong>-M</strong>.
       <dt><strong>-M</strong>, <strong>--multi-volume</strong>
       <dd>Create/list/extract multi-volume archive.
       <dt><strong>--rmt-command</strong>=<em>COMMAND</em>
@@ -461,9 +467,9 @@ or
           <dt><strong>nil</strong>, <strong>existing</strong>
           <dd>Make numbered backups if numbered backups exist, simple backups otherwise.
           <dt><strong>never</strong>, <strong>simple</strong>
-          <dd>
-            <p>Always make simple backups
-            <p>If <em>CONTROL</em> is not given, the value is taken from the <strong>VERSION_CONTROL</strong> environment variable. If it is not set, <strong>existing</strong> is assumed.
+          <dd>Always make simple backups<br>
+          <br>
+          If <em>CONTROL</em> is not given, the value is taken from the <strong>VERSION_CONTROL</strong> environment variable. If it is not set, <strong>existing</strong> is assumed.
         </dl>
       <dt><strong>-C</strong>, <strong>--directory</strong>=<em>DIR</em>
       <dd>Change to <em>DIR</em> before performing any operations. This option is order-sensitive, i.e. it affects all options that follow.
@@ -506,15 +512,17 @@ or
       <dt><strong>--no-unquote</strong>
       <dd>Do not unquote input file or member names.
       <dt><strong>--no-verbatim-files-from</strong>
-      <dd>
-        <p>Treat each line read from a file list as if it were supplied in the command line. I.e., leading and trailing whitespace is removed and, if the resulting string begins with a dash, it is treated as <strong>tar</strong> command line option.
-        <p>This is the default behavior. The <strong>--no-verbatim-files-from</strong> option is provided as a way to restore it after <strong>--verbatim-files-from</strong> option.
-        <p>This option is positional: it affects all <strong>--files-from</strong> options that occur after it in, until <strong>--verbatim-files-from</strong> option or end of line, whichever occurs first.
-        <p>It is implied by the <strong>--no-null</strong> option.
+      <dd>Treat each line read from a file list as if it were supplied in the command line. I.e., leading and trailing whitespace is removed and, if the resulting string begins with a dash, it is treated as <strong>tar</strong> command line option.<br>
+      <br>
+      This is the default behavior. The <strong>--no-verbatim-files-from</strong> option is provided as a way to restore it after <strong>--verbatim-files-from</strong> option.<br>
+      <br>
+      This option is positional: it affects all <strong>--files-from</strong> options that occur after it in, until <strong>--verbatim-files-from</strong> option or end of line, whichever occurs first.<br>
+      <br>
+      It is implied by the <strong>--no-null</strong> option.
       <dt><strong>--null</strong>
-      <dd>
-        <p>Instruct subsequent <strong>-T</strong> options to read null-terminated names verbatim (disables special handling of names that start with a dash).
-        <p>See also <strong>--verbatim-files-from</strong>.
+      <dd>Instruct subsequent <strong>-T</strong> options to read null-terminated names verbatim (disables special handling of names that start with a dash).<br>
+      <br>
+      See also <strong>--verbatim-files-from</strong>.
       <dt><strong>-N</strong>, <strong>--newer</strong>=<em>DATE</em>, <strong>--after-date</strong>=<em>DATE</em>
       <dd>Only store files newer than DATE. If <em>DATE</em> starts with <strong>/</strong> or <strong>.</strong> it is taken to be a file name; the ctime of that file is used as the date.
       <dt><strong>--one-file-system</strong>
@@ -526,19 +534,23 @@ or
       <dt><strong>--suffix</strong>=<em>STRING</em>
       <dd>Backup before removal, override usual suffix. Default suffix is <strong>~</strong>, unless overridden by environment variable <strong>SIMPLE_BACKUP_SUFFIX</strong>.
       <dt><strong>-T</strong>, <strong>--files-from</strong>=<em>FILE</em>
-      <dd>
-        <p>Get names to extract or create from <em>FILE</em>.
-        <p>Unless specified otherwise, the <em>FILE</em> must contain a list of names separated by ASCII <strong>LF</strong> (i.e. one name per line). The names read are handled the same way as command line arguments. They undergo quote removal and word splitting, and any string that starts with a <strong>-</strong> is handled as <strong>tar</strong> command line option.
-        <p>If this behavior is undesirable, it can be turned off using the <strong>--verbatim-files-from</strong> option.
-        <p>The <strong>--null</strong> option instructs <strong>tar</strong> that the names in <em>FILE</em> are separated by ASCII <strong>NUL</strong> character, instead of <strong>LF</strong>. It is useful if the list is generated by <strong>find</strong>(1) <strong>-print0</strong> predicate.
+      <dd>Get names to extract or create from <em>FILE</em>.<br>
+      <br>
+      Unless specified otherwise, the <em>FILE</em> must contain a list of names separated by ASCII <strong>LF</strong> (i.e. one name per line). The names read are handled the same way as command line arguments. They undergo quote removal and word splitting, and any string that starts with a <strong>-</strong> is handled as <strong>tar</strong> command line option.<br>
+      <br>
+      If this behavior is undesirable, it can be turned off using the <strong>--verbatim-files-from</strong> option.<br>
+      <br>
+      The <strong>--null</strong> option instructs <strong>tar</strong> that the names in <em>FILE</em> are separated by ASCII <strong>NUL</strong> character, instead of <strong>LF</strong>. It is useful if the list is generated by <strong>find</strong>(1) <strong>-print0</strong> predicate.
       <dt><strong>--unquote</strong>
       <dd>Unquote file or member names (default).
       <dt><strong>--verbatim-files-from</strong>
-      <dd>
-        <p>Treat each line obtained from a file list as a file name, even if it starts with a dash. File lists are supplied with the <strong>--files-from</strong> (<strong>-T</strong>) option. The default behavior is to handle names supplied in file lists as if they were typed in the command line, i.e. any names starting with a dash are treated as <strong>tar</strong> options. The <strong>--verbatim-files-from</strong> option disables this behavior.
-        <p>This option affects all <strong>--files-from</strong> options that occur after it in the command line. Its effect is reverted by the <strong>--no-verbatim-files-from} option.</strong>
-        <p>This option is implied by the <strong>--null</strong> option.
-        <p>See also <strong>--add-file</strong>.
+      <dd>Treat each line obtained from a file list as a file name, even if it starts with a dash. File lists are supplied with the <strong>--files-from</strong> (<strong>-T</strong>) option. The default behavior is to handle names supplied in file lists as if they were typed in the command line, i.e. any names starting with a dash are treated as <strong>tar</strong> options. The <strong>--verbatim-files-from</strong> option disables this behavior.<br>
+      <br>
+      This option affects all <strong>--files-from</strong> options that occur after it in the command line. Its effect is reverted by the <strong>--no-verbatim-files-from} option.</strong><br>
+      <br>
+      This option is implied by the <strong>--null</strong> option.<br>
+      <br>
+      See also <strong>--add-file</strong>.
       <dt><strong>-X</strong>, <strong>--exclude-from</strong>=<em>FILE</em>
       <dd>Exclude files matching patterns listed in FILE.
     </dl>
@@ -609,9 +621,11 @@ or
       <dd>Verbosely list files processed.
       <dt><strong>--warning</strong>=<em>KEYWORD</em>
       <dd>
-        <p>Enable or disable warning messages identified by <em>KEYWORD</em>. The messages are suppressed if <em>KEYWORD</em> is prefixed with <strong>no-</strong> and enabled otherwise.
-        <p>Multiple <strong>--warning</strong> messages accumulate.
-        <p>Keywords controlling general <strong>tar</strong> operation:
+        <p>Enable or disable warning messages identified by <em>KEYWORD</em>. The messages are suppressed if <em>KEYWORD</em> is prefixed with <strong>no-</strong> and enabled otherwise.<br>
+        <br>
+        Multiple <strong>--warning</strong> messages accumulate.<br>
+        <br>
+        Keywords controlling general <strong>tar</strong> operation:
         <div class="indent">
           <dl>
             <dt><strong>all</strong>

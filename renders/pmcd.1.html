@@ -108,9 +108,9 @@
     <dt><em>entry-point</em>
     <dd>is the name of an initialization function which will be called when the DSO is loaded
     <dt><em>path</em>
-    <dd>
-      <p>designates the location of the DSO and this is expected to be an absolute pathname. <strong>pmcd</strong> is only able to load DSO agents that have the same <em>simabi</em> (Subprogram Interface Model ABI, or calling conventions) as it does (i.e. only one of the <em>simabi</em> versions will be applicable). The <em>simabi</em> version of a running <strong>pmcd</strong> may be determined by fetching <strong>pmcd.simabi</strong>. Alternatively, the <strong>file</strong>(1) command may be used to determine the <em>simabi</em> version from the <strong>pmcd</strong> executable.
-      <p>For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
+    <dd>designates the location of the DSO and this is expected to be an absolute pathname. <strong>pmcd</strong> is only able to load DSO agents that have the same <em>simabi</em> (Subprogram Interface Model ABI, or calling conventions) as it does (i.e. only one of the <em>simabi</em> versions will be applicable). The <em>simabi</em> version of a running <strong>pmcd</strong> may be determined by fetching <strong>pmcd.simabi</strong>. Alternatively, the <strong>file</strong>(1) command may be used to determine the <em>simabi</em> version from the <strong>pmcd</strong> executable.<br>
+    <br>
+    For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
   </dl>
   <p>For agents providing socket connections, a line of the form
   <blockquote>
@@ -140,9 +140,9 @@
     <dt><em>domain-no</em>
     <dd>is an unsigned integer specifying the agent's domain
     <dt><em>protocol</em>
-    <dd>
-      <p>The value for this parameter should be <strong>binary</strong>.
-      <p>Additionally, the <em>protocol</em> can include the <strong>notready</strong> keyword to indicate that the agent must be marked as not being ready to process requests from <strong>pmcd</strong>. The agent will explicitly notify the <strong>pmcd</strong> when it is ready to process the requests by sending <strong>PM_ERR_PMDAREADY</strong> PDU.
+    <dd>The value for this parameter should be <strong>binary</strong>.<br>
+    <br>
+    Additionally, the <em>protocol</em> can include the <strong>notready</strong> keyword to indicate that the agent must be marked as not being ready to process requests from <strong>pmcd</strong>. The agent will explicitly notify the <strong>pmcd</strong> when it is ready to process the requests by sending <strong>PM_ERR_PMDAREADY</strong> PDU.
     <dt><em>command</em>
     <dd>specifies a command line to start the agent when <strong>pmcd</strong> initializes. Note that <em>command</em> is mandatory for pipe-based agents. The <em>command</em> is considered to start from the first non-white character after the <em>protocol</em> parameter and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>

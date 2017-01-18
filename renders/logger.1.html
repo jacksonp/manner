@@ -29,9 +29,9 @@
     <dt><strong>-i</strong>
     <dd>Log the PID of the logger process with each line.
     <dt><strong>--id</strong>[<strong>=<em>id</em></strong>]
-    <dd>
-      <p>Log the PID of the logger process with each line. When the optional argument <em>id</em> is specified, then it is used instead of the logger command's PID. The use of <strong>--id=$$</strong> (PPID) is recommended in scripts that send several messages.
-      <p>Note that the system logging infrastructure (for example <strong>systemd</strong> when listening on /dev/log) may follow local socket credentials to overwrite the PID specified in the message. <strong>logger</strong>(1) is able to set those socket credentials to the given <em>id</em>, but only if you have root permissions and a process with the specified PID exists, otherwise the socket credentials are not modified and the problem is silently ignored.
+    <dd>Log the PID of the logger process with each line. When the optional argument <em>id</em> is specified, then it is used instead of the logger command's PID. The use of <strong>--id=$$</strong> (PPID) is recommended in scripts that send several messages.<br>
+    <br>
+    Note that the system logging infrastructure (for example <strong>systemd</strong> when listening on /dev/log) may follow local socket credentials to overwrite the PID specified in the message. <strong>logger</strong>(1) is able to set those socket credentials to the given <em>id</em>, but only if you have root permissions and a process with the specified PID exists, otherwise the socket credentials are not modified and the problem is silently ignored.
     <dt><strong>--journald</strong>[<strong>=<em>file</em></strong>]
     <dd>
       <p>Write a systemd journal entry. The entry is read from the given <em>file</em>, when specified, otherwise from standard input. Each line must begin with a field that is accepted by journald; see <strong>systemd.journal-fields</strong>(7) for details. The use of a MESSAGE_ID field is generally a good idea, as it makes finding entries easy. Examples:
@@ -65,18 +65,21 @@
     <dt><strong>--rfc3164</strong>
     <dd>Use the RFC 3164 BSD syslog protocol to submit messages to a remote server.
     <dt><strong>--rfc5424</strong>[<strong>=<em>without</em></strong>]
-    <dd>
-      <p>Use the RFC 5424 syslog protocol to submit messages to a remote server. The optional <em>without</em> argument can be a comma-separated list of the following values: <strong>notq</strong>, <strong>notime</strong>, <strong>nohost</strong>.
-      <p>The <strong>notq</strong> value suppresses the time-quality structured data from the submitted message. The time-quality information shows whether the local clock was synchronized plus the maximum number of microseconds the timestamp might be off. The time quality is also automatically suppressed when <strong>--sd-id timeQuality</strong> is specified.
-      <p>The <strong>notime</strong> value (which implies <strong>notq</strong>) suppresses the complete sender timestamp that is in ISO-8601 format, including microseconds and timezone.
-      <p>The <strong>nohost</strong> value suppresses <strong>gethostname</strong>(2) information from the message header.
-      <p>The RFC 5424 protocol has been the default for <strong>logger</strong> since version 2.26.
+    <dd>Use the RFC 5424 syslog protocol to submit messages to a remote server. The optional <em>without</em> argument can be a comma-separated list of the following values: <strong>notq</strong>, <strong>notime</strong>, <strong>nohost</strong>.<br>
+    <br>
+    The <strong>notq</strong> value suppresses the time-quality structured data from the submitted message. The time-quality information shows whether the local clock was synchronized plus the maximum number of microseconds the timestamp might be off. The time quality is also automatically suppressed when <strong>--sd-id timeQuality</strong> is specified.<br>
+    <br>
+    The <strong>notime</strong> value (which implies <strong>notq</strong>) suppresses the complete sender timestamp that is in ISO-8601 format, including microseconds and timezone.<br>
+    <br>
+    The <strong>nohost</strong> value suppresses <strong>gethostname</strong>(2) information from the message header.<br>
+    <br>
+    The RFC 5424 protocol has been the default for <strong>logger</strong> since version 2.26.
     <dt><strong>-s</strong>, <strong>--stderr</strong>
     <dd>Output the message to standard error as well as to the system log.
     <dt><strong>--sd-id <em>name</em></strong>[<strong>@<em>digits</em></strong>]
-    <dd>
-      <p>Specifies a structured data element ID for an RFC 5424 message header. The option has to be used before <strong>--sd-param</strong> to introduce a new element. The number of structured data elements is unlimited. The ID (<em>name</em> plus possibly <strong>@</strong><em>digits</em>) is case-sensitive and uniquely identifies the type and purpose of the element. The same ID must not exist more than once in a message. The <strong>@</strong><em>digits</em> part is required for user-defined non-standardized IDs.
-      <p><strong>logger</strong> currently generates the <strong>timeQuality</strong> standardized element only. RFC 5424 also describes the elements <strong>origin</strong> (with parameters ip, enterpriseId, software and swVersion) and <strong>meta</strong> (with parameters sequenceId, sysUpTime and language). These element IDs may be specified without the <strong>@</strong><em>digits</em> suffix.
+    <dd>Specifies a structured data element ID for an RFC 5424 message header. The option has to be used before <strong>--sd-param</strong> to introduce a new element. The number of structured data elements is unlimited. The ID (<em>name</em> plus possibly <strong>@</strong><em>digits</em>) is case-sensitive and uniquely identifies the type and purpose of the element. The same ID must not exist more than once in a message. The <strong>@</strong><em>digits</em> part is required for user-defined non-standardized IDs.<br>
+    <br>
+    <strong>logger</strong> currently generates the <strong>timeQuality</strong> standardized element only. RFC 5424 also describes the elements <strong>origin</strong> (with parameters ip, enterpriseId, software and swVersion) and <strong>meta</strong> (with parameters sequenceId, sysUpTime and language). These element IDs may be specified without the <strong>@</strong><em>digits</em> suffix.
     <dt><strong>--sd-param</strong> <em>name</em><strong>="<em>value</em>"</strong>
     <dd>
       <p>Specifies a structured data element parameter, a name and value pair. The option has to be used after <strong>--sd-id</strong> and may be specified more than once for the same element. Note that the quotation marks around <em>value</em> are required and must be escaped on the command line.
@@ -89,14 +92,15 @@
       <p>produces:
       <pre><strong>  &lt;13&gt;1 2015-10-01T14:07:59.168662+02:00 ws kzak - - [timeQuality tzKnown="1" isSynced="1" syncAccuracy="218616"][zoo@123 tiger="hungry" zebra="running"][manager@123 onMeeting="yes"] this is message</strong></pre>
     <dt><strong>--size</strong> <em>size</em>
-    <dd>
-      <p>Sets the maximum permitted message size to <em>size</em>. The default is 1KiB characters, which is the limit traditionally used and specified in RFC 3164. With RFC 5424, this limit has become flexible. A good assumption is that RFC 5424 receivers can at least process 4KiB messages.
-      <p>Most receivers accept messages larger than 1KiB over any type of syslog protocol. As such, the <strong>--size</strong> option affects logger in all cases (not only when <strong>--rfc5424</strong> was used).
-      <p>Note: the message-size limit limits the overall message size, including the syslog header. Header sizes vary depending on the selected options and the hostname length. As a rule of thumb, headers are usually not longer than 50 to 80 characters. When selecting a maximum message size, it is important to ensure that the receiver supports the max size as well, otherwise messages may become truncated. Again, as a rule of thumb two to four KiB message size should generally be OK, whereas anything larger should be verified to work.
+    <dd>Sets the maximum permitted message size to <em>size</em>. The default is 1KiB characters, which is the limit traditionally used and specified in RFC 3164. With RFC 5424, this limit has become flexible. A good assumption is that RFC 5424 receivers can at least process 4KiB messages.<br>
+    <br>
+    Most receivers accept messages larger than 1KiB over any type of syslog protocol. As such, the <strong>--size</strong> option affects logger in all cases (not only when <strong>--rfc5424</strong> was used).<br>
+    <br>
+    Note: the message-size limit limits the overall message size, including the syslog header. Header sizes vary depending on the selected options and the hostname length. As a rule of thumb, headers are usually not longer than 50 to 80 characters. When selecting a maximum message size, it is important to ensure that the receiver supports the max size as well, otherwise messages may become truncated. Again, as a rule of thumb two to four KiB message size should generally be OK, whereas anything larger should be verified to work.
     <dt><strong>--socket-errors</strong>[<strong>=<em>mode</em></strong>]
-    <dd>
-      <p>Print errors about Unix socket connections. The <em>mode</em> can be a value of <strong>off</strong>, <strong>on</strong>, or <strong>auto</strong>. When the mode is auto logger will detect if the init process is systemd, and if so assumption is made /dev/log can be used early at boot. Other init systems lack of /dev/log will not cause errors that is identical with messaging using <strong>openlog</strong>(3) system call. The <strong>logger</strong>(1) before version 2.26 used openlog, and hence was unable to detected loss of messages sent to Unix sockets.
-      <p>The default mode is <strong>auto</strong>. When errors are not enabled lost messages are not communicated and will result to successful return value of <strong>logger</strong>(1) invocation.
+    <dd>Print errors about Unix socket connections. The <em>mode</em> can be a value of <strong>off</strong>, <strong>on</strong>, or <strong>auto</strong>. When the mode is auto logger will detect if the init process is systemd, and if so assumption is made /dev/log can be used early at boot. Other init systems lack of /dev/log will not cause errors that is identical with messaging using <strong>openlog</strong>(3) system call. The <strong>logger</strong>(1) before version 2.26 used openlog, and hence was unable to detected loss of messages sent to Unix sockets.<br>
+    <br>
+    The default mode is <strong>auto</strong>. When errors are not enabled lost messages are not communicated and will result to successful return value of <strong>logger</strong>(1) invocation.
     <dt><strong>-T</strong>, <strong>--tcp</strong>
     <dd>Use stream (TCP) only. By default the connection is tried to the <em>syslog-conn</em> port defined in /etc/services, which is often <em>601</em>.
     <dt><strong>-t</strong>, <strong>--tag</strong> <em>tag</em>

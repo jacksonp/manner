@@ -195,9 +195,9 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--server</strong>
     <dd>Configures the virtual machine to be better suited for server operations (currently, allows a heavier threadpool initialization).
     <dt><strong>--verify-all</strong>
-    <dd>
-      <p>Verifies mscorlib and assemblies in the global assembly cache for valid IL, and all user code for IL verifiability.
-      <p>This is different from <strong>--security</strong>'s verifiable or validil in that these options only check user code and skip mscorlib and assemblies located on the global assembly cache.
+    <dd>Verifies mscorlib and assemblies in the global assembly cache for valid IL, and all user code for IL verifiability.<br>
+    <br>
+    This is different from <strong>--security</strong>'s verifiable or validil in that these options only check user code and skip mscorlib and assemblies located on the global assembly cache.
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>Prints JIT version information (system configuration, release number and branch names if available).
   </dl>
@@ -228,7 +228,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. The words `program', `all' and `disabled' have special meaning. `program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>       mono --trace=System app.exe</pre>
+      <pre>     mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. For example, to trace all calls to the System.String class, use:
       <pre>        mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -413,9 +413,9 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_DISABLE_SHARED_AREA</strong>
     <dd>Unix only: If set, disable usage of shared memory for exposing performance counters. This means it will not be possible to both externally read performance counters from this processes or read those of external processes.
     <dt><strong>MONO_DNS</strong>
-    <dd>
-      <p>When set, enables the use of a fully managed DNS resolver instead of the regular libc functions. This resolver performs much better when multiple queries are run in parallel.
-      <p>Note that /etc/nsswitch.conf will be ignored.
+    <dd>When set, enables the use of a fully managed DNS resolver instead of the regular libc functions. This resolver performs much better when multiple queries are run in parallel.<br>
+    <br>
+    Note that /etc/nsswitch.conf will be ignored.
     <dt><strong>MONO_EGD_SOCKET</strong>
     <dd>For platforms that do not otherwise have a way of obtaining random bytes this can be set to the name of a file system socket on which an egd or prngd daemon is listening.
     <dt><strong>MONO_ENABLE_COOP</strong>
@@ -439,10 +439,11 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
         <p>The default is "null" on Unix (and versions of Windows before NT), and "win32" on Windows NT (and higher).
       </div>
     <dt><strong>MONO_EXTERNAL_ENCODINGS</strong>
-    <dd>
-      <p>If set, contains a colon-separated list of text encodings to try when turning externally-generated text (e.g. command-line arguments or filenames) into Unicode. The encoding names come from the list provided by iconv, and the special case "default_locale" which refers to the current locale's default encoding.
-      <p>When reading externally-generated text strings UTF-8 is tried first, and then this list is tried in order with the first successful conversion ending the search. When writing external text (e.g. new filenames or arguments to new processes) the first item in this list is used, or UTF-8 if the environment variable is not set.
-      <p>The problem with using MONO_EXTERNAL_ENCODINGS to process your files is that it results in a problem: although its possible to get the right file name it is not necessarily possible to open the file. In general if you have problems with encodings in your filenames you should use the "convmv" program.
+    <dd>If set, contains a colon-separated list of text encodings to try when turning externally-generated text (e.g. command-line arguments or filenames) into Unicode. The encoding names come from the list provided by iconv, and the special case "default_locale" which refers to the current locale's default encoding.<br>
+    <br>
+    When reading externally-generated text strings UTF-8 is tried first, and then this list is tried in order with the first successful conversion ending the search. When writing external text (e.g. new filenames or arguments to new processes) the first item in this list is used, or UTF-8 if the environment variable is not set.<br>
+    <br>
+    The problem with using MONO_EXTERNAL_ENCODINGS to process your files is that it results in a problem: although its possible to get the right file name it is not necessarily possible to open the file. In general if you have problems with encodings in your filenames you should use the "convmv" program.
     <dt><strong>MONO_GC_PARAMS</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this variable controls several parameters of the collector. The variable's value is a comma separated list of words.
@@ -537,13 +538,14 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. Set to a colon-separated list of "drive" to strip drive letters, or "case" to do case-insensitive file matching in every directory in a path. "all" enables all rewriting methods. (Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre>   MONO_IOMAP=drive:case
+      <pre>      MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
       <pre>   MonoIOMAP &lt;appalias&gt; all</pre>
-      <p>See mod_mono(8) for more details.
-      <p>Additionally. Mono includes a profiler module which allows one to track what adjustements to file paths IOMAP code needs to do. The tracking code reports the managed location (full stack trace) from which the IOMAP-ed call was made and, on process exit, the locations where all the IOMAP-ed strings were created in managed code. The latter report is only approximate as it is not always possible to estimate the actual location where the string was created. The code uses simple heuristics - it analyzes stack trace leading back to the string allocation location and ignores all the managed code which lives in assemblies installed in GAC as well as in the class libraries shipped with Mono (since they are assumed to be free of case-sensitivity issues). It then reports the first location in the user's code - in most cases this will be the place where the string is allocated or very close to the location. The reporting code is implemented as a custom profiler module (see the "PROFILING" section) and can be loaded in the following way:
-      <pre>        mono --profile=iomap yourapplication.exe</pre>
+      <p>See mod_mono(8) for more details.<br>
+      <br>
+      Additionally. Mono includes a profiler module which allows one to track what adjustements to file paths IOMAP code needs to do. The tracking code reports the managed location (full stack trace) from which the IOMAP-ed call was made and, on process exit, the locations where all the IOMAP-ed strings were created in managed code. The latter report is only approximate as it is not always possible to estimate the actual location where the string was created. The code uses simple heuristics - it analyzes stack trace leading back to the string allocation location and ignores all the managed code which lives in assemblies installed in GAC as well as in the class libraries shipped with Mono (since they are assumed to be free of case-sensitivity issues). It then reports the first location in the user's code - in most cases this will be the place where the string is allocated or very close to the location. The reporting code is implemented as a custom profiler module (see the "PROFILING" section) and can be loaded in the following way:
+      <pre>       mono --profile=iomap yourapplication.exe</pre>
       <p>Note, however, that Mono currently supports only one profiler module at a time.
     <dt><strong>MONO_LLVM</strong>
     <dd>When Mono is using the LLVM code generation backend you can use this environment variable to pass code generation options to the LLVM compiler.
