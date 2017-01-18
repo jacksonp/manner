@@ -19,45 +19,36 @@
   <p><strong>strace</strong> is a useful diagnostic, instructional, and debugging tool. System administrators, diagnosticians and trouble-shooters will find it invaluable for solving problems with programs for which the source is not readily available since they do not need to be recompiled in order to trace them. Students, hackers and the overly-curious will find that a great deal can be learned about a system and its system calls by tracing even ordinary programs. And programmers will find that since system calls and signals are events that happen at the user/kernel interface, a close examination of this boundary is very useful for bug isolation, sanity checking and attempting to capture race conditions.
   <p>Each line in the trace contains the system call name, followed by its arguments in parentheses and its return value. An example from stracing the command "cat /dev/null" is:
   <pre><code>open("/dev/null", O_RDONLY) = 3</code></pre>
-  <p>Errors (typically a return value of -1) have the errno symbol and error string appended.<br>
-  <br>
+  <p>Errors (typically a return value of -1) have the errno symbol and error string appended.
   <pre><code>open("/foo/bar", O_RDONLY) = -1 ENOENT (No such file or directory)</code></pre>
-  <p>Signals are printed as signal symbol and decoded siginfo structure. An excerpt from stracing and interrupting the command "sleep 666" is:<br>
-  <br>
+  <p>Signals are printed as signal symbol and decoded siginfo structure. An excerpt from stracing and interrupting the command "sleep 666" is:
   <pre><code>sigsuspend([] &lt;unfinished ...&gt;
 --- SIGINT {si_signo=SIGINT, si_code=SI_USER, si_pid=...} ---
 +++ killed by SIGINT +++</code></pre>
-  <p>If a system call is being executed and meanwhile another one is being called from a different thread/process then <strong>strace</strong> will try to preserve the order of those events and mark the ongoing call as being <em>unfinished</em>. When the call returns it will be marked as <em>resumed</em>.<br>
-  <br>
+  <p>If a system call is being executed and meanwhile another one is being called from a different thread/process then <strong>strace</strong> will try to preserve the order of those events and mark the ongoing call as being <em>unfinished</em>. When the call returns it will be marked as <em>resumed</em>.
   <pre><code>[pid 28772] select(4, [3], NULL, NULL, NULL &lt;unfinished ...&gt;
 [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0
 [pid 28772] &lt;... select resumed&gt; )      = 1 (in [3])</code></pre>
-  <p>Interruption of a (restartable) system call by a signal delivery is processed differently as kernel terminates the system call and also arranges its immediate reexecution after the signal handler completes.<br>
-  <br>
+  <p>Interruption of a (restartable) system call by a signal delivery is processed differently as kernel terminates the system call and also arranges its immediate reexecution after the signal handler completes.
   <pre><code>read(0, 0x7ffff72cf5cf, 1)              = ? ERESTARTSYS (To be restarted)
 --- SIGALRM ... ---
 rt_sigreturn(0xe)                       = 0
 read(0, "", 1)                          = 0</code></pre>
-  <p>Arguments are printed in symbolic form with a passion. This example shows the shell performing "&gt;&gt;xyzzy" output redirection:<br>
-  <br>
+  <p>Arguments are printed in symbolic form with a passion. This example shows the shell performing "&gt;&gt;xyzzy" output redirection:
   <pre><code>open("xyzzy", O_WRONLY|O_APPEND|O_CREAT, 0666) = 3</code></pre>
   <p>Here the third argument of open is decoded by breaking down the flag argument into its three bitwise-OR constituents and printing the mode value in octal by tradition. Where traditional or native usage differs from ANSI or POSIX, the latter forms are preferred. In some cases, <strong>strace</strong> output has proven to be more readable than the source.
   <p>Structure pointers are dereferenced and the members are displayed as appropriate. In all cases arguments are formatted in the most C-like fashion possible. For example, the essence of the command "ls -l /dev/null" is captured as:
   <pre><code>lstat("/dev/null", {st_mode=S_IFCHR|0666, st_rdev=makedev(1, 3), ...}) = 0</code></pre>
-  <p>Notice how the 'struct stat' argument is dereferenced and how each member is displayed symbolically. In particular, observe how the st_mode member is carefully decoded into a bitwise-OR of symbolic and numeric values. Also notice in this example that the first argument to lstat is an input to the system call and the second argument is an output. Since output arguments are not modified if the system call fails, arguments may not always be dereferenced. For example, retrying the "ls -l" example with a non-existent file produces the following line:<br>
-  <br>
+  <p>Notice how the 'struct stat' argument is dereferenced and how each member is displayed symbolically. In particular, observe how the st_mode member is carefully decoded into a bitwise-OR of symbolic and numeric values. Also notice in this example that the first argument to lstat is an input to the system call and the second argument is an output. Since output arguments are not modified if the system call fails, arguments may not always be dereferenced. For example, retrying the "ls -l" example with a non-existent file produces the following line:
   <pre><code>lstat("/foo/bar", 0xb004) = -1 ENOENT (No such file or directory)</code></pre>
   <p>In this case the porch light is on but nobody is home.
   <p>Character pointers are dereferenced and printed as C strings. Non-printing characters in strings are normally represented by ordinary C escape codes. Only the first <em>strsize</em> (32 by default) bytes of strings are printed; longer strings have an ellipsis appended following the closing quote. Here is a line from "ls -l" where the <strong>getpwuid</strong> library routine is reading the password file:
   <pre><code>read(3, "root::0:0:System Administrator:/"..., 1024) = 422</code></pre>
-  <p>While structures are annotated using curly braces, simple pointers and arrays are printed using square brackets with commas separating elements. Here is an example from the command "id" on a system with supplementary group ids:<br>
-  <br>
+  <p>While structures are annotated using curly braces, simple pointers and arrays are printed using square brackets with commas separating elements. Here is an example from the command "id" on a system with supplementary group ids:
   <pre><code>getgroups(32, [100, 0]) = 2</code></pre>
-  <p>On the other hand, bit-sets are also shown using square brackets but set elements are separated only by a space. Here is the shell preparing to execute an external command:<br>
-  <br>
+  <p>On the other hand, bit-sets are also shown using square brackets but set elements are separated only by a space. Here is the shell preparing to execute an external command:
   <pre><code>sigprocmask(SIG_BLOCK, [CHLD TTOU], []) = 0</code></pre>
-  <p>Here the second argument is a bit-set of two signals, SIGCHLD and SIGTTOU. In some cases the bit-set is so full that printing out the unset elements is more valuable. In that case, the bit-set is prefixed by a tilde like this:<br>
-  <br>
+  <p>Here the second argument is a bit-set of two signals, SIGCHLD and SIGTTOU. In some cases the bit-set is so full that printing out the unset elements is more valuable. In that case, the bit-set is prefixed by a tilde like this:
   <pre><code>sigprocmask(SIG_UNBLOCK, ~[], NULL) = 0</code></pre>
   <p>Here the second argument represents the full set of all signals.
 </section>
