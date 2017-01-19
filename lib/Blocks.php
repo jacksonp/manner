@@ -67,7 +67,7 @@ class Blocks
         } else {
             $parentNodeLastBlock = $parentNode->getLastBlock();
             if (is_null($parentNodeLastBlock) ||
-              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl'])
+              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
             ) {
                 return [$parentNode->ownerDocument->createElement('p'), true];
             } else {

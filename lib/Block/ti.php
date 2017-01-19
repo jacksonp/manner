@@ -21,7 +21,7 @@ class Block_ti
                 // Could be a change in indentation, just add a break for now
                 $blockLines[] = '.br';
                 continue;
-            } elseif (Blocks::lineEndsBlock($lines, $i + 1)) {
+            } elseif (Blocks::lineEndsBlock($lines, $i + 1) || $lines[$i + 1] === '') {
                 // This check has to come after .ti check, as .ti is otherwise a block-ender.
                 break;
             } else {
