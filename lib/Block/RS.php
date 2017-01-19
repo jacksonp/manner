@@ -23,7 +23,7 @@ class Block_RS
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $line    = $lines[$i];
-            $request = Request::get($line);
+            $request = Request::getLine($lines, $i);
             if ($request['request'] === 'RS') {
                 $indent = Roff_Unit::normalize(trim($request['arg_string']));
                 if ($indent === $thisIndent) {

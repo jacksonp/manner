@@ -137,6 +137,47 @@ ROFF;
         return in_array(Request::get($line)['request'], (array)$requests);
     }
 
+    public static function getLine(array &$lines, int $i, &$callerArguments = null): array
+    {
+        $man = Man::instance();
+        $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        if (preg_match(
+            '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            $lines[$i], $matches)
+        ) {
+            $return['request'] = $matches[1];
+            if (array_key_exists(2, $matches) && !is_null($matches[2])) {
+                $return['raw_arg_string'] = ltrim($matches[2]);
+                $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
+                $return['arguments']      = Request::parseArguments($return['arg_string']);
+            }
+
+            $macros = $man->getMacros();
+            if (isset($macros[$return['request']])) {
+                $man->setRegister('.$', count($return['arguments']));
+                if (!is_null($callerArguments)) {
+                    foreach ($return['arguments'] as $k => $v) {
+                        $return['arguments'][$k] = Roff_Macro::applyReplacements($return['arguments'][$k],
+                            $callerArguments);
+                    }
+                }
+
+                // Make copies of arrays:
+                $macroLines           = $macros[$return['request']];
+                $macroCallerArguments = $return['arguments'];
+//                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
+                foreach ($macroLines as $k => $l) {
+                    $macroLines[$k] = Roff_Macro::applyReplacements($l, $macroCallerArguments);
+                }
+                array_splice($lines, $i, 1, $macroLines);
+                return self::getLine($lines, $i, $callerArguments);
+            }
+
+        }
+
+        return $return;
+    }
+
     public static function get(string $line): array
     {
         $man = Man::instance();

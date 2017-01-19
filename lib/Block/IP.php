@@ -28,8 +28,7 @@ class Block_IP
         $firstIndent = null;
 
         for (; $i < $numLines; ++$i) {
-            $line    = $lines[$i];
-            $request = Request::get($line);
+            $request = Request::getLine($lines, $i);
             if ($request['request'] === 'IP') {
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (count($request['arguments']) && trim($request['arguments'][0]) !== '') {
@@ -69,8 +68,7 @@ class Block_IP
         $block = $dom->createElement('blockquote');
 
         for (; $i < $numLines; ++$i) {
-            $line    = $lines[$i];
-            $request = Request::get($line);
+            $request = Request::getLine($lines, $i);
             if (
               $request['request'] !== 'IP' ||
               (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')

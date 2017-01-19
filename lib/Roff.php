@@ -40,32 +40,9 @@ class Roff
                 continue;
             }
 
-            $request = Request::get($lines[$i]);
+            $request = Request::getLine($lines, $i, $callerArguments);
 
             if (!is_null($request['request'])) {
-
-                $macros = $man->getMacros();
-                if (isset($macros[$request['request']])) {
-                    $man->setRegister('.$', count($request['arguments']));
-                    if (!is_null($callerArguments)) {
-                        foreach ($request['arguments'] as $k => $v) {
-                            $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k],
-                                $callerArguments);
-                        }
-                    }
-
-                    // Make copies of arrays:
-                    $macroLines           = $macros[$request['request']];
-                    $macroCallerArguments = $request['arguments'];
-//                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
-                    foreach ($macroLines as $k => $l) {
-                        $macroLines[$k] = Roff_Macro::applyReplacements($l, $macroCallerArguments);
-                    }
-                    array_splice($lines, $i, 1, $macroLines);
-                    --$i;
-
-                    continue;
-                }
 
                 $className = $man->getRoffRequestClass($request['request']);
                 if ($className) {

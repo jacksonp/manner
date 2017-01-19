@@ -48,7 +48,7 @@ class Inline_Link
         $blockLines  = [];
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $request = Request::get($lines[$i]);
+            $request = Request::getLine($lines, $i);
             if (in_array($request['request'], ['UR', 'MT'])) {
                 --$i;
                 break;

@@ -86,9 +86,7 @@ class Roff_Condition
     ): array
     {
 
-        $line = $lines[$i];
-
-        $request = Request::get($line);
+        $request = Request::getLine($lines, $i);
 
         if ($request['request'] === 'el') {
 
@@ -266,7 +264,7 @@ class Roff_Condition
             $recurseLines = [];
             for ($j = 0; $j < count($replacementLines); ++$j) {
                 if (
-                  $request = Request::get($replacementLines[$j]) and
+                  $request = Request::getLine($replacementLines, $j) and
                   in_array($request['request'], ['if', 'ie']) and
                   $result = self::evaluate($parentNode, $request, $replacementLines, $j, $macroArguments) and
                   $result !== false

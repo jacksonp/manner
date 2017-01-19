@@ -15,7 +15,7 @@ class Block_DataDefinition
         for (; $i < $numLines; ++$i) {
             $line = $lines[$i];
 
-            $request = Request::get($line);
+            $request = Request::getLine($lines, $i);
 
             if ($request['request'] === 'RS') {
                 ++$rsLevel;

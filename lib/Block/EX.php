@@ -13,7 +13,7 @@ class Block_EX
         $blockLines = [];
         while ($i < $numLines - 1) {
             $line    = $lines[$i + 1];
-            $request = Request::get($line);
+            $request = Request::getLine($lines, $i);
             if (Block_SS::endSubsection($line) || in_array($request['request'], ['TS', 'EE'])) {
                 break;
             } elseif (Request::is($line, ['nf', 'fi'])) {

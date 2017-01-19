@@ -24,12 +24,11 @@ class Block_nf
 
         $preLines = [];
         while ($i < $numLines - 1) {
-            $line    = $lines[$i + 1];
-            $request = Request::get($line);
-            if (Block_SS::endSubsection($line) || $request['request'] === 'TS') {
+            $request = Request::getLine($lines, $i);
+            if (Block_SS::endSubsection($lines[$i + 1]) || $request['request'] === 'TS') {
                 break;
             } elseif (self::endBlock($request)) {
-                while ($i < $numLines - 1 && $request = Request::get($lines[$i + 1]) && self::endBlock($request)) {
+                while ($i < $numLines - 1 && $nextRequest = Request::getLine($lines, $i + 1) and self::endBlock($nextRequest)) {
                     ++$i; // swallow
                 }
                 break;
@@ -39,7 +38,7 @@ class Block_nf
             ) {
                 // Skip
             } else {
-                $preLines[] = $line;
+                $preLines[] = $lines[$i + 1];
             }
             ++$i;
         }
@@ -103,9 +102,9 @@ class Block_nf
 
         $pre = $dom->createElement('pre');
 
-        $request = Request::get($preLines[0]);
+        $request = Request::getLine($preLines, 0);
         if ($request['request'] === 'RS') {
-            $lastRequest = Request::get($preLines[count($preLines) - 1]);
+            $lastRequest = Request::getLine($preLines, count($preLines) - 1);
             if ($lastRequest['request'] === 'RE') {
                 array_pop($preLines);
                 array_shift($preLines);

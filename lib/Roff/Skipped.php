@@ -112,7 +112,7 @@ class Roff_Skipped
             return ['i' => $i];
         }
 
-        $request = Request::get($lines[$i]);
+        $request = Request::getLine($lines, $i);
         if (in_array($request['request'], self::requests) || in_array($request['request'], self::nonStandardRequests)) {
             return ['i' => $i];
         }

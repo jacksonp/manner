@@ -14,11 +14,10 @@ class Block_ce
         $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
         $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
         for (; $i < $centerLinesUpTo; ++$i) {
-            $nextLine = $lines[$i + 1];
-            if (Request::is($nextLine, 'ce')) {
+            if (Request::getLine($lines, $i + 1)['request'] === 'ce') {
                 break;
             }
-            $blockLines[] = $nextLine;
+            $blockLines[] = $lines[$i + 1];
             $blockLines[] = '.br';
         }
         $block = $dom->createElement('div');

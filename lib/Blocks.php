@@ -29,7 +29,7 @@ class Blocks
 
     static function lineEndsBlock(array $lines, int $i)
     {
-        $request = Request::get($lines[$i]);
+        $request = Request::getLine($lines, $i);
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }

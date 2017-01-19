@@ -18,7 +18,7 @@ class Roff_de
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
             $macroLine = $lines[$i];
-            $request   = Request::get($macroLine);
+            $request   = Request::getLine($lines, $i);
             if (
               $request['request'] === '.' ||
               ($newMacro === 'P!' && $macroLine === '.') // work around bug in Xm*.3 man pages
