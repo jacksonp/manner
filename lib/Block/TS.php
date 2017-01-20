@@ -4,7 +4,7 @@
 class Block_TS implements Block_Template
 {
 
-    private static function parseRowFormats(array $lines, int $i): array
+    private static function parseRowFormats(array &$lines, int $i): array
     {
 
         $rowFormats  = [];

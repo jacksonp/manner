@@ -24,7 +24,7 @@ class Block_IP implements Block_Template
 
     }
 
-    static function appendDl(DOMElement $parentNode, array $lines, int $i)
+    static function appendDl(DOMElement $parentNode, array &$lines, int $i)
     {
 
         $dom = $parentNode->ownerDocument;
@@ -64,7 +64,7 @@ class Block_IP implements Block_Template
 
     }
 
-    static function appendBlockquote(DOMElement $parentNode, array $lines, int $i)
+    static function appendBlockquote(DOMElement $parentNode, array &$lines, int $i)
     {
 
         $dom = $parentNode->ownerDocument;

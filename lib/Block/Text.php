@@ -19,7 +19,7 @@ class Block_Text implements Block_Template
         }
     }
 
-    static function getNextInputLine(array $lines, int $i): array
+    static function getNextInputLine(array &$lines, int $i): array
     {
 
         $blockLines = []; // Could be .B on one line, then some text on next line for example.

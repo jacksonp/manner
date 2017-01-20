@@ -53,7 +53,7 @@ class Block_DataDefinition implements Block_Template
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < count($lines) - 1 || trim($lines[$i]) !== '') {
+                if ($i < count($lines) - 1 || ($i < count($lines) && trim($lines[$i]) !== '')) {
                     $blockLines[] = $lines[$i];
                 }
             }
