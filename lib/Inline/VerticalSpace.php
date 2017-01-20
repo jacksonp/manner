@@ -21,35 +21,26 @@ class Inline_VerticalSpace
         }
     }
 
-    static function check($string)
+    static function check(string $string)
     {
-        return Request::is($string, ['br', 'sp', 'ne']);
+        $stringArray = [$string];
+        $request     = Request::getLine($stringArray, 0);
+        return in_array($request['request'], ['br', 'sp', 'ne']);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
     {
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-        $numLines = count($lines);
 
-        if (!in_array($textParent->tagName, [
-            'p',
-            'blockquote',
-            'dt',
-            'td',
-            'th',
-            'pre',
-            'h2',
-            'h3',
-            'code',
-          ]) ||
-          (
-            $textParent->hasChildNodes() &&
+        if (!in_array($textParent->tagName, ['p', 'blockquote', 'dt', 'td', 'th', 'pre', 'h2', 'h3', 'code',]) ||
             (
-              !($textParent->lastChild instanceof DOMElement) ||
-              $textParent->lastChild->tagName !== 'pre'
+                $textParent->hasChildNodes() &&
+                (
+                    !($textParent->lastChild instanceof DOMElement) ||
+                    $textParent->lastChild->tagName !== 'pre'
+                )
             )
-          )
         ) {
 
             self::addBR($textParent);
