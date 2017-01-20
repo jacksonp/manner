@@ -26,6 +26,7 @@ class Block_P
             } else {
                 $p = $dom->createElement('p');
                 Roff::parse($p, $blockLines);
+                $p->trimTrailingBrs();
                 $parentNode->appendBlockIfHasContent($p);
             }
         }

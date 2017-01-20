@@ -31,6 +31,7 @@ class HybridNode extends DOMElement
         return $this->childNodes->length > 1 || ($this->firstChild && $this->firstChild->nodeValue !== '');
     }
 
+    // TODO: consider moving this into appendBlockIfHasContent()
     function trimTrailingBrs()
     {
         while (
