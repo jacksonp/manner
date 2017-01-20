@@ -132,6 +132,17 @@ ROFF;
         return str_replace('\\\\', '\\', $macroLine);
     }
 
+    public static function peepAtName($line)
+    {
+        if (preg_match(
+            '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            $line, $matches)
+        ) {
+            return $matches[1];
+        }
+        return '';
+    }
+
     public static function getLine(array &$lines, int $i, &$callerArguments = null): array
     {
         if (!isset($lines[$i])) {

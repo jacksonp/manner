@@ -17,16 +17,15 @@ class Roff_de
         $foundEnd   = false;
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $macroLine = $lines[$i];
             $request   = Request::getLine($lines, $i);
             if (
               $request['request'] === '.' ||
-              ($newMacro === 'P!' && $macroLine === '.') // work around bug in Xm*.3 man pages
+              ($newMacro === 'P!' && $lines[$i] === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;
             }
-            $macroLines[] = Request::massageLine($macroLine);
+            $macroLines[] = Request::massageLine($lines[$i]);
         }
 
         if (!$foundEnd) {
