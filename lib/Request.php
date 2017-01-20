@@ -132,11 +132,6 @@ ROFF;
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function is(string $line, $requests): bool
-    {
-        return in_array(Request::get($line)['request'], (array)$requests);
-    }
-
     public static function getLine(array &$lines, int $i, &$callerArguments = null): array
     {
         $man    = Man::instance();
@@ -178,30 +173,11 @@ ROFF;
         return $return;
     }
 
-    public static function get(string $line): array
-    {
-        $man    = Man::instance();
-        $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
-        if (preg_match(
-            '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
-            $line, $matches)
-        ) {
-            $return['request'] = $matches[1];
-            if (array_key_exists(2, $matches) && !is_null($matches[2])) {
-                $return['raw_arg_string'] = ltrim($matches[2]);
-                $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
-                $return['arguments']      = Request::parseArguments($return['arg_string']);
-            }
-        }
-
-        return $return;
-    }
-
     public static function getClass(array $lines, int $i): array
     {
         $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
 
-        $request = self::get($lines[$i]);
+        $request = self::getLine($lines, $i);
 
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
