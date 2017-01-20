@@ -162,7 +162,7 @@ ROFF;
         }
 
         $man    = Man::instance();
-        $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        $return = ['request' => null, 'raw_line' => $lines[$i], 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[$i], $matches)
@@ -222,7 +222,7 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
-        $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        $return = ['class' => null, 'request' => null, 'raw_line' => $lines[$i], 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
 
         $request = self::getLine($lines, $i);
 

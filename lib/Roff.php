@@ -28,9 +28,8 @@ class Roff
 
             $request = Request::getLine($lines, $i, $callerArguments);
 
-            $result = Roff_Skipped::checkEvaluate($lines, $i);
-            if ($result !== false) {
-                array_splice($lines, $i, $result['i'] + 1 - $i);
+            if (Roff_Skipped::skip($request)) {
+                array_splice($lines, $i, 1);
                 --$i;
                 continue;
             }
