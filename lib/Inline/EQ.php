@@ -11,12 +11,12 @@ class Inline_EQ
 
         $eqLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, 'EN')) {
+            $request = Request::getLine($lines, $i);
+            if ($request['request'] === 'EN') {
                 $foundEnd = true;
                 break;
             } else {
-                $eqLines[] = $line;
+                $eqLines[] = $lines[$i];
             }
         }
 

@@ -17,27 +17,27 @@ class Request
         // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
         // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
-          $request['request'] === 'br.' ||
-          in_array($request['request'], [
-            'RE',
-            'fi',
-            'ad',
-            'Sh',
-            'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
-            'EE',  // strays
-              // .man page bugs:
-            'sp,',
-            'sp2',
-            'pp', // spurious, in *_selinux.8 pages
-            'RH',
-            'Sp',
-            'Sp ',
-            'TC',
-            'TR',
-          ]) ||
-          (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
-          preg_match('~^\.\.?\s*$~u', $line) ||
-          self::isEmptyRequest($line);
+            $request['request'] === 'br.' ||
+            in_array($request['request'], [
+                'RE',
+                'fi',
+                'ad',
+                'Sh',
+                'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
+                'EE',  // strays
+                // .man page bugs:
+                'sp,',
+                'sp2',
+                'pp', // spurious, in *_selinux.8 pages
+                'RH',
+                'Sp',
+                'Sp ',
+                'TC',
+                'TR',
+            ]) ||
+            (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
+            preg_match('~^\.\.?\s*$~u', $line) ||
+            self::isEmptyRequest($line);
     }
 
     private static function parseArguments(string $argString)
@@ -132,14 +132,14 @@ ROFF;
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function is(string $line, $requests):bool
+    public static function is(string $line, $requests): bool
     {
         return in_array(Request::get($line)['request'], (array)$requests);
     }
 
     public static function getLine(array &$lines, int $i, &$callerArguments = null): array
     {
-        $man = Man::instance();
+        $man    = Man::instance();
         $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
@@ -180,11 +180,11 @@ ROFF;
 
     public static function get(string $line): array
     {
-        $man = Man::instance();
+        $man    = Man::instance();
         $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
         if (preg_match(
-          '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
-          $line, $matches)
+            '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            $line, $matches)
         ) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
@@ -210,7 +210,7 @@ ROFF;
                 $return['class'] = 'Request_Skippable';
             } else {
                 $return['request'] = 'sp';
-                $return['class'] = 'Inline_VerticalSpace';
+                $return['class']   = 'Inline_VerticalSpace';
             }
         } elseif (self::isEmptyRequest($lines[$i])) {
             $return['class'] = 'Request_Skippable';

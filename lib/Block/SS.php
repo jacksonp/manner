@@ -4,9 +4,9 @@
 class Block_SS
 {
 
-    static function endSubsection($line)
+    static function endSubsection($requestName)
     {
-        return Request::is($line, ['SS', 'SH']);
+        return in_array($requestName, ['SS', 'SH']);
     }
 
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
@@ -18,7 +18,8 @@ class Block_SS
         $headingNode = $dom->createElement('h3');
 
         if (count($arguments) === 0) {
-            if ($i === $numLines - 1 || self::endSubsection($lines[$i + 1])) {
+            $nextRequest = Request::getLine($lines, $i + 1);
+            if ($i === $numLines - 1 || self::endSubsection($nextRequest['request'])) {
                 return $i;
             }
             // Text for subheading is on next line.
@@ -46,11 +47,11 @@ class Block_SS
 
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (self::endSubsection($line)) {
+            $request = Request::getLine($lines, $i);
+            if (self::endSubsection($request['request'])) {
                 break;
             } else {
-                $blockLines[] = $line;
+                $blockLines[] = $lines[$i];
             }
         }
 

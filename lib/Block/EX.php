@@ -12,14 +12,13 @@ class Block_EX
 
         $blockLines = [];
         while ($i < $numLines - 1) {
-            $line    = $lines[$i + 1];
-            $request = Request::getLine($lines, $i);
-            if (Block_SS::endSubsection($line) || in_array($request['request'], ['TS', 'EE'])) {
+            $nextRequest = Request::getLine($lines, $i + 1);
+            if (Block_SS::endSubsection($nextRequest['request']) || in_array($nextRequest['request'], ['TS', 'EE'])) {
                 break;
-            } elseif (Request::is($line, ['nf', 'fi'])) {
+            } elseif (in_array($nextRequest['request'], ['nf', 'fi'])) {
                 // .EX already marks block as preformatted, just skip
             } else {
-                $blockLines[] = $line;
+                $blockLines[] = $lines[$i + 1];
             }
             ++$i;
         }

@@ -45,8 +45,8 @@ class Block_TP
                 $dl->appendBlockIfHasContent($dt);
 
                 while ($i < count($lines)) {
-                    $line = $lines[$i];
-                    if (Request::is($line, 'TQ')) {
+                    $request = Request::getLine($lines, $i);
+                    if ($request['request'] === 'TQ') {
                         $dt = $dom->createElement('dt');
                         $i  = Roff::parse($dt, $lines, $callerArgs, $i + 1) - 1;
                         $dl->appendBlockIfHasContent($dt);

@@ -7,7 +7,7 @@ class Inline_FontOneInputLine
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
     {
 
-        if (count($arguments) === 0 && $i < count($lines) - 1 && Request::is($lines[$i + 1], 'IP')) {
+        if (count($arguments) === 0 && $i < count($lines) - 1 && Request::getLine($lines, $i + 1)['request'] === 'IP') {
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 

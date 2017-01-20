@@ -24,17 +24,17 @@ class Block_nf
 
         $preLines = [];
         while ($i < $numLines - 1) {
-            $request = Request::getLine($lines, $i);
-            if (Block_SS::endSubsection($lines[$i + 1]) || $request['request'] === 'TS') {
+            $nextRequest = Request::getLine($lines, $i + 1);
+            if (Block_SS::endSubsection($nextRequest['request']) || $nextRequest['request'] === 'TS') {
                 break;
-            } elseif (self::endBlock($request)) {
+            } elseif (self::endBlock($nextRequest)) {
                 while ($i < $numLines - 1 && $nextRequest = Request::getLine($lines, $i + 1) and self::endBlock($nextRequest)) {
                     ++$i; // swallow
                 }
                 break;
             } elseif (
-              in_array($request['request'], ['EX', 'EE']) ||
-              ($request['request'] === 'ad' && $request['arg_string'] === 'l')
+              in_array($nextRequest['request'], ['EX', 'EE']) ||
+              ($nextRequest['request'] === 'ad' && $nextRequest['arg_string'] === 'l')
             ) {
                 // Skip
             } else {
@@ -73,11 +73,11 @@ class Block_nf
                     if (in_array($preLine, ['.br', ''])) {
                         continue;
                     }
-                    $request = '';
+                    $nextRequest = '';
                     // TODO: use Request?
                     if (mb_substr($preLine, 0, 1) === '.') {
                         preg_match('~^(\.\w+ )"?(.*?)"?$~u', $preLine, $matches);
-                        $request = $matches[1];
+                        $nextRequest = $matches[1];
                         $preLine = $matches[2];
                     }
                     $tds = preg_split('~\t+~u', $preLine);
@@ -85,10 +85,10 @@ class Block_nf
                     foreach ($tds as $tdLine) {
                         $cell     = $dom->createElement('td');
                         $codeNode = $cell->appendChild($dom->createElement('code'));
-                        if (empty($request)) {
+                        if (empty($nextRequest)) {
                             TextContent::interpretAndAppendText($codeNode, $tdLine);
                         } else {
-                            $blockLines = [$request . $tdLine];
+                            $blockLines = [$nextRequest . $tdLine];
                             Blocks::trim($blockLines);
                             Roff::parse($codeNode, $blockLines);
                         }
@@ -102,8 +102,8 @@ class Block_nf
 
         $pre = $dom->createElement('pre');
 
-        $request = Request::getLine($preLines, 0);
-        if ($request['request'] === 'RS') {
+        $nextRequest = Request::getLine($preLines, 0);
+        if ($nextRequest['request'] === 'RS') {
             $lastRequest = Request::getLine($preLines, count($preLines) - 1);
             if ($lastRequest['request'] === 'RE') {
                 array_pop($preLines);
@@ -111,8 +111,8 @@ class Block_nf
                 ArrayHelper::trim($preLines, ['', '.br', '.sp']);
                 $className = 'indent';
                 if (
-                  !empty($request['arg_string']) &&
-                  $indentVal = Roff_Unit::normalize(trim($request['arg_string'])) // note this filters out 0s
+                  !empty($nextRequest['arg_string']) &&
+                  $indentVal = Roff_Unit::normalize(trim($nextRequest['arg_string'])) // note this filters out 0s
                 ) {
                     $className .= '-' . $indentVal;
                 }

@@ -9,7 +9,8 @@ class Roff_di
 
         $numLines = count($lines);
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (Request::is($lines[$i], 'di')) {
+            $request = Request::getLine($lines, $i);
+            if ($request['request'] === 'di') {
                 return ['i' => $i];
             }
         }

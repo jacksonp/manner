@@ -67,27 +67,27 @@ class Block_TS
         $tr           = false;
 
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
+            $request = Request::getLine($lines, $i);
 
-            if (Request::is($line, 'TE')) {
+            if ($request['request'] === 'TE') {
                 break;
-            } elseif ($line === '.T&') {
+            } elseif ($lines[$i] === '.T&') {
                 list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
                 $formatRowNum = 0;
                 continue;
-            } elseif ($line === '_') {
+            } elseif ($lines[$i] === '_') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom');
                 }
-            } elseif ($line === '=') {
+            } elseif ($lines[$i] === '=') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom-double');
                 }
-            } elseif (in_array($line, ['.ft CW', '.ft R', '.P', '.PP'])) {
+            } elseif (in_array($lines[$i], ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
             } else {
                 $tr           = $dom->createElement('tr');
-                $cols         = explode($columnSeparator, $line);
+                $cols         = explode($columnSeparator, $lines[$i]);
                 $totalColSpan = 0;
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...

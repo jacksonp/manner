@@ -12,11 +12,11 @@ class Block_Vb
 
         $blockLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, 'Ve')) {
+            $request = Request::getLine($lines, $i);
+            if ($request['request'] === 'Ve') {
                 break;
             } else {
-                $blockLines[] = $line;
+                $blockLines[] = $lines[$i];
             }
         }
 

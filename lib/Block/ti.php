@@ -16,8 +16,8 @@ class Block_ti
 
         $blockLines = [];
         for (; $i < $numLines - 1; ++$i) {
-            $line = $lines[$i + 1];
-            if (Request::is($line, 'ti')) {
+            $nextRequest = Request::getLine($lines, $i + 1);
+            if ($nextRequest['request'] === 'ti') {
                 // Could be a change in indentation, just add a break for now
                 $blockLines[] = '.br';
                 continue;
@@ -25,7 +25,7 @@ class Block_ti
                 // This check has to come after .ti check, as .ti is otherwise a block-ender.
                 break;
             } else {
-                $blockLines[] = $line;
+                $blockLines[] = $lines[$i + 1];
             }
         }
 

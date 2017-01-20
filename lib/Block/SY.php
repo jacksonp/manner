@@ -26,9 +26,10 @@ class Block_SY
 
         $preLines = [];
         for ($i = $i + 1; $i < $numLines; ++$i) {
+            $request = Request::getLine($lines, $i);
             if (in_array($lines[$i], $blockEnds)) {
                 break;
-            } elseif (Request::is($lines[$i], 'SY')) {
+            } elseif ($request['request'] === 'SY') {
                 --$i;
                 break;
             }
