@@ -185,7 +185,11 @@ ROFF;
                     } else {
                         array_splice($lines, $i, $result['i'] + 1 - $i);
                     }
-                    return self::getLine($lines, $i, $callerArguments);
+                    if ($i < count($lines)) {
+                        return self::getLine($lines, $i, $callerArguments);
+                    } else {
+                        return $return; // e.g. a .if that removes all the remaining lines from the file.
+                    }
                 }
             }
 
@@ -199,6 +203,10 @@ ROFF;
         $return = ['class' => null, 'request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
 
         $request = self::getLine($lines, $i);
+
+        if ($i > count($lines) - 1) {
+            return $return; // e.g. a .if that removes all the remaining lines from the file.
+        }
 
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1

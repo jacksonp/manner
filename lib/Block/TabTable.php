@@ -33,8 +33,7 @@ class Block_TabTable implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-        $line     = $lines[$i];
+        $line = $lines[$i];
 
         $isStart = self::isStart($lines, $i);
         if (!$isStart) {
@@ -56,7 +55,7 @@ class Block_TabTable implements Block_Template
                 $tr->appendChild($cell);
             }
 
-            if ($i === $numLines - 1) {
+            if ($i === count($lines) - 1) {
                 return $i;
             }
 
@@ -64,7 +63,7 @@ class Block_TabTable implements Block_Template
 
             if (in_array(trim($line), ['.br', ''])) {
                 ++$i;
-                if ($i === $numLines - 1) {
+                if ($i === count($lines) - 1) {
                     return $i;
                 }
                 $line = $lines[$i + 1];

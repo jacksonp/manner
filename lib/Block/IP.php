@@ -27,13 +27,12 @@ class Block_IP implements Block_Template
     static function appendDl(DOMElement $parentNode, array $lines, int $i)
     {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        for (; $i < $numLines; ++$i) {
+        for (; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if ($request['request'] === 'IP') {
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
@@ -68,12 +67,11 @@ class Block_IP implements Block_Template
     static function appendBlockquote(DOMElement $parentNode, array $lines, int $i)
     {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $block = $dom->createElement('blockquote');
 
-        for (; $i < $numLines; ++$i) {
+        for (; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if (
                 $request['request'] !== 'IP' ||

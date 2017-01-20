@@ -15,7 +15,6 @@ class Block_SY implements Block_Template
 
         // These get swallowed:
         $blockEnds   = ['.YS'];
-        $numLines    = count($lines);
         $dom         = $parentNode->ownerDocument;
         $commandName = '';
 
@@ -31,7 +30,7 @@ class Block_SY implements Block_Template
         }
 
         $preLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if (in_array($lines[$i], $blockEnds)) {
                 break;

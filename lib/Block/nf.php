@@ -25,16 +25,15 @@ class Block_nf implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $preLines = [];
-        while ($i < $numLines - 1) {
+        while ($i < count($lines) - 1) {
             $nextRequest = Request::getLine($lines, $i + 1);
             if (Block_SS::endSubsection($nextRequest['request']) || $nextRequest['request'] === 'TS') {
                 break;
             } elseif (self::endBlock($nextRequest)) {
-                while ($i < $numLines - 1 && $nextRequest = Request::getLine($lines,
+                while ($i < count($lines) - 1 && $nextRequest = Request::getLine($lines,
                         $i + 1) and self::endBlock($nextRequest)) {
                     ++$i; // swallow
                 }
@@ -55,7 +54,7 @@ class Block_nf implements Block_Template
         }
 
         if (
-            $i < $numLines - 1
+            $i < count($lines) - 1
             && Request::getLine($preLines, 0)['request'] === 'RS'
             && Request::getLine($lines, $i + 1)['request'] === 'RE'
         ) {

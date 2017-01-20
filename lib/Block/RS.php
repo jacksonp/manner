@@ -21,13 +21,12 @@ class Block_RS implements Block_Template
                 $className .= '-' . $thisIndent;
             }
         }
-        $numLines   = count($lines);
         $dom        = $parentNode->ownerDocument;
         $skippedRSs = 0;
 
         $rsLevel    = 1;
         $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $line    = $lines[$i];
             $request = Request::getLine($lines, $i);
             if ($request['request'] === 'RS') {

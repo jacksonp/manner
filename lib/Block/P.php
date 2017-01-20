@@ -13,11 +13,10 @@ class Block_P implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        for (; $i < $numLines - 1; ++$i) {
+        for (; $i < count($lines) - 1; ++$i) {
             if (Blocks::lineEndsBlock($lines, $i + 1)) {
                 break;
             }

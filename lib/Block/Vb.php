@@ -13,11 +13,10 @@ class Block_Vb implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if ($request['request'] === 'Ve') {
                 break;

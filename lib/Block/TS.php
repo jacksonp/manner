@@ -7,11 +7,9 @@ class Block_TS implements Block_Template
     private static function parseRowFormats(array $lines, int $i): array
     {
 
-        $numLines = count($lines);
-
         $rowFormats  = [];
         $formatsDone = false;
-        for (; $i < $numLines - 1; ++$i) {
+        for (; $i < count($lines) - 1; ++$i) {
             $line = $lines[$i];
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
@@ -52,7 +50,6 @@ class Block_TS implements Block_Template
     ) {
 
         $dom      = $parentNode->ownerDocument;
-        $numLines = count($lines);
 
         $columnSeparator = "\t";
 
@@ -72,7 +69,7 @@ class Block_TS implements Block_Template
         $formatRowNum = 0;
         $tr           = false;
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
 
             if ($request['request'] === 'TE') {
@@ -149,7 +146,7 @@ class Block_TS implements Block_Template
                         if ($tdContents !== 'T{') {
                             $tBlockLines[] = mb_substr($tdContents, 2);
                         }
-                        for ($i = $i + 1; $i < $numLines; ++$i) {
+                        for ($i = $i + 1; $i < count($lines); ++$i) {
                             $tBlockLine = $lines[$i];
                             if (mb_strpos($tBlockLine, 'T}') === 0) {
                                 if ($tBlockLine !== 'T}') {

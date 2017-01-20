@@ -13,15 +13,14 @@ class Block_ti implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
-        if ($i === $numLines - 1) {
+        if ($i === count($lines) - 1) {
             return $i;
         }
 
         $blockLines = [];
-        for (; $i < $numLines - 1; ++$i) {
+        for (; $i < count($lines) - 1; ++$i) {
             $nextRequest = Request::getLine($lines, $i + 1);
             if ($nextRequest['request'] === 'ti') {
                 // Could be a change in indentation, just add a break for now

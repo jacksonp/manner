@@ -23,8 +23,7 @@ class Block_Text implements Block_Template
     {
 
         $blockLines = []; // Could be .B on one line, then some text on next line for example.
-        $numLines   = count($lines);
-        for (; $i < $numLines; ++$i) {
+        for (; $i < count($lines); ++$i) {
 
             $request = Request::getClass($lines, $i);
 
@@ -50,7 +49,7 @@ class Block_Text implements Block_Template
             }
 
         }
-        if ($i < $numLines - 1 && $lines[$i + 1] === '.UE') {
+        if ($i < count($lines) - 1 && $lines[$i + 1] === '.UE') {
             $blockLines[] = $lines[++$i];
         }
 
@@ -67,8 +66,6 @@ class Block_Text implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-
         $line = self::removeContinuation($lines[$i]);
 
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
@@ -80,7 +77,7 @@ class Block_Text implements Block_Template
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
-            for (; $i < $numLines - 1 && (self::$continuation || !$needOneLineOnly); ++$i) {
+            for (; $i < count($lines) - 1 && (self::$continuation || !$needOneLineOnly); ++$i) {
                 $nextLine = $lines[$i + 1];
                 if (trim($nextLine) === '' ||
                     in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||

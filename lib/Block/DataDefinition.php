@@ -13,12 +13,10 @@ class Block_DataDefinition implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-
         $blockLines = [];
         $rsLevel    = 0;
 
-        for (; $i < $numLines; ++$i) {
+        for (; $i < count($lines); ++$i) {
 
             $request = Request::getLine($lines, $i);
 
@@ -39,7 +37,7 @@ class Block_DataDefinition implements Block_Template
             if ($rsLevel <= 0) {
                 if (
                     in_array($request['request'], ['LP', 'PP', 'P']) &&
-                    $i < $numLines - 1 && Request::getLine($lines, $i + 1)['request'] === 'TP'
+                    $i < count($lines) - 1 && Request::getLine($lines, $i + 1)['request'] === 'TP'
                 ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
@@ -55,7 +53,7 @@ class Block_DataDefinition implements Block_Template
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < $numLines - 1 || trim($lines[$i]) !== '') {
+                if ($i < count($lines) - 1 || trim($lines[$i]) !== '') {
                     $blockLines[] = $lines[$i];
                 }
             }

@@ -13,11 +13,10 @@ class Block_EX implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
 
         $blockLines = [];
-        while ($i < $numLines - 1) {
+        while ($i < count($lines) - 1) {
             $nextRequest = Request::getLine($lines, $i + 1);
             if (Block_SS::endSubsection($nextRequest['request']) || in_array($nextRequest['request'], ['TS', 'EE'])) {
                 break;

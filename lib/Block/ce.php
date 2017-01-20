@@ -13,12 +13,11 @@ class Block_ce implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $blockLines       = [];
         $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
-        $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
+        $centerLinesUpTo  = min($i + $numLinesToCenter, count($lines) - 1);
         for (; $i < $centerLinesUpTo; ++$i) {
             if (Request::getLine($lines, $i + 1)['request'] === 'ce') {
                 break;

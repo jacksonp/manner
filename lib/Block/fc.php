@@ -26,11 +26,10 @@ class Block_fc implements Block_Template
         $delim = $arguments[0];
         $pad   = $arguments[1];
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         $table = $dom->createElement('table');
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if (in_array($request['request'], ['ta', 'nf'])) {
                 continue; // Swallow

@@ -19,13 +19,12 @@ class Block_SS implements Block_Template
     ) {
 
         $dom      = $parentNode->ownerDocument;
-        $numLines = count($lines);
 
         $headingNode = $dom->createElement('h3');
 
         if (count($arguments) === 0) {
             $nextRequest = Request::getLine($lines, $i + 1);
-            if ($i === $numLines - 1 || self::endSubsection($nextRequest['request'])) {
+            if ($i === count($lines) - 1 || self::endSubsection($nextRequest['request'])) {
                 return $i;
             }
             // Text for subheading is on next line.
@@ -52,7 +51,7 @@ class Block_SS implements Block_Template
         $subsection->appendChild($headingNode);
 
         $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if (self::endSubsection($request['request'])) {
                 break;
