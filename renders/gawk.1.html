@@ -230,86 +230,84 @@
       <dt><strong>PROCINFO</strong>
       <dd>
         <p>The elements of this array provide access to information about the running AWK program. On some systems, there may be elements in the array, <strong>"group1"</strong> through <strong>"group</strong><em>n</em><strong>"</strong> for some <em>n</em>, which is the number of supplementary groups that the process has. Use the <strong>in</strong> operator to test for these elements. The following elements are guaranteed to be available:
-        <div class="indent">
-          <dl class="indent-33">
-            <dt><strong>PROCINFO["egid"]</strong>
-            <dd>The value of the <em>getegid</em>(2) system call.
-            <dt><strong>PROCINFO["errno"]</strong>
-            <dd>The value of <em>errno</em>(3) when <strong>ERRNO</strong> is set to the associated error message.
-            <dt><strong>PROCINFO["euid"]</strong>
-            <dd>The value of the <em>geteuid</em>(2) system call.
-            <dt><strong>PROCINFO["FS"]</strong>
-            <dd><strong>"FS"</strong> if field splitting with <strong>FS</strong> is in effect, <strong>"FPAT"</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>"FIELDWIDTHS"</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
-            <dt><strong>PROCINFO["gid"]</strong>
-            <dd>The value of the <em>getgid</em>(2) system call.
-            <dt><strong>PROCINFO["identifiers"]</strong>
-            <dd>
-              <p>A subarray, indexed by the names of all identifiers used in the text of the AWK program. The values indicate what <em>gawk</em> knows about the identifiers after it has finished parsing the program; they are <em>not</em> updated while the program runs. For each identifier, the value of the element is one of the following:
-              <dl class="indent-24">
-                <dt><strong>"array"</strong>
-                <dd>The identifier is an array.
-                <dt><strong>"builtin"</strong>
-                <dd>The identifier is a built-in function.
-                <dt><strong>"extension"</strong>
-                <dd>The identifier is an extension function loaded via <strong>@load</strong> or <strong>-l</strong>.
-                <dt><strong>"scalar"</strong>
-                <dd>The identifier is a scalar.
-                <dt><strong>"untyped"</strong>
-                <dd>The identifier is untyped (could be used as a scalar or array, <em>gawk</em> doesn't know yet).
-                <dt><strong>"user"</strong>
-                <dd>The identifier is a user-defined function.
-              </dl>
-            <dt><strong>PROCINFO["pgrpid"]</strong>
-            <dd>The process group ID of the current process.
-            <dt><strong>PROCINFO["pid"]</strong>
-            <dd>The process ID of the current process.
-            <dt><strong>PROCINFO["ppid"]</strong>
-            <dd>The parent process ID of the current process.
-            <dt><strong>PROCINFO["strftime"]</strong>
-            <dd>The default time format string for <strong>strftime()</strong>.
-            <dt><strong>PROCINFO["uid"]</strong>
-            <dd>The value of the <em>getuid</em>(2) system call.
-            <dt><strong>PROCINFO["version"]</strong>
-            <dd>the version of <em>gawk</em>.
-          </dl>
-          <p>The following elements are present if loading dynamic extensions is available:
-          <dl>
-            <dt><strong>PROCINFO["api_major"]</strong>
-            <dd>The major version of the extension API.
-            <dt><strong>PROCINFO["api_minor"]</strong>
-            <dd>The minor version of the extension API.
-          </dl>
-          <p>The following elements are available if MPFR support is compiled into <em>gawk</em>:
-          <dl>
-            <dt><strong>PROCINFO["gmp_version"]</strong>
-            <dd>The version of the GNU MP library used for arbitrary precision number support in <em>gawk</em>.
-            <dt><strong>PROCINFO["mpfr_version"]</strong>
-            <dd>The version of the GNU MPFR library used for arbitrary precision number support in <em>gawk</em>.
-            <dt><strong>PROCINFO["prec_max"]</strong>
-            <dd>The maximum precision supported by the GNU MPFR library for arbitrary precision floating-point numbers.
-            <dt><strong>PROCINFO["prec_min"]</strong>
-            <dd>The minimum precision allowed by the GNU MPFR library for arbitrary precision floating-point numbers.
-          </dl>
-          <p>The following elements may set by a program to change <em>gawk</em>'s behavior:
-          <dl>
-            <dt><strong>PROCINFO["NONFATAL"]</strong>
-            <dd>If this exists, then I/O errors for all output redirections become nonfatal.
-            <dt><strong>PROCINFO["</strong><em>output_name</em><strong>", "NONFATAL"]</strong>
-            <dd>Make output errors for <em>output_name</em> be nonfatal.
-            <dt><strong>PROCINFO["</strong><em>command</em><strong>", "pty"]</strong>
-            <dd>Use a pseudo-tty for two-way communication with <em>command</em> instead of setting up two one-way pipes.
-            <dt><strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong>
-            <dd>The timeout in milliseconds for reading data from <em>input</em>, where <em>input</em> is a redirection string or a filename. A value of zero or less than zero means no timeout.
-            <dt><strong>PROCINFO["</strong><em>input</em><strong>", "RETRY"]</strong>
-            <dd>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
-            <dt><strong>PROCINFO["sorted_in"]</strong>
-            <dd>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>"@ind_str_asc"</strong>, <strong>"@ind_num_asc"</strong>, <strong>"@val_type_asc"</strong>, <strong>"@val_str_asc"</strong>, <strong>"@val_num_asc"</strong>, <strong>"@ind_str_desc"</strong>, <strong>"@ind_num_desc"</strong>, <strong>"@val_type_desc"</strong>, <strong>"@val_str_desc"</strong>, <strong>"@val_num_desc"</strong>, and <strong>"@unsorted"</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
-            <br>
-            <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
-            <br>
-            where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
-          </dl>
-        </div>
+        <dl class="indent-33">
+          <dt><strong>PROCINFO["egid"]</strong>
+          <dd>The value of the <em>getegid</em>(2) system call.
+          <dt><strong>PROCINFO["errno"]</strong>
+          <dd>The value of <em>errno</em>(3) when <strong>ERRNO</strong> is set to the associated error message.
+          <dt><strong>PROCINFO["euid"]</strong>
+          <dd>The value of the <em>geteuid</em>(2) system call.
+          <dt><strong>PROCINFO["FS"]</strong>
+          <dd><strong>"FS"</strong> if field splitting with <strong>FS</strong> is in effect, <strong>"FPAT"</strong> if field splitting with <strong>FPAT</strong> is in effect, or <strong>"FIELDWIDTHS"</strong> if field splitting with <strong>FIELDWIDTHS</strong> is in effect.
+          <dt><strong>PROCINFO["gid"]</strong>
+          <dd>The value of the <em>getgid</em>(2) system call.
+          <dt><strong>PROCINFO["identifiers"]</strong>
+          <dd>
+            <p>A subarray, indexed by the names of all identifiers used in the text of the AWK program. The values indicate what <em>gawk</em> knows about the identifiers after it has finished parsing the program; they are <em>not</em> updated while the program runs. For each identifier, the value of the element is one of the following:
+            <dl class="indent-24">
+              <dt><strong>"array"</strong>
+              <dd>The identifier is an array.
+              <dt><strong>"builtin"</strong>
+              <dd>The identifier is a built-in function.
+              <dt><strong>"extension"</strong>
+              <dd>The identifier is an extension function loaded via <strong>@load</strong> or <strong>-l</strong>.
+              <dt><strong>"scalar"</strong>
+              <dd>The identifier is a scalar.
+              <dt><strong>"untyped"</strong>
+              <dd>The identifier is untyped (could be used as a scalar or array, <em>gawk</em> doesn't know yet).
+              <dt><strong>"user"</strong>
+              <dd>The identifier is a user-defined function.
+            </dl>
+          <dt><strong>PROCINFO["pgrpid"]</strong>
+          <dd>The process group ID of the current process.
+          <dt><strong>PROCINFO["pid"]</strong>
+          <dd>The process ID of the current process.
+          <dt><strong>PROCINFO["ppid"]</strong>
+          <dd>The parent process ID of the current process.
+          <dt><strong>PROCINFO["strftime"]</strong>
+          <dd>The default time format string for <strong>strftime()</strong>.
+          <dt><strong>PROCINFO["uid"]</strong>
+          <dd>The value of the <em>getuid</em>(2) system call.
+          <dt><strong>PROCINFO["version"]</strong>
+          <dd>the version of <em>gawk</em>.
+        </dl>
+        <p>The following elements are present if loading dynamic extensions is available:
+        <dl>
+          <dt><strong>PROCINFO["api_major"]</strong>
+          <dd>The major version of the extension API.
+          <dt><strong>PROCINFO["api_minor"]</strong>
+          <dd>The minor version of the extension API.
+        </dl>
+        <p>The following elements are available if MPFR support is compiled into <em>gawk</em>:
+        <dl>
+          <dt><strong>PROCINFO["gmp_version"]</strong>
+          <dd>The version of the GNU MP library used for arbitrary precision number support in <em>gawk</em>.
+          <dt><strong>PROCINFO["mpfr_version"]</strong>
+          <dd>The version of the GNU MPFR library used for arbitrary precision number support in <em>gawk</em>.
+          <dt><strong>PROCINFO["prec_max"]</strong>
+          <dd>The maximum precision supported by the GNU MPFR library for arbitrary precision floating-point numbers.
+          <dt><strong>PROCINFO["prec_min"]</strong>
+          <dd>The minimum precision allowed by the GNU MPFR library for arbitrary precision floating-point numbers.
+        </dl>
+        <p>The following elements may set by a program to change <em>gawk</em>'s behavior:
+        <dl>
+          <dt><strong>PROCINFO["NONFATAL"]</strong>
+          <dd>If this exists, then I/O errors for all output redirections become nonfatal.
+          <dt><strong>PROCINFO["</strong><em>output_name</em><strong>", "NONFATAL"]</strong>
+          <dd>Make output errors for <em>output_name</em> be nonfatal.
+          <dt><strong>PROCINFO["</strong><em>command</em><strong>", "pty"]</strong>
+          <dd>Use a pseudo-tty for two-way communication with <em>command</em> instead of setting up two one-way pipes.
+          <dt><strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong>
+          <dd>The timeout in milliseconds for reading data from <em>input</em>, where <em>input</em> is a redirection string or a filename. A value of zero or less than zero means no timeout.
+          <dt><strong>PROCINFO["</strong><em>input</em><strong>", "RETRY"]</strong>
+          <dd>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
+          <dt><strong>PROCINFO["sorted_in"]</strong>
+          <dd>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>"@ind_str_asc"</strong>, <strong>"@ind_num_asc"</strong>, <strong>"@val_type_asc"</strong>, <strong>"@val_str_asc"</strong>, <strong>"@val_num_asc"</strong>, <strong>"@ind_str_desc"</strong>, <strong>"@ind_num_desc"</strong>, <strong>"@val_type_desc"</strong>, <strong>"@val_str_desc"</strong>, <strong>"@val_num_desc"</strong>, and <strong>"@unsorted"</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
+          <br>
+          <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
+          <br>
+          where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
+        </dl>
       <dt><strong>ROUNDMODE</strong>
       <dd>The rounding mode to use for arbitrary precision arithmetic on numbers, by default <strong>"N"</strong> (IEEE-754 roundTiesToEven mode). The accepted values are <strong>"N"</strong> or <strong>"n"</strong> for roundTiesToEven, <strong>"U"</strong> or <strong>"u"</strong> for roundTowardPositive, <strong>"D"</strong> or <strong>"d"</strong> for roundTowardNegative, <strong>"Z"</strong> or <strong>"z"</strong> for roundTowardZero, and if your version of GNU MPFR library supports it, <strong>"A"</strong> or <strong>"a"</strong> for roundTiesToAway.
       <dt><strong>RS</strong>

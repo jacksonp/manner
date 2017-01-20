@@ -65,13 +65,23 @@ class Block_RS
             $rsBlock->setAttribute('class', $className);
             Blocks::handle($rsBlock, $blockLines);
             if ($className === 'indent' &&
-              $rsBlock->childNodes->length === 1 &&
-              $rsBlock->firstChild instanceof DOMElement &&
-              in_array($rsBlock->firstChild->tagName, ['dl', 'div'])
+                $rsBlock->childNodes->length === 1 &&
+                $rsBlock->firstChild instanceof DOMElement &&
+                in_array($rsBlock->firstChild->tagName, ['dl', 'div'])
             ) {
                 $parentNode->appendChild($rsBlock->firstChild);
+            } elseif ($className === 'indent' &&
+                $parentNode->tagName === 'dd'
+            ) {
+                $child = $rsBlock->firstChild;
+                while ($child) {
+                    $nextSibling = $child->nextSibling;
+                    $parentNode->appendBlockIfHasContent($child);
+                    $child = $nextSibling;
+                }
             } else {
                 $parentNode->appendBlockIfHasContent($rsBlock);
+
             }
         }
 

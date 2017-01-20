@@ -34,16 +34,14 @@
     <dt><strong>-i</strong>
     <dd>
       <p><em>instances</em> is a list of one or more instance names for the nominated performance metric - just these instances will be retrieved and reported (the default is to report all instances). The list must be a single argument, with elements of the list separated by commas and/or white space.
-      <div class="indent">
-        <p>The instance name may be quoted with single (') or double (") quotes for those cases where the instance name contains white space or commas.
-        <p>Multiple <strong>-i</strong> options are allowed as an alternative way of specifying more than one instance of interest.
-        <p>As an example, the following are all equivalent:
-        <pre>$ pmval -i "'1 minute','5 minute'" kernel.all.load
+      <p>The instance name may be quoted with single (') or double (") quotes for those cases where the instance name contains white space or commas.
+      <p>Multiple <strong>-i</strong> options are allowed as an alternative way of specifying more than one instance of interest.
+      <p>As an example, the following are all equivalent:
+      <pre>$ pmval -i "'1 minute','5 minute'" kernel.all.load
 $ pmval -i '"1 minute","5 minute"' kernel.all.load
 $ pmval -i "'1 minute' '5 minute'" kernel.all.load
 $ pmval -i "'1 minute'" -i "'5 minute'" kernel.all.load
 $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
-      </div>
     <dt><strong>-K</strong>
     <dd>When fetching metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
     <dt><strong>-n</strong>
@@ -67,9 +65,7 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
     <dt><strong>-x</strong>
     <dd>
       <p>The given <em>pattern</em> is sent to the performance metric domain agent for the requested <em>metricname</em> before any values are requested. This serves two purposes. Firstly, it provides a mechanism for server-side event filtering that is customisable for individual event streams. In addition, some performance metrics domain agents also use the PMCD store mechanism to provide a basic security model (e.g. for sensitive log files, only a client host with <strong>pmStore</strong>(3) access would be able to access the event stream).
-      <div class="indent">
-        <p>As <em>pattern</em> may be processed by <strong>regcomp</strong>(3) it should be a non-empty string. Use . (dot) for a “match all” <em>pattern</em>.
-      </div>
+      <p>As <em>pattern</em> may be processed by <strong>regcomp</strong>(3) it should be a non-empty string. Use . (dot) for a “match all” <em>pattern</em>.
     <dt><strong>-Z</strong>
     <dd>By default, <strong>pmval</strong> reports the time of day according to the local timezone on the system where <strong>pmval</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
     <dt><strong>-z</strong>

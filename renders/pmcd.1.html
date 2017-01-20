@@ -53,26 +53,22 @@
     <dt><strong>-t</strong> <em>timeout</em>
     <dd>
       <p>To prevent misbehaving clients or agents from hanging the entire Performance Metrics Collection System (PMCS), <strong>pmcd</strong> uses timeouts on PDU exchanges with clients and agents running as processes. By default the timeout interval is five seconds. The <strong>-t</strong> option allows an alternative timeout interval in seconds to be specified. If <em>timeout</em> is zero, timeouts are turned off. It is almost impossible to use the debugger interactively on an agent unless timeouts have been turned off for its "parent" <strong>pmcd</strong>.
-      <div class="indent">
-        <p>Once <strong>pmcd</strong> is running, the timeout may be dynamically modified by storing an integer value (the timeout in seconds) into the metric <strong>pmcd.control.timeout</strong> via <strong>pmstore</strong>(1).
-      </div>
+      <p>Once <strong>pmcd</strong> is running, the timeout may be dynamically modified by storing an integer value (the timeout in seconds) into the metric <strong>pmcd.control.timeout</strong> via <strong>pmstore</strong>(1).
     <dt><strong>-T</strong> <em>traceflag</em>
     <dd>
       <p>To assist with error diagnosis for agents and/or clients of <strong>pmcd</strong> that are not behaving correctly, an internal event tracing mechanism is supported within <strong>pmcd</strong>. The value of <em>traceflag</em> is interpreted as a bit field with the following control functions:
-      <div class="indent">
-        <dl class="indent-26">
-          <dt><strong>1</strong>
-          <dd>enable client connection tracing
-          <dt><strong>2</strong>
-          <dd>enable PDU tracing
-          <dt><strong>256</strong>
-          <dd>unbuffered event tracing
-        </dl>
-        <p>By default, event tracing is buffered using a circular buffer that is over-written as new events are recorded. The default buffer size holds the last 20 events, although this number may be over-ridden by using <strong>pmstore</strong>(1) to modify the metric <strong>pmcd.control.tracebufs</strong>.
-        <p>Similarly once <strong>pmcd</strong> is running, the event tracing control may be dynamically modified by storing 1 (enable) or 0 (disable) into the metrics <strong>pmcd.control.traceconn</strong>, <strong>pmcd.control.tracepdu</strong> and <strong>pmcd.control.tracenobuf</strong>. These metrics map to the bit fields associated with the <em>traceflag</em> argument for the <strong>-T</strong> option.
-        <p>When operating in buffered mode, the event trace buffer will be dumped whenever an agent connection is terminated by <strong>pmcd</strong>, or when any value is stored into the metric <strong>pmcd.control.dumptrace</strong> via <strong>pmstore</strong>(1).
-        <p>In unbuffered mode, <strong>every</strong> event will be reported when it occurs.
-      </div>
+      <dl class="indent-26">
+        <dt><strong>1</strong>
+        <dd>enable client connection tracing
+        <dt><strong>2</strong>
+        <dd>enable PDU tracing
+        <dt><strong>256</strong>
+        <dd>unbuffered event tracing
+      </dl>
+      <p>By default, event tracing is buffered using a circular buffer that is over-written as new events are recorded. The default buffer size holds the last 20 events, although this number may be over-ridden by using <strong>pmstore</strong>(1) to modify the metric <strong>pmcd.control.tracebufs</strong>.
+      <p>Similarly once <strong>pmcd</strong> is running, the event tracing control may be dynamically modified by storing 1 (enable) or 0 (disable) into the metrics <strong>pmcd.control.traceconn</strong>, <strong>pmcd.control.tracepdu</strong> and <strong>pmcd.control.tracenobuf</strong>. These metrics map to the bit fields associated with the <em>traceflag</em> argument for the <strong>-T</strong> option.
+      <p>When operating in buffered mode, the event trace buffer will be dumped whenever an agent connection is terminated by <strong>pmcd</strong>, or when any value is stored into the metric <strong>pmcd.control.dumptrace</strong> via <strong>pmstore</strong>(1).
+      <p>In unbuffered mode, <strong>every</strong> event will be reported when it occurs.
     <dt><strong>-U</strong> <em>username</em>
     <dd>User account under which to run <strong>pmcd</strong>. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-v</strong>

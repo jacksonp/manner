@@ -107,15 +107,11 @@
     <dt><strong>metacharacter</strong>
     <dd>
       <p>A character that, when unquoted, separates words. One of the following:
-      <div class="indent">
-        <p><strong>| & ; ( ) &lt; &gt; space tab newline</strong>
-      </div>
+      <p><strong>| & ; ( ) &lt; &gt; space tab newline</strong>
     <dt><strong>control operator</strong>
     <dd>
       <p>A <em>token</em> that performs a control function. It is one of the following symbols:
-      <div class="indent">
-        <p><strong>|| & &amp;& ; ;; ;& ;;& ( ) | |& &lt;newline&gt;</strong>
-      </div>
+      <p><strong>|| & &amp;& ; ;; ;& ;;& ( ) | |& &lt;newline&gt;</strong>
   </dl>
 </section>
 <section>
@@ -180,19 +176,17 @@
         An additional binary operator, <strong>=~</strong>, is available, with the same precedence as <strong>==</strong> and <strong>!=</strong>. When it is used, the string to the right of the operator is considered an extended regular expression and matched accordingly (as in <em>regex</em>(3)). The return value is 0 if the string matches the pattern, and 1 otherwise. If the regular expression is syntactically incorrect, the conditional expression's return value is 2. If the <strong>nocasematch</strong> shell option is enabled, the match is performed without regard to the case of alphabetic characters. Any part of the pattern may be quoted to force the quoted portion to be matched as a string. Bracket expressions in regular expressions must be treated carefully, since normal quoting characters lose their meanings between brackets. If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a string. Substrings matched by parenthesized subexpressions within the regular expression are saved in the array variable <small><strong>BASH_REMATCH</strong>.</small> The element of <small><strong>BASH_REMATCH</strong></small> with index 0 is the portion of the string matching the entire regular expression. The element of <small><strong>BASH_REMATCH</strong></small> with index <em>n</em> is the portion of the string matching the <em>n</em>th parenthesized subexpression.<br>
         <br>
         Expressions may be combined using the following operators, listed in decreasing order of precedence:
-        <div class="indent">
-          <dl>
-            <dt><strong>( <em>expression</em> )</strong>
-            <dd>Returns the value of <em>expression</em>. This may be used to override the normal precedence of operators.
-            <dt><strong>! <em>expression</em></strong>
-            <dd>True if <em>expression</em> is false.
-            <dt><em>expression1</em> <strong>&amp;&</strong> <em>expression2</em>
-            <dd>True if both <em>expression1</em> and <em>expression2</em> are true.
-            <dt><em>expression1</em> <strong>||</strong> <em>expression2</em>
-            <dd>True if either <em>expression1</em> or <em>expression2</em> is true.
-          </dl>
-          <p>The <strong>&amp;&</strong> and <strong>||</strong> operators do not evaluate <em>expression2</em> if the value of <em>expression1</em> is sufficient to determine the return value of the entire conditional expression.
-        </div>
+        <dl>
+          <dt><strong>( <em>expression</em> )</strong>
+          <dd>Returns the value of <em>expression</em>. This may be used to override the normal precedence of operators.
+          <dt><strong>! <em>expression</em></strong>
+          <dd>True if <em>expression</em> is false.
+          <dt><em>expression1</em> <strong>&amp;&</strong> <em>expression2</em>
+          <dd>True if both <em>expression1</em> and <em>expression2</em> are true.
+          <dt><em>expression1</em> <strong>||</strong> <em>expression2</em>
+          <dd>True if either <em>expression1</em> or <em>expression2</em> is true.
+        </dl>
+        <p>The <strong>&amp;&</strong> and <strong>||</strong> operators do not evaluate <em>expression2</em> if the value of <em>expression1</em> is sufficient to determine the return value of the entire conditional expression.
       <dt><strong>for</strong> <em>name</em> [ [ <strong>in</strong> [ <em>word ...</em> ] ] ; ] <strong>do</strong> <em>list</em> ; <strong>done</strong>
       <dd>The list of words following <strong>in</strong> is expanded, generating a list of items. The variable <em>name</em> is set to each element of this list in turn, and <em>list</em> is executed each time. If the <strong>in</strong> <em>word</em> is omitted, the <strong>for</strong> command executes <em>list</em> once for each positional parameter that is set (see <small><strong>PARAMETERS</strong></small> below). The return status is the exit status of the last command that executes. If the expansion of the items following <strong>in</strong> results in an empty list, no commands are executed, and the return status is 0.
       <dt><strong>for</strong> (( <em>expr1</em> ; <em>expr2</em> ; <em>expr3</em> )) ; <strong>do</strong> <em>list</em> ; <strong>done</strong>
@@ -523,10 +517,8 @@
       <dt><strong>MAILPATH</strong>
       <dd>
         <p>A colon-separated list of filenames to be checked for mail. The message to be printed when mail arrives in a particular file may be specified by separating the filename from the message with a `?'. When used in the text of the message, <strong>$_</strong> expands to the name of the current mailfile. Example:
-        <div class="indent">
-          <p><strong>MAILPATH</strong>='/var/mail/bfox?"You have mail":~/shell-mail?"$_ has mail!"'
-          <p><strong>Bash</strong> can be configured to supply a default value for this variable (there is no value by default), but the location of the user mail files that it uses is system dependent (e.g., /var/mail/<strong>$USER</strong>).
-        </div>
+        <p><strong>MAILPATH</strong>='/var/mail/bfox?"You have mail":~/shell-mail?"$_ has mail!"'
+        <p><strong>Bash</strong> can be configured to supply a default value for this variable (there is no value by default), but the location of the user mail files that it uses is system dependent (e.g., /var/mail/<strong>$USER</strong>).
       <dt><strong>OPTERR</strong>
       <dd>If set to the value 1, <strong>bash</strong> displays error messages generated by the <strong>getopts</strong> builtin command (see <small><strong>SHELL BUILTIN COMMANDS</strong></small> below). <small><strong>OPTERR</strong></small> is initialized to 1 each time the shell is invoked or a shell script is executed.
       <dt><strong>PATH</strong>
@@ -685,23 +677,21 @@
       <dt>${<em>parameter</em><strong>@</strong><em>operator</em>}
       <dd>
         <p><strong>Parameter transformation</strong>. The expansion is either a transformation of the value of <em>parameter</em> or information about <em>parameter</em> itself, depending on the value of <em>operator</em>. Each <em>operator</em> is a single letter:
-        <div class="indent">
-          <dl>
-            <dt><strong>Q</strong>
-            <dd>The expansion is a string that is the value of <em>parameter</em> quoted in a format that can be reused as input.
-            <dt><strong>E</strong>
-            <dd>The expansion is a string that is the value of <em>parameter</em> with backslash escape sequences expanded as with the <strong>$'...'</strong> quoting mechansim.
-            <dt><strong>P</strong>
-            <dd>The expansion is a string that is the result of expanding the value of <em>parameter</em> as if it were a prompt string (see <strong>PROMPTING</strong> below).
-            <dt><strong>A</strong>
-            <dd>The expansion is a string in the form of an assignment statement or <strong>declare</strong> command that, if evaluated, will recreate <em>parameter</em> with its attributes and value.
-            <dt><strong>a</strong>
-            <dd>The expansion is a string consisting of flag values representing <em>parameter</em>'s attributes.
-          </dl>
-          <p>If <em>parameter</em> is <strong>@</strong> or <strong>*</strong>, the operation is applied to each positional parameter in turn, and the expansion is the resultant list. If <em>parameter</em> is an array variable subscripted with <strong>@</strong> or <strong>*</strong>, the case modification operation is applied to each member of the array in turn, and the expansion is the resultant list.<br>
-          <br>
-          The result of the expansion is subject to word splitting and pathname expansion as described below.
-        </div>
+        <dl>
+          <dt><strong>Q</strong>
+          <dd>The expansion is a string that is the value of <em>parameter</em> quoted in a format that can be reused as input.
+          <dt><strong>E</strong>
+          <dd>The expansion is a string that is the value of <em>parameter</em> with backslash escape sequences expanded as with the <strong>$'...'</strong> quoting mechansim.
+          <dt><strong>P</strong>
+          <dd>The expansion is a string that is the result of expanding the value of <em>parameter</em> as if it were a prompt string (see <strong>PROMPTING</strong> below).
+          <dt><strong>A</strong>
+          <dd>The expansion is a string in the form of an assignment statement or <strong>declare</strong> command that, if evaluated, will recreate <em>parameter</em> with its attributes and value.
+          <dt><strong>a</strong>
+          <dd>The expansion is a string consisting of flag values representing <em>parameter</em>'s attributes.
+        </dl>
+        <p>If <em>parameter</em> is <strong>@</strong> or <strong>*</strong>, the operation is applied to each positional parameter in turn, and the expansion is the resultant list. If <em>parameter</em> is an array variable subscripted with <strong>@</strong> or <strong>*</strong>, the case modification operation is applied to each member of the array in turn, and the expansion is the resultant list.<br>
+        <br>
+        The result of the expansion is subject to word splitting and pathname expansion as described below.
     </dl>
   </section>
   <section>
@@ -1447,9 +1437,7 @@
       <dt><strong>$include</strong>
       <dd>
         <p>This directive takes a single filename as an argument and reads commands and bindings from that file. For example, the following directive would read <em>/etc/inputrc</em>:
-        <div class="indent">
-          <pre><strong>$include</strong>  <em>/etc/inputrc</em></pre>
-        </div>
+        <pre><strong>$include</strong>  <em>/etc/inputrc</em></pre>
     </dl>
   </section>
   <section>
@@ -1854,39 +1842,37 @@
     <dt><strong>bind</strong> [<strong>-m</strong> <em>keymap</em>] <em>keyseq</em>:<em>readline-command</em>
     <dd>
       <p>Display current <strong>readline</strong> key and function bindings, bind a key sequence to a <strong>readline</strong> function or macro, or set a <strong>readline</strong> variable. Each non-option argument is a command as it would appear in <em>.inputrc</em>, but each binding or command must be passed as a separate argument; e.g., '"\C-x\C-r": re-read-init-file'. Options, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-m <em>keymap</em></strong>
-          <dd>Use <em>keymap</em> as the keymap to be affected by the subsequent bindings. Acceptable <em>keymap</em> names are <em>emacs, emacs-standard, emacs-meta, emacs-ctlx, vi, vi-move, vi-command</em>, and <em>vi-insert</em>. <em>vi</em> is equivalent to <em>vi-command</em> (<em>vi-move</em> is also a synonym); <em>emacs</em> is equivalent to <em>emacs-standard</em>.
-          <dt><strong>-l</strong>
-          <dd>List the names of all <strong>readline</strong> functions.
-          <dt><strong>-p</strong>
-          <dd>Display <strong>readline</strong> function names and bindings in such a way that they can be re-read.
-          <dt><strong>-P</strong>
-          <dd>List current <strong>readline</strong> function names and bindings.
-          <dt><strong>-s</strong>
-          <dd>Display <strong>readline</strong> key sequences bound to macros and the strings they output in such a way that they can be re-read.
-          <dt><strong>-S</strong>
-          <dd>Display <strong>readline</strong> key sequences bound to macros and the strings they output.
-          <dt><strong>-v</strong>
-          <dd>Display <strong>readline</strong> variable names and values in such a way that they can be re-read.
-          <dt><strong>-V</strong>
-          <dd>List current <strong>readline</strong> variable names and values.
-          <dt><strong>-f <em>filename</em></strong>
-          <dd>Read key bindings from <em>filename</em>.
-          <dt><strong>-q <em>function</em></strong>
-          <dd>Query about which keys invoke the named <em>function</em>.
-          <dt><strong>-u <em>function</em></strong>
-          <dd>Unbind all keys bound to the named <em>function</em>.
-          <dt><strong>-r <em>keyseq</em></strong>
-          <dd>Remove any current binding for <em>keyseq</em>.
-          <dt><strong>-x <em>keyseq</em>:<em>shell-command</em></strong>
-          <dd>Cause <em>shell-command</em> to be executed whenever <em>keyseq</em> is entered. When <em>shell-command</em> is executed, the shell sets the <small><strong>READLINE_LINE</strong></small> variable to the contents of the <strong>readline</strong> line buffer and the <small><strong>READLINE_POINT</strong></small> variable to the current location of the insertion point. If the executed command changes the value of <small><strong>READLINE_LINE</strong></small> or <small><strong>READLINE_POINT</strong>,</small> those new values will be reflected in the editing state.
-          <dt><strong>-X</strong>
-          <dd>List all key sequences bound to shell commands and the associated commands in a format that can be reused as input.
-        </dl>
-        <p>The return value is 0 unless an unrecognized option is given or an error occurred.
-      </div>
+      <dl>
+        <dt><strong>-m <em>keymap</em></strong>
+        <dd>Use <em>keymap</em> as the keymap to be affected by the subsequent bindings. Acceptable <em>keymap</em> names are <em>emacs, emacs-standard, emacs-meta, emacs-ctlx, vi, vi-move, vi-command</em>, and <em>vi-insert</em>. <em>vi</em> is equivalent to <em>vi-command</em> (<em>vi-move</em> is also a synonym); <em>emacs</em> is equivalent to <em>emacs-standard</em>.
+        <dt><strong>-l</strong>
+        <dd>List the names of all <strong>readline</strong> functions.
+        <dt><strong>-p</strong>
+        <dd>Display <strong>readline</strong> function names and bindings in such a way that they can be re-read.
+        <dt><strong>-P</strong>
+        <dd>List current <strong>readline</strong> function names and bindings.
+        <dt><strong>-s</strong>
+        <dd>Display <strong>readline</strong> key sequences bound to macros and the strings they output in such a way that they can be re-read.
+        <dt><strong>-S</strong>
+        <dd>Display <strong>readline</strong> key sequences bound to macros and the strings they output.
+        <dt><strong>-v</strong>
+        <dd>Display <strong>readline</strong> variable names and values in such a way that they can be re-read.
+        <dt><strong>-V</strong>
+        <dd>List current <strong>readline</strong> variable names and values.
+        <dt><strong>-f <em>filename</em></strong>
+        <dd>Read key bindings from <em>filename</em>.
+        <dt><strong>-q <em>function</em></strong>
+        <dd>Query about which keys invoke the named <em>function</em>.
+        <dt><strong>-u <em>function</em></strong>
+        <dd>Unbind all keys bound to the named <em>function</em>.
+        <dt><strong>-r <em>keyseq</em></strong>
+        <dd>Remove any current binding for <em>keyseq</em>.
+        <dt><strong>-x <em>keyseq</em>:<em>shell-command</em></strong>
+        <dd>Cause <em>shell-command</em> to be executed whenever <em>keyseq</em> is entered. When <em>shell-command</em> is executed, the shell sets the <small><strong>READLINE_LINE</strong></small> variable to the contents of the <strong>readline</strong> line buffer and the <small><strong>READLINE_POINT</strong></small> variable to the current location of the insertion point. If the executed command changes the value of <small><strong>READLINE_LINE</strong></small> or <small><strong>READLINE_POINT</strong>,</small> those new values will be reflected in the editing state.
+        <dt><strong>-X</strong>
+        <dd>List all key sequences bound to shell commands and the associated commands in a format that can be reused as input.
+      </dl>
+      <p>The return value is 0 unless an unrecognized option is given or an error occurred.
     <dt><strong>break</strong> [<em>n</em>]
     <dd>Exit from within a <strong>for</strong>, <strong>while</strong>, <strong>until</strong>, or <strong>select</strong> loop. If <em>n</em> is specified, break <em>n</em> levels. <em>n</em> must be ≥ 1. If <em>n</em> is greater than the number of enclosing loops, all enclosing loops are exited. The return value is 0 unless <em>n</em> is not greater than or equal to 1.
     <dt><strong>builtin</strong> <em>shell-builtin</em> [<em>arguments</em>]
@@ -1912,99 +1898,97 @@
       The process of applying these completion specifications when word completion is attempted is described above under <strong>Programmable Completion</strong>.<br>
       <br>
       Other options, if specified, have the following meanings. The arguments to the <strong>-G</strong>, <strong>-W</strong>, and <strong>-X</strong> options (and, if necessary, the <strong>-P</strong> and <strong>-S</strong> options) should be quoted to protect them from expansion before the <strong>complete</strong> builtin is invoked.
-      <div class="indent">
-        <dl class="indent-8">
-          <dt><strong>-o</strong> <em>comp-option</em>
-          <dd>
-            <p>The <em>comp-option</em> controls several aspects of the compspec's behavior beyond the simple generation of completions. <em>comp-option</em> may be one of:
-            <dl class="indent-8">
-              <dt><strong>bashdefault</strong>
-              <dd>Perform the rest of the default <strong>bash</strong> completions if the compspec generates no matches.
-              <dt><strong>default</strong>
-              <dd>Use readline's default filename completion if the compspec generates no matches.
-              <dt><strong>dirnames</strong>
-              <dd>Perform directory name completion if the compspec generates no matches.
-              <dt><strong>filenames</strong>
-              <dd>Tell readline that the compspec generates filenames, so it can perform any filename-specific processing (like adding a slash to directory names, quoting special characters, or suppressing trailing spaces). Intended to be used with shell functions.
-              <dt><strong>noquote</strong>
-              <dd>Tell readline not to quote the completed words if they are filenames (quoting filenames is the default).
-              <dt><strong>nosort</strong>
-              <dd>Tell readline not to sort the list of possible completions alphabetically.
-              <dt><strong>nospace</strong>
-              <dd>Tell readline not to append a space (the default) to words completed at the end of the line.
-              <dt><strong>plusdirs</strong>
-              <dd>After any matches defined by the compspec are generated, directory name completion is attempted and any matches are added to the results of the other actions.
-            </dl>
-          <dt><strong>-A</strong> <em>action</em>
-          <dd>
-            <p>The <em>action</em> may be one of the following to generate a list of possible completions:
-            <dl class="indent-8">
-              <dt><strong>alias</strong>
-              <dd>Alias names. May also be specified as <strong>-a</strong>.
-              <dt><strong>arrayvar</strong>
-              <dd>Array variable names.
-              <dt><strong>binding</strong>
-              <dd><strong>Readline</strong> key binding names.
-              <dt><strong>builtin</strong>
-              <dd>Names of shell builtin commands. May also be specified as <strong>-b</strong>.
-              <dt><strong>command</strong>
-              <dd>Command names. May also be specified as <strong>-c</strong>.
-              <dt><strong>directory</strong>
-              <dd>Directory names. May also be specified as <strong>-d</strong>.
-              <dt><strong>disabled</strong>
-              <dd>Names of disabled shell builtins.
-              <dt><strong>enabled</strong>
-              <dd>Names of enabled shell builtins.
-              <dt><strong>export</strong>
-              <dd>Names of exported shell variables. May also be specified as <strong>-e</strong>.
-              <dt><strong>file</strong>
-              <dd>File names. May also be specified as <strong>-f</strong>.
-              <dt><strong>function</strong>
-              <dd>Names of shell functions.
-              <dt><strong>group</strong>
-              <dd>Group names. May also be specified as <strong>-g</strong>.
-              <dt><strong>helptopic</strong>
-              <dd>Help topics as accepted by the <strong>help</strong> builtin.
-              <dt><strong>hostname</strong>
-              <dd>Hostnames, as taken from the file specified by the <small><strong>HOSTFILE</strong></small> shell variable.
-              <dt><strong>job</strong>
-              <dd>Job names, if job control is active. May also be specified as <strong>-j</strong>.
-              <dt><strong>keyword</strong>
-              <dd>Shell reserved words. May also be specified as <strong>-k</strong>.
-              <dt><strong>running</strong>
-              <dd>Names of running jobs, if job control is active.
-              <dt><strong>service</strong>
-              <dd>Service names. May also be specified as <strong>-s</strong>.
-              <dt><strong>setopt</strong>
-              <dd>Valid arguments for the <strong>-o</strong> option to the <strong>set</strong> builtin.
-              <dt><strong>shopt</strong>
-              <dd>Shell option names as accepted by the <strong>shopt</strong> builtin.
-              <dt><strong>signal</strong>
-              <dd>Signal names.
-              <dt><strong>stopped</strong>
-              <dd>Names of stopped jobs, if job control is active.
-              <dt><strong>user</strong>
-              <dd>User names. May also be specified as <strong>-u</strong>.
-              <dt><strong>variable</strong>
-              <dd>Names of all shell variables. May also be specified as <strong>-v</strong>.
-            </dl>
-          <dt><strong>-C</strong> <em>command</em>
-          <dd><em>command</em> is executed in a subshell environment, and its output is used as the possible completions.
-          <dt><strong>-F</strong> <em>function</em>
-          <dd>The shell function <em>function</em> is executed in the current shell environment. When the function is executed, the first argument (<strong>$1</strong>) is the name of the command whose arguments are being completed, the second argument (<strong>$2</strong>) is the word being completed, and the third argument (<strong>$3</strong>) is the word preceding the word being completed on the current command line. When it finishes, the possible completions are retrieved from the value of the <small><strong>COMPREPLY</strong></small> array variable.
-          <dt><strong>-G</strong> <em>globpat</em>
-          <dd>The pathname expansion pattern <em>globpat</em> is expanded to generate the possible completions.
-          <dt><strong>-P</strong> <em>prefix</em>
-          <dd><em>prefix</em> is added at the beginning of each possible completion after all other options have been applied.
-          <dt><strong>-S</strong> <em>suffix</em>
-          <dd><em>suffix</em> is appended to each possible completion after all other options have been applied.
-          <dt><strong>-W</strong> <em>wordlist</em>
-          <dd>The <em>wordlist</em> is split using the characters in the <small><strong>IFS</strong></small> special variable as delimiters, and each resultant word is expanded. The possible completions are the members of the resultant list which match the word being completed.
-          <dt><strong>-X</strong> <em>filterpat</em>
-          <dd><em>filterpat</em> is a pattern as used for pathname expansion. It is applied to the list of possible completions generated by the preceding options and arguments, and each completion matching <em>filterpat</em> is removed from the list. A leading <strong>!</strong> in <em>filterpat</em> negates the pattern; in this case, any completion not matching <em>filterpat</em> is removed.
-        </dl>
-        <p>The return value is true unless an invalid option is supplied, an option other than <strong>-p</strong> or <strong>-r</strong> is supplied without a <em>name</em> argument, an attempt is made to remove a completion specification for a <em>name</em> for which no specification exists, or an error occurs adding a completion specification.
-      </div>
+      <dl class="indent-8">
+        <dt><strong>-o</strong> <em>comp-option</em>
+        <dd>
+          <p>The <em>comp-option</em> controls several aspects of the compspec's behavior beyond the simple generation of completions. <em>comp-option</em> may be one of:
+          <dl class="indent-8">
+            <dt><strong>bashdefault</strong>
+            <dd>Perform the rest of the default <strong>bash</strong> completions if the compspec generates no matches.
+            <dt><strong>default</strong>
+            <dd>Use readline's default filename completion if the compspec generates no matches.
+            <dt><strong>dirnames</strong>
+            <dd>Perform directory name completion if the compspec generates no matches.
+            <dt><strong>filenames</strong>
+            <dd>Tell readline that the compspec generates filenames, so it can perform any filename-specific processing (like adding a slash to directory names, quoting special characters, or suppressing trailing spaces). Intended to be used with shell functions.
+            <dt><strong>noquote</strong>
+            <dd>Tell readline not to quote the completed words if they are filenames (quoting filenames is the default).
+            <dt><strong>nosort</strong>
+            <dd>Tell readline not to sort the list of possible completions alphabetically.
+            <dt><strong>nospace</strong>
+            <dd>Tell readline not to append a space (the default) to words completed at the end of the line.
+            <dt><strong>plusdirs</strong>
+            <dd>After any matches defined by the compspec are generated, directory name completion is attempted and any matches are added to the results of the other actions.
+          </dl>
+        <dt><strong>-A</strong> <em>action</em>
+        <dd>
+          <p>The <em>action</em> may be one of the following to generate a list of possible completions:
+          <dl class="indent-8">
+            <dt><strong>alias</strong>
+            <dd>Alias names. May also be specified as <strong>-a</strong>.
+            <dt><strong>arrayvar</strong>
+            <dd>Array variable names.
+            <dt><strong>binding</strong>
+            <dd><strong>Readline</strong> key binding names.
+            <dt><strong>builtin</strong>
+            <dd>Names of shell builtin commands. May also be specified as <strong>-b</strong>.
+            <dt><strong>command</strong>
+            <dd>Command names. May also be specified as <strong>-c</strong>.
+            <dt><strong>directory</strong>
+            <dd>Directory names. May also be specified as <strong>-d</strong>.
+            <dt><strong>disabled</strong>
+            <dd>Names of disabled shell builtins.
+            <dt><strong>enabled</strong>
+            <dd>Names of enabled shell builtins.
+            <dt><strong>export</strong>
+            <dd>Names of exported shell variables. May also be specified as <strong>-e</strong>.
+            <dt><strong>file</strong>
+            <dd>File names. May also be specified as <strong>-f</strong>.
+            <dt><strong>function</strong>
+            <dd>Names of shell functions.
+            <dt><strong>group</strong>
+            <dd>Group names. May also be specified as <strong>-g</strong>.
+            <dt><strong>helptopic</strong>
+            <dd>Help topics as accepted by the <strong>help</strong> builtin.
+            <dt><strong>hostname</strong>
+            <dd>Hostnames, as taken from the file specified by the <small><strong>HOSTFILE</strong></small> shell variable.
+            <dt><strong>job</strong>
+            <dd>Job names, if job control is active. May also be specified as <strong>-j</strong>.
+            <dt><strong>keyword</strong>
+            <dd>Shell reserved words. May also be specified as <strong>-k</strong>.
+            <dt><strong>running</strong>
+            <dd>Names of running jobs, if job control is active.
+            <dt><strong>service</strong>
+            <dd>Service names. May also be specified as <strong>-s</strong>.
+            <dt><strong>setopt</strong>
+            <dd>Valid arguments for the <strong>-o</strong> option to the <strong>set</strong> builtin.
+            <dt><strong>shopt</strong>
+            <dd>Shell option names as accepted by the <strong>shopt</strong> builtin.
+            <dt><strong>signal</strong>
+            <dd>Signal names.
+            <dt><strong>stopped</strong>
+            <dd>Names of stopped jobs, if job control is active.
+            <dt><strong>user</strong>
+            <dd>User names. May also be specified as <strong>-u</strong>.
+            <dt><strong>variable</strong>
+            <dd>Names of all shell variables. May also be specified as <strong>-v</strong>.
+          </dl>
+        <dt><strong>-C</strong> <em>command</em>
+        <dd><em>command</em> is executed in a subshell environment, and its output is used as the possible completions.
+        <dt><strong>-F</strong> <em>function</em>
+        <dd>The shell function <em>function</em> is executed in the current shell environment. When the function is executed, the first argument (<strong>$1</strong>) is the name of the command whose arguments are being completed, the second argument (<strong>$2</strong>) is the word being completed, and the third argument (<strong>$3</strong>) is the word preceding the word being completed on the current command line. When it finishes, the possible completions are retrieved from the value of the <small><strong>COMPREPLY</strong></small> array variable.
+        <dt><strong>-G</strong> <em>globpat</em>
+        <dd>The pathname expansion pattern <em>globpat</em> is expanded to generate the possible completions.
+        <dt><strong>-P</strong> <em>prefix</em>
+        <dd><em>prefix</em> is added at the beginning of each possible completion after all other options have been applied.
+        <dt><strong>-S</strong> <em>suffix</em>
+        <dd><em>suffix</em> is appended to each possible completion after all other options have been applied.
+        <dt><strong>-W</strong> <em>wordlist</em>
+        <dd>The <em>wordlist</em> is split using the characters in the <small><strong>IFS</strong></small> special variable as delimiters, and each resultant word is expanded. The possible completions are the members of the resultant list which match the word being completed.
+        <dt><strong>-X</strong> <em>filterpat</em>
+        <dd><em>filterpat</em> is a pattern as used for pathname expansion. It is applied to the list of possible completions generated by the preceding options and arguments, and each completion matching <em>filterpat</em> is removed from the list. A leading <strong>!</strong> in <em>filterpat</em> negates the pattern; in this case, any completion not matching <em>filterpat</em> is removed.
+      </dl>
+      <p>The return value is true unless an invalid option is supplied, an option other than <strong>-p</strong> or <strong>-r</strong> is supplied without a <em>name</em> argument, an attempt is made to remove a completion specification for a <em>name</em> for which no specification exists, or an error occurs adding a completion specification.
     <dt><strong>compopt</strong> [<strong>-o</strong> <em>option</em>] [<strong>-DE</strong>] [<strong>+o</strong> <em>option</em>] [<em>name</em>]
     <dd>Modify completion options for each <em>name</em> according to the <em>option</em>s, or for the currently-executing completion if no <em>name</em>s are supplied. If no <em>option</em>s are given, display the completion options for each <em>name</em> or the current completion. The possible values of <em>option</em> are those valid for the <strong>complete</strong> builtin described above. The <strong>-D</strong> option indicates that the remaining options should apply to the ``default'' command completion; that is, completion attempted on a command for which no completion has previously been defined. The <strong>-E</strong> option indicates that the remaining options should apply to ``empty'' command completion; that is, completion attempted on a blank line.<br>
     <br>
@@ -2015,51 +1999,47 @@
     <dt><strong>typeset</strong> [<strong>-aAfFgilnrtux</strong>] [<strong>-p</strong>] [<em>name</em>[=<em>value</em>] ...]
     <dd>
       <p>Declare variables and/or give them attributes. If no <em>name</em>s are given then display the values of variables. The <strong>-p</strong> option will display the attributes and values of each <em>name</em>. When <strong>-p</strong> is used with <em>name</em> arguments, additional options, other than <strong>-f</strong> and <strong>-F</strong>, are ignored. When <strong>-p</strong> is supplied without <em>name</em> arguments, it will display the attributes and values of all variables having the attributes specified by the additional options. If no other options are supplied with <strong>-p</strong>, <strong>declare</strong> will display the attributes and values of all shell variables. The <strong>-f</strong> option will restrict the display to shell functions. The <strong>-F</strong> option inhibits the display of function definitions; only the function name and attributes are printed. If the <strong>extdebug</strong> shell option is enabled using <strong>shopt</strong>, the source file name and line number where each <em>name</em> is defined are displayed as well. The <strong>-F</strong> option implies <strong>-f</strong>. The <strong>-g</strong> option forces variables to be created or modified at the global scope, even when <strong>declare</strong> is executed in a shell function. It is ignored in all other cases. The following options can be used to restrict output to variables with the specified attribute or to give variables attributes:
-      <div class="indent">
-        <dl>
-          <dt><strong>-a</strong>
-          <dd>Each <em>name</em> is an indexed array variable (see <strong>Arrays</strong> above).
-          <dt><strong>-A</strong>
-          <dd>Each <em>name</em> is an associative array variable (see <strong>Arrays</strong> above).
-          <dt><strong>-f</strong>
-          <dd>Use function names only.
-          <dt><strong>-i</strong>
-          <dd>The variable is treated as an integer; arithmetic evaluation (see <small><strong>ARITHMETIC EVALUATION</strong></small> above) is performed when the variable is assigned a value.
-          <dt><strong>-l</strong>
-          <dd>When the variable is assigned a value, all upper-case characters are converted to lower-case. The upper-case attribute is disabled.
-          <dt><strong>-n</strong>
-          <dd>Give each <em>name</em> the <em>nameref</em> attribute, making it a name reference to another variable. That other variable is defined by the value of <em>name</em>. All references, assignments, and attribute modifications to <em>name</em>, except those using or changing the <strong>-n</strong> attribute itself, are performed on the variable referenced by <em>name</em>'s value. The nameref attribute cannot be applied to array variables.
-          <dt><strong>-r</strong>
-          <dd>Make <em>name</em>s readonly. These names cannot then be assigned values by subsequent assignment statements or unset.
-          <dt><strong>-t</strong>
-          <dd>Give each <em>name</em> the <em>trace</em> attribute. Traced functions inherit the <strong>DEBUG</strong> and <strong>RETURN</strong> traps from the calling shell. The trace attribute has no special meaning for variables.
-          <dt><strong>-u</strong>
-          <dd>When the variable is assigned a value, all lower-case characters are converted to upper-case. The lower-case attribute is disabled.
-          <dt><strong>-x</strong>
-          <dd>Mark <em>name</em>s for export to subsequent commands via the environment.
-        </dl>
-        <p>Using `+' instead of `-' turns off the attribute instead, with the exceptions that <strong>+a</strong> may not be used to destroy an array variable and <strong>+r</strong> will not remove the readonly attribute. When used in a function, <strong>declare</strong> and <strong>typeset</strong> make each <em>name</em> local, as with the <strong>local</strong> command, unless the <strong>-g</strong> option is supplied. If a variable name is followed by =<em>value</em>, the value of the variable is set to <em>value</em>. When using <strong>-a</strong> or <strong>-A</strong> and the compound assignment syntax to create array variables, additional attributes do not take effect until subsequent assignments. The return value is 0 unless an invalid option is encountered, an attempt is made to define a function using ``-f foo=bar'', an attempt is made to assign a value to a readonly variable, an attempt is made to assign a value to an array variable without using the compound assignment syntax (see <strong>Arrays</strong> above), one of the <em>names</em> is not a valid shell variable name, an attempt is made to turn off readonly status for a readonly variable, an attempt is made to turn off array status for an array variable, or an attempt is made to display a non-existent function with <strong>-f</strong>.
-      </div>
+      <dl>
+        <dt><strong>-a</strong>
+        <dd>Each <em>name</em> is an indexed array variable (see <strong>Arrays</strong> above).
+        <dt><strong>-A</strong>
+        <dd>Each <em>name</em> is an associative array variable (see <strong>Arrays</strong> above).
+        <dt><strong>-f</strong>
+        <dd>Use function names only.
+        <dt><strong>-i</strong>
+        <dd>The variable is treated as an integer; arithmetic evaluation (see <small><strong>ARITHMETIC EVALUATION</strong></small> above) is performed when the variable is assigned a value.
+        <dt><strong>-l</strong>
+        <dd>When the variable is assigned a value, all upper-case characters are converted to lower-case. The upper-case attribute is disabled.
+        <dt><strong>-n</strong>
+        <dd>Give each <em>name</em> the <em>nameref</em> attribute, making it a name reference to another variable. That other variable is defined by the value of <em>name</em>. All references, assignments, and attribute modifications to <em>name</em>, except those using or changing the <strong>-n</strong> attribute itself, are performed on the variable referenced by <em>name</em>'s value. The nameref attribute cannot be applied to array variables.
+        <dt><strong>-r</strong>
+        <dd>Make <em>name</em>s readonly. These names cannot then be assigned values by subsequent assignment statements or unset.
+        <dt><strong>-t</strong>
+        <dd>Give each <em>name</em> the <em>trace</em> attribute. Traced functions inherit the <strong>DEBUG</strong> and <strong>RETURN</strong> traps from the calling shell. The trace attribute has no special meaning for variables.
+        <dt><strong>-u</strong>
+        <dd>When the variable is assigned a value, all lower-case characters are converted to upper-case. The lower-case attribute is disabled.
+        <dt><strong>-x</strong>
+        <dd>Mark <em>name</em>s for export to subsequent commands via the environment.
+      </dl>
+      <p>Using `+' instead of `-' turns off the attribute instead, with the exceptions that <strong>+a</strong> may not be used to destroy an array variable and <strong>+r</strong> will not remove the readonly attribute. When used in a function, <strong>declare</strong> and <strong>typeset</strong> make each <em>name</em> local, as with the <strong>local</strong> command, unless the <strong>-g</strong> option is supplied. If a variable name is followed by =<em>value</em>, the value of the variable is set to <em>value</em>. When using <strong>-a</strong> or <strong>-A</strong> and the compound assignment syntax to create array variables, additional attributes do not take effect until subsequent assignments. The return value is 0 unless an invalid option is encountered, an attempt is made to define a function using ``-f foo=bar'', an attempt is made to assign a value to a readonly variable, an attempt is made to assign a value to an array variable without using the compound assignment syntax (see <strong>Arrays</strong> above), one of the <em>names</em> is not a valid shell variable name, an attempt is made to turn off readonly status for a readonly variable, an attempt is made to turn off array status for an array variable, or an attempt is made to display a non-existent function with <strong>-f</strong>.
     <dt><strong>dirs [-clpv] [+<em>n</em>] [-<em>n</em>]</strong>
     <dd>
       <p>Without options, displays the list of currently remembered directories. The default display is on a single line with directory names separated by spaces. Directories are added to the list with the <strong>pushd</strong> command; the <strong>popd</strong> command removes entries from the list. The current directory is always the first directory in the stack.
-      <div class="indent">
-        <dl>
-          <dt><strong>-c</strong>
-          <dd>Clears the directory stack by deleting all of the entries.
-          <dt><strong>-l</strong>
-          <dd>Produces a listing using full pathnames; the default listing format uses a tilde to denote the home directory.
-          <dt><strong>-p</strong>
-          <dd>Print the directory stack with one entry per line.
-          <dt><strong>-v</strong>
-          <dd>Print the directory stack with one entry per line, prefixing each entry with its index in the stack.
-          <dt><strong>+</strong><em>n</em>
-          <dd>Displays the <em>n</em>th entry counting from the left of the list shown by <strong>dirs</strong> when invoked without options, starting with zero.
-          <dt><strong>-</strong><em>n</em>
-          <dd>Displays the <em>n</em>th entry counting from the right of the list shown by <strong>dirs</strong> when invoked without options, starting with zero.
-        </dl>
-        <p>The return value is 0 unless an invalid option is supplied or <em>n</em> indexes beyond the end of the directory stack.
-      </div>
+      <dl>
+        <dt><strong>-c</strong>
+        <dd>Clears the directory stack by deleting all of the entries.
+        <dt><strong>-l</strong>
+        <dd>Produces a listing using full pathnames; the default listing format uses a tilde to denote the home directory.
+        <dt><strong>-p</strong>
+        <dd>Print the directory stack with one entry per line.
+        <dt><strong>-v</strong>
+        <dd>Print the directory stack with one entry per line, prefixing each entry with its index in the stack.
+        <dt><strong>+</strong><em>n</em>
+        <dd>Displays the <em>n</em>th entry counting from the left of the list shown by <strong>dirs</strong> when invoked without options, starting with zero.
+        <dt><strong>-</strong><em>n</em>
+        <dd>Displays the <em>n</em>th entry counting from the right of the list shown by <strong>dirs</strong> when invoked without options, starting with zero.
+      </dl>
+      <p>The return value is 0 unless an invalid option is supplied or <em>n</em> indexes beyond the end of the directory stack.
     <dt><strong>disown</strong> [<strong>-ar</strong>] [<strong>-h</strong>] [<em>jobspec</em> ... | <em>pid</em> ... ]
     <dd>Without options, remove each <em>jobspec</em> from the table of active jobs. If <em>jobspec</em> is not present, and neither the <strong>-a</strong> nor the <strong>-r</strong> option is supplied, the <em>current job</em> is used. If the <strong>-h</strong> option is given, each <em>jobspec</em> is not removed from the table, but is marked so that <small><strong>SIGHUP</strong></small> is not sent to the job if the shell receives a <small><strong>SIGHUP</strong>.</small> If no <em>jobspec</em> is supplied, the <strong>-a</strong> option means to remove or mark all jobs; the <strong>-r</strong> option without a <em>jobspec</em> argument restricts operation to running jobs. The return value is 0 unless a <em>jobspec</em> does not specify a valid job.
     <dt><strong>echo</strong> [<strong>-neE</strong>] [<em>arg</em> ...]
@@ -2137,17 +2117,15 @@
     <dt><strong>help</strong> [<strong>-dms</strong>] [<em>pattern</em>]
     <dd>
       <p>Display helpful information about builtin commands. If <em>pattern</em> is specified, <strong>help</strong> gives detailed help on all commands matching <em>pattern</em>; otherwise help for all the builtins and shell control structures is printed.
-      <div class="indent">
-        <dl>
-          <dt><strong>-d</strong>
-          <dd>Display a short description of each <em>pattern</em>
-          <dt><strong>-m</strong>
-          <dd>Display the description of each <em>pattern</em> in a manpage-like format
-          <dt><strong>-s</strong>
-          <dd>Display only a short usage synopsis for each <em>pattern</em>
-        </dl>
-        <p>The return status is 0 unless no command matches <em>pattern</em>.
-      </div>
+      <dl>
+        <dt><strong>-d</strong>
+        <dd>Display a short description of each <em>pattern</em>
+        <dt><strong>-m</strong>
+        <dd>Display the description of each <em>pattern</em> in a manpage-like format
+        <dt><strong>-s</strong>
+        <dd>Display only a short usage synopsis for each <em>pattern</em>
+      </dl>
+      <p>The return status is 0 unless no command matches <em>pattern</em>.
     <dt><strong>history [</strong><em>n</em>]
     <dt><strong>history</strong> <strong>-c</strong>
     <dt><strong>history -d</strong> <em>offset</em>
@@ -2156,47 +2134,43 @@
     <dt><strong>history</strong> <strong>-s</strong> <em>arg</em> [<em>arg ...</em>]
     <dd>
       <p>With no options, display the command history list with line numbers. Lines listed with a <strong>*</strong> have been modified. An argument of <em>n</em> lists only the last <em>n</em> lines. If the shell variable <small><strong>HISTTIMEFORMAT</strong></small> is set and not null, it is used as a format string for <em>strftime</em>(3) to display the time stamp associated with each displayed history entry. No intervening blank is printed between the formatted time stamp and the history line. If <em>filename</em> is supplied, it is used as the name of the history file; if not, the value of <small><strong>HISTFILE</strong></small> is used. Options, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-c</strong>
-          <dd>Clear the history list by deleting all the entries.
-          <dt><strong>-d</strong> <em>offset</em>
-          <dd>Delete the history entry at position <em>offset</em>.
-          <dt><strong>-a</strong>
-          <dd>Append the ``new'' history lines to the history file. These are history lines entered since the beginning of the current <strong>bash</strong> session, but not already appended to the history file.
-          <dt><strong>-n</strong>
-          <dd>Read the history lines not already read from the history file into the current history list. These are lines appended to the history file since the beginning of the current <strong>bash</strong> session.
-          <dt><strong>-r</strong>
-          <dd>Read the contents of the history file and append them to the current history list.
-          <dt><strong>-w</strong>
-          <dd>Write the current history list to the history file, overwriting the history file's contents.
-          <dt><strong>-p</strong>
-          <dd>Perform history substitution on the following <em>args</em> and display the result on the standard output. Does not store the results in the history list. Each <em>arg</em> must be quoted to disable normal history expansion.
-          <dt><strong>-s</strong>
-          <dd>Store the <em>args</em> in the history list as a single entry. The last command in the history list is removed before the <em>args</em> are added.
-        </dl>
-        <p>If the <small><strong>HISTTIMEFORMAT</strong></small> variable is set, the time stamp information associated with each history entry is written to the history file, marked with the history comment character. When the history file is read, lines beginning with the history comment character followed immediately by a digit are interpreted as timestamps for the following history entry. The return value is 0 unless an invalid option is encountered, an error occurs while reading or writing the history file, an invalid <em>offset</em> is supplied as an argument to <strong>-d</strong>, or the history expansion supplied as an argument to <strong>-p</strong> fails.
-      </div>
+      <dl>
+        <dt><strong>-c</strong>
+        <dd>Clear the history list by deleting all the entries.
+        <dt><strong>-d</strong> <em>offset</em>
+        <dd>Delete the history entry at position <em>offset</em>.
+        <dt><strong>-a</strong>
+        <dd>Append the ``new'' history lines to the history file. These are history lines entered since the beginning of the current <strong>bash</strong> session, but not already appended to the history file.
+        <dt><strong>-n</strong>
+        <dd>Read the history lines not already read from the history file into the current history list. These are lines appended to the history file since the beginning of the current <strong>bash</strong> session.
+        <dt><strong>-r</strong>
+        <dd>Read the contents of the history file and append them to the current history list.
+        <dt><strong>-w</strong>
+        <dd>Write the current history list to the history file, overwriting the history file's contents.
+        <dt><strong>-p</strong>
+        <dd>Perform history substitution on the following <em>args</em> and display the result on the standard output. Does not store the results in the history list. Each <em>arg</em> must be quoted to disable normal history expansion.
+        <dt><strong>-s</strong>
+        <dd>Store the <em>args</em> in the history list as a single entry. The last command in the history list is removed before the <em>args</em> are added.
+      </dl>
+      <p>If the <small><strong>HISTTIMEFORMAT</strong></small> variable is set, the time stamp information associated with each history entry is written to the history file, marked with the history comment character. When the history file is read, lines beginning with the history comment character followed immediately by a digit are interpreted as timestamps for the following history entry. The return value is 0 unless an invalid option is encountered, an error occurs while reading or writing the history file, an invalid <em>offset</em> is supplied as an argument to <strong>-d</strong>, or the history expansion supplied as an argument to <strong>-p</strong> fails.
     <dt><strong>jobs</strong> [<strong>-lnprs</strong>] [ <em>jobspec</em> ... ]
     <dt><strong>jobs</strong> <strong>-x</strong> <em>command</em> [ <em>args</em> ... ]
     <dd>
       <p>The first form lists the active jobs. The options have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-l</strong>
-          <dd>List process IDs in addition to the normal information.
-          <dt><strong>-n</strong>
-          <dd>Display information only about jobs that have changed status since the user was last notified of their status.
-          <dt><strong>-p</strong>
-          <dd>List only the process ID of the job's process group leader.
-          <dt><strong>-r</strong>
-          <dd>Display only running jobs.
-          <dt><strong>-s</strong>
-          <dd>Display only stopped jobs.
-        </dl>
-        <p>If <em>jobspec</em> is given, output is restricted to information about that job. The return status is 0 unless an invalid option is encountered or an invalid <em>jobspec</em> is supplied.
-        <p>If the <strong>-x</strong> option is supplied, <strong>jobs</strong> replaces any <em>jobspec</em> found in <em>command</em> or <em>args</em> with the corresponding process group ID, and executes <em>command</em> passing it <em>args</em>, returning its exit status.
-      </div>
+      <dl>
+        <dt><strong>-l</strong>
+        <dd>List process IDs in addition to the normal information.
+        <dt><strong>-n</strong>
+        <dd>Display information only about jobs that have changed status since the user was last notified of their status.
+        <dt><strong>-p</strong>
+        <dd>List only the process ID of the job's process group leader.
+        <dt><strong>-r</strong>
+        <dd>Display only running jobs.
+        <dt><strong>-s</strong>
+        <dd>Display only stopped jobs.
+      </dl>
+      <p>If <em>jobspec</em> is given, output is restricted to information about that job. The return status is 0 unless an invalid option is encountered or an invalid <em>jobspec</em> is supplied.
+      <p>If the <strong>-x</strong> option is supplied, <strong>jobs</strong> replaces any <em>jobspec</em> found in <em>command</em> or <em>args</em> with the corresponding process group ID, and executes <em>command</em> passing it <em>args</em>, returning its exit status.
     <dt><strong>kill</strong> [<strong>-s</strong> <em>sigspec</em> | <strong>-n</strong> <em>signum</em> | <strong>-</strong><em>sigspec</em>] [<em>pid</em> | <em>jobspec</em>] ...
     <dt><strong>kill</strong> <strong>-l</strong>|<strong>-L</strong> [<em>sigspec</em> | <em>exit_status</em>]
     <dd>Send the signal named by <em>sigspec</em> or <em>signum</em> to the processes named by <em>pid</em> or <em>jobspec</em>. <em>sigspec</em> is either a case-insensitive signal name such as <small><strong>SIGKILL</strong></small> (with or without the <small><strong>SIG</strong></small> prefix) or a signal number; <em>signum</em> is a signal number. If <em>sigspec</em> is not present, then <small><strong>SIGTERM</strong></small> is assumed. An argument of <strong>-l</strong> lists the signal names. If any arguments are supplied when <strong>-l</strong> is given, the names of the signals corresponding to the arguments are listed, and the return status is 0. The <em>exit_status</em> argument to <strong>-l</strong> is a number specifying either a signal number or the exit status of a process terminated by a signal. The <strong>-L</strong> option is equivalent to <strong>-l</strong>. <strong>kill</strong> returns true if at least one signal was successfully sent, or false if an error occurs or an invalid option is encountered.
@@ -2210,109 +2184,99 @@
     <dt><strong>readarray</strong> [<strong>-d</strong> <em>delim</em>] [<strong>-n</strong> <em>count</em>] [<strong>-O</strong> <em>origin</em>] [<strong>-s</strong> <em>count</em>] [<strong>-t</strong>] [<strong>-u</strong> <em>fd</em>] [<strong>-C</strong> <em>callback</em>] [<strong>-c</strong> <em>quantum</em>] [<em>array</em>]
     <dd>
       <p>Read lines from the standard input into the indexed array variable <em>array</em>, or from file descriptor <em>fd</em> if the <strong>-u</strong> option is supplied. The variable <small><strong>MAPFILE</strong></small> is the default <em>array</em>. Options, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-d</strong>
-          <dd>The first character of <em>delim</em> is used to terminate each input line, rather than newline.
-          <dt><strong>-n</strong>
-          <dd>Copy at most <em>count</em> lines. If <em>count</em> is 0, all lines are copied.
-          <dt><strong>-O</strong>
-          <dd>Begin assigning to <em>array</em> at index <em>origin</em>. The default index is 0.
-          <dt><strong>-s</strong>
-          <dd>Discard the first <em>count</em> lines read.
-          <dt><strong>-t</strong>
-          <dd>Remove a trailing <em>delim</em> (default newline) from each line read.
-          <dt><strong>-u</strong>
-          <dd>Read lines from file descriptor <em>fd</em> instead of the standard input.
-          <dt><strong>-C</strong>
-          <dd>Evaluate <em>callback</em> each time <em>quantum</em> lines are read. The <strong>-c</strong> option specifies <em>quantum</em>.
-          <dt><strong>-c</strong>
-          <dd>Specify the number of lines read between each call to <em>callback</em>.
-        </dl>
-        <p>If <strong>-C</strong> is specified without <strong>-c</strong>, the default quantum is 5000. When <em>callback</em> is evaluated, it is supplied the index of the next array element to be assigned and the line to be assigned to that element as additional arguments. <em>callback</em> is evaluated after the line is read but before the array element is assigned.
-        <p>If not supplied with an explicit origin, <strong>mapfile</strong> will clear <em>array</em> before assigning to it.
-        <p><strong>mapfile</strong> returns successfully unless an invalid option or option argument is supplied, <em>array</em> is invalid or unassignable, or if <em>array</em> is not an indexed array.
-      </div>
+      <dl>
+        <dt><strong>-d</strong>
+        <dd>The first character of <em>delim</em> is used to terminate each input line, rather than newline.
+        <dt><strong>-n</strong>
+        <dd>Copy at most <em>count</em> lines. If <em>count</em> is 0, all lines are copied.
+        <dt><strong>-O</strong>
+        <dd>Begin assigning to <em>array</em> at index <em>origin</em>. The default index is 0.
+        <dt><strong>-s</strong>
+        <dd>Discard the first <em>count</em> lines read.
+        <dt><strong>-t</strong>
+        <dd>Remove a trailing <em>delim</em> (default newline) from each line read.
+        <dt><strong>-u</strong>
+        <dd>Read lines from file descriptor <em>fd</em> instead of the standard input.
+        <dt><strong>-C</strong>
+        <dd>Evaluate <em>callback</em> each time <em>quantum</em> lines are read. The <strong>-c</strong> option specifies <em>quantum</em>.
+        <dt><strong>-c</strong>
+        <dd>Specify the number of lines read between each call to <em>callback</em>.
+      </dl>
+      <p>If <strong>-C</strong> is specified without <strong>-c</strong>, the default quantum is 5000. When <em>callback</em> is evaluated, it is supplied the index of the next array element to be assigned and the line to be assigned to that element as additional arguments. <em>callback</em> is evaluated after the line is read but before the array element is assigned.
+      <p>If not supplied with an explicit origin, <strong>mapfile</strong> will clear <em>array</em> before assigning to it.
+      <p><strong>mapfile</strong> returns successfully unless an invalid option or option argument is supplied, <em>array</em> is invalid or unassignable, or if <em>array</em> is not an indexed array.
     <dt><strong>popd</strong> [-<strong>n</strong>] [+<em>n</em>] [-<em>n</em>]
     <dd>
       <p>Removes entries from the directory stack. With no arguments, removes the top directory from the stack, and performs a <strong>cd</strong> to the new top directory. Arguments, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-n</strong>
-          <dd>Suppresses the normal change of directory when removing directories from the stack, so that only the stack is manipulated.
-          <dt><strong>+</strong><em>n</em>
-          <dd>Removes the <em>n</em>th entry counting from the left of the list shown by <strong>dirs</strong>, starting with zero. For example: ``popd +0'' removes the first directory, ``popd +1'' the second.
-          <dt><strong>-</strong><em>n</em>
-          <dd>Removes the <em>n</em>th entry counting from the right of the list shown by <strong>dirs</strong>, starting with zero. For example: ``popd -0'' removes the last directory, ``popd -1'' the next to last.
-        </dl>
-        <p>If the <strong>popd</strong> command is successful, a <strong>dirs</strong> is performed as well, and the return status is 0. <strong>popd</strong> returns false if an invalid option is encountered, the directory stack is empty, a non-existent directory stack entry is specified, or the directory change fails.
-      </div>
+      <dl>
+        <dt><strong>-n</strong>
+        <dd>Suppresses the normal change of directory when removing directories from the stack, so that only the stack is manipulated.
+        <dt><strong>+</strong><em>n</em>
+        <dd>Removes the <em>n</em>th entry counting from the left of the list shown by <strong>dirs</strong>, starting with zero. For example: ``popd +0'' removes the first directory, ``popd +1'' the second.
+        <dt><strong>-</strong><em>n</em>
+        <dd>Removes the <em>n</em>th entry counting from the right of the list shown by <strong>dirs</strong>, starting with zero. For example: ``popd -0'' removes the last directory, ``popd -1'' the next to last.
+      </dl>
+      <p>If the <strong>popd</strong> command is successful, a <strong>dirs</strong> is performed as well, and the return status is 0. <strong>popd</strong> returns false if an invalid option is encountered, the directory stack is empty, a non-existent directory stack entry is specified, or the directory change fails.
     <dt><strong>printf</strong> [<strong>-v</strong> <em>var</em>] <em>format</em> [<em>arguments</em>]
     <dd>
       <p>Write the formatted <em>arguments</em> to the standard output under the control of the <em>format</em>. The <strong>-v</strong> option causes the output to be assigned to the variable <em>var</em> rather than being printed to the standard output.<br>
       <br>
       The <em>format</em> is a character string which contains three types of objects: plain characters, which are simply copied to standard output, character escape sequences, which are converted and copied to the standard output, and format specifications, each of which causes printing of the next successive <em>argument</em>. In addition to the standard <em>printf</em>(1) format specifications, <strong>printf</strong> interprets the following extensions:
-      <div class="indent">
-        <dl>
-          <dt><strong>%b</strong>
-          <dd>causes <strong>printf</strong> to expand backslash escape sequences in the corresponding <em>argument</em> in the same way as <strong>echo -e</strong>.
-          <dt><strong>%q</strong>
-          <dd>causes <strong>printf</strong> to output the corresponding <em>argument</em> in a format that can be reused as shell input.
-          <dt><strong>%(<em>datefmt</em>)T</strong>
-          <dd>causes <strong>printf</strong> to output the date-time string resulting from using <em>datefmt</em> as a format string for <em>strftime</em>(3). The corresponding <em>argument</em> is an integer representing the number of seconds since the epoch. Two special argument values may be used: -1 represents the current time, and -2 represents the time the shell was invoked. If no argument is specified, conversion behaves as if -1 had been given. This is an exception to the usual <strong>printf</strong> behavior.
-        </dl>
-        <p>Arguments to non-string format specifiers are treated as C constants, except that a leading plus or minus sign is allowed, and if the leading character is a single or double quote, the value is the ASCII value of the following character.
-        <p>The <em>format</em> is reused as necessary to consume all of the <em>arguments</em>. If the <em>format</em> requires more <em>arguments</em> than are supplied, the extra format specifications behave as if a zero value or null string, as appropriate, had been supplied. The return value is zero on success, non-zero on failure.
-      </div>
+      <dl>
+        <dt><strong>%b</strong>
+        <dd>causes <strong>printf</strong> to expand backslash escape sequences in the corresponding <em>argument</em> in the same way as <strong>echo -e</strong>.
+        <dt><strong>%q</strong>
+        <dd>causes <strong>printf</strong> to output the corresponding <em>argument</em> in a format that can be reused as shell input.
+        <dt><strong>%(<em>datefmt</em>)T</strong>
+        <dd>causes <strong>printf</strong> to output the date-time string resulting from using <em>datefmt</em> as a format string for <em>strftime</em>(3). The corresponding <em>argument</em> is an integer representing the number of seconds since the epoch. Two special argument values may be used: -1 represents the current time, and -2 represents the time the shell was invoked. If no argument is specified, conversion behaves as if -1 had been given. This is an exception to the usual <strong>printf</strong> behavior.
+      </dl>
+      <p>Arguments to non-string format specifiers are treated as C constants, except that a leading plus or minus sign is allowed, and if the leading character is a single or double quote, the value is the ASCII value of the following character.
+      <p>The <em>format</em> is reused as necessary to consume all of the <em>arguments</em>. If the <em>format</em> requires more <em>arguments</em> than are supplied, the extra format specifications behave as if a zero value or null string, as appropriate, had been supplied. The return value is zero on success, non-zero on failure.
     <dt><strong>pushd</strong> [<strong>-n</strong>] [+<em>n</em>] [-<em>n</em>]
     <dt><strong>pushd</strong> [<strong>-n</strong>] [<em>dir</em>]
     <dd>
       <p>Adds a directory to the top of the directory stack, or rotates the stack, making the new top of the stack the current working directory. With no arguments, <strong>pushd</strong> exchanges the top two directories and returns 0, unless the directory stack is empty. Arguments, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-n</strong>
-          <dd>Suppresses the normal change of directory when rotating or adding directories to the stack, so that only the stack is manipulated.
-          <dt><strong>+</strong><em>n</em>
-          <dd>Rotates the stack so that the <em>n</em>th directory (counting from the left of the list shown by <strong>dirs</strong>, starting with zero) is at the top.
-          <dt><strong>-</strong><em>n</em>
-          <dd>Rotates the stack so that the <em>n</em>th directory (counting from the right of the list shown by <strong>dirs</strong>, starting with zero) is at the top.
-          <dt><em>dir</em>
-          <dd>Adds <em>dir</em> to the directory stack at the top, making it the new current working directory as if it had been supplied as the argument to the <strong>cd</strong> builtin.
-        </dl>
-        <p>If the <strong>pushd</strong> command is successful, a <strong>dirs</strong> is performed as well. If the first form is used, <strong>pushd</strong> returns 0 unless the cd to <em>dir</em> fails. With the second form, <strong>pushd</strong> returns 0 unless the directory stack is empty, a non-existent directory stack element is specified, or the directory change to the specified new current directory fails.
-      </div>
+      <dl>
+        <dt><strong>-n</strong>
+        <dd>Suppresses the normal change of directory when rotating or adding directories to the stack, so that only the stack is manipulated.
+        <dt><strong>+</strong><em>n</em>
+        <dd>Rotates the stack so that the <em>n</em>th directory (counting from the left of the list shown by <strong>dirs</strong>, starting with zero) is at the top.
+        <dt><strong>-</strong><em>n</em>
+        <dd>Rotates the stack so that the <em>n</em>th directory (counting from the right of the list shown by <strong>dirs</strong>, starting with zero) is at the top.
+        <dt><em>dir</em>
+        <dd>Adds <em>dir</em> to the directory stack at the top, making it the new current working directory as if it had been supplied as the argument to the <strong>cd</strong> builtin.
+      </dl>
+      <p>If the <strong>pushd</strong> command is successful, a <strong>dirs</strong> is performed as well. If the first form is used, <strong>pushd</strong> returns 0 unless the cd to <em>dir</em> fails. With the second form, <strong>pushd</strong> returns 0 unless the directory stack is empty, a non-existent directory stack element is specified, or the directory change to the specified new current directory fails.
     <dt><strong>pwd</strong> [<strong>-LP</strong>]
     <dd>Print the absolute pathname of the current working directory. The pathname printed contains no symbolic links if the <strong>-P</strong> option is supplied or the <strong>-o physical</strong> option to the <strong>set</strong> builtin command is enabled. If the <strong>-L</strong> option is used, the pathname printed may contain symbolic links. The return status is 0 unless an error occurs while reading the name of the current directory or an invalid option is supplied.
     <dt><strong>read</strong> [<strong>-ers</strong>] [<strong>-a</strong> <em>aname</em>] [<strong>-d</strong> <em>delim</em>] [<strong>-i</strong> <em>text</em>] [<strong>-n</strong> <em>nchars</em>] [<strong>-N</strong> <em>nchars</em>] [<strong>-p</strong> <em>prompt</em>] [<strong>-t</strong> <em>timeout</em>] [<strong>-u</strong> <em>fd</em>] [<em>name</em> ...]
     <dd>
       <p>One line is read from the standard input, or from the file descriptor <em>fd</em> supplied as an argument to the <strong>-u</strong> option, split into words as described above under <strong>Word Splitting</strong>, and the first word is assigned to the first <em>name</em>, the second word to the second <em>name</em>, and so on. If there are more words than names, the remaining words and their intervening delimiters are assigned to the last <em>name</em>. If there are fewer words read from the input stream than names, the remaining names are assigned empty values. The characters in <small><strong>IFS</strong></small> are used to split the line into words using the same rules the shell uses for expansion (described above under <strong>Word Splitting</strong>). The backslash character (<strong>\</strong>) may be used to remove any special meaning for the next character read and for line continuation. Options, if supplied, have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-a <em>aname</em></strong>
-          <dd>The words are assigned to sequential indices of the array variable <em>aname</em>, starting at 0. <em>aname</em> is unset before any new values are assigned. Other <em>name</em> arguments are ignored.
-          <dt><strong>-d <em>delim</em></strong>
-          <dd>The first character of <em>delim</em> is used to terminate the input line, rather than newline.
-          <dt><strong>-e</strong>
-          <dd>If the standard input is coming from a terminal, <strong>readline</strong> (see <small><strong>READLINE</strong></small> above) is used to obtain the line. Readline uses the current (or default, if line editing was not previously active) editing settings.
-          <dt><strong>-i <em>text</em></strong>
-          <dd>If <strong>readline</strong> is being used to read the line, <em>text</em> is placed into the editing buffer before editing begins.
-          <dt><strong>-n <em>nchars</em></strong>
-          <dd><strong>read</strong> returns after reading <em>nchars</em> characters rather than waiting for a complete line of input, but honors a delimiter if fewer than <em>nchars</em> characters are read before the delimiter.
-          <dt><strong>-N <em>nchars</em></strong>
-          <dd><strong>read</strong> returns after reading exactly <em>nchars</em> characters rather than waiting for a complete line of input, unless EOF is encountered or <strong>read</strong> times out. Delimiter characters encountered in the input are not treated specially and do not cause <strong>read</strong> to return until <em>nchars</em> characters are read. The result is not split on the characters in <strong>IFS</strong>; the intent is that the variable is assigned exactly the characters read (with the exception of backslash; see the <strong>-r</strong> option below).
-          <dt><strong>-p <em>prompt</em></strong>
-          <dd>Display <em>prompt</em> on standard error, without a trailing newline, before attempting to read any input. The prompt is displayed only if input is coming from a terminal.
-          <dt><strong>-r</strong>
-          <dd>Backslash does not act as an escape character. The backslash is considered to be part of the line. In particular, a backslash-newline pair may not be used as a line continuation.
-          <dt><strong>-s</strong>
-          <dd>Silent mode. If input is coming from a terminal, characters are not echoed.
-          <dt><strong>-t <em>timeout</em></strong>
-          <dd>Cause <strong>read</strong> to time out and return failure if a complete line of input (or a specified number of characters) is not read within <em>timeout</em> seconds. <em>timeout</em> may be a decimal number with a fractional portion following the decimal point. This option is only effective if <strong>read</strong> is reading input from a terminal, pipe, or other special file; it has no effect when reading from regular files. If <strong>read</strong> times out, <strong>read</strong> saves any partial input read into the specified variable <em>name</em>. If <em>timeout</em> is 0, <strong>read</strong> returns immediately, without trying to read any data. The exit status is 0 if input is available on the specified file descriptor, non-zero otherwise. The exit status is greater than 128 if the timeout is exceeded.
-          <dt><strong>-u <em>fd</em></strong>
-          <dd>Read input from file descriptor <em>fd</em>.
-        </dl>
-        <p>If no <em>names</em> are supplied, the line read is assigned to the variable <small><strong>REPLY</strong>.</small> The exit status is zero, unless end-of-file is encountered, <strong>read</strong> times out (in which case the status is greater than 128), a variable assignment error (such as assigning to a readonly variable) occurs, or an invalid file descriptor is supplied as the argument to <strong>-u</strong>.
-      </div>
+      <dl>
+        <dt><strong>-a <em>aname</em></strong>
+        <dd>The words are assigned to sequential indices of the array variable <em>aname</em>, starting at 0. <em>aname</em> is unset before any new values are assigned. Other <em>name</em> arguments are ignored.
+        <dt><strong>-d <em>delim</em></strong>
+        <dd>The first character of <em>delim</em> is used to terminate the input line, rather than newline.
+        <dt><strong>-e</strong>
+        <dd>If the standard input is coming from a terminal, <strong>readline</strong> (see <small><strong>READLINE</strong></small> above) is used to obtain the line. Readline uses the current (or default, if line editing was not previously active) editing settings.
+        <dt><strong>-i <em>text</em></strong>
+        <dd>If <strong>readline</strong> is being used to read the line, <em>text</em> is placed into the editing buffer before editing begins.
+        <dt><strong>-n <em>nchars</em></strong>
+        <dd><strong>read</strong> returns after reading <em>nchars</em> characters rather than waiting for a complete line of input, but honors a delimiter if fewer than <em>nchars</em> characters are read before the delimiter.
+        <dt><strong>-N <em>nchars</em></strong>
+        <dd><strong>read</strong> returns after reading exactly <em>nchars</em> characters rather than waiting for a complete line of input, unless EOF is encountered or <strong>read</strong> times out. Delimiter characters encountered in the input are not treated specially and do not cause <strong>read</strong> to return until <em>nchars</em> characters are read. The result is not split on the characters in <strong>IFS</strong>; the intent is that the variable is assigned exactly the characters read (with the exception of backslash; see the <strong>-r</strong> option below).
+        <dt><strong>-p <em>prompt</em></strong>
+        <dd>Display <em>prompt</em> on standard error, without a trailing newline, before attempting to read any input. The prompt is displayed only if input is coming from a terminal.
+        <dt><strong>-r</strong>
+        <dd>Backslash does not act as an escape character. The backslash is considered to be part of the line. In particular, a backslash-newline pair may not be used as a line continuation.
+        <dt><strong>-s</strong>
+        <dd>Silent mode. If input is coming from a terminal, characters are not echoed.
+        <dt><strong>-t <em>timeout</em></strong>
+        <dd>Cause <strong>read</strong> to time out and return failure if a complete line of input (or a specified number of characters) is not read within <em>timeout</em> seconds. <em>timeout</em> may be a decimal number with a fractional portion following the decimal point. This option is only effective if <strong>read</strong> is reading input from a terminal, pipe, or other special file; it has no effect when reading from regular files. If <strong>read</strong> times out, <strong>read</strong> saves any partial input read into the specified variable <em>name</em>. If <em>timeout</em> is 0, <strong>read</strong> returns immediately, without trying to read any data. The exit status is 0 if input is available on the specified file descriptor, non-zero otherwise. The exit status is greater than 128 if the timeout is exceeded.
+        <dt><strong>-u <em>fd</em></strong>
+        <dd>Read input from file descriptor <em>fd</em>.
+      </dl>
+      <p>If no <em>names</em> are supplied, the line read is assigned to the variable <small><strong>REPLY</strong>.</small> The exit status is zero, unless end-of-file is encountered, <strong>read</strong> times out (in which case the status is greater than 128), a variable assignment error (such as assigning to a readonly variable) occurs, or an invalid file descriptor is supplied as the argument to <strong>-u</strong>.
     <dt><strong>readonly</strong> [<strong>-aAf</strong>] [<strong>-p</strong>] [<em>name</em>[=<em>word</em>] ...]
     <dd>The given <em>names</em> are marked readonly; the values of these <em>names</em> may not be changed by subsequent assignment. If the <strong>-f</strong> option is supplied, the functions corresponding to the <em>names</em> are so marked. The <strong>-a</strong> option restricts the variables to indexed arrays; the <strong>-A</strong> option restricts the variables to associative arrays. If both options are supplied, <strong>-A</strong> takes precedence. If no <em>name</em> arguments are given, or if the <strong>-p</strong> option is supplied, a list of all readonly names is printed. The other options may be used to restrict the output to a subset of the set of readonly names. The <strong>-p</strong> option causes output to be displayed in a format that may be reused as input. If a variable name is followed by =<em>word</em>, the value of the variable is set to <em>word</em>. The return status is 0 unless an invalid option is encountered, one of the <em>names</em> is not a valid shell variable name, or <strong>-f</strong> is supplied with a <em>name</em> that is not a function.
     <dt><strong>return</strong> [<em>n</em>]
@@ -2321,248 +2285,242 @@
     <dt><strong>set</strong> [<strong>+abefhkmnptuvxBCEHPT</strong>] [<strong>+o</strong> <em>option-name</em>] [<em>arg</em> ...]
     <dd>
       <p>Without options, the name and value of each shell variable are displayed in a format that can be reused as input for setting or resetting the currently-set variables. Read-only variables cannot be reset. In <em>posix</em> mode, only shell variables are listed. The output is sorted according to the current locale. When options are specified, they set or unset shell attributes. Any arguments remaining after option processing are treated as values for the positional parameters and are assigned, in order, to <strong>$1</strong>, <strong>$2</strong>, <strong>...</strong> <strong>$<em>n</em></strong>. Options, if specified, have the following meanings:
-      <div class="indent">
-        <dl class="indent-8">
-          <dt><strong>-a</strong>
-          <dd>Each variable or function that is created or modified is given the export attribute and marked for export to the environment of subsequent commands.
-          <dt><strong>-b</strong>
-          <dd>Report the status of terminated background jobs immediately, rather than before the next primary prompt. This is effective only when job control is enabled.
-          <dt><strong>-e</strong>
-          <dd>Exit immediately if a <em>pipeline</em> (which may consist of a single <em>simple command</em>), a <em>list</em>, or a <em>compound command</em> (see <small><strong>SHELL GRAMMAR</strong></small> above), exits with a non-zero status. The shell does not exit if the command that fails is part of the command list immediately following a <strong>while</strong> or <strong>until</strong> keyword, part of the test following the <strong>if</strong> or <strong>elif</strong> reserved words, part of any command executed in a <strong>&amp;&</strong> or <strong>||</strong> list except the command following the final <strong>&amp;&</strong> or <strong>||</strong>, any command in a pipeline but the last, or if the command's return value is being inverted with <strong>!</strong>. If a compound command other than a subshell returns a non-zero status because a command failed while <strong>-e</strong> was being ignored, the shell does not exit. A trap on <strong>ERR</strong>, if set, is executed before the shell exits. This option applies to the shell environment and each subshell environment separately (see <small><strong>COMMAND EXECUTION ENVIRONMENT</strong></small> above), and may cause subshells to exit before executing all the commands in the subshell.<br>
-          <br>
-          If a compound command or shell function executes in a context where <strong>-e</strong> is being ignored, none of the commands executed within the compound command or function body will be affected by the <strong>-e</strong> setting, even if <strong>-e</strong> is set and a command returns a failure status. If a compound command or shell function sets <strong>-e</strong> while executing in a context where <strong>-e</strong> is ignored, that setting will not have any effect until the compound command or the command containing the function call completes.
-          <dt><strong>-f</strong>
-          <dd>Disable pathname expansion.
-          <dt><strong>-h</strong>
-          <dd>Remember the location of commands as they are looked up for execution. This is enabled by default.
-          <dt><strong>-k</strong>
-          <dd>All arguments in the form of assignment statements are placed in the environment for a command, not just those that precede the command name.
-          <dt><strong>-m</strong>
-          <dd>Monitor mode. Job control is enabled. This option is on by default for interactive shells on systems that support it (see <small><strong>JOB CONTROL</strong></small> above). All processes run in a separate process group. When a background job completes, the shell prints a line containing its exit status.
-          <dt><strong>-n</strong>
-          <dd>Read commands but do not execute them. This may be used to check a shell script for syntax errors. This is ignored by interactive shells.
-          <dt><strong>-o <em>option-name</em></strong>
-          <dd>
-            <p>The <em>option-name</em> can be one of the following:
-            <div class="indent">
-              <dl class="indent-8">
-                <dt><strong>allexport</strong>
-                <dd>Same as <strong>-a</strong>.
-                <dt><strong>braceexpand</strong>
-                <dd>Same as <strong>-B</strong>.
-                <dt><strong>emacs</strong>
-                <dd>Use an emacs-style command line editing interface. This is enabled by default when the shell is interactive, unless the shell is started with the <strong>--noediting</strong> option. This also affects the editing interface used for <strong>read -e</strong>.
-                <dt><strong>errexit</strong>
-                <dd>Same as <strong>-e</strong>.
-                <dt><strong>errtrace</strong>
-                <dd>Same as <strong>-E</strong>.
-                <dt><strong>functrace</strong>
-                <dd>Same as <strong>-T</strong>.
-                <dt><strong>hashall</strong>
-                <dd>Same as <strong>-h</strong>.
-                <dt><strong>histexpand</strong>
-                <dd>Same as <strong>-H</strong>.
-                <dt><strong>history</strong>
-                <dd>Enable command history, as described above under <small><strong>HISTORY</strong>.</small> This option is on by default in interactive shells.
-                <dt><strong>ignoreeof</strong>
-                <dd>The effect is as if the shell command ``IGNOREEOF=10'' had been executed (see <strong>Shell Variables</strong> above).
-                <dt><strong>keyword</strong>
-                <dd>Same as <strong>-k</strong>.
-                <dt><strong>monitor</strong>
-                <dd>Same as <strong>-m</strong>.
-                <dt><strong>noclobber</strong>
-                <dd>Same as <strong>-C</strong>.
-                <dt><strong>noexec</strong>
-                <dd>Same as <strong>-n</strong>.
-                <dt><strong>noglob</strong>
-                <dd>Same as <strong>-f</strong>.
-                <dt><strong>nolog</strong>
-                <dd>Currently ignored.
-                <dt><strong>notify</strong>
-                <dd>Same as <strong>-b</strong>.
-                <dt><strong>nounset</strong>
-                <dd>Same as <strong>-u</strong>.
-                <dt><strong>onecmd</strong>
-                <dd>Same as <strong>-t</strong>.
-                <dt><strong>physical</strong>
-                <dd>Same as <strong>-P</strong>.
-                <dt><strong>pipefail</strong>
-                <dd>If set, the return value of a pipeline is the value of the last (rightmost) command to exit with a non-zero status, or zero if all commands in the pipeline exit successfully. This option is disabled by default.
-                <dt><strong>posix</strong>
-                <dd>Change the behavior of <strong>bash</strong> where the default operation differs from the POSIX standard to match the standard (<em>posix mode</em>). See <small><strong>SEE ALSO</strong></small> below for a reference to a document that details how posix mode affects bash's behavior.
-                <dt><strong>privileged</strong>
-                <dd>Same as <strong>-p</strong>.
-                <dt><strong>verbose</strong>
-                <dd>Same as <strong>-v</strong>.
-                <dt><strong>vi</strong>
-                <dd>Use a vi-style command line editing interface. This also affects the editing interface used for <strong>read -e</strong>.
-                <dt><strong>xtrace</strong>
-                <dd>Same as <strong>-x</strong>.
-              </dl>
-              <p>If <strong>-o</strong> is supplied with no <em>option-name</em>, the values of the current options are printed. If <strong>+o</strong> is supplied with no <em>option-name</em>, a series of <strong>set</strong> commands to recreate the current option settings is displayed on the standard output.
-            </div>
-          <dt><strong>-p</strong>
-          <dd>Turn on <em>privileged</em> mode. In this mode, the <small><strong>$ENV</strong></small> and <small><strong>$BASH_ENV</strong></small> files are not processed, shell functions are not inherited from the environment, and the <small><strong>SHELLOPTS</strong>,</small> <small><strong>BASHOPTS</strong>,</small> <small><strong>CDPATH</strong>,</small> and <small><strong>GLOBIGNORE</strong></small> variables, if they appear in the environment, are ignored. If the shell is started with the effective user (group) id not equal to the real user (group) id, and the <strong>-p</strong> option is not supplied, these actions are taken and the effective user id is set to the real user id. If the <strong>-p</strong> option is supplied at startup, the effective user id is not reset. Turning this option off causes the effective user and group ids to be set to the real user and group ids.
-          <dt><strong>-t</strong>
-          <dd>Exit after reading and executing one command.
-          <dt><strong>-u</strong>
-          <dd>Treat unset variables and parameters other than the special parameters "@" and "*" as an error when performing parameter expansion. If expansion is attempted on an unset variable or parameter, the shell prints an error message, and, if not interactive, exits with a non-zero status.
-          <dt><strong>-v</strong>
-          <dd>Print shell input lines as they are read.
-          <dt><strong>-x</strong>
-          <dd>After expanding each <em>simple command</em>, <strong>for</strong> command, <strong>case</strong> command, <strong>select</strong> command, or arithmetic <strong>for</strong> command, display the expanded value of <small><strong>PS4</strong>,</small> followed by the command and its expanded arguments or associated word list.
-          <dt><strong>-B</strong>
-          <dd>The shell performs brace expansion (see <strong>Brace Expansion</strong> above). This is on by default.
-          <dt><strong>-C</strong>
-          <dd>If set, <strong>bash</strong> does not overwrite an existing file with the <strong>&gt;</strong>, <strong>&gt;&</strong>, and <strong>&lt;&gt;</strong> redirection operators. This may be overridden when creating output files by using the redirection operator <strong>&gt;|</strong> instead of <strong>&gt;</strong>.
-          <dt><strong>-E</strong>
-          <dd>If set, any trap on <strong>ERR</strong> is inherited by shell functions, command substitutions, and commands executed in a subshell environment. The <strong>ERR</strong> trap is normally not inherited in such cases.
-          <dt><strong>-H</strong>
-          <dd>Enable <strong>!</strong> style history substitution. This option is on by default when the shell is interactive.
-          <dt><strong>-P</strong>
-          <dd>If set, the shell does not resolve symbolic links when executing commands such as <strong>cd</strong> that change the current working directory. It uses the physical directory structure instead. By default, <strong>bash</strong> follows the logical chain of directories when performing commands which change the current directory.
-          <dt><strong>-T</strong>
-          <dd>If set, any traps on <strong>DEBUG</strong> and <strong>RETURN</strong> are inherited by shell functions, command substitutions, and commands executed in a subshell environment. The <strong>DEBUG</strong> and <strong>RETURN</strong> traps are normally not inherited in such cases.
-          <dt><strong>--</strong>
-          <dd>If no arguments follow this option, then the positional parameters are unset. Otherwise, the positional parameters are set to the <em>arg</em>s, even if some of them begin with a <strong>-</strong>.
-          <dt><strong>-</strong>
-          <dd>Signal the end of options, cause all remaining <em>arg</em>s to be assigned to the positional parameters. The <strong>-x</strong> and <strong>-v</strong> options are turned off. If there are no <em>arg</em>s, the positional parameters remain unchanged.
-        </dl>
-        <p>The options are off by default unless otherwise noted. Using + rather than - causes these options to be turned off. The options can also be specified as arguments to an invocation of the shell. The current set of options may be found in <strong>$-</strong>. The return status is always true unless an invalid option is encountered.
-      </div>
+      <dl class="indent-8">
+        <dt><strong>-a</strong>
+        <dd>Each variable or function that is created or modified is given the export attribute and marked for export to the environment of subsequent commands.
+        <dt><strong>-b</strong>
+        <dd>Report the status of terminated background jobs immediately, rather than before the next primary prompt. This is effective only when job control is enabled.
+        <dt><strong>-e</strong>
+        <dd>Exit immediately if a <em>pipeline</em> (which may consist of a single <em>simple command</em>), a <em>list</em>, or a <em>compound command</em> (see <small><strong>SHELL GRAMMAR</strong></small> above), exits with a non-zero status. The shell does not exit if the command that fails is part of the command list immediately following a <strong>while</strong> or <strong>until</strong> keyword, part of the test following the <strong>if</strong> or <strong>elif</strong> reserved words, part of any command executed in a <strong>&amp;&</strong> or <strong>||</strong> list except the command following the final <strong>&amp;&</strong> or <strong>||</strong>, any command in a pipeline but the last, or if the command's return value is being inverted with <strong>!</strong>. If a compound command other than a subshell returns a non-zero status because a command failed while <strong>-e</strong> was being ignored, the shell does not exit. A trap on <strong>ERR</strong>, if set, is executed before the shell exits. This option applies to the shell environment and each subshell environment separately (see <small><strong>COMMAND EXECUTION ENVIRONMENT</strong></small> above), and may cause subshells to exit before executing all the commands in the subshell.<br>
+        <br>
+        If a compound command or shell function executes in a context where <strong>-e</strong> is being ignored, none of the commands executed within the compound command or function body will be affected by the <strong>-e</strong> setting, even if <strong>-e</strong> is set and a command returns a failure status. If a compound command or shell function sets <strong>-e</strong> while executing in a context where <strong>-e</strong> is ignored, that setting will not have any effect until the compound command or the command containing the function call completes.
+        <dt><strong>-f</strong>
+        <dd>Disable pathname expansion.
+        <dt><strong>-h</strong>
+        <dd>Remember the location of commands as they are looked up for execution. This is enabled by default.
+        <dt><strong>-k</strong>
+        <dd>All arguments in the form of assignment statements are placed in the environment for a command, not just those that precede the command name.
+        <dt><strong>-m</strong>
+        <dd>Monitor mode. Job control is enabled. This option is on by default for interactive shells on systems that support it (see <small><strong>JOB CONTROL</strong></small> above). All processes run in a separate process group. When a background job completes, the shell prints a line containing its exit status.
+        <dt><strong>-n</strong>
+        <dd>Read commands but do not execute them. This may be used to check a shell script for syntax errors. This is ignored by interactive shells.
+        <dt><strong>-o <em>option-name</em></strong>
+        <dd>
+          <p>The <em>option-name</em> can be one of the following:
+          <dl class="indent-8">
+            <dt><strong>allexport</strong>
+            <dd>Same as <strong>-a</strong>.
+            <dt><strong>braceexpand</strong>
+            <dd>Same as <strong>-B</strong>.
+            <dt><strong>emacs</strong>
+            <dd>Use an emacs-style command line editing interface. This is enabled by default when the shell is interactive, unless the shell is started with the <strong>--noediting</strong> option. This also affects the editing interface used for <strong>read -e</strong>.
+            <dt><strong>errexit</strong>
+            <dd>Same as <strong>-e</strong>.
+            <dt><strong>errtrace</strong>
+            <dd>Same as <strong>-E</strong>.
+            <dt><strong>functrace</strong>
+            <dd>Same as <strong>-T</strong>.
+            <dt><strong>hashall</strong>
+            <dd>Same as <strong>-h</strong>.
+            <dt><strong>histexpand</strong>
+            <dd>Same as <strong>-H</strong>.
+            <dt><strong>history</strong>
+            <dd>Enable command history, as described above under <small><strong>HISTORY</strong>.</small> This option is on by default in interactive shells.
+            <dt><strong>ignoreeof</strong>
+            <dd>The effect is as if the shell command ``IGNOREEOF=10'' had been executed (see <strong>Shell Variables</strong> above).
+            <dt><strong>keyword</strong>
+            <dd>Same as <strong>-k</strong>.
+            <dt><strong>monitor</strong>
+            <dd>Same as <strong>-m</strong>.
+            <dt><strong>noclobber</strong>
+            <dd>Same as <strong>-C</strong>.
+            <dt><strong>noexec</strong>
+            <dd>Same as <strong>-n</strong>.
+            <dt><strong>noglob</strong>
+            <dd>Same as <strong>-f</strong>.
+            <dt><strong>nolog</strong>
+            <dd>Currently ignored.
+            <dt><strong>notify</strong>
+            <dd>Same as <strong>-b</strong>.
+            <dt><strong>nounset</strong>
+            <dd>Same as <strong>-u</strong>.
+            <dt><strong>onecmd</strong>
+            <dd>Same as <strong>-t</strong>.
+            <dt><strong>physical</strong>
+            <dd>Same as <strong>-P</strong>.
+            <dt><strong>pipefail</strong>
+            <dd>If set, the return value of a pipeline is the value of the last (rightmost) command to exit with a non-zero status, or zero if all commands in the pipeline exit successfully. This option is disabled by default.
+            <dt><strong>posix</strong>
+            <dd>Change the behavior of <strong>bash</strong> where the default operation differs from the POSIX standard to match the standard (<em>posix mode</em>). See <small><strong>SEE ALSO</strong></small> below for a reference to a document that details how posix mode affects bash's behavior.
+            <dt><strong>privileged</strong>
+            <dd>Same as <strong>-p</strong>.
+            <dt><strong>verbose</strong>
+            <dd>Same as <strong>-v</strong>.
+            <dt><strong>vi</strong>
+            <dd>Use a vi-style command line editing interface. This also affects the editing interface used for <strong>read -e</strong>.
+            <dt><strong>xtrace</strong>
+            <dd>Same as <strong>-x</strong>.
+          </dl>
+          <p>If <strong>-o</strong> is supplied with no <em>option-name</em>, the values of the current options are printed. If <strong>+o</strong> is supplied with no <em>option-name</em>, a series of <strong>set</strong> commands to recreate the current option settings is displayed on the standard output.
+        <dt><strong>-p</strong>
+        <dd>Turn on <em>privileged</em> mode. In this mode, the <small><strong>$ENV</strong></small> and <small><strong>$BASH_ENV</strong></small> files are not processed, shell functions are not inherited from the environment, and the <small><strong>SHELLOPTS</strong>,</small> <small><strong>BASHOPTS</strong>,</small> <small><strong>CDPATH</strong>,</small> and <small><strong>GLOBIGNORE</strong></small> variables, if they appear in the environment, are ignored. If the shell is started with the effective user (group) id not equal to the real user (group) id, and the <strong>-p</strong> option is not supplied, these actions are taken and the effective user id is set to the real user id. If the <strong>-p</strong> option is supplied at startup, the effective user id is not reset. Turning this option off causes the effective user and group ids to be set to the real user and group ids.
+        <dt><strong>-t</strong>
+        <dd>Exit after reading and executing one command.
+        <dt><strong>-u</strong>
+        <dd>Treat unset variables and parameters other than the special parameters "@" and "*" as an error when performing parameter expansion. If expansion is attempted on an unset variable or parameter, the shell prints an error message, and, if not interactive, exits with a non-zero status.
+        <dt><strong>-v</strong>
+        <dd>Print shell input lines as they are read.
+        <dt><strong>-x</strong>
+        <dd>After expanding each <em>simple command</em>, <strong>for</strong> command, <strong>case</strong> command, <strong>select</strong> command, or arithmetic <strong>for</strong> command, display the expanded value of <small><strong>PS4</strong>,</small> followed by the command and its expanded arguments or associated word list.
+        <dt><strong>-B</strong>
+        <dd>The shell performs brace expansion (see <strong>Brace Expansion</strong> above). This is on by default.
+        <dt><strong>-C</strong>
+        <dd>If set, <strong>bash</strong> does not overwrite an existing file with the <strong>&gt;</strong>, <strong>&gt;&</strong>, and <strong>&lt;&gt;</strong> redirection operators. This may be overridden when creating output files by using the redirection operator <strong>&gt;|</strong> instead of <strong>&gt;</strong>.
+        <dt><strong>-E</strong>
+        <dd>If set, any trap on <strong>ERR</strong> is inherited by shell functions, command substitutions, and commands executed in a subshell environment. The <strong>ERR</strong> trap is normally not inherited in such cases.
+        <dt><strong>-H</strong>
+        <dd>Enable <strong>!</strong> style history substitution. This option is on by default when the shell is interactive.
+        <dt><strong>-P</strong>
+        <dd>If set, the shell does not resolve symbolic links when executing commands such as <strong>cd</strong> that change the current working directory. It uses the physical directory structure instead. By default, <strong>bash</strong> follows the logical chain of directories when performing commands which change the current directory.
+        <dt><strong>-T</strong>
+        <dd>If set, any traps on <strong>DEBUG</strong> and <strong>RETURN</strong> are inherited by shell functions, command substitutions, and commands executed in a subshell environment. The <strong>DEBUG</strong> and <strong>RETURN</strong> traps are normally not inherited in such cases.
+        <dt><strong>--</strong>
+        <dd>If no arguments follow this option, then the positional parameters are unset. Otherwise, the positional parameters are set to the <em>arg</em>s, even if some of them begin with a <strong>-</strong>.
+        <dt><strong>-</strong>
+        <dd>Signal the end of options, cause all remaining <em>arg</em>s to be assigned to the positional parameters. The <strong>-x</strong> and <strong>-v</strong> options are turned off. If there are no <em>arg</em>s, the positional parameters remain unchanged.
+      </dl>
+      <p>The options are off by default unless otherwise noted. Using + rather than - causes these options to be turned off. The options can also be specified as arguments to an invocation of the shell. The current set of options may be found in <strong>$-</strong>. The return status is always true unless an invalid option is encountered.
     <dt><strong>shift</strong> [<em>n</em>]
     <dd>The positional parameters from <em>n</em>+1 ... are renamed to <strong>$1</strong> <strong>....</strong> Parameters represented by the numbers <strong>$#</strong> down to <strong>$#</strong>-<em>n</em>+1 are unset. <em>n</em> must be a non-negative number less than or equal to <strong>$#</strong>. If <em>n</em> is 0, no parameters are changed. If <em>n</em> is not given, it is assumed to be 1. If <em>n</em> is greater than <strong>$#</strong>, the positional parameters are not changed. The return status is greater than zero if <em>n</em> is greater than <strong>$#</strong> or less than zero; otherwise 0.
     <dt><strong>shopt</strong> [<strong>-pqsu</strong>] [<strong>-o</strong>] [<em>optname</em> ...]
     <dd>
       <p>Toggle the values of settings controlling optional shell behavior. The settings can be either those listed below, or, if the <strong>-o</strong> option is used, those available with the <strong>-o</strong> option to the <strong>set</strong> builtin command. With no options, or with the <strong>-p</strong> option, a list of all settable options is displayed, with an indication of whether or not each is set. The <strong>-p</strong> option causes output to be displayed in a form that may be reused as input. Other options have the following meanings:
-      <div class="indent">
-        <dl>
-          <dt><strong>-s</strong>
-          <dd>Enable (set) each <em>optname</em>.
-          <dt><strong>-u</strong>
-          <dd>Disable (unset) each <em>optname</em>.
-          <dt><strong>-q</strong>
-          <dd>Suppresses normal output (quiet mode); the return status indicates whether the <em>optname</em> is set or unset. If multiple <em>optname</em> arguments are given with <strong>-q</strong>, the return status is zero if all <em>optnames</em> are enabled; non-zero otherwise.
-          <dt><strong>-o</strong>
-          <dd>Restricts the values of <em>optname</em> to be those defined for the <strong>-o</strong> option to the <strong>set</strong> builtin.
-        </dl>
-        <p>If either <strong>-s</strong> or <strong>-u</strong> is used with no <em>optname</em> arguments, <strong>shopt</strong> shows only those options which are set or unset, respectively. Unless otherwise noted, the <strong>shopt</strong> options are disabled (unset) by default.
-        <p>The return status when listing options is zero if all <em>optnames</em> are enabled, non-zero otherwise. When setting or unsetting options, the return status is zero unless an <em>optname</em> is not a valid shell option.
-        <p>The list of <strong>shopt</strong> options is:
-        <dl class="indent-8">
-          <dt><strong>autocd</strong>
-          <dd>If set, a command name that is the name of a directory is executed as if it were the argument to the <strong>cd</strong> command. This option is only used by interactive shells.
-          <dt><strong>cdable_vars</strong>
-          <dd>If set, an argument to the <strong>cd</strong> builtin command that is not a directory is assumed to be the name of a variable whose value is the directory to change to.
-          <dt><strong>cdspell</strong>
-          <dd>If set, minor errors in the spelling of a directory component in a <strong>cd</strong> command will be corrected. The errors checked for are transposed characters, a missing character, and one character too many. If a correction is found, the corrected filename is printed, and the command proceeds. This option is only used by interactive shells.
-          <dt><strong>checkhash</strong>
-          <dd>If set, <strong>bash</strong> checks that a command found in the hash table exists before trying to execute it. If a hashed command no longer exists, a normal path search is performed.
-          <dt><strong>checkjobs</strong>
-          <dd>If set, <strong>bash</strong> lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted without an intervening command (see <small><strong>JOB CONTROL</strong></small> above). The shell always postpones exiting if any jobs are stopped.
-          <dt><strong>checkwinsize</strong>
-          <dd>If set, <strong>bash</strong> checks the window size after each command and, if necessary, updates the values of <small><strong>LINES</strong></small> and <small><strong>COLUMNS</strong>.</small>
-          <dt><strong>cmdhist</strong>
-          <dd>If set, <strong>bash</strong> attempts to save all lines of a multiple-line command in the same history entry. This allows easy re-editing of multi-line commands.
-          <dt><strong>compat31</strong>
-          <dd>If set, <strong>bash</strong> changes its behavior to that of version 3.1 with respect to quoted arguments to the <strong>[[</strong> conditional command's <strong>=~</strong> operator and locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators. Bash versions prior to bash-4.1 use ASCII collation and <em>strcmp</em>(3); bash-4.1 and later use the current locale's collation sequence and <em>strcoll</em>(3).
-          <dt><strong>compat32</strong>
-          <dd>If set, <strong>bash</strong> changes its behavior to that of version 3.2 with respect to locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators (see previous item) and the effect of interrupting a command list. Bash versions 3.2 and earlier continue with the next command in the list after one terminates due to an interrupt.
-          <dt><strong>compat40</strong>
-          <dd>If set, <strong>bash</strong> changes its behavior to that of version 4.0 with respect to locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators (see description of <strong>compat31</strong>) and the effect of interrupting a command list. Bash versions 4.0 and later interrupt the list as if the shell received the interrupt; previous versions continue with the next command in the list.
-          <dt><strong>compat41</strong>
-          <dd>If set, <strong>bash</strong>, when in <em>posix</em> mode, treats a single quote in a double-quoted parameter expansion as a special character. The single quotes must match (an even number) and the characters between the single quotes are considered quoted. This is the behavior of posix mode through version 4.1. The default bash behavior remains as in previous versions.
-          <dt><strong>compat42</strong>
-          <dd>If set, <strong>bash</strong> does not process the replacement string in the pattern substitution word expansion using quote removal.
-          <dt><strong>compat43</strong>
-          <dd>If set, <strong>bash</strong> does not print a warning message if an attempt is made to use a quoted compound array assignment as an argument to <strong>declare</strong>, makes word expansion errors non-fatal errors that cause the current command to fail (the default behavior is to make them fatal errors that cause the shell to exit), and does not reset the loop state when a shell function is executed (this allows <strong>break</strong> or <strong>continue</strong> in a shell function to affect loops in the caller's context).
-          <dt><strong>complete_fullquote</strong>
-          <dd>If set, <strong>bash</strong> quotes all shell metacharacters in filenames and directory names when performing completion. If not set, <strong>bash</strong> removes metacharacters such as the dollar sign from the set of characters that will be quoted in completed filenames when these metacharacters appear in shell variable references in words to be completed. This means that dollar signs in variable names that expand to directories will not be quoted; however, any dollar signs appearing in filenames will not be quoted, either. This is active only when bash is using backslashes to quote completed filenames. This variable is set by default, which is the default bash behavior in versions through 4.2.
-          <dt><strong>direxpand</strong>
-          <dd>If set, <strong>bash</strong> replaces directory names with the results of word expansion when performing filename completion. This changes the contents of the readline editing buffer. If not set, <strong>bash</strong> attempts to preserve what the user typed.
-          <dt><strong>dirspell</strong>
-          <dd>If set, <strong>bash</strong> attempts spelling correction on directory names during word completion if the directory name initially supplied does not exist.
-          <dt><strong>dotglob</strong>
-          <dd>If set, <strong>bash</strong> includes filenames beginning with a `.' in the results of pathname expansion.
-          <dt><strong>execfail</strong>
-          <dd>If set, a non-interactive shell will not exit if it cannot execute the file specified as an argument to the <strong>exec</strong> builtin command. An interactive shell does not exit if <strong>exec</strong> fails.
-          <dt><strong>expand_aliases</strong>
-          <dd>If set, aliases are expanded as described above under <small><strong>ALIASES</strong>.</small> This option is enabled by default for interactive shells.
-          <dt><strong>extdebug</strong>
-          <dd>
-            <p>If set at shell invocation, arrange to execute the debugger profile before the shell starts, identical to the <strong>--debugger</strong> option. If set after invocation, behavior intended for use by debuggers is enabled:
-            <dl>
-              <dt><strong>1.</strong>
-              <dd>The <strong>-F</strong> option to the <strong>declare</strong> builtin displays the source file name and line number corresponding to each function name supplied as an argument.
-              <dt><strong>2.</strong>
-              <dd>If the command run by the <strong>DEBUG</strong> trap returns a non-zero value, the next command is skipped and not executed.
-              <dt><strong>3.</strong>
-              <dd>If the command run by the <strong>DEBUG</strong> trap returns a value of 2, and the shell is executing in a subroutine (a shell function or a shell script executed by the <strong>.</strong> or <strong>source</strong> builtins), the shell simulates a call to <strong>return</strong>.
-              <dt><strong>4.</strong>
-              <dd><small><strong>BASH_ARGC</strong></small> and <small><strong>BASH_ARGV</strong></small> are updated as described in their descriptions above.
-              <dt><strong>5.</strong>
-              <dd>Function tracing is enabled: command substitution, shell functions, and subshells invoked with <strong>(</strong> <em>command</em> <strong>)</strong> inherit the <strong>DEBUG</strong> and <strong>RETURN</strong> traps.
-              <dt><strong>6.</strong>
-              <dd>Error tracing is enabled: command substitution, shell functions, and subshells invoked with <strong>(</strong> <em>command</em> <strong>)</strong> inherit the <strong>ERR</strong> trap.
-            </dl>
-          <dt><strong>extglob</strong>
-          <dd>If set, the extended pattern matching features described above under <strong>Pathname Expansion</strong> are enabled.
-          <dt><strong>extquote</strong>
-          <dd>If set, <strong>$</strong>'<em>string</em>' and <strong>$</strong>"<em>string</em>" quoting is performed within <strong>${</strong><em>parameter</em><strong>}</strong> expansions enclosed in double quotes. This option is enabled by default.
-          <dt><strong>failglob</strong>
-          <dd>If set, patterns which fail to match filenames during pathname expansion result in an expansion error.
-          <dt><strong>force_fignore</strong>
-          <dd>If set, the suffixes specified by the <small><strong>FIGNORE</strong></small> shell variable cause words to be ignored when performing word completion even if the ignored words are the only possible completions. See <small><strong>SHELL VARIABLES</strong></small> above for a description of <small><strong>FIGNORE</strong>.</small> This option is enabled by default.
-          <dt><strong>globasciiranges</strong>
-          <dd>If set, range expressions used in pattern matching bracket expressions (see <small><strong>Pattern Matching</strong></small> above) behave as if in the traditional C locale when performing comparisons. That is, the current locale's collating sequence is not taken into account, so <strong>b</strong> will not collate between <strong>A</strong> and <strong>B</strong>, and upper-case and lower-case ASCII characters will collate together.
-          <dt><strong>globstar</strong>
-          <dd>If set, the pattern <strong>**</strong> used in a pathname expansion context will match all files and zero or more directories and subdirectories. If the pattern is followed by a <strong>/</strong>, only directories and subdirectories match.
-          <dt><strong>gnu_errfmt</strong>
-          <dd>If set, shell error messages are written in the standard GNU error message format.
-          <dt><strong>histappend</strong>
-          <dd>If set, the history list is appended to the file named by the value of the <small><strong>HISTFILE</strong></small> variable when the shell exits, rather than overwriting the file.
-          <dt><strong>histreedit</strong>
-          <dd>If set, and <strong>readline</strong> is being used, a user is given the opportunity to re-edit a failed history substitution.
-          <dt><strong>histverify</strong>
-          <dd>If set, and <strong>readline</strong> is being used, the results of history substitution are not immediately passed to the shell parser. Instead, the resulting line is loaded into the <strong>readline</strong> editing buffer, allowing further modification.
-          <dt><strong>hostcomplete</strong>
-          <dd>If set, and <strong>readline</strong> is being used, <strong>bash</strong> will attempt to perform hostname completion when a word containing a <strong>@</strong> is being completed (see <strong>Completing</strong> under <small><strong>READLINE</strong></small> above). This is enabled by default.
-          <dt><strong>huponexit</strong>
-          <dd>If set, <strong>bash</strong> will send <small><strong>SIGHUP</strong></small> to all jobs when an interactive login shell exits.
-          <dt><strong>inherit_errexit</strong>
-          <dd>If set, command substitution inherits the value of the <strong>errexit</strong> option, instead of unsetting it in the subshell environment. This option is enabled when <em>posix mode</em> is enabled.
-          <dt><strong>interactive_comments</strong>
-          <dd>If set, allow a word beginning with <strong>#</strong> to cause that word and all remaining characters on that line to be ignored in an interactive shell (see <small><strong>COMMENTS</strong></small> above). This option is enabled by default.
-          <dt><strong>lastpipe</strong>
-          <dd>If set, and job control is not active, the shell runs the last command of a pipeline not executed in the background in the current shell environment.
-          <dt><strong>lithist</strong>
-          <dd>If set, and the <strong>cmdhist</strong> option is enabled, multi-line commands are saved to the history with embedded newlines rather than using semicolon separators where possible.
-          <dt><strong>login_shell</strong>
-          <dd>The shell sets this option if it is started as a login shell (see <small><strong>INVOCATION</strong></small> above). The value may not be changed.
-          <dt><strong>mailwarn</strong>
-          <dd>If set, and a file that <strong>bash</strong> is checking for mail has been accessed since the last time it was checked, the message ``The mail in <em>mailfile</em> has been read'' is displayed.
-          <dt><strong>no_empty_cmd_completion</strong>
-          <dd>If set, and <strong>readline</strong> is being used, <strong>bash</strong> will not attempt to search the <small><strong>PATH</strong></small> for possible completions when completion is attempted on an empty line.
-          <dt><strong>nocaseglob</strong>
-          <dd>If set, <strong>bash</strong> matches filenames in a case-insensitive fashion when performing pathname expansion (see <strong>Pathname Expansion</strong> above).
-          <dt><strong>nocasematch</strong>
-          <dd>If set, <strong>bash</strong> matches patterns in a case-insensitive fashion when performing matching while executing <strong>case</strong> or <strong>[[</strong> conditional commands, when performing pattern substitution word expansions, or when filtering possible completions as part of programmable completion.
-          <dt><strong>nullglob</strong>
-          <dd>If set, <strong>bash</strong> allows patterns which match no files (see <strong>Pathname Expansion</strong> above) to expand to a null string, rather than themselves.
-          <dt><strong>progcomp</strong>
-          <dd>If set, the programmable completion facilities (see <strong>Programmable Completion</strong> above) are enabled. This option is enabled by default.
-          <dt><strong>promptvars</strong>
-          <dd>If set, prompt strings undergo parameter expansion, command substitution, arithmetic expansion, and quote removal after being expanded as described in <small><strong>PROMPTING</strong></small> above. This option is enabled by default.
-          <dt><strong>restricted_shell</strong>
-          <dd>The shell sets this option if it is started in restricted mode (see <small><strong>RESTRICTED SHELL</strong></small> below). The value may not be changed. This is not reset when the startup files are executed, allowing the startup files to discover whether or not a shell is restricted.
-          <dt><strong>shift_verbose</strong>
-          <dd>If set, the <strong>shift</strong> builtin prints an error message when the shift count exceeds the number of positional parameters.
-          <dt><strong>sourcepath</strong>
-          <dd>If set, the <strong>source</strong> (<strong>.</strong>) builtin uses the value of <small><strong>PATH</strong></small> to find the directory containing the file supplied as an argument. This option is enabled by default.
-          <dt><strong>xpg_echo</strong>
-          <dd>If set, the <strong>echo</strong> builtin expands backslash-escape sequences by default.
-        </dl>
-      </div>
+      <dl>
+        <dt><strong>-s</strong>
+        <dd>Enable (set) each <em>optname</em>.
+        <dt><strong>-u</strong>
+        <dd>Disable (unset) each <em>optname</em>.
+        <dt><strong>-q</strong>
+        <dd>Suppresses normal output (quiet mode); the return status indicates whether the <em>optname</em> is set or unset. If multiple <em>optname</em> arguments are given with <strong>-q</strong>, the return status is zero if all <em>optnames</em> are enabled; non-zero otherwise.
+        <dt><strong>-o</strong>
+        <dd>Restricts the values of <em>optname</em> to be those defined for the <strong>-o</strong> option to the <strong>set</strong> builtin.
+      </dl>
+      <p>If either <strong>-s</strong> or <strong>-u</strong> is used with no <em>optname</em> arguments, <strong>shopt</strong> shows only those options which are set or unset, respectively. Unless otherwise noted, the <strong>shopt</strong> options are disabled (unset) by default.
+      <p>The return status when listing options is zero if all <em>optnames</em> are enabled, non-zero otherwise. When setting or unsetting options, the return status is zero unless an <em>optname</em> is not a valid shell option.
+      <p>The list of <strong>shopt</strong> options is:
+      <dl class="indent-8">
+        <dt><strong>autocd</strong>
+        <dd>If set, a command name that is the name of a directory is executed as if it were the argument to the <strong>cd</strong> command. This option is only used by interactive shells.
+        <dt><strong>cdable_vars</strong>
+        <dd>If set, an argument to the <strong>cd</strong> builtin command that is not a directory is assumed to be the name of a variable whose value is the directory to change to.
+        <dt><strong>cdspell</strong>
+        <dd>If set, minor errors in the spelling of a directory component in a <strong>cd</strong> command will be corrected. The errors checked for are transposed characters, a missing character, and one character too many. If a correction is found, the corrected filename is printed, and the command proceeds. This option is only used by interactive shells.
+        <dt><strong>checkhash</strong>
+        <dd>If set, <strong>bash</strong> checks that a command found in the hash table exists before trying to execute it. If a hashed command no longer exists, a normal path search is performed.
+        <dt><strong>checkjobs</strong>
+        <dd>If set, <strong>bash</strong> lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted without an intervening command (see <small><strong>JOB CONTROL</strong></small> above). The shell always postpones exiting if any jobs are stopped.
+        <dt><strong>checkwinsize</strong>
+        <dd>If set, <strong>bash</strong> checks the window size after each command and, if necessary, updates the values of <small><strong>LINES</strong></small> and <small><strong>COLUMNS</strong>.</small>
+        <dt><strong>cmdhist</strong>
+        <dd>If set, <strong>bash</strong> attempts to save all lines of a multiple-line command in the same history entry. This allows easy re-editing of multi-line commands.
+        <dt><strong>compat31</strong>
+        <dd>If set, <strong>bash</strong> changes its behavior to that of version 3.1 with respect to quoted arguments to the <strong>[[</strong> conditional command's <strong>=~</strong> operator and locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators. Bash versions prior to bash-4.1 use ASCII collation and <em>strcmp</em>(3); bash-4.1 and later use the current locale's collation sequence and <em>strcoll</em>(3).
+        <dt><strong>compat32</strong>
+        <dd>If set, <strong>bash</strong> changes its behavior to that of version 3.2 with respect to locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators (see previous item) and the effect of interrupting a command list. Bash versions 3.2 and earlier continue with the next command in the list after one terminates due to an interrupt.
+        <dt><strong>compat40</strong>
+        <dd>If set, <strong>bash</strong> changes its behavior to that of version 4.0 with respect to locale-specific string comparison when using the <strong>[[</strong> conditional command's <strong>&lt;</strong> and <strong>&gt;</strong> operators (see description of <strong>compat31</strong>) and the effect of interrupting a command list. Bash versions 4.0 and later interrupt the list as if the shell received the interrupt; previous versions continue with the next command in the list.
+        <dt><strong>compat41</strong>
+        <dd>If set, <strong>bash</strong>, when in <em>posix</em> mode, treats a single quote in a double-quoted parameter expansion as a special character. The single quotes must match (an even number) and the characters between the single quotes are considered quoted. This is the behavior of posix mode through version 4.1. The default bash behavior remains as in previous versions.
+        <dt><strong>compat42</strong>
+        <dd>If set, <strong>bash</strong> does not process the replacement string in the pattern substitution word expansion using quote removal.
+        <dt><strong>compat43</strong>
+        <dd>If set, <strong>bash</strong> does not print a warning message if an attempt is made to use a quoted compound array assignment as an argument to <strong>declare</strong>, makes word expansion errors non-fatal errors that cause the current command to fail (the default behavior is to make them fatal errors that cause the shell to exit), and does not reset the loop state when a shell function is executed (this allows <strong>break</strong> or <strong>continue</strong> in a shell function to affect loops in the caller's context).
+        <dt><strong>complete_fullquote</strong>
+        <dd>If set, <strong>bash</strong> quotes all shell metacharacters in filenames and directory names when performing completion. If not set, <strong>bash</strong> removes metacharacters such as the dollar sign from the set of characters that will be quoted in completed filenames when these metacharacters appear in shell variable references in words to be completed. This means that dollar signs in variable names that expand to directories will not be quoted; however, any dollar signs appearing in filenames will not be quoted, either. This is active only when bash is using backslashes to quote completed filenames. This variable is set by default, which is the default bash behavior in versions through 4.2.
+        <dt><strong>direxpand</strong>
+        <dd>If set, <strong>bash</strong> replaces directory names with the results of word expansion when performing filename completion. This changes the contents of the readline editing buffer. If not set, <strong>bash</strong> attempts to preserve what the user typed.
+        <dt><strong>dirspell</strong>
+        <dd>If set, <strong>bash</strong> attempts spelling correction on directory names during word completion if the directory name initially supplied does not exist.
+        <dt><strong>dotglob</strong>
+        <dd>If set, <strong>bash</strong> includes filenames beginning with a `.' in the results of pathname expansion.
+        <dt><strong>execfail</strong>
+        <dd>If set, a non-interactive shell will not exit if it cannot execute the file specified as an argument to the <strong>exec</strong> builtin command. An interactive shell does not exit if <strong>exec</strong> fails.
+        <dt><strong>expand_aliases</strong>
+        <dd>If set, aliases are expanded as described above under <small><strong>ALIASES</strong>.</small> This option is enabled by default for interactive shells.
+        <dt><strong>extdebug</strong>
+        <dd>
+          <p>If set at shell invocation, arrange to execute the debugger profile before the shell starts, identical to the <strong>--debugger</strong> option. If set after invocation, behavior intended for use by debuggers is enabled:
+          <dl>
+            <dt><strong>1.</strong>
+            <dd>The <strong>-F</strong> option to the <strong>declare</strong> builtin displays the source file name and line number corresponding to each function name supplied as an argument.
+            <dt><strong>2.</strong>
+            <dd>If the command run by the <strong>DEBUG</strong> trap returns a non-zero value, the next command is skipped and not executed.
+            <dt><strong>3.</strong>
+            <dd>If the command run by the <strong>DEBUG</strong> trap returns a value of 2, and the shell is executing in a subroutine (a shell function or a shell script executed by the <strong>.</strong> or <strong>source</strong> builtins), the shell simulates a call to <strong>return</strong>.
+            <dt><strong>4.</strong>
+            <dd><small><strong>BASH_ARGC</strong></small> and <small><strong>BASH_ARGV</strong></small> are updated as described in their descriptions above.
+            <dt><strong>5.</strong>
+            <dd>Function tracing is enabled: command substitution, shell functions, and subshells invoked with <strong>(</strong> <em>command</em> <strong>)</strong> inherit the <strong>DEBUG</strong> and <strong>RETURN</strong> traps.
+            <dt><strong>6.</strong>
+            <dd>Error tracing is enabled: command substitution, shell functions, and subshells invoked with <strong>(</strong> <em>command</em> <strong>)</strong> inherit the <strong>ERR</strong> trap.
+          </dl>
+        <dt><strong>extglob</strong>
+        <dd>If set, the extended pattern matching features described above under <strong>Pathname Expansion</strong> are enabled.
+        <dt><strong>extquote</strong>
+        <dd>If set, <strong>$</strong>'<em>string</em>' and <strong>$</strong>"<em>string</em>" quoting is performed within <strong>${</strong><em>parameter</em><strong>}</strong> expansions enclosed in double quotes. This option is enabled by default.
+        <dt><strong>failglob</strong>
+        <dd>If set, patterns which fail to match filenames during pathname expansion result in an expansion error.
+        <dt><strong>force_fignore</strong>
+        <dd>If set, the suffixes specified by the <small><strong>FIGNORE</strong></small> shell variable cause words to be ignored when performing word completion even if the ignored words are the only possible completions. See <small><strong>SHELL VARIABLES</strong></small> above for a description of <small><strong>FIGNORE</strong>.</small> This option is enabled by default.
+        <dt><strong>globasciiranges</strong>
+        <dd>If set, range expressions used in pattern matching bracket expressions (see <small><strong>Pattern Matching</strong></small> above) behave as if in the traditional C locale when performing comparisons. That is, the current locale's collating sequence is not taken into account, so <strong>b</strong> will not collate between <strong>A</strong> and <strong>B</strong>, and upper-case and lower-case ASCII characters will collate together.
+        <dt><strong>globstar</strong>
+        <dd>If set, the pattern <strong>**</strong> used in a pathname expansion context will match all files and zero or more directories and subdirectories. If the pattern is followed by a <strong>/</strong>, only directories and subdirectories match.
+        <dt><strong>gnu_errfmt</strong>
+        <dd>If set, shell error messages are written in the standard GNU error message format.
+        <dt><strong>histappend</strong>
+        <dd>If set, the history list is appended to the file named by the value of the <small><strong>HISTFILE</strong></small> variable when the shell exits, rather than overwriting the file.
+        <dt><strong>histreedit</strong>
+        <dd>If set, and <strong>readline</strong> is being used, a user is given the opportunity to re-edit a failed history substitution.
+        <dt><strong>histverify</strong>
+        <dd>If set, and <strong>readline</strong> is being used, the results of history substitution are not immediately passed to the shell parser. Instead, the resulting line is loaded into the <strong>readline</strong> editing buffer, allowing further modification.
+        <dt><strong>hostcomplete</strong>
+        <dd>If set, and <strong>readline</strong> is being used, <strong>bash</strong> will attempt to perform hostname completion when a word containing a <strong>@</strong> is being completed (see <strong>Completing</strong> under <small><strong>READLINE</strong></small> above). This is enabled by default.
+        <dt><strong>huponexit</strong>
+        <dd>If set, <strong>bash</strong> will send <small><strong>SIGHUP</strong></small> to all jobs when an interactive login shell exits.
+        <dt><strong>inherit_errexit</strong>
+        <dd>If set, command substitution inherits the value of the <strong>errexit</strong> option, instead of unsetting it in the subshell environment. This option is enabled when <em>posix mode</em> is enabled.
+        <dt><strong>interactive_comments</strong>
+        <dd>If set, allow a word beginning with <strong>#</strong> to cause that word and all remaining characters on that line to be ignored in an interactive shell (see <small><strong>COMMENTS</strong></small> above). This option is enabled by default.
+        <dt><strong>lastpipe</strong>
+        <dd>If set, and job control is not active, the shell runs the last command of a pipeline not executed in the background in the current shell environment.
+        <dt><strong>lithist</strong>
+        <dd>If set, and the <strong>cmdhist</strong> option is enabled, multi-line commands are saved to the history with embedded newlines rather than using semicolon separators where possible.
+        <dt><strong>login_shell</strong>
+        <dd>The shell sets this option if it is started as a login shell (see <small><strong>INVOCATION</strong></small> above). The value may not be changed.
+        <dt><strong>mailwarn</strong>
+        <dd>If set, and a file that <strong>bash</strong> is checking for mail has been accessed since the last time it was checked, the message ``The mail in <em>mailfile</em> has been read'' is displayed.
+        <dt><strong>no_empty_cmd_completion</strong>
+        <dd>If set, and <strong>readline</strong> is being used, <strong>bash</strong> will not attempt to search the <small><strong>PATH</strong></small> for possible completions when completion is attempted on an empty line.
+        <dt><strong>nocaseglob</strong>
+        <dd>If set, <strong>bash</strong> matches filenames in a case-insensitive fashion when performing pathname expansion (see <strong>Pathname Expansion</strong> above).
+        <dt><strong>nocasematch</strong>
+        <dd>If set, <strong>bash</strong> matches patterns in a case-insensitive fashion when performing matching while executing <strong>case</strong> or <strong>[[</strong> conditional commands, when performing pattern substitution word expansions, or when filtering possible completions as part of programmable completion.
+        <dt><strong>nullglob</strong>
+        <dd>If set, <strong>bash</strong> allows patterns which match no files (see <strong>Pathname Expansion</strong> above) to expand to a null string, rather than themselves.
+        <dt><strong>progcomp</strong>
+        <dd>If set, the programmable completion facilities (see <strong>Programmable Completion</strong> above) are enabled. This option is enabled by default.
+        <dt><strong>promptvars</strong>
+        <dd>If set, prompt strings undergo parameter expansion, command substitution, arithmetic expansion, and quote removal after being expanded as described in <small><strong>PROMPTING</strong></small> above. This option is enabled by default.
+        <dt><strong>restricted_shell</strong>
+        <dd>The shell sets this option if it is started in restricted mode (see <small><strong>RESTRICTED SHELL</strong></small> below). The value may not be changed. This is not reset when the startup files are executed, allowing the startup files to discover whether or not a shell is restricted.
+        <dt><strong>shift_verbose</strong>
+        <dd>If set, the <strong>shift</strong> builtin prints an error message when the shift count exceeds the number of positional parameters.
+        <dt><strong>sourcepath</strong>
+        <dd>If set, the <strong>source</strong> (<strong>.</strong>) builtin uses the value of <small><strong>PATH</strong></small> to find the directory containing the file supplied as an argument. This option is enabled by default.
+        <dt><strong>xpg_echo</strong>
+        <dd>If set, the <strong>echo</strong> builtin expands backslash-escape sequences by default.
+      </dl>
     <dt><strong>suspend</strong> [<strong>-f</strong>]
     <dd>Suspend the execution of this shell until it receives a <small><strong>SIGCONT</strong></small> signal. A login shell cannot be suspended; the <strong>-f</strong> option can be used to override this and force the suspension. The return status is 0 unless the shell is a login shell and <strong>-f</strong> is not supplied, or if job control is not enabled.
     <dt><strong>test</strong> <em>expr</em>
@@ -2571,34 +2529,32 @@
       <p>Return a status of 0 (true) or 1 (false) depending on the evaluation of the conditional expression <em>expr</em>. Each operator and operand must be a separate argument. Expressions are composed of the primaries described above under <small><strong>CONDITIONAL EXPRESSIONS</strong>.</small> <strong>test</strong> does not accept any options, nor does it accept and ignore an argument of <strong>--</strong> as signifying the end of options.<br>
       <br>
       Expressions may be combined using the following operators, listed in decreasing order of precedence. The evaluation depends on the number of arguments; see below. Operator precedence is used when there are five or more arguments.
-      <div class="indent">
-        <dl>
-          <dt><strong>! <em>expr</em></strong>
-          <dd>True if <em>expr</em> is false.
-          <dt><strong>( <em>expr</em> )</strong>
-          <dd>Returns the value of <em>expr</em>. This may be used to override the normal precedence of operators.
-          <dt><em>expr1</em> -<strong>a</strong> <em>expr2</em>
-          <dd>True if both <em>expr1</em> and <em>expr2</em> are true.
-          <dt><em>expr1</em> -<strong>o</strong> <em>expr2</em>
-          <dd>True if either <em>expr1</em> or <em>expr2</em> is true.
-        </dl>
-        <p><strong>test</strong> and <strong>[</strong> evaluate conditional expressions using a set of rules based on the number of arguments.
-        <dl>
-          <dt>0 arguments
-          <dd>The expression is false.
-          <dt>1 argument
-          <dd>The expression is true if and only if the argument is not null.
-          <dt>2 arguments
-          <dd>If the first argument is <strong>!</strong>, the expression is true if and only if the second argument is null. If the first argument is one of the unary conditional operators listed above under <small><strong>CONDITIONAL EXPRESSIONS</strong>,</small> the expression is true if the unary test is true. If the first argument is not a valid unary conditional operator, the expression is false.
-          <dt>3 arguments
-          <dd>The following conditions are applied in the order listed. If the second argument is one of the binary conditional operators listed above under <small><strong>CONDITIONAL EXPRESSIONS</strong>,</small> the result of the expression is the result of the binary test using the first and third arguments as operands. The <strong>-a</strong> and <strong>-o</strong> operators are considered binary operators when there are three arguments. If the first argument is <strong>!</strong>, the value is the negation of the two-argument test using the second and third arguments. If the first argument is exactly <strong>(</strong> and the third argument is exactly <strong>)</strong>, the result is the one-argument test of the second argument. Otherwise, the expression is false.
-          <dt>4 arguments
-          <dd>If the first argument is <strong>!</strong>, the result is the negation of the three-argument expression composed of the remaining arguments. Otherwise, the expression is parsed and evaluated according to precedence using the rules listed above.
-          <dt>5 or more arguments
-          <dd>The expression is parsed and evaluated according to precedence using the rules listed above.
-        </dl>
-        <p>When used with <strong>test</strong> or <strong>[</strong>, the <strong>&lt;</strong> and <strong>&gt;</strong> operators sort lexicographically using ASCII ordering.
-      </div>
+      <dl>
+        <dt><strong>! <em>expr</em></strong>
+        <dd>True if <em>expr</em> is false.
+        <dt><strong>( <em>expr</em> )</strong>
+        <dd>Returns the value of <em>expr</em>. This may be used to override the normal precedence of operators.
+        <dt><em>expr1</em> -<strong>a</strong> <em>expr2</em>
+        <dd>True if both <em>expr1</em> and <em>expr2</em> are true.
+        <dt><em>expr1</em> -<strong>o</strong> <em>expr2</em>
+        <dd>True if either <em>expr1</em> or <em>expr2</em> is true.
+      </dl>
+      <p><strong>test</strong> and <strong>[</strong> evaluate conditional expressions using a set of rules based on the number of arguments.
+      <dl>
+        <dt>0 arguments
+        <dd>The expression is false.
+        <dt>1 argument
+        <dd>The expression is true if and only if the argument is not null.
+        <dt>2 arguments
+        <dd>If the first argument is <strong>!</strong>, the expression is true if and only if the second argument is null. If the first argument is one of the unary conditional operators listed above under <small><strong>CONDITIONAL EXPRESSIONS</strong>,</small> the expression is true if the unary test is true. If the first argument is not a valid unary conditional operator, the expression is false.
+        <dt>3 arguments
+        <dd>The following conditions are applied in the order listed. If the second argument is one of the binary conditional operators listed above under <small><strong>CONDITIONAL EXPRESSIONS</strong>,</small> the result of the expression is the result of the binary test using the first and third arguments as operands. The <strong>-a</strong> and <strong>-o</strong> operators are considered binary operators when there are three arguments. If the first argument is <strong>!</strong>, the value is the negation of the two-argument test using the second and third arguments. If the first argument is exactly <strong>(</strong> and the third argument is exactly <strong>)</strong>, the result is the one-argument test of the second argument. Otherwise, the expression is false.
+        <dt>4 arguments
+        <dd>If the first argument is <strong>!</strong>, the result is the negation of the three-argument expression composed of the remaining arguments. Otherwise, the expression is parsed and evaluated according to precedence using the rules listed above.
+        <dt>5 or more arguments
+        <dd>The expression is parsed and evaluated according to precedence using the rules listed above.
+      </dl>
+      <p>When used with <strong>test</strong> or <strong>[</strong>, the <strong>&lt;</strong> and <strong>&gt;</strong> operators sort lexicographically using ASCII ordering.
     <dt><strong>times</strong>
     <dd>Print the accumulated user and system times for the shell and for processes run from the shell. The return status is 0.
     <dt><strong>trap</strong> [<strong>-lp</strong>] [[<em>arg</em>] <em>sigspec</em> ...]
@@ -2614,53 +2570,51 @@
     <dt><strong>ulimit</strong> [<strong>-HSabcdefiklmnpqrstuvxPT</strong> [<em>limit</em>]]
     <dd>
       <p>Provides control over the resources available to the shell and to processes started by it, on systems that allow such control. The <strong>-H</strong> and <strong>-S</strong> options specify that the hard or soft limit is set for the given resource. A hard limit cannot be increased by a non-root user once it is set; a soft limit may be increased up to the value of the hard limit. If neither <strong>-H</strong> nor <strong>-S</strong> is specified, both the soft and hard limits are set. The value of <em>limit</em> can be a number in the unit specified for the resource or one of the special values <strong>hard</strong>, <strong>soft</strong>, or <strong>unlimited</strong>, which stand for the current hard limit, the current soft limit, and no limit, respectively. If <em>limit</em> is omitted, the current value of the soft limit of the resource is printed, unless the <strong>-H</strong> option is given. When more than one resource is specified, the limit name and unit are printed before the value. Other options are interpreted as follows:
-      <div class="indent">
-        <dl>
-          <dt><strong>-a</strong>
-          <dd>All current limits are reported
-          <dt><strong>-b</strong>
-          <dd>The maximum socket buffer size
-          <dt><strong>-c</strong>
-          <dd>The maximum size of core files created
-          <dt><strong>-d</strong>
-          <dd>The maximum size of a process's data segment
-          <dt><strong>-e</strong>
-          <dd>The maximum scheduling priority ("nice")
-          <dt><strong>-f</strong>
-          <dd>The maximum size of files written by the shell and its children
-          <dt><strong>-i</strong>
-          <dd>The maximum number of pending signals
-          <dt><strong>-k</strong>
-          <dd>The maximum number of kqueues that may be allocated
-          <dt><strong>-l</strong>
-          <dd>The maximum size that may be locked into memory
-          <dt><strong>-m</strong>
-          <dd>The maximum resident set size (many systems do not honor this limit)
-          <dt><strong>-n</strong>
-          <dd>The maximum number of open file descriptors (most systems do not allow this value to be set)
-          <dt><strong>-p</strong>
-          <dd>The pipe size in 512-byte blocks (this may not be set)
-          <dt><strong>-q</strong>
-          <dd>The maximum number of bytes in POSIX message queues
-          <dt><strong>-r</strong>
-          <dd>The maximum real-time scheduling priority
-          <dt><strong>-s</strong>
-          <dd>The maximum stack size
-          <dt><strong>-t</strong>
-          <dd>The maximum amount of cpu time in seconds
-          <dt><strong>-u</strong>
-          <dd>The maximum number of processes available to a single user
-          <dt><strong>-v</strong>
-          <dd>The maximum amount of virtual memory available to the shell and, on some systems, to its children
-          <dt><strong>-x</strong>
-          <dd>The maximum number of file locks
-          <dt><strong>-P</strong>
-          <dd>The maximum number of pseudoterminals
-          <dt><strong>-T</strong>
-          <dd>The maximum number of threads
-        </dl>
-        <p>If <em>limit</em> is given, and the <strong>-a</strong> option is not used, <em>limit</em> is the new value of the specified resource. If no option is given, then <strong>-f</strong> is assumed. Values are in 1024-byte increments, except for <strong>-t</strong>, which is in seconds; <strong>-p</strong>, which is in units of 512-byte blocks; <strong>-P</strong>, <strong>-T</strong>, <strong>-b</strong>, <strong>-k</strong>, <strong>-n</strong>, and <strong>-u</strong>, which are unscaled values; and, when in Posix mode, <strong>-c</strong> and <strong>-f</strong>, which are in 512-byte increments. The return status is 0 unless an invalid option or argument is supplied, or an error occurs while setting a new limit.
-      </div>
+      <dl>
+        <dt><strong>-a</strong>
+        <dd>All current limits are reported
+        <dt><strong>-b</strong>
+        <dd>The maximum socket buffer size
+        <dt><strong>-c</strong>
+        <dd>The maximum size of core files created
+        <dt><strong>-d</strong>
+        <dd>The maximum size of a process's data segment
+        <dt><strong>-e</strong>
+        <dd>The maximum scheduling priority ("nice")
+        <dt><strong>-f</strong>
+        <dd>The maximum size of files written by the shell and its children
+        <dt><strong>-i</strong>
+        <dd>The maximum number of pending signals
+        <dt><strong>-k</strong>
+        <dd>The maximum number of kqueues that may be allocated
+        <dt><strong>-l</strong>
+        <dd>The maximum size that may be locked into memory
+        <dt><strong>-m</strong>
+        <dd>The maximum resident set size (many systems do not honor this limit)
+        <dt><strong>-n</strong>
+        <dd>The maximum number of open file descriptors (most systems do not allow this value to be set)
+        <dt><strong>-p</strong>
+        <dd>The pipe size in 512-byte blocks (this may not be set)
+        <dt><strong>-q</strong>
+        <dd>The maximum number of bytes in POSIX message queues
+        <dt><strong>-r</strong>
+        <dd>The maximum real-time scheduling priority
+        <dt><strong>-s</strong>
+        <dd>The maximum stack size
+        <dt><strong>-t</strong>
+        <dd>The maximum amount of cpu time in seconds
+        <dt><strong>-u</strong>
+        <dd>The maximum number of processes available to a single user
+        <dt><strong>-v</strong>
+        <dd>The maximum amount of virtual memory available to the shell and, on some systems, to its children
+        <dt><strong>-x</strong>
+        <dd>The maximum number of file locks
+        <dt><strong>-P</strong>
+        <dd>The maximum number of pseudoterminals
+        <dt><strong>-T</strong>
+        <dd>The maximum number of threads
+      </dl>
+      <p>If <em>limit</em> is given, and the <strong>-a</strong> option is not used, <em>limit</em> is the new value of the specified resource. If no option is given, then <strong>-f</strong> is assumed. Values are in 1024-byte increments, except for <strong>-t</strong>, which is in seconds; <strong>-p</strong>, which is in units of 512-byte blocks; <strong>-P</strong>, <strong>-T</strong>, <strong>-b</strong>, <strong>-k</strong>, <strong>-n</strong>, and <strong>-u</strong>, which are unscaled values; and, when in Posix mode, <strong>-c</strong> and <strong>-f</strong>, which are in 512-byte increments. The return status is 0 unless an invalid option or argument is supplied, or an error occurs while setting a new limit.
     <dt><strong>umask</strong> [<strong>-p</strong>] [<strong>-S</strong>] [<em>mode</em>]
     <dd>The user file-creation mask is set to <em>mode</em>. If <em>mode</em> begins with a digit, it is interpreted as an octal number; otherwise it is interpreted as a symbolic mode mask similar to that accepted by <em>chmod</em>(1). If <em>mode</em> is omitted, the current value of the mask is printed. The <strong>-S</strong> option causes the mask to be printed in symbolic form; the default output is an octal number. If the <strong>-p</strong> option is supplied, and <em>mode</em> is omitted, the output is in a form that may be reused as input. The return status is 0 if the mode was successfully changed or if no <em>mode</em> argument was supplied, and false otherwise.
     <dt><strong>unalias</strong> [-<strong>a</strong>] [<em>name</em> ...]
