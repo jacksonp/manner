@@ -7,9 +7,10 @@ class Roff_Macro
     static function applyReplacements(string $string, &$arguments): string
     {
 
-        if (Request::is($string, 'shift')) {
+        $stringArray = [$string];
+        $request     = Request::getLine($stringArray, 0);
+        if ($request['request'] === 'shift') {
             array_shift($arguments);
-
             return '.';
         }
 
