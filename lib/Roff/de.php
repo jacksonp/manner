@@ -11,16 +11,15 @@ class Roff_de
             throw new Exception('Unexpected argument in Roff_Macro: ' . $request['arg_string']);
         }
 
-        $numLines   = count($lines);
         $newMacro   = $matches[1];
         $macroLines = [];
         $foundEnd   = false;
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $request   = Request::getLine($lines, $i);
+        for ($i = $i + 1; $i < count($lines); ++$i) {
+            $request = Request::getLine($lines, $i);
             if (
-              $request['request'] === '.' ||
-              ($newMacro === 'P!' && $lines[$i] === '.') // work around bug in Xm*.3 man pages
+                $request['request'] === '.' ||
+                ($newMacro === 'P!' && $lines[$i] === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;
@@ -29,7 +28,7 @@ class Roff_de
         }
 
         if (!$foundEnd) {
-            throw new Exception($matches[0] . ' - not followed by expected pattern.');
+            throw new Exception('Macro definition for "' . $matches[1] . '" does not follow expected pattern.');
         }
 
         if (in_array($newMacro, ['SS', 'FONT', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE'])) {

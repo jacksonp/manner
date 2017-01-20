@@ -215,7 +215,6 @@ class Roff_Condition
       $macroArguments
     ) {
 
-        $numLines         = count($lines);
         $foundEnd         = false;
         $replacementLines = [];
 
@@ -224,7 +223,7 @@ class Roff_Condition
         $openBraces = 1;
         $recurse    = false;
 
-        for ($ifIndex = $i; $ifIndex < $numLines;) {
+        for ($ifIndex = $i; $ifIndex < count($lines);) {
 
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 ||
@@ -247,7 +246,7 @@ class Roff_Condition
                 $replacementLines[] = $line;
             }
             ++$ifIndex;
-            if ($ifIndex < $numLines) {
+            if ($ifIndex < count($lines)) {
                 $line = $lines[$ifIndex];
             }
         }

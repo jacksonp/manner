@@ -145,9 +145,20 @@ ROFF;
 
     public static function getLine(array &$lines, int $i, &$callerArguments = null): array
     {
+
         if (!isset($lines[$i])) {
             var_dump($lines);
             throw new Exception('Line ' . $i . ' does not exist.');
+        }
+
+        // Do comments first
+        $result = Roff_Comment::checkEvaluate($lines, $i);
+        if ($result !== false) {
+            if ($result['i'] >= $i) {
+                array_splice($lines, $i, $result['i'] + 1 - $i);
+            }
+            // We want another look at the same line:
+            return self::getLine($lines, $i, $callerArguments);
         }
 
         $man    = Man::instance();

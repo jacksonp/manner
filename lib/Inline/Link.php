@@ -43,11 +43,10 @@ class Inline_Link
         }
 
         $dom         = $parentNode->ownerDocument;
-        $numLines    = count($lines);
         $punctuation = '';
         $blockLines  = [];
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if (in_array($request['request'], ['UR', 'MT'])) {
                 --$i;

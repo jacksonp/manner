@@ -7,9 +7,7 @@ class Inline_ft
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
     {
 
-        $numLines = count($lines);
-
-        if ($i === $numLines - 1) {
+        if ($i === count($lines) - 1) {
             return $i; // trailing .ft: skip
         }
 
@@ -28,7 +26,7 @@ class Inline_ft
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $blockLines = [];
-        for (; $i < $numLines - 1; ++$i) {
+        for (; $i < count($lines) - 1; ++$i) {
             $nextLine = $lines[$i + 1];
             if (
               preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) ||

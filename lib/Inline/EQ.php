@@ -6,11 +6,10 @@ class Inline_EQ
     static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
     {
 
-        $numLines = count($lines);
         $foundEnd = false;
 
         $eqLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getLine($lines, $i);
             if ($request['request'] === 'EN') {
                 $foundEnd = true;

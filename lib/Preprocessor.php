@@ -7,11 +7,10 @@ class Preprocessor
     static function strip(array &$lines): array
     {
 
-        $numLines        = count($lines);
         $linesNoComments = [];
         $linePrefix      = '';
 
-        for ($i = 0; $i < $numLines; ++$i) {
+        for ($i = 0; $i < count($lines); ++$i) {
 
             $line       = $linePrefix . $lines[$i];
             $linePrefix = '';
@@ -21,9 +20,9 @@ class Preprocessor
             // picked up Roff_Condition, e.g. man.1
             // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
             while (
-              $i < $numLines - 1 &&
-              mb_substr($line, -1, 1) === '\\' &&
-              (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
+                $i < count($lines) - 1 &&
+                mb_substr($line, -1, 1) === '\\' &&
+                (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
                 $line = mb_substr($line, 0, -1) . $lines[++$i];
             }
 
@@ -48,8 +47,7 @@ class Preprocessor
             // Copied from Roff_Comment for top.1
             if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $line, $matches)) {
                 $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
-                $numLines  = count($lines);
-                for ($i = $i + 1; $i < $numLines; ++$i) {
+                for ($i = $i + 1; $i < count($lines); ++$i) {
                     if ($lines[$i] === $delimiter) {
                         continue 2;
                     }

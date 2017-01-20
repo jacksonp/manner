@@ -11,8 +11,6 @@ class Roff
         $stopOnContentLineAfter = false
     ) {
 
-        $man = Man::instance();
-
         if ($stopOnContentLineAfter !== false) {
             $i             = $stopOnContentLineAfter;
             $stopOnContent = true;
@@ -27,18 +25,6 @@ class Roff
 
 //            echo $i, "\t", $lines[$i], PHP_EOL;
 //            var_dump(array_slice($lines, 0, 5));
-
-            // Do comments first
-            $result = Roff_Comment::checkEvaluate($lines, $i);
-            if ($result !== false) {
-                if ($result['i'] < $i) { // We want another look at a modified $lines[$i];
-                    --$i;
-                } else {
-                    array_splice($lines, $i, $result['i'] + 1 - $i);
-                    --$i;
-                }
-                continue;
-            }
 
             $request = Request::getLine($lines, $i, $callerArguments);
 

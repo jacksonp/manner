@@ -11,8 +11,7 @@ class Inline_FontOneInputLine
             return $i; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $dom = $parentNode->ownerDocument;
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
@@ -49,7 +48,7 @@ class Inline_FontOneInputLine
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
         if (count($arguments) === 0) {
-            if ($i === $numLines - 1) {
+            if ($i === count($lines) - 1) {
                 return $i;
             }
             if ($appendToParentNode) {

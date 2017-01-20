@@ -11,8 +11,7 @@ class BlockPreformatted
 
         $addIndent  = 0;
         $nextIndent = 0;
-        $numLines   = count($lines);
-        for ($i = 0; $i < $numLines; ++$i) {
+        for ($i = 0; $i < count($lines); ++$i) {
             $line = $lines[$i];
 
             if ($nextIndent !== 0) {
@@ -23,7 +22,7 @@ class BlockPreformatted
             $request = Request::getClass($lines, $i);
 
             if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
-                if ($i > 0 && $i !== $numLines - 1) {
+                if ($i > 0 && $i !== count($lines) - 1) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
                 }
@@ -35,7 +34,7 @@ class BlockPreformatted
                 $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'],
                   $request['request']);
                 if ($newI !== false) {
-                    if ($i !== $numLines - 1 && $request['class'] !== 'Request_Skippable') {
+                    if ($i !== count($lines) - 1 && $request['class'] !== 'Request_Skippable') {
                         self::endInputLine($parentNode);
                     }
                     $i = $newI;
@@ -49,7 +48,7 @@ class BlockPreformatted
                     $line = $request['arguments'][0];
                 }
             } elseif ($request['request'] === 'TP') {
-                if ($i === $numLines - 1) {
+                if ($i === count($lines) - 1) {
                     continue;
                 }
                 $addIndent  = 0;
@@ -87,7 +86,7 @@ class BlockPreformatted
             }
 
             TextContent::interpretAndAppendText($parentNode, $line);
-            if ($i !== $numLines - 1) {
+            if ($i !== count($lines) - 1) {
                 self::endInputLine($parentNode);
             }
 
