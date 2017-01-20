@@ -31,18 +31,29 @@ class HybridNode extends DOMElement
         return $this->childNodes->length > 1 || ($this->firstChild && $this->firstChild->nodeValue !== '');
     }
 
+    function trimTrailingBrs()
+    {
+        while (
+            $lastChild = $this->lastChild and
+            ($lastChild->nodeType === XML_ELEMENT_NODE && $lastChild->tagName === 'br')
+        ) {
+            $this->removeChild($lastChild);
+        }
+    }
+
     function appendBlockIfHasContent(HybridNode $block)
     {
         if ($block->hasChildNodes()) {
             if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
                 if (in_array($block->tagName, self::BLOCK_TAGS)) {
+                    // If we are about to append a block, we can prune any trailing <br>s from the element before it.
                     $lastChild = $this->lastChild;
                     if ($lastChild) {
                         $lastChildOfLastChild = $lastChild->lastChild;
                         while (
-                          $lastChildOfLastChild &&
-                          $lastChildOfLastChild->nodeType === XML_ELEMENT_NODE &&
-                          $lastChildOfLastChild->tagName === 'br'
+                            $lastChildOfLastChild &&
+                            $lastChildOfLastChild->nodeType === XML_ELEMENT_NODE &&
+                            $lastChildOfLastChild->tagName === 'br'
                         ) {
                             $lastChild->removeChild($lastChild->lastChild);
                             $lastChildOfLastChild = $lastChild->lastChild;

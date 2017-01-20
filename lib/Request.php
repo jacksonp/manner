@@ -139,15 +139,16 @@ ROFF;
 
     public static function get(string $line): array
     {
+        $man = Man::instance();
         $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
         if (preg_match(
-          '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+          '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
           $line, $matches)
         ) {
             $return['request'] = $matches[1];
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
-                $return['arg_string']     = Request::massageLine($return['raw_arg_string']);
+                $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
                 $return['arguments']      = Request::parseArguments($return['arg_string']);
             }
         }

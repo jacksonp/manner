@@ -48,8 +48,7 @@ class Inline_VerticalSpace
             (
               !($textParent->lastChild instanceof DOMElement) ||
               $textParent->lastChild->tagName !== 'pre'
-            ) &&
-            $i !== $numLines - 1
+            )
           )
         ) {
 

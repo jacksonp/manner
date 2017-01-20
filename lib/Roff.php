@@ -5,10 +5,10 @@ class Roff
 {
 
     static function parse(
-      DOMElement $parentNode,
-      array &$lines,
-      &$callerArguments = null,
-      $stopOnContentLineAfter = false
+        DOMElement $parentNode,
+        array &$lines,
+        &$callerArguments = null,
+        $stopOnContentLineAfter = false
     ) {
 
         $man = Man::instance();
@@ -20,6 +20,8 @@ class Roff
             $i             = 0;
             $stopOnContent = false;
         }
+
+//        var_dump($lines);
 
         for (; $i < count($lines) && !($stopOnContent and $parentNode->textContent !== ''); ++$i) {
 
@@ -48,14 +50,19 @@ class Roff
                     if (!is_null($callerArguments)) {
                         foreach ($request['arguments'] as $k => $v) {
                             $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k],
-                              $callerArguments);
+                                $callerArguments);
                         }
                     }
 
                     // Make copies of arrays:
                     $macroLines           = $macros[$request['request']];
                     $macroCallerArguments = $request['arguments'];
-                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
+//                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
+                    foreach ($macroLines as $k => $l) {
+                        $macroLines[$k] = Roff_Macro::applyReplacements($l, $macroCallerArguments);
+                    }
+                    array_splice($lines, $i, 1, $macroLines);
+                    --$i;
 
                     continue;
                 }
@@ -89,9 +96,10 @@ class Roff
             $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
 
             $request = Request::getClass($lines, $i);
+//            var_dump($request['class']);
 
             $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request'],
-              $stopOnContent);
+                $stopOnContent);
             if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);

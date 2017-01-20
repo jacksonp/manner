@@ -50,6 +50,7 @@ class Block_DefinitionList
                     $dlChild->appendChild($dlChild->firstChild->firstChild);
                 }
                 $dlChild->removeChild($dlChild->firstChild);
+                $dlChild->trimTrailingBrs();
             }
         }
 
