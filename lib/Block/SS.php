@@ -27,7 +27,8 @@ class Block_SS
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
                 return $i;
             }
-            Roff::parse($headingNode, [$sectionHeading]);
+            $sectionHeading = [$sectionHeading];
+            Roff::parse($headingNode, $sectionHeading);
         } else {
             $sectionHeading = ltrim(implode(' ', $arguments));
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);

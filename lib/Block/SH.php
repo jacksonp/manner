@@ -21,7 +21,8 @@ class Block_SH
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 return $i;
             }
-            Roff::parse($headingNode, [$sectionHeading]);
+            $sectionHeading = [$sectionHeading];
+            Roff::parse($headingNode, $sectionHeading);
         } else {
             $sectionHeading = implode(' ', $arguments);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
