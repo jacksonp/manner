@@ -1,7 +1,6 @@
 <?php
 
-
-class Block_fc
+class Block_fc implements Block_Template
 {
 
     private static function addRow(DOMDocument $dom, DOMElement $table, array $cells)
@@ -15,8 +14,14 @@ class Block_fc
         $table->appendChild($tr);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $delim = $arguments[0];
         $pad   = $arguments[1];

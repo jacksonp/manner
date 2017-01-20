@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_nf
+class Block_nf implements Block_Template
 {
 
     private static function endBlock($request)
@@ -16,8 +16,14 @@ class Block_nf
         return false;
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;

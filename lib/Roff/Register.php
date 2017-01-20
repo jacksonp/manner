@@ -4,7 +4,7 @@
 class Roff_Register
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array $lines, int $i)
+    static function evaluate(array $request, array $lines, int $i)
     {
 
         if ($request['request'] === 'rr') {

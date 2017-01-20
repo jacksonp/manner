@@ -1,11 +1,17 @@
 <?php
 
 
-class Block_DataDefinition
+class Block_DataDefinition implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $numLines = count($lines);
 
@@ -13,7 +19,6 @@ class Block_DataDefinition
         $rsLevel    = 0;
 
         for (; $i < $numLines; ++$i) {
-            $line = $lines[$i];
 
             $request = Request::getLine($lines, $i);
 
@@ -50,8 +55,8 @@ class Block_DataDefinition
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < $numLines - 1 || trim($line) !== '') {
-                    $blockLines[] = $line;
+                if ($i < $numLines - 1 || trim($lines[$i]) !== '') {
+                    $blockLines[] = $lines[$i];
                 }
             }
         }

@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_Text
+class Block_Text implements Block_Template
 {
 
     private static $continuation = false;
@@ -9,11 +9,11 @@ class Block_Text
     static function addSpace(DOMElement $parentNode, DOMElement $textParent, bool $shouldAppend)
     {
         if (
-          $parentNode->tagName !== 'pre' &&
-          (!$textParent->lastChild || $textParent->lastChild->nodeType !== XML_ELEMENT_NODE || $textParent->lastChild->tagName !== 'br') &&
-          !$shouldAppend &&
-          !TextContent::$continuation &&
-          $textParent->hasContent()
+            $parentNode->tagName !== 'pre' &&
+            (!$textParent->lastChild || $textParent->lastChild->nodeType !== XML_ELEMENT_NODE || $textParent->lastChild->tagName !== 'br') &&
+            !$shouldAppend &&
+            !TextContent::$continuation &&
+            $textParent->hasContent()
         ) {
             $textParent->appendChild(new DOMText(' '));
         }
@@ -36,13 +36,13 @@ class Block_Text
             if (!in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
                 $blockLines[] = $lines[$i];
                 if (
-                  mb_substr($lines[$i], 0, 1) !== '.' ||
-                  (
-                    in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) &&
-                    !is_null($request['arguments']) &&
-                    count($request['arguments']) > 0 &&
-                    $request['arguments'][0] !== ''
-                  )
+                    mb_substr($lines[$i], 0, 1) !== '.' ||
+                    (
+                        in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) &&
+                        !is_null($request['arguments']) &&
+                        count($request['arguments']) > 0 &&
+                        $request['arguments'][0] !== ''
+                    )
                 ) {
                     break;
                 }
@@ -59,12 +59,12 @@ class Block_Text
     }
 
     static function checkAppend(
-      HybridNode $parentNode,
-      array $lines,
-      int $i,
-      array $arguments,
-      $request,
-      $needOneLineOnly = false
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
     ) {
 
         $numLines = count($lines);
@@ -83,9 +83,9 @@ class Block_Text
             for (; $i < $numLines - 1 && (self::$continuation || !$needOneLineOnly); ++$i) {
                 $nextLine = $lines[$i + 1];
                 if (trim($nextLine) === '' ||
-                  in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
-                  mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
-                  (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
+                    in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
+                    mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
+                    (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
                 ) {
                     break;
                 }
@@ -144,8 +144,8 @@ class Block_Text
     private static function addImplicitBreak(DOMElement $parentNode)
     {
         if (
-          $parentNode->hasChildNodes() &&
-          ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
+            $parentNode->hasChildNodes() &&
+            ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
         ) {
             $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
         }

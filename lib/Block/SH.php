@@ -1,19 +1,24 @@
 <?php
 
 
-class Block_SH
+class Block_SH implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
-        $dom      = $parentNode->ownerDocument;
-        $numLines = count($lines);
+        $dom = $parentNode->ownerDocument;
 
         $headingNode = $dom->createElement('h2');
 
         if (count($arguments) === 0) {
-            if ($i === $numLines - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
+            if ($i === count($lines) - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
                 return $i;
             }
             // Text for subheading is on next line.
@@ -39,22 +44,21 @@ class Block_SH
         $section->appendChild($headingNode);
 
         $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line    = $lines[$i];
+        for ($i = $i + 1; $i < count($lines); ++$i) {
             $request = Request::getClass($lines, $i);
             if ($request['class'] === 'Block_SH') {
                 if (
-                  (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
-                  (count($request['arguments']) === 0 &&
-                    $i < $numLines - 1 &&
-                    in_array($lines[$i + 1], Block_Section::skipSectionNameLines))
+                    (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
+                    (count($request['arguments']) === 0 &&
+                        $i < count($lines) - 1 &&
+                        in_array($lines[$i + 1], Block_Section::skipSectionNameLines))
                 ) {
                     continue;
                 }
                 --$i;
                 break;
             } else {
-                $blockLines[] = $line;
+                $blockLines[] = $lines[$i];
             }
         }
 

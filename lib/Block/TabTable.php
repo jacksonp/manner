@@ -3,29 +3,35 @@
 /**
  * Make tables out of tab-separated lines
  */
-class Block_TabTable
+class Block_TabTable implements Block_Template
 {
 
     static function isStart($lines, $i)
     {
         // char before tab avoid indented stuff + exclude escaped tabs
         return
-          $i < count($lines) - 2 &&
-          !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) &&
-          mb_strpos($lines[$i], "\t") > 0 &&
-          preg_match('~[^\\\\\s]\t~u', $lines[$i]) &&
-          (
+            $i < count($lines) - 2 &&
+            !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) &&
+            mb_strpos($lines[$i], "\t") > 0 &&
+            preg_match('~[^\\\\\s]\t~u', $lines[$i]) &&
             (
-              preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) && mb_strpos($lines[$i + 1], "\t") > 0) ||
-            (in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])
-            ) &&
-            preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) &&
-            mb_strpos($lines[$i + 2], "\t") > 0
-          );
+                (
+                    preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) && mb_strpos($lines[$i + 1], "\t") > 0) ||
+                (in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])
+                ) &&
+                preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) &&
+                mb_strpos($lines[$i + 2], "\t") > 0
+            );
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $numLines = count($lines);
         $line     = $lines[$i];

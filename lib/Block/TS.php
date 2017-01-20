@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_TS
+class Block_TS implements Block_Template
 {
 
     private static function parseRowFormats(array $lines, int $i): array
@@ -42,8 +42,14 @@ class Block_TS
 
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);

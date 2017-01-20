@@ -4,7 +4,7 @@
 class Roff_String
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i, $macroArguments)
+    static function evaluate(array $request, array &$lines, int $i, $macroArguments)
     {
 
         if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {

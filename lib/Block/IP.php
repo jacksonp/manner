@@ -1,11 +1,17 @@
 <?php
 
 
-class Block_IP
+class Block_IP implements Block_Template
 {
 
-    static function checkAppend(DOMElement $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
@@ -33,9 +39,9 @@ class Block_IP
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (count($request['arguments']) && trim($request['arguments'][0]) !== '') {
                     if (
-                      is_null($firstIndent) &&
-                      count($request['arguments']) > 1 &&
-                      $indentVal = Roff_Unit::normalize($request['arguments'][1]) // note this filters out 0s
+                        is_null($firstIndent) &&
+                        count($request['arguments']) > 1 &&
+                        $indentVal = Roff_Unit::normalize($request['arguments'][1]) // note this filters out 0s
                     ) {
                         $firstIndent = 'indent-' . $indentVal;
                         $dl->setAttribute('class', $firstIndent);
@@ -70,8 +76,8 @@ class Block_IP
         for (; $i < $numLines; ++$i) {
             $request = Request::getLine($lines, $i);
             if (
-              $request['request'] !== 'IP' ||
-              (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')
+                $request['request'] !== 'IP' ||
+                (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')
             ) {
                 --$i;
                 break;

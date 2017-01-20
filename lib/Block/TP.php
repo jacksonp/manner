@@ -1,11 +1,17 @@
 <?php
 
 
-class Block_TP
+class Block_TP implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array &$lines, int $i)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         if ($i < count($lines) - 1 && $lines[$i + 1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1

@@ -42,27 +42,6 @@ class Roff
 
             $request = Request::getLine($lines, $i, $callerArguments);
 
-            if (!is_null($request['request'])) {
-
-                $className = $man->getRoffRequestClass($request['request']);
-                if ($className) {
-                    $result = $className::evaluate($parentNode, $request, $lines, $i, $callerArguments);
-                    if ($result !== false) {
-                        if (isset($result['lines'])) {
-                            foreach ($result['lines'] as $k => $l) {
-                                $result['lines'][$k] = Roff_Macro::applyReplacements($l, $callerArguments);
-                            }
-                            array_splice($lines, $i, $result['i'] + 1 - $i, $result['lines']);
-                        } else {
-                            array_splice($lines, $i, $result['i'] + 1 - $i);
-                        }
-                        --$i;
-                        continue;
-                    }
-                }
-
-            }
-
             $result = Roff_Skipped::checkEvaluate($lines, $i);
             if ($result !== false) {
                 array_splice($lines, $i, $result['i'] + 1 - $i);

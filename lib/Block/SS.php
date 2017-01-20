@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_SS
+class Block_SS implements Block_Template
 {
 
     static function endSubsection($requestName)
@@ -9,8 +9,14 @@ class Block_SS
         return in_array($requestName, ['SS', 'SH']);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $dom      = $parentNode->ownerDocument;
         $numLines = count($lines);

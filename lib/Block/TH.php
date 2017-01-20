@@ -1,10 +1,16 @@
 <?php
 
-class Block_TH
+class Block_TH implements Block_Template
 {
 
-    static function checkAppend(DOMElement $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $man = Man::instance();
 

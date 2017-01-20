@@ -7,7 +7,7 @@
 class Roff_do
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i)
     {
 
         $lines[$i] = '.' . $request['arg_string'];

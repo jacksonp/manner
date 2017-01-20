@@ -134,6 +134,11 @@ ROFF;
 
     public static function getLine(array &$lines, int $i, &$callerArguments = null): array
     {
+        if (!isset($lines[$i])) {
+            var_dump($lines);
+            throw new Exception('Line ' . $i . ' does not exist.');
+        }
+
         $man    = Man::instance();
         $return = ['request' => null, 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
         if (preg_match(
@@ -166,6 +171,22 @@ ROFF;
                 }
                 array_splice($lines, $i, 1, $macroLines);
                 return self::getLine($lines, $i, $callerArguments);
+            }
+
+            $className = $man->getRoffRequestClass($return['request']);
+            if ($className) {
+                $result = $className::evaluate($return, $lines, $i, $callerArguments);
+                if ($result !== false) {
+                    if (isset($result['lines'])) {
+                        foreach ($result['lines'] as $k => $l) {
+                            $result['lines'][$k] = Roff_Macro::applyReplacements($l, $callerArguments);
+                        }
+                        array_splice($lines, $i, $result['i'] + 1 - $i, $result['lines']);
+                    } else {
+                        array_splice($lines, $i, $result['i'] + 1 - $i);
+                    }
+                    return self::getLine($lines, $i, $callerArguments);
+                }
             }
 
         }

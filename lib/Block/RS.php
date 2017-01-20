@@ -1,11 +1,17 @@
 <?php
 
 
-class Block_RS
+class Block_RS implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array &$lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $thisIndent = '';
         $className  = 'indent';

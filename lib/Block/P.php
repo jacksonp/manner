@@ -1,11 +1,17 @@
 <?php
 
 
-class Block_P
+class Block_P implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        int $i,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $numLines = count($lines);
         $dom      = $parentNode->ownerDocument;
