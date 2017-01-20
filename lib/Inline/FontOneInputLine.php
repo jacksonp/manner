@@ -52,7 +52,9 @@ class Inline_FontOneInputLine
             if ($i === $numLines - 1) {
                 return $i;
             }
-            $textParent->appendChild($appendToParentNode);
+            if ($appendToParentNode) {
+                $textParent->appendChild($appendToParentNode);
+            }
             if ($shouldAppend) {
                 $parentNode->appendChild($textParent);
             }
