@@ -1,7 +1,7 @@
 <?php
 
 
-class Inline_VerticalSpace
+class Inline_VerticalSpace implements Block_Template
 {
 
     private static function addBR(DOMElement $parentNode)
@@ -28,8 +28,15 @@ class Inline_VerticalSpace
         return in_array($request['request'], ['br', 'sp', 'ne']);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
+
+        array_shift($lines);
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
@@ -53,7 +60,7 @@ class Inline_VerticalSpace
             }
         }
 
-        return $i;
+        return 0;
 
     }
 

@@ -7,7 +7,6 @@ class Block_IP implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
@@ -17,14 +16,14 @@ class Block_IP implements Block_Template
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (count($arguments) > 0 && trim($arguments[0]) !== '') {
-            return self::appendDl($parentNode, $lines, $i);
+            return self::appendDl($parentNode, $lines);
         } else {
-            return self::appendBlockquote($parentNode, $lines, $i);
+            return self::appendBlockquote($parentNode, $lines);
         }
 
     }
 
-    static function appendDl(DOMElement $parentNode, array &$lines, int $i)
+    static function appendDl(DOMElement $parentNode, array &$lines)
     {
 
         $dom = $parentNode->ownerDocument;
@@ -32,9 +31,10 @@ class Block_IP implements Block_Template
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        for (; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if ($request['request'] === 'IP') {
+                array_shift($lines);
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
                 if (count($request['arguments']) && trim($request['arguments'][0]) !== '') {
                     if (
@@ -49,43 +49,41 @@ class Block_IP implements Block_Template
                     TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
                     $dl->appendChild($dt);
                     $dd = $dom->createElement('dd');
-                    $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
+                    Block_DataDefinition::checkAppend($dd, $lines);
                     $dl->appendBlockIfHasContent($dd);
                 }
             } else {
-                --$i;
                 break;
             }
         }
 
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return $i;
+        return 0;
 
     }
 
-    static function appendBlockquote(DOMElement $parentNode, array &$lines, int $i)
+    static function appendBlockquote(DOMElement $parentNode, array &$lines)
     {
 
         $dom = $parentNode->ownerDocument;
 
         $block = $dom->createElement('blockquote');
 
-        for (; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if (
                 $request['request'] !== 'IP' ||
                 (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')
             ) {
-                --$i;
                 break;
             }
-            $i = Block_DataDefinition::checkAppend($block, $lines, $i + 1);
+            Block_DataDefinition::checkAppend($block, $lines);
         }
 
         $parentNode->appendBlockIfHasContent($block);
 
-        return $i;
+        return 0;
 
     }
 

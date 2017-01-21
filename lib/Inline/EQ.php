@@ -1,10 +1,15 @@
 <?php
 
-class Inline_EQ
+class Inline_EQ implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         $foundEnd = false;
 

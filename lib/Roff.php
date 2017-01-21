@@ -8,50 +8,41 @@ class Roff
         DOMElement $parentNode,
         array &$lines,
         &$callerArguments = null,
-        $stopOnContentLineAfter = false
+        $stopOnContent = false
     ) {
 
-        if ($stopOnContentLineAfter !== false) {
-            $i             = $stopOnContentLineAfter;
-            $stopOnContent = true;
-        } else {
-            $i             = 0;
-            $stopOnContent = false;
-        }
-
-//        var_dump($lines);
-
-        for (; $i < count($lines) && !($stopOnContent and $parentNode->textContent !== ''); ++$i) {
+        while (count($lines) && (!$stopOnContent || $parentNode->textContent === '')) {
 
 //            echo $i, "\t", $lines[$i], PHP_EOL;
 //            var_dump(array_slice($lines, 0, 5));
 
-            $request = Request::getLine($lines, $i, $callerArguments);
+            $request = Request::getLine($lines, 0, $callerArguments);
 
             if (Roff_Skipped::skip($request)) {
-                array_splice($lines, $i, 1);
-                --$i;
+                array_shift($lines);
                 continue;
             }
 
-            $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
+            $request['raw_line'] = Roff_Macro::applyReplacements($request['raw_line'], $callerArguments);
 
-            $request = Request::getClass($lines, $i);
+            $request = Request::getClass($lines, 0);
 //            var_dump($request['class']);
 
-            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request'],
+            $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request'],
                 $stopOnContent);
             if ($newI === false) {
 //            var_dump(array_slice($lines, $i - 5, 10));
 //            var_dump($lines);
-                throw new Exception('"' . $lines[$i] . '" Roff::parse() could not handle it.');
+                throw new Exception('"' . $lines[0] . '" Roff::parse() could not handle it.');
             }
 
-            $i = $newI;
+            if ($newI) { // could be 0
+                array_splice($lines, 0, $newI);
+            }
 
         }
 
-        return $i;
+        return 0;
 
     }
 

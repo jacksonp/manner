@@ -7,7 +7,6 @@ class Block_DataDefinition implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
@@ -16,9 +15,9 @@ class Block_DataDefinition implements Block_Template
         $blockLines = [];
         $rsLevel    = 0;
 
-        for (; $i < count($lines); ++$i) {
+        while (count($lines)) {
 
-            $request = Request::getLine($lines, $i);
+            $request = Request::getLine($lines, 0);
 
             if ($request['request'] === 'RS') {
                 ++$rsLevel;
@@ -37,7 +36,7 @@ class Block_DataDefinition implements Block_Template
             if ($rsLevel <= 0) {
                 if (
                     in_array($request['request'], ['LP', 'PP', 'P']) &&
-                    $i < count($lines) - 1 && Request::getLine($lines, $i + 1)['request'] === 'TP'
+                    count($lines) > 1 && Request::getLine($lines, 1)['request'] === 'TP'
                 ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
                     continue;
@@ -45,7 +44,6 @@ class Block_DataDefinition implements Block_Template
                     in_array($request['request'], ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) ||
                     ($hitIP && !$hitBlankIP)
                 ) {
-                    --$i;
                     break;
                 }
             }
@@ -53,8 +51,8 @@ class Block_DataDefinition implements Block_Template
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
             } else {
-                if ($i < count($lines) - 1 || ($i < count($lines) && trim($lines[$i]) !== '')) {
-                    $blockLines[] = $lines[$i];
+                if (count($lines) > 1 || (count($lines) && trim($lines[0]) !== '')) {
+                    $blockLines[] = array_shift($lines);
                 }
             }
         }
@@ -62,7 +60,7 @@ class Block_DataDefinition implements Block_Template
         Blocks::trim($blockLines);
         Roff::parse($parentNode, $blockLines);
 
-        return $i;
+        return 0;
 
     }
 

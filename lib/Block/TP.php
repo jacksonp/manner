@@ -7,18 +7,16 @@ class Block_TP implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
 
-        if ($i < count($lines) - 1 && $lines[$i + 1] === '.nf') {
+        if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
-            $lines[$i + 1] = $lines[$i];
-            $lines[$i]     = '.nf';
-
-            return $i - 1;
+            $lines[1] = $lines[0];
+            $lines[0] = '.nf';
+            return 0;
         }
 
         $dom = $parentNode->ownerDocument;
@@ -26,12 +24,15 @@ class Block_TP implements Block_Template
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        for (; $i < count($lines); ++$i) {
+        while (count($lines)) {
 
-            $request = Request::getClass($lines, $i);
+            $request = Request::getClass($lines, 0);
 
             if ($request['class'] === 'Block_TP') {
-                if ($i === count($lines) - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
+
+                array_shift($lines);
+
+                if (count($lines) === 0 || Request::getClass($lines, 0)['class'] === 'Block_TP') {
                     // a bug in the man page, just skip:
                     continue;
                 }
@@ -46,15 +47,16 @@ class Block_TP implements Block_Template
 
                 $dt         = $dom->createElement('dt');
                 $callerArgs = null;
-                $i          = Roff::parse($dt, $lines, $callerArgs, $i + 1) - 1;
+                Roff::parse($dt, $lines, $callerArgs, true);
 
                 $dl->appendBlockIfHasContent($dt);
 
-                while ($i < count($lines)) {
-                    $request = Request::getLine($lines, $i);
+                while (count($lines)) {
+                    $request = Request::getLine($lines, 0);
                     if ($request['request'] === 'TQ') {
+                        array_shift($lines);
                         $dt = $dom->createElement('dt');
-                        $i  = Roff::parse($dt, $lines, $callerArgs, $i + 1) - 1;
+                        Roff::parse($dt, $lines, $callerArgs, true);
                         $dl->appendBlockIfHasContent($dt);
                     } else {
                         break;
@@ -62,18 +64,17 @@ class Block_TP implements Block_Template
                 }
 
                 $dd = $dom->createElement('dd');
-                $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
+                Block_DataDefinition::checkAppend($dd, $lines);
                 $dl->appendBlockIfHasContent($dd);
 
             } else {
-                --$i;
                 break;
             }
         }
 
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return $i;
+        return 0;
 
     }
 

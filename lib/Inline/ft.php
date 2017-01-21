@@ -1,11 +1,16 @@
 <?php
 
 
-class Inline_ft
+class Inline_ft implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         if ($i === count($lines) - 1) {
             return $i; // trailing .ft: skip

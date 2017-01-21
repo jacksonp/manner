@@ -7,24 +7,25 @@ class Block_SH implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
+
+        array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
 
         $headingNode = $dom->createElement('h2');
 
         if (count($arguments) === 0) {
-            if ($i === count($lines) - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_SH') {
-                return $i;
+            if (count($lines) === 0 || Request::getClass($lines, 0)['class'] === 'Block_SH') {
+                return 0;
             }
             // Text for subheading is on next line.
-            $sectionHeading = $lines[++$i];
+            $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
-                return $i;
+                return 0;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
@@ -35,7 +36,7 @@ class Block_SH implements Block_Template
 
         // We skip empty .SH macros
         if (trim($headingNode->textContent) === '') {
-            return $i;
+            return 0;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -44,21 +45,20 @@ class Block_SH implements Block_Template
         $section->appendChild($headingNode);
 
         $blockLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getClass($lines, $i);
+        while (count($lines)) {
+            $request = Request::getClass($lines, 0);
             if ($request['class'] === 'Block_SH') {
                 if (
                     (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
                     (count($request['arguments']) === 0 &&
-                        $i < count($lines) - 1 &&
-                        in_array($lines[$i + 1], Block_Section::skipSectionNameLines))
+                        count($lines) > 1 &&
+                        in_array($lines[1], Block_Section::skipSectionNameLines))
                 ) {
                     continue;
                 }
-                --$i;
                 break;
             } else {
-                $blockLines[] = $lines[$i];
+                $blockLines[] = array_shift($lines);
             }
         }
 
@@ -66,7 +66,7 @@ class Block_SH implements Block_Template
         Roff::parse($section, $blockLines);
         $parentNode->appendBlockIfHasContent($section);
 
-        return $i;
+        return 0;
 
     }
 

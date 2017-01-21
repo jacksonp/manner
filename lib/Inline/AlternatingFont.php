@@ -1,14 +1,21 @@
 <?php
 
 
-class Inline_AlternatingFont
+class Inline_AlternatingFont implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
+
+        array_shift($lines);
 
         if (count($arguments) === 0) {
-            return $i; // Just skip empty requests
+            return 0; // Just skip empty requests
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
@@ -20,7 +27,7 @@ class Inline_AlternatingFont
         foreach ($arguments as $bi => $bit) {
             $requestCharIndex = $bi % 2;
             if (!isset($request[$requestCharIndex])) {
-                throw new Exception($lines[$i] . ' command ' . $request . ' has nothing at index ' . $requestCharIndex);
+                throw new Exception($lines[0] . ' command ' . $request . ' has nothing at index ' . $requestCharIndex);
             }
             if (trim($bit) === '') {
                 TextContent::interpretAndAppendText($textParent, $bit);
@@ -45,7 +52,7 @@ class Inline_AlternatingFont
                     }
                     break;
                 default:
-                    throw new Exception($lines[$i] . ' command ' . $request . ' unexpected character at index ' . $requestCharIndex);
+                    throw new Exception($lines[0] . ' command ' . $request . ' unexpected character at index ' . $requestCharIndex);
             }
         }
 
@@ -53,7 +60,7 @@ class Inline_AlternatingFont
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return $i;
+        return 0;
 
     }
 

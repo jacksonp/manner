@@ -7,7 +7,6 @@ class Block_SY implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false

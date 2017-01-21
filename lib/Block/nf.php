@@ -19,23 +19,24 @@ class Block_nf implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $dom = $parentNode->ownerDocument;
 
         $preLines = [];
-        while ($i < count($lines) - 1) {
-            $nextRequest = Request::getLine($lines, $i + 1);
+        while (count($lines)) {
+            $nextRequest = Request::getLine($lines, 0);
             if (Block_SS::endSubsection($nextRequest['request']) || $nextRequest['request'] === 'TS') {
                 break;
             } elseif (self::endBlock($nextRequest)) {
-                while ($i < count($lines) - 1 && $nextRequest = Request::getLine($lines,
-                        $i + 1) and self::endBlock($nextRequest)) {
-                    ++$i; // swallow
+                array_shift($lines);
+                while (count($lines) > 1 && $nextRequest = Request::getLine($lines, 1) and self::endBlock($nextRequest)) {
+                    array_shift($lines); // swallow
                 }
                 break;
             } elseif (
@@ -43,28 +44,28 @@ class Block_nf implements Block_Template
                 ($nextRequest['request'] === 'ad' && $nextRequest['arg_string'] === 'l')
             ) {
                 // Skip
+                array_shift($lines);
             } else {
-                $preLines[] = $lines[$i + 1];
+                $preLines[] = array_shift($lines);
             }
-            ++$i;
         }
 
         if (count($preLines) === 0) {
-            return $i;
+            return 0;
         }
 
         if (
-            $i < count($lines) - 1
+            count($lines)
             && Request::getLine($preLines, 0)['request'] === 'RS'
-            && Request::getLine($lines, $i + 1)['request'] === 'RE'
+            && Request::getLine($lines, 0)['request'] === 'RE'
         ) {
-            $preLines[] = $lines[++$i];
+            $preLines[] = array_shift($lines);
         }
 
         ArrayHelper::rtrim($preLines, ['.fi', '.ad', '.ad n', '.ad b', '', '.br', '.sp']);
 
         if (count($preLines) === 0) {
-            return $i;
+            return 0;
         }
 
         if (count($preLines) > 1) {
@@ -106,7 +107,7 @@ class Block_nf implements Block_Template
                     }
                 }
 
-                return $i;
+                return 0;
             }
         }
 
@@ -133,7 +134,7 @@ class Block_nf implements Block_Template
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendBlockIfHasContent($pre);
 
-        return $i;
+        return 0;
     }
 
 

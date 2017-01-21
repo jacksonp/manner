@@ -7,20 +7,21 @@ class Block_P implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        for (; $i < count($lines) - 1; ++$i) {
-            if (Blocks::lineEndsBlock($lines, $i + 1)) {
+        while (count($lines)) {
+            if (Blocks::lineEndsBlock($lines, 0)) {
                 break;
             }
-            $blockLines[] = $lines[$i + 1];
+            $blockLines[] = array_shift($lines);
         }
 
         Blocks::trim($blockLines);
@@ -36,7 +37,7 @@ class Block_P implements Block_Template
             }
         }
 
-        return $i;
+        return 0;
 
     }
 

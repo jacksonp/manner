@@ -7,22 +7,23 @@ class Block_ce implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $dom = $parentNode->ownerDocument;
 
         $blockLines       = [];
         $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
-        $centerLinesUpTo  = min($i + $numLinesToCenter, count($lines) - 1);
-        for (; $i < $centerLinesUpTo; ++$i) {
-            if (Request::getLine($lines, $i + 1)['request'] === 'ce') {
+        $centerLinesUpTo  = min($numLinesToCenter, count($lines) - 1);
+        for ($i = 0; $i < $centerLinesUpTo; ++$i) {
+            if (Request::getLine($lines, 1)['request'] === 'ce') {
                 break;
             }
-            $blockLines[] = $lines[$i + 1];
+            $blockLines[] = array_shift($lines);
             $blockLines[] = '.br';
         }
         $block = $dom->createElement('div');
@@ -31,7 +32,7 @@ class Block_ce implements Block_Template
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return $i;
+        return 0;
 
     }
 

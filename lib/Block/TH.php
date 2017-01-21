@@ -6,7 +6,6 @@ class Block_TH implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
@@ -49,7 +48,7 @@ class Block_TH implements Block_Template
             $parentNode->appendChild($hr);
         }
 
-        return $i;
+        return 1;
 
     }
 

@@ -1,11 +1,16 @@
 <?php
 
 
-class Inline_Link
+class Inline_Link implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 

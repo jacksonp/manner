@@ -7,11 +7,12 @@ class Block_RS implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
+
+        array_shift($lines);
 
         $thisIndent = '';
         $className  = 'indent';
@@ -26,9 +27,8 @@ class Block_RS implements Block_Template
 
         $rsLevel    = 1;
         $blockLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $line    = $lines[$i];
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if ($request['request'] === 'RS') {
                 $indent = Roff_Unit::normalize(trim($request['arg_string']));
                 if ($indent === $thisIndent) {
@@ -54,14 +54,14 @@ class Block_RS implements Block_Template
                 // prevent skipping
                 $thisIndent = 'GARBAGE';
             }
-            $blockLines[] = $line;
+            $blockLines[] = array_shift($lines);
         }
 
         // Hack for duplicity.1
-        if (count($blockLines) > 0 && $blockLines[count($blockLines) - 1] === '.PP') {
-            $lines[$i] = '.PP';
-            --$i;
-        }
+//        if (count($blockLines) > 0 && $blockLines[count($blockLines) - 1] === '.PP') {
+//            $lines[$i] = '.PP';
+//            --$i;
+//        }
 
         Blocks::trim($blockLines);
 
@@ -90,7 +90,7 @@ class Block_RS implements Block_Template
             }
         }
 
-        return $i;
+        return 0;
 
     }
 

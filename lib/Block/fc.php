@@ -17,11 +17,12 @@ class Block_fc implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
+
+        array_shift($lines);
 
         $delim = $arguments[0];
         $pad   = $arguments[1];
@@ -29,24 +30,25 @@ class Block_fc implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $table = $dom->createElement('table');
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
+            array_shift($lines);
             if (in_array($request['request'], ['ta', 'nf'])) {
                 continue; // Swallow
             } elseif ($request['request'] === 'fi') {
                 break; // Finished
-            } elseif (mb_strpos($lines[$i], $delim) === 0) {
-                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $line);
+            } elseif (mb_strpos($request['raw_line'], $delim) === 0) {
+                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $request['raw_line']);
                 array_shift($cells);
                 $cells = array_map(function ($contents) use ($pad) {
                     return trim($contents, $pad);
                 }, $cells);
                 self::addRow($dom, $table, $cells);
-            } elseif (mb_strpos($lines[$i], "\t") !== 0) {
-                $cells = preg_split("~\t~u", $lines[$i]);
+            } elseif (mb_strpos($request['raw_line'], "\t") !== 0) {
+                $cells = preg_split("~\t~u", $request['raw_line']);
                 self::addRow($dom, $table, $cells);
             } else {
-                throw new Exception('Unexpected ' . $lines[$i]);
+                throw new Exception('Unexpected ' . $request['raw_line']);
             }
         }
 

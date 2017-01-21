@@ -60,13 +60,14 @@ class Block_Text implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        int $i,
         ?array $arguments = null,
         ?string $request = null,
         $needOneLineOnly = false
     ) {
 
-        $line = self::removeContinuation($lines[$i]);
+        $line = self::removeContinuation($lines[0]);
+
+        array_shift($lines);
 
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
@@ -77,8 +78,8 @@ class Block_Text implements Block_Template
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
-            for (; $i < count($lines) - 1 && (self::$continuation || !$needOneLineOnly); ++$i) {
-                $nextLine = $lines[$i + 1];
+            while (count($lines) && (self::$continuation || !$needOneLineOnly)) {
+                $nextLine = $lines[0];
                 if (trim($nextLine) === '' ||
                     in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
                     mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
@@ -87,6 +88,7 @@ class Block_Text implements Block_Template
                     break;
                 }
 
+                array_shift($lines);
 
                 if (in_array($nextLine, ['\\&', '\\)'])) {
                     if (self::$continuation) {
@@ -107,7 +109,7 @@ class Block_Text implements Block_Template
 
         self::addLine($parentNode, $line, $implicitBreak);
 
-        return $i;
+        return 0;
 
     }
 

@@ -1,14 +1,21 @@
 <?php
 
 
-class Inline_FontOneInputLine
+class Inline_FontOneInputLine implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        ?array $arguments = null,
+        ?string $request = null,
+        $needOneLineOnly = false
+    ) {
 
-        if (count($arguments) === 0 && $i < count($lines) - 1 && Request::getLine($lines, $i + 1)['request'] === 'IP') {
-            return $i; // TODO: not sure how to handle this, just skip the font setting for now.
+        array_shift($lines);
+
+        if (count($arguments) === 0 && count($lines) && Request::getLine($lines, 0)['request'] === 'IP') {
+            return 0; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
         $dom = $parentNode->ownerDocument;
@@ -48,8 +55,8 @@ class Inline_FontOneInputLine
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
         if (count($arguments) === 0) {
-            if ($i === count($lines) - 1) {
-                return $i;
+            if (count($lines) === 0) {
+                return 0;
             }
             if ($appendToParentNode) {
                 $textParent->appendChild($appendToParentNode);
@@ -58,7 +65,7 @@ class Inline_FontOneInputLine
                 $parentNode->appendChild($textParent);
             }
 
-            return $i;
+            return 0;
 
             /*
             ++$i;
@@ -86,7 +93,7 @@ class Inline_FontOneInputLine
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return $i;
+        return 0;
 
     }
 

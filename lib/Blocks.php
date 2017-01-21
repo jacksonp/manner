@@ -29,8 +29,8 @@ class Blocks
 
     static function lineEndsBlock(array $lines, int $i)
     {
-        $request = Request::getLine($lines, $i);
-        if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
+        $requestName = Request::peepAtName($lines[$i]);
+        if ($requestName && Man::instance()->requestStartsBlock($requestName)) {
             return true;
         }
 
