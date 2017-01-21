@@ -1,13 +1,13 @@
 <?php
 
 
-class Roff_Condition
+class Roff_Condition implements Roff_Template
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
     const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
 
-    static function evaluate(array $request, array &$lines, int $i, $macroArguments)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         if ($request['request'] === 'if') {

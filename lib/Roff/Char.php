@@ -1,10 +1,10 @@
 <?php
 
 
-class Roff_Char
+class Roff_Char implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         if (!preg_match('~^(.+)\s+(.+)$~u', $request['arg_string'], $matches)) {

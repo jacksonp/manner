@@ -1,10 +1,10 @@
 <?php
 
 
-class Roff_Translation
+class Roff_Translation implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         $man = Man::instance();

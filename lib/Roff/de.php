@@ -1,11 +1,13 @@
 <?php
 
 
-class Roff_de
+class Roff_de implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
+
+        array_shift($lines);
 
         if (!preg_match('~^([^\s"]+)\s*$~u', $request['arg_string'], $matches)) {
             throw new Exception('Unexpected argument in Roff_Macro: ' . $request['arg_string']);
@@ -15,16 +17,17 @@ class Roff_de
         $macroLines = [];
         $foundEnd   = false;
 
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if (
                 $request['request'] === '.' ||
-                ($newMacro === 'P!' && $lines[$i] === '.') // work around bug in Xm*.3 man pages
+                ($newMacro === 'P!' && $request['raw_line'] === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
+                array_shift($lines);
                 break;
             }
-            $macroLines[] = Request::massageLine($lines[$i]);
+            $macroLines[] = Request::massageLine(array_shift($lines));
         }
 
         if (!$foundEnd) {
@@ -40,7 +43,7 @@ class Roff_de
             Man::instance()->addMacro($newMacro, $macroLines);
         }
 
-        return ['i' => $i];
+        return ['i' => 0];
 
     }
 

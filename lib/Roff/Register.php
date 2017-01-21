@@ -1,10 +1,10 @@
 <?php
 
 
-class Roff_Register
+class Roff_Register implements Roff_Template
 {
 
-    static function evaluate(array $request, array $lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         if ($request['request'] === 'rr') {

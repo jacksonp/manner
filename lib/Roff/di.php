@@ -1,10 +1,10 @@
 <?php
 
 
-class Roff_di
+class Roff_di implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         for ($i = $i + 1; $i < count($lines); ++$i) {

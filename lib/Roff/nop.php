@@ -1,9 +1,9 @@
 <?php
 
-class Roff_nop
+class Roff_nop implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
     {
 
         $lines[$i] = $request['arg_string'];
