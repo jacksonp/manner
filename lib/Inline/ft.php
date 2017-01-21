@@ -12,37 +12,38 @@ class Inline_ft implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        if ($i === count($lines) - 1) {
-            return $i; // trailing .ft: skip
+        array_shift($lines);
+
+        if (!count($lines)) {
+            return 0; // trailing .ft: skip
         }
 
         if (count($arguments) === 0) {
-            return $i; // Just skip empty requests
+            return 0; // Just skip empty requests
         }
 
         $fontAbbreviation = $arguments[0];
 
         // Skip stray regular font settings:
         if (in_array($fontAbbreviation, ['0', '1', 'R', 'P', 'CR', 'AR'])) {
-            return $i;
+            return 0;
         }
 
         $dom = $parentNode->ownerDocument;
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $blockLines = [];
-        for (; $i < count($lines) - 1; ++$i) {
-            $nextLine = $lines[$i + 1];
+        while (count($lines)) {
+            $line = $lines[0];
             if (
-              preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) ||
-              Blocks::lineEndsBlock($lines, $i + 1)
+                preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $line) ||
+                Blocks::lineEndsBlock($lines, 0)
             ) {
                 break;
             }
-            $blockLines[] = $nextLine;
+            $blockLines[] = array_shift($lines);
 
-            if (preg_match('~\\\\f1$~u', $nextLine)) {
-                ++$i; // We include $nextLine, swallow it.
+            if (preg_match('~\\\\f1$~u', $line)) { // Include, but then stop
                 break;
             }
 
@@ -89,7 +90,7 @@ class Inline_ft implements Block_Template
         }
 
 
-        return $i;
+        return 0;
 
     }
 
