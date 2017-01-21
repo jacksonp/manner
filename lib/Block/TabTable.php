@@ -32,9 +32,7 @@ class Block_TabTable implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $line = $lines[$i];
-
-        $isStart = self::isStart($lines, $i);
+        $isStart = self::isStart($lines, 0);
         if (!$isStart) {
             return false;
         }
@@ -44,7 +42,17 @@ class Block_TabTable implements Block_Template
         $table = $dom->createElement('table');
         $parentNode->appendChild($table);
 
-        for (; ; ++$i) {
+        while (count($lines)) {
+
+            if (mb_strpos($lines[0], "\t") === false && $lines[0] !== '\\&...') { // \&... see pmlogextract.1
+                break;
+            }
+
+            $line = array_shift($lines);
+
+            if (in_array(trim($line), ['.br', ''])) {
+                continue;
+            }
 
             $tds = preg_split('~\t+~u', $line);
             $tr  = $table->appendChild($dom->createElement('tr'));
@@ -54,27 +62,9 @@ class Block_TabTable implements Block_Template
                 $tr->appendChild($cell);
             }
 
-            if ($i === count($lines) - 1) {
-                return $i;
-            }
-
-            $line = $lines[$i + 1];
-
-            if (in_array(trim($line), ['.br', ''])) {
-                ++$i;
-                if ($i === count($lines) - 1) {
-                    return $i;
-                }
-                $line = $lines[$i + 1];
-            }
-
-            if (mb_strpos($line, "\t") === false && $line !== '\\&...') { // \&... see pmlogextract.1
-                return $i;
-            }
-
         }
 
-        throw new Exception('Should not get to the end of this function.');
+        return 0;
 
     }
 
