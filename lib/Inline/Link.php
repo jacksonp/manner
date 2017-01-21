@@ -12,20 +12,22 @@ class Inline_Link implements Block_Template
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         if ($request === 'URL') {
             $dom = $parentNode->ownerDocument;
             if (count($arguments) === 0) {
-                throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
+                throw new Exception('Not enough arguments to .URL: ' . $request['raw_line']);
             }
             $anchor = $dom->createElement('a');
             $anchor->setAttribute('href', $arguments[0]);
 
             if (count($arguments) > 1) {
                 TextContent::interpretAndAppendText($anchor, $arguments[1]);
-            } elseif ($i < count($lines) - 1) {
-                $blockLines = [$lines[++$i]];
+            } elseif (count($lines)) {
+                $blockLines = array_shift($lines);
                 Blocks::trim($blockLines);
                 Roff::parse($anchor, $blockLines);
             } else {
@@ -44,23 +46,23 @@ class Inline_Link implements Block_Template
                 $parentNode->appendBlockIfHasContent($textParent);
             }
 
-            return $i;
+            return 0;
         }
 
         $dom         = $parentNode->ownerDocument;
         $punctuation = '';
         $blockLines  = [];
 
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if (in_array($request['request'], ['UR', 'MT'])) {
-                --$i;
                 break;
             } elseif (in_array($request['request'], ['UE', 'ME'])) {
                 $punctuation = trim($request['arg_string']);
+                array_shift($lines);
                 break;
             }
-            $blockLines[] = $lines[$i];
+            $blockLines[] = array_shift($lines);
         }
 
         $href = false;
@@ -77,7 +79,7 @@ class Inline_Link implements Block_Template
             Blocks::trim($blockLines);
             Roff::parse($parentNode, $blockLines);
 
-            return $i;
+            return 0;
         }
 
         $anchor = $dom->createElement('a');
@@ -103,7 +105,7 @@ class Inline_Link implements Block_Template
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return $i;
+        return 0;
 
     }
 
