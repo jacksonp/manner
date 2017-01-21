@@ -162,7 +162,13 @@ ROFF;
         }
 
         $man    = Man::instance();
-        $return = ['request' => null, 'raw_line' => $lines[$i], 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        $return = [
+            'request' => null,
+            'raw_line' => $lines[$i],
+            'arguments' => [],
+            'arg_string' => '',
+            'raw_arg_string' => ''
+        ];
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[$i], $matches)
@@ -222,7 +228,14 @@ ROFF;
 
     public static function getClass(array $lines, int $i): array
     {
-        $return = ['class' => null, 'request' => null, 'raw_line' => $lines[$i], 'arguments' => [], 'arg_string' => '', 'raw_arg_string' => ''];
+        $return = [
+            'class' => null,
+            'request' => null,
+            'raw_line' => $lines[$i],
+            'arguments' => [],
+            'arg_string' => '',
+            'raw_arg_string' => ''
+        ];
 
         $request = self::getLine($lines, $i);
 
@@ -233,12 +246,8 @@ ROFF;
         if ($lines[$i] === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            if ($i === 0) {
-                $return['class'] = 'Request_Skippable';
-            } else {
-                $return['request'] = 'sp';
-                $return['class']   = 'Inline_VerticalSpace';
-            }
+            $return['request'] = 'sp';
+            $return['class']   = 'Inline_VerticalSpace';
         } elseif (self::isEmptyRequest($lines[$i])) {
             $return['class'] = 'Request_Skippable';
         } elseif (self::canSkip($lines[$i], $request)) {
