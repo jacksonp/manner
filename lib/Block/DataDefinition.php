@@ -39,6 +39,7 @@ class Block_DataDefinition implements Block_Template
                     count($lines) > 1 && Request::getLine($lines, 1)['request'] === 'TP'
                 ) {
                     // skip this line: last .PP used to visually separate .TP entries, keep as one dl
+                    array_shift($lines);
                     continue;
                 } elseif (
                     in_array($request['request'], ['HP', 'TP', 'LP', 'PP', 'P', 'SS', 'SH', 'TQ', 'TH']) ||
@@ -50,6 +51,7 @@ class Block_DataDefinition implements Block_Template
 
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
+                array_shift($lines);
             } else {
                 if (count($lines) > 1 || (count($lines) && trim($lines[0]) !== '')) {
                     $blockLines[] = array_shift($lines);
