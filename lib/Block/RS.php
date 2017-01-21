@@ -36,6 +36,7 @@ class Block_RS implements Block_Template
                         $blockLines[] = '.br';
                     }
                     ++$skippedRSs;
+                    array_shift($lines);
                     continue;
                 } else {
                     ++$rsLevel;
@@ -43,6 +44,7 @@ class Block_RS implements Block_Template
             } elseif ($request['request'] === 'RE') {
                 if ($skippedRSs > 0) {
                     --$skippedRSs;
+                    array_shift($lines);
                     continue;
                 } else {
                     --$rsLevel;

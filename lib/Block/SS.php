@@ -17,20 +17,21 @@ class Block_SS implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
+
+        $dom = $parentNode->ownerDocument;
 
         $headingNode = $dom->createElement('h3');
 
         if (count($arguments) === 0) {
-            $nextRequest = Request::getLine($lines, $i + 1);
-            if ($i === count($lines) - 1 || self::endSubsection($nextRequest['request'])) {
-                return $i;
+            if (count($lines) === 0 || self::endSubsection(Request::getLine($lines, 0)['request'])) {
+                return 0;
             }
             // Text for subheading is on next line.
-            $sectionHeading = $lines[++$i];
+            $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
-                return $i;
+                return 0;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
@@ -41,7 +42,7 @@ class Block_SS implements Block_Template
 
         // We skip empty .SS macros
         if (trim($headingNode->textContent) === '') {
-            return $i;
+            return 0;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -50,12 +51,12 @@ class Block_SS implements Block_Template
         $subsection->appendChild($headingNode);
 
         $blockLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if (self::endSubsection($request['request'])) {
                 break;
             } else {
-                $blockLines[] = $lines[$i];
+                $blockLines[] = array_shift($lines);
             }
         }
 
@@ -63,7 +64,7 @@ class Block_SS implements Block_Template
         Roff::parse($subsection, $blockLines);
         $parentNode->appendBlockIfHasContent($subsection);
 
-        return $i - 1;
+        return 0;
 
     }
 
