@@ -12,15 +12,18 @@ class Block_Vb implements Block_Template
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if ($request['request'] === 'Ve') {
+                array_shift($lines);
                 break;
             } else {
-                $blockLines[] = $lines[$i];
+                $blockLines[] = array_shift($lines);
             }
         }
 
@@ -28,7 +31,7 @@ class Block_Vb implements Block_Template
         BlockPreformatted::handle($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return $i;
+        return 0;
 
     }
 
