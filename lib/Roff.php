@@ -17,6 +17,11 @@ class Roff
 //            var_dump(array_slice($lines, 0, 5));
 
             $request = Request::getLine($lines, 0, $callerArguments);
+            if (!count($lines)) {
+                // e.g. if last request was a comment: stop getClass below causing an error.
+                // Bit of a hack, see instead about bringing not doing both getLine and getClass...
+                break;
+            }
 
             if (Roff_Skipped::skip($request)) {
                 array_shift($lines);

@@ -151,17 +151,6 @@ ROFF;
             throw new Exception('Line ' . $i . ' does not exist.');
         }
 
-        // Do comments first
-        $result = Roff_Comment::checkEvaluate($lines, $i);
-        if ($result !== false) {
-            if ($result['i'] >= $i) {
-                array_splice($lines, $i, $result['i'] + 1 - $i);
-            }
-            // We want another look at the same line:
-            return self::getLine($lines, $i, $callerArguments);
-        }
-
-        $man    = Man::instance();
         $return = [
             'request' => null,
             'raw_line' => $lines[$i],
@@ -169,6 +158,23 @@ ROFF;
             'arg_string' => '',
             'raw_arg_string' => ''
         ];
+
+        // Do comments first
+        $result = Roff_Comment::checkEvaluate($lines, $i);
+        if ($result !== false) {
+            if ($result['i'] >= $i) {
+                array_splice($lines, $i, $result['i'] + 1 - $i);
+            }
+            if ($i < count($lines)) {
+                // We want another look at the same line:
+                return self::getLine($lines, $i, $callerArguments);
+            } else {
+                return $return; // $lines ended with a comment.
+            }
+        }
+
+        $man = Man::instance();
+
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[$i], $matches)
