@@ -4,13 +4,13 @@
 class Block_TS implements Block_Template
 {
 
-    private static function parseRowFormats(array &$lines, int $i): array
+    private static function parseRowFormats(array &$lines): array
     {
 
         $rowFormats  = [];
         $formatsDone = false;
-        for (; $i < count($lines) - 1; ++$i) {
-            $line = $lines[$i];
+        while (count($lines)) {
+            $line = array_shift($lines);
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
@@ -36,7 +36,7 @@ class Block_TS implements Block_Template
 
         }
 
-        return [$i, $rowFormats];
+        return $rowFormats;
 
     }
 
@@ -48,19 +48,20 @@ class Block_TS implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
+
+        $dom = $parentNode->ownerDocument;
 
         $columnSeparator = "\t";
 
-        $line = $lines[++$i];
-        if (mb_substr(trim($line), -1, 1) === ';') {
-            if (preg_match('~tab\s?\((.)\)~u', $line, $matches)) {
+        if (mb_substr(trim($lines[0]), -1, 1) === ';') {
+            if (preg_match('~tab\s?\((.)\)~u', $lines[0], $matches)) {
                 $columnSeparator = $matches[1];
             }
-            ++$i;
+            array_shift($lines);
         }
 
-        list($i, $rowFormats) = self::parseRowFormats($lines, $i);
+        $rowFormats = self::parseRowFormats($lines);
 
         $table = $dom->createElement('table');
         $table->setAttribute('class', 'tbl');
@@ -68,28 +69,29 @@ class Block_TS implements Block_Template
         $formatRowNum = 0;
         $tr           = false;
 
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
+            array_shift($lines);
 
             if ($request['request'] === 'TE') {
                 break;
-            } elseif ($lines[$i] === '.T&') {
-                list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
+            } elseif ($request['raw_line'] === '.T&') {
+                $rowFormats   = self::parseRowFormats($lines);
                 $formatRowNum = 0;
                 continue;
-            } elseif ($lines[$i] === '_') {
+            } elseif ($request['raw_line'] === '_') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom');
                 }
-            } elseif ($lines[$i] === '=') {
+            } elseif ($request['raw_line'] === '=') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom-double');
                 }
-            } elseif (in_array($lines[$i], ['.ft CW', '.ft R', '.P', '.PP'])) {
+            } elseif (in_array($request['raw_line'], ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
             } else {
                 $tr           = $dom->createElement('tr');
-                $cols         = explode($columnSeparator, $lines[$i]);
+                $cols         = explode($columnSeparator, $request['raw_line']);
                 $totalColSpan = 0;
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
@@ -145,8 +147,8 @@ class Block_TS implements Block_Template
                         if ($tdContents !== 'T{') {
                             $tBlockLines[] = mb_substr($tdContents, 2);
                         }
-                        for ($i = $i + 1; $i < count($lines); ++$i) {
-                            $tBlockLine = $lines[$i];
+                        while (count($lines)) {
+                            $tBlockLine = array_shift($lines);
                             if (mb_strpos($tBlockLine, 'T}') === 0) {
                                 if ($tBlockLine !== 'T}') {
                                     $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
@@ -178,7 +180,7 @@ class Block_TS implements Block_Template
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return $i;
+        return 0;
 
     }
 
