@@ -11,56 +11,57 @@ class BlockPreformatted
 
         $addIndent  = 0;
         $nextIndent = 0;
-        for ($i = 0; $i < count($lines); ++$i) {
-            $line = $lines[$i];
+        while (count($lines)) {
 
             if ($nextIndent !== 0) {
                 $addIndent  = $nextIndent;
                 $nextIndent = 0;
             }
 
-            $request = Request::getClass($lines, $i);
+            $request = Request::getClass($lines, 0);
+            $line    = $request['raw_line'];
 
             if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
-                if ($i > 0 && $i !== count($lines) - 1) {
+                if ($parentNode->hasChildNodes() && count($lines)) {
                     $parentNode->appendChild(new DOMText("\n"));
                     $addIndent = 0;
                 }
+                array_shift($lines);
                 continue;
             } elseif (in_array(
-              $request['class'],
-              ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
+                $request['class'],
+                ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
             )) {
                 $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'],
-                  $request['request']);
+                    $request['request']);
                 if ($newI !== false) {
-                    if ($i !== count($lines) - 1 && $request['class'] !== 'Request_Skippable') {
+                    if (count($lines) && $request['class'] !== 'Request_Skippable') {
                         self::endInputLine($parentNode);
                     }
-                    $i = $newI;
                     continue;
                 }
             } elseif ($request['request'] === 'IP') {
                 $nextIndent = 4;
                 if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
+                    array_shift($lines);
                     continue;
                 } else {
                     $line = $request['arguments'][0];
                 }
             } elseif ($request['request'] === 'TP') {
-                if ($i === count($lines) - 1) {
-                    continue;
-                }
                 $addIndent  = 0;
                 $nextIndent = 4;
+                array_shift($lines);
                 continue;
             } elseif ($request['request'] === 'ti') {
                 $nextIndent = 4;
+                array_shift($lines);
                 continue;
             } elseif (
-              in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) ||
-              in_array($line, ['\\&', '\\)'])
+                in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) ||
+                in_array($line, ['\\&', '\\)'])
             ) {
+                array_shift($lines);
                 continue;
             } elseif ($request['request'] === 'OP') {
                 $parentNode->appendChild(new DOMText('['));
@@ -72,6 +73,7 @@ class BlockPreformatted
                     TextContent::interpretAndAppendText($em, $request['arguments'][1]);
                 }
                 $parentNode->appendChild(new DOMText('] '));
+                array_shift($lines);
                 continue;
             }
 
@@ -86,16 +88,17 @@ class BlockPreformatted
             }
 
             TextContent::interpretAndAppendText($parentNode, $line);
-            if ($i !== count($lines) - 1) {
+            if (count($lines)) {
                 self::endInputLine($parentNode);
             }
+            array_shift($lines);
 
         }
 
         while (
-          $parentNode->lastChild &&
-          $parentNode->lastChild instanceof DOMText &&
-          trim($parentNode->lastChild->textContent) === ''
+            $parentNode->lastChild &&
+            $parentNode->lastChild instanceof DOMText &&
+            trim($parentNode->lastChild->textContent) === ''
         ) {
             $parentNode->removeChild($parentNode->lastChild);
         }

@@ -35,7 +35,7 @@ class Block_nf implements Block_Template
                 break;
             } elseif (self::endBlock($nextRequest)) {
                 array_shift($lines);
-                while (count($lines) > 1 && $nextRequest = Request::getLine($lines, 1) and self::endBlock($nextRequest)) {
+                while (count($lines) && self::endBlock(Request::getLine($lines, 0))) {
                     array_shift($lines); // swallow
                 }
                 break;
