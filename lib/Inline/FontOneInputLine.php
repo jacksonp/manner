@@ -66,21 +66,6 @@ class Inline_FontOneInputLine implements Block_Template
             }
 
             return 0;
-
-            /*
-            ++$i;
-            if ($lines[$i] === '') {
-                return $i;
-            }
-            $result = Block_Text::getNextInputLine($lines, $i);
-            $i      = $result['i'];
-            if (count($result['lines']) === 0) {
-                return $i;
-            }
-            $blockLines = $result['lines'];
-            Blocks::trim($blockLines);
-            Roff::parse($innerNode, $blockLines);
-            */
         } else {
             TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
         }

@@ -19,44 +19,6 @@ class Block_Text implements Block_Template
         }
     }
 
-    static function getNextInputLine(array &$lines, int $i): array
-    {
-
-        $blockLines = []; // Could be .B on one line, then some text on next line for example.
-        for (; $i < count($lines); ++$i) {
-
-            $request = Request::getClass($lines, $i);
-
-            if (in_array($request['class'], ['Block_RS', 'Block_TP', 'Block_IP', 'Block_SH', 'Block_SS', 'Block_nf'])) {
-                --$i;
-                break;
-            }
-
-            if (!in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
-                $blockLines[] = $lines[$i];
-                if (
-                    mb_substr($lines[$i], 0, 1) !== '.' ||
-                    (
-                        in_array($request['class'], ['Inline_FontOneInputLine', 'Inline_AlternatingFont']) &&
-                        !is_null($request['arguments']) &&
-                        count($request['arguments']) > 0 &&
-                        $request['arguments'][0] !== ''
-                    )
-                ) {
-                    break;
-                }
-
-            }
-
-        }
-        if ($i < count($lines) - 1 && $lines[$i + 1] === '.UE') {
-            $blockLines[] = $lines[++$i];
-        }
-
-        return ['i' => $i, 'lines' => $blockLines];
-
-    }
-
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
