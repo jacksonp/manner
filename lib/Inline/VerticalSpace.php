@@ -38,6 +38,10 @@ class Inline_VerticalSpace implements Block_Template
 
         array_shift($lines);
 
+        if (!count($lines)) {
+            return 0;
+        }
+
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         if (!in_array($textParent->tagName, ['p', 'blockquote', 'dt', 'td', 'th', 'pre', 'h2', 'h3', 'code']) ||
@@ -50,9 +54,13 @@ class Inline_VerticalSpace implements Block_Template
             )
         ) {
 
-            self::addBR($textParent);
-            if (in_array($request, ['sp', 'ne'])) {
+            $nextRequest = Request::getLine($lines, 0);
+
+            if (count($lines) && !Blocks::lineEndsBlock($nextRequest, $lines)) {
                 self::addBR($textParent);
+                if (in_array($request, ['sp', 'ne'])) {
+                    self::addBR($textParent);
+                }
             }
 
             if ($shouldAppend) {
