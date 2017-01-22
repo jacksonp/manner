@@ -32,7 +32,7 @@ class Block_TP implements Block_Template
 
                 array_shift($lines);
 
-                if (count($lines) === 0 || Request::getClass($lines, 0)['class'] === 'Block_TP') {
+                if (count($lines) === 0 || in_array(Request::getLine($lines, 0)['request'], ['TP', 'TQ', 'IP'])) {
                     // a bug in the man page, just skip:
                     continue;
                 }
