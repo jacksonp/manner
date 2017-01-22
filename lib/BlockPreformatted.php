@@ -32,14 +32,11 @@ class BlockPreformatted
                 $request['class'],
                 ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
             )) {
-                $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'],
-                    $request['request']);
-                if ($newI !== false) {
-                    if (count($lines) && $request['class'] !== 'Request_Skippable') {
-                        self::endInputLine($parentNode);
-                    }
-                    continue;
+                $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request']);
+                if (count($lines) && $request['class'] !== 'Request_Skippable') {
+                    self::endInputLine($parentNode);
                 }
+                continue;
             } elseif ($request['request'] === 'IP') {
                 $nextIndent = 4;
                 if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
