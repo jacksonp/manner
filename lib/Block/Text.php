@@ -77,7 +77,7 @@ class Block_Text implements Block_Template
 
     static private function removeContinuation(string $line)
     {
-        $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
+        $line = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
 
         return $line;

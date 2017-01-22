@@ -40,7 +40,7 @@ class Inline_VerticalSpace implements Block_Template
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        if (!in_array($textParent->tagName, ['p', 'blockquote', 'dt', 'td', 'th', 'pre', 'h2', 'h3', 'code',]) ||
+        if (!in_array($textParent->tagName, ['p', 'blockquote', 'dt', 'td', 'th', 'pre', 'h2', 'h3', 'code']) ||
             (
                 $textParent->hasChildNodes() &&
                 (
