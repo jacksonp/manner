@@ -11,16 +11,19 @@ class Inline_EQ implements Block_Template
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $foundEnd = false;
 
         $eqLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
             if ($request['request'] === 'EN') {
+                array_shift($lines);
                 $foundEnd = true;
                 break;
             } else {
-                $eqLines[] = $lines[$i];
+                $eqLines[] = array_shift($lines);
             }
         }
 
@@ -35,7 +38,7 @@ class Inline_EQ implements Block_Template
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
 
-                return $i;
+                return 0;
             }
         }
 
@@ -58,7 +61,7 @@ class Inline_EQ implements Block_Template
             }
         }
 
-        return $i;
+        return 0;
 
     }
 
