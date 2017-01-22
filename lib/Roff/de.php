@@ -4,7 +4,7 @@
 class Roff_de implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
         array_shift($lines);
@@ -43,7 +43,7 @@ class Roff_de implements Roff_Template
             Man::instance()->addMacro($newMacro, $macroLines);
         }
 
-        return ['i' => 0];
+        return [];
 
     }
 

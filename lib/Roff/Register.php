@@ -4,15 +4,18 @@
 class Roff_Register implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
+        // Remove register
         if ($request['request'] === 'rr') {
             Man::instance()->unsetRegister($request['arg_string']);
-
-            return ['i' => $i];
+            array_shift($lines);
+            return [];
         }
 
+        // .nr register ±N [M]
+        // Define or modify register using ±N with auto-increment M
         if (
           $request['request'] !== 'nr' ||
           !preg_match('~^(?<name>\S+) (?<val>.+)$~u', $request['arg_string'], $matches)
@@ -20,13 +23,14 @@ class Roff_Register implements Roff_Template
             return false;
         }
 
+        array_shift($lines);
         $man           = Man::instance();
         $registerValue = $man->applyAllReplacements($matches['val']);
         // Normalize here: a unit value may be concatenated when the register is used.
         $registerValue = Roff_Unit::normalize($registerValue);
         $man->setRegister($matches['name'], $registerValue);
 
-        return ['i' => $i];
+        return [];
 
     }
 

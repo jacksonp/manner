@@ -4,12 +4,13 @@
 class Roff_String implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
+        array_shift($lines);
         if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {
             // May have just one argument, e.g. gnugo.6 - skip for now.
-            return ['i' => $i];
+            return [];
         }
 
         $man = Man::instance();
@@ -42,7 +43,7 @@ class Roff_String implements Roff_Template
 
         $man->addString($newRequest, $requestVal);
 
-        return ['i' => $i];
+        return [];
 
     }
 

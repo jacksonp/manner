@@ -4,9 +4,9 @@
 class Roff_Translation implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
-
+        array_shift($lines);
         $man = Man::instance();
 //
 //        $roffStrings = $man->getStrings();
@@ -21,7 +21,7 @@ class Roff_Translation implements Roff_Template
             $man->setCharTranslation($chrArray[$j], $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1]);
         }
 
-        return ['i' => $i];
+        return [];
 
     }
 

@@ -4,13 +4,14 @@
 class Roff_di implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, int $i, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
-
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
+        array_shift($lines);
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
+            array_shift($lines);
             if ($request['request'] === 'di') {
-                return ['i' => $i];
+                return [];
             }
         }
         throw new Exception('.di with no end .di');

@@ -160,12 +160,8 @@ ROFF;
         ];
 
         // Do comments first
-        $result = Roff_Comment::checkEvaluate($lines, $i);
-        if ($result !== false) {
-            if ($result['i'] >= $i) {
-                array_splice($lines, $i, $result['i'] + 1 - $i);
-            }
-            if ($i < count($lines)) {
+        if (Roff_Comment::checkLine($lines)) {
+            if ($i < count($lines)) { // Roff_Comment::checkLine() can alter $lines
                 // We want another look at the same line:
                 return self::getLine($lines, $i, $callerArguments);
             } else {
@@ -209,16 +205,8 @@ ROFF;
 
             $className = $man->getRoffRequestClass($return['request']);
             if ($className) {
-                $result = $className::evaluate($return, $lines, $i, $callerArguments);
+                $result = $className::evaluate($return, $lines, $callerArguments);
                 if ($result !== false) {
-                    if (isset($result['lines'])) {
-                        foreach ($result['lines'] as $k => $l) {
-                            $result['lines'][$k] = Roff_Macro::applyReplacements($l, $callerArguments);
-                        }
-                        array_splice($lines, $i, $result['i'] + 1 - $i, $result['lines']);
-                    } else {
-                        array_splice($lines, $i, $result['i'] + 1 - $i);
-                    }
                     if ($i < count($lines)) {
                         return self::getLine($lines, $i, $callerArguments);
                     } else {
