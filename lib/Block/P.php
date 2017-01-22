@@ -18,7 +18,11 @@ class Block_P implements Block_Template
 
         $blockLines = [];
         while (count($lines)) {
-            if (Blocks::lineEndsBlock($lines, 0)) {
+
+            // Force processing the line even if we don't use result. E.g. when a macro is defined inside a paragraph:
+            Request::getLine($lines, 0);
+
+            if (!count($lines) || Blocks::lineEndsBlock($lines, 0)) {
                 break;
             }
             $blockLines[] = array_shift($lines);

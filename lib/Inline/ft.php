@@ -34,6 +34,14 @@ class Inline_ft implements Block_Template
 
         $blockLines = [];
         while (count($lines)) {
+
+            // Force processing the line even if we don't use result. E.g. when a macro is defined inside a paragraph:
+            Request::getLine($lines, 0);
+
+            if (!count($lines)) {
+                break;
+            }
+
             $line = $lines[0];
             if (
                 preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $line) ||
