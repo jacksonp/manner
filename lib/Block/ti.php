@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * Class Block_ti
+ * .ti ±N: Temporary indent next line (default scaling indicator m).
+ */
 class Block_ti implements Block_Template
 {
 
@@ -12,24 +15,27 @@ class Block_ti implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
 
-        if ($i === count($lines) - 1) {
-            return $i;
+        $dom = $parentNode->ownerDocument;
+
+        if (!count($lines)) {
+            return 0;
         }
 
         $blockLines = [];
-        for (; $i < count($lines) - 1; ++$i) {
-            $nextRequest = Request::getLine($lines, $i + 1);
+        while (count($lines)) {
+            $nextRequest = Request::getLine($lines, 0);
             if ($nextRequest['request'] === 'ti') {
                 // Could be a change in indentation, just add a break for now
+                array_shift($lines);
                 $blockLines[] = '.br';
                 continue;
-            } elseif (Blocks::lineEndsBlock($lines, $i + 1) || $lines[$i + 1] === '') {
+            } elseif (Blocks::lineEndsBlock($lines, 0) || $lines[0] === '') {
                 // This check has to come after .ti check, as .ti is otherwise a block-ender.
                 break;
             } else {
-                $blockLines[] = $lines[$i + 1];
+                $blockLines[] = array_shift($lines);
             }
         }
 
@@ -38,7 +44,7 @@ class Block_ti implements Block_Template
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return $i;
+        return 0;
 
     }
 
