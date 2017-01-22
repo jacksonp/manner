@@ -12,8 +12,9 @@ class Block_SY implements Block_Template
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         // These get swallowed:
-        $blockEnds   = ['.YS'];
         $dom         = $parentNode->ownerDocument;
         $commandName = '';
 
@@ -29,25 +30,25 @@ class Block_SY implements Block_Template
         }
 
         $preLines = [];
-        for ($i = $i + 1; $i < count($lines); ++$i) {
-            $request = Request::getLine($lines, $i);
-            if (in_array($lines[$i], $blockEnds)) {
+        while (count($lines)) {
+            $request = Request::getLine($lines, 0);
+            if ($request['request'] === 'YS') {
+                array_shift($lines);
                 break;
             } elseif ($request['request'] === 'SY') {
-                --$i;
                 break;
             }
-            $preLines[] = $lines[$i];
+            $preLines[] = array_shift($lines);
         }
 
         if (count($preLines) === 0) {
-            return $i;
+            return 0;
         }
 
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendChild($pre);
 
-        return $i;
+        return 0;
     }
 
 
