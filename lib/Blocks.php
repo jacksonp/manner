@@ -5,19 +5,19 @@ class Blocks
 {
 
     const TEXT_CONTAINERS = [
-      'p',
-      'blockquote',
-      'dt',
-      'strong',
-      'em',
-      'small',
-      'code',
-      'td',
-      'th',
-      'pre',
-      'a',
-      'h2',
-      'h3',
+        'p',
+        'blockquote',
+        'dt',
+        'strong',
+        'em',
+        'small',
+        'code',
+        'td',
+        'th',
+        'pre',
+        'a',
+        'h2',
+        'h3',
     ];
 
     static function trim(array &$lines)
@@ -27,27 +27,25 @@ class Blocks
         ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
     }
 
-    static function lineEndsBlock(array $lines, int $i)
+    static function lineEndsBlock(array $request, array $lines)
     {
-        $requestName = Request::peepAtName($lines[$i]);
-        if ($requestName && Man::instance()->requestStartsBlock($requestName)) {
+        if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
-
-        return Block_TabTable::isStart($lines, $i);
+        return Block_TabTable::isStart($lines, 0);
     }
 
     static function _maybeLastEmptyChildWaitingForText(DOMElement $parentNode)
     {
         if (
-          $parentNode->lastChild &&
-          $parentNode->lastChild->nodeType === XML_ELEMENT_NODE &&
-          in_array($parentNode->lastChild->tagName, ['em', 'strong', 'small']) &&
-          $parentNode->lastChild->textContent === ''
+            $parentNode->lastChild &&
+            $parentNode->lastChild->nodeType === XML_ELEMENT_NODE &&
+            in_array($parentNode->lastChild->tagName, ['em', 'strong', 'small']) &&
+            $parentNode->lastChild->textContent === ''
         ) {
             if ($parentNode->lastChild->lastChild &&
-              $parentNode->lastChild->lastChild->nodeType === XML_ELEMENT_NODE &&
-              in_array($parentNode->lastChild->lastChild->tagName, ['em', 'strong', 'small'])
+                $parentNode->lastChild->lastChild->nodeType === XML_ELEMENT_NODE &&
+                in_array($parentNode->lastChild->lastChild->tagName, ['em', 'strong', 'small'])
             ) {
                 // bash.1:
                 // .SM
@@ -69,7 +67,7 @@ class Blocks
         } else {
             $parentNodeLastBlock = $parentNode->getLastBlock();
             if (is_null($parentNodeLastBlock) ||
-              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
+                in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
             ) {
                 return [$parentNode->ownerDocument->createElement('p'), true, false];
             } else {

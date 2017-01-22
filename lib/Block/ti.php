@@ -31,7 +31,7 @@ class Block_ti implements Block_Template
                 array_shift($lines);
                 $blockLines[] = '.br';
                 continue;
-            } elseif (Blocks::lineEndsBlock($lines, 0) || $lines[0] === '') {
+            } elseif (Blocks::lineEndsBlock($nextRequest, $lines) || $lines[0] === '') {
                 // This check has to come after .ti check, as .ti is otherwise a block-ender.
                 break;
             } else {
