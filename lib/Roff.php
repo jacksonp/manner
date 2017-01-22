@@ -13,9 +13,6 @@ class Roff
 
         while (count($lines) && (!$stopOnContent || $parentNode->textContent === '')) {
 
-//            echo $i, "\t", $lines[$i], PHP_EOL;
-//            var_dump(array_slice($lines, 0, 5));
-
             $request = Request::getLine($lines, 0, $callerArguments);
             if (!count($lines)) {
                 // e.g. if last request was a comment: stop getClass below causing an error.
@@ -36,8 +33,6 @@ class Roff
             $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request'],
                 $stopOnContent);
             if ($newI === false) {
-//            var_dump(array_slice($lines, $i - 5, 10));
-//            var_dump($lines);
                 throw new Exception('"' . $lines[0] . '" Roff::parse() could not handle it.');
             }
 

@@ -4,7 +4,7 @@
 class Manner
 {
 
-    static function roffToDOM(array $fileLines, string $filePath):DOMDocument
+    static function roffToDOM(array $fileLines, string $filePath): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
         $dom->registerNodeClass('DOMElement', 'HybridNode');
@@ -28,6 +28,9 @@ class Manner
 
         $dom  = self::roffToDOM($fileLines, $filePath);
         $html = $dom->saveHTML();
+
+        // Remove \& chars aka zero width space.
+        $html = str_replace(Char::ZERO_WIDTH_SPACE_HTML, '', $html);
 
         $man = Man::instance();
 
