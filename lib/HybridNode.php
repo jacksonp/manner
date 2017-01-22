@@ -45,7 +45,10 @@ class HybridNode extends DOMElement
     function appendBlockIfHasContent(HybridNode $block)
     {
         if ($block->hasChildNodes()) {
-            if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+            if (
+                $block->childNodes->length > 1 ||
+                trim($block->firstChild->textContent, " \t\n\r\0\x0B" . Char::ZERO_WIDTH_SPACE_UTF8) !== ''
+            ) {
                 if (in_array($block->tagName, self::BLOCK_TAGS)) {
                     // If we are about to append a block, we can prune any trailing <br>s from the element before it.
                     $lastChild = $this->lastChild;
