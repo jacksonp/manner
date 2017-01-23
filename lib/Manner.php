@@ -4,6 +4,16 @@
 class Manner
 {
 
+    private static function trimBrs(DOMElement $domNode)
+    {
+        foreach ($domNode->childNodes as $node) {
+            if ($node->hasChildNodes()) {
+                $node->trimTrailingBrs();
+                self::trimBrs($node);
+            }
+        }
+    }
+
     static function roffToDOM(array $fileLines, string $filePath): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -18,6 +28,7 @@ class Manner
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
+        self::trimBrs($manPageContainer);
 
         return $dom;
     }

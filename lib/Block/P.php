@@ -31,7 +31,6 @@ class Block_P implements Block_Template
             } else {
                 $p = $dom->createElement('p');
                 Roff::parse($p, $blockLines);
-                $p->trimTrailingBrs();
                 $parentNode->appendBlockIfHasContent($p);
             }
         }

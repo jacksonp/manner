@@ -40,6 +40,7 @@ class Block_Text implements Block_Template
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
             while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
+                Request::getLine($lines); // process line...
                 $nextLine = $lines[0];
                 if (trim($nextLine) === '' ||
                     in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||

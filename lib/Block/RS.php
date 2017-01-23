@@ -53,6 +53,8 @@ class Block_RS implements Block_Template
             } elseif ($request['request'] === 'TP') {
                 // prevent skipping
                 $thisIndent = 'GARBAGE';
+            } elseif ($request['request'] === 'SH') {
+                break;
             }
             $blockLines[] = array_shift($lines);
         }

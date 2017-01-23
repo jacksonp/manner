@@ -30,7 +30,7 @@ class Block_DataDefinition implements Block_Template
             }
 
             // <= 0 for stray .REs
-            if ($rsLevel <= 0) {
+            if ($rsLevel <= 0 || in_array($request['request'], ['SS', 'SH'])) {
                 if (
                     in_array($request['request'], ['LP', 'PP', 'P']) &&
                     count($lines) > 1 && Request::getLine($lines, 1)['request'] === 'TP'

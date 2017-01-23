@@ -43,27 +43,15 @@ class Block_SH implements Block_Template
         $section = $dom->createElement('section');
         $section->appendChild($headingNode);
 
-        $blockLines = [];
-        while ($request = Request::getLine($lines)) {
-            if ($request['request'] === 'SH') {
-                if (
-                    (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
-                    (count($request['arguments']) === 0 &&
-                        count($lines) > 1 &&
-                        in_array($lines[1], Block_Section::skipSectionNameLines))
-                ) {
-                    array_shift($lines);
-                    continue;
-                }
-                break;
-            } else {
-                $blockLines[] = array_shift($lines);
+        while ($parentNode->tagName !== 'body') {
+            if (!$parentNode->parentNode) {
+                throw new Exception('Could not find parent with tag body.');
             }
+            $parentNode = $parentNode->parentNode;
         }
 
-        Blocks::trim($blockLines);
-        Roff::parse($section, $blockLines);
-        $parentNode->appendBlockIfHasContent($section);
+        $section = $parentNode->appendChild($section);
+        Roff::parse($section, $lines);
 
         return true;
 
