@@ -26,7 +26,7 @@ class Inline_Link implements Block_Template
             if (count($request['arguments']) > 1) {
                 TextContent::interpretAndAppendText($anchor, $request['arguments'][1]);
             } elseif (count($lines)) {
-                $blockLines = array_shift($lines);
+                $blockLines = [array_shift($lines)];
                 Blocks::trim($blockLines);
                 Roff::parse($anchor, $blockLines);
             } else {
