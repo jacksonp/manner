@@ -18,7 +18,7 @@ class Block_ce implements Block_Template
 
         $blockLines       = [];
         $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
-        $centerLinesUpTo  = min($numLinesToCenter, count($lines) - 1);
+        $centerLinesUpTo  = min($numLinesToCenter, count($lines));
         for ($i = 0; $i < $centerLinesUpTo; ++$i) {
             if (Request::getLine($lines, 0)['request'] === 'ce') {
                 break;
