@@ -13,6 +13,12 @@ class Roff
 
         while ($request = Request::getLine($lines, 0, $callerArguments)) {
 
+            // \c: Interrupt text processing (groff.7)
+            if ($stopOnContent && $request['raw_line'] === '\\c') {
+                array_shift($lines);
+                break;
+            }
+
             $request['raw_line'] = Roff_Macro::applyReplacements($request['raw_line'], $callerArguments);
 
             $request = Request::getNextClass($lines);
