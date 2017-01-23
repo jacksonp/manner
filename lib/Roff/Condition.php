@@ -105,7 +105,6 @@ class Roff_Condition implements Roff_Template
     {
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
-
         return self::testRecursive($condition, $macroArguments);
     }
 

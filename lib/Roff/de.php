@@ -18,16 +18,16 @@ class Roff_de implements Roff_Template
         $macroLines = [];
         $foundEnd   = false;
 
-        while ($request = Request::getLine($lines)) {
+        while ($nextRequest = Request::getLine($lines)) {
             array_shift($lines);
             if (
-                $request['request'] === '.' ||
-                ($newMacro === 'P!' && $request['raw_line'] === '.') // work around bug in Xm*.3 man pages
+                $nextRequest['request'] === '.' ||
+                ($newMacro === 'P!' && $nextRequest['raw_line'] === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;
             }
-            $macroLines[] = Request::massageLine($request['raw_line']);
+            $macroLines[] = Request::massageLine($nextRequest['raw_line']);
         }
 
         if (!$foundEnd) {
