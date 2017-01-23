@@ -27,7 +27,7 @@ class Roff
 
             $request['raw_line'] = Roff_Macro::applyReplacements($request['raw_line'], $callerArguments);
 
-            $request = Request::getClass($lines, 0);
+            $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
 
             $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request'],

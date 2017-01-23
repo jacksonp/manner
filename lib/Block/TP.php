@@ -26,7 +26,7 @@ class Block_TP implements Block_Template
 
         while (count($lines)) {
 
-            $request = Request::getClass($lines, 0);
+            $request = Request::getNextClass($lines);
 
             if ($request['class'] === 'Block_TP') {
 

@@ -220,31 +220,33 @@ ROFF;
         return $return;
     }
 
-    public static function getClass(array &$lines, int $i): array
+    public static function getNextClass(array &$lines): array
     {
         $return = [
             'class' => null,
             'request' => null,
-            'raw_line' => $lines[$i],
+            'raw_line' => $lines[0],
             'arguments' => [],
             'arg_string' => '',
             'raw_arg_string' => ''
         ];
 
-        $request = self::getLine($lines, $i);
+        $request = self::getLine($lines, 0);
 
-        if ($i > count($lines) - 1) {
+        if (!count($lines)) {
             return $return; // e.g. a .if that removes all the remaining lines from the file.
         }
 
-        if ($lines[$i] === '') {
+        $line = $lines[0];
+
+        if ($line === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             $return['request'] = 'sp';
             $return['class']   = 'Inline_VerticalSpace';
-        } elseif (self::isEmptyRequest($lines[$i])) {
+        } elseif (self::isEmptyRequest($line)) {
             $return['class'] = 'Request_Skippable';
-        } elseif (self::canSkip($lines[$i], $request)) {
+        } elseif (self::canSkip($line, $request)) {
             $return['class'] = 'Request_Skippable';
         } elseif (!is_null($request['request'])) {
             $man   = Man::instance();
@@ -253,17 +255,17 @@ ROFF;
                 $return          = $request;
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
-                throw new exception('Unhandled request ' . $lines[$i]);
-            } elseif (!preg_match('~^[' . preg_quote($man->control_char, '~') . ']~u', $lines[$i])) {
+                throw new exception('Unhandled request ' . $line);
+            } elseif (!preg_match('~^[' . preg_quote($man->control_char, '~') . ']~u', $line)) {
                 // Lenient with things starting with ' to match pre-refactor output...
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
                 $return['class'] = 'Block_Text';
             } else {
                 $return['class'] = 'Request_Skippable';
             }
-        } elseif (Block_TabTable::isStart($lines, $i)) {
+        } elseif (Block_TabTable::isStart($lines, 0)) {
             $return['class'] = 'Block_TabTable';
-        } elseif (!preg_match('~^[\.]~u', $lines[$i])) {
+        } elseif (!preg_match('~^[\.]~u', $line)) {
             $return['class'] = 'Block_Text';
         } else {
             $return['class'] = 'Request_Skippable';

@@ -18,7 +18,7 @@ class BlockPreformatted
                 $nextIndent = 0;
             }
 
-            $request = Request::getClass($lines, 0);
+            $request = Request::getNextClass($lines);
             $line    = $request['raw_line'];
 
             if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
