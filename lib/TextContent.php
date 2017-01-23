@@ -311,10 +311,6 @@ class TextContent
           }, $string);
 
         $roffStrings = $man->getStrings();
-//        $string      = Roff_String::substitute($string, $roffStrings);
-
-//        $string = Roff_Glyph::substitute($string);
-
 
         $string = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
             return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');

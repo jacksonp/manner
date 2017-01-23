@@ -47,21 +47,22 @@ class Roff_String implements Roff_Template
 
     }
 
-    static function substitute(string $string, array &$replacements) :string
+    static function substitute(string $string): string
     {
+
+        $replacements = Man::instance()->getStrings();
 
         // Want to match any of: \*. \*(.. \*[....]
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
-          function ($matches) use (&$replacements) {
-              if (isset($replacements[$matches['str']])) {
-                  return $matches['bspairs'] . $replacements[$matches['str']];
-              } else {
-                  return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
-              }
-          },
-          $string);
-
+            '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
+            function ($matches) use (&$replacements) {
+                if (isset($replacements[$matches['str']])) {
+                    return $matches['bspairs'] . $replacements[$matches['str']];
+                } else {
+                    return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
+                }
+            },
+            $string);
 
     }
 

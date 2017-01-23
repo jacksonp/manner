@@ -263,8 +263,6 @@ class Man
             $line = strtr($line, $this->entities);
         }
 
-        $line = Roff_String::substitute($line, $this->strings);
-
         // \w’string’: The width of the glyph sequence string. We approximate...
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
             return mb_strlen(TextContent::interpretString($matches[0]));

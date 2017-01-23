@@ -166,6 +166,8 @@ ROFF;
 
         $man = Man::instance();
 
+        $lines[$i] = Roff_String::substitute($lines[$i]);
+
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[$i], $matches)

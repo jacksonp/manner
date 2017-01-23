@@ -8,9 +8,7 @@ class Roff_Translation implements Roff_Template
     {
         array_shift($lines);
         $man = Man::instance();
-//
-//        $roffStrings = $man->getStrings();
-//        $translate   = Roff_String::substitute($matches[1], $roffStrings);
+
         $translate = $request['arg_string'];
         $translate = TextContent::interpretString($translate, false);
 
