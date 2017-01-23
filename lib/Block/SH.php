@@ -52,6 +52,7 @@ class Block_SH implements Block_Template
                         count($lines) > 1 &&
                         in_array($lines[1], Block_Section::skipSectionNameLines))
                 ) {
+                    array_shift($lines);
                     continue;
                 }
                 break;
