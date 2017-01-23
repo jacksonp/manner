@@ -33,7 +33,7 @@ class Block_SY implements Block_Template
             if ($request['request'] === 'YS') {
                 array_shift($lines);
                 break;
-            } elseif ($request['request'] === 'SY') {
+            } elseif ($request['request'] === 'SY' || Blocks::lineEndsBlock($request, $lines)) {
                 break;
             }
             $preLines[] = array_shift($lines);

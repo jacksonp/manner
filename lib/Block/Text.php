@@ -41,6 +41,9 @@ class Block_Text implements Block_Template
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
             while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
                 Request::getLine($lines); // process line...
+                if (!count($lines)) {
+                    break;
+                }
                 $nextLine = $lines[0];
                 if (trim($nextLine) === '' ||
                     in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
