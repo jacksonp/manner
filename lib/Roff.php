@@ -9,7 +9,7 @@ class Roff
         array &$lines,
         &$callerArguments = null,
         $stopOnContent = false
-    ) {
+    ): void {
 
         while ($request = Request::getLine($lines, 0, $callerArguments)) {
 
@@ -20,7 +20,7 @@ class Roff
 
             $used = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
             if (!$used) {
-                throw new Exception('"' . $lines[0] . '" Roff::parse() could not handle it.');
+                throw new Exception('"' . $request['raw_line'] . '" Roff::parse() could not handle it.');
             }
 
             if ($stopOnContent && $parentNode->textContent !== '') {
@@ -28,8 +28,6 @@ class Roff
             }
 
         }
-
-        return 0;
 
     }
 

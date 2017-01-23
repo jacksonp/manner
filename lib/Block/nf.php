@@ -49,7 +49,7 @@ class Block_nf implements Block_Template
         }
 
         if (count($preLines) === 0) {
-            return 0;
+            return true;
         }
 
         if (
