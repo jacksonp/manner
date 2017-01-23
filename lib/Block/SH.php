@@ -19,7 +19,7 @@ class Block_SH implements Block_Template
         $headingNode = $dom->createElement('h2');
 
         if (count($arguments) === 0) {
-            if (count($lines) === 0 || Request::getNextClass($lines)['class'] === 'Block_SH') {
+            if (count($lines) === 0 || Request::getLine($lines)['request'] === 'SH') {
                 return 0;
             }
             // Text for subheading is on next line.
