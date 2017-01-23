@@ -37,7 +37,6 @@ class Request_Unhandled implements Block_Template
         'dei1',
         'device',
         'devicem',
-        'di',
         'do',
         'dt',
         'ec',

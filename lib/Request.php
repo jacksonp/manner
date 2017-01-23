@@ -132,7 +132,7 @@ ROFF;
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function peepAtName($line)
+    public static function peepAtName($line): string
     {
         if (preg_match(
             '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
