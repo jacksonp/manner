@@ -177,6 +177,11 @@ ROFF;
                 $return['arguments']      = Request::parseArguments($return['arg_string']);
             }
 
+            if (Roff_Skipped::skip($return)) {
+                array_shift($lines);
+                return self::getLine($lines, $i, $callerArguments);
+            }
+
             $macros = $man->getMacros();
             if (isset($macros[$return['request']])) {
                 $man->setRegister('.$', count($return['arguments']));

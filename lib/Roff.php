@@ -11,19 +11,7 @@ class Roff
         $stopOnContent = false
     ) {
 
-        while (count($lines) && (!$stopOnContent || $parentNode->textContent === '')) {
-
-            $request = Request::getLine($lines, 0, $callerArguments);
-            if (!count($lines)) {
-                // e.g. if last request was a comment: stop getClass below causing an error.
-                // Bit of a hack, see instead about bringing not doing both getLine and getClass...
-                break;
-            }
-
-            if (Roff_Skipped::skip($request)) {
-                array_shift($lines);
-                continue;
-            }
+        while ($request = Request::getLine($lines, 0, $callerArguments)) {
 
             $request['raw_line'] = Roff_Macro::applyReplacements($request['raw_line'], $callerArguments);
 
@@ -38,6 +26,10 @@ class Roff
 
             if ($newI) { // could be 0
                 array_splice($lines, 0, $newI);
+            }
+
+            if ($stopOnContent && $parentNode->textContent !== '') {
+                break;
             }
 
         }
