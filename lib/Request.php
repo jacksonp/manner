@@ -132,15 +132,19 @@ ROFF;
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function peepAtName($line): string
+    public static function peepAt($line): ?array
     {
+        $return = ['name' => null, 'raw_arg_string' => ''];
         if (preg_match(
             '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $line, $matches)
         ) {
-            return $matches[1];
+            $return['name'] = $matches[1];
+            if (array_key_exists(2, $matches) && !is_null($matches[2])) {
+                $return['raw_arg_string'] = ltrim($matches[2]);
+            }
         }
-        return '';
+        return $return;
     }
 
     public static function getLine(array &$lines, int $i = 0, &$callerArguments = null): ?array

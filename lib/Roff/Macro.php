@@ -7,8 +7,7 @@ class Roff_Macro
     static function applyReplacements(string $string, &$arguments): string
     {
 
-        $requestName = Request::peepAtName($string);
-        if ($requestName === 'shift') {
+        if (Request::peepAt($string)['name'] === 'shift') {
             array_shift($arguments);
             return '.';
         }

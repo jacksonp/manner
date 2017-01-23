@@ -11,7 +11,7 @@ class Roff_di implements Roff_Template
         // We don't want to handle the lines at this stage as a fresh call to .di call a new Roff_di, so don't iterate
         // with Request::getLine()
         while ($line = array_shift($lines)) {
-            if (Request::peepAtName($line) === 'di') {
+            if (Request::peepAt($line)['name'] === 'di') {
                 return [];
             }
         }
