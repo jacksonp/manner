@@ -27,12 +27,12 @@ class Blocks
         ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
     }
 
-    static function lineEndsBlock(array $request, array $lines)
+    static function lineEndsBlock(array $request, array &$lines)
     {
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
-        return Block_TabTable::isStart($lines, 0);
+        return Block_TabTable::isStart($lines);
     }
 
     static function _maybeLastEmptyChildWaitingForText(DOMElement $parentNode)

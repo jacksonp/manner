@@ -263,7 +263,7 @@ ROFF;
             } else {
                 $return['class'] = 'Request_Skippable';
             }
-        } elseif (Block_TabTable::isStart($lines, 0)) {
+        } elseif (Block_TabTable::isStart($lines)) {
             $return['class'] = 'Block_TabTable';
         } elseif (!preg_match('~^[\.]~u', $line)) {
             $return['class'] = 'Block_Text';

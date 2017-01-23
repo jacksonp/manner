@@ -20,20 +20,23 @@ class Block_TabTable implements Block_Template
             in_array($line, self::specialAcceptableLines);
     }
 
-    static function isStart($lines, $i)
+    private static function lineContainsTab(string $line): bool
     {
         // char before tab avoid indented stuff + exclude escaped tabs
+        return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
+    }
+
+    static function isStart(array &$lines): bool
+    {
         return
-            $i < count($lines) - 2 &&
-            !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) &&
-            mb_strpos($lines[$i], "\t") > 0 &&
-            preg_match('~[^\\\\\s]\t~u', $lines[$i]) &&
+            count($lines) > 2 &&
+            !in_array(mb_substr($lines[0], 0, 1), ['.', '\'']) &&
+            self::lineContainsTab($lines[0]) &&
             (
-                (preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) && mb_strpos($lines[$i + 1], "\t") > 0) ||
-                in_array(trim($lines[$i + 1]), self::skippableLines + self::specialAcceptableLines) &&
-                preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) &&
-                mb_strpos($lines[$i + 2], "\t") > 0
-            );
+                self::lineContainsTab($lines[1]) ||
+                in_array(trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
+            ) &&
+            self::lineContainsTab($lines[2]);
     }
 
     static function checkAppend(
@@ -44,8 +47,7 @@ class Block_TabTable implements Block_Template
         $needOneLineOnly = false
     ) {
 
-        $isStart = self::isStart($lines, 0);
-        if (!$isStart) {
+        if (!self::isStart($lines)) {
             return false;
         }
 
