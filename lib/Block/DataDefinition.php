@@ -46,12 +46,13 @@ class Block_DataDefinition implements Block_Template
                 }
             }
 
+            $line = array_shift($lines);
+
             if ($hitBlankIP) {
                 $blockLines[] = ''; // Empty creates new paragraph in block, see dir.1
-                array_shift($lines);
             } else {
-                if (count($lines) > 1 || (count($lines) && trim($lines[0]) !== '')) {
-                    $blockLines[] = array_shift($lines);
+                if (count($lines) || trim($line) !== '') {
+                    $blockLines[] = $line;
                 }
             }
         }
