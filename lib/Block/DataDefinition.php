@@ -7,10 +7,9 @@ class Block_DataDefinition implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         $blockLines = [];
         $rsLevel    = 0;
@@ -60,7 +59,7 @@ class Block_DataDefinition implements Block_Template
         Blocks::trim($blockLines);
         Roff::parse($parentNode, $blockLines);
 
-        return 0;
+        return true;
 
     }
 

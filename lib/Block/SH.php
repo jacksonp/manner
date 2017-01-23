@@ -7,10 +7,9 @@ class Block_SH implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -18,25 +17,25 @@ class Block_SH implements Block_Template
 
         $headingNode = $dom->createElement('h2');
 
-        if (count($arguments) === 0) {
+        if (count($request['arguments']) === 0) {
             if (count($lines) === 0 || Request::getLine($lines)['request'] === 'SH') {
-                return 0;
+                return true;
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
-                return 0;
+                return true;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
         } else {
-            $sectionHeading = implode(' ', $arguments);
+            $sectionHeading = implode(' ', $request['arguments']);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SH macros
         if (trim($headingNode->textContent) === '') {
-            return 0;
+            return true;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -65,7 +64,7 @@ class Block_SH implements Block_Template
         Roff::parse($section, $blockLines);
         $parentNode->appendBlockIfHasContent($section);
 
-        return 0;
+        return true;
 
     }
 

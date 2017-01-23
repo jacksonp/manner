@@ -10,17 +10,16 @@ class Block_ti implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
 
         if (!count($lines)) {
-            return 0;
+            return true;
         }
 
         $blockLines = [];
@@ -43,7 +42,7 @@ class Block_ti implements Block_Template
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return 0;
+        return true;
 
     }
 

@@ -32,7 +32,7 @@ class BlockPreformatted
                 $request['class'],
                 ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
             )) {
-                $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request']);
+                $request['class']::checkAppend($parentNode, $lines, $request);
                 if (count($lines) && $request['class'] !== 'Request_Skippable') {
                     self::endInputLine($parentNode);
                 }

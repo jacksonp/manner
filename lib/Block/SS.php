@@ -12,10 +12,9 @@ class Block_SS implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -23,26 +22,26 @@ class Block_SS implements Block_Template
 
         $headingNode = $dom->createElement('h3');
 
-        if (count($arguments) === 0) {
+        if (count($request['arguments']) === 0) {
             if (count($lines) === 0 || self::endSubsection(Request::getLine($lines, 0)['request'])) {
-                return 0;
+                return true;
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
-                return 0;
+                return true;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
         } else {
-            $sectionHeading = ltrim(implode(' ', $arguments));
+            $sectionHeading = ltrim(implode(' ', $request['arguments']));
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
         // We skip empty .SS macros
         if (trim($headingNode->textContent) === '') {
-            return 0;
+            return true;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -63,7 +62,7 @@ class Block_SS implements Block_Template
         Roff::parse($subsection, $blockLines);
         $parentNode->appendBlockIfHasContent($subsection);
 
-        return 0;
+        return true;
 
     }
 

@@ -7,10 +7,9 @@ class Block_EX implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -32,7 +31,7 @@ class Block_EX implements Block_Template
         BlockPreformatted::handle($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return 0;
+        return true;
 
     }
 

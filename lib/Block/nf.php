@@ -19,10 +19,9 @@ class Block_nf implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -64,7 +63,7 @@ class Block_nf implements Block_Template
         ArrayHelper::rtrim($preLines, ['.fi', '.ad', '.ad n', '.ad b', '', '.br', '.sp']);
 
         if (count($preLines) === 0) {
-            return 0;
+            return true;
         }
 
         if (count($preLines) > 1) {
@@ -106,7 +105,7 @@ class Block_nf implements Block_Template
                     }
                 }
 
-                return 0;
+                return true;
             }
         }
 
@@ -133,7 +132,7 @@ class Block_nf implements Block_Template
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendBlockIfHasContent($pre);
 
-        return 0;
+        return true;
     }
 
 

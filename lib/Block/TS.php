@@ -43,10 +43,9 @@ class Block_TS implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -179,7 +178,7 @@ class Block_TS implements Block_Template
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return 0;
+        return true;
 
     }
 

@@ -6,10 +6,9 @@ class Inline_EQ implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
@@ -37,7 +36,7 @@ class Inline_EQ implements Block_Template
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
 
-                return 0;
+                return true;
             }
         }
 
@@ -60,7 +59,7 @@ class Inline_EQ implements Block_Template
             }
         }
 
-        return 0;
+        return true;
 
     }
 

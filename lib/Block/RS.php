@@ -7,17 +7,16 @@ class Block_RS implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
         $thisIndent = '';
         $className  = 'indent';
-        if (count($arguments) > 0) {
-            $thisIndent = Roff_Unit::normalize($arguments[0]);
+        if (count($request['arguments']) > 0) {
+            $thisIndent = Roff_Unit::normalize($request['arguments'][0]);
             if ($thisIndent) { // note this filters out 0s
                 $className .= '-' . $thisIndent;
             }
@@ -91,7 +90,7 @@ class Block_RS implements Block_Template
             }
         }
 
-        return 0;
+        return true;
 
     }
 

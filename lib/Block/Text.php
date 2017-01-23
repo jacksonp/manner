@@ -22,10 +22,9 @@ class Block_Text implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         $line = self::removeContinuation($lines[0]);
 
@@ -71,7 +70,7 @@ class Block_Text implements Block_Template
 
         self::addLine($parentNode, $line, $implicitBreak);
 
-        return 0;
+        return true;
 
     }
 

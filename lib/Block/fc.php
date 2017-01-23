@@ -17,15 +17,14 @@ class Block_fc implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
-        $delim = $arguments[0];
-        $pad   = $arguments[1];
+        $delim = $request['arguments'][0];
+        $pad   = $request['arguments'][1];
 
         $dom = $parentNode->ownerDocument;
 
@@ -53,7 +52,7 @@ class Block_fc implements Block_Template
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return 0;
+        return true;
 
     }
 

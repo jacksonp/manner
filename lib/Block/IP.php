@@ -7,15 +7,14 @@ class Block_IP implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-        if (count($arguments) > 0 && trim($arguments[0]) !== '') {
+        if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
             return self::appendDl($parentNode, $lines);
         } else {
             return self::appendBlockquote($parentNode, $lines);
@@ -58,7 +57,7 @@ class Block_IP implements Block_Template
 
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return 0;
+        return true;
 
     }
 
@@ -82,7 +81,7 @@ class Block_IP implements Block_Template
 
         $parentNode->appendBlockIfHasContent($block);
 
-        return 0;
+        return true;
 
     }
 

@@ -7,16 +7,15 @@ class Block_TP implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
             $lines[1] = $lines[0];
             $lines[0] = '.nf';
-            return 0;
+            return true;
         }
 
         $dom = $parentNode->ownerDocument;
@@ -72,7 +71,7 @@ class Block_TP implements Block_Template
 
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return 0;
+        return true;
 
     }
 

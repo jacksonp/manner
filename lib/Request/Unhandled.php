@@ -115,11 +115,10 @@ class Request_Unhandled implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
-        throw new exception('Unhandled request ' . $lines[0]);
+    ): bool {
+        throw new exception('Unhandled request ' . $request['raw_line']);
     }
 
 }

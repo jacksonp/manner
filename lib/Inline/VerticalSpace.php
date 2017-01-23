@@ -31,15 +31,14 @@ class Inline_VerticalSpace implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
         if (!count($lines)) {
-            return 0;
+            return true;
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
@@ -54,11 +53,11 @@ class Inline_VerticalSpace implements Block_Template
             )
         ) {
 
-            $nextRequest = Request::getLine($lines, 0);
+            $nextRequest = Request::getLine($lines);
 
             if (count($lines) && !Blocks::lineEndsBlock($nextRequest, $lines)) {
                 self::addBR($textParent);
-                if (in_array($request, ['sp', 'ne'])) {
+                if (in_array($request['request'], ['sp', 'ne'])) {
                     self::addBR($textParent);
                 }
             }
@@ -68,7 +67,7 @@ class Inline_VerticalSpace implements Block_Template
             }
         }
 
-        return 0;
+        return true;
 
     }
 

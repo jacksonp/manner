@@ -7,15 +7,14 @@ class Inline_AlternatingFont implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
-        if (count($arguments) === 0) {
-            return 0; // Just skip empty requests
+        if (count($request['arguments']) === 0) {
+            return true; // Just skip empty requests
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
@@ -24,16 +23,16 @@ class Inline_AlternatingFont implements Block_Template
 
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
-        foreach ($arguments as $bi => $bit) {
+        foreach ($request['arguments'] as $bi => $bit) {
             $requestCharIndex = $bi % 2;
-            if (!isset($request[$requestCharIndex])) {
-                throw new Exception($lines[0] . ' command ' . $request . ' has nothing at index ' . $requestCharIndex);
+            if (!isset($request['request'][$requestCharIndex])) {
+                throw new Exception($lines[0] . ' command ' . $request['request'] . ' has nothing at index ' . $requestCharIndex);
             }
             if (trim($bit) === '') {
                 TextContent::interpretAndAppendText($textParent, $bit);
                 continue;
             }
-            switch ($request[$requestCharIndex]) {
+            switch ($request['request'][$requestCharIndex]) {
                 case 'R':
                     TextContent::interpretAndAppendText($textParent, $bit);
                     break;
@@ -52,7 +51,7 @@ class Inline_AlternatingFont implements Block_Template
                     }
                     break;
                 default:
-                    throw new Exception($lines[0] . ' command ' . $request . ' unexpected character at index ' . $requestCharIndex);
+                    throw new Exception($lines[0] . ' command ' . $request['request'] . ' unexpected character at index ' . $requestCharIndex);
             }
         }
 
@@ -60,7 +59,7 @@ class Inline_AlternatingFont implements Block_Template
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return 0;
+        return true;
 
     }
 

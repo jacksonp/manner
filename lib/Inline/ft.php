@@ -7,26 +7,25 @@ class Inline_ft implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
         if (!count($lines)) {
-            return 0; // trailing .ft: skip
+            return true; // trailing .ft: skip
         }
 
-        if (count($arguments) === 0) {
-            return 0; // Just skip empty requests
+        if (count($request['arguments']) === 0) {
+            return true; // Just skip empty requests
         }
 
-        $fontAbbreviation = $arguments[0];
+        $fontAbbreviation = $request['arguments'][0];
 
         // Skip stray regular font settings:
         if (in_array($fontAbbreviation, ['0', '1', 'R', 'P', 'CR', 'AR'])) {
-            return 0;
+            return true;
         }
 
         $dom = $parentNode->ownerDocument;
@@ -90,7 +89,7 @@ class Inline_ft implements Block_Template
         }
 
 
-        return 0;
+        return true;
 
     }
 

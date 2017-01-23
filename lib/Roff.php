@@ -18,14 +18,9 @@ class Roff
             $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
 
-            $newI = $request['class']::checkAppend($parentNode, $lines, $request['arguments'], $request['request'],
-                $stopOnContent);
-            if ($newI === false) {
+            $used = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
+            if (!$used) {
                 throw new Exception('"' . $lines[0] . '" Roff::parse() could not handle it.');
-            }
-
-            if ($newI) { // could be 0
-                array_splice($lines, 0, $newI);
             }
 
             if ($stopOnContent && $parentNode->textContent !== '') {

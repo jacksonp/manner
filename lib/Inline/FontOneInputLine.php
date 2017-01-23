@@ -7,22 +7,21 @@ class Inline_FontOneInputLine implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $arguments = null,
-        ?string $request = null,
+        ?array $request = null,
         $needOneLineOnly = false
-    ) {
+    ): bool {
 
         array_shift($lines);
 
-        if (count($arguments) === 0 && count($lines) && Request::getLine($lines, 0)['request'] === 'IP') {
-            return 0; // TODO: not sure how to handle this, just skip the font setting for now.
+        if (count($request['arguments']) === 0 && count($lines) && Request::getLine($lines, 0)['request'] === 'IP') {
+            return true; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
         $dom = $parentNode->ownerDocument;
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        switch ($request) {
+        switch ($request['request']) {
             case 'R':
                 $appendToParentNode = false;
                 $innerNode          = $textParent;
@@ -54,16 +53,16 @@ class Inline_FontOneInputLine implements Block_Template
 
         Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
 
-        if (count($arguments) === 0) {
+        if (count($request['arguments']) === 0) {
             if (count($lines) === 0) {
-                return 0;
+                return true;
             }
 
             $callerArgs = null;
             Roff::parse($innerNode, $lines, $callerArgs, true);
 
         } else {
-            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
+            TextContent::interpretAndAppendText($innerNode, implode(' ', $request['arguments']));
         }
 
         if ($appendToParentNode) {
@@ -74,7 +73,7 @@ class Inline_FontOneInputLine implements Block_Template
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return 0;
+        return true;
 
     }
 
