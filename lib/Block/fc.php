@@ -30,8 +30,7 @@ class Block_fc implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $table = $dom->createElement('table');
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             array_shift($lines);
             if (in_array($request['request'], ['ta', 'nf'])) {
                 continue; // Swallow

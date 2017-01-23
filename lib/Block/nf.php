@@ -29,8 +29,7 @@ class Block_nf implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $preLines = [];
-        while (count($lines)) {
-            $nextRequest = Request::getLine($lines, 0);
+        while ($nextRequest = Request::getLine($lines)) {
             if (Block_SS::endSubsection($nextRequest['request']) || $nextRequest['request'] === 'TS') {
                 break;
             } elseif (self::endBlock($nextRequest)) {

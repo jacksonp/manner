@@ -24,8 +24,7 @@ class Block_ti implements Block_Template
         }
 
         $blockLines = [];
-        while (count($lines)) {
-            $nextRequest = Request::getLine($lines, 0);
+        while ($nextRequest = Request::getLine($lines)) {
             if ($nextRequest['request'] === 'ti') {
                 // Could be a change in indentation, just add a break for now
                 array_shift($lines);

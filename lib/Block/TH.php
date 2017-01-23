@@ -11,12 +11,14 @@ class Block_TH implements Block_Template
         $needOneLineOnly = false
     ) {
 
+        array_shift($lines);
+
         $man = Man::instance();
 
         if (empty($man->title)) {
 
             if (count($arguments) < 1) {
-                throw new Exception($lines[$i] . ' - missing title info');
+                throw new Exception($request['raw_line'] . ' - missing title info');
             }
 
             foreach ($arguments as $k => $v) {
@@ -48,7 +50,7 @@ class Block_TH implements Block_Template
             $parentNode->appendChild($hr);
         }
 
-        return 1;
+        return 0;
 
     }
 

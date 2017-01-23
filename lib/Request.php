@@ -143,12 +143,11 @@ ROFF;
         return '';
     }
 
-    public static function getLine(array &$lines, int $i, &$callerArguments = null): array
+    public static function getLine(array &$lines, int $i = 0, &$callerArguments = null): ?array
     {
 
         if (!isset($lines[$i])) {
-            var_dump($lines);
-            throw new Exception('Line ' . $i . ' does not exist.');
+            return null;
         }
 
         $return = [
@@ -160,13 +159,9 @@ ROFF;
         ];
 
         // Do comments first
-        if (Roff_Comment::checkLine($lines)) {
-            if ($i < count($lines)) { // Roff_Comment::checkLine() can alter $lines
-                // We want another look at the same line:
-                return self::getLine($lines, $i, $callerArguments);
-            } else {
-                return $return; // $lines ended with a comment.
-            }
+        if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
+            // We want another look at the same line:
+            return self::getLine($lines, $i, $callerArguments);
         }
 
         $man = Man::instance();
@@ -207,11 +202,7 @@ ROFF;
             if ($className) {
                 $result = $className::evaluate($return, $lines, $callerArguments);
                 if ($result !== false) {
-                    if ($i < count($lines)) {
-                        return self::getLine($lines, $i, $callerArguments);
-                    } else {
-                        return $return; // e.g. a .if that removes all the remaining lines from the file.
-                    }
+                    return self::getLine($lines, $i, $callerArguments);
                 }
             }
 
@@ -222,6 +213,13 @@ ROFF;
 
     public static function getNextClass(array &$lines): array
     {
+
+        $request = self::getLine($lines);
+
+        if (!$request) {
+            return null;
+        }
+
         $return = [
             'class' => null,
             'request' => null,
@@ -231,13 +229,7 @@ ROFF;
             'raw_arg_string' => ''
         ];
 
-        $request = self::getLine($lines, 0);
-
-        if (!count($lines)) {
-            return $return; // e.g. a .if that removes all the remaining lines from the file.
-        }
-
-        $line = $lines[0];
+        $line = $request['raw_line'];
 
         if ($line === '') {
             // empty lines cause a new paragraph, see sar.1

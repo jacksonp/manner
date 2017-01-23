@@ -31,8 +31,7 @@ class Block_IP implements Block_Template
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             if ($request['request'] === 'IP') {
                 array_shift($lines);
                 // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.

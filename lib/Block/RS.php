@@ -27,8 +27,7 @@ class Block_RS implements Block_Template
 
         $rsLevel    = 1;
         $blockLines = [];
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             if ($request['request'] === 'RS') {
                 $indent = Roff_Unit::normalize(trim($request['arg_string']));
                 if ($indent === $thisIndent) {

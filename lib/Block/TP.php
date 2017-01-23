@@ -24,15 +24,13 @@ class Block_TP implements Block_Template
         $dl          = $dom->createElement('dl');
         $firstIndent = null;
 
-        while (count($lines)) {
+        while ($request = Request::getLine($lines)) {
 
-            $request = Request::getNextClass($lines);
-
-            if ($request['class'] === 'Block_TP') {
+            if (in_array($request['request'], ['TP', 'TQ'])) {
 
                 array_shift($lines);
 
-                if (count($lines) === 0 || in_array(Request::getLine($lines, 0)['request'], ['TP', 'TQ', 'IP'])) {
+                if (count($lines) === 0 || in_array(Request::getLine($lines)['request'], ['TP', 'TQ', 'IP'])) {
                     // a bug in the man page, just skip:
                     continue;
                 }

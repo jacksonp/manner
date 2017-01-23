@@ -69,8 +69,7 @@ class Block_TS implements Block_Template
         $formatRowNum = 0;
         $tr           = false;
 
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             array_shift($lines);
 
             if ($request['request'] === 'TE') {

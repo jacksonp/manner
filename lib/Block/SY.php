@@ -30,8 +30,7 @@ class Block_SY implements Block_Template
         }
 
         $preLines = [];
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             if ($request['request'] === 'YS') {
                 array_shift($lines);
                 break;

@@ -56,9 +56,7 @@ class Block_TabTable implements Block_Template
         $table = $dom->createElement('table');
         $parentNode->appendChild($table);
 
-        while (count($lines)) {
-
-            $nextRequest = Request::getLine($lines, 0);
+        while ($nextRequest = Request::getLine($lines)) {
 
             if (!self::isTabTableLine($nextRequest['raw_line'])) {
                 break;

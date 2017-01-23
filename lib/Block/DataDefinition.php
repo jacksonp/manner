@@ -15,9 +15,7 @@ class Block_DataDefinition implements Block_Template
         $blockLines = [];
         $rsLevel    = 0;
 
-        while (count($lines)) {
-
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
 
             if ($request['request'] === 'RS') {
                 ++$rsLevel;

@@ -45,9 +45,8 @@ class Block_SH implements Block_Template
         $section->appendChild($headingNode);
 
         $blockLines = [];
-        while (count($lines)) {
-            $request = Request::getNextClass($lines);
-            if ($request['class'] === 'Block_SH') {
+        while ($request = Request::getLine($lines)) {
+            if ($request['request'] === 'SH') {
                 if (
                     (count($request['arguments']) === 1 && $request['arguments'][0] === '\\ ') ||
                     (count($request['arguments']) === 0 &&

@@ -53,8 +53,7 @@ class Inline_Link implements Block_Template
         $punctuation = '';
         $blockLines  = [];
 
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             if (in_array($request['request'], ['UR', 'MT'])) {
                 break;
             } elseif (in_array($request['request'], ['UE', 'ME'])) {

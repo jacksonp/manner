@@ -7,6 +7,7 @@ class Roff_de implements Roff_Template
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
+        // shift .de
         array_shift($lines);
 
         if (!preg_match('~^([^\s"]+)\s*$~u', $request['arg_string'], $matches)) {
@@ -17,17 +18,16 @@ class Roff_de implements Roff_Template
         $macroLines = [];
         $foundEnd   = false;
 
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
+            array_shift($lines);
             if (
                 $request['request'] === '.' ||
                 ($newMacro === 'P!' && $request['raw_line'] === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
-                array_shift($lines);
                 break;
             }
-            $macroLines[] = Request::massageLine(array_shift($lines));
+            $macroLines[] = Request::massageLine($request['raw_line']);
         }
 
         if (!$foundEnd) {

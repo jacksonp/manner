@@ -17,13 +17,12 @@ class Block_Vb implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
+            array_shift($lines);
             if ($request['request'] === 'Ve') {
-                array_shift($lines);
                 break;
             } else {
-                $blockLines[] = array_shift($lines);
+                $blockLines[] = $request['raw_line'];
             }
         }
 

@@ -20,7 +20,7 @@ class Block_ce implements Block_Template
         $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
         $centerLinesUpTo  = min($numLinesToCenter, count($lines));
         for ($i = 0; $i < $centerLinesUpTo; ++$i) {
-            if (Request::getLine($lines, 0)['request'] === 'ce') {
+            if (Request::getLine($lines)['request'] === 'ce') {
                 break;
             }
             $blockLines[] = array_shift($lines);

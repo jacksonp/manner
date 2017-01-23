@@ -51,8 +51,7 @@ class Block_SS implements Block_Template
         $subsection->appendChild($headingNode);
 
         $blockLines = [];
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
             if (self::endSubsection($request['request'])) {
                 break;
             } else {

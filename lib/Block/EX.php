@@ -17,16 +17,14 @@ class Block_EX implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        while (count($lines)) {
-            $nextRequest = Request::getLine($lines, 0);
+        while ($nextRequest = Request::getLine($lines)) {
+            array_shift($lines);
             if (Block_SS::endSubsection($nextRequest['request']) || in_array($nextRequest['request'], ['TS', 'EE'])) {
-                array_shift($lines);
                 break;
             } elseif (in_array($nextRequest['request'], ['nf', 'fi'])) {
                 // .EX already marks block as preformatted, just skip
-                array_shift($lines);
             } else {
-                $blockLines[] = array_shift($lines);
+                $blockLines[] = $nextRequest['raw_line'];
             }
         }
 

@@ -16,14 +16,13 @@ class Inline_EQ implements Block_Template
         $foundEnd = false;
 
         $eqLines = [];
-        while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+        while ($request = Request::getLine($lines)) {
+            array_shift($lines);
             if ($request['request'] === 'EN') {
-                array_shift($lines);
                 $foundEnd = true;
                 break;
             } else {
-                $eqLines[] = array_shift($lines);
+                $eqLines[] = $request['raw_line'];
             }
         }
 

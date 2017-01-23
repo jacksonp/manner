@@ -33,25 +33,17 @@ class Inline_ft implements Block_Template
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
         $blockLines = [];
-        while (count($lines)) {
-
-            // Force processing the line even if we don't use result. E.g. when a macro is defined inside a paragraph:
-            $nextRequest = Request::getLine($lines, 0);
-
-            if (!count($lines)) {
-                break;
-            }
-
-            $line = $lines[0];
+        // Force processing the line even if we don't use result. E.g. when a macro is defined inside a paragraph:
+        while ($nextRequest = Request::getLine($lines)) {
             if (
-                preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $line) ||
+                preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextRequest['raw_line']) ||
                 Blocks::lineEndsBlock($nextRequest, $lines)
             ) {
                 break;
             }
             $blockLines[] = array_shift($lines);
 
-            if (preg_match('~\\\\f1$~u', $line)) { // Include, but then stop
+            if (preg_match('~\\\\f1$~u', $nextRequest['raw_line'])) { // Include, but then stop
                 break;
             }
 

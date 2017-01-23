@@ -17,8 +17,7 @@ class Block_P implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $blockLines = [];
-        while (count($lines)) {
-            $nextRequest = Request::getLine($lines, 0);
+        while ($nextRequest = Request::getLine($lines)) {
             if (!count($lines) || Blocks::lineEndsBlock($nextRequest, $lines)) {
                 break;
             }
