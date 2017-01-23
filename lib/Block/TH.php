@@ -26,7 +26,7 @@ class Block_TH implements Block_Template
                 $value = $man->applyAllReplacements($value);
                 $value = TextContent::interpretString($value);
                 // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
-                $value         = trim($value);
+                $value                    = trim($value);
                 $request['arguments'][$k] = $value;
             }
 

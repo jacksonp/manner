@@ -170,7 +170,7 @@ ROFF;
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[$i], $matches)
         ) {
-            $return['request'] = $matches[1];
+            $return['request'] = Roff_Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));

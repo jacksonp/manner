@@ -9,7 +9,6 @@ class Request_Unhandled implements Block_Template
         'ab',
         'ad',
         'aln',
-        'als',
         'am',
         'am1',
         'ami',

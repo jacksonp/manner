@@ -264,9 +264,6 @@ class Man
         }
 
         $line = Roff_String::substitute($line, $this->strings);
-        foreach ($this->aliases as $new => $old) {
-            $line = Replace::preg('~^\.' . preg_quote($new, '~') . '(\s|$)~u', '.' . $old . '$1', $line);
-        }
 
         // \w’string’: The width of the glyph sequence string. We approximate...
         $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
