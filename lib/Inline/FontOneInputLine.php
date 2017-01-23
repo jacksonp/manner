@@ -17,6 +17,10 @@ class Inline_FontOneInputLine implements Block_Template
             return true; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
+        if (count($request['arguments']) === 1 && $request['arguments'][0] === '') {
+            return true; // bug in man page, see e.g. basic_ldap_auth.8: .B "\"uid\=%s\""
+        }
+
         $dom = $parentNode->ownerDocument;
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
