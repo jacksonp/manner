@@ -14,7 +14,8 @@ class Roff
         while ($request = Request::getLine($lines, 0, $callerArguments)) {
 
             // \c: Interrupt text processing (groff.7)
-            if ($stopOnContent && $request['raw_line'] === '\\c') {
+            // \fB\fP see KRATool.1
+            if ($stopOnContent && in_array($request['raw_line'], ['\\c', '\\fB\\fP'])) {
                 array_shift($lines);
                 break;
             }
@@ -29,7 +30,7 @@ class Roff
                 throw new Exception('"' . $request['raw_line'] . '" Roff::parse() could not handle it.');
             }
 
-            if ($stopOnContent && $parentNode->textContent !== '') {
+            if ($stopOnContent && ($request['class'] === 'Block_Text' || $parentNode->textContent !== '')) {
                 break;
             }
 

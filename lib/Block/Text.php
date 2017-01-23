@@ -4,7 +4,7 @@
 class Block_Text implements Block_Template
 {
 
-    private static $continuation = false;
+    private static $interruptTextProcessing = false;
 
     static function addSpace(DOMElement $parentNode, DOMElement $textParent, bool $shouldAppend)
     {
@@ -26,7 +26,7 @@ class Block_Text implements Block_Template
         $needOneLineOnly = false
     ): bool {
 
-        $line = self::removeContinuation($lines[0]);
+        $line = self::removeTextProcessingInterrupt($lines[0]);
 
         array_shift($lines);
 
@@ -39,7 +39,7 @@ class Block_Text implements Block_Template
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
-            while (count($lines) && (self::$continuation || !$needOneLineOnly)) {
+            while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
                 $nextLine = $lines[0];
                 if (trim($nextLine) === '' ||
                     in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
@@ -51,20 +51,21 @@ class Block_Text implements Block_Template
 
                 array_shift($lines);
 
-                if (in_array($nextLine, ['\\&', '\\)'])) {
-                    if (self::$continuation) {
-                        $line .= ' ';
-                    }
-                    continue;
-                }
+//                if (in_array($nextLine, ['\\&', '\\)'])) {
+//                    if (self::$interruptTextProcessing) {
+//                        $line .= ' ';
+//                    }
+//                    continue;
+//                }
 
-                $line .= (self::$continuation ? '' : ' ') . self::removeContinuation($nextLine);
+//                $line .= (self::$interruptTextProcessing ? '' : ' ') . self::removeTextProcessingInterrupt($nextLine);
+                $line .= ' ' . self::removeTextProcessingInterrupt($nextLine);
             }
         }
 
         // Re-add continuation if present to last line for TextContent::interpretAndAppendText:
-        if (self::$continuation) {
-            self::$continuation = false;
+        if (self::$interruptTextProcessing) {
+            self::$interruptTextProcessing = false;
             $line .= '\\c';
         }
 
@@ -74,11 +75,10 @@ class Block_Text implements Block_Template
 
     }
 
-    static private function removeContinuation(string $line)
+    static private function removeTextProcessingInterrupt(string $line)
     {
-        $line = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
-        self::$continuation = $replacements > 0;
-
+        $line                          = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
+        self::$interruptTextProcessing = $replacements > 0;
         return $line;
     }
 
