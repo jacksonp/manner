@@ -54,7 +54,7 @@ class Block_fc implements Block_Template
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return $i;
+        return 0;
 
     }
 

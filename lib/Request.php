@@ -220,7 +220,7 @@ ROFF;
         return $return;
     }
 
-    public static function getClass(array $lines, int $i): array
+    public static function getClass(array &$lines, int $i): array
     {
         $return = [
             'class' => null,

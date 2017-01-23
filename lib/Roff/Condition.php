@@ -205,13 +205,14 @@ class Roff_Condition implements Roff_Template
         $recurse     = false;
         $isFirstLine = true;
 
-        while (count($lines) >= 0) {
+        while (true) {
 
             $openBraces += substr_count($line, '\\{');
             if ($openBraces > 1 || (!$isFirstLine && preg_match('~^\.\s*i[fe] ~u', $line))) {
                 $recurse = true;
             }
             $openBraces -= substr_count($line, '\\}');
+
             if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) && $openBraces === 0) {
                 $foundEnd = true;
                 if (!empty($matches[1]) && $matches[1] !== '\'br') {
@@ -223,6 +224,10 @@ class Roff_Condition implements Roff_Template
                 break;
             } elseif ($line !== '') {
                 $replacementLines[] = $line;
+            }
+
+            if (count($lines) === 0) {
+                break;
             }
 
             $line = array_shift($lines);
