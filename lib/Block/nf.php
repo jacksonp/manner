@@ -33,7 +33,7 @@ class Block_nf implements Block_Template
                 break;
             } elseif (self::endBlock($nextRequest)) {
                 array_shift($lines);
-                while (count($lines) && self::endBlock(Request::getLine($lines, 0))) {
+                while (count($lines) && self::endBlock(Request::getLine($lines))) {
                     array_shift($lines); // swallow
                 }
                 break;
@@ -54,8 +54,8 @@ class Block_nf implements Block_Template
 
         if (
             count($lines)
-            && Request::getLine($preLines, 0)['request'] === 'RS'
-            && Request::getLine($lines, 0)['request'] === 'RE'
+            && Request::getLine($preLines)['request'] === 'RS'
+            && Request::getLine($lines)['request'] === 'RE'
         ) {
             $preLines[] = array_shift($lines);
         }
@@ -111,7 +111,7 @@ class Block_nf implements Block_Template
 
         $pre = $dom->createElement('pre');
 
-        $nextRequest = Request::getLine($preLines, 0);
+        $nextRequest = Request::getLine($preLines);
         if ($nextRequest['request'] === 'RS') {
             $lastRequest = Request::getLine($preLines, count($preLines) - 1);
             if ($lastRequest['request'] === 'RE') {

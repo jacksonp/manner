@@ -49,7 +49,7 @@ class Block_TP implements Block_Template
                 $dl->appendBlockIfHasContent($dt);
 
                 while (count($lines)) {
-                    $request = Request::getLine($lines, 0);
+                    $request = Request::getLine($lines);
                     if ($request['request'] === 'TQ') {
                         array_shift($lines);
                         $dt = $dom->createElement('dt');
@@ -61,7 +61,7 @@ class Block_TP implements Block_Template
                 }
 
                 $dd = $dom->createElement('dd');
-                Block_DataDefinition::checkAppend($dd, $lines);
+                Block_DataDefinition::append($dd, $lines);
                 $dl->appendBlockIfHasContent($dd);
 
             } else {

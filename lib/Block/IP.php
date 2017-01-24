@@ -48,7 +48,7 @@ class Block_IP implements Block_Template
                     TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
                     $dl->appendChild($dt);
                     $dd = $dom->createElement('dd');
-                    Block_DataDefinition::checkAppend($dd, $lines);
+                    Block_DataDefinition::append($dd, $lines);
                     $dl->appendBlockIfHasContent($dd);
                 }
             } else {
@@ -70,14 +70,14 @@ class Block_IP implements Block_Template
         $block = $dom->createElement('blockquote');
 
         while (count($lines)) {
-            $request = Request::getLine($lines, 0);
+            $request = Request::getLine($lines);
             if (
                 $request['request'] !== 'IP' ||
                 (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '')
             ) {
                 break;
             }
-            Block_DataDefinition::checkAppend($block, $lines);
+            Block_DataDefinition::append($block, $lines);
         }
 
         $parentNode->appendBlockIfHasContent($block);
