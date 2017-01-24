@@ -11,7 +11,7 @@ class Roff
         $stopOnContent = false
     ): void {
 
-        while ($request = Request::getLine($lines, 0, $callerArguments)) {
+        while ($request = Request::getLine($lines, $callerArguments)) {
 
             // \c: Interrupt text processing (groff.7)
             // \fB\fP see KRATool.1

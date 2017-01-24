@@ -23,7 +23,7 @@ class Block_SS implements Block_Template
         $headingNode = $dom->createElement('h3');
 
         if (count($request['arguments']) === 0) {
-            if (count($lines) === 0 || self::endSubsection(Request::getLine($lines, 0)['request'])) {
+            if (count($lines) === 0 || self::endSubsection(Request::getLine($lines)['request'])) {
                 return null;
             }
             // Text for subheading is on next line.

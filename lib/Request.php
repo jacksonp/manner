@@ -147,16 +147,16 @@ ROFF;
         return $return;
     }
 
-    public static function getLine(array &$lines, int $i = 0, &$callerArguments = null): ?array
+    public static function getLine(array &$lines, &$callerArguments = null): ?array
     {
 
-        if (!isset($lines[$i])) {
+        if (!count($lines)) {
             return null;
         }
 
         $return = [
             'request' => null,
-            'raw_line' => $lines[$i],
+            'raw_line' => $lines[0],
             'arguments' => [],
             'arg_string' => '',
             'raw_arg_string' => ''
@@ -165,16 +165,16 @@ ROFF;
         // Do comments first
         if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
             // We want another look at the same line:
-            return self::getLine($lines, $i, $callerArguments);
+            return self::getLine($lines, $callerArguments);
         }
 
         $man = Man::instance();
 
-        $lines[$i] = Roff_String::substitute($lines[$i]);
+        $lines[0] = Roff_String::substitute($lines[0]);
 
         if (preg_match(
             '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
-            $lines[$i], $matches)
+            $lines[0], $matches)
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
@@ -185,7 +185,7 @@ ROFF;
 
             if (Roff_Skipped::skip($return)) {
                 array_shift($lines);
-                return self::getLine($lines, $i, $callerArguments);
+                return self::getLine($lines, $callerArguments);
             }
 
             $macros = $man->getMacros();
@@ -205,15 +205,15 @@ ROFF;
                 foreach ($macroLines as $k => $l) {
                     $macroLines[$k] = Roff_Macro::applyReplacements($l, $macroCallerArguments);
                 }
-                array_splice($lines, $i, 1, $macroLines);
-                return self::getLine($lines, $i, $callerArguments);
+                array_splice($lines, 0, 1, $macroLines);
+                return self::getLine($lines, $callerArguments);
             }
 
             $className = $man->getRoffRequestClass($return['request']);
             if ($className) {
                 $result = $className::evaluate($return, $lines, $callerArguments);
                 if ($result !== false) {
-                    return self::getLine($lines, $i, $callerArguments);
+                    return self::getLine($lines, $callerArguments);
                 }
             }
 

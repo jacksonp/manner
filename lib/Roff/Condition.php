@@ -80,7 +80,7 @@ class Roff_Condition implements Roff_Template
     private static function handleElse(array &$lines, bool $useIf, $macroArguments): array
     {
 
-        $request = Request::getLine($lines, 0);
+        $request = Request::getLine($lines);
         array_shift($lines);
 
         if ($request['request'] === 'el') {

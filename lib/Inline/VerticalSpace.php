@@ -24,7 +24,7 @@ class Inline_VerticalSpace implements Block_Template
     static function check(string $string)
     {
         $stringArray = [$string];
-        $request     = Request::getLine($stringArray, 0);
+        $request     = Request::getLine($stringArray);
         return in_array($request['request'], ['br', 'sp', 'ne']);
     }
 

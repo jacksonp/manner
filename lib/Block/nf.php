@@ -113,8 +113,8 @@ class Block_nf implements Block_Template
 
         $nextRequest = Request::getLine($preLines);
         if ($nextRequest['request'] === 'RS') {
-            $lastRequest = Request::getLine($preLines, count($preLines) - 1);
-            if ($lastRequest['request'] === 'RE') {
+            $lastRequest = Request::peepAt($preLines[count($preLines) - 1]);
+            if ($lastRequest['name'] === 'RE') {
                 array_pop($preLines);
                 array_shift($preLines);
                 ArrayHelper::trim($preLines, ['', '.br', '.sp']);

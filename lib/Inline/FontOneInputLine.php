@@ -13,7 +13,7 @@ class Inline_FontOneInputLine implements Block_Template
 
         array_shift($lines);
 
-        if (count($request['arguments']) === 0 && count($lines) && Request::getLine($lines, 0)['request'] === 'IP') {
+        if (count($request['arguments']) === 0 && count($lines) && Request::getLine($lines)['request'] === 'IP') {
             return null; // TODO: not sure how to handle this, just skip the font setting for now.
         }
 
