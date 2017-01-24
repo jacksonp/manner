@@ -18,7 +18,7 @@ class Block_SH implements Block_Template
         $headingNode = $dom->createElement('h2');
 
         if (count($request['arguments']) === 0) {
-            if (count($lines) === 0 || Request::getLine($lines)['request'] === 'SH') {
+            if (count($lines) === 0 || Request::peepAt($lines[0])['name'] === 'SH') {
                 return null;
             }
             // Text for subheading is on next line.
@@ -29,6 +29,9 @@ class Block_SH implements Block_Template
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
         } else {
+            if ($request['raw_arg_string'] === '\\ ') {
+                return null;
+            }
             $sectionHeading = implode(' ', $request['arguments']);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
