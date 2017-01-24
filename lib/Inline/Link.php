@@ -29,7 +29,9 @@ class Inline_Link implements Block_Template
                 $blockLines = [array_shift($lines)];
                 Blocks::trim($blockLines);
                 Roff::parse($anchor, $blockLines);
-            } else {
+            }
+
+            if ($anchor->textContent === '') {
                 $anchor->appendChild(new DOMText($request['arguments'][0]));
             }
 
