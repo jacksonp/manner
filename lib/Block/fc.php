@@ -19,7 +19,8 @@ class Block_fc implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -29,24 +30,40 @@ class Block_fc implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $table = $dom->createElement('table');
-        while ($request = Request::getLine($lines)) {
-            array_shift($lines);
-            if (in_array($request['request'], ['ta', 'nf'])) {
+
+        // We don't want to handle the lines at this stage as a fresh call to .fc call a new Roff_fc, so don't iterate
+        // with Request::getLine()
+        while (count($lines)) {
+
+            // Don't process next line yet, could be new .fc
+            $requestDetails = Request::peepAt($lines[0]);
+
+            if (in_array($requestDetails['name'], ['ta', 'nf'])) {
+                array_shift($lines);
                 continue; // Swallow
-            } elseif ($request['request'] === 'fi') {
+            } elseif (
+                $requestDetails['name'] === 'fi' ||
+                ($requestDetails['name'] === 'fc' && $requestDetails['raw_arg_string'] === '')
+            ) {
+                array_shift($lines);
                 break; // Finished
-            } elseif (mb_strpos($request['raw_line'], $delim) === 0) {
-                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $request['raw_line']);
+            }
+
+            $nextRequest = Request::getLine($lines);
+            array_shift($lines);
+
+            if (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
+                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $nextRequest['raw_line']);
                 array_shift($cells);
                 $cells = array_map(function ($contents) use ($pad) {
                     return trim($contents, $pad);
                 }, $cells);
                 self::addRow($dom, $table, $cells);
-            } elseif (mb_strpos($request['raw_line'], "\t") !== 0) {
-                $cells = preg_split("~\t~u", $request['raw_line']);
+            } elseif (mb_strpos($nextRequest['raw_line'], "\t") !== 0) {
+                $cells = preg_split("~\t~u", $nextRequest['raw_line']);
                 self::addRow($dom, $table, $cells);
             } else {
-                throw new Exception('Unexpected ' . $request['raw_line']);
+                throw new Exception('Unexpected ' . $nextRequest['raw_line']);
             }
         }
 
