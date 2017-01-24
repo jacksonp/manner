@@ -12,7 +12,7 @@ class Block_SS implements Block_Template
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
-        ?array $request = null,
+        array $request,
         $needOneLineOnly = false
     ): ?DOMElement {
 
