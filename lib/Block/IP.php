@@ -9,7 +9,8 @@ class Block_IP implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement
+    {
 
         // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
 
@@ -22,7 +23,7 @@ class Block_IP implements Block_Template
 
     }
 
-    static function appendDl(DOMElement $parentNode, array &$lines)
+    static function appendDl(DOMElement $parentNode, array &$lines):?DOMElement
     {
 
         $dom = $parentNode->ownerDocument;
@@ -57,11 +58,11 @@ class Block_IP implements Block_Template
 
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return true;
+        return null;
 
     }
 
-    static function appendBlockquote(DOMElement $parentNode, array &$lines)
+    static function appendBlockquote(DOMElement $parentNode, array &$lines):?DOMElement
     {
 
         $dom = $parentNode->ownerDocument;
@@ -81,7 +82,7 @@ class Block_IP implements Block_Template
 
         $parentNode->appendBlockIfHasContent($block);
 
-        return true;
+        return null;
 
     }
 

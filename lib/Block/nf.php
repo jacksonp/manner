@@ -21,7 +21,7 @@ class Block_nf implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -49,7 +49,7 @@ class Block_nf implements Block_Template
         }
 
         if (count($preLines) === 0) {
-            return true;
+            return null;
         }
 
         if (
@@ -63,7 +63,7 @@ class Block_nf implements Block_Template
         ArrayHelper::rtrim($preLines, ['.fi', '.ad', '.ad n', '.ad b', '', '.br', '.sp']);
 
         if (count($preLines) === 0) {
-            return true;
+            return null;
         }
 
         if (count($preLines) > 1) {
@@ -105,7 +105,7 @@ class Block_nf implements Block_Template
                     }
                 }
 
-                return true;
+                return null;
             }
         }
 
@@ -132,7 +132,7 @@ class Block_nf implements Block_Template
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendBlockIfHasContent($pre);
 
-        return true;
+        return null;
     }
 
 

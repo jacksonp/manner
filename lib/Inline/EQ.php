@@ -8,7 +8,7 @@ class Inline_EQ implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -35,8 +35,7 @@ class Inline_EQ implements Block_Template
             if (preg_match('~^delim (.)(.)$~ui', $eqLines[0], $matches)) {
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
-
-                return true;
+                return null;
             }
         }
 
@@ -59,7 +58,7 @@ class Inline_EQ implements Block_Template
             }
         }
 
-        return true;
+        return null;
 
     }
 

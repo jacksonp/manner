@@ -9,23 +9,23 @@ class Inline_ft implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
         if (!count($lines)) {
-            return true; // trailing .ft: skip
+            return null; // trailing .ft: skip
         }
 
         if (count($request['arguments']) === 0) {
-            return true; // Just skip empty requests
+            return null; // Just skip empty requests
         }
 
         $fontAbbreviation = $request['arguments'][0];
 
         // Skip stray regular font settings:
         if (in_array($fontAbbreviation, ['0', '1', 'R', 'P', 'CR', 'AR'])) {
-            return true;
+            return null;
         }
 
         $dom = $parentNode->ownerDocument;
@@ -89,7 +89,7 @@ class Inline_ft implements Block_Template
         }
 
 
-        return true;
+        return null;
 
     }
 

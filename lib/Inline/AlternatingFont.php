@@ -9,12 +9,12 @@ class Inline_AlternatingFont implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
         if (count($request['arguments']) === 0) {
-            return true; // Just skip empty requests
+            return null; // Just skip empty requests
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
@@ -59,7 +59,7 @@ class Inline_AlternatingFont implements Block_Template
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return true;
+        return null;
 
     }
 

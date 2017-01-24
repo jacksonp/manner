@@ -8,7 +8,7 @@ class Block_TH implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -49,7 +49,7 @@ class Block_TH implements Block_Template
             $parentNode->appendChild($hr);
         }
 
-        return true;
+        return null;
 
     }
 

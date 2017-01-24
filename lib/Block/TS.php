@@ -45,7 +45,7 @@ class Block_TS implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -178,7 +178,7 @@ class Block_TS implements Block_Template
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return true;
+        return null;
 
     }
 

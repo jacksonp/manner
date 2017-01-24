@@ -44,10 +44,11 @@ class Block_TabTable implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
+        // TODO: see if we can remove this check:
         if (!self::isStart($lines)) {
-            return false;
+            throw new Exception('Not at start of table.');
         }
 
         $dom = $parentNode->ownerDocument;
@@ -77,7 +78,7 @@ class Block_TabTable implements Block_Template
 
         }
 
-        return true;
+        return null;
 
     }
 

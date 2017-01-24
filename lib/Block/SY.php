@@ -9,7 +9,7 @@ class Block_SY implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -40,13 +40,13 @@ class Block_SY implements Block_Template
         }
 
         if (count($preLines) === 0) {
-            return true;
+            return null;
         }
 
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendChild($pre);
 
-        return true;
+        return null;
     }
 
 

@@ -25,9 +25,9 @@ class Roff
             $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
 
-            $used = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
-            if (!$used) {
-                throw new Exception('"' . $request['raw_line'] . '" Roff::parse() could not handle it.');
+            $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
+            if (!is_null($newParent)) {
+                $parentNode = $newParent;
             }
 
             if ($stopOnContent && ($request['class'] === 'Block_Text' || $parentNode->textContent !== '')) {

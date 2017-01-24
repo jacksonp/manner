@@ -9,7 +9,7 @@ class Block_RS implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -92,7 +92,7 @@ class Block_RS implements Block_Template
             }
         }
 
-        return true;
+        return null;
 
     }
 

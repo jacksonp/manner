@@ -115,7 +115,7 @@ class Request_Unhandled implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
         throw new exception('Unhandled request ' . $request['raw_line']);
     }
 

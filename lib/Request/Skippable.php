@@ -9,9 +9,9 @@ class Request_Skippable implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
         array_shift($lines);
-        return true;
+        return null;
     }
 
 }

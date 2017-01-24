@@ -12,14 +12,14 @@ class Block_ti implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
 
         if (!count($lines)) {
-            return true;
+            return null;
         }
 
         $blockLines = [];
@@ -42,7 +42,7 @@ class Block_ti implements Block_Template
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return true;
+        return null;
 
     }
 

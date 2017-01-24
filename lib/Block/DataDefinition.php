@@ -9,7 +9,7 @@ class Block_DataDefinition implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         $blockLines = [];
         $rsLevel    = 0;
@@ -60,7 +60,7 @@ class Block_DataDefinition implements Block_Template
         Blocks::trim($blockLines);
         Roff::parse($parentNode, $blockLines);
 
-        return true;
+        return null;
 
     }
 

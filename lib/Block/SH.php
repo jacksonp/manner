@@ -9,7 +9,7 @@ class Block_SH implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -19,12 +19,12 @@ class Block_SH implements Block_Template
 
         if (count($request['arguments']) === 0) {
             if (count($lines) === 0 || Request::getLine($lines)['request'] === 'SH') {
-                return true;
+                return null;
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
-                return true;
+                return null;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
@@ -35,7 +35,7 @@ class Block_SH implements Block_Template
 
         // We skip empty .SH macros
         if (trim($headingNode->textContent) === '') {
-            return true;
+            return null;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -51,9 +51,9 @@ class Block_SH implements Block_Template
         }
 
         $section = $parentNode->appendChild($section);
-        Roff::parse($section, $lines);
+//        Roff::parse($section, $lines);
 
-        return true;
+        return $section;
 
     }
 

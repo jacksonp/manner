@@ -9,7 +9,7 @@ class Block_ce implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -31,7 +31,7 @@ class Block_ce implements Block_Template
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return true;
+        return null;
 
     }
 

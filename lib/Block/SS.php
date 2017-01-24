@@ -14,7 +14,7 @@ class Block_SS implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -24,13 +24,13 @@ class Block_SS implements Block_Template
 
         if (count($request['arguments']) === 0) {
             if (count($lines) === 0 || self::endSubsection(Request::getLine($lines, 0)['request'])) {
-                return true;
+                return null;
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
             if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
-                return true;
+                return null;
             }
             $sectionHeading = [$sectionHeading];
             Roff::parse($headingNode, $sectionHeading);
@@ -41,7 +41,7 @@ class Block_SS implements Block_Template
 
         // We skip empty .SS macros
         if (trim($headingNode->textContent) === '') {
-            return true;
+            return null;
         }
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
@@ -62,7 +62,7 @@ class Block_SS implements Block_Template
         Roff::parse($subsection, $blockLines);
         $parentNode->appendBlockIfHasContent($subsection);
 
-        return true;
+        return null;
 
     }
 

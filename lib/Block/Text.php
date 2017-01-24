@@ -24,7 +24,7 @@ class Block_Text implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         $line = self::removeTextProcessingInterrupt($lines[0]);
 
@@ -75,7 +75,7 @@ class Block_Text implements Block_Template
 
         self::addLine($parentNode, $line, $implicitBreak);
 
-        return true;
+        return null;
 
     }
 

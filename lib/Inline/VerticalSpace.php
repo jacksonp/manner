@@ -33,12 +33,12 @@ class Inline_VerticalSpace implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
         if (!count($lines)) {
-            return true;
+            return null;
         }
 
         list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
@@ -67,7 +67,7 @@ class Inline_VerticalSpace implements Block_Template
             }
         }
 
-        return true;
+        return null;
 
     }
 

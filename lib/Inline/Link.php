@@ -9,7 +9,7 @@ class Inline_Link implements Block_Template
         array &$lines,
         ?array $request = null,
         $needOneLineOnly = false
-    ): bool {
+    ): ?DOMElement {
 
         array_shift($lines);
 
@@ -45,7 +45,7 @@ class Inline_Link implements Block_Template
                 $parentNode->appendBlockIfHasContent($textParent);
             }
 
-            return true;
+            return null;
         }
 
         $dom         = $parentNode->ownerDocument;
@@ -76,7 +76,7 @@ class Inline_Link implements Block_Template
             // No valid URL, output any content as text and bail.
             Blocks::trim($blockLines);
             Roff::parse($parentNode, $blockLines);
-            return true;
+            return null;
         }
 
         $anchor = $dom->createElement('a');
@@ -102,7 +102,7 @@ class Inline_Link implements Block_Template
             $parentNode->appendBlockIfHasContent($textParent);
         }
 
-        return true;
+        return null;
 
     }
 
