@@ -4,12 +4,28 @@
 class Manner
 {
 
-    private static function trimBrs(DOMElement $domNode)
+    private static function trimTrailingBrs(DOMElement $element)
     {
-        foreach ($domNode->childNodes as $node) {
-            if ($node->hasChildNodes()) {
-                $node->trimTrailingBrs();
-                self::trimBrs($node);
+        while (
+            $lastChild = $element->lastChild and
+            (
+                ($lastChild->nodeType === XML_TEXT_NODE && trim($lastChild->textContent) === '') ||
+                ($lastChild->nodeType === XML_ELEMENT_NODE && $lastChild->tagName === 'br')
+            )
+        ) {
+            $element->removeChild($lastChild);
+        }
+    }
+
+    private static function trimTrailingBrsRecursive(DOMElement $element)
+    {
+        self::trimTrailingBrs($element);
+        foreach ($element->childNodes as $child) {
+            if (
+                $child->nodeType === XML_ELEMENT_NODE &&
+                in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl'])
+            ) {
+                self::trimTrailingBrsRecursive($child);
             }
         }
     }
@@ -28,7 +44,7 @@ class Manner
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
-        self::trimBrs($manPageContainer);
+        self::trimTrailingBrsRecursive($manPageContainer);
 
         return $dom;
     }
