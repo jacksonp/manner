@@ -25,6 +25,10 @@ class Roff
             $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
 
+            if ($stopOnContent && in_array($request['request'], ['SH', 'SS'])) {
+                break;
+            }
+
             $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
             if (!is_null($newParent)) {
                 $parentNode = $newParent;
