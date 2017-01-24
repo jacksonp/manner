@@ -8,15 +8,52 @@ class Roff_String implements Roff_Template
     {
 
         array_shift($lines);
+
+        $man = Man::instance();
+
+        $known = [];
+        $known['C++'] = <<<'ROFF'
+C+ C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
+ROFF;
+        /*
+        $known['ð'] = <<<'ROFF'
+d- \h'0'\(pd\h'-\w'~'u'\v'-.25m'\f2\(hy\fP\v'.25m'\h'-0'
+ROFF;
+        $known['Ð'] = <<<'ROFF'
+D- D\\k:\h'-\w'D'u'\v'-.11m'\z\(hy\v'.11m'\h'|\\n:u'
+ROFF;
+        $known['Þ'] = <<<'ROFF'
+th \f1\v'.3m'I\v'-.3m'\h'-(\w'I'u*2/3)'o\fP
+ROFF;
+        $known['þ'] = <<<'ROFF'
+Th \f1I\h'-\w'I'u*3/5'\v'-.3m'o\v'.3m'\fP
+ROFF;
+        */
+        $known['ð'] = <<<'ROFF'
+d- d\h'-1'\(ga
+ROFF;
+        $known['Ð'] = <<<'ROFF'
+D- D\h'-1'\(hy
+ROFF;
+        $known['Þ'] = <<<'ROFF'
+th \o'bp'
+ROFF;
+        $known['þ'] = <<<'ROFF'
+Th \o'LP'
+ROFF;
+
+        if ($key = array_search($request['raw_arg_string'], $known)) {
+            $man->addString($request['arguments'][0], $key);
+            return [];
+        }
+
         if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {
             // May have just one argument, e.g. gnugo.6 - skip for now.
             return [];
         }
 
-        $man = Man::instance();
-
         $newRequest = $matches[1];
-        $requestVal = Request::simplifyRequest($matches[2]);
+        $requestVal = $matches[2];
         if (mb_substr($requestVal, 0, 1) === '"') {
             $requestVal = mb_substr($requestVal, 1);
         }

@@ -99,34 +99,6 @@ class Request
 
     }
 
-    static function simplifyRequest(string $string)
-    {
-
-        $known = [];
-
-        $known['C++'] = <<<'ROFF'
-C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
-ROFF;
-
-        $known['ð'] = <<<'ROFF'
-d\h'-1'\(ga
-ROFF;
-
-        $known['Ð'] = <<<'ROFF'
-D\h'-1'\(hy
-ROFF;
-        $known['Þ'] = <<<'ROFF'
-\o'bp'
-ROFF;
-
-        $known['þ'] = <<<'ROFF'
-\o'LP'
-ROFF;
-
-        return array_search($string, $known) ?: $string;
-
-    }
-
     public static function massageLine(string $macroLine)
     {
         return str_replace('\\\\', '\\', $macroLine);
