@@ -7,7 +7,6 @@ class Roff
     static function parse(
         DOMElement $parentNode,
         array &$lines,
-        &$callerArguments = null,
         $stopOnContent = false
     ): void {
 

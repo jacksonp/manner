@@ -61,10 +61,7 @@ class Inline_FontOneInputLine implements Block_Template
             if (count($lines) === 0) {
                 return null;
             }
-
-            $callerArgs = null;
-            Roff::parse($innerNode, $lines, $callerArgs, true);
-
+            Roff::parse($innerNode, $lines, true);
         } else {
             TextContent::interpretAndAppendText($innerNode, implode(' ', $request['arguments']));
         }

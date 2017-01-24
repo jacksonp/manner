@@ -43,8 +43,7 @@ class Block_TP implements Block_Template
                 }
 
                 $dt         = $dom->createElement('dt');
-                $callerArgs = null;
-                Roff::parse($dt, $lines, $callerArgs, true);
+                Roff::parse($dt, $lines, true);
 
                 $dl->appendBlockIfHasContent($dt);
 
@@ -53,7 +52,7 @@ class Block_TP implements Block_Template
                     if ($request['request'] === 'TQ') {
                         array_shift($lines);
                         $dt = $dom->createElement('dt');
-                        Roff::parse($dt, $lines, $callerArgs, true);
+                        Roff::parse($dt, $lines, true);
                         $dl->appendBlockIfHasContent($dt);
                     } else {
                         break;
