@@ -4,10 +4,10 @@
 class Roff_Macro
 {
 
-    static function applyReplacements(string $string, array &$arguments): string
+    static function applyReplacements(string $string, array &$arguments, bool $fullLine = false): string
     {
 
-        if (Request::peepAt($string)['name'] === 'shift') {
+        if ($fullLine && Request::peepAt($string)['name'] === 'shift') {
             array_shift($arguments);
             return '.';
         }
