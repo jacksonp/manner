@@ -44,6 +44,7 @@ class BlockPreformatted
                     continue;
                 } else {
                     $line = $request['arguments'][0];
+                    $request['request'] = null;
                 }
             } elseif ($request['request'] === 'TP') {
                 $addIndent  = 0;
@@ -79,9 +80,9 @@ class BlockPreformatted
                 $parentNode->appendChild(new DOMText(str_repeat(' ', $addIndent)));
             }
 
-            // FAIL on unknown command
-            if (mb_strlen($line) > 0 && mb_substr($line[0], 0, 1) === Man::instance()->control_char) {
-                throw new Exception($line . ' unexpected command in BlockPreformatted::handle().');
+            // FAIL on unknown command:
+            if (!is_null($request['request'])) {
+                throw new Exception($line . ' unexpected request in BlockPreformatted::handle().');
             }
 
             TextContent::interpretAndAppendText($parentNode, $line);
