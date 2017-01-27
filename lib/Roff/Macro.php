@@ -12,10 +12,6 @@ class Roff_Macro
             return '.';
         }
 
-        if (is_null($arguments)) {
-            return $string;
-        }
-
         // \$x - Macro or string argument with one-digit number x in the range 1 to 9.
         for ($n = 1; $n < 10; ++$n) {
             $string = str_replace('\\$' . $n, @$arguments[$n - 1] ?: '', $string);
