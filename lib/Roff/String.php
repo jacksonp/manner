@@ -73,11 +73,6 @@ ROFF;
             $requestVal = '”';
         }
 
-        // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
-        $requestVal = $man->applyAllReplacements($requestVal);
-        $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
-//        $requestVal = TextContent::interpretString($requestVal);
-
         $man->addString($newRequest, $requestVal);
 
         return [];

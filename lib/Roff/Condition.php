@@ -48,7 +48,6 @@ class Roff_Condition implements Roff_Template
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
                 $useIf   = self::test($matches[1], $macroArguments);
                 $ifLines = self::ifBlock($lines, $matches[2], $useIf);
-//                Roff_Comment::checkLine($lines);
                 $elseLines = self::handleElse($lines, $useIf);
                 if ($useIf) {
                     array_splice($lines, 0, 0, $ifLines);
@@ -61,7 +60,6 @@ class Roff_Condition implements Roff_Template
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['raw_arg_string'], $ifMatches)) {
                 $useIf     = self::test($ifMatches[1], $macroArguments);
                 $elseLines = self::handleElse($lines, $useIf);
-//                Roff_Comment::checkLine($lines);
                 if ($useIf) {
                     array_unshift($lines, Roff_Macro::applyReplacements($ifMatches[2], $macroArguments));
                 } else {
@@ -112,7 +110,6 @@ class Roff_Condition implements Roff_Template
         if (mb_strpos($condition, '!') === 0) {
             return !self::testRecursive(mb_substr($condition, 1), $macroArguments);
         }
-
 
         $alwaysTrue = [
             'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
@@ -195,19 +192,12 @@ class Roff_Condition implements Roff_Template
 
         $foundEnd         = false;
         $replacementLines = [];
-
         $line = $firstLine;
-
         $openBraces  = 1;
-        $recurse     = false;
-        $isFirstLine = true;
 
         while (true) {
 
             $openBraces += substr_count($line, '\\{');
-            if ($openBraces > 1 || (!$isFirstLine && preg_match('~^\.\s*i[fe] ~u', $line))) {
-                $recurse = true;
-            }
             $openBraces -= substr_count($line, '\\}');
 
             if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) && $openBraces === 0) {
@@ -229,8 +219,6 @@ class Roff_Condition implements Roff_Template
 
             $line = array_shift($lines);
 
-            $isFirstLine = false;
-
         }
 
         if (!$foundEnd) {
@@ -240,32 +228,6 @@ class Roff_Condition implements Roff_Template
         if (!$processContents) {
             return [];
         }
-
-        /*
-        if ($recurse) {
-            $recurseLines = [];
-            for ($j = 0; $j < count($replacementLines); ++$j) {
-                if (
-                    $request = Request::getLine($replacementLines, $j) and
-                    in_array($request['request'], ['if', 'ie']) and
-                    $result = self::evaluate($request, $replacementLines, $macroArguments) and
-                    $result !== false
-                ) {
-                    if (array_key_exists('lines', $result)) {
-                        $recurseLines = array_merge($recurseLines, $result['lines']);
-                    }
-                    $j = $result['i'];
-                } else {
-                    $recurseLines[] = $replacementLines[$j];
-                }
-            }
-            $replacementLines = $recurseLines;
-        }
-        */
-//
-//        foreach ($replacementLines as $k => $v) {
-//            $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
-//        }
 
         return $replacementLines;
 
