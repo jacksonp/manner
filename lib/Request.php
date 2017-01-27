@@ -174,7 +174,7 @@ class Request
 
                 while (count($macroLines)) {
                     $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
-                    if ($evaluatedMacroLine) {
+                    if (!is_null($evaluatedMacroLine)) {
                         $evaluatedMacroLines[] = $evaluatedMacroLine;
                     }
                     array_shift($macroLines);
