@@ -11,7 +11,7 @@ class Block_fc implements Block_Template
             TextContent::interpretAndAppendText($td, $contents);
             $tr->appendChild($td);
         }
-        $table->appendChild($tr);
+        $table->appendBlockIfHasContent($tr);
     }
 
     static function checkAppend(
@@ -38,10 +38,7 @@ class Block_fc implements Block_Template
             // Don't process next line yet, could be new .fc
             $requestDetails = Request::peepAt($lines[0]);
 
-            if (in_array($requestDetails['name'], ['ta', 'nf'])) {
-                array_shift($lines);
-                continue; // Swallow
-            } elseif (
+            if (
                 $requestDetails['name'] === 'fi' ||
                 ($requestDetails['name'] === 'fc' && $requestDetails['raw_arg_string'] === '')
             ) {
@@ -52,7 +49,9 @@ class Block_fc implements Block_Template
             $nextRequest = Request::getLine($lines);
             array_shift($lines);
 
-            if (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
+            if (in_array($nextRequest['request'], ['ta', 'nf', 'br'])) {
+                continue; // Ignore
+            } elseif (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
                 $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $nextRequest['raw_line']);
                 array_shift($cells);
                 $cells = array_map(function ($contents) use ($pad) {

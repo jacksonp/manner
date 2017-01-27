@@ -104,7 +104,7 @@ class Request
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function peepAt($line): ?array
+    public static function peepAt($line): array
     {
         $return = ['name' => null, 'raw_arg_string' => ''];
         if (preg_match(
