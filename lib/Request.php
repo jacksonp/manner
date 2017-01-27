@@ -119,7 +119,7 @@ class Request
         return $return;
     }
 
-    public static function getLine(array &$lines, &$callerArguments = null): ?array
+    public static function getLine(array &$lines, array &$callerArguments = []): ?array
     {
 
         if (!count($lines)) {
@@ -163,21 +163,24 @@ class Request
             $macros = $man->getMacros();
             if (isset($macros[$return['request']])) {
                 $man->setRegister('.$', count($return['arguments']));
-                if (!is_null($callerArguments)) {
-                    foreach ($return['arguments'] as $k => $v) {
-                        $return['arguments'][$k] = Roff_Macro::applyReplacements($return['arguments'][$k],
-                            $callerArguments);
-                    }
+                foreach ($return['arguments'] as $k => $arg) {
+                    $return['arguments'][$k] = Roff_Macro::applyReplacements($arg, $callerArguments);
                 }
 
                 // Make copies of arrays:
                 $macroLines           = $macros[$return['request']];
                 $macroCallerArguments = $return['arguments'];
-//                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
-                foreach ($macroLines as $k => $l) {
-                    $macroLines[$k] = Roff_Macro::applyReplacements($l, $macroCallerArguments);
+                $evaluatedMacroLines  = [];
+
+                while (count($macroLines)) {
+                    $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
+                    if ($evaluatedMacroLine) {
+                        $evaluatedMacroLines[] = $evaluatedMacroLine;
+                    }
+                    array_shift($macroLines);
                 }
-                array_splice($lines, 0, 1, $macroLines);
+
+                array_splice($lines, 0, 1, $evaluatedMacroLines);
                 return self::getLine($lines, $callerArguments);
             }
 
@@ -189,6 +192,11 @@ class Request
                 }
             }
 
+        }
+
+        // For text, and above call: Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
+        if ($return['raw_line']) {
+            $return['raw_line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments);
         }
 
         return $return;

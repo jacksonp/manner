@@ -23,15 +23,13 @@ class Roff_Condition implements Roff_Template
                 $request['raw_arg_string'], $matches)
             ) {
                 $newLines = self::ifBlock($lines, $matches[3],
-                    self::test($matches[1], $macroArguments) && self::test($matches[2], $macroArguments),
-                    $macroArguments);
+                    self::test($matches[1], $macroArguments) && self::test($matches[2], $macroArguments));
                 array_splice($lines, 0, 0, $newLines);
                 return [];
             }
 
             if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
-                $newLines = self::ifBlock($lines, $matches[2], self::test($matches[1], $macroArguments),
-                    $macroArguments);
+                $newLines = self::ifBlock($lines, $matches[2], self::test($matches[1], $macroArguments));
                 array_splice($lines, 0, 0, $newLines);
                 return [];
             }
@@ -49,9 +47,9 @@ class Roff_Condition implements Roff_Template
 
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
                 $useIf   = self::test($matches[1], $macroArguments);
-                $ifLines = self::ifBlock($lines, $matches[2], $useIf, $macroArguments);
+                $ifLines = self::ifBlock($lines, $matches[2], $useIf);
 //                Roff_Comment::checkLine($lines);
-                $elseLines = self::handleElse($lines, $useIf, $macroArguments);
+                $elseLines = self::handleElse($lines, $useIf);
                 if ($useIf) {
                     array_splice($lines, 0, 0, $ifLines);
                 } else {
@@ -62,7 +60,7 @@ class Roff_Condition implements Roff_Template
 
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['raw_arg_string'], $ifMatches)) {
                 $useIf     = self::test($ifMatches[1], $macroArguments);
-                $elseLines = self::handleElse($lines, $useIf, $macroArguments);
+                $elseLines = self::handleElse($lines, $useIf);
 //                Roff_Comment::checkLine($lines);
                 if ($useIf) {
                     array_unshift($lines, Roff_Macro::applyReplacements($ifMatches[2], $macroArguments));
@@ -73,11 +71,11 @@ class Roff_Condition implements Roff_Template
             }
         }
 
-        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $lines[0]);
+        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $request['raw_line']);
 
     }
 
-    private static function handleElse(array &$lines, bool $useIf, $macroArguments): array
+    private static function handleElse(array &$lines, bool $useIf): array
     {
 
         $request = Request::getLine($lines);
@@ -85,7 +83,7 @@ class Roff_Condition implements Roff_Template
 
         if ($request['request'] === 'el') {
             if (preg_match('~^\\\\{(.*)$~u', $request['raw_arg_string'], $matches)) {
-                return self::ifBlock($lines, $matches[1], !$useIf, $macroArguments);
+                return self::ifBlock($lines, $matches[1], !$useIf);
             }
         } else {
             //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
@@ -96,7 +94,7 @@ class Roff_Condition implements Roff_Template
         if ($useIf) {
             return [];
         } else {
-            return [Roff_Macro::applyReplacements($request['arg_string'], $macroArguments)];
+            return [$request['arg_string']];
         }
 
     }
@@ -192,7 +190,7 @@ class Roff_Condition implements Roff_Template
 
     }
 
-    private static function ifBlock(array &$lines, string $firstLine, bool $processContents, $macroArguments): array
+    private static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
     {
 
         $foundEnd         = false;
@@ -264,10 +262,10 @@ class Roff_Condition implements Roff_Template
             $replacementLines = $recurseLines;
         }
         */
-
-        foreach ($replacementLines as $k => $v) {
-            $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
-        }
+//
+//        foreach ($replacementLines as $k => $v) {
+//            $replacementLines[$k] = Roff_Macro::applyReplacements($v, $macroArguments);
+//        }
 
         return $replacementLines;
 

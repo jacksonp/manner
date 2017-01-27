@@ -10,7 +10,7 @@ class Roff
         $stopOnContent = false
     ): void {
 
-        while ($request = Request::getLine($lines, $callerArguments)) {
+        while ($request = Request::getLine($lines)) {
 
             // \c: Interrupt text processing (groff.7)
             // \fB\fP see KRATool.1
@@ -18,8 +18,6 @@ class Roff
                 array_shift($lines);
                 break;
             }
-
-            $request['raw_line'] = Roff_Macro::applyReplacements($request['raw_line'], $callerArguments);
 
             $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
