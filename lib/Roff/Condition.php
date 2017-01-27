@@ -46,8 +46,8 @@ class Roff_Condition implements Roff_Template
         } elseif ($request['request'] === 'ie') {
 
             if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
-                $useIf   = self::test($matches[1], $macroArguments);
-                $ifLines = self::ifBlock($lines, $matches[2], $useIf);
+                $useIf     = self::test($matches[1], $macroArguments);
+                $ifLines   = self::ifBlock($lines, $matches[2], $useIf);
                 $elseLines = self::handleElse($lines, $useIf);
                 if ($useIf) {
                     array_splice($lines, 0, 0, $ifLines);
@@ -61,7 +61,7 @@ class Roff_Condition implements Roff_Template
                 $useIf     = self::test($ifMatches[1], $macroArguments);
                 $elseLines = self::handleElse($lines, $useIf);
                 if ($useIf) {
-                    array_unshift($lines, Roff_Macro::applyReplacements($ifMatches[2], $macroArguments));
+                    array_unshift($lines, $ifMatches[2]);
                 } else {
                     array_splice($lines, 0, 0, $elseLines);
                 }
@@ -192,8 +192,8 @@ class Roff_Condition implements Roff_Template
 
         $foundEnd         = false;
         $replacementLines = [];
-        $line = $firstLine;
-        $openBraces  = 1;
+        $line             = $firstLine;
+        $openBraces       = 1;
 
         while (true) {
 
