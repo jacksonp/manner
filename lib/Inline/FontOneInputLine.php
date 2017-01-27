@@ -9,12 +9,17 @@ class Inline_FontOneInputLine implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        if (count($request['arguments']) === 0 && count($lines) && Request::getLine($lines)['request'] === 'IP') {
-            return null; // TODO: not sure how to handle this, just skip the font setting for now.
+        if (
+            count($request['arguments']) === 0 &&
+            count($lines) &&
+            (Blocks::lineEndsBlock(Request::getLine($lines), $lines))
+        ) {
+            return null; // Skip
         }
 
         if (count($request['arguments']) === 1 && $request['arguments'][0] === '') {

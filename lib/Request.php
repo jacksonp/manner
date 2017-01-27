@@ -106,8 +106,8 @@ class Request
 
     public static function peepAt($line): array
     {
-        $return = ['name' => null, 'raw_arg_string' => ''];
-        $man = Man::instance();
+        $return       = ['name' => null, 'raw_arg_string' => ''];
+        $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
             '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
@@ -150,7 +150,7 @@ class Request
             return self::getLine($lines, $callerArguments);
         }
 
-        $man = Man::instance();
+        $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
         $lines[0] = Roff_String::substitute($lines[0]);
@@ -233,6 +233,8 @@ class Request
 
         $line = $request['raw_line'];
 
+        $man = Man::instance();
+
         if ($line === '') {
             // empty lines cause a new paragraph, see sar.1
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
@@ -243,7 +245,6 @@ class Request
         } elseif (self::canSkip($line, $request)) {
             $return['class'] = 'Request_Skippable';
         } elseif (!is_null($request['request'])) {
-            $man   = Man::instance();
             $class = $man->getRequestClass($request['request']);
             if ($class !== false) {
                 $return          = $request;
@@ -259,7 +260,7 @@ class Request
             }
         } elseif (Block_TabTable::isStart($lines)) {
             $return['class'] = 'Block_TabTable';
-        } elseif (!preg_match('~^[\.]~u', $line)) {
+        } elseif (!preg_match('~^' . preg_quote($man->control_char, '~') . '~u', $line)) {
             $return['class'] = 'Block_Text';
         } else {
             $return['class'] = 'Request_Skippable';
