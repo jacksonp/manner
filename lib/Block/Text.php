@@ -24,7 +24,8 @@ class Block_Text implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         $line = self::removeTextProcessingInterrupt($lines[0]);
 
@@ -34,8 +35,10 @@ class Block_Text implements Block_Template
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
         if (!$needOneLineOnly) {
-            list ($textParent, $shouldAppend, $needOneLineOnly) = Blocks::getTextParent($parentNode);
+            list (, , $needOneLineOnly) = Blocks::getTextParent($parentNode);
         }
+
+        $man = Man::instance();
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
@@ -46,7 +49,7 @@ class Block_Text implements Block_Template
                 }
                 $nextLine = $lines[0];
                 if (trim($nextLine) === '' ||
-                    in_array(mb_substr($nextLine, 0, 1), ['.', ' ']) ||
+                    in_array(mb_substr($nextLine, 0, 1), [$man->control_char, $man->control_char_2, ' ']) ||
                     mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
                     (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
                 ) {
@@ -55,14 +58,6 @@ class Block_Text implements Block_Template
 
                 array_shift($lines);
 
-//                if (in_array($nextLine, ['\\&', '\\)'])) {
-//                    if (self::$interruptTextProcessing) {
-//                        $line .= ' ';
-//                    }
-//                    continue;
-//                }
-
-//                $line .= (self::$interruptTextProcessing ? '' : ' ') . self::removeTextProcessingInterrupt($nextLine);
                 $line .= ' ' . self::removeTextProcessingInterrupt($nextLine);
             }
         }

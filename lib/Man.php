@@ -49,6 +49,7 @@ class Man
     {
         $this->data     = [
             'control_char' => '.',
+            'control_char_2' => '\'',
             'eq_delim_left' => null,
             'eq_delim_right' => null,
         ];

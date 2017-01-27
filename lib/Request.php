@@ -107,8 +107,10 @@ class Request
     public static function peepAt($line): array
     {
         $return = ['name' => null, 'raw_arg_string' => ''];
+        $man = Man::instance();
+        $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
-            '~^(?:\\\\?' . preg_quote(Man::instance()->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $line, $matches)
         ) {
             $return['name'] = $matches[1];
@@ -119,6 +121,14 @@ class Request
         return $return;
     }
 
+    /**
+     *
+     * NB: we don't skip empty requests as e.g. a "." is needed to detected the end of row formats in a .TS macro.
+     *
+     * @param array $lines
+     * @param array $callerArguments
+     * @return array|null
+     */
     public static function getLine(array &$lines, array &$callerArguments = []): ?array
     {
 
@@ -141,11 +151,12 @@ class Request
         }
 
         $man = Man::instance();
+        $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
         $lines[0] = Roff_String::substitute($lines[0]);
 
         if (preg_match(
-            '~^(?:\\\\?' . preg_quote($man->control_char, '~') . '|\')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
             $lines[0], $matches)
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
