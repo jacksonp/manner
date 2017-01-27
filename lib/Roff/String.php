@@ -11,7 +11,7 @@ class Roff_String implements Roff_Template
 
         $man = Man::instance();
 
-        $known = [];
+        $known        = [];
         $known['C++'] = <<<'ROFF'
 C+ C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
 ROFF;
@@ -72,6 +72,10 @@ ROFF;
         } elseif ($newRequest === 'U' && $requestVal === '\&"') {
             $requestVal = '”';
         }
+
+        // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
+        $requestVal = $man->applyAllReplacements($requestVal);
+        $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
 
         $man->addString($newRequest, $requestVal);
 
