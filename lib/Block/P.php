@@ -9,31 +9,22 @@ class Block_P implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        $dom = $parentNode->ownerDocument;
-
-        $blockLines = [];
-        while ($nextRequest = Request::getLine($lines)) {
-            if (!count($lines) || Blocks::lineEndsBlock($nextRequest, $lines)) {
-                break;
-            }
-            $blockLines[] = array_shift($lines);
-        }
-
-        if (count($blockLines) > 0) {
-            if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
-                Roff::parse($parentNode, $blockLines);
+        if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
+            return null; // Use existing parent node for content that will follow.
+        } else {
+            $p = $parentNode->ownerDocument->createElement('p');
+            if ($parentNode->tagName === 'p') {
+                $p = $parentNode->parentNode->appendChild($p);
             } else {
-                $p = $dom->createElement('p');
-                Roff::parse($p, $blockLines);
-                $parentNode->appendBlockIfHasContent($p);
+                $p = $parentNode->appendChild($p);
             }
+            return $p;
         }
-
-        return null;
 
     }
 

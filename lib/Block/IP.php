@@ -56,9 +56,13 @@ class Block_IP implements Block_Template
             }
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return null;
+        return $parentNode;
 
     }
 
@@ -80,9 +84,13 @@ class Block_IP implements Block_Template
             Block_DataDefinition::append($block, $lines);
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $parentNode->appendBlockIfHasContent($block);
 
-        return null;
+        return $parentNode;
 
     }
 

@@ -25,12 +25,17 @@ class Block_ce implements Block_Template
             $blockLines[] = array_shift($lines);
             $blockLines[] = '.br';
         }
+
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $block = $dom->createElement('div');
         $block->setAttribute('class', 'center');
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return null;
+        return $parentNode;
 
     }
 

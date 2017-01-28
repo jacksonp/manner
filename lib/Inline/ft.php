@@ -88,7 +88,7 @@ class Inline_ft implements Block_Template
         }
 
 
-        return null;
+        return $parentNode;
 
     }
 

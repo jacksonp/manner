@@ -64,6 +64,10 @@ class Block_nf implements Block_Template
             return null;
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         if (count($preLines) > 1) {
             $isTable = true;
             foreach ($preLines as $preLine) {
@@ -128,7 +132,7 @@ class Block_nf implements Block_Template
         BlockPreformatted::handle($pre, $preLines);
         $parentNode->appendBlockIfHasContent($pre);
 
-        return null;
+        return $parentNode;
     }
 
 

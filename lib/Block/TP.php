@@ -68,9 +68,13 @@ class Block_TP implements Block_Template
             }
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         Block_DefinitionList::appendDL($parentNode, $dl);
 
-        return null;
+        return $parentNode;
 
     }
 

@@ -53,6 +53,10 @@ class Block_TabTable implements Block_Template
 
         $dom = $parentNode->ownerDocument;
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $table = $dom->createElement('table');
         $parentNode->appendChild($table);
 
@@ -78,7 +82,7 @@ class Block_TabTable implements Block_Template
 
         }
 
-        return null;
+        return $parentNode;
 
     }
 

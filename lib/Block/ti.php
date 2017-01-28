@@ -37,11 +37,15 @@ class Block_ti implements Block_Template
             }
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $block = $dom->createElement('blockquote');
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return null;
+        return $parentNode;
 
     }
 

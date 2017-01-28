@@ -25,11 +25,15 @@ class Block_Vb implements Block_Template
             }
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $block = $dom->createElement('pre');
         BlockPreformatted::handle($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return null;
+        return $parentNode;
 
     }
 

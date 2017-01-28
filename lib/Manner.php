@@ -4,7 +4,21 @@
 class Manner
 {
 
-    private static function trimBrs(DOMElement $element)
+    static function removeNode(DOMNode $from, $preserveChildren = true)
+    {
+        if ($preserveChildren) {
+            $sibling = $from->firstChild;
+            if ($sibling) { // ->firstChild is null is there isn't one
+                do {
+                    $next = $sibling->nextSibling;
+                    $from->parentNode->insertBefore($sibling, $from);
+                } while ($sibling = $next);
+            }
+        }
+        $from->parentNode->removeChild($from);
+    }
+
+    private static function trimBrs(DOMElement $element): void
     {
 
         while (
@@ -18,6 +32,16 @@ class Manner
         }
 
         while (
+            $nextSibling = $element->nextSibling and
+            (
+                ($nextSibling->nodeType === XML_TEXT_NODE && trim($nextSibling->textContent) === '') ||
+                ($nextSibling->nodeType === XML_ELEMENT_NODE && $nextSibling->tagName === 'br')
+            )
+        ) {
+            $element->parentNode->removeChild($nextSibling);
+        }
+
+        while (
             $lastChild = $element->lastChild and
             (
                 ($lastChild->nodeType === XML_TEXT_NODE && trim($lastChild->textContent) === '') ||
@@ -27,20 +51,32 @@ class Manner
             $element->removeChild($lastChild);
         }
 
+        if ($element->tagName === 'div' && $element->childNodes->length === 1 && $element->firstChild->tagName === 'dl') {
+            self::removeNode($element);
+            return;
+        }
+
+        if (!$element->hasChildNodes()) {
+            $element->parentNode->removeChild($element);
+        }
+
     }
 
     // if we include <pre> below, we won't want to trim leading empty text elements above...
     private static function trimBrsRecursive(DOMElement $element)
     {
-        self::trimBrs($element);
-        foreach ($element->childNodes as $child) {
+        $child = $element->firstChild;
+        while ($child) {
+            $nextChild = $child->nextSibling;
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
                 in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl'])
             ) {
                 self::trimBrsRecursive($child);
             }
+            $child = $nextChild;
         }
+        self::trimBrs($element);
     }
 
     static function roffToDOM(array $fileLines, string $filePath): DOMDocument
@@ -77,6 +113,8 @@ class Manner
         $extra1 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra1);
         $extra2 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra2);
         $extra3 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra3);
+
+//        echo $html; return;
 
         $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars($extra1) . '" data-extra2="' . htmlspecialchars($extra2) . '" data-extra3="' . htmlspecialchars($extra3) . '">';
 

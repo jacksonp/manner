@@ -65,6 +65,10 @@ class Block_RS implements Block_Template
 //            --$i;
 //        }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         if (count($blockLines) > 0) {
             $rsBlock = $dom->createElement('div');
             $rsBlock->setAttribute('class', $className);
@@ -90,7 +94,7 @@ class Block_RS implements Block_Template
             }
         }
 
-        return null;
+        return $parentNode;
 
     }
 

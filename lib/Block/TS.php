@@ -179,9 +179,13 @@ class Block_TS implements Block_Template
 
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $parentNode->appendBlockIfHasContent($table);
 
-        return null;
+        return $parentNode;
 
     }
 
