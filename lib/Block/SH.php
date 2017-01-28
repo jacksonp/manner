@@ -9,7 +9,8 @@ class Block_SH implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -45,16 +46,7 @@ class Block_SH implements Block_Template
 
         $section = $dom->createElement('section');
         $section->appendChild($headingNode);
-
-        while ($parentNode->tagName !== 'body') {
-            if (!$parentNode->parentNode) {
-                throw new Exception('Could not find parent with tag body.');
-            }
-            $parentNode = $parentNode->parentNode;
-        }
-
-        $section = $parentNode->appendChild($section);
-//        Roff::parse($section, $lines);
+        $section = $parentNode->ancestor('body')->appendChild($section);
 
         return $section;
 

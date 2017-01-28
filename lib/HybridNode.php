@@ -31,6 +31,17 @@ class HybridNode extends DOMElement
         return $this->childNodes->length > 1 || ($this->firstChild && $this->firstChild->nodeValue !== '');
     }
 
+    function ancestor (string $tagName) {
+        $node = $this;
+        while ($node->tagName !== $tagName) {
+            if (!$node->parentNode) {
+                throw new Exception('Could not find parent with tag ' . $tagName . '.');
+            }
+            $node = $node->parentNode;
+        }
+        return $node;
+    }
+
     function appendBlockIfHasContent(HybridNode $block)
     {
         if ($block->hasChildNodes()) {

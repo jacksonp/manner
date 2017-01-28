@@ -23,7 +23,7 @@ class Block_SS implements Block_Template
         $headingNode = $dom->createElement('h3');
 
         if (count($request['arguments']) === 0) {
-            if (count($lines) === 0 || self::endSubsection(Request::getLine($lines)['request'])) {
+            if (count($lines) === 0 || self::endSubsection(Request::peepAt($lines[0])['name'])) {
                 return null;
             }
             // Text for subheading is on next line.
@@ -49,20 +49,9 @@ class Block_SS implements Block_Template
         $subsection = $dom->createElement('section');
         $subsection->appendChild($headingNode);
 
-        $blockLines = [];
-        while ($request = Request::getLine($lines)) {
-            if (self::endSubsection($request['request'])) {
-                break;
-            } else {
-                $blockLines[] = array_shift($lines);
-            }
-        }
+        $subsection = $parentNode->ancestor('body')->lastChild->appendChild($subsection);
 
-        Blocks::trim($blockLines);
-        Roff::parse($subsection, $blockLines);
-        $parentNode->appendBlockIfHasContent($subsection);
-
-        return null;
+        return $subsection;
 
     }
 

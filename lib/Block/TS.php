@@ -45,7 +45,8 @@ class Block_TS implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -71,7 +72,7 @@ class Block_TS implements Block_Template
         while ($request = Request::getLine($lines)) {
             array_shift($lines);
 
-            if ($request['request'] === 'TE') {
+            if (in_array($request['request'], ['TE', 'SH', 'SS'])) {
                 break;
             } elseif ($request['raw_line'] === '.T&') {
                 $rowFormats   = self::parseRowFormats($lines);
@@ -146,6 +147,9 @@ class Block_TS implements Block_Template
                             $tBlockLines[] = mb_substr($tdContents, 2);
                         }
                         while (count($lines)) {
+                            if (mb_strpos($lines[0], '.TE') === 0) { // bug in latex2man.1
+                                break;
+                            }
                             $tBlockLine = array_shift($lines);
                             if (mb_strpos($tBlockLine, 'T}') === 0) {
                                 if ($tBlockLine !== 'T}') {

@@ -153,11 +153,12 @@ class Request
         $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
-        $lines[0] = Roff_String::substitute($lines[0]);
+        $lines[0]           = Roff_String::substitute($lines[0]);
+        $return['raw_line'] = Roff_String::substitute($return['raw_line']);
 
         if (preg_match(
             '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
-            $lines[0], $matches)
+            $return['raw_line'], $matches)
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
