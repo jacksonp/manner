@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_Ve implements Block_Template
+class Block_EndPreformatted implements Block_Template
 {
 
     static function checkAppend(

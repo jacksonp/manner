@@ -24,7 +24,6 @@ class Request
                 'ad',
                 'Sh',
                 'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
-                'EE',  // strays
                 // .man page bugs:
                 'sp,',
                 'sp2',
