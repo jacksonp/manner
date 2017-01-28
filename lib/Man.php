@@ -130,6 +130,7 @@ class Man
             'EX' => 'Block_EX',
             'fc' => 'Block_fc',
             'Vb' => 'Block_Vb',
+            'Ve' => 'Block_Ve',
             'ce' => 'Block_ce',
             'nf' => 'Block_nf',
             'TS' => 'Block_TS',

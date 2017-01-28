@@ -26,6 +26,10 @@ class Roff
                 break;
             }
 
+            if (Block_Preformatted::handle($parentNode, $lines, $request)) {
+                continue;
+            }
+
             $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
             if (!is_null($newParent)) {
                 $parentNode = $newParent;

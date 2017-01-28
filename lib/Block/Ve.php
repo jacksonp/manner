@@ -1,7 +1,7 @@
 <?php
 
 
-class Block_Vb implements Block_Template
+class Block_Ve implements Block_Template
 {
 
     static function checkAppend(
@@ -9,19 +9,18 @@ class Block_Vb implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        if ($parentNode->tagName === 'p') {
+        Block_Preformatted::end();
+
+        if ($parentNode->tagName === 'pre') {
             $parentNode = $parentNode->parentNode;
         }
 
-        $pre = $parentNode->ownerDocument->createElement('pre');
-
-        $pre = $parentNode->appendChild($pre);
-
-        return $pre;
+        return $parentNode;
 
     }
 
