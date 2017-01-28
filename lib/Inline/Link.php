@@ -9,7 +9,8 @@ class Inline_Link implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -27,7 +28,6 @@ class Inline_Link implements Block_Template
                 TextContent::interpretAndAppendText($anchor, $request['arguments'][1]);
             } elseif (count($lines)) {
                 $blockLines = [array_shift($lines)];
-                Blocks::trim($blockLines);
                 Roff::parse($anchor, $blockLines);
             }
 
@@ -76,7 +76,6 @@ class Inline_Link implements Block_Template
         }
         if ($href === false) {
             // No valid URL, output any content as text and bail.
-            Blocks::trim($blockLines);
             Roff::parse($parentNode, $blockLines);
             return null;
         }
@@ -84,7 +83,6 @@ class Inline_Link implements Block_Template
         $anchor = $dom->createElement('a');
         $anchor->setAttribute('href', $href);
 
-        Blocks::trim($blockLines);
         if (count($blockLines) === 0) {
             TextContent::interpretAndAppendText($anchor, $url);
         } else {

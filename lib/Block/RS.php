@@ -65,8 +65,6 @@ class Block_RS implements Block_Template
 //            --$i;
 //        }
 
-        Blocks::trim($blockLines);
-
         if (count($blockLines) > 0) {
             $rsBlock = $dom->createElement('div');
             $rsBlock->setAttribute('class', $className);

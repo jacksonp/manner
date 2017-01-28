@@ -53,7 +53,6 @@ class Block_DataDefinition
             }
         }
 
-        Blocks::trim($blockLines);
         Roff::parse($parentNode, $blockLines);
 
     }

@@ -27,7 +27,6 @@ class Block_ce implements Block_Template
         }
         $block = $dom->createElement('div');
         $block->setAttribute('class', 'center');
-        Blocks::trim($blockLines);
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 

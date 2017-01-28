@@ -20,13 +20,6 @@ class Blocks
         'h3',
     ];
 
-    static function trim(array &$lines)
-    {
-        $trimVals = ['', ' ', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp', '.sp .5', '.sp 1', '.sp 0.5'];
-        ArrayHelper::ltrim($lines, $trimVals);
-        ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
-    }
-
     static function lineEndsBlock(array $request, array &$lines)
     {
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {

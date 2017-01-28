@@ -156,7 +156,6 @@ class Block_TS implements Block_Template
                                     $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
                                     $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                 }
-                                Blocks::trim($tBlockLines);
                                 Roff::parse($cell, $tBlockLines);
                                 break;
                             } else {

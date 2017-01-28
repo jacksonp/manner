@@ -60,8 +60,6 @@ class Block_nf implements Block_Template
             $preLines[] = array_shift($lines);
         }
 
-        ArrayHelper::rtrim($preLines, ['.fi', '.ad', '.ad n', '.ad b', '', '.br', '.sp']);
-
         if (count($preLines) === 0) {
             return null;
         }
@@ -98,7 +96,6 @@ class Block_nf implements Block_Template
                             TextContent::interpretAndAppendText($codeNode, $tdLine);
                         } else {
                             $blockLines = [$nextRequest . $tdLine];
-                            Blocks::trim($blockLines);
                             Roff::parse($codeNode, $blockLines);
                         }
                         $tr->appendChild($cell);
@@ -117,7 +114,6 @@ class Block_nf implements Block_Template
             if ($lastRequest['name'] === 'RE') {
                 array_pop($preLines);
                 array_shift($preLines);
-                ArrayHelper::trim($preLines, ['', '.br', '.sp']);
                 $className = 'indent';
                 if (
                     !empty($nextRequest['arg_string']) &&

@@ -78,7 +78,6 @@ class Inline_ft implements Block_Template
             if ($textParent->isOrInTag('pre')) {
                 BlockPreformatted::handle($node, $blockLines);
             } else {
-                Blocks::trim($blockLines);
                 Roff::parse($node, $blockLines);
             }
             $textParent->appendBlockIfHasContent($node);

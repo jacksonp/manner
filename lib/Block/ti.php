@@ -38,7 +38,6 @@ class Block_ti implements Block_Template
         }
 
         $block = $dom->createElement('blockquote');
-        Blocks::trim($blockLines);
         Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 

@@ -23,8 +23,6 @@ class Block_P implements Block_Template
             $blockLines[] = array_shift($lines);
         }
 
-        Blocks::trim($blockLines);
-
         if (count($blockLines) > 0) {
             if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
                 Roff::parse($parentNode, $blockLines);

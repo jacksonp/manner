@@ -4,8 +4,19 @@
 class Manner
 {
 
-    private static function trimTrailingBrs(DOMElement $element)
+    private static function trimBrs(DOMElement $element)
     {
+
+        while (
+            $firstChild = $element->firstChild and
+            (
+                ($firstChild->nodeType === XML_TEXT_NODE && trim($firstChild->textContent) === '') ||
+                ($firstChild->nodeType === XML_ELEMENT_NODE && $firstChild->tagName === 'br')
+            )
+        ) {
+            $element->removeChild($firstChild);
+        }
+
         while (
             $lastChild = $element->lastChild and
             (
@@ -15,17 +26,19 @@ class Manner
         ) {
             $element->removeChild($lastChild);
         }
+
     }
 
-    private static function trimTrailingBrsRecursive(DOMElement $element)
+    // if we include <pre> below, we won't want to trim leading empty text elements above...
+    private static function trimBrsRecursive(DOMElement $element)
     {
-        self::trimTrailingBrs($element);
+        self::trimBrs($element);
         foreach ($element->childNodes as $child) {
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
                 in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl'])
             ) {
-                self::trimTrailingBrsRecursive($child);
+                self::trimBrsRecursive($child);
             }
         }
     }
@@ -44,7 +57,7 @@ class Manner
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
-        self::trimTrailingBrsRecursive($manPageContainer);
+        self::trimBrsRecursive($manPageContainer);
 
         return $dom;
     }
