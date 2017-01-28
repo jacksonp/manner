@@ -27,7 +27,7 @@ class Block_Text implements Block_Template
     ): ?DOMElement
     {
 
-        $line = self::removeTextProcessingInterrupt($lines[0]);
+        $line = self::removeTextProcessingInterrupt($request['raw_line']);
 
         array_shift($lines);
 
