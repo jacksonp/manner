@@ -20,7 +20,6 @@ class Request
             $request['request'] === 'br.' ||
             in_array($request['request'], [
                 'RE',
-                'fi',
                 'ad',
                 'Sh',
                 'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro

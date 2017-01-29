@@ -33,7 +33,8 @@ class Inline_VerticalSpace implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -53,13 +54,9 @@ class Inline_VerticalSpace implements Block_Template
             )
         ) {
 
-            $nextRequest = Request::getLine($lines);
-
-            if (count($lines) && !Blocks::lineEndsBlock($nextRequest, $lines)) {
+            self::addBR($textParent);
+            if (in_array($request['request'], ['sp', 'ne'])) {
                 self::addBR($textParent);
-                if (in_array($request['request'], ['sp', 'ne'])) {
-                    self::addBR($textParent);
-                }
             }
 
             if ($shouldAppend) {

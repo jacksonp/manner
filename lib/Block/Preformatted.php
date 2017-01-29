@@ -7,7 +7,7 @@ class Block_Preformatted
     private static $addIndent = 0;
     private static $nextIndent = 0;
 
-    public static function end()
+    public static function reset()
     {
         self::$addIndent  = 0;
         self::$nextIndent = 0;
@@ -28,6 +28,41 @@ class Block_Preformatted
         }
 
         $line = $request['raw_line'];
+
+        if (!$parentNode->hasChildNodes() && count($lines) > 1 && Block_TabTable::lineContainsTab($line) && Block_TabTable::lineContainsTab($lines[1])) {
+
+            // TODO: add "preformatted" table class instead of code tags in cells?
+            $table = $parentNode->appendChild($dom->createElement('table'));
+            while (Block_TabTable::lineContainsTab($lines[0])) {
+                $line = array_shift($lines);
+                if (in_array($line, ['.br', ''])) {
+                    continue;
+                }
+                $nextRequest = '';
+                // TODO: use Request?
+                if (mb_substr($line, 0, 1) === '.') {
+                    preg_match('~^(\.\w+ )"?(.*?)"?$~u', $line, $matches);
+                    $nextRequest = $matches[1];
+                    $line        = $matches[2];
+                }
+                $tds = preg_split('~\t+~u', $line);
+                $tr  = $table->appendChild($dom->createElement('tr'));
+                foreach ($tds as $tdLine) {
+                    $cell     = $dom->createElement('td');
+                    $codeNode = $cell->appendChild($dom->createElement('code'));
+                    if (empty($nextRequest)) {
+                        TextContent::interpretAndAppendText($codeNode, $tdLine);
+                    } else {
+                        $blockLines = [$nextRequest . $tdLine];
+                        Roff::parse($codeNode, $blockLines);
+                    }
+                    $tr->appendChild($cell);
+                }
+            }
+
+            $parentNode->parentNode->insertBefore($table, $parentNode);
+            return true;
+        }
 
         if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
             array_shift($lines);
@@ -64,7 +99,7 @@ class Block_Preformatted
             array_shift($lines);
             return true;
         } elseif (
-            in_array($request['request'], ['nf', 'RS', 'RE', 'fi', 'ce']) ||
+            in_array($request['request'], ['nf', 'RS', 'RE', 'ce']) ||
             in_array($line, ['\\&', '\\)'])
         ) {
             array_shift($lines);

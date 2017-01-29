@@ -1,6 +1,5 @@
 <?php
 
-
 class Block_EndPreformatted implements Block_Template
 {
 
@@ -14,13 +13,12 @@ class Block_EndPreformatted implements Block_Template
 
         array_shift($lines);
 
-        Block_Preformatted::end();
-
         if ($parentNode->tagName === 'pre') {
-            $parentNode = $parentNode->parentNode;
+            Block_Preformatted::reset();
+            return $parentNode->parentNode;
+        } else {
+            return null;
         }
-
-        return $parentNode;
 
     }
 

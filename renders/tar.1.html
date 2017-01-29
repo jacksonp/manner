@@ -72,22 +72,18 @@
     <h3>Option styles</h3>
     <p>Options to GNU <strong>tar</strong> can be given in three different styles. In <strong>traditional style</strong>, the first argument is a cluster of option letters and all subsequent arguments supply arguments to those options that require them. The arguments are read in the same order as the option letters. Any command line words that remain after all options has been processed are treated as non-optional arguments: file or archive member names.
     <p>For example, the <strong>c</strong> option requires creating the archive, the <strong>v</strong> option requests the verbose operation, and the <strong>f</strong> option takes an argument that sets the name of the archive to operate upon. The following command, written in the traditional style, instructs tar to store all files from the directory <strong>/etc</strong> into the archive file <strong>etc.tar</strong> verbosely listing the files being archived:
-    <pre><strong>tar cfv a.tar /etc</strong>
-</pre>
+    <pre><strong>tar cfv a.tar /etc</strong></pre>
     <p>In <strong>UNIX</strong> or <strong>short-option style</strong>, each option letter is prefixed with a single dash, as in other command line utilities. If an option takes argument, the argument follows it, either as a separate command line word, or immediately following the option. However, if the option takes an <strong>optional</strong> argument, the argument must follow the option letter without any intervening whitespace, as in <strong>-g/tmp/snar.db</strong>.
     <p>Any number of options not taking arguments can be clustered together after a single dash, e.g. <strong>-vkp</strong>. Options that take arguments (whether mandatory or optional), can appear at the end of such a cluster, e.g. <strong>-vkpf a.tar</strong>.
     <p>The example command above written in the <strong>short-option style</strong> could look like:
     <pre><strong>tar -cvf a.tar /etc</strong>
 or
-<strong>tar -c -v -f a.tar /etc</strong>
-</pre>
+<strong>tar -c -v -f a.tar /etc</strong></pre>
     <p>In <strong>GNU</strong> or <strong>long-option style</strong>, each option begins with two dashes and has a meaningful name, consisting of lower-case letters and dashes. When used, the long option can be abbreviated to its initial letters, provided that this does not create ambiguity. Arguments to long options are supplied either as a separate command line word, immediately following the option, or separated from the option by an equals sign with no intervening whitespace. Optional arguments must always use the latter method.
     <p>Here are several ways of writing the example command in this style:
-    <pre><strong>tar --create --file a.tar --verbose /etc</strong>
-</pre>
+    <pre><strong>tar --create --file a.tar --verbose /etc</strong></pre>
     <p>or (abbreviating some options):
-    <pre><strong>tar --cre --file=a.tar --verb /etc</strong>
-</pre>
+    <pre><strong>tar --cre --file=a.tar --verb /etc</strong></pre>
     <p>The options in all three styles can be intermixed, although doing so with old options is not encouraged.
   </section>
   <section>
@@ -267,8 +263,7 @@ or
       <dt><strong>--group-map</strong>=<em>FILE</em>
       <dd>
         <p>Read group translation map from <em>FILE</em>. Empty lines are ignored. Comments are introduced with <strong>#</strong> sign and extend to the end of line. Each non-empty line in <em>FILE</em> defines translation for a single group. It must consist of two fields, delimited by any amount of whitespace:
-        <pre><em>OLDGRP</em> <em>NEWGRP</em>[<strong>:</strong><em>NEWGID</em>]
-</pre>
+        <pre><em>OLDGRP</em> <em>NEWGRP</em>[<strong>:</strong><em>NEWGID</em>]</pre>
         <p><em>OLDGRP</em> is either a valid group name or a GID prefixed with <strong>+</strong>. Unless <em>NEWGID</em> is supplied, <em>NEWGRP</em> must also be either a valid group name or a <strong>+</strong><em>GID</em>. Otherwise, both <em>NEWGRP</em> and <em>NEWGID</em> need not be listed in the system group database.<br>
         <br>
         As a result, each input file with owner group <em>OLDGRP</em> will be stored in archive with owner group <em>NEWGRP</em> and GID <em>NEWGID</em>.
@@ -293,8 +288,7 @@ or
       <dt><strong>--owner-map</strong>=<em>FILE</em>
       <dd>
         <p>Read owner translation map from <em>FILE</em>. Empty lines are ignored. Comments are introduced with <strong>#</strong> sign and extend to the end of line. Each non-empty line in <em>FILE</em> defines translation for a single UID. It must consist of two fields, delimited by any amount of whitespace:
-        <pre><em>OLDUSR</em> <em>NEWUSR</em>[<strong>:</strong><em>NEWUID</em>]
-</pre>
+        <pre><em>OLDUSR</em> <em>NEWUSR</em>[<strong>:</strong><em>NEWUID</em>]</pre>
         <p><em>OLDUSR</em> is either a valid user name or a UID prefixed with <strong>+</strong>. Unless <em>NEWUID</em> is supplied, <em>NEWUSR</em> must also be either a valid user name or a <strong>+</strong><em>UID</em>. Otherwise, both <em>NEWUSR</em> and <em>NEWUID</em> need not be listed in the system user database.<br>
         <br>
         As a result, each input file owned by <em>OLDUSR</em> will be stored in archive with owner name <em>NEWUSR</em> and UID <em>NEWUID</em>.
@@ -345,13 +339,11 @@ or
         <p>Use archive file or device <em>ARCHIVE</em>. If this option is not given, <strong>tar</strong> will first examine the environment variable `TAPE'. If it is set, its value will be used as the archive name. Otherwise, <strong>tar</strong> will assume the compiled-in default. The default value can be inspected either using the <strong>--show-defaults</strong> option, or at the end of the <strong>tar --help</strong> output.<br>
         <br>
         An archive name that has a colon in it specifies a file or device on a remote machine. The part before the colon is taken as the machine name or IP address, and the part after it as the file or device pathname, e.g.:
-        <pre>--file=remotehost:/dev/sr0
-</pre>
+        <pre>--file=remotehost:/dev/sr0</pre>
         <p>An optional username can be prefixed to the hostname, placing a <strong>@</strong> sign between them.<br>
         <br>
         By default, the remote host is accessed via the <strong>rsh</strong>(1) command. Nowadays it is common to use <strong>ssh</strong>(1) instead. You can do so by giving the following command line option:
-        <pre>--rsh-command=/usr/bin/ssh
-</pre>
+        <pre>--rsh-command=/usr/bin/ssh</pre>
         <p>The remote machine should have the <strong>rmt</strong>(8) command installed. If its pathname does not match <strong>tar</strong>'s default, you can inform <strong>tar</strong> about the correct pathname using the <strong>--rmt-command</strong> option.
       <dt><strong>--force-local</strong>
       <dd>Archive file is local even if it has a colon.
@@ -683,8 +675,7 @@ or
             <p>Controls verbose description of failures occurring when trying to run alternative decompressor programs. This warning is disabled by default (unless <strong>--verbose</strong> is used). A common example of what you can get when using this warning is:
             <pre>$ <strong>tar --warning=decompress-program -x -f archive.Z</strong>
 tar (child): cannot run compress: No such file or directory
-tar (child): trying gzip
-</pre>
+tar (child): trying gzip</pre>
             <p>This means that <strong>tar</strong> first tried to decompress <strong>archive.Z</strong> using <strong>compress</strong>, and, when that failed, switched to <strong>gzip</strong>.
           <dt><strong>record-size</strong>
           <dd>"Record size = %lu blocks"

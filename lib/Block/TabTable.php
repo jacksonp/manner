@@ -20,9 +20,9 @@ class Block_TabTable implements Block_Template
             in_array($line, self::specialAcceptableLines);
     }
 
-    private static function lineContainsTab(string $line): bool
+    static function lineContainsTab(string $line): bool
     {
-        // char before tab avoid indented stuff + exclude escaped tabs
+        // first char is NOT a tab + non-white-space before tab avoid indented stuff + exclude escaped tabs
         return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
     }
 
@@ -44,7 +44,8 @@ class Block_TabTable implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         // TODO: see if we can remove this check:
         if (!self::isStart($lines)) {

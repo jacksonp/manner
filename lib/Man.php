@@ -134,6 +134,7 @@ class Man
             'Ve' => 'Block_EndPreformatted',
             'ce' => 'Block_ce',
             'nf' => 'Block_nf',
+            'fi' => 'Block_EndPreformatted',
             'TS' => 'Block_TS',
             'TH' => 'Block_TH',
         ];

@@ -21,14 +21,26 @@ class Manner
     private static function trimBrs(DOMElement $element): void
     {
 
+        $myTag = $element->tagName;
+
         while (
             $firstChild = $element->firstChild and
             (
-                ($firstChild->nodeType === XML_TEXT_NODE && trim($firstChild->textContent) === '') ||
+                ($myTag !== 'pre' && $firstChild->nodeType === XML_TEXT_NODE && trim($firstChild->textContent) === '') ||
                 ($firstChild->nodeType === XML_ELEMENT_NODE && $firstChild->tagName === 'br')
             )
         ) {
             $element->removeChild($firstChild);
+        }
+
+        while (
+            $previousSibling = $element->previousSibling and
+            (
+                ($previousSibling->nodeType === XML_TEXT_NODE && trim($previousSibling->textContent) === '') ||
+                ($previousSibling->nodeType === XML_ELEMENT_NODE && $previousSibling->tagName === 'br')
+            )
+        ) {
+            $element->parentNode->removeChild($previousSibling);
         }
 
         while (
@@ -51,7 +63,7 @@ class Manner
             $element->removeChild($lastChild);
         }
 
-        if ($element->tagName === 'div' && $element->childNodes->length === 1 && $element->firstChild->tagName === 'dl') {
+        if ($myTag === 'div' && $element->childNodes->length === 1 && $element->firstChild->tagName === 'dl') {
             self::removeNode($element);
             return;
         }
@@ -70,7 +82,7 @@ class Manner
             $nextChild = $child->nextSibling;
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
-                in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl'])
+                in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl', 'pre', 'table'])
             ) {
                 self::trimBrsRecursive($child);
             }
