@@ -135,6 +135,7 @@ class Man
             'ce' => 'Block_ce',
             'nf' => 'Block_nf',
             'fi' => 'Block_EndPreformatted',
+            'ad' => 'Block_ad', // like Block_EndPreformatted
             'TS' => 'Block_TS',
             'TH' => 'Block_TH',
         ];
