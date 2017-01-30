@@ -41,7 +41,7 @@ class Request
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:
-        $argString = Replace::preg('~(?<!\\\\)\s+~', ' ', $argString);
+        $argString = Replace::preg('~(?<!\\\\) +~', ' ', $argString);
 
         $argString = ltrim($argString);
 

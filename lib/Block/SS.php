@@ -14,7 +14,8 @@ class Block_SS implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
@@ -49,7 +50,15 @@ class Block_SS implements Block_Template
         $subsection = $dom->createElement('section');
         $subsection->appendChild($headingNode);
 
-        $subsection = $parentNode->ancestor('body')->lastChild->appendChild($subsection);
+        $body = $parentNode->ancestor('body');
+        if ($body->lastChild && $body->lastChild->tagName === 'section') {
+            $subsection = $body->lastChild->appendChild($subsection);
+        } else {
+            // Make a new h2 level container section:
+            $section = $body->appendChild($dom->createElement('section'));
+            $subsection = $section->appendChild($subsection);
+        }
+
 
         return $subsection;
 

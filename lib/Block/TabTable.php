@@ -22,6 +22,7 @@ class Block_TabTable implements Block_Template
 
     static function lineContainsTab(string $line): bool
     {
+        $line = ltrim($line, '\\&');
         // first char is NOT a tab + non-white-space before tab avoid indented stuff + exclude escaped tabs
         return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
     }

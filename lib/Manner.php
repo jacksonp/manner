@@ -4,7 +4,7 @@
 class Manner
 {
 
-    static function removeNode(DOMNode $from, $preserveChildren = true)
+    static function removeNode(DOMNode $from, $preserveChildren = true): void
     {
         if ($preserveChildren) {
             $sibling = $from->firstChild;
@@ -18,7 +18,11 @@ class Manner
         $from->parentNode->removeChild($from);
     }
 
-    private static function trimBrs(DOMElement $element): void
+    /**
+     * @param DOMElement $element
+     * @return DOMElement|null The element we should look at next.
+     */
+    private static function trimBrs(DOMElement $element): ?DOMNode
     {
 
         $myTag = $element->tagName;
@@ -63,32 +67,47 @@ class Manner
             $element->removeChild($lastChild);
         }
 
-        if ($myTag === 'div' && $element->childNodes->length === 1 && $element->firstChild->tagName === 'dl') {
-            self::removeNode($element);
-            return;
+        if ($element->childNodes->length === 1 && $element->firstChild->nodeType === XML_ELEMENT_NODE) {
+
+            $firstChild = $element->firstChild;
+
+            if ($myTag === 'div' && $firstChild->tagName === 'dl') {
+                $nextSibling = $element->nextSibling;
+                self::removeNode($element);
+                return $nextSibling;
+            }
+
+            if ($myTag === 'dd' && $firstChild->tagName === 'p') {
+                self::removeNode($firstChild);
+            }
+
         }
 
-        if (!$element->hasChildNodes()) {
+        if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {
+            $nextSibling = $element->nextSibling;
             $element->parentNode->removeChild($element);
+            return $nextSibling;
         }
+
+        return $element->nextSibling;
 
     }
 
-    // if we include <pre> below, we won't want to trim leading empty text elements above...
-    private static function trimBrsRecursive(DOMElement $element)
+    private static function trimBrsRecursive(DOMElement $element): ?DOMNode
     {
         $child = $element->firstChild;
         while ($child) {
-            $nextChild = $child->nextSibling;
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
-                in_array($child->tagName, ['section', 'p', 'dd', 'dt', 'div', 'blockquote', 'dl', 'pre', 'table'])
+                in_array($child->tagName,
+                    ['section', 'p', 'dl', 'dt', 'dd', 'div', 'blockquote', 'pre', 'table', 'tr', 'th', 'td'])
             ) {
-                self::trimBrsRecursive($child);
+                $child = self::trimBrsRecursive($child);
+            } else {
+                $child = $child->nextSibling;
             }
-            $child = $nextChild;
         }
-        self::trimBrs($element);
+        return self::trimBrs($element);
     }
 
     static function roffToDOM(array $fileLines, string $filePath): DOMDocument

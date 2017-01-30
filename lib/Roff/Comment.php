@@ -23,6 +23,7 @@ class Roff_Comment
         // but this behaviour is consistent with what the man command renders:
         $lines[0] = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $lines[0], -1, $replacements);
         if ($replacements > 0) {
+            $lines[0] = rtrim($lines[0], "\t");
             // Look at this same line again:
             return true;
         }

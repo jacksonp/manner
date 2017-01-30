@@ -32,28 +32,29 @@ class Block_Preformatted
         if (!$parentNode->hasChildNodes() && count($lines) > 1 && Block_TabTable::lineContainsTab($line) && Block_TabTable::lineContainsTab($lines[1])) {
 
             // TODO: add "preformatted" table class instead of code tags in cells?
+            // or don't use fixed width font at all? see https://www.mankier.com/3/SoIndexedShape.3iv#Description
             $table = $parentNode->appendChild($dom->createElement('table'));
-            while (Block_TabTable::lineContainsTab($lines[0])) {
-                $line = array_shift($lines);
-                if (in_array($line, ['.br', ''])) {
-                    continue;
-                }
-                $nextRequest = '';
-                // TODO: use Request?
-                if (mb_substr($line, 0, 1) === '.') {
-                    preg_match('~^(\.\w+ )"?(.*?)"?$~u', $line, $matches);
-                    $nextRequest = $matches[1];
-                    $line        = $matches[2];
+            while (count($lines) && mb_strpos($lines[0], "\t") !== false) {
+                $request = Request::getLine($lines);
+                array_shift($lines);
+//                if (in_array($line, ['.br', ''])) {
+//                    continue;
+//                }
+
+                if (is_null($request['request'])) {
+                    $line = $request['raw_line'];
+                } else {
+                    $line = $request['arguments'][0];
                 }
                 $tds = preg_split('~\t+~u', $line);
                 $tr  = $table->appendChild($dom->createElement('tr'));
                 foreach ($tds as $tdLine) {
                     $cell     = $dom->createElement('td');
                     $codeNode = $cell->appendChild($dom->createElement('code'));
-                    if (empty($nextRequest)) {
+                    if (is_null($request['request'])) {
                         TextContent::interpretAndAppendText($codeNode, $tdLine);
                     } else {
-                        $blockLines = [$nextRequest . $tdLine];
+                        $blockLines = [Man::instance()->control_char . $request['request'] . ' ' . $tdLine];
                         Roff::parse($codeNode, $blockLines);
                     }
                     $tr->appendChild($cell);
