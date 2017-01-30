@@ -118,6 +118,7 @@ class Man
             'SH' => 'Block_SH',
             'SS' => 'Block_SS',
             'SY' => 'Block_SY',
+            'YS' => 'Block_EndPreformatted',
             'P' => 'Block_P',
             'LP' => 'Block_P',
             'PP' => 'Block_P',

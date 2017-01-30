@@ -1,6 +1,5 @@
 <?php
 
-
 class Block_SY implements Block_Template
 {
 
@@ -9,45 +8,28 @@ class Block_SY implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        // These get swallowed:
-        $dom         = $parentNode->ownerDocument;
         $commandName = '';
 
         if (count($request['arguments']) > 0) {
             $commandName = $request['arguments'][0];
         }
 
-        $pre = $dom->createElement('pre');
+        $pre = $parentNode->ownerDocument->createElement('pre');
         if ($commandName !== '') {
             $commandName = trim(TextContent::interpretString($commandName));
             $pre->setAttribute('class', 'synopsis');
             $pre->appendChild(new DOMText($commandName . ' '));
         }
 
-        $preLines = [];
-        while ($request = Request::getLine($lines)) {
-            if ($request['request'] === 'YS') {
-                array_shift($lines);
-                break;
-            } elseif ($request['request'] === 'SY' || Blocks::lineEndsBlock($request, $lines)) {
-                break;
-            }
-            $preLines[] = array_shift($lines);
-        }
+        $pre = $parentNode->appendChild($pre);
 
-        if (count($preLines) === 0) {
-            return null;
-        }
+        return $pre;
 
-        BlockPreformatted::handle($pre, $preLines);
-        $parentNode->appendChild($pre);
-
-        return null;
     }
-
 
 }
