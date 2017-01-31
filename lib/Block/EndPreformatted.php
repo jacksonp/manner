@@ -13,9 +13,9 @@ class Block_EndPreformatted implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->isOrInTag('pre')) {
+        if ($pre = $parentNode->ancestor('pre')) {
             Block_Preformatted::reset();
-            return $parentNode->ancestor('pre')->parentNode;
+            return $pre->parentNode;
         } else {
             return null;
         }

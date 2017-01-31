@@ -4,7 +4,7 @@
 class Inline_VerticalSpace implements Block_Template
 {
 
-    private static function addBR(DOMElement $parentNode)
+    static function addBR(DOMElement $parentNode)
     {
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;

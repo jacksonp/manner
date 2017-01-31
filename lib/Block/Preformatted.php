@@ -72,10 +72,7 @@ class Block_Preformatted
                 self::$addIndent = 0;
             }
             return true;
-        } elseif (in_array(
-            $request['class'],
-            ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Request_Skippable']
-        )) {
+        } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Request_Skippable'])) {
             $request['class']::checkAppend($parentNode, $lines, $request);
             if ($request['class'] !== 'Request_Skippable') {
                 self::endInputLine($parentNode);
@@ -137,7 +134,7 @@ class Block_Preformatted
 
     }
 
-    private static function endInputLine(DOMElement $parentNode)
+    static function endInputLine(DOMElement $parentNode)
     {
         if (TextContent::$continuation || $parentNode->getAttribute('class') === 'synopsis') {
             $parentNode->appendChild(new DOMText(' '));

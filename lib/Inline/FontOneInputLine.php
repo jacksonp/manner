@@ -63,9 +63,18 @@ class Inline_FontOneInputLine implements Block_Template
         }
 
         if (count($request['arguments']) === 0) {
-            Roff::parse($node, $lines, true);
+            $gotContent = Roff::parse($node, $lines, true);
+            if (!$gotContent) {
+                if ($node->tagName !== $parentNode->tagName) {
+                    $parentNode->removeChild($node);
+                }
+                return null;
+            }
         } else {
             TextContent::interpretAndAppendText($node, implode(' ', $request['arguments']));
+            if ($pre = $parentNode->ancestor('pre')) {
+                Block_Preformatted::endInputLine($pre);
+            }
         }
 
         return $parentNode;

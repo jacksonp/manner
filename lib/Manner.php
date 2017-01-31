@@ -81,6 +81,9 @@ class Manner
             $firstChild = $element->firstChild;
 
             if ($myTag === 'div' && $firstChild->tagName === 'dl') {
+                if ($element->getAttribute('class') !== '' && $firstChild->getAttribute('class') === '') {
+                    $firstChild->setAttribute('class', $element->getAttribute('class'));
+                }
                 $nextSibling = $element->nextSibling;
                 self::removeNode($element);
                 return $nextSibling;
@@ -92,10 +95,27 @@ class Manner
 
         }
 
-        if ($myTag === 'div' && $element->parentNode->tagName === 'dd' && $element->getAttribute('class') === 'indent') {
+        if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
             $nextSibling = $element->nextSibling;
             self::removeNode($element);
             return $nextSibling;
+        }
+
+        if ($myTag === 'div' && $element->parentNode->tagName === 'pre') {
+            if ($element->getAttribute('class') !== '' && $element->parentNode->getAttribute('class') === '') {
+                $element->parentNode->setAttribute('class', $element->getAttribute('class'));
+            }
+            $nextSibling = $element->nextSibling;
+            self::removeNode($element);
+            return $nextSibling;
+        }
+
+        if ($myTag === 'div' && $element->getAttribute('class') === 'indent') {
+            if (in_array($element->parentNode->tagName, ['dd'])) {
+                $nextSibling = $element->nextSibling;
+                self::removeNode($element);
+                return $nextSibling;
+            }
         }
 
         if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {
@@ -145,6 +165,19 @@ class Manner
                 return $nextSibling;
             }
 
+            while ($element->lastChild && $element->lastChild->tagName === 'dt') {
+                $p     = $element->ownerDocument->createElement('p');
+                $class = $element->getAttribute('class');
+                if (!in_array($class, ['', 'indent'])) {
+                    $p->setAttribute('class', $class);
+                }
+                $strayDT = $element->lastChild;
+                while ($strayDT->firstChild) {
+                    $p->appendChild($strayDT->firstChild);
+                }
+                $element->removeChild($strayDT);
+                $element->parentNode->insertBefore($p, $element->nextSibling);
+            }
 
         }
 

@@ -16,8 +16,6 @@ class Block_RS implements Block_Template
 
         $dom = $parentNode->ownerDocument;
 
-        $parentNode = Blocks::getBlockContainerParent($parentNode);
-
 //        $thisIndent = '';
         $className = 'indent';
         if (count($request['arguments']) > 0) {
@@ -27,6 +25,12 @@ class Block_RS implements Block_Template
             }
         }
 
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
+
+        if ($className === 'indent' && $parentNode->tagName === 'div' && $parentNode->getAttribute('class') === 'indent') {
+            array_unshift($lines, '.br');
+            return null;
+        }
 
         $div = $dom->createElement('div');
         $div->setAttribute('class', $className);

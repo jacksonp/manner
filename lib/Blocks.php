@@ -37,10 +37,11 @@ class Blocks
 
     static function getBlockContainerParent(DOMElement $parentNode, bool $superOnly = false): DOMElement
     {
-        $blockTags = ['body', 'div', 'section'];
+        $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
             $blockTags[] = 'dd';
             $blockTags[] = 'blockquote';
+            $blockTags[] = 'th';
             $blockTags[] = 'td';
         }
 

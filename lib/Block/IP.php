@@ -50,8 +50,13 @@ class Block_IP implements Block_Template
             return $dd;
         } else {
             $p = $dom->createElement('p');
-            if ($parentNode->tagName !== 'dd') {
-                $p->setAttribute('class', 'indent');
+            if (count($request['arguments']) > 1 && $request['arguments'][1] === '0') {
+                // Resetting indentation, exit dd
+                $parentNode = Blocks::getBlockContainerParent($parentNode, true);
+            } else {
+                if ($parentNode->tagName !== 'dd') {
+                    $p->setAttribute('class', 'indent');
+                }
             }
             $p = $parentNode->appendChild($p);
             return $p;
