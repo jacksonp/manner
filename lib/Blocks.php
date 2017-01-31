@@ -1,6 +1,5 @@
 <?php
 
-
 class Blocks
 {
 
@@ -20,53 +19,54 @@ class Blocks
         'h3',
     ];
 
+    const INLINE_ELEMENTS = [
+        'em',
+        'strong',
+        'small',
+        'code',
+        'span'
+    ];
+
+    static function getParentForText(DOMElement $parentNode): DOMElement
+    {
+        if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {
+            $parentNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('p'));
+        }
+        return $parentNode;
+    }
+
+    static function getBlockContainerParent(DOMElement $parentNode, bool $superOnly = false): DOMElement
+    {
+        $blockTags = ['body', 'div', 'section'];
+        if (!$superOnly) {
+            $blockTags[] = 'dd';
+            $blockTags[] = 'blockquote';
+            $blockTags[] = 'td';
+        }
+
+        while (!in_array($parentNode->tagName, $blockTags)) {
+            $parentNode = $parentNode->parentNode;
+            if (!$parentNode) {
+                throw new Exception('No more parents.');
+            }
+        }
+        return $parentNode;
+    }
+
+    static function getNonInlineParent(DOMElement $parentNode): DOMElement
+    {
+        while (in_array($parentNode->tagName, self::INLINE_ELEMENTS)) {
+            $parentNode = $parentNode->parentNode;
+        }
+        return $parentNode;
+    }
+
     static function lineEndsBlock(array $request, array &$lines)
     {
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
         return Block_TabTable::isStart($lines);
-    }
-
-    static function _maybeLastEmptyChildWaitingForText(DOMElement $parentNode)
-    {
-        if (
-            $parentNode->lastChild &&
-            $parentNode->lastChild->nodeType === XML_ELEMENT_NODE &&
-            in_array($parentNode->lastChild->tagName, ['em', 'strong', 'small']) &&
-            $parentNode->lastChild->textContent === ''
-        ) {
-            if ($parentNode->lastChild->lastChild &&
-                $parentNode->lastChild->lastChild->nodeType === XML_ELEMENT_NODE &&
-                in_array($parentNode->lastChild->lastChild->tagName, ['em', 'strong', 'small'])
-            ) {
-                // bash.1:
-                // .SM
-                // .B
-                // ARITHMETIC EVALUATION
-                return [$parentNode->lastChild->lastChild, false, true];
-            } else {
-                return [$parentNode->lastChild, false, true];
-            }
-        } else {
-            return [$parentNode, false, $parentNode->tagName === 'dt'];
-        }
-    }
-
-    static function getTextParent(DOMElement $parentNode)
-    {
-        if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
-            return self::_maybeLastEmptyChildWaitingForText($parentNode);
-        } else {
-            $parentNodeLastBlock = $parentNode->getLastBlock();
-            if (is_null($parentNodeLastBlock) ||
-                in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
-            ) {
-                return [$parentNode->ownerDocument->createElement('p'), true, false];
-            } else {
-                return self::_maybeLastEmptyChildWaitingForText($parentNodeLastBlock);
-            }
-        }
     }
 
 }

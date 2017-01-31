@@ -14,9 +14,7 @@ class Block_EX implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
+        $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
         $pre = $parentNode->ownerDocument->createElement('pre');
 

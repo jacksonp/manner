@@ -6,16 +6,19 @@ class Block_Text implements Block_Template
 
     private static $interruptTextProcessing = false;
 
-    static function addSpace(DOMElement $parentNode, DOMElement $textParent, bool $shouldAppend)
+    static function addSpace(DOMElement $parentNode)
     {
+
         if (
-            $parentNode->tagName !== 'pre' &&
-            (!$textParent->lastChild || $textParent->lastChild->nodeType !== XML_ELEMENT_NODE || $textParent->lastChild->tagName !== 'br') &&
-            !$shouldAppend &&
-            !TextContent::$continuation &&
-            $textParent->hasContent()
+            !$parentNode->isOrInTag('pre') &&
+            $parentNode->hasContent() &&
+            (
+                $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
+                in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
+            ) &&
+            !TextContent::$continuation
         ) {
-            $textParent->appendChild(new DOMText(' '));
+            $parentNode->appendChild(new DOMText(' '));
         }
     }
 
@@ -31,12 +34,10 @@ class Block_Text implements Block_Template
 
         array_shift($lines);
 
+        $parentNode = Blocks::getParentForText($parentNode);
+
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
-
-        if (!$needOneLineOnly) {
-            list (, , $needOneLineOnly) = Blocks::getTextParent($parentNode);
-        }
 
         $man = Man::instance();
 
@@ -70,7 +71,7 @@ class Block_Text implements Block_Template
 
         self::addLine($parentNode, $line, $implicitBreak);
 
-        return null;
+        return $parentNode;
 
     }
 
@@ -84,19 +85,13 @@ class Block_Text implements Block_Template
     static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
     {
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-
         if ($prefixBR) {
-            self::addImplicitBreak($textParent);
+            self::addImplicitBreak($parentNode);
         }
 
-        self::addSpace($parentNode, $textParent, $shouldAppend);
+        self::addSpace($parentNode);
 
-        TextContent::interpretAndAppendText($textParent, $line);
-
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
+        TextContent::interpretAndAppendText($parentNode, $line);
 
     }
 

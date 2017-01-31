@@ -1,6 +1,7 @@
 <?php
 
-class Block_EndPreformatted implements Block_Template
+
+class Block_RE implements Block_Template
 {
 
     static function checkAppend(
@@ -13,13 +14,13 @@ class Block_EndPreformatted implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->isOrInTag('pre')) {
-            Block_Preformatted::reset();
-            return $parentNode->ancestor('pre')->parentNode;
+        if ($parentNode->isOrInTag('div')) {
+            return $parentNode->ancestor('div')->parentNode;
         } else {
             return null;
         }
 
     }
+
 
 }

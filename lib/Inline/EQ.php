@@ -48,14 +48,8 @@ class Inline_EQ implements Block_Template
         }
 
         if (count($eqLines) > 0) {
-            list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
-            self::appendMath($textParent, $eqLines);
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
+            Block_Text::addSpace($parentNode);
+            self::appendMath($parentNode, $eqLines);
         }
 
         return null;

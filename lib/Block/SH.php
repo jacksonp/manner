@@ -24,7 +24,7 @@ class Block_SH implements Block_Template
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
-            if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
+            if (in_array(Request::peepAt($sectionHeading)['name'], Block_Section::skipSectionNameRequests)) {
                 return null;
             }
             $sectionHeading = [$sectionHeading];

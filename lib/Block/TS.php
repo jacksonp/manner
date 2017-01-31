@@ -50,6 +50,8 @@ class Block_TS implements Block_Template
 
         array_shift($lines);
 
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
+
         $dom = $parentNode->ownerDocument;
 
         $columnSeparator = "\t";
@@ -68,6 +70,8 @@ class Block_TS implements Block_Template
         $tableRowNum  = 0;
         $formatRowNum = 0;
         $tr           = false;
+
+        $table = $parentNode->appendChild($table);
 
         while ($request = Request::getLine($lines)) {
             array_shift($lines);
@@ -90,6 +94,7 @@ class Block_TS implements Block_Template
                 // Do nothing for now - see sox.1
             } else {
                 $tr           = $dom->createElement('tr');
+                $tr           = $table->appendChild($tr);
                 $cols         = explode($columnSeparator, $request['raw_line']);
                 $totalColSpan = 0;
 
@@ -135,6 +140,8 @@ class Block_TS implements Block_Template
                     }
                     $totalColSpan += $colspan;
 
+                    $cell = $tr->appendChild($cell);
+
                     $tdContents = $cols[$j];
 
                     if ($tdContents === '_') {
@@ -170,20 +177,12 @@ class Block_TS implements Block_Template
                             TextContent::interpretAndAppendText($cell, $tdContents);
                         }
                     }
-                    $tr->appendChild($cell);
                 }
                 ++$tableRowNum;
                 ++$formatRowNum;
-                $table->appendBlockIfHasContent($tr);
             }
 
         }
-
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
-
-        $parentNode->appendBlockIfHasContent($table);
 
         return $parentNode;
 

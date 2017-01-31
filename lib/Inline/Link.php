@@ -14,7 +14,7 @@ class Inline_Link implements Block_Template
 
         array_shift($lines);
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+        $parentNode = Blocks::getParentForText($parentNode);
 
         if ($request['request'] === 'URL') {
             $dom = $parentNode->ownerDocument;
@@ -35,19 +35,13 @@ class Inline_Link implements Block_Template
                 $anchor->appendChild(new DOMText($request['arguments'][0]));
             }
 
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
-            $textParent->appendChild($anchor);
+            Block_Text::addSpace($parentNode);
+            $parentNode->appendChild($anchor);
             if (count($request['arguments']) === 3) {
-                $textParent->appendChild(new DOMText($request['arguments'][2]));
+                $parentNode->appendChild(new DOMText($request['arguments'][2]));
             }
 
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
-
-            return null;
+            return $parentNode;
         }
 
         $dom         = $parentNode->ownerDocument;
@@ -77,7 +71,7 @@ class Inline_Link implements Block_Template
         if ($href === false) {
             // No valid URL, output any content as text and bail.
             Roff::parse($parentNode, $blockLines);
-            return null;
+            return $parentNode;
         }
 
         $anchor = $dom->createElement('a');
@@ -89,20 +83,14 @@ class Inline_Link implements Block_Template
             Roff::parse($anchor, $blockLines);
         }
         if ($anchor->hasContent()) {
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
-            $textParent->appendChild($anchor);
+            Block_Text::addSpace($parentNode);
+            $parentNode->appendChild($anchor);
         }
         if ($punctuation !== '') {
-            $textParent->appendChild(new DOMText($punctuation));
+            $parentNode->appendChild(new DOMText($punctuation));
         }
 
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
-
-        return null;
+        return $parentNode;
 
     }
 

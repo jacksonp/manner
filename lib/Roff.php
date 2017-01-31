@@ -8,7 +8,7 @@ class Roff
         DOMElement $parentNode,
         array &$lines,
         $stopOnContent = false
-    ): void {
+    ): bool {
 
         while ($request = Request::getLine($lines)) {
 
@@ -16,14 +16,14 @@ class Roff
             // \fB\fP see KRATool.1
             if ($stopOnContent && in_array($request['raw_line'], ['\\c', '\\fB\\fP'])) {
                 array_shift($lines);
-                break;
+                return true;
             }
 
             $request = Request::getNextClass($lines);
 //            var_dump($request['class']);
 
-            if ($stopOnContent && in_array($request['request'], ['SH', 'SS'])) {
-                break;
+            if ($stopOnContent && in_array($request['request'], ['SH', 'SS', 'TP', 'br', 'sp', 'ne', 'PP', 'RS', 'P', 'LP'])) {
+                return false;
             }
 
             if (Block_Preformatted::handle($parentNode, $lines, $request)) {
@@ -36,10 +36,12 @@ class Roff
             }
 
             if ($stopOnContent && ($request['class'] === 'Block_Text' || $parentNode->textContent !== '')) {
-                break;
+                return true;
             }
 
         }
+
+        return !$stopOnContent;
 
     }
 

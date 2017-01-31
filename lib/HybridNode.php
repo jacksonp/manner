@@ -35,9 +35,12 @@ class HybridNode extends DOMElement
         $node = $this;
         while ($node->tagName !== $tagName) {
             if (!$node->parentNode) {
-                throw new Exception('Could not find parent with tag ' . $tagName . '.');
+                return null;
             }
             $node = $node->parentNode;
+            if ($node->nodeType === XML_DOCUMENT_NODE) {
+                return null;
+            }
         }
         return $node;
     }

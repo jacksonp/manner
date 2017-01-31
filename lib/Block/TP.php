@@ -9,7 +9,8 @@ class Block_TP implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
@@ -18,63 +19,57 @@ class Block_TP implements Block_Template
             return null;
         }
 
+        array_shift($lines);
+
         $dom = $parentNode->ownerDocument;
 
-        $dl          = $dom->createElement('dl');
-        $firstIndent = null;
+        $blockContainerParentNode = Blocks::getBlockContainerParent($parentNode);
 
-        while ($request = Request::getLine($lines)) {
+        $indentVal = null;
+        if (
+            count($request['arguments']) &&
+            $normalizedVal = Roff_Unit::normalize($request['arguments'][0]) // note this filters out 0s
+        ) {
+            $indentVal = $normalizedVal;
+        }
 
-            if (in_array($request['request'], ['TP', 'TQ'])) {
+        $dl = Block_DefinitionList::getParentDL($blockContainerParentNode);
 
+        if (is_null($dl)) {
+            $dl = $dom->createElement('dl');
+            $dl = $blockContainerParentNode->appendChild($dl);
+            if ($indentVal) {
+                $dl->setAttribute('class', 'indent-' . $indentVal);
+            }
+        }
+
+        $dt         = $dom->createElement('dt');
+        $dt         = $dl->appendChild($dt);
+        $gotContent = Roff::parse($dt, $lines, true);
+        if (!$gotContent) {
+            $dl->removeChild($dt);
+            return null;
+        }
+
+        while (count($lines)) {
+            $request = Request::getLine($lines);
+            if ($request['request'] === 'TQ') {
                 array_shift($lines);
-
-                if (count($lines) === 0 || in_array(Request::getLine($lines)['request'], ['TP', 'TQ', 'IP', 'SH'])) {
-                    // a bug in the man page, just skip:
-                    continue;
+                $dt = $dom->createElement('dt');
+                $dl->appendChild($dt);
+                $gotContent = Roff::parse($dt, $lines, true);
+                if (!$gotContent) {
+                    $dl->removeChild($dt);
                 }
-
-                if (is_null($firstIndent) && count($request['arguments']) > 0) {
-                    $firstIndent = 'indent';
-                    if ($indentVal = Roff_Unit::normalize($request['arguments'][0])) { // note: filters out 0s
-                        $firstIndent = 'indent-' . $indentVal;
-                        $dl->setAttribute('class', $firstIndent);
-                    }
-                }
-
-                $dt         = $dom->createElement('dt');
-                Roff::parse($dt, $lines, true);
-
-                $dl->appendBlockIfHasContent($dt);
-
-                while (count($lines)) {
-                    $request = Request::getLine($lines);
-                    if ($request['request'] === 'TQ') {
-                        array_shift($lines);
-                        $dt = $dom->createElement('dt');
-                        Roff::parse($dt, $lines, true);
-                        $dl->appendBlockIfHasContent($dt);
-                    } else {
-                        break;
-                    }
-                }
-
-                $dd = $dom->createElement('dd');
-                Block_DataDefinition::append($dd, $lines);
-                $dl->appendBlockIfHasContent($dd);
-
             } else {
                 break;
             }
         }
 
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
+        $dd = $dom->createElement('dd');
+        $dd = $dl->appendChild($dd);
 
-        Block_DefinitionList::appendDL($parentNode, $dl);
-
-        return $parentNode;
+        return $dd;
 
     }
 

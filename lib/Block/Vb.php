@@ -9,13 +9,12 @@ class Block_Vb implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         $pre = $parentNode->ownerDocument->createElement('pre');
 

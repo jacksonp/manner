@@ -17,12 +17,12 @@ class Block_P implements Block_Template
         if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
             return null; // Use existing parent node for content that will follow.
         } else {
-            $p = $parentNode->ownerDocument->createElement('p');
-            if ($parentNode->tagName === 'p') {
-                $p = $parentNode->parentNode->appendChild($p);
-            } else {
-                $p = $parentNode->appendChild($p);
+            $parentNode = Blocks::getBlockContainerParent($parentNode);
+            if ($parentNode->tagName === 'dd') {
+                $parentNode = $parentNode->parentNode->parentNode;
             }
+            $p = $parentNode->ownerDocument->createElement('p');
+            $p = $parentNode->appendChild($p);
             return $p;
         }
 

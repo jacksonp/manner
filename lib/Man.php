@@ -128,6 +128,7 @@ class Man
             'TQ' => 'Block_TP',
             'ti' => 'Block_ti',
             'RS' => 'Block_RS',
+            'RE' => 'Block_RE',
             'EX' => 'Block_EX',
             'EE' => 'Block_EndPreformatted',
             'fc' => 'Block_fc',

@@ -29,7 +29,7 @@ class Block_SS implements Block_Template
             }
             // Text for subheading is on next line.
             $sectionHeading = array_shift($lines);
-            if (in_array($sectionHeading, Block_Section::skipSectionNameLines)) {
+            if (in_array(Request::peepAt($sectionHeading)['name'], Block_Section::skipSectionNameRequests)) {
                 // Skip $line to work around bugs in man pages, e.g. xorrecord.1, bdh.3
                 return null;
             }
@@ -55,8 +55,8 @@ class Block_SS implements Block_Template
             $subsection = $body->lastChild->appendChild($subsection);
         } else {
             // Make a new h2 level container section:
-            $section = $body->appendChild($dom->createElement('section'));
-            $subsection = $section->appendChild($subsection);
+            $section    = $body->appendChild($dom->createElement('section'));
+            $subsection = $body->appendChild($subsection);
         }
 
 

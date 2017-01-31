@@ -27,6 +27,15 @@ class Manner
 
         $myTag = $element->tagName;
 
+        if ($myTag === 'pre') {
+            if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
+                $codeNode = $element->lastChild;
+                if ($codeNode->lastChild->nodeType === XML_TEXT_NODE) {
+                    $codeNode->lastChild->textContent = preg_replace('~\n+$~', '', $codeNode->lastChild->textContent);
+                }
+            }
+        }
+
         while (
             $firstChild = $element->firstChild and
             (
@@ -83,10 +92,60 @@ class Manner
 
         }
 
+        if ($myTag === 'div' && $element->parentNode->tagName === 'dd' && $element->getAttribute('class') === 'indent') {
+            $nextSibling = $element->nextSibling;
+            self::removeNode($element);
+            return $nextSibling;
+        }
+
         if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {
             $nextSibling = $element->nextSibling;
             $element->parentNode->removeChild($element);
             return $nextSibling;
+        }
+
+        if ($myTag === 'dl') {
+            if ($element->previousSibling && $element->previousSibling->nodeType === XML_ELEMENT_NODE && $element->previousSibling->tagName === 'dl') {
+                if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) { // matching indent level
+                    $nextSibling = $element->nextSibling;
+                    while ($element->firstChild) {
+                        $element->previousSibling->appendChild($element->firstChild);
+                    }
+                    $element->parentNode->removeChild($element);
+                    return $nextSibling;
+                }
+            }
+
+
+            $everyChildIsDT = true;
+            for ($j = 0; $j < $element->childNodes->length; ++$j) {
+                $elementChild = $element->childNodes->item($j);
+                if ($elementChild->tagName !== 'dt') {
+                    $everyChildIsDT = false;
+                    break;
+                }
+            }
+
+            if ($everyChildIsDT) {
+                for ($j = 0; $j < $element->childNodes->length; ++$j) {
+                    $strayDT = $element->childNodes->item($j);
+                    $p       = $element->ownerDocument->createElement('p');
+                    $class   = $element->getAttribute('class');
+                    if (!in_array($class, ['', 'indent'])) {
+                        $p->setAttribute('class', $class);
+                    }
+                    while ($strayDT->firstChild) {
+                        $p->appendChild($strayDT->firstChild);
+                    }
+                    $element->parentNode->insertBefore($p, $element);
+
+                }
+                $nextSibling = $element->nextSibling;
+                $element->parentNode->removeChild($element);
+                return $nextSibling;
+            }
+
+
         }
 
         return $element->nextSibling;
@@ -103,6 +162,12 @@ class Manner
                     ['section', 'p', 'dl', 'dt', 'dd', 'div', 'blockquote', 'pre', 'table', 'tr', 'th', 'td'])
             ) {
                 $child = self::trimBrsRecursive($child);
+            } elseif ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName,
+                    Blocks::INLINE_ELEMENTS) && !$child->hasChildNodes()
+            ) {
+                $nextSibling = $child->nextSibling;
+                $child->parentNode->removeChild($child);
+                $child = $nextSibling;
             } else {
                 $child = $child->nextSibling;
             }

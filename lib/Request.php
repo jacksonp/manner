@@ -19,7 +19,6 @@ class Request
         return
             $request['request'] === 'br.' ||
             in_array($request['request'], [
-                'RE',
                 'Sh',
                 'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
                 // .man page bugs:
@@ -211,7 +210,7 @@ class Request
         return $return;
     }
 
-    public static function getNextClass(array &$lines): array
+    public static function getNextClass(array &$lines): ?array
     {
 
         $request = self::getLine($lines);

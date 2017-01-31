@@ -26,60 +26,49 @@ class Inline_FontOneInputLine implements Block_Template
             return null; // bug in man page, see e.g. basic_ldap_auth.8: .B "\"uid\=%s\""
         }
 
+        $parentNode = Blocks::getParentForText($parentNode);
+        Block_Text::addSpace($parentNode);
         $dom = $parentNode->ownerDocument;
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+        $node = $parentNode;
 
         switch ($request['request']) {
             case 'R':
-                $appendToParentNode = false;
-                $innerNode          = $textParent;
                 break;
             case 'I':
-                $appendToParentNode = $dom->createElement('em');
-                $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('em')) {
+                    $node = $parentNode->appendChild($dom->createElement('em'));
+                }
                 break;
             case 'B':
-                if ($textParent->tagName === 'strong') {
-                    $appendToParentNode = false;
-                    $innerNode          = $textParent;
-                } else {
-                    $appendToParentNode = $dom->createElement('strong');
-                    $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('strong')) {
+                    $node = $parentNode->appendChild($dom->createElement('strong'));
                 }
                 break;
             case 'SB':
-                $appendToParentNode = $dom->createElement('small');
-                $innerNode          = $appendToParentNode->appendChild($dom->createElement('strong'));
+                if (!$parentNode->isOrInTag('strong')) {
+                    $node = $parentNode->appendChild($dom->createElement('strong'));
+                }
+                if (!$parentNode->isOrInTag('small')) {
+                    $node = $parentNode->appendChild($dom->createElement('small'));
+                }
                 break;
             case 'SM':
-                $appendToParentNode = $dom->createElement('small');
-                $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('small')) {
+                    $node = $parentNode->appendChild($dom->createElement('small'));
+                }
                 break;
             default:
                 throw new Exception('switch is exhaustive.');
         }
 
-        Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
-
         if (count($request['arguments']) === 0) {
-            if (count($lines) === 0) {
-                return null;
-            }
-            Roff::parse($innerNode, $lines, true);
+            Roff::parse($node, $lines, true);
         } else {
-            TextContent::interpretAndAppendText($innerNode, implode(' ', $request['arguments']));
+            TextContent::interpretAndAppendText($node, implode(' ', $request['arguments']));
         }
 
-        if ($appendToParentNode) {
-            $textParent->appendChild($appendToParentNode);
-        }
-
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
-
-        return null;
+        return $parentNode;
 
     }
 

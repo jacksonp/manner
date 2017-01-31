@@ -4,18 +4,6 @@
 class Block_nf implements Block_Template
 {
 
-    private static function endBlock($request)
-    {
-        if (in_array($request['request'], ['fi'])) {
-            return true;
-        }
-        if ($request['request'] === 'ad' && in_array($request['arg_string'], ['', 'n', 'b'])) {
-            return true;
-        }
-
-        return false;
-    }
-
     static function checkAppend(
         HybridNode $parentNode,
         array &$lines,
@@ -26,9 +14,7 @@ class Block_nf implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         $pre = $parentNode->ownerDocument->createElement('pre');
 

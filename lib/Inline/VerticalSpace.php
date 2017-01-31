@@ -38,30 +38,16 @@ class Inline_VerticalSpace implements Block_Template
 
         array_shift($lines);
 
-        if (!count($lines)) {
-            return null;
-        }
-
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-
-        if (!in_array($textParent->tagName, ['p', 'blockquote', 'dt', 'td', 'th', 'pre', 'h2', 'h3', 'code']) ||
-            (
-                $textParent->hasChildNodes() &&
-                (
-                    !($textParent->lastChild instanceof DOMElement) ||
-                    $textParent->lastChild->tagName !== 'pre'
-                )
-            )
+        if (
+            !($parentNode->lastChild instanceof DOMElement) ||
+            $parentNode->lastChild->tagName !== 'pre'
         ) {
 
-            self::addBR($textParent);
+            self::addBR($parentNode);
             if (in_array($request['request'], ['sp', 'ne'])) {
-                self::addBR($textParent);
+                self::addBR($parentNode);
             }
 
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
         }
 
         return null;

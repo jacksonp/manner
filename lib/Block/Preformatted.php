@@ -16,7 +16,7 @@ class Block_Preformatted
     public static function handle(HybridNode $parentNode, array &$lines, array $request): bool
     {
 
-        if ($parentNode->tagName !== 'pre') {
+        if (!$parentNode->isOrInTag('pre')) {
             return false;
         }
 
@@ -74,7 +74,7 @@ class Block_Preformatted
             return true;
         } elseif (in_array(
             $request['class'],
-            ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable']
+            ['Inline_FontOneInputLine', 'Inline_AlternatingFont', 'Request_Skippable']
         )) {
             $request['class']::checkAppend($parentNode, $lines, $request);
             if ($request['class'] !== 'Request_Skippable') {
@@ -100,7 +100,7 @@ class Block_Preformatted
             array_shift($lines);
             return true;
         } elseif (
-            in_array($request['request'], ['nf', 'RS', 'RE', 'ce']) ||
+            in_array($request['request'], ['ce']) ||
             in_array($line, ['\\&', '\\)'])
         ) {
             array_shift($lines);
