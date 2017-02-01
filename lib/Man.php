@@ -143,7 +143,7 @@ class Man
         ];
 
         $this->inlineClasses = [
-            'URL' => 'Inline_Link',
+            'URL' => 'Inline_URL',
             'UR' => 'Inline_Link',
             'MT' => 'Inline_Link',
             'R' => 'Inline_FontOneInputLine',
