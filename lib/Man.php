@@ -115,8 +115,8 @@ class Man
         ];
 
         $this->blockClasses = [
-            'SH' => 'Block_SH',
-            'SS' => 'Block_SS',
+            'SH' => 'Block_Section',
+            'SS' => 'Block_Section',
             'SY' => 'Block_SY',
             'YS' => 'Block_EndPreformatted',
             'P' => 'Block_P',
