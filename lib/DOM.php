@@ -19,7 +19,7 @@ class DOM
         }
     }
 
-    private static function removeNode(DOMNode $from, $preserveChildren = true): void
+    static function removeNode(DOMNode $from, $preserveChildren = true): void
     {
         if ($preserveChildren) {
             $sibling = $from->firstChild;

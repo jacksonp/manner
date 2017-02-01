@@ -20,6 +20,7 @@ class Blocks
     ];
 
     const INLINE_ELEMENTS = [
+        'a',
         'em',
         'strong',
         'small',
