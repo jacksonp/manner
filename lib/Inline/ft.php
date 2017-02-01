@@ -1,6 +1,5 @@
 <?php
 
-
 class Inline_ft implements Block_Template
 {
 
@@ -74,56 +73,6 @@ class Inline_ft implements Block_Template
         $node = $parentNode->appendChild($node);
 
         return $node;
-        /*
-
-        $inPre = $parentNode->isOrInTag('pre');
-
-        if ($inPre) {
-            list($textParent) = Blocks::maybeLastEmptyChildWaitingForText($parentNode);
-        } else {
-            list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-            if ($shouldAppend) {
-                $parentNode->appendChild($textParent);
-            }
-        }
-        $node = $textParent->appendChild($node);
-
-        return $node;
-
-
-        $blockLines = [];
-        // Force processing the line even if we don't use result. E.g. when a macro is defined inside a paragraph:
-        while ($nextRequest = Request::getNextClass($lines)) {
-            if (
-                preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextRequest['raw_line']) ||
-                Blocks::lineEndsBlock($nextRequest, $lines)
-            ) {
-                break;
-            }
-
-            if ($inPre) {
-                Block_Preformatted::handle($node, $lines, $nextRequest);
-            }
-
-            $blockLines[] = array_shift($lines);
-
-            if (preg_match('~\\\\f1$~u', $nextRequest['raw_line'])) { // Include, but then stop
-                break;
-            }
-
-        }
-
-        if ($inPre) {
-            return null;
-        }
-
-        if (count($blockLines) > 0) {
-            Roff::parse($node, $blockLines);
-        }
-
-
-        return null;
-        */
 
     }
 
