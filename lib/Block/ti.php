@@ -12,12 +12,37 @@ class Block_ti implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
-        $dom = $parentNode->ownerDocument;
+        $className = 'indent-ti';
+        $indentVal = null;
+        if (
+            count($request['arguments']) &&
+            $normalizedVal = Roff_Unit::normalize($request['arguments'][0]) // note this filters out 0s
+        ) {
+            $indentVal = $normalizedVal;
+            if ($indentVal) {
+                $className .= '-' . $indentVal;
+            }
+        }
 
+        if ($parentNode->tagName === 'p' && $parentNode->getAttribute('class') === $className) {
+            if ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br') {
+                Inline_VerticalSpace::addBR($parentNode);
+            }
+            return $parentNode;
+        }
+
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
+        $p          = $parentNode->ownerDocument->createElement('p');
+        $p          = $parentNode->appendChild($p);
+        $p->setAttribute('class', $className);
+        return $p;
+
+        /*
         if (!count($lines)) {
             return null;
         }
@@ -46,6 +71,7 @@ class Block_ti implements Block_Template
         $parentNode->appendBlockIfHasContent($block);
 
         return $parentNode;
+        */
 
     }
 

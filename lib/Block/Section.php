@@ -50,7 +50,9 @@ class Block_Section implements Block_Template
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }
 
-        $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
+        if ($headingNode->lastChild) {
+            $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
+        }
 
         // Skip sections with empty headings
         if (trim($headingNode->textContent) === '') {
