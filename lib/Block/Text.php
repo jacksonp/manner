@@ -39,29 +39,20 @@ class Block_Text implements Block_Template
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
-        $man = Man::instance();
-
-        // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
         while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
-            Request::getLine($lines); // process line...
-            if (!count($lines)) {
-                break;
-            }
-            $nextLine = $lines[0];
-            if (trim($nextLine) === '' ||
-                in_array(mb_substr($nextLine, 0, 1), [$man->control_char, $man->control_char_2, ' ']) ||
-                mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
-                (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
+            $nextRequest = Request::getNextClass($lines); // process line...
+            if (
+                is_null($nextRequest) ||
+                $nextRequest['class'] !== 'Block_Text' ||
+                mb_substr($nextRequest['raw_line'], 0, 1) === ' ' // Stop on implicit line break.
             ) {
                 break;
             }
-
             array_shift($lines);
-
-            $line .= ' ' . self::removeTextProcessingInterrupt($nextLine);
+            $line .= ' ' . self::removeTextProcessingInterrupt($nextRequest['raw_line']);
         }
 
-        // Re-add continuation if present to last line for TextContent::interpretAndAppendText:
+        // Re-add interrupt if present to last line for TextContent::interpretAndAppendText:
         if (self::$interruptTextProcessing) {
             self::$interruptTextProcessing = false;
             $line .= '\\c';
