@@ -79,7 +79,7 @@
     If no names are given, add all files to the repository (except files matching <strong>.hgignore</strong>).<br>
     <br>
     Examples:
-    <dl class="indent-2">
+    <dl class="indent-6">
       <dt>·
       <dd>
         <p>New (unknown) files are added automatically by <strong>hg add</strong>:
@@ -130,7 +130,7 @@ A bar.c
     Use the -s/--similarity option to detect renamed files. This option takes a percentage between 0 (disabled) and 100 (files must be identical) as its parameter. With a parameter greater than 0, this compares every removed file with every added file and records those similar enough as renames. Detecting renamed files this way can be expensive. After using this option, <strong>hg status -C</strong> can be used to check which files were identified as moved or renamed. If not specified, -s/--similarity defaults to 100 and only renames of identical files are detected.<br>
     <br>
     Examples:
-    <dl class="indent-2">
+    <dl class="indent-6">
       <dt>·
       <dd>
         <p>A number of files (bar.c and foo.c) are new, while foobar.c has been removed (without using <strong>hg remove</strong>) from the repository:
@@ -302,24 +302,27 @@ R foobar.c</code></pre>
     <p>Prepare a new changeset with the effect of REV undone in the current working directory. If no conflicts were encountered, it will be committed immediately.<br>
     <br>
     If REV is the parent of the working directory, then this new changeset is committed automatically (unless --no-commit is specified).
-    <dl class="indent-2">
+    <dl>
       <dt>Note
-      <dd><strong>hg backout</strong> cannot be used to fix either an unwanted or incorrect merge.<br>
-      <br>
-      Examples:
-      <dt>·
       <dd>
-        <p>Reverse the effect of the parent of the working directory. This backout will be committed immediately:
-        <pre><code>hg backout -r .</code></pre>
-      <dt>·
-      <dd>
-        <p>Reverse the effect of previous bad revision 23:
-        <pre><code>hg backout -r 23</code></pre>
-      <dt>·
-      <dd>
-        <p>Reverse the effect of previous bad revision 23 and leave changes uncommitted:
-        <pre><code>hg backout -r 23 --no-commit
+        <p><strong>hg backout</strong> cannot be used to fix either an unwanted or incorrect merge.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>Reverse the effect of the parent of the working directory. This backout will be committed immediately:
+            <pre><code>hg backout -r .</code></pre>
+          <dt>·
+          <dd>
+            <p>Reverse the effect of previous bad revision 23:
+            <pre><code>hg backout -r 23</code></pre>
+          <dt>·
+          <dd>
+            <p>Reverse the effect of previous bad revision 23 and leave changes uncommitted:
+            <pre><code>hg backout -r 23 --no-commit
 hg commit -m "Backout revision 23"</code></pre>
+        </dl>
         <p>By default, the pending changeset will have one parent, maintaining a linear history. With --merge, the pending changeset will instead have two parents: the old parent of the working directory and a new child of REV that simply undoes REV.<br>
         <br>
         Before version 1.7, the behavior without --merge was equivalent to specifying --merge followed by <strong>hg update --clean .</strong> to cancel the merge and leave the child of REV as a head to be merged separately.<br>
@@ -331,36 +334,35 @@ hg commit -m "Backout revision 23"</code></pre>
         Returns 0 on success, 1 if nothing to backout or there are unresolved files.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>--merge</strong>
-      <dd>merge with old dirstate parent after backout
-      <dt><strong>--commit</strong>
-      <dd>commit if no conflicts were encountered (DEPRECATED)
-      <dt><strong>--no-commit</strong>
-      <dd>do not commit
-      <dt><strong>--parent</strong><em>&nbsp;&lt;REV&gt;</em>
-      <dd>parent to choose when backing out merge (DEPRECATED)
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV&gt;</strong>
-      <dd>revision to backout
-      <dt><strong>-e, --edit</strong>
-      <dd>invoke editor on commit messages
-      <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
-      <dd>specify merge tool
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>exclude names matching the given patterns
-      <dt><strong>-m,</strong><em>--message</em><strong>&nbsp;&lt;TEXT&gt;</strong>
-      <dd>use text as commit message
-      <dt><strong>-l,</strong><em>--logfile</em><strong>&nbsp;&lt;FILE&gt;</strong>
-      <dd>read commit message from file
-      <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
-      <dd>record the specified date as commit date
-      <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
-      <dd>record the specified user as committer<br>
-      <br>
-      [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>--merge</strong>
+          <dd>merge with old dirstate parent after backout
+          <dt><strong>--commit</strong>
+          <dd>commit if no conflicts were encountered (DEPRECATED)
+          <dt><strong>--no-commit</strong>
+          <dd>do not commit
+          <dt><strong>--parent</strong><em>&nbsp;&lt;REV&gt;</em>
+          <dd>parent to choose when backing out merge (DEPRECATED)
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV&gt;</strong>
+          <dd>revision to backout
+          <dt><strong>-e, --edit</strong>
+          <dd>invoke editor on commit messages
+          <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
+          <dd>specify merge tool
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+          <dt><strong>-m,</strong><em>--message</em><strong>&nbsp;&lt;TEXT&gt;</strong>
+          <dd>use text as commit message
+          <dt><strong>-l,</strong><em>--logfile</em><strong>&nbsp;&lt;FILE&gt;</strong>
+          <dd>read commit message from file
+          <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
+          <dd>record the specified date as commit date
+          <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
+          <dd>record the specified user as committer
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -503,25 +505,26 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <pre><code>hg branch [-fC] [NAME]</code></pre>
     <dl>
       <dt>Note
-      <dd>Branch names are permanent and global. Use <strong>hg bookmark</strong> to create a light-weight bookmark instead. See <strong>hg help glossary</strong> for more information about named branches and bookmarks.<br>
-      <br>
-      With no argument, show the current branch name. With one argument, set the working directory branch name (the branch will not exist in the repository until the next commit). Standard practice recommends that primary development take place on the 'default' branch.<br>
-      <br>
-      Unless -f/--force is specified, branch will not let you set a branch name that already exists.<br>
-      <br>
-      Use -C/--clean to reset the working directory branch to that of the parent of the working directory, negating a previous branch change.<br>
-      <br>
-      Use the command <strong>hg update</strong> to switch to an existing branch. Use <strong>hg commit --close-branch</strong> to mark this branch head as closed. When all heads of a branch are closed, the branch will be considered closed.<br>
-      <br>
-      Returns 0 on success.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-f, --force</strong>
-      <dd>set branch name even if it shadows an existing branch
-      <dt><strong>-C, --clean</strong>
-      <dd>reset branch name to parent branch name
+      <dd>
+        <p>Branch names are permanent and global. Use <strong>hg bookmark</strong> to create a light-weight bookmark instead. See <strong>hg help glossary</strong> for more information about named branches and bookmarks.<br>
+        <br>
+        With no argument, show the current branch name. With one argument, set the working directory branch name (the branch will not exist in the repository until the next commit). Standard practice recommends that primary development take place on the 'default' branch.<br>
+        <br>
+        Unless -f/--force is specified, branch will not let you set a branch name that already exists.<br>
+        <br>
+        Use -C/--clean to reset the working directory branch to that of the parent of the working directory, negating a previous branch change.<br>
+        <br>
+        Use the command <strong>hg update</strong> to switch to an existing branch. Use <strong>hg commit --close-branch</strong> to mark this branch head as closed. When all heads of a branch are closed, the branch will be considered closed.<br>
+        <br>
+        Returns 0 on success.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-f, --force</strong>
+          <dd>set branch name even if it shadows an existing branch
+          <dt><strong>-C, --clean</strong>
+          <dd>reset branch name to parent branch name
+        </dl>
     </dl>
   </section>
   <section>
@@ -644,7 +647,7 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     To check out a particular version, use -u/--update, or -U/--noupdate to create a clone with no working directory.<br>
     <br>
     To pull only a subset of changesets, specify one or more revisions identifiers with -r/--rev or branches with -b/--branch. The resulting clone will contain only the specified changesets and their ancestors. These options (or 'clone src#rev dest') imply --pull, even for local source repositories.
-    <dl class="indent-3">
+    <dl>
       <dt>Note
       <dd>
         <p>Specifying a tag will include the tagged changeset but not the changeset containing the tag.<br>
@@ -656,79 +659,81 @@ hg bisect --command "make &amp;& make tests"</code></pre>
         <p>This is the fastest way to clone, but it is not always safe. The operation is not atomic (making sure REPO is not modified during the operation is up to you) and you have to make sure your editor breaks hardlinks (Emacs and most Linux Kernel tools do so). Also, this is not compatible with certain extensions that place their metadata under the .hg directory, such as mq.<br>
         <br>
         Mercurial will update the working directory to the first applicable revision from this list:
-      <dt>a.
-      <dd>null if -U or the source repository has no changesets
-      <dt>b.
-      <dd>if -u . and the source repository is local, the first parent of the source repository's working directory
-      <dt>c.
-      <dd>the changeset specified with -u (if a branch name, this means the latest head of that branch)
-      <dt>d.
-      <dd>the changeset specified with -r
-      <dt>e.
-      <dd>the tipmost head specified with -b
-      <dt>f.
-      <dd>the tipmost head specified with the url#branch source syntax
-      <dt>g.
-      <dd>the revision marked with the '@' bookmark, if present
-      <dt>h.
-      <dd>the tipmost head of the default branch
-      <dt>i.
-      <dd>tip<br>
-      <br>
-      When cloning from servers that support it, Mercurial may fetch pre-generated data from a server-advertised URL. When this is done, hooks operating on incoming changesets and changegroups may fire twice, once for the bundle fetched from the URL and another for any additional data not fetched from this URL. In addition, if an error occurs, the repository may be rolled back to a partial clone. This behavior may change in future releases. See <strong>hg help -e clonebundles</strong> for more.<br>
-      <br>
-      Examples:
-      <dt>·
-      <dd>
-        <p>clone a remote repository to a new directory named hg/:
-        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/</code></pre>
-      <dt>·
-      <dd>
-        <p>create a lightweight local clone:
-        <pre><code>hg clone project/ project-feature/</code></pre>
-      <dt>·
-      <dd>
-        <p>clone from an absolute path on an ssh server (note double-slash):
-        <pre><code>hg clone ssh://user@server//home/projects/alpha/</code></pre>
-      <dt>·
-      <dd>
-        <p>do a high-speed clone over a LAN while checking out a specified version:
-        <pre><code>hg clone --uncompressed http://server/repo -u 1.5</code></pre>
-      <dt>·
-      <dd>
-        <p>create a repository without changesets after a particular revision:
-        <pre><code>hg clone -r 04e544 experimental/ good/</code></pre>
-      <dt>·
-      <dd>
-        <p>clone (and track) a particular named branch:
-        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/#stable</code></pre>
+        <dl class="indent-3">
+          <dt>a.
+          <dd>null if -U or the source repository has no changesets
+          <dt>b.
+          <dd>if -u . and the source repository is local, the first parent of the source repository's working directory
+          <dt>c.
+          <dd>the changeset specified with -u (if a branch name, this means the latest head of that branch)
+          <dt>d.
+          <dd>the changeset specified with -r
+          <dt>e.
+          <dd>the tipmost head specified with -b
+          <dt>f.
+          <dd>the tipmost head specified with the url#branch source syntax
+          <dt>g.
+          <dd>the revision marked with the '@' bookmark, if present
+          <dt>h.
+          <dd>the tipmost head of the default branch
+          <dt>i.
+          <dd>tip
+        </dl>
+        <p>When cloning from servers that support it, Mercurial may fetch pre-generated data from a server-advertised URL. When this is done, hooks operating on incoming changesets and changegroups may fire twice, once for the bundle fetched from the URL and another for any additional data not fetched from this URL. In addition, if an error occurs, the repository may be rolled back to a partial clone. This behavior may change in future releases. See <strong>hg help -e clonebundles</strong> for more.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>clone a remote repository to a new directory named hg/:
+            <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/</code></pre>
+          <dt>·
+          <dd>
+            <p>create a lightweight local clone:
+            <pre><code>hg clone project/ project-feature/</code></pre>
+          <dt>·
+          <dd>
+            <p>clone from an absolute path on an ssh server (note double-slash):
+            <pre><code>hg clone ssh://user@server//home/projects/alpha/</code></pre>
+          <dt>·
+          <dd>
+            <p>do a high-speed clone over a LAN while checking out a specified version:
+            <pre><code>hg clone --uncompressed http://server/repo -u 1.5</code></pre>
+          <dt>·
+          <dd>
+            <p>create a repository without changesets after a particular revision:
+            <pre><code>hg clone -r 04e544 experimental/ good/</code></pre>
+          <dt>·
+          <dd>
+            <p>clone (and track) a particular named branch:
+            <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/#stable</code></pre>
+        </dl>
         <p>See <strong>hg help urls</strong> for details on specifying URLs.<br>
         <br>
         Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-U, --noupdate</strong>
-      <dd>the clone will include an empty working directory (only a repository)
-      <dt><strong>-u,</strong><em>--updaterev</em><strong>&nbsp;&lt;REV&gt;</strong>
-      <dd>revision, tag, or branch to check out
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>include the specified changeset
-      <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
-      <dd>clone only the specified branch
-      <dt><strong>--pull</strong>
-      <dd>use pull protocol to copy metadata
-      <dt><strong>--uncompressed</strong>
-      <dd>use uncompressed transfer (fast over LAN)
-      <dt><strong>-e,</strong><em>--ssh</em><strong>&nbsp;&lt;CMD&gt;</strong>
-      <dd>specify ssh command to use
-      <dt><strong>--remotecmd</strong><em>&nbsp;&lt;CMD&gt;</em>
-      <dd>specify hg command to run on the remote side
-      <dt><strong>--insecure</strong>
-      <dd>do not verify server certificate (ignoring web.cacerts config)<br>
-      <br>
-      [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-U, --noupdate</strong>
+          <dd>the clone will include an empty working directory (only a repository)
+          <dt><strong>-u,</strong><em>--updaterev</em><strong>&nbsp;&lt;REV&gt;</strong>
+          <dd>revision, tag, or branch to check out
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>include the specified changeset
+          <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
+          <dd>clone only the specified branch
+          <dt><strong>--pull</strong>
+          <dd>use pull protocol to copy metadata
+          <dt><strong>--uncompressed</strong>
+          <dd>use uncompressed transfer (fast over LAN)
+          <dt><strong>-e,</strong><em>--ssh</em><strong>&nbsp;&lt;CMD&gt;</strong>
+          <dd>specify ssh command to use
+          <dt><strong>--remotecmd</strong><em>&nbsp;&lt;CMD&gt;</em>
+          <dd>specify hg command to run on the remote side
+          <dt><strong>--insecure</strong>
+          <dd>do not verify server certificate (ignoring web.cacerts config)
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -875,82 +880,84 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <p>Show differences between revisions for the specified files.<br>
     <br>
     Differences between files are shown using the unified diff format.
-    <dl class="indent-2">
+    <dl>
       <dt>Note
-      <dd><strong>hg diff</strong> may generate unexpected results for merges, as it will default to comparing against the working directory's first parent changeset if no revisions are specified.<br>
-      <br>
-      When two revision arguments are given, then changes are shown between those revisions. If only one revision is specified then that revision is compared to the working directory, and, when no revisions are specified, the working directory files are compared to its first parent.<br>
-      <br>
-      Alternatively you can specify -c/--change with a revision to see the changes in that changeset relative to its first parent.<br>
-      <br>
-      Without the -a/--text option, diff will avoid generating diffs of files it detects as binary. With -a, diff will generate a diff anyway, probably with undesirable results.<br>
-      <br>
-      Use the -g/--git option to generate diffs in the git extended diff format. For more information, read <strong>hg help diffs</strong>.<br>
-      <br>
-      Examples:
-      <dt>·
       <dd>
-        <p>compare a file in the current working directory to its parent:
-        <pre><code>hg diff foo.c</code></pre>
-      <dt>·
-      <dd>
-        <p>compare two historical versions of a directory, with rename info:
-        <pre><code>hg diff --git -r 1.0:1.2 lib/</code></pre>
-      <dt>·
-      <dd>
-        <p>get change stats relative to the last change on some date:
-        <pre><code>hg diff --stat -r "date('may 2')"</code></pre>
-      <dt>·
-      <dd>
-        <p>diff all newly-added files that contain a keyword:
-        <pre><code>hg diff "set:added() and grep(GNU)"</code></pre>
-      <dt>·
-      <dd>
-        <p>compare a revision and its parents:
-        <pre><code>hg diff -c 9353         # compare against first parent
+        <p><strong>hg diff</strong> may generate unexpected results for merges, as it will default to comparing against the working directory's first parent changeset if no revisions are specified.<br>
+        <br>
+        When two revision arguments are given, then changes are shown between those revisions. If only one revision is specified then that revision is compared to the working directory, and, when no revisions are specified, the working directory files are compared to its first parent.<br>
+        <br>
+        Alternatively you can specify -c/--change with a revision to see the changes in that changeset relative to its first parent.<br>
+        <br>
+        Without the -a/--text option, diff will avoid generating diffs of files it detects as binary. With -a, diff will generate a diff anyway, probably with undesirable results.<br>
+        <br>
+        Use the -g/--git option to generate diffs in the git extended diff format. For more information, read <strong>hg help diffs</strong>.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>compare a file in the current working directory to its parent:
+            <pre><code>hg diff foo.c</code></pre>
+          <dt>·
+          <dd>
+            <p>compare two historical versions of a directory, with rename info:
+            <pre><code>hg diff --git -r 1.0:1.2 lib/</code></pre>
+          <dt>·
+          <dd>
+            <p>get change stats relative to the last change on some date:
+            <pre><code>hg diff --stat -r "date('may 2')"</code></pre>
+          <dt>·
+          <dd>
+            <p>diff all newly-added files that contain a keyword:
+            <pre><code>hg diff "set:added() and grep(GNU)"</code></pre>
+          <dt>·
+          <dd>
+            <p>compare a revision and its parents:
+            <pre><code>hg diff -c 9353         # compare against first parent
 hg diff -r 9353^:9353   # same using revset syntax
 hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
+        </dl>
         <p>Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>revision
-      <dt><strong>-c,</strong><em>--change</em><strong>&nbsp;&lt;REV&gt;</strong>
-      <dd>change made by revision
-      <dt><strong>-a, --text</strong>
-      <dd>treat all files as text
-      <dt><strong>-g, --git</strong>
-      <dd>use git extended diff format
-      <dt><strong>--nodates</strong>
-      <dd>omit dates from diff headers
-      <dt><strong>--noprefix</strong>
-      <dd>omit a/ and b/ prefixes from filenames
-      <dt><strong>-p, --show-function</strong>
-      <dd>show which function each change is in
-      <dt><strong>--reverse</strong>
-      <dd>produce a diff that undoes the changes
-      <dt><strong>-w, --ignore-all-space</strong>
-      <dd>ignore white space when comparing lines
-      <dt><strong>-b, --ignore-space-change</strong>
-      <dd>ignore changes in the amount of white space
-      <dt><strong>-B, --ignore-blank-lines</strong>
-      <dd>ignore changes whose lines are all blank
-      <dt><strong>-U,</strong><em>--unified</em><strong>&nbsp;&lt;NUM&gt;</strong>
-      <dd>number of lines of context to show
-      <dt><strong>--stat</strong>
-      <dd>output diffstat-style summary of changes
-      <dt><strong>--root</strong><em>&nbsp;&lt;DIR&gt;</em>
-      <dd>produce diffs relative to subdirectory
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>exclude names matching the given patterns
-      <dt><strong>-S, --subrepos</strong>
-      <dd>recurse into subrepositories<br>
-      <br>
-      [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>revision
+          <dt><strong>-c,</strong><em>--change</em><strong>&nbsp;&lt;REV&gt;</strong>
+          <dd>change made by revision
+          <dt><strong>-a, --text</strong>
+          <dd>treat all files as text
+          <dt><strong>-g, --git</strong>
+          <dd>use git extended diff format
+          <dt><strong>--nodates</strong>
+          <dd>omit dates from diff headers
+          <dt><strong>--noprefix</strong>
+          <dd>omit a/ and b/ prefixes from filenames
+          <dt><strong>-p, --show-function</strong>
+          <dd>show which function each change is in
+          <dt><strong>--reverse</strong>
+          <dd>produce a diff that undoes the changes
+          <dt><strong>-w, --ignore-all-space</strong>
+          <dd>ignore white space when comparing lines
+          <dt><strong>-b, --ignore-space-change</strong>
+          <dd>ignore changes in the amount of white space
+          <dt><strong>-B, --ignore-blank-lines</strong>
+          <dd>ignore changes whose lines are all blank
+          <dt><strong>-U,</strong><em>--unified</em><strong>&nbsp;&lt;NUM&gt;</strong>
+          <dd>number of lines of context to show
+          <dt><strong>--stat</strong>
+          <dd>output diffstat-style summary of changes
+          <dt><strong>--root</strong><em>&nbsp;&lt;DIR&gt;</em>
+          <dd>produce diffs relative to subdirectory
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+          <dt><strong>-S, --subrepos</strong>
+          <dd>recurse into subrepositories
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -962,70 +969,69 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
     The information shown in the changeset header is: author, date, branch name (if non-default), changeset hash, parent(s) and commit comment.
     <dl>
       <dt>Note
-      <dd><strong>hg export</strong> may generate unexpected diff output for merge changesets, as it will compare the merge changeset against its first parent only.<br>
-      <br>
-      Output may be to a file, in which case the name of the file is given using a format string. The formatting rules are as follows:
-    </dl>
-    <dl>
-      <dt><strong>%%</strong>
-      <dd>literal "%" character
-      <dt><strong>%H</strong>
-      <dd>changeset hash (40 hexadecimal digits)
-      <dt><strong>%N</strong>
-      <dd>number of patches being generated
-      <dt><strong>%R</strong>
-      <dd>changeset revision number
-      <dt><strong>%b</strong>
-      <dd>basename of the exporting repository
-      <dt><strong>%h</strong>
-      <dd>short-form changeset hash (12 hexadecimal digits)
-      <dt><strong>%m</strong>
-      <dd>first line of the commit message (only alphanumeric characters)
-      <dt><strong>%n</strong>
-      <dd>zero-padded sequence number, starting at 1
-      <dt><strong>%r</strong>
-      <dd>zero-padded changeset revision number<br>
-      <br>
-      Without the -a/--text option, export will avoid generating diffs of files it detects as binary. With -a, export will generate a diff anyway, probably with undesirable results.<br>
-      <br>
-      Use the -g/--git option to generate diffs in the git extended diff format. See <strong>hg help diffs</strong> for more information.<br>
-      <br>
-      With the --switch-parent option, the diff will be against the second parent. It can be useful to review a merge.<br>
-      <br>
-      Examples:
-    </dl>
-    <dl class="indent-2">
-      <dt>·
       <dd>
-        <p>use export and import to transplant a bugfix to the current branch:
-        <pre><code>hg export -r 9353 | hg import -</code></pre>
-      <dt>·
-      <dd>
-        <p>export all the changesets between two revisions to a file with rename information:
-        <pre><code>hg export --git -r 123:150 &gt; changes.txt</code></pre>
-      <dt>·
-      <dd>
-        <p>split outgoing changes into a series of patches with descriptive names:
-        <pre><code>hg export -r "outgoing()" -o "%n-%m.patch"</code></pre>
+        <p><strong>hg export</strong> may generate unexpected diff output for merge changesets, as it will compare the merge changeset against its first parent only.<br>
+        <br>
+        Output may be to a file, in which case the name of the file is given using a format string. The formatting rules are as follows:
+        <dl>
+          <dt><strong>%%</strong>
+          <dd>literal "%" character
+          <dt><strong>%H</strong>
+          <dd>changeset hash (40 hexadecimal digits)
+          <dt><strong>%N</strong>
+          <dd>number of patches being generated
+          <dt><strong>%R</strong>
+          <dd>changeset revision number
+          <dt><strong>%b</strong>
+          <dd>basename of the exporting repository
+          <dt><strong>%h</strong>
+          <dd>short-form changeset hash (12 hexadecimal digits)
+          <dt><strong>%m</strong>
+          <dd>first line of the commit message (only alphanumeric characters)
+          <dt><strong>%n</strong>
+          <dd>zero-padded sequence number, starting at 1
+          <dt><strong>%r</strong>
+          <dd>zero-padded changeset revision number
+        </dl>
+        <p>Without the -a/--text option, export will avoid generating diffs of files it detects as binary. With -a, export will generate a diff anyway, probably with undesirable results.<br>
+        <br>
+        Use the -g/--git option to generate diffs in the git extended diff format. See <strong>hg help diffs</strong> for more information.<br>
+        <br>
+        With the --switch-parent option, the diff will be against the second parent. It can be useful to review a merge.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>use export and import to transplant a bugfix to the current branch:
+            <pre><code>hg export -r 9353 | hg import -</code></pre>
+          <dt>·
+          <dd>
+            <p>export all the changesets between two revisions to a file with rename information:
+            <pre><code>hg export --git -r 123:150 &gt; changes.txt</code></pre>
+          <dt>·
+          <dd>
+            <p>split outgoing changes into a series of patches with descriptive names:
+            <pre><code>hg export -r "outgoing()" -o "%n-%m.patch"</code></pre>
+        </dl>
         <p>Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-o,</strong><em>--output</em><strong>&nbsp;&lt;FORMAT&gt;</strong>
-      <dd>print output to file with formatted name
-      <dt><strong>--switch-parent</strong>
-      <dd>diff against the second parent
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>revisions to export
-      <dt><strong>-a, --text</strong>
-      <dd>treat all files as text
-      <dt><strong>-g, --git</strong>
-      <dd>use git extended diff format
-      <dt><strong>--nodates</strong>
-      <dd>omit dates from diff headers<br>
-      <br>
-      [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-o,</strong><em>--output</em><strong>&nbsp;&lt;FORMAT&gt;</strong>
+          <dd>print output to file with formatted name
+          <dt><strong>--switch-parent</strong>
+          <dd>diff against the second parent
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>revisions to export
+          <dt><strong>-a, --text</strong>
+          <dd>treat all files as text
+          <dt><strong>-g, --git</strong>
+          <dd>use git extended diff format
+          <dt><strong>--nodates</strong>
+          <dd>omit dates from diff headers
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -1131,63 +1137,65 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
     <p>If --force is specified, revisions will be grafted even if they are already ancestors of or have been grafted to the destination. This is useful when the revisions have since been backed out.<br>
     <br>
     If a graft merge results in conflicts, the graft process is interrupted so that the current merge can be manually resolved. Once all conflicts are addressed, the graft process can be continued with the -c/--continue option.
-    <dl class="indent-2">
+    <dl>
       <dt>Note
-      <dd>The -c/--continue option does not reapply earlier options, except for --force.<br>
-      <br>
-      Examples:
-      <dt>·
       <dd>
-        <p>copy a single change to the stable branch and edit its description:
-        <pre><code>hg update stable
+        <p>The -c/--continue option does not reapply earlier options, except for --force.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>copy a single change to the stable branch and edit its description:
+            <pre><code>hg update stable
 hg graft --edit 9393</code></pre>
-      <dt>·
-      <dd>
-        <p>graft a range of changesets with one exception, updating dates:
-        <pre><code>hg graft -D "2085::2093 and not 2091"</code></pre>
-      <dt>·
-      <dd>
-        <p>continue a graft after resolving conflicts:
-        <pre><code>hg graft -c</code></pre>
-      <dt>·
-      <dd>
-        <p>show the source of a grafted changeset:
-        <pre><code>hg log --debug -r .</code></pre>
-      <dt>·
-      <dd>
-        <p>show revisions sorted by date:
-        <pre><code>hg log -r "sort(all(), date)"</code></pre>
+          <dt>·
+          <dd>
+            <p>graft a range of changesets with one exception, updating dates:
+            <pre><code>hg graft -D "2085::2093 and not 2091"</code></pre>
+          <dt>·
+          <dd>
+            <p>continue a graft after resolving conflicts:
+            <pre><code>hg graft -c</code></pre>
+          <dt>·
+          <dd>
+            <p>show the source of a grafted changeset:
+            <pre><code>hg log --debug -r .</code></pre>
+          <dt>·
+          <dd>
+            <p>show revisions sorted by date:
+            <pre><code>hg log -r "sort(all(), date)"</code></pre>
+        </dl>
         <p>See <strong>hg help revisions</strong> and <strong>hg help revsets</strong> for more about specifying revisions.<br>
         <br>
         Returns 0 on successful completion.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>revisions to graft
-      <dt><strong>-c, --continue</strong>
-      <dd>resume interrupted graft
-      <dt><strong>-e, --edit</strong>
-      <dd>invoke editor on commit messages
-      <dt><strong>--log</strong>
-      <dd>append graft info to log message
-      <dt><strong>-f, --force</strong>
-      <dd>force graft
-      <dt><strong>-D, --currentdate</strong>
-      <dd>record the current date as commit date
-      <dt><strong>-U, --currentuser</strong>
-      <dd>record the current user as committer
-      <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
-      <dd>record the specified date as commit date
-      <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
-      <dd>record the specified user as committer
-      <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
-      <dd>specify merge tool
-      <dt><strong>-n, --dry-run</strong>
-      <dd>do not perform actions, just print output<br>
-      <br>
-      [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>revisions to graft
+          <dt><strong>-c, --continue</strong>
+          <dd>resume interrupted graft
+          <dt><strong>-e, --edit</strong>
+          <dd>invoke editor on commit messages
+          <dt><strong>--log</strong>
+          <dd>append graft info to log message
+          <dt><strong>-f, --force</strong>
+          <dd>force graft
+          <dt><strong>-D, --currentdate</strong>
+          <dd>record the current date as commit date
+          <dt><strong>-U, --currentuser</strong>
+          <dd>record the current user as committer
+          <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
+          <dd>record the specified date as commit date
+          <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
+          <dd>record the specified user as committer
+          <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
+          <dd>specify merge tool
+          <dt><strong>-n, --dry-run</strong>
+          <dd>do not perform actions, just print output
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -1362,86 +1370,85 @@ hg graft --edit 9393</code></pre>
     If --exact is specified, import will set the working directory to the parent of each patch before applying it, and will abort if the resulting changeset has a different ID than the one recorded in the patch. This will guard against various ways that portable patch formats and mail systems might fail to transfer Mercurial data or metadata. See <strong>hg bundle</strong> for lossless transmission.<br>
     <br>
     Use --partial to ensure a changeset will be created from the patch even if some hunks fail to apply. Hunks that fail to apply will be written to a &lt;target-file&gt;.rej file. Conflicts can then be resolved by hand before <strong>hg commit --amend</strong> is run to update the created changeset. This flag exists to let people import patches that partially apply without losing the associated metadata (author, date, description, ...).
-    <dl class="indent-2">
+    <dl>
       <dt>Note
-      <dd>When no hunks apply cleanly, <strong>hg import --partial</strong> will create an empty changeset, importing only the patch metadata.<br>
-      <br>
-      With -s/--similarity, hg will attempt to discover renames and copies in the patch in the same way as <strong>hg addremove</strong>.<br>
-      <br>
-      It is possible to use external patch programs to perform the patch by setting the <strong>ui.patch</strong> configuration option. For the default internal tool, the fuzz can also be configured via <strong>patch.fuzz</strong>. See <strong>hg help config</strong> for more information about configuration files and how to use these options.<br>
-      <br>
-      See <strong>hg help dates</strong> for a list of formats valid for -d/--date.<br>
-      <br>
-      Examples:
-      <dt>·
       <dd>
-        <p>import a traditional patch from a website and detect renames:
-        <pre><code>hg import -s 80 http://example.com/bugfix.patch</code></pre>
-      <dt>·
-      <dd>
-        <p>import a changeset from an hgweb server:
-        <pre><code>hg import https://www.mercurial-scm.org/repo/hg/rev/5ca8c111e9aa</code></pre>
-      <dt>·
-      <dd>
-        <p>import all the patches in an Unix-style mbox:
-        <pre><code>hg import incoming-patches.mbox</code></pre>
-      <dt>·
-      <dd>
-        <p>attempt to exactly restore an exported changeset (not always possible):
-        <pre><code>hg import --exact proposed-fix.patch</code></pre>
-      <dt>·
-      <dd>
-        <p>use an external tool to apply a patch which is too fuzzy for the default internal tool.
-        <div class="indent-2">
-          <div class="indent-4">
-            <p>hg import --config ui.patch="patch --merge" fuzzy.patch
-          </div>
-        </div>
-      <dt>·
-      <dd>
-        <p>change the default fuzzing from 2 to a less strict 7
-        <div class="indent-2">
-          <div class="indent-4">
-            <p>hg import --config ui.fuzz=7 fuzz.patch
-          </div>
-        </div>
+        <p>When no hunks apply cleanly, <strong>hg import --partial</strong> will create an empty changeset, importing only the patch metadata.<br>
+        <br>
+        With -s/--similarity, hg will attempt to discover renames and copies in the patch in the same way as <strong>hg addremove</strong>.<br>
+        <br>
+        It is possible to use external patch programs to perform the patch by setting the <strong>ui.patch</strong> configuration option. For the default internal tool, the fuzz can also be configured via <strong>patch.fuzz</strong>. See <strong>hg help config</strong> for more information about configuration files and how to use these options.<br>
+        <br>
+        See <strong>hg help dates</strong> for a list of formats valid for -d/--date.<br>
+        <br>
+        Examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>import a traditional patch from a website and detect renames:
+            <pre><code>hg import -s 80 http://example.com/bugfix.patch</code></pre>
+          <dt>·
+          <dd>
+            <p>import a changeset from an hgweb server:
+            <pre><code>hg import https://www.mercurial-scm.org/repo/hg/rev/5ca8c111e9aa</code></pre>
+          <dt>·
+          <dd>
+            <p>import all the patches in an Unix-style mbox:
+            <pre><code>hg import incoming-patches.mbox</code></pre>
+          <dt>·
+          <dd>
+            <p>attempt to exactly restore an exported changeset (not always possible):
+            <pre><code>hg import --exact proposed-fix.patch</code></pre>
+          <dt>·
+          <dd>
+            <p>use an external tool to apply a patch which is too fuzzy for the default internal tool.
+            <div class="indent-6">
+              <p>hg import --config ui.patch="patch --merge" fuzzy.patch
+            </div>
+          <dt>·
+          <dd>
+            <p>change the default fuzzing from 2 to a less strict 7
+            <div class="indent-6">
+              <p>hg import --config ui.fuzz=7 fuzz.patch
+            </div>
+        </dl>
         <p>Returns 0 on success, 1 on partial success (see --partial).<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-p,</strong><em>--strip</em><strong>&nbsp;&lt;NUM&gt;</strong>
-      <dd>directory strip option for patch. This has the same meaning as the corresponding patch option (default: 1)
-      <dt><strong>-b,</strong><em>--base</em><strong>&nbsp;&lt;PATH&gt;</strong>
-      <dd>base path (DEPRECATED)
-      <dt><strong>-e, --edit</strong>
-      <dd>invoke editor on commit messages
-      <dt><strong>-f, --force</strong>
-      <dd>skip check for outstanding uncommitted changes (DEPRECATED)
-      <dt><strong>--no-commit</strong>
-      <dd>don't commit, just update the working directory
-      <dt><strong>--bypass</strong>
-      <dd>apply patch without touching the working directory
-      <dt><strong>--partial</strong>
-      <dd>commit even if some hunks fail
-      <dt><strong>--exact</strong>
-      <dd>abort if patch would apply lossily
-      <dt><strong>--prefix</strong><em>&nbsp;&lt;DIR&gt;</em>
-      <dd>apply patch to subdirectory
-      <dt><strong>--import-branch</strong>
-      <dd>use any branch information in patch (implied by --exact)
-      <dt><strong>-m,</strong><em>--message</em><strong>&nbsp;&lt;TEXT&gt;</strong>
-      <dd>use text as commit message
-      <dt><strong>-l,</strong><em>--logfile</em><strong>&nbsp;&lt;FILE&gt;</strong>
-      <dd>read commit message from file
-      <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
-      <dd>record the specified date as commit date
-      <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
-      <dd>record the specified user as committer
-      <dt><strong>-s,</strong><em>--similarity</em><strong>&nbsp;&lt;SIMILARITY&gt;</strong>
-      <dd>guess renamed files by similarity (0&lt;=s&lt;=100)<br>
-      <br>
-      aliases: patch
+        <dl>
+          <dt><strong>-p,</strong><em>--strip</em><strong>&nbsp;&lt;NUM&gt;</strong>
+          <dd>directory strip option for patch. This has the same meaning as the corresponding patch option (default: 1)
+          <dt><strong>-b,</strong><em>--base</em><strong>&nbsp;&lt;PATH&gt;</strong>
+          <dd>base path (DEPRECATED)
+          <dt><strong>-e, --edit</strong>
+          <dd>invoke editor on commit messages
+          <dt><strong>-f, --force</strong>
+          <dd>skip check for outstanding uncommitted changes (DEPRECATED)
+          <dt><strong>--no-commit</strong>
+          <dd>don't commit, just update the working directory
+          <dt><strong>--bypass</strong>
+          <dd>apply patch without touching the working directory
+          <dt><strong>--partial</strong>
+          <dd>commit even if some hunks fail
+          <dt><strong>--exact</strong>
+          <dd>abort if patch would apply lossily
+          <dt><strong>--prefix</strong><em>&nbsp;&lt;DIR&gt;</em>
+          <dd>apply patch to subdirectory
+          <dt><strong>--import-branch</strong>
+          <dd>use any branch information in patch (implied by --exact)
+          <dt><strong>-m,</strong><em>--message</em><strong>&nbsp;&lt;TEXT&gt;</strong>
+          <dd>use text as commit message
+          <dt><strong>-l,</strong><em>--logfile</em><strong>&nbsp;&lt;FILE&gt;</strong>
+          <dd>read commit message from file
+          <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
+          <dd>record the specified date as commit date
+          <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER&gt;</strong>
+          <dd>record the specified user as committer
+          <dt><strong>-s,</strong><em>--similarity</em><strong>&nbsp;&lt;SIMILARITY&gt;</strong>
+          <dd>guess renamed files by similarity (0&lt;=s&lt;=100)<br>
+          <br>
+          aliases: patch
+        </dl>
     </dl>
   </section>
   <section>
@@ -1600,57 +1607,60 @@ hg pull incoming.hg</code></pre>
     By default this command prints revision number and changeset id, tags, non-trivial parents, user, date and time, and a summary for each commit. When the -v/--verbose switch is used, the list of changed files and full commit message are shown.<br>
     <br>
     With --graph the revisions are shown as an ASCII art DAG with the most recent changeset at the top. 'o' is a changeset, '@' is a working directory parent, 'x' is obsolete, and '+' represents a fork where the changeset from the lines below is a parent of the 'o' merge on the same line.
-    <dl class="indent-2">
+    <dl>
       <dt>Note
       <dd><strong>hg log --patch</strong> may generate unexpected diff output for merge changesets, as it will only compare the merge changeset against its first parent. Also, only files different from BOTH parents will appear in files:.
       <dt>Note
-      <dd>For performance reasons, <strong>hg log FILE</strong> may omit duplicate changes made on branches and will not show removals or mode changes. To see all such changes, use the --removed switch.<br>
-      <br>
-      Some examples:
-      <dt>·
       <dd>
-        <p>changesets with full descriptions and file lists:
-        <pre><code>hg log -v</code></pre>
-      <dt>·
-      <dd>
-        <p>changesets ancestral to the working directory:
-        <pre><code>hg log -f</code></pre>
-      <dt>·
-      <dd>
-        <p>last 10 commits on the current branch:
-        <pre><code>hg log -l 10 -b .</code></pre>
-      <dt>·
-      <dd>
-        <p>changesets showing all modifications of a file, including removals:
-        <pre><code>hg log --removed file.c</code></pre>
-      <dt>·
-      <dd>
-        <p>all changesets that touch a directory, with diffs, excluding merges:
-        <pre><code>hg log -Mp lib/</code></pre>
-      <dt>·
-      <dd>
-        <p>all revision numbers that match a keyword:
-        <pre><code>hg log -k bug --template "{rev}\n"</code></pre>
-      <dt>·
-      <dd>
-        <p>the full hash identifier of the working directory parent:
-        <pre><code>hg log -r . --template "{node}\n"</code></pre>
-      <dt>·
-      <dd>
-        <p>list available log templates:
-        <pre><code>hg log -T list</code></pre>
-      <dt>·
-      <dd>
-        <p>check if a given changeset is included in a tagged release:
-        <pre><code>hg log -r "a21ccf and ancestor(1.9)"</code></pre>
-      <dt>·
-      <dd>
-        <p>find all changesets by some user in a date range:
-        <pre><code>hg log -k alice -d "may 2008 to jul 2008"</code></pre>
-      <dt>·
-      <dd>
-        <p>summary of all changesets after the last tag:
-        <pre><code>hg log -r "last(tagged())::" --template "{desc|firstline}\n"</code></pre>
+        <p>For performance reasons, <strong>hg log FILE</strong> may omit duplicate changes made on branches and will not show removals or mode changes. To see all such changes, use the --removed switch.<br>
+        <br>
+        Some examples:
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>changesets with full descriptions and file lists:
+            <pre><code>hg log -v</code></pre>
+          <dt>·
+          <dd>
+            <p>changesets ancestral to the working directory:
+            <pre><code>hg log -f</code></pre>
+          <dt>·
+          <dd>
+            <p>last 10 commits on the current branch:
+            <pre><code>hg log -l 10 -b .</code></pre>
+          <dt>·
+          <dd>
+            <p>changesets showing all modifications of a file, including removals:
+            <pre><code>hg log --removed file.c</code></pre>
+          <dt>·
+          <dd>
+            <p>all changesets that touch a directory, with diffs, excluding merges:
+            <pre><code>hg log -Mp lib/</code></pre>
+          <dt>·
+          <dd>
+            <p>all revision numbers that match a keyword:
+            <pre><code>hg log -k bug --template "{rev}\n"</code></pre>
+          <dt>·
+          <dd>
+            <p>the full hash identifier of the working directory parent:
+            <pre><code>hg log -r . --template "{node}\n"</code></pre>
+          <dt>·
+          <dd>
+            <p>list available log templates:
+            <pre><code>hg log -T list</code></pre>
+          <dt>·
+          <dd>
+            <p>check if a given changeset is included in a tagged release:
+            <pre><code>hg log -r "a21ccf and ancestor(1.9)"</code></pre>
+          <dt>·
+          <dd>
+            <p>find all changesets by some user in a date range:
+            <pre><code>hg log -k alice -d "may 2008 to jul 2008"</code></pre>
+          <dt>·
+          <dd>
+            <p>summary of all changesets after the last tag:
+            <pre><code>hg log -r "last(tagged())::" --template "{desc|firstline}\n"</code></pre>
+        </dl>
         <p>See <strong>hg help dates</strong> for a list of formats valid for -d/--date.<br>
         <br>
         See <strong>hg help revisions</strong> and <strong>hg help revsets</strong> for more about specifying and ordering revisions.<br>
@@ -1660,55 +1670,53 @@ hg pull incoming.hg</code></pre>
         Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-f, --follow</strong>
-      <dd>follow changeset history, or file history across copies and renames
-      <dt><strong>--follow-first</strong>
-      <dd>only follow the first parent of merge changesets (DEPRECATED)
-      <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
-      <dd>show revisions matching date spec
-      <dt><strong>-C, --copies</strong>
-      <dd>show copied files
-      <dt><strong>-k,</strong><em>--keyword</em><strong>&nbsp;&lt;TEXT[+]&gt;</strong>
-      <dd>do case-insensitive search for a given text
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>show the specified revision or revset
-      <dt><strong>--removed</strong>
-      <dd>include revisions where files were removed
-      <dt><strong>-m, --only-merges</strong>
-      <dd>show only merges (DEPRECATED)
-      <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER[+]&gt;</strong>
-      <dd>revisions committed by user
-      <dt><strong>--only-branch</strong><em>&nbsp;&lt;BRANCH[+]&gt;</em>
-      <dd>show only changesets within the given named branch (DEPRECATED)
-      <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
-      <dd>show changesets within the given named branch
-      <dt><strong>-P,</strong><em>--prune</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>do not display revision or any of its ancestors
-      <dt><strong>-p, --patch</strong>
-      <dd>show patch
-      <dt><strong>-g, --git</strong>
-      <dd>use git extended diff format
-      <dt><strong>-l,</strong><em>--limit</em><strong>&nbsp;&lt;NUM&gt;</strong>
-      <dd>limit number of changes displayed
-      <dt><strong>-M, --no-merges</strong>
-      <dd>do not show merges
-      <dt><strong>--stat</strong>
-      <dd>output diffstat-style summary of changes
-      <dt><strong>-G, --graph</strong>
-      <dd>show the revision DAG
-      <dt><strong>--style</strong><em>&nbsp;&lt;STYLE&gt;</em>
-      <dd>display using template map file (DEPRECATED)
-      <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
-      <dd>display with template
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>
-        <p>exclude names matching the given patterns<br>
-        <br>
-        [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-f, --follow</strong>
+          <dd>follow changeset history, or file history across copies and renames
+          <dt><strong>--follow-first</strong>
+          <dd>only follow the first parent of merge changesets (DEPRECATED)
+          <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
+          <dd>show revisions matching date spec
+          <dt><strong>-C, --copies</strong>
+          <dd>show copied files
+          <dt><strong>-k,</strong><em>--keyword</em><strong>&nbsp;&lt;TEXT[+]&gt;</strong>
+          <dd>do case-insensitive search for a given text
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>show the specified revision or revset
+          <dt><strong>--removed</strong>
+          <dd>include revisions where files were removed
+          <dt><strong>-m, --only-merges</strong>
+          <dd>show only merges (DEPRECATED)
+          <dt><strong>-u,</strong><em>--user</em><strong>&nbsp;&lt;USER[+]&gt;</strong>
+          <dd>revisions committed by user
+          <dt><strong>--only-branch</strong><em>&nbsp;&lt;BRANCH[+]&gt;</em>
+          <dd>show only changesets within the given named branch (DEPRECATED)
+          <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
+          <dd>show changesets within the given named branch
+          <dt><strong>-P,</strong><em>--prune</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>do not display revision or any of its ancestors
+          <dt><strong>-p, --patch</strong>
+          <dd>show patch
+          <dt><strong>-g, --git</strong>
+          <dd>use git extended diff format
+          <dt><strong>-l,</strong><em>--limit</em><strong>&nbsp;&lt;NUM&gt;</strong>
+          <dd>limit number of changes displayed
+          <dt><strong>-M, --no-merges</strong>
+          <dd>do not show merges
+          <dt><strong>--stat</strong>
+          <dd>output diffstat-style summary of changes
+          <dt><strong>-G, --graph</strong>
+          <dd>show the revision DAG
+          <dt><strong>--style</strong><em>&nbsp;&lt;STYLE&gt;</em>
+          <dd>display using template map file (DEPRECATED)
+          <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
+          <dd>display with template
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+        </dl>
+        <p>[+] marked option can be specified multiple times
         <div class="indent-4">
           <p>aliases: history
         </div>
@@ -1877,17 +1885,18 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     The path names <strong>default</strong> and <strong>default-push</strong> have a special meaning. When performing a push or pull operation, they are used as fallbacks if no location is specified on the command-line. When <strong>default-push</strong> is set, it will be used for push and <strong>default</strong> will be used for pull; otherwise <strong>default</strong> is used as the fallback for both. When cloning a repository, the clone source is written as <strong>default</strong> in <strong>.hg/hgrc</strong>.
     <dl>
       <dt>Note
-      <dd><strong>default</strong> and <strong>default-push</strong> apply to all inbound (e.g. <strong>hg incoming</strong>) and outbound (e.g. <strong>hg outgoing</strong>, <strong>hg email</strong> and <strong>hg bundle</strong>) operations.<br>
-      <br>
-      See <strong>hg help urls</strong> for more information.<br>
-      <br>
-      Returns 0 on success.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
-      <dd>display with template (EXPERIMENTAL)
+      <dd>
+        <p><strong>default</strong> and <strong>default-push</strong> apply to all inbound (e.g. <strong>hg incoming</strong>) and outbound (e.g. <strong>hg outgoing</strong>, <strong>hg email</strong> and <strong>hg bundle</strong>) operations.<br>
+        <br>
+        See <strong>hg help urls</strong> for more information.<br>
+        <br>
+        Returns 0 on success.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
+          <dd>display with template (EXPERIMENTAL)
+        </dl>
     </dl>
   </section>
   <section>
@@ -1969,37 +1978,37 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     Use --new-branch if you want to allow push to create a new named branch that is not present at the destination. This allows you to only create a new branch without forcing other changes.
     <dl>
       <dt>Note
-      <dd>Extra care should be taken with the -f/--force option, which will push all new heads on all branches, an action which will almost always cause confusion for collaborators.<br>
-      <br>
-      If -r/--rev is used, the specified revision and all its ancestors will be pushed to the remote repository.<br>
-      <br>
-      If -B/--bookmark is used, the specified bookmarked revision, its ancestors, and the bookmark will be pushed to the remote repository. Specifying <strong>.</strong> is equivalent to specifying the active bookmark's name.<br>
-      <br>
-      Please see <strong>hg help urls</strong> for important details about <strong>ssh://</strong> URLs. If DESTINATION is omitted, a default path will be used.<br>
-      <br>
-      Returns 0 if push was successful, 1 if nothing to push.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-f, --force</strong>
-      <dd>force push
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
-      <dd>a changeset intended to be included in the destination
-      <dt><strong>-B,</strong><em>--bookmark</em><strong>&nbsp;&lt;BOOKMARK[+]&gt;</strong>
-      <dd>bookmark to push
-      <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
-      <dd>a specific branch you would like to push
-      <dt><strong>--new-branch</strong>
-      <dd>allow pushing a new branch
-      <dt><strong>-e,</strong><em>--ssh</em><strong>&nbsp;&lt;CMD&gt;</strong>
-      <dd>specify ssh command to use
-      <dt><strong>--remotecmd</strong><em>&nbsp;&lt;CMD&gt;</em>
-      <dd>specify hg command to run on the remote side
-      <dt><strong>--insecure</strong>
-      <dd>do not verify server certificate (ignoring web.cacerts config)<br>
-      <br>
-      [+] marked option can be specified multiple times
+      <dd>
+        <p>Extra care should be taken with the -f/--force option, which will push all new heads on all branches, an action which will almost always cause confusion for collaborators.<br>
+        <br>
+        If -r/--rev is used, the specified revision and all its ancestors will be pushed to the remote repository.<br>
+        <br>
+        If -B/--bookmark is used, the specified bookmarked revision, its ancestors, and the bookmark will be pushed to the remote repository. Specifying <strong>.</strong> is equivalent to specifying the active bookmark's name.<br>
+        <br>
+        Please see <strong>hg help urls</strong> for important details about <strong>ssh://</strong> URLs. If DESTINATION is omitted, a default path will be used.<br>
+        <br>
+        Returns 0 if push was successful, 1 if nothing to push.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-f, --force</strong>
+          <dd>force push
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV[+]&gt;</strong>
+          <dd>a changeset intended to be included in the destination
+          <dt><strong>-B,</strong><em>--bookmark</em><strong>&nbsp;&lt;BOOKMARK[+]&gt;</strong>
+          <dd>bookmark to push
+          <dt><strong>-b,</strong><em>--branch</em><strong>&nbsp;&lt;BRANCH[+]&gt;</strong>
+          <dd>a specific branch you would like to push
+          <dt><strong>--new-branch</strong>
+          <dd>allow pushing a new branch
+          <dt><strong>-e,</strong><em>--ssh</em><strong>&nbsp;&lt;CMD&gt;</strong>
+          <dd>specify ssh command to use
+          <dt><strong>--remotecmd</strong><em>&nbsp;&lt;CMD&gt;</em>
+          <dd>specify hg command to run on the remote side
+          <dt><strong>--insecure</strong>
+          <dd>do not verify server certificate (ignoring web.cacerts config)
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -2057,26 +2066,25 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     </table>
     <dl>
       <dt>Note
-      <dd><strong>hg remove</strong> never deletes files in Added [A] state from the working directory, not even if <strong>--force</strong> is specified.<br>
-      <br>
-      Returns 0 on success, 1 if any warnings encountered.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-A, --after</strong>
-      <dd>record delete for missing files
-      <dt><strong>-f, --force</strong>
-      <dd>forget added files, delete modified files
-      <dt><strong>-S, --subrepos</strong>
-      <dd>recurse into subrepositories
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
       <dd>
-        <p>exclude names matching the given patterns<br>
+        <p><strong>hg remove</strong> never deletes files in Added [A] state from the working directory, not even if <strong>--force</strong> is specified.<br>
         <br>
-        [+] marked option can be specified multiple times
+        Returns 0 on success, 1 if any warnings encountered.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-A, --after</strong>
+          <dd>record delete for missing files
+          <dt><strong>-f, --force</strong>
+          <dd>forget added files, delete modified files
+          <dt><strong>-S, --subrepos</strong>
+          <dd>recurse into subrepositories
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+        </dl>
+        <p>[+] marked option can be specified multiple times
         <div class="indent-4">
           <p>aliases: rm
         </div>
@@ -2131,33 +2139,33 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     </dl>
     <dl>
       <dt>Note
-      <dd>Mercurial will not let you commit files with unresolved merge conflicts. You must use <strong>hg resolve -m ...</strong> before you can commit after a conflicting merge.<br>
-      <br>
-      Returns 0 on success, 1 if any files fail a resolve attempt.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-a, --all</strong>
-      <dd>select all unresolved files
-      <dt><strong>-l, --list</strong>
-      <dd>list state of files needing merge
-      <dt><strong>-m, --mark</strong>
-      <dd>mark files as resolved
-      <dt><strong>-u, --unmark</strong>
-      <dd>mark files as unresolved
-      <dt><strong>-n, --no-status</strong>
-      <dd>hide status prefix
-      <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
-      <dd>specify merge tool
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>exclude names matching the given patterns
-      <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
-      <dd>display with template (EXPERIMENTAL)<br>
-      <br>
-      [+] marked option can be specified multiple times
+      <dd>
+        <p>Mercurial will not let you commit files with unresolved merge conflicts. You must use <strong>hg resolve -m ...</strong> before you can commit after a conflicting merge.<br>
+        <br>
+        Returns 0 on success, 1 if any files fail a resolve attempt.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-a, --all</strong>
+          <dd>select all unresolved files
+          <dt><strong>-l, --list</strong>
+          <dd>list state of files needing merge
+          <dt><strong>-m, --mark</strong>
+          <dd>mark files as resolved
+          <dt><strong>-u, --unmark</strong>
+          <dd>mark files as unresolved
+          <dt><strong>-n, --no-status</strong>
+          <dd>hide status prefix
+          <dt><strong>-t,</strong><em>--tool</em><strong>&nbsp;&lt;VALUE&gt;</strong>
+          <dd>specify merge tool
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+          <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
+          <dd>display with template (EXPERIMENTAL)
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -2166,41 +2174,41 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     <pre><code>hg revert [OPTION]... [-r REV] [NAME]...</code></pre>
     <dl>
       <dt>Note
-      <dd>To check out earlier revisions, you should use <strong>hg update REV</strong>. To cancel an uncommitted merge (and lose your changes), use <strong>hg update --clean .</strong>.<br>
-      <br>
-      With no revision specified, revert the specified files or directories to the contents they had in the parent of the working directory. This restores the contents of files to an unmodified state and unschedules adds, removes, copies, and renames. If the working directory has two parents, you must explicitly specify a revision.<br>
-      <br>
-      Using the -r/--rev or -d/--date options, revert the given files or directories to their states as of a specific revision. Because revert does not change the working directory parents, this will cause these files to appear modified. This can be helpful to "back out" some or all of an earlier change. See <strong>hg backout</strong> for a related method.<br>
-      <br>
-      Modified files are saved with a .orig suffix before reverting. To disable these backups, use --no-backup. It is possible to store the backup files in a custom directory relative to the root of the repository by setting the <strong>ui.origbackuppath</strong> configuration option.<br>
-      <br>
-      See <strong>hg help dates</strong> for a list of formats valid for -d/--date.<br>
-      <br>
-      See <strong>hg help backout</strong> for a way to reverse the effect of an earlier changeset.<br>
-      <br>
-      Returns 0 on success.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-a, --all</strong>
-      <dd>revert all changes when no arguments given
-      <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
-      <dd>tipmost revision matching date
-      <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV&gt;</strong>
-      <dd>revert to the specified revision
-      <dt><strong>-C, --no-backup</strong>
-      <dd>do not save backup copies of files
-      <dt><strong>-i, --interactive</strong>
-      <dd>interactively select the changes (EXPERIMENTAL)
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>exclude names matching the given patterns
-      <dt><strong>-n, --dry-run</strong>
-      <dd>do not perform actions, just print output<br>
-      <br>
-      [+] marked option can be specified multiple times
+      <dd>
+        <p>To check out earlier revisions, you should use <strong>hg update REV</strong>. To cancel an uncommitted merge (and lose your changes), use <strong>hg update --clean .</strong>.<br>
+        <br>
+        With no revision specified, revert the specified files or directories to the contents they had in the parent of the working directory. This restores the contents of files to an unmodified state and unschedules adds, removes, copies, and renames. If the working directory has two parents, you must explicitly specify a revision.<br>
+        <br>
+        Using the -r/--rev or -d/--date options, revert the given files or directories to their states as of a specific revision. Because revert does not change the working directory parents, this will cause these files to appear modified. This can be helpful to "back out" some or all of an earlier change. See <strong>hg backout</strong> for a related method.<br>
+        <br>
+        Modified files are saved with a .orig suffix before reverting. To disable these backups, use --no-backup. It is possible to store the backup files in a custom directory relative to the root of the repository by setting the <strong>ui.origbackuppath</strong> configuration option.<br>
+        <br>
+        See <strong>hg help dates</strong> for a list of formats valid for -d/--date.<br>
+        <br>
+        See <strong>hg help backout</strong> for a way to reverse the effect of an earlier changeset.<br>
+        <br>
+        Returns 0 on success.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-a, --all</strong>
+          <dd>revert all changes when no arguments given
+          <dt><strong>-d,</strong><em>--date</em><strong>&nbsp;&lt;DATE&gt;</strong>
+          <dd>tipmost revision matching date
+          <dt><strong>-r,</strong><em>--rev</em><strong>&nbsp;&lt;REV&gt;</strong>
+          <dd>revert to the specified revision
+          <dt><strong>-C, --no-backup</strong>
+          <dd>do not save backup copies of files
+          <dt><strong>-i, --interactive</strong>
+          <dd>interactively select the changes (EXPERIMENTAL)
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+          <dt><strong>-n, --dry-run</strong>
+          <dd>do not perform actions, just print output
+        </dl>
+        <p>[+] marked option can be specified multiple times
     </dl>
   </section>
   <section>
@@ -2310,7 +2318,7 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     <p>Show status of files in the repository. If names are given, only files that match are shown. Files that are clean or ignored or the source of a copy/move operation, are not listed unless -c/--clean, -i/--ignored, -C/--copies or -A/--all are given. Unless options described with "show only ..." are given, the options -mardu are used.<br>
     <br>
     Option -q/--quiet hides untracked (unknown and ignored) files unless explicitly requested with -u/--unknown or -i/--ignored.
-    <dl class="indent-2">
+    <dl>
       <dt>Note
       <dd>
         <p><strong>hg status</strong> may appear to disagree with diff if permissions have changed or a merge has occurred. The standard diff format does not report permission changes and diff only reports changes relative to one merge parent.<br>
@@ -2327,64 +2335,64 @@ C = clean
 I = ignored
   = origin of the previous file (with --copies)</code></pre>
         <p>Examples:
-      <dt>·
-      <dd>
-        <p>show changes in the working directory relative to a changeset:
-        <pre><code>hg status --rev 9353</code></pre>
-      <dt>·
-      <dd>
-        <p>show changes in the working directory relative to the current directory (see <strong>hg help patterns</strong> for more information):
-        <pre><code>hg status re:</code></pre>
-      <dt>·
-      <dd>
-        <p>show all changes including copies in an existing changeset:
-        <pre><code>hg status --copies --change 9353</code></pre>
-      <dt>·
-      <dd>
-        <p>get a NUL separated list of added files, suitable for xargs:
-        <pre><code>hg status -an0</code></pre>
+        <dl class="indent-2">
+          <dt>·
+          <dd>
+            <p>show changes in the working directory relative to a changeset:
+            <pre><code>hg status --rev 9353</code></pre>
+          <dt>·
+          <dd>
+            <p>show changes in the working directory relative to the current directory (see <strong>hg help patterns</strong> for more information):
+            <pre><code>hg status re:</code></pre>
+          <dt>·
+          <dd>
+            <p>show all changes including copies in an existing changeset:
+            <pre><code>hg status --copies --change 9353</code></pre>
+          <dt>·
+          <dd>
+            <p>get a NUL separated list of added files, suitable for xargs:
+            <pre><code>hg status -an0</code></pre>
+        </dl>
         <p>Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-A, --all</strong>
-      <dd>show status of all files
-      <dt><strong>-m, --modified</strong>
-      <dd>show only modified files
-      <dt><strong>-a, --added</strong>
-      <dd>show only added files
-      <dt><strong>-r, --removed</strong>
-      <dd>show only removed files
-      <dt><strong>-d, --deleted</strong>
-      <dd>show only deleted (but tracked) files
-      <dt><strong>-c, --clean</strong>
-      <dd>show only files without changes
-      <dt><strong>-u, --unknown</strong>
-      <dd>show only unknown (not tracked) files
-      <dt><strong>-i, --ignored</strong>
-      <dd>show only ignored files
-      <dt><strong>-n, --no-status</strong>
-      <dd>hide status prefix
-      <dt><strong>-C, --copies</strong>
-      <dd>show source of copied files
-      <dt><strong>-0, --print0</strong>
-      <dd>end filenames with NUL, for use with xargs
-      <dt><strong>--rev</strong><em>&nbsp;&lt;REV[+]&gt;</em>
-      <dd>show difference from revision
-      <dt><strong>--change</strong><em>&nbsp;&lt;REV&gt;</em>
-      <dd>list the changed files of a revision
-      <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>include names matching the given patterns
-      <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
-      <dd>exclude names matching the given patterns
-      <dt><strong>-S, --subrepos</strong>
-      <dd>recurse into subrepositories
-      <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
-      <dd>
-        <p>display with template (EXPERIMENTAL)<br>
-        <br>
-        [+] marked option can be specified multiple times
+        <dl>
+          <dt><strong>-A, --all</strong>
+          <dd>show status of all files
+          <dt><strong>-m, --modified</strong>
+          <dd>show only modified files
+          <dt><strong>-a, --added</strong>
+          <dd>show only added files
+          <dt><strong>-r, --removed</strong>
+          <dd>show only removed files
+          <dt><strong>-d, --deleted</strong>
+          <dd>show only deleted (but tracked) files
+          <dt><strong>-c, --clean</strong>
+          <dd>show only files without changes
+          <dt><strong>-u, --unknown</strong>
+          <dd>show only unknown (not tracked) files
+          <dt><strong>-i, --ignored</strong>
+          <dd>show only ignored files
+          <dt><strong>-n, --no-status</strong>
+          <dd>hide status prefix
+          <dt><strong>-C, --copies</strong>
+          <dd>show source of copied files
+          <dt><strong>-0, --print0</strong>
+          <dd>end filenames with NUL, for use with xargs
+          <dt><strong>--rev</strong><em>&nbsp;&lt;REV[+]&gt;</em>
+          <dd>show difference from revision
+          <dt><strong>--change</strong><em>&nbsp;&lt;REV&gt;</em>
+          <dd>list the changed files of a revision
+          <dt><strong>-I,</strong><em>--include</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>include names matching the given patterns
+          <dt><strong>-X,</strong><em>--exclude</em><strong>&nbsp;&lt;PATTERN[+]&gt;</strong>
+          <dd>exclude names matching the given patterns
+          <dt><strong>-S, --subrepos</strong>
+          <dd>recurse into subrepositories
+          <dt><strong>-T,</strong><em>--template</em><strong>&nbsp;&lt;TEMPLATE&gt;</strong>
+          <dd>display with template (EXPERIMENTAL)
+        </dl>
+        <p>[+] marked option can be specified multiple times
         <div class="indent-4">
           <p>aliases: st
         </div>
@@ -2678,7 +2686,7 @@ I = ignored
       <p>A list of files or directories to search for configuration files. Item separator is ":" on Unix, ";" on Windows. If HGRCPATH is not set, platform default search path is used. If empty, only the .hg/hgrc from the current repository is read.<br>
       <br>
       For each element in HGRCPATH:
-      <dl class="indent-2">
+      <dl class="indent-9">
         <dt>·
         <dd>if it's a directory, all files ending with .rc are added
         <dt>·
@@ -2691,7 +2699,7 @@ I = ignored
     <dt><strong>HGPLAINEXCEPT</strong>
     <dd>
       <p>This is a comma-separated list of features to preserve when HGPLAIN is enabled. Currently the following values are supported:
-      <dl>
+      <dl class="indent-7">
         <dt><strong>alias</strong>
         <dd>Don't remove aliases.
         <dt><strong>i18n</strong>
@@ -2707,7 +2715,7 @@ I = ignored
     <dt><strong>HGUSER</strong>
     <dd>
       <p>This is the string used as the author of a commit. If not set, available values will be considered in this order:
-      <dl class="indent-2">
+      <dl class="indent-9">
         <dt>·
         <dd>HGUSER (deprecated)
         <dt>·
@@ -2753,7 +2761,7 @@ bar = !/path/to/extension/bar.py
 # ditto, but no path was supplied for extension baz
 baz = !</code></pre>
   <p>disabled extensions:
-  <dl>
+  <dl class="indent-4">
     <dt><strong>acl</strong>
     <dd>hooks for controlling repository access
     <dt><strong>blackbox</strong>
@@ -2879,7 +2887,7 @@ baz = !</code></pre>
     <dt><strong>size(expression)</strong>
     <dd>
       <p>File size matches the given expression. Examples:
-      <dl class="indent-2">
+      <dl class="indent-9">
         <dt>·
         <dd>size('1k') - files from 1024 to 2047 bytes
         <dt>·
@@ -3189,7 +3197,7 @@ syntax: regexp
   <p>Mercurial's internal web server, hgweb, can serve either a single repository, or a tree of repositories. In the second case, repository paths and global options can be defined using a dedicated configuration file common to <strong>hg serve</strong>, <strong>hgweb.wsgi</strong>, <strong>hgweb.cgi</strong> and <strong>hgweb.fcgi</strong>.<br>
   <br>
   This file uses the same syntax as other Mercurial configuration files but recognizes only the following sections:
-  <dl class="indent-2">
+  <dl class="indent-6">
     <dt>·
     <dd>web
     <dt>·
@@ -3409,7 +3417,7 @@ syntax: regexp
 </section>
 <section>
   <h2>TECHNICAL IMPLEMENTATION TOPICS</h2>
-  <dl>
+  <dl class="indent-4">
     <dt><strong>bundles</strong>
     <dd>Bundles
     <dt><strong>changegroups</strong>
@@ -3561,7 +3569,7 @@ subinclude:path/to/subignorefile reads patterns specifically for paths in the
     <p>Phases are a system for tracking which changesets have been or should be shared. This helps prevent common mistakes when modifying history (for instance, with the mq or rebase extensions).<br>
     <br>
     Each changeset in a repository is in one of the following phases:
-    <dl class="indent-2">
+    <dl class="indent-6">
       <dt>·
       <dd>public : changeset is visible on a public server
       <dt>·
@@ -3608,7 +3616,7 @@ publish = False</code></pre>
   </section>
   <section>
     <h3>Examples</h3>
-    <dl class="indent-2">
+    <dl class="indent-6">
       <dt>·
       <dd>
         <p>list changesets in draft or secret phase:
@@ -3735,7 +3743,7 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dt><strong>bisect(string)</strong>
       <dd>
         <p>Changesets marked in the specified bisect status:
-        <dl class="indent-2">
+        <dl class="indent-9">
           <dt>·
           <dd><strong>good</strong>, <strong>bad</strong>, <strong>skip</strong>: csets explicitly marked as good/bad/skip
           <dt>·
@@ -3896,7 +3904,7 @@ in this case. This matches against all of "issue 1234", "issue:1234",
         <p>Sort set by keys. The default sort order is ascending, specify a key as <strong>-key</strong> to sort in descending order.<br>
         <br>
         The keys can be:
-        <dl class="indent-2">
+        <dl class="indent-9">
           <dt>·
           <dd><strong>rev</strong> for the revision number,
           <dt>·
@@ -4761,7 +4769,7 @@ maxfiles = 3</code></pre>
       <dt><strong>bugzilla.version</strong>
       <dd>
         <p>The access type to use. Values recognized are:
-        <dl>
+        <dl class="indent-7">
           <dt><strong>xmlrpc</strong>
           <dd>Bugzilla XMLRPC interface.
           <dt><strong>xmlrpc+email</strong>
@@ -4786,7 +4794,7 @@ maxfiles = 3</code></pre>
       <dt><strong>bugzilla.template</strong>
       <dd>
         <p>Template to use when formatting comments. Overrides style if specified. In addition to the usual Mercurial keywords, the extension specifies:
-        <dl>
+        <dl class="indent-7">
           <dt><strong>{bug}</strong>
           <dd>The Bugzilla bug ID.
           <dt><strong>{root}</strong>
@@ -5491,23 +5499,25 @@ Makefile = LF
 
 [repository]
 native = LF</code></pre>
-    <dl class="indent-2">
+    <dl>
       <dt>Note
-      <dd>The rules will first apply when files are touched in the working directory, e.g. by updating to null and back to tip to touch all files.<br>
-      <br>
-      The extension uses an optional <strong>[eol]</strong> section read from both the normal Mercurial configuration files and the <strong>.hgeol</strong> file, with the latter overriding the former. You can use that section to control the overall behavior. There are three settings:
-      <dt>·
-      <dd><strong>eol.native</strong> (default <strong>os.linesep</strong>) can be set to <strong>LF</strong> or <strong>CRLF</strong> to override the default interpretation of <strong>native</strong> for checkout. This can be used with <strong>hg archive</strong> on Unix, say, to generate an archive where files have line endings for Windows.
-      <dt>·
-      <dd><strong>eol.only-consistent</strong> (default True) can be set to False to make the extension convert files with inconsistent EOLs. Inconsistent means that there is both <strong>CRLF</strong> and <strong>LF</strong> present in the file. Such files are normally not touched under the assumption that they have mixed EOLs on purpose.
-      <dt>·
-      <dd><strong>eol.fix-trailing-newline</strong> (default False) can be set to True to ensure that converted files end with a EOL character (either <strong>\n</strong> or <strong>\r\n</strong> as per the configured patterns).<br>
-      <br>
-      The extension provides <strong>cleverencode:</strong> and <strong>cleverdecode:</strong> filters like the deprecated win32text extension does. This means that you can disable win32text and enable eol and your filters will still work. You only need to these filters until you have prepared a <strong>.hgeol</strong> file.<br>
-      <br>
-      The <strong>win32text.forbid*</strong> hooks provided by the win32text extension have been unified into a single hook named <strong>eol.checkheadshook</strong>. The hook will lookup the expected line endings from the <strong>.hgeol</strong> file, which means you must migrate to a <strong>.hgeol</strong> file first before using the hook. <strong>eol.checkheadshook</strong> only checks heads, intermediate invalid revisions will be pushed. To forbid them completely, use the <strong>eol.checkallhook</strong> hook. These hooks are best used as <strong>pretxnchangegroup</strong> hooks.<br>
-      <br>
-      See <strong>hg help patterns</strong> for more information about the glob patterns used.
+      <dd>
+        <p>The rules will first apply when files are touched in the working directory, e.g. by updating to null and back to tip to touch all files.<br>
+        <br>
+        The extension uses an optional <strong>[eol]</strong> section read from both the normal Mercurial configuration files and the <strong>.hgeol</strong> file, with the latter overriding the former. You can use that section to control the overall behavior. There are three settings:
+        <dl class="indent-2">
+          <dt>·
+          <dd><strong>eol.native</strong> (default <strong>os.linesep</strong>) can be set to <strong>LF</strong> or <strong>CRLF</strong> to override the default interpretation of <strong>native</strong> for checkout. This can be used with <strong>hg archive</strong> on Unix, say, to generate an archive where files have line endings for Windows.
+          <dt>·
+          <dd><strong>eol.only-consistent</strong> (default True) can be set to False to make the extension convert files with inconsistent EOLs. Inconsistent means that there is both <strong>CRLF</strong> and <strong>LF</strong> present in the file. Such files are normally not touched under the assumption that they have mixed EOLs on purpose.
+          <dt>·
+          <dd><strong>eol.fix-trailing-newline</strong> (default False) can be set to True to ensure that converted files end with a EOL character (either <strong>\n</strong> or <strong>\r\n</strong> as per the configured patterns).
+        </dl>
+        <p>The extension provides <strong>cleverencode:</strong> and <strong>cleverdecode:</strong> filters like the deprecated win32text extension does. This means that you can disable win32text and enable eol and your filters will still work. You only need to these filters until you have prepared a <strong>.hgeol</strong> file.<br>
+        <br>
+        The <strong>win32text.forbid*</strong> hooks provided by the win32text extension have been unified into a single hook named <strong>eol.checkheadshook</strong>. The hook will lookup the expected line endings from the <strong>.hgeol</strong> file, which means you must migrate to a <strong>.hgeol</strong> file first before using the hook. <strong>eol.checkheadshook</strong> only checks heads, intermediate invalid revisions will be pushed. To forbid them completely, use the <strong>eol.checkallhook</strong> hook. These hooks are best used as <strong>pretxnchangegroup</strong> hooks.<br>
+        <br>
+        See <strong>hg help patterns</strong> for more information about the glob patterns used.
     </dl>
   </section>
   <section>
@@ -5979,7 +5989,7 @@ dropmissing = True</code></pre>
     Use "min(outgoing() and ::.)" or similar revset specification instead of --outgoing to specify edit target revision exactly in such ambiguous situation. See <strong>hg help revsets</strong> for detail about selecting revisions.<br>
     <br>
     Examples:
-    <dl class="indent-2">
+    <dl class="indent-6">
       <dt>·
       <dd>
         <p>A number of changes have been made. Revision 3 is no longer needed.<br>
@@ -6100,27 +6110,27 @@ x*    = ignore
 svn = True</code></pre>
     <dl>
       <dt>Note
-      <dd>The more specific you are in your filename patterns the less you lose speed in huge repositories.<br>
-      <br>
-      For [keywordmaps] template mapping and expansion demonstration and control run <strong>hg kwdemo</strong>. See <strong>hg help templates</strong> for a list of available templates and filters.<br>
-      <br>
-      Three additional date template filters are provided:
-    </dl>
-    <dl>
-      <dt><strong>utcdate</strong>
-      <dd>"2006/09/18 15:13:13"
-      <dt><strong>svnutcdate</strong>
-      <dd>"2006-09-18 15:13:13Z"
-      <dt><strong>svnisodate</strong>
-      <dd>"2006-09-18 08:13:13 -700 (Mon, 18 Sep 2006)"<br>
-      <br>
-      The default template mappings (view with <strong>hg kwdemo -d</strong>) can be replaced with customized keywords and templates. Again, run <strong>hg kwdemo</strong> to control the results of your configuration changes.<br>
-      <br>
-      Before changing/disabling active keywords, you must run <strong>hg kwshrink</strong> to avoid storing expanded keywords in the change history.<br>
-      <br>
-      To force expansion after enabling it, or a configuration change, run <strong>hg kwexpand</strong>.<br>
-      <br>
-      Expansions spanning more than one line and incremental expansions, like CVS' $Log$, are not supported. A keyword template map "Log = {desc}" expands to the first line of the changeset description.
+      <dd>
+        <p>The more specific you are in your filename patterns the less you lose speed in huge repositories.<br>
+        <br>
+        For [keywordmaps] template mapping and expansion demonstration and control run <strong>hg kwdemo</strong>. See <strong>hg help templates</strong> for a list of available templates and filters.<br>
+        <br>
+        Three additional date template filters are provided:
+        <dl>
+          <dt><strong>utcdate</strong>
+          <dd>"2006/09/18 15:13:13"
+          <dt><strong>svnutcdate</strong>
+          <dd>"2006-09-18 15:13:13Z"
+          <dt><strong>svnisodate</strong>
+          <dd>"2006-09-18 08:13:13 -700 (Mon, 18 Sep 2006)"
+        </dl>
+        <p>The default template mappings (view with <strong>hg kwdemo -d</strong>) can be replaced with customized keywords and templates. Again, run <strong>hg kwdemo</strong> to control the results of your configuration changes.<br>
+        <br>
+        Before changing/disabling active keywords, you must run <strong>hg kwshrink</strong> to avoid storing expanded keywords in the change history.<br>
+        <br>
+        To force expansion after enabling it, or a configuration change, run <strong>hg kwexpand</strong>.<br>
+        <br>
+        Expansions spanning more than one line and incremental expansions, like CVS' $Log$, are not supported. A keyword template map "Log = {desc}" expands to the first line of the changeset description.
     </dl>
   </section>
   <section>
@@ -6580,12 +6590,12 @@ keepchanges = True</code></pre>
         <p>Returns 0 on success.<br>
         <br>
         Options:
-    </dl>
-    <dl>
-      <dt><strong>-l, --list</strong>
-      <dd>list all patches and guards
-      <dt><strong>-n, --none</strong>
-      <dd>drop all guards
+        <dl>
+          <dt><strong>-l, --list</strong>
+          <dd>list all patches and guards
+          <dt><strong>-n, --none</strong>
+          <dd>drop all guards
+        </dl>
     </dl>
   </section>
   <section>
@@ -6994,7 +7004,7 @@ config = /path/to/subscriptionsfile</code></pre>
       <dt><strong>notify.sources</strong>
       <dd>
         <p>Space-separated list of change sources. Notifications are activated only when a changeset's source is in this list. Sources may be:
-        <dl>
+        <dl class="indent-7">
           <dt><strong>serve</strong>
           <dd>changesets received via http or ssh
           <dt><strong>pull</strong>
@@ -7310,7 +7320,7 @@ hg email -o -m mbox &amp;&    # generate an mbox file ...
     If you don't specify a destination changeset (<strong>-d/--dest</strong>), rebase will use the same logic as <strong>hg merge</strong> to pick a destination. if the current branch contains exactly one other head, the other head is merged with by default. Otherwise, an explicit revision with which to merge with must be provided. (destination changeset is not modified by rebasing, but new changesets are added as its descendants.)<br>
     <br>
     Here are the ways to select changesets:
-    <dl class="indent-3">
+    <dl class="indent-7">
       <dt>1.
       <dd>Explicitly select them using <strong>--rev</strong>.
       <dt>2.
@@ -7552,15 +7562,16 @@ kiln = https://{1}.kilnhg.com/Repo/</code></pre>
     <p>Initialize a new repository and working directory that shares its history (and optionally bookmarks) with another repository.
     <dl>
       <dt>Note
-      <dd>using rollback or extensions that destroy/modify history (mq, rebase, etc.) can cause considerable confusion with shared clones. In particular, if two shared clones are both updated to the same changeset, and one of them destroys that changeset with rollback, the other clone will suddenly stop working: all operations will fail with "abort: working directory has unknown parent". The only known workaround is to use debugsetparents on the broken clone to reset it to a changeset that still exists.<br>
-      <br>
-      Options:
-    </dl>
-    <dl>
-      <dt><strong>-U, --noupdate</strong>
-      <dd>do not create a working directory
-      <dt><strong>-B, --bookmarks</strong>
-      <dd>also share bookmarks
+      <dd>
+        <p>using rollback or extensions that destroy/modify history (mq, rebase, etc.) can cause considerable confusion with shared clones. In particular, if two shared clones are both updated to the same changeset, and one of them destroys that changeset with rollback, the other clone will suddenly stop working: all operations will fail with "abort: working directory has unknown parent". The only known workaround is to use debugsetparents on the broken clone to reset it to a changeset that still exists.<br>
+        <br>
+        Options:
+        <dl>
+          <dt><strong>-U, --noupdate</strong>
+          <dd>do not create a working directory
+          <dt><strong>-B, --bookmarks</strong>
+          <dd>also share bookmarks
+        </dl>
     </dl>
   </section>
   <section>

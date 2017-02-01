@@ -92,9 +92,9 @@
   <p>Each line of the agent configuration section of the configuration file must be either an agent specification, a comment, or a blank line. Lexical elements are separated by whitespace characters, however a single agent specification may not be broken across lines unless a <strong>\</strong> (backslash) is used to continue the line.
   <p>Each agent specification must start with a textual label (string) followed by an integer in the range 1 to 510. The label is a tag used to refer to the agent and the integer specifies the domain for which the agent supplies data. This domain identifier corresponds to the domain portion of the PMIDs handled by the agent. Each agent must have a unique label and domain identifier.
   <p>For DSO agents a line of the form:
-  <blockquote>
-    <p><em>label</em> <em>domain-no</em> <strong>dso</strong> <em>entry-point</em> <em>path</em>
-  </blockquote>
+  <dl>
+    <dd><em>label</em> <em>domain-no</em> <strong>dso</strong> <em>entry-point</em> <em>path</em>
+  </dl>
   <p>should appear. Where,
   <dl class="indent-14">
     <dt><em>label</em>
@@ -104,14 +104,14 @@
     <dt><em>entry-point</em>
     <dd>is the name of an initialization function which will be called when the DSO is loaded
     <dt><em>path</em>
-    <dd>designates the location of the DSO and this is expected to be an absolute pathname. <strong>pmcd</strong> is only able to load DSO agents that have the same <em>simabi</em> (Subprogram Interface Model ABI, or calling conventions) as it does (i.e. only one of the <em>simabi</em> versions will be applicable). The <em>simabi</em> version of a running <strong>pmcd</strong> may be determined by fetching <strong>pmcd.simabi</strong>. Alternatively, the <strong>file</strong>(1) command may be used to determine the <em>simabi</em> version from the <strong>pmcd</strong> executable.<br>
-    <br>
-    For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
+    <dd>
+      <p>designates the location of the DSO and this is expected to be an absolute pathname. <strong>pmcd</strong> is only able to load DSO agents that have the same <em>simabi</em> (Subprogram Interface Model ABI, or calling conventions) as it does (i.e. only one of the <em>simabi</em> versions will be applicable). The <em>simabi</em> version of a running <strong>pmcd</strong> may be determined by fetching <strong>pmcd.simabi</strong>. Alternatively, the <strong>file</strong>(1) command may be used to determine the <em>simabi</em> version from the <strong>pmcd</strong> executable.
+      <p>For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
   </dl>
   <p>For agents providing socket connections, a line of the form
-  <blockquote>
-    <p><em>label</em> <em>domain-no</em> <strong>socket</strong> <em>addr-family</em> <em>address</em> [ <em>command</em> ]
-  </blockquote>
+  <dl>
+    <dd><em>label</em> <em>domain-no</em> <strong>socket</strong> <em>addr-family</em> <em>address</em> [ <em>command</em> ]
+  </dl>
   <p>should appear. Where,
   <dl class="indent-14">
     <dt><em>label</em>
@@ -126,9 +126,9 @@
     <dd>is an optional parameter used to specify a command line to start the agent when <strong>pmcd</strong> initializes. If <em>command</em> is not present, <strong>pmcd</strong> assumes that the specified agent has already been created. The <em>command</em> is considered to start from the first non-white character after the socket address and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>
   <p>For agents interacting with the <strong>pmcd</strong> via stdin/stdout, a line of the form:
-  <blockquote>
-    <p><em>label</em> <em>domain-no</em> <strong>pipe</strong> <em>protocol</em> <em>command</em>
-  </blockquote>
+  <dl>
+    <dd><em>label</em> <em>domain-no</em> <strong>pipe</strong> <em>protocol</em> <em>command</em>
+  </dl>
   <p>should appear. Where,
   <dl class="indent-14">
     <dt><em>label</em>
@@ -136,9 +136,9 @@
     <dt><em>domain-no</em>
     <dd>is an unsigned integer specifying the agent's domain
     <dt><em>protocol</em>
-    <dd>The value for this parameter should be <strong>binary</strong>.<br>
-    <br>
-    Additionally, the <em>protocol</em> can include the <strong>notready</strong> keyword to indicate that the agent must be marked as not being ready to process requests from <strong>pmcd</strong>. The agent will explicitly notify the <strong>pmcd</strong> when it is ready to process the requests by sending <strong>PM_ERR_PMDAREADY</strong> PDU.
+    <dd>
+      <p>The value for this parameter should be <strong>binary</strong>.
+      <p>Additionally, the <em>protocol</em> can include the <strong>notready</strong> keyword to indicate that the agent must be marked as not being ready to process requests from <strong>pmcd</strong>. The agent will explicitly notify the <strong>pmcd</strong> when it is ready to process the requests by sending <strong>PM_ERR_PMDAREADY</strong> PDU.
     <dt><em>command</em>
     <dd>specifies a command line to start the agent when <strong>pmcd</strong> initializes. Note that <em>command</em> is mandatory for pipe-based agents. The <em>command</em> is considered to start from the first non-white character after the <em>protocol</em> parameter and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>
@@ -188,14 +188,14 @@ fe80*</pre>
   <p>The first example is not allowed because only (numeric) IP addresses may contain a wildcard. The second and fifth examples are not valid because there is more than one wildcard character. The third and sixth contain an embedded wildcard, the fourth and seventh have a wildcard character that is not the last component of the address (the last components are <code>127*</code> and <code>fe80*</code> respectively).
   <p>The name <strong>localhost</strong> is given special treatment to make the behavior of host wildcarding consistent. Rather than being 127.0.0.1 and ::1, it is mapped to the primary inet and IPv6 addresses associated with the name of the host on which <strong>pmcd</strong> is running. Beware of this when running <strong>pmcd</strong> on multi-homed hosts.
   <p>Access for users, groups or hosts are allowed or disallowed by specifying statements of the form:
-  <blockquote class="indent-14">
-    <p><strong>allow users</strong> <em>userlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
+  <dl>
+    <dd><strong>allow users</strong> <em>userlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
     <strong>disallow users</strong> <em>userlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
     <strong>allow groups</strong> <em>grouplist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
     <strong>disallow groups</strong> <em>grouplist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
     <strong>allow hosts</strong> <em>hostlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
     <strong>disallow hosts</strong> <em>hostlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong>
-  </blockquote>
+  </dl>
   <dl class="indent-14">
     <dt><em>list</em>
     <dd><em>userlist</em>, <em>grouplist</em> and <em>hostlist</em> are comma separated lists of one or more users, groups or host identifiers.
@@ -216,19 +216,17 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>because the former contains a specific host name (equivalent to a fully specified IP address), whereas the latter has a wildcard. In turn, the latter would override
   <pre>disallow host * : all;</pre>
   <p>It is possible to limit the number of connections from a user, group or host to <strong>pmcd</strong>. This may be done by adding a clause of the form
-  <blockquote>
-    <p><strong>maximum</strong> <em>n</em> <strong>connections</strong>
-  </blockquote>
+  <dl>
+    <dd><strong>maximum</strong> <em>n</em> <strong>connections</strong>
+  </dl>
   <p>to the <em>operations</em> list of an <strong>allow</strong> statement. Such a clause may not be used in a <strong>disallow</strong> statement. Here, <em>n</em> is the maximum number of connections that will be accepted from the user, group or host matching the identifier(s) used in the statement.
   <p>An access control statement with a list of user, group or host identifiers is equivalent to a set of access control statements, with each specifying one of the identifiers in the list and all with the same access controls (both permissions and connection limits). A group should be used if you want users to contribute to a shared connection limit. A wildcard should be used if you want hosts to contribute to a shared connection limit.
   <p>When a new client requests a connection, and <strong>pmcd</strong> has determined that the client has permission to connect, it searches the matching list of access control statements for the most specific match containing a connection limit. For brevity, this will be called the limiting statement. If there is no limiting statement, the client is granted a connection. If there is a limiting statement and the number of <strong>pmcd</strong> clients with user ID, group ID, or IP addresses that match the identifier in the limiting statement is less than the connection limit in the statement, the connection is allowed. Otherwise the connection limit has been reached and the client is refused a connection.
   <p>Group access controls and the wildcarding in host identifiers means that once <strong>pmcd</strong> actually accepts a connection from a client, the connection may contribute to the current connection count of more than one access control statement - the client's host may match more than one access control statement, and similarly the user ID may be in more than one group. This may be significant for subsequent connection requests.
   <p>Note that <strong>pmcd</strong> enters a mode where it runs effectively with a higher-level of security as soon as a user or group access control section is added to the configuration. In this mode only authenticated connections are allowed - either from a SASL authenticated connection, or a Unix domain socket (which implicitly passes client credentials). This is the same mode that is entered explicitly using the <strong>-S</strong> option. Assuming permission is allowed, one can determine whether <strong>pmcd</strong> is running in this mode by querying the value of the <em>pmcd.feature.creds_required</em> metric.
   <p>Note also that because most specific match semantics are used when checking the connection limit, for the host-based access control case, priority is given to clients with more specific host identifiers. It is also possible to exceed connection limits in some situations. Consider the following:
-  <blockquote>
-    allow host clank : all, maximum 5 connections;<br>
-    allow host * : all except store, maximum 2 connections;
-  </blockquote>
+  <p class="indent">allow host clank : all, maximum 5 connections;<br>
+  allow host * : all except store, maximum 2 connections;
   <p>This says that only 2 client connections at a time are permitted for all hosts other than "clank", which is permitted 5. If a client from host "boing" is the first to connect to <strong>pmcd</strong>, its connection is checked against the second statement (that is the most specific match with a connection limit). As there are no other clients, the connection is accepted and contributes towards the limit for only the second statement above. If the next client connects from "clank", its connection is checked against the limit for the first statement. There are no other connections from "clank", so the connection is accepted. Once this connection is accepted, it counts towards <strong>both</strong> statements' limits because "clank" matches the host identifier in both statements. Remember that the decision to accept a new connection is made using only the most specific matching access control statement with a connection limit. Now, the connection limit for the second statement has been reached. Any connections from hosts other than "clank" will be refused.
   <p>If instead, <strong>pmcd</strong> with no clients saw three successive connections arrived from "boing", the first two would be accepted and the third refused. After that, if a connection was requested from "clank" it would be accepted. It matches the first statement, which is more specific than the second, so the connection limit in the first is used to determine that the client has the right to connect. Now there are 3 connections contributing to the second statement's connection limit. Even though the connection limit for the second statement has been exceeded, the earlier connections from "boing" are maintained. The connection limit is only checked at the time a client attempts a connection rather than being re-evaluated every time a new client connects to <strong>pmcd</strong>.
   <p>This gentle scheme is designed to allow reasonable limits to be imposed on a first come first served basis, with specific exceptions.
