@@ -97,6 +97,7 @@ class Man
         $this->characterTranslations = [];
 
         $this->roffClasses = [
+            'cc' => 'Roff_cc',
             'do' => 'Roff_do',
             'nop' => 'Roff_nop',
             'char' => 'Roff_Char',

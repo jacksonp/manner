@@ -22,7 +22,6 @@ class Request_Unhandled implements Block_Template
         'brp',
         'break',
         'c2',
-        'cc',
         'cf',
         'cflags',
         'ch',
