@@ -48,11 +48,6 @@ class Block_TabTable implements Block_Template
     ): ?DOMElement
     {
 
-        // TODO: see if we can remove this check:
-        if (!self::isStart($lines)) {
-            throw new Exception('Not at start of table.');
-        }
-
         $dom = $parentNode->ownerDocument;
 
         if ($parentNode->tagName === 'p') {
