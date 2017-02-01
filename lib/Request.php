@@ -248,8 +248,8 @@ class Request
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $line);
-            } elseif (!preg_match('~^' . preg_quote($man->control_char, '~') . '~u', $line)) {
-                // Lenient with things starting with ' to match pre-refactor output...
+            } elseif (preg_match('~^[^' . preg_quote($man->control_char, '~') . '].*\w~u', $line)) {
+                // Lenient with things starting with ' or \. if there's a "word" char later on in the line.
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
                 $return['class'] = 'Block_Text';
             } else {
