@@ -18,25 +18,24 @@ class Inline_Link implements Block_Template
 
         if ($request['request'] === 'URL') {
             $dom = $parentNode->ownerDocument;
+            Block_Text::addSpace($parentNode);
             if (count($request['arguments']) === 0) {
                 throw new Exception('Not enough arguments to .URL: ' . $request['raw_line']);
             }
             $anchor = $dom->createElement('a');
             $anchor->setAttribute('href', $request['arguments'][0]);
+            $parentNode->appendChild($anchor);
 
             if (count($request['arguments']) > 1) {
                 TextContent::interpretAndAppendText($anchor, $request['arguments'][1]);
             } elseif (count($lines)) {
-                $blockLines = [array_shift($lines)];
-                Roff::parse($anchor, $blockLines);
+                Roff::parse($anchor, $lines, true);
             }
 
             if ($anchor->textContent === '') {
                 $anchor->appendChild(new DOMText($request['arguments'][0]));
             }
 
-            Block_Text::addSpace($parentNode);
-            $parentNode->appendChild($anchor);
             if (count($request['arguments']) === 3) {
                 $parentNode->appendChild(new DOMText($request['arguments'][2]));
             }
@@ -71,7 +70,7 @@ class Inline_Link implements Block_Template
         if ($href === false) {
             // No valid URL, output any content as text and bail.
             Roff::parse($parentNode, $blockLines);
-            return $parentNode;
+            return null;
         }
 
         $anchor = $dom->createElement('a');
