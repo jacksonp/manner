@@ -24,7 +24,7 @@ class Manner
     }
 
 
-    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null)
+    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
     {
 
         $dom  = self::roffToDOM($fileLines, $filePath);
@@ -39,7 +39,10 @@ class Manner
         $extra2 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra2);
         $extra3 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra3);
 
-//        echo $html; return;
+        if ($test) {
+            echo $html;
+            return;
+        }
 
         $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars($extra1) . '" data-extra2="' . htmlspecialchars($extra2) . '" data-extra3="' . htmlspecialchars($extra3) . '">';
 
