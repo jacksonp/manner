@@ -16,19 +16,17 @@ class Block_SH implements Block_Template
 
         $dom = $parentNode->ownerDocument;
 
+        $section = $dom->createElement('section');
+        $section = $parentNode->ancestor('body')->appendChild($section);
         $headingNode = $dom->createElement('h2');
+        $headingNode = $section->appendChild($headingNode);
 
         if (count($request['arguments']) === 0) {
-            if (count($lines) === 0 || Request::peepAt($lines[0])['name'] === 'SH') {
+            $gotContent = Roff::parse($headingNode, $lines, true);
+            if (!$gotContent) {
+                $section->parentNode->removeChild($section);
                 return null;
             }
-            // Text for subheading is on next line.
-            $sectionHeading = array_shift($lines);
-            if (in_array(Request::peepAt($sectionHeading)['name'], Block_Section::skipSectionNameRequests)) {
-                return null;
-            }
-            $sectionHeading = [$sectionHeading];
-            Roff::parse($headingNode, $sectionHeading);
         } else {
             if ($request['raw_arg_string'] === '\\ ') {
                 return null;
@@ -44,9 +42,6 @@ class Block_SH implements Block_Template
 
         $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
 
-        $section = $dom->createElement('section');
-        $section->appendChild($headingNode);
-        $section = $parentNode->ancestor('body')->appendChild($section);
 
         return $section;
 
