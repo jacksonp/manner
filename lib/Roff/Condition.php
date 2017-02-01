@@ -5,7 +5,7 @@ class Roff_Condition implements Roff_Template
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
-    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|[^"][^\s]*)';
+    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
 
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
