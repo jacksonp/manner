@@ -81,7 +81,10 @@ class Manner
             $firstChild = $element->firstChild;
 
             if ($myTag === 'div' && $firstChild->tagName === 'dl') {
-                if ($element->getAttribute('class') !== '' && $firstChild->getAttribute('class') === '') {
+                if (
+                    !in_array($element->getAttribute('class'), ['', 'indent']) &&
+                    $firstChild->getAttribute('class') === ''
+                ) {
                     $firstChild->setAttribute('class', $element->getAttribute('class'));
                 }
                 $nextSibling = $element->nextSibling;
@@ -102,7 +105,10 @@ class Manner
         }
 
         if ($myTag === 'div' && $element->parentNode->tagName === 'pre') {
-            if ($element->getAttribute('class') !== '' && $element->parentNode->getAttribute('class') === '') {
+            if (
+                !in_array($element->getAttribute('class'), ['', 'indent']) &&
+                $element->parentNode->getAttribute('class') === ''
+            ) {
                 $element->parentNode->setAttribute('class', $element->getAttribute('class'));
             }
             $nextSibling = $element->nextSibling;
@@ -195,8 +201,10 @@ class Manner
                     ['section', 'p', 'dl', 'dt', 'dd', 'div', 'blockquote', 'pre', 'table', 'tr', 'th', 'td'])
             ) {
                 $child = self::trimBrsRecursive($child);
-            } elseif ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName,
-                    Blocks::INLINE_ELEMENTS) && !$child->hasChildNodes()
+            } elseif (
+                $child->nodeType === XML_ELEMENT_NODE &&
+                in_array($child->tagName, Blocks::INLINE_ELEMENTS) &&
+                trim($child->textContent === '')
             ) {
                 $nextSibling = $child->nextSibling;
                 $child->parentNode->removeChild($child);

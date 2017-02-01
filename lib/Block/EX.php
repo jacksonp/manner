@@ -14,6 +14,10 @@ class Block_EX implements Block_Template
 
         array_shift($lines);
 
+        if ($parentNode->isOrInTag('pre')) {
+            return null;
+        }
+
         $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
         $pre = $parentNode->ownerDocument->createElement('pre');

@@ -13,6 +13,12 @@ class Block_SY implements Block_Template
 
         array_shift($lines);
 
+        $parentNode = Blocks::getBlockContainerParent($parentNode, true);
+
+        if ($parentNode->tagName === 'pre') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $commandName = '';
 
         if (count($request['arguments']) > 0) {
