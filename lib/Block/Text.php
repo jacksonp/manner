@@ -42,25 +42,23 @@ class Block_Text implements Block_Template
         $man = Man::instance();
 
         // TODO: we accept text lines start with \' - because of bugs in man pages for now, revisit.
-        if (mb_strlen($line) < 2 || mb_substr($line, 0, 2) !== '\\.') {
-            while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
-                Request::getLine($lines); // process line...
-                if (!count($lines)) {
-                    break;
-                }
-                $nextLine = $lines[0];
-                if (trim($nextLine) === '' ||
-                    in_array(mb_substr($nextLine, 0, 1), [$man->control_char, $man->control_char_2, ' ']) ||
-                    mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
-                    (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
-                ) {
-                    break;
-                }
-
-                array_shift($lines);
-
-                $line .= ' ' . self::removeTextProcessingInterrupt($nextLine);
+        while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
+            Request::getLine($lines); // process line...
+            if (!count($lines)) {
+                break;
             }
+            $nextLine = $lines[0];
+            if (trim($nextLine) === '' ||
+                in_array(mb_substr($nextLine, 0, 1), [$man->control_char, $man->control_char_2, ' ']) ||
+                mb_strpos($nextLine, "\t") > 0 || // Could be TabTable
+                (mb_strlen($nextLine) > 1 && mb_substr($nextLine, 0, 2) === '\\.')
+            ) {
+                break;
+            }
+
+            array_shift($lines);
+
+            $line .= ' ' . self::removeTextProcessingInterrupt($nextLine);
         }
 
         // Re-add continuation if present to last line for TextContent::interpretAndAppendText:
