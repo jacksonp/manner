@@ -15,12 +15,12 @@ class Block_TS implements Block_Template
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
             }
-            if (preg_match('~^-+$~u', $line)) {
+            $line = str_replace('|', '', $line);
+            if (preg_match('~^[-_\s]+$~u', $line)) {
                 $rowFormats[] = '---';
             } else {
                 // Ignore vertical bars for now:
-                $line    = str_replace('|', '', $line);
-                $colDefs = preg_split('~[\s]+~', $line);
+                $colDefs = preg_split('~\s+~', $line);
                 if (count($colDefs) === 1) {
                     $colDefs = str_split($colDefs[0]);
                 }
