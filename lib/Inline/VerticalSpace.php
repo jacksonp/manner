@@ -1,10 +1,10 @@
 <?php
 
 
-class Inline_VerticalSpace
+class Inline_VerticalSpace implements Block_Template
 {
 
-    private static function addBR(DOMElement $parentNode)
+    static function addBR(DOMElement $parentNode)
     {
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;
@@ -21,49 +21,36 @@ class Inline_VerticalSpace
         }
     }
 
-    static function check($string)
+    static function check(string $string)
     {
-        return Request::is($string, ['br', 'sp', 'ne']);
+        $stringArray = [$string];
+        $request     = Request::getLine($stringArray);
+        return in_array($request['request'], ['br', 'sp', 'ne']);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments, $request)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-        $numLines = count($lines);
+        array_shift($lines);
 
-        if (!in_array($textParent->tagName, [
-            'p',
-            'blockquote',
-            'dt',
-            'td',
-            'th',
-            'pre',
-            'h2',
-            'h3',
-            'code',
-          ]) ||
-          (
-            $textParent->hasChildNodes() &&
-            (
-              !($textParent->lastChild instanceof DOMElement) ||
-              $textParent->lastChild->tagName !== 'pre'
-            ) &&
-            $i !== $numLines - 1
-          )
+        if (
+            !($parentNode->lastChild instanceof DOMElement) ||
+            $parentNode->lastChild->tagName !== 'pre'
         ) {
 
-            self::addBR($textParent);
-            if (in_array($request, ['sp', 'ne'])) {
-                self::addBR($textParent);
+            self::addBR($parentNode);
+            if (in_array($request['request'], ['sp', 'ne'])) {
+                self::addBR($parentNode);
             }
 
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
         }
 
-        return $i;
+        return null;
 
     }
 

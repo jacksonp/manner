@@ -112,8 +112,6 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dd>Defaults to yes, with the default option Mono will suspend the vm on startup until it connects successfully to a debugger front end. If you set it to 'n', in conjunction with <strong>server=y</strong>, it instructs the Mono runtime to run as normal, while caching metadata to send to the debugger front end on connection..
     <dt><em>transport=transport_name</em>
     <dd>This is used to specify the transport that the debugger will use to communicate. It must be specified and currently requires this to be 'dt_socket'.
-  </dl>
-  <dl>
     <dt><strong>--desktop</strong>
     <dd>Configures the virtual machine to be better suited for desktop applications. Currently this sets the GC system to avoid expanding the heap as much as possible at the expense of slowing down garbage collection a bit.
     <dt><strong>--full-aot</strong>
@@ -220,7 +218,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. The words `program', `all' and `disabled' have special meaning. `program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>   mono --trace=System app.exe</pre>
+      <pre>    mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. For example, to trace all calls to the System.String class, use:
       <pre>        mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -429,11 +427,10 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       </dl>
       <p>The default is "null" on Unix (and versions of Windows before NT), and "win32" on Windows NT (and higher).
     <dt><strong>MONO_EXTERNAL_ENCODINGS</strong>
-    <dd>If set, contains a colon-separated list of text encodings to try when turning externally-generated text (e.g. command-line arguments or filenames) into Unicode. The encoding names come from the list provided by iconv, and the special case "default_locale" which refers to the current locale's default encoding.<br>
-    <br>
-    When reading externally-generated text strings UTF-8 is tried first, and then this list is tried in order with the first successful conversion ending the search. When writing external text (e.g. new filenames or arguments to new processes) the first item in this list is used, or UTF-8 if the environment variable is not set.<br>
-    <br>
-    The problem with using MONO_EXTERNAL_ENCODINGS to process your files is that it results in a problem: although its possible to get the right file name it is not necessarily possible to open the file. In general if you have problems with encodings in your filenames you should use the "convmv" program.
+    <dd>
+      <p>If set, contains a colon-separated list of text encodings to try when turning externally-generated text (e.g. command-line arguments or filenames) into Unicode. The encoding names come from the list provided by iconv, and the special case "default_locale" which refers to the current locale's default encoding.
+      <p>When reading externally-generated text strings UTF-8 is tried first, and then this list is tried in order with the first successful conversion ending the search. When writing external text (e.g. new filenames or arguments to new processes) the first item in this list is used, or UTF-8 if the environment variable is not set.
+      <p>The problem with using MONO_EXTERNAL_ENCODINGS to process your files is that it results in a problem: although its possible to get the right file name it is not necessarily possible to open the file. In general if you have problems with encodings in your filenames you should use the "convmv" program.
     <dt><strong>MONO_GC_PARAMS</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this variable controls several parameters of the collector. The variable's value is a comma separated list of words.
@@ -528,7 +525,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. Set to a colon-separated list of "drive" to strip drive letters, or "case" to do case-insensitive file matching in every directory in a path. "all" enables all rewriting methods. (Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre>        MONO_IOMAP=drive:case
+      <pre>   MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
       <pre>   MonoIOMAP &lt;appalias&gt; all</pre>
@@ -544,31 +541,76 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_MESSAGING_PROVIDER</strong>
     <dd>
       <p>Mono supports a plugin model for its implementation of System.Messaging making it possible to support a variety of messaging implementations (e.g. AMQP, ActiveMQ). To specify which messaging implementation is to be used the evironement variable needs to be set to the full class name for the provider. E.g. to use the RabbitMQ based AMQP implementation the variable should be set to:
-      <pre>Mono.Messaging.RabbitMQ.RabbitMQMessagingProvider,Mono.Messaging.RabbitMQ</pre>
-    <dt><strong>MONO_NO_SMP</strong>
-    <dd>If set causes the mono process to be bound to a single processor. This may be useful when debugging or working around race conditions.
-    <dt><strong>MONO_NO_TLS</strong>
-    <dd>Disable inlining of thread local accesses. Try setting this if you get a segfault early on in the execution of mono.
-    <dt><strong>MONO_PATH</strong>
-    <dd>Provides a search path to the runtime where to look for library files. This is a tool convenient for debugging applications, but should not be used by deployed applications as it breaks the assembly loader in subtle ways. Directories are separated by the platform path separator (colons on unix). Example: <strong>/home/username/lib:/usr/local/mono/lib</strong> Relative paths are resolved based on the launch-time current directory. Alternative solutions to MONO_PATH include: installing libraries into the Global Assembly Cache (see gacutil(1)) or having the dependent libraries side-by-side with the main executable. For a complete description of recommended practices for application deployment, see http://www.mono-project.com/docs/getting-started/application-deployment/
-    <dt><strong>MONO_SHARED_DIR</strong>
-    <dd>If set its the directory where the ".wapi" handle state is stored. This is the directory where the Windows I/O Emulation layer stores its shared state data (files, events, mutexes, pipes). By default Mono will store the ".wapi" directory in the users's home directory.
-    <dt><strong>MONO_SHARED_HOSTNAME</strong>
-    <dd>Uses the string value of this variable as a replacement for the host name when creating file names in the ".wapi" directory. This helps if the host name of your machine is likely to be changed when a mono application is running or if you have a .wapi directory shared among several different computers. Mono typically uses the hostname to create the files that are used to share state across multiple Mono processes. This is done to support home directories that might be shared over the network.
-    <dt><strong>MONO_STRICT_IO_EMULATION</strong>
-    <dd>If set, extra checks are made during IO operations. Currently, this includes only advisory locks around file writes.
-    <dt><strong>MONO_THEME</strong>
-    <dd>The name of the theme to be used by Windows.Forms. Available themes today include "clearlooks", "nice" and "win32". The default is "win32".
-    <dt><strong>MONO_TLS_SESSION_CACHE_TIMEOUT</strong>
-    <dd>The time, in seconds, that the SSL/TLS session cache will keep it's entry to avoid a new negotiation between the client and a server. Negotiation are very CPU intensive so an application-specific custom value may prove useful for small embedded systems. The default is 180 seconds.
-    <dt><strong>MONO_THREADS_PER_CPU</strong>
-    <dd>The minimum number of threads in the general threadpool will be MONO_THREADS_PER_CPU * number of CPUs. The default value for this variable is 1.
-    <dt><strong>MONO_XMLSERIALIZER_THS</strong>
-    <dd>Controls the threshold for the XmlSerializer to produce a custom serializer for a given class instead of using the Reflection-based interpreter. The possible values are `no' to disable the use of a custom serializer or a number to indicate when the XmlSerializer should start serializing. The default value is 50, which means that the a custom serializer will be produced on the 50th use.
-    <dt><strong>MONO_X509_REVOCATION_MODE</strong>
-    <dd>Sets the revocation mode used when validating a X509 certificate chain (https, ftps, smtps...). The default is 'nocheck', which performs no revocation check at all. The other possible values are 'offline', which performs CRL check (not implemented yet) and 'online' which uses OCSP and CRL to verify the revocation status (not implemented yet).
-    <dt><strong>NO_PROXY</strong>
-    <dd>(Also <strong>no_proxy</strong>) If both <strong>HTTP_PROXY</strong> and <strong>NO_PROXY</strong> are set, <strong>NO_PROXY</strong> will be treated as a comma-separated list of "bypass" domains which will not be sent through the proxy. Domains in <strong>NO_PROXY</strong> may contain wildcards, as in "*.mono-project.com" or "build????.local". Not supported on Windows, Mac OS, iOS or Android.
+      <pre>Mono.Messaging.RabbitMQ.RabbitMQMessagingProvider,Mono.Messaging.RabbitMQ
+    <strong>MONO_NO_SMP</strong>
+    If set causes the mono process to be bound to a single processor. This may be
+    useful when debugging or working around race conditions.
+    <strong>MONO_NO_TLS</strong>
+    Disable inlining of thread local accesses. Try setting this if you get a segfault
+    early on in the execution of mono.
+    <strong>MONO_PATH</strong>
+    Provides a search path to the runtime where to look for library
+    files.   This is a tool convenient for debugging applications, but
+    should not be used by deployed applications as it breaks the assembly
+    loader in subtle ways. 
+    Directories are separated by the platform path separator (colons on unix). Example:
+    <strong>/home/username/lib:/usr/local/mono/lib</strong>
+    Relative paths are resolved based on the launch-time current directory.
+    Alternative solutions to MONO_PATH include: installing libraries into
+    the Global Assembly Cache (see gacutil(1)) or having the dependent
+    libraries side-by-side with the main executable.
+    For a complete description of recommended practices for application
+    deployment, see
+    http://www.mono-project.com/docs/getting-started/application-deployment/
+    <strong>MONO_SHARED_DIR</strong>
+    If set its the directory where the ".wapi" handle state is stored.
+    This is the directory where the Windows I/O Emulation layer stores its
+    shared state data (files, events, mutexes, pipes).  By default Mono
+    will store the ".wapi" directory in the users's home directory.
+    <strong>MONO_SHARED_HOSTNAME</strong>
+    Uses the string value of this variable as a replacement for the host name when
+    creating file names in the ".wapi" directory. This helps if the host name of
+    your machine is likely to be changed when a mono application is running or if
+    you have a .wapi directory shared among several different computers.
+    Mono typically uses the hostname to create the files that are used to
+    share state across multiple Mono processes.  This is done to support
+    home directories that might be shared over the network.
+    <strong>MONO_STRICT_IO_EMULATION</strong>
+    If set, extra checks are made during IO operations.  Currently, this
+    includes only advisory locks around file writes.
+    <strong>MONO_THEME</strong>
+    The name of the theme to be used by Windows.Forms.   Available themes today
+    include "clearlooks", "nice" and "win32".
+    The default is "win32".  
+    <strong>MONO_TLS_SESSION_CACHE_TIMEOUT</strong>
+    The time, in seconds, that the SSL/TLS session cache will keep it's entry to
+    avoid a new negotiation between the client and a server. Negotiation are very
+    CPU intensive so an application-specific custom value may prove useful for 
+    small embedded systems.
+    The default is 180 seconds.
+    <strong>MONO_THREADS_PER_CPU</strong>
+    The minimum number of threads in the general threadpool will be 
+    MONO_THREADS_PER_CPU * number of CPUs. The default value for this
+    variable is 1.
+    <strong>MONO_XMLSERIALIZER_THS</strong>
+    Controls the threshold for the XmlSerializer to produce a custom
+    serializer for a given class instead of using the Reflection-based
+    interpreter.  The possible values are `no' to disable the use of a
+    custom serializer or a number to indicate when the XmlSerializer
+    should start serializing.   The default value is 50, which means that
+    the a custom serializer will be produced on the 50th use.
+    <strong>MONO_X509_REVOCATION_MODE</strong>
+    Sets the revocation mode used when validating a X509 certificate chain (https,
+    ftps, smtps...).  The default is 'nocheck', which performs no revocation check
+    at all. The other possible values are 'offline', which performs CRL check (not
+    implemented yet) and 'online' which uses OCSP and CRL to verify the revocation
+    status (not implemented yet).
+    <strong>NO_PROXY</strong>
+    (Also <strong>no_proxy</strong>) If both <strong>HTTP_PROXY</strong> and <strong>NO_PROXY</strong> are
+    set, <strong>NO_PROXY</strong> will be treated as a comma-separated list of "bypass" domains
+    which will not be sent through the proxy. Domains in <strong>NO_PROXY</strong> may contain
+    wildcards, as in "*.mono-project.com" or "build????.local". Not supported on
+    Windows, Mac OS, iOS or Android.</pre>
   </dl>
 </section>
 <section>
@@ -640,7 +682,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_TRACE</strong>
     <dd>
       <p>Used for runtime tracing of method calls. The format of the comma separated trace options is:
-      <pre>        [-]M:method name
+      <pre>          [-]M:method name
         [-]N:namespace
         [-]T:class name
         [-]all

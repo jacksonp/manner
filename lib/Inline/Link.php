@@ -1,109 +1,39 @@
 <?php
 
 
-class Inline_Link
+class Inline_Link implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-
-        if ($request === 'URL') {
-            $dom = $parentNode->ownerDocument;
-            if (count($arguments) === 0) {
-                throw new Exception('Not enough arguments to .URL: ' . $lines[$i]);
-            }
-            $anchor = $dom->createElement('a');
-            $anchor->setAttribute('href', $arguments[0]);
-
-            if (count($arguments) > 1) {
-                TextContent::interpretAndAppendText($anchor, $arguments[1]);
-            } elseif ($i < count($lines) - 1) {
-                $blockLines = [$lines[++$i]];
-                Blocks::trim($blockLines);
-                Blocks::handle($anchor, $blockLines);
-            } else {
-                $anchor->appendChild(new DOMText($arguments[0]));
-            }
-
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
-            $textParent->appendChild($anchor);
-            if (count($arguments) === 3) {
-                $textParent->appendChild(new DOMText($arguments[2]));
-            }
-
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
-
-            return $i;
-        }
-
-        $dom         = $parentNode->ownerDocument;
-        $numLines    = count($lines);
-        $punctuation = '';
-        $blockLines  = [];
-
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $request = Request::get($lines[$i]);
-            if (in_array($request['request'], ['UR', 'MT'])) {
-                --$i;
-                break;
-            } elseif (in_array($request['request'], ['UE', 'ME'])) {
-                $punctuation = trim($request['arg_string']);
-                break;
-            }
-            $blockLines[] = $lines[$i];
-        }
-
-        $href = false;
-        if (count($arguments) > 0) {
-            $url  = $arguments[0];
-            $href = self::getValidHREF($url);
-        }
-        if ($href === false && count($blockLines) === 1) {
-            $url  = $blockLines[0];
-            $href = self::getValidHREF($url);
-        }
-        if ($href === false) {
-            // No valid URL, output any content as text and bail.
-            Blocks::trim($blockLines);
-            Blocks::handle($parentNode, $blockLines);
-
-            return $i;
-        }
+        array_shift($lines);
+        $dom        = $parentNode->ownerDocument;
+        $parentNode = Blocks::getParentForText($parentNode);
 
         $anchor = $dom->createElement('a');
-        $anchor->setAttribute('href', $href);
 
-        Blocks::trim($blockLines);
-        if (count($blockLines) === 0) {
-            TextContent::interpretAndAppendText($anchor, $url);
-        } else {
-            Blocks::handle($anchor, $blockLines);
-        }
-        if ($anchor->hasContent()) {
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
+        if (count($request['arguments'])) {
+            $url = $request['arguments'][0];
+            $href = self::getValidHREF($url);
+            if ($href) {
+                $anchor->setAttribute('href', $href);
             }
-            $textParent->appendChild($anchor);
-        }
-        if ($punctuation !== '') {
-            $textParent->appendChild(new DOMText($punctuation));
         }
 
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
+        Block_Text::addSpace($parentNode);
+        $parentNode->appendChild($anchor);
 
-        return $i;
+        return $anchor;
 
     }
 
-    private static function getValidHREF(string $url)
+    static function getValidHREF(string $url)
     {
         $url  = Replace::preg('~^<(.*)>$~u', '$1', $url);
         $href = TextContent::interpretString($url);

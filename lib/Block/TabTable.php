@@ -3,46 +3,73 @@
 /**
  * Make tables out of tab-separated lines
  */
-class Block_TabTable
+class Block_TabTable implements Block_Template
 {
 
-    static function isStart($lines, $i)
+    const skippableLines = ['.br', ''];
+
+    // \&... see pmlogextract.1
+    const specialAcceptableLines = ['\\&...'];
+
+    private static function isTabTableLine($line)
     {
-        // char before tab avoid indented stuff + exclude escaped tabs
+        $line = trim($line);
         return
-          $i < count($lines) - 2 &&
-          !in_array(mb_substr($lines[$i], 0, 1), ['.', '\'']) &&
-          mb_strpos($lines[$i], "\t") > 0 &&
-          preg_match('~[^\\\\\s]\t~u', $lines[$i]) &&
-          (
-            (
-              preg_match('~[^\\\\\s]\t~u', $lines[$i + 1]) && mb_strpos($lines[$i + 1], "\t") > 0) ||
-            (in_array(trim($lines[$i + 1]), ['.br', '', '\\&...'])
-            ) &&
-            preg_match('~[^\\\\\s]\t~u', $lines[$i + 2]) &&
-            mb_strpos($lines[$i + 2], "\t") > 0
-          );
+            mb_strpos($line, "\t") !== false ||
+            in_array($line, self::skippableLines) ||
+            in_array($line, self::specialAcceptableLines);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function lineContainsTab(string $line): bool
+    {
+        $line = ltrim($line, '\\&');
+        // first char is NOT a tab + non-white-space before tab avoid indented stuff + exclude escaped tabs
+        return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
+    }
+
+    static function isStart(array &$lines): bool
+    {
+        return
+            count($lines) > 2 &&
+            !in_array(mb_substr($lines[0], 0, 1), ['.', '\'']) &&
+            self::lineContainsTab($lines[0]) &&
+            (
+                self::lineContainsTab($lines[1]) ||
+                in_array(trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
+            ) &&
+            self::lineContainsTab($lines[2]);
+    }
+
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
-        $line     = $lines[$i];
-
-        $isStart = self::isStart($lines, $i);
-        if (!$isStart) {
-            return false;
-        }
-
         $dom = $parentNode->ownerDocument;
+
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
 
         $table = $dom->createElement('table');
         $parentNode->appendChild($table);
 
-        for (; ; ++$i) {
+        while ($nextRequest = Request::getLine($lines)) {
 
-            $tds = preg_split('~\t+~u', $line);
+            if (!self::isTabTableLine($nextRequest['raw_line'])) {
+                break;
+            }
+
+            array_shift($lines);
+
+            if (in_array(trim($nextRequest['raw_line']), self::skippableLines)) {
+                continue;
+            }
+
+            $tds = preg_split('~\t+~u', $nextRequest['raw_line']);
             $tr  = $table->appendChild($dom->createElement('tr'));
             foreach ($tds as $tdLine) {
                 $cell = $dom->createElement('td');
@@ -50,27 +77,9 @@ class Block_TabTable
                 $tr->appendChild($cell);
             }
 
-            if ($i === $numLines - 1) {
-                return $i;
-            }
-
-            $line = $lines[$i + 1];
-
-            if (in_array(trim($line), ['.br', ''])) {
-                ++$i;
-                if ($i === $numLines - 1) {
-                    return $i;
-                }
-                $line = $lines[$i + 1];
-            }
-
-            if (mb_strpos($line, "\t") === false && $line !== '\\&...') { // \&... see pmlogextract.1
-                return $i;
-            }
-
         }
 
-        throw new Exception('Should not get to the end of this function.');
+        return $parentNode;
 
     }
 

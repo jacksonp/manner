@@ -1,7 +1,6 @@
 <?php
 
-
-class Block_fc
+class Block_fc implements Block_Template
 {
 
     private static function addRow(DOMDocument $dom, DOMElement $table, array $cells)
@@ -12,43 +11,64 @@ class Block_fc
             TextContent::interpretAndAppendText($td, $contents);
             $tr->appendChild($td);
         }
-        $table->appendChild($tr);
+        $table->appendBlockIfHasContent($tr);
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $delim = $arguments[0];
-        $pad   = $arguments[1];
+        array_shift($lines);
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        $delim = $request['arguments'][0];
+        $pad   = $request['arguments'][1];
+
+        $dom = $parentNode->ownerDocument;
 
         $table = $dom->createElement('table');
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, ['ta', 'nf'])) {
-                continue; // Swallow
-            } elseif (Request::is($line, 'fi')) {
+
+        // We don't want to handle the lines at this stage as a fresh call to .fc call a new Roff_fc, so don't iterate
+        // with Request::getLine()
+        while (count($lines)) {
+
+            // Don't process next line yet, could be new .fc
+            $requestDetails = Request::peepAt($lines[0]);
+
+            if (
+                $requestDetails['name'] === 'fi' ||
+                ($requestDetails['name'] === 'fc' && $requestDetails['raw_arg_string'] === '')
+            ) {
+                array_shift($lines);
                 break; // Finished
-            } elseif (mb_strpos($line, $delim) === 0) {
-                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $line);
+            }
+
+            $nextRequest = Request::getLine($lines);
+            array_shift($lines);
+
+            if (in_array($nextRequest['request'], ['ta', 'nf', 'br'])) {
+                continue; // Ignore
+            } elseif (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
+                $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $nextRequest['raw_line']);
                 array_shift($cells);
                 $cells = array_map(function ($contents) use ($pad) {
                     return trim($contents, $pad);
                 }, $cells);
                 self::addRow($dom, $table, $cells);
-            } elseif (mb_strpos($line, "\t") !== 0) {
-                $cells = preg_split("~\t~u", $line);
+            } elseif (mb_strpos($nextRequest['raw_line'], "\t") !== 0) {
+                $cells = preg_split("~\t~u", $nextRequest['raw_line']);
                 self::addRow($dom, $table, $cells);
             } else {
-                throw new Exception('Unexpected ' . $line);
+                throw new Exception('Unexpected ' . $nextRequest['raw_line']);
             }
         }
 
         $parentNode->appendBlockIfHasContent($table);
 
-        return $i;
+        return null;
 
     }
 

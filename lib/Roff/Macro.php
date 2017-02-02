@@ -4,17 +4,12 @@
 class Roff_Macro
 {
 
-    static function applyReplacements(string $string, &$arguments): string
+    static function applyReplacements(string $string, array &$arguments, bool $fullLine = false): string
     {
 
-        if (Request::is($string, 'shift')) {
+        if ($fullLine && Request::peepAt($string)['name'] === 'shift') {
             array_shift($arguments);
-
             return '.';
-        }
-
-        if (is_null($arguments)) {
-            return $string;
         }
 
         // \$x - Macro or string argument with one-digit number x in the range 1 to 9.
@@ -27,11 +22,6 @@ class Roff_Macro
 
         // \$@ : In a macro or string, the concatenation of all the arguments with each surrounded by double quotes, and separated by spaces.
         $string = str_replace('\\$@', '"' . implode('" "', $arguments) . '"', $string);
-
-        // Other \$ things are also arguments...
-        if (mb_strpos($string, '\\$') !== false) {
-            throw new Exception($string . ' - can not handle macro with: ' . $string);
-        }
 
         return $string;
     }

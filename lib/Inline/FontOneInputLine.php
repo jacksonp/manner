@@ -1,82 +1,83 @@
 <?php
 
 
-class Inline_FontOneInputLine
+class Inline_FontOneInputLine implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        if (count($arguments) === 0 && $i < count($lines) - 1 && Request::is($lines[$i + 1], 'IP')) {
-            return $i; // TODO: not sure how to handle this, just skip the font setting for now.
+        array_shift($lines);
+
+        if (
+            count($request['arguments']) === 0 &&
+            count($lines) &&
+            (Blocks::lineEndsBlock(Request::getLine($lines), $lines))
+        ) {
+            return null; // Skip
         }
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        if (count($request['arguments']) === 1 && $request['arguments'][0] === '') {
+            return null; // bug in man page, see e.g. basic_ldap_auth.8: .B "\"uid\=%s\""
+        }
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+        $parentNode = Blocks::getParentForText($parentNode);
+        Block_Text::addSpace($parentNode);
+        $dom = $parentNode->ownerDocument;
 
-        switch ($request) {
+        $node = $parentNode;
+
+        switch ($request['request']) {
             case 'R':
-                $appendToParentNode = false;
-                $innerNode          = $textParent;
                 break;
             case 'I':
-                $appendToParentNode = $dom->createElement('em');
-                $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('em')) {
+                    $node = $parentNode->appendChild($dom->createElement('em'));
+                }
                 break;
             case 'B':
-                if ($textParent->tagName === 'strong') {
-                    $appendToParentNode = false;
-                    $innerNode          = $textParent;
-                } else {
-                    $appendToParentNode = $dom->createElement('strong');
-                    $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('strong')) {
+                    $node = $parentNode->appendChild($dom->createElement('strong'));
                 }
                 break;
             case 'SB':
-                $appendToParentNode = $dom->createElement('small');
-                $innerNode          = $appendToParentNode->appendChild($dom->createElement('strong'));
+                if (!$parentNode->isOrInTag('strong')) {
+                    $node = $parentNode->appendChild($dom->createElement('strong'));
+                }
+                if (!$parentNode->isOrInTag('small')) {
+                    $node = $parentNode->appendChild($dom->createElement('small'));
+                }
                 break;
             case 'SM':
-                $appendToParentNode = $dom->createElement('small');
-                $innerNode          = $appendToParentNode;
+                if (!$parentNode->isOrInTag('small')) {
+                    $node = $parentNode->appendChild($dom->createElement('small'));
+                }
                 break;
             default:
                 throw new Exception('switch is exhaustive.');
         }
 
-        Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
-
-        if (count($arguments) === 0) {
-            if ($i === $numLines - 1) {
-                return $i;
+        if (count($request['arguments']) === 0) {
+            $gotContent = Roff::parse($node, $lines, true);
+            if (!$gotContent) {
+                if ($node->tagName !== $parentNode->tagName) {
+                    $parentNode->removeChild($node);
+                }
+                return null;
             }
-            ++$i;
-            if ($lines[$i] === '') {
-                return $i;
-            }
-            $result = Block_Text::getNextInputLine($lines, $i);
-            $i      = $result['i'];
-            if (count($result['lines']) === 0) {
-                return $i;
-            }
-            $blockLines = $result['lines'];
-            Blocks::trim($blockLines);
-            Blocks::handle($innerNode, $blockLines);
         } else {
-            TextContent::interpretAndAppendText($innerNode, implode(' ', $arguments));
+            TextContent::interpretAndAppendText($node, implode(' ', $request['arguments']));
+            if ($pre = $parentNode->ancestor('pre')) {
+                Block_Preformatted::endInputLine($pre);
+            }
         }
 
-        if ($appendToParentNode) {
-            $textParent->appendChild($appendToParentNode);
-        }
-
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
-
-        return $i;
+        return $parentNode;
 
     }
 

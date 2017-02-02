@@ -1,30 +1,30 @@
 <?php
 
 
-class Block_Vb
+class Block_Vb implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
 
-        $blockLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, 'Ve')) {
-                break;
-            } else {
-                $blockLines[] = $line;
-            }
+        if ($parentNode->isOrInTag('pre')) {
+            return null;
         }
 
-        $block = $dom->createElement('pre');
-        BlockPreformatted::handle($block, $blockLines);
-        $parentNode->appendBlockIfHasContent($block);
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
 
-        return $i;
+        $pre = $parentNode->ownerDocument->createElement('pre');
+
+        $pre = $parentNode->appendChild($pre);
+
+        return $pre;
 
     }
 

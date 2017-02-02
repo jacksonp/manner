@@ -1,16 +1,14 @@
 <?php
 
 
-class Roff_Translation
+class Roff_Translation implements Roff_Template
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
-
+        array_shift($lines);
         $man = Man::instance();
-//
-//        $roffStrings = $man->getStrings();
-//        $translate   = Roff_String::substitute($matches[1], $roffStrings);
+
         $translate = $request['arg_string'];
         $translate = TextContent::interpretString($translate, false);
 
@@ -21,7 +19,7 @@ class Roff_Translation
             $man->setCharTranslation($chrArray[$j], $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1]);
         }
 
-        return ['i' => $i];
+        return [];
 
     }
 

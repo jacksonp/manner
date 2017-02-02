@@ -1,22 +1,27 @@
 <?php
 
-class Inline_EQ
+class Inline_EQ implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement {
 
-        $numLines = count($lines);
+        array_shift($lines);
+
         $foundEnd = false;
 
         $eqLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
-            if (Request::is($line, 'EN')) {
+        while ($request = Request::getLine($lines)) {
+            array_shift($lines);
+            if ($request['request'] === 'EN') {
                 $foundEnd = true;
                 break;
             } else {
-                $eqLines[] = $line;
+                $eqLines[] = $request['raw_line'];
             }
         }
 
@@ -30,8 +35,7 @@ class Inline_EQ
             if (preg_match('~^delim (.)(.)$~ui', $eqLines[0], $matches)) {
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
-
-                return $i;
+                return null;
             }
         }
 
@@ -44,17 +48,11 @@ class Inline_EQ
         }
 
         if (count($eqLines) > 0) {
-            list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
-            if ($textParent->hasContent()) {
-                $textParent->appendChild(new DOMText(' '));
-            }
-            self::appendMath($textParent, $eqLines);
-            if ($shouldAppend) {
-                $parentNode->appendBlockIfHasContent($textParent);
-            }
+            Block_Text::addSpace($parentNode);
+            self::appendMath($parentNode, $eqLines);
         }
 
-        return $i;
+        return null;
 
     }
 

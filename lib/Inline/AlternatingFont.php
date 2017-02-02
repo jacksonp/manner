@@ -1,59 +1,49 @@
 <?php
 
-
-class Inline_AlternatingFont
+class Inline_AlternatingFont implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments, $request)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        if (count($arguments) === 0) {
-            return $i; // Just skip empty requests
-        }
+        array_shift($lines);
 
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
+        $parentNode = Blocks::getParentForText($parentNode);
 
-        $dom = $parentNode->ownerDocument;
-
-        Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
-
-        foreach ($arguments as $bi => $bit) {
+        Block_Text::addSpace($parentNode);
+        
+        foreach ($request['arguments'] as $bi => $bit) {
             $requestCharIndex = $bi % 2;
-            if (!isset($request[$requestCharIndex])) {
-                throw new Exception($lines[$i] . ' command ' . $request . ' has nothing at index ' . $requestCharIndex);
+            if (!isset($request['request'][$requestCharIndex])) {
+                throw new Exception($lines[0] . ' command ' . $request['request'] . ' has nothing at index ' . $requestCharIndex);
             }
             if (trim($bit) === '') {
-                TextContent::interpretAndAppendText($textParent, $bit);
+                TextContent::interpretAndAppendText($parentNode, $bit);
                 continue;
             }
-            switch ($request[$requestCharIndex]) {
+            switch ($request['request'][$requestCharIndex]) {
                 case 'R':
-                    TextContent::interpretAndAppendText($textParent, $bit);
+                    TextContent::interpretAndAppendText($parentNode, $bit);
                     break;
                 case 'B':
-                    $strongNode = $dom->createElement('strong');
+                    $strongNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('strong'));
                     TextContent::interpretAndAppendText($strongNode, $bit);
-                    if ($strongNode->hasContent()) {
-                        $textParent->appendChild($strongNode);
-                    }
                     break;
                 case 'I':
-                    $emNode = $dom->createElement('em');
+                    $emNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('em'));
                     TextContent::interpretAndAppendText($emNode, $bit);
-                    if ($emNode->hasContent()) {
-                        $textParent->appendChild($emNode);
-                    }
                     break;
                 default:
-                    throw new Exception($lines[$i] . ' command ' . $request . ' unexpected character at index ' . $requestCharIndex);
+                    throw new Exception($lines[0] . ' command ' . $request['request'] . ' unexpected character at index ' . $requestCharIndex);
             }
         }
 
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
-
-        return $i;
+        return $parentNode;
 
     }
 

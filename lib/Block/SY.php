@@ -1,49 +1,41 @@
 <?php
 
-
-class Block_SY
+class Block_SY implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        // These get swallowed:
-        $blockEnds   = ['.YS'];
-        $numLines    = count($lines);
-        $dom         = $parentNode->ownerDocument;
-        $commandName = '';
+        array_shift($lines);
 
-        if (count($arguments) > 0) {
-            $commandName = $arguments[0];
+        $parentNode = Blocks::getBlockContainerParent($parentNode, true);
+
+        if ($parentNode->tagName === 'pre') {
+            $parentNode = $parentNode->parentNode;
         }
 
-        $pre = $dom->createElement('pre');
+        $commandName = '';
+
+        if (count($request['arguments']) > 0) {
+            $commandName = $request['arguments'][0];
+        }
+
+        $pre = $parentNode->ownerDocument->createElement('pre');
         if ($commandName !== '') {
             $commandName = trim(TextContent::interpretString($commandName));
             $pre->setAttribute('class', 'synopsis');
             $pre->appendChild(new DOMText($commandName . ' '));
         }
 
-        $preLines = [];
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            if (in_array($lines[$i], $blockEnds)) {
-                break;
-            } elseif (Request::is($lines[$i], 'SY')) {
-                --$i;
-                break;
-            }
-            $preLines[] = $lines[$i];
-        }
+        $pre = $parentNode->appendChild($pre);
 
-        if (count($preLines) === 0) {
-            return $i;
-        }
+        return $pre;
 
-        BlockPreformatted::handle($pre, $preLines);
-        $parentNode->appendChild($pre);
-
-        return $i;
     }
-
 
 }

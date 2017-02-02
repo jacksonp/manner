@@ -1,36 +1,30 @@
 <?php
 
 
-class Block_P
+class Block_P implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
 
-        $blockLines = [];
-        for (; $i < $numLines - 1; ++$i) {
-            if (Blocks::lineEndsBlock($lines, $i + 1)) {
-                break;
+        if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
+            return null; // Use existing parent node for content that will follow.
+        } else {
+            $parentNode = Blocks::getBlockContainerParent($parentNode);
+            if ($parentNode->tagName === 'dd') {
+                $parentNode = $parentNode->parentNode->parentNode;
             }
-            $blockLines[] = $lines[$i + 1];
+            $p = $parentNode->ownerDocument->createElement('p');
+            $p = $parentNode->appendChild($p);
+            return $p;
         }
-
-        Blocks::trim($blockLines);
-
-        if (count($blockLines) > 0) {
-            if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
-                Blocks::handle($parentNode, $blockLines);
-            } else {
-                $p = $dom->createElement('p');
-                Blocks::handle($p, $blockLines);
-                $parentNode->appendBlockIfHasContent($p);
-            }
-        }
-
-        return $i;
 
     }
 

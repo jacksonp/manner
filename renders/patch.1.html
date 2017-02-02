@@ -104,11 +104,9 @@
 <em>new lines from the patch</em>
 <strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</strong></pre>
   </div>
-  <blockquote>
-    The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. The merge format is the default.<br>
-    <br>
-    This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
-  </blockquote>
+  <p class="indent">The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. The merge format is the default.<br>
+  <br>
+  This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
   <dl>
     <dt><strong>-n</strong> or <strong>--normal</strong>
     <dd>Interpret the patch file as a normal diff.
@@ -119,15 +117,12 @@
     <dt><strong>-p</strong><em>num</em> or <strong>--strip</strong><strong>=</strong><em>num</em>
     <dd>
       <p>Strip the smallest prefix containing <em>num</em> leading slashes from each file name found in the patch file. A sequence of one or more adjacent slashes is counted as a single slash. This controls how file names found in the patch file are treated, in case you keep your files in a different directory than the person who sent out the patch. For example, supposing the file name in the patch file was
-      <p><strong>/u/howard/src/blurfl/blurfl.c</strong><br>
-      <br>
-      setting <strong>-p0</strong> gives the entire file name unmodified, <strong>-p1</strong> gives
-      <p><strong>u/howard/src/blurfl/blurfl.c</strong><br>
-      <br>
-      without the leading slash, <strong>-p4</strong> gives
-      <p><strong>blurfl/blurfl.c</strong><br>
-      <br>
-      and not specifying <strong>-p</strong> at all just gives you <strong>blurfl.c</strong>. Whatever you end up with is looked for either in the current directory, or the directory specified by the <strong>-d</strong> option.
+      <p><strong>/u/howard/src/blurfl/blurfl.c</strong>
+      <p>setting <strong>-p0</strong> gives the entire file name unmodified, <strong>-p1</strong> gives
+      <p><strong>u/howard/src/blurfl/blurfl.c</strong>
+      <p>without the leading slash, <strong>-p4</strong> gives
+      <p><strong>blurfl/blurfl.c</strong>
+      <p>and not specifying <strong>-p</strong> at all just gives you <strong>blurfl.c</strong>. Whatever you end up with is looked for either in the current directory, or the directory specified by the <strong>-d</strong> option.
     <dt><strong>--posix</strong>
     <dd>
       <p>Conform more strictly to the POSIX standard, as follows.
@@ -257,13 +252,17 @@
   <p>You can create a file by sending out a diff that compares <strong>/dev/null</strong> or an empty file dated the Epoch (1970-01-01 00:00:00 UTC) to the file you want to create. This only works if the file you want to create doesn't exist already in the target directory. Conversely, you can remove a file by sending out a context diff that compares the file to be deleted with an empty file dated the Epoch. The file will be removed unless <strong>patch</strong> is conforming to POSIX and the <strong>-E</strong> or <strong>--remove-empty-files</strong> option is not given. An easy way to generate patches that create and remove files is to use GNU <strong>diff</strong>'s <strong>-N</strong> or <strong>--new-file</strong> option.
   <p>If the recipient is supposed to use the <strong>-p</strong><em>N</em> option, do not send output that looks like this:
   <div class="indent">
-    <p><code>diff -Naur v2.0.29/prog/README prog/README<br>
+    <p><code><br>
+    <br>
+    diff -Naur v2.0.29/prog/README prog/README<br>
     --- v2.0.29/prog/README Mon Mar 10 15:13:12 1997<br>
     +++ prog/README Mon Mar 17 14:58:22 1997</code>
   </div>
   <p>because the two file names have different numbers of slashes, and different versions of <strong>patch</strong> interpret the file names differently. To avoid confusion, send output that looks like this instead:
   <div class="indent">
-    <p><code>diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>
+    <p><code><br>
+    <br>
+    diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>
     --- v2.0.29/prog/README Mon Mar 10 15:13:12 1997<br>
     +++ v2.0.30/prog/README Mon Mar 17 14:58:22 1997</code>
   </div>

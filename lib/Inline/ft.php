@@ -1,92 +1,78 @@
 <?php
 
-
-class Inline_ft
+class Inline_ft implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, array $arguments)
+    private static function getNonFontParent(DOMElement $parentNode): DOMElement
+    {
+        while (in_array($parentNode->tagName, Blocks::INLINE_ELEMENTS)) {
+            $parentNode = $parentNode->parentNode;
+        }
+        return $parentNode;
+    }
+
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
+        array_shift($lines);
 
-        if ($i === $numLines - 1) {
-            return $i; // trailing .ft: skip
+        // Return to previous font. Same as \f[] or \fP.
+        if (count($request['arguments']) === 0) {
+            return self::getNonFontParent($parentNode);
         }
 
-        if (count($arguments) === 0) {
-            return $i; // Just skip empty requests
-        }
-
-        $fontAbbreviation = $arguments[0];
+        $fontAbbreviation = $request['arguments'][0];
 
         // Skip stray regular font settings:
         if (in_array($fontAbbreviation, ['0', '1', 'R', 'P', 'CR', 'AR'])) {
-            return $i;
+            return self::getNonFontParent($parentNode);
         }
+
+        $parentNode = Blocks::getParentForText($parentNode);
 
         $dom = $parentNode->ownerDocument;
-        list ($textParent, $shouldAppend) = Blocks::getTextParent($parentNode);
 
-        $blockLines = [];
-        for (; $i < $numLines - 1; ++$i) {
-            $nextLine = $lines[$i + 1];
-            if (
-              preg_match('~^\.\s*((ft|I|B|SB|SM)(\s|$)|(BI|BR|IB|IR|RB|RI)\s)~u', $nextLine) ||
-              Blocks::lineEndsBlock($lines, $i + 1)
-            ) {
+        switch ($fontAbbreviation) {
+            case 'I':
+            case '2':
+            case 'AI':
+                if ($parentNode->isOrInTag('em')) {
+                    return null;
+                }
+                $node = $dom->createElement('em');
                 break;
-            }
-            $blockLines[] = $nextLine;
-
-            if (preg_match('~\\\\f1$~u', $nextLine)) {
-                ++$i; // We include $nextLine, swallow it.
+            case 'B':
+            case '3':
+                if ($parentNode->isOrInTag('strong')) {
+                    return null;
+                }
+                $node = $dom->createElement('strong');
                 break;
-            }
-
+            case 'C':
+            case 'CW':
+            case '4':
+            case '5':
+            case 'tt':
+            case 'CB':
+            case 'CS': // e.g. pmwebd.1
+                if ($parentNode->isOrInTag('code')) {
+                    return null;
+                }
+                $node = $dom->createElement('code');
+                break;
+            default:
+                $node = $dom->createElement('span');
+                $node->setAttribute('class', 'font-' . $fontAbbreviation);
         }
 
-        if (count($blockLines) > 0) {
+        $node = $parentNode->appendChild($node);
 
-            Block_Text::addSpace($parentNode, $textParent, $shouldAppend);
-
-            switch ($fontAbbreviation) {
-                case 'I':
-                case '2':
-                case 'AI':
-                    $node = $dom->createElement('em');
-                    break;
-                case 'B':
-                case '3':
-                    $node = $dom->createElement('strong');
-                    break;
-                case 'C':
-                case 'CW':
-                case '4':
-                case '5':
-                case 'tt':
-                case 'CB':
-                case 'CS': // e.g. pmwebd.1
-                    $node = $dom->createElement('code');
-                    break;
-                default:
-                    $node = $dom->createElement('span');
-                    $node->setAttribute('class', 'font-' . $fontAbbreviation);
-            }
-            if ($textParent->isOrInTag('pre')) {
-                BlockPreformatted::handle($node, $blockLines);
-            } else {
-                Blocks::trim($blockLines);
-                Blocks::handle($node, $blockLines);
-            }
-            $textParent->appendBlockIfHasContent($node);
-        }
-
-        if ($shouldAppend) {
-            $parentNode->appendBlockIfHasContent($textParent);
-        }
-
-
-        return $i;
+        return $node;
 
     }
 

@@ -1,0 +1,33 @@
+.TH ROFF 7 "4 November 2014" "Groff Version 1.22.3"
+.de Esc
+.  ds @1 \\$1
+.  shift
+.  nop \f[B]\[rs]\\*[@1]\f[]\\$*
+.  rm @1
+..
+.
+.de QuotedChar
+.  ds @1 \\$1
+.  shift
+.  nop \[oq]\f[B]\\*[@1]\f[]\[cq]\\$*
+.  rm @1
+..
+.P
+.I Escape sequences
+are
+.I roff
+elements starting with a backslash
+.QuotedChar \[rs] .
+.
+They can be inserted anywhere, also in the midst of text in a line.
+.
+They are used to implement various features, including the insertion of
+non-\f[CR]ASCII\f[] characters with
+.Esc ( ,
+font changes with
+.Esc f ,
+in-line comments with
+.Esc \[dq] ,
+the escaping of special control characters like
+.Esc \[rs] ,
+and many other features.

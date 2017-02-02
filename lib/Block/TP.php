@@ -1,78 +1,75 @@
 <?php
 
 
-class Block_TP
+class Block_TP implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array &$lines, int $i)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
-
-        if ($i < $numLines - 1 && $lines[$i + 1] === '.nf') {
+        if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
-            $lines[$i + 1] = $lines[$i];
-            $lines[$i]     = '.nf';
-
-            return $i - 1;
+            $lines[1] = $lines[0];
+            $lines[0] = '.nf';
+            return null;
         }
+
+        array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
 
-        $dl          = $dom->createElement('dl');
-        $firstIndent = null;
+        $blockContainerParentNode = Blocks::getBlockContainerParent($parentNode);
 
-        for (; $i < $numLines; ++$i) {
+        $indentVal = null;
+        if (
+            count($request['arguments']) &&
+            $normalizedVal = Roff_Unit::normalize($request['arguments'][0]) // note this filters out 0s
+        ) {
+            $indentVal = $normalizedVal;
+        }
 
-            $request = Request::getClass($lines, $i);
+        $dl = Block_DefinitionList::getParentDL($blockContainerParentNode);
 
-            if ($request['class'] === 'Block_TP') {
-                if ($i === $numLines - 1 || Request::getClass($lines, $i + 1)['class'] === 'Block_TP') {
-                    // a bug in the man page, just skip:
-                    continue;
+        if (is_null($dl)) {
+            $dl = $dom->createElement('dl');
+            $dl = $blockContainerParentNode->appendChild($dl);
+            if ($indentVal) {
+                $dl->setAttribute('class', 'indent-' . $indentVal);
+            }
+        }
+
+        $dt         = $dom->createElement('dt');
+        $dt         = $dl->appendChild($dt);
+        $gotContent = Roff::parse($dt, $lines, true);
+        if (!$gotContent) {
+            $dl->removeChild($dt);
+            return null;
+        }
+
+        while (count($lines)) {
+            $request = Request::getLine($lines);
+            if ($request['request'] === 'TQ') {
+                array_shift($lines);
+                $dt = $dom->createElement('dt');
+                $dl->appendChild($dt);
+                $gotContent = Roff::parse($dt, $lines, true);
+                if (!$gotContent) {
+                    $dl->removeChild($dt);
                 }
-
-                if (is_null($firstIndent) && count($request['arguments']) > 0) {
-                    $firstIndent = 'indent';
-                    if ($indentVal = Roff_Unit::normalize($request['arguments'][0])) { // note: filters out 0s
-                        $firstIndent = 'indent-' . $indentVal;
-                        $dl->setAttribute('class', $firstIndent);
-                    }
-                }
-
-                $result = Block_Text::getNextInputLine($lines, $i + 1);
-                $i      = $result['i'];
-                $dt     = $dom->createElement('dt');
-                Blocks::handle($dt, $result['lines']);
-                $dl->appendBlockIfHasContent($dt);
-
-                for ($i = $i + 1; $i < $numLines; ++$i) {
-                    $line = $lines[$i];
-                    if (Request::is($line, 'TQ')) {
-                        $result = Block_Text::getNextInputLine($lines, $i + 1);
-                        $i      = $result['i'];
-                        $dt     = $dom->createElement('dt');
-                        Blocks::handle($dt, $result['lines']);
-                        $dl->appendBlockIfHasContent($dt);
-                    } else {
-                        --$i;
-                        break;
-                    }
-                }
-
-                $dd = $dom->createElement('dd');
-                $i  = Block_DataDefinition::checkAppend($dd, $lines, $i + 1);
-                $dl->appendBlockIfHasContent($dd);
-
             } else {
-                --$i;
                 break;
             }
         }
 
-        Block_DefinitionList::appendDL($parentNode, $dl);
+        $dd = $dom->createElement('dd');
+        $dd = $dl->appendChild($dd);
 
-        return $i;
+        return $dd;
 
     }
 

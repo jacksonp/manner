@@ -1,28 +1,26 @@
 <?php
 
 
-class Block_TS
+class Block_TS implements Block_Template
 {
 
-    private static function parseRowFormats(array $lines, int $i): array
+    private static function parseRowFormats(array &$lines): array
     {
-
-        $numLines = count($lines);
 
         $rowFormats  = [];
         $formatsDone = false;
-        for (; $i < $numLines - 1; ++$i) {
-            $line = $lines[$i];
+        while (count($lines)) {
+            $line = array_shift($lines);
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
             }
-            if (preg_match('~^-+$~u', $line)) {
+            $line = str_replace('|', '', $line);
+            if (preg_match('~^[-_\s]+$~u', $line)) {
                 $rowFormats[] = '---';
             } else {
                 // Ignore vertical bars for now:
-                $line    = str_replace('|', '', $line);
-                $colDefs = preg_split('~[\s]+~', $line);
+                $colDefs = preg_split('~\s+~', $line);
                 if (count($colDefs) === 1) {
                     $colDefs = str_split($colDefs[0]);
                 }
@@ -38,27 +36,34 @@ class Block_TS
 
         }
 
-        return [$i, $rowFormats];
+        return $rowFormats;
 
     }
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $dom      = $parentNode->ownerDocument;
-        $numLines = count($lines);
+        array_shift($lines);
+
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
+
+        $dom = $parentNode->ownerDocument;
 
         $columnSeparator = "\t";
 
-        $line = $lines[++$i];
-        if (mb_substr(trim($line), -1, 1) === ';') {
-            if (preg_match('~tab\s?\((.)\)~u', $line, $matches)) {
+        if (mb_substr(trim($lines[0]), -1, 1) === ';') {
+            if (preg_match('~tab\s?\((.)\)~u', $lines[0], $matches)) {
                 $columnSeparator = $matches[1];
             }
-            ++$i;
+            array_shift($lines);
         }
 
-        list($i, $rowFormats) = self::parseRowFormats($lines, $i);
+        $rowFormats = self::parseRowFormats($lines);
 
         $table = $dom->createElement('table');
         $table->setAttribute('class', 'tbl');
@@ -66,28 +71,31 @@ class Block_TS
         $formatRowNum = 0;
         $tr           = false;
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $line = $lines[$i];
+        $table = $parentNode->appendChild($table);
 
-            if (Request::is($line, 'TE')) {
+        while ($request = Request::getLine($lines)) {
+            array_shift($lines);
+
+            if (in_array($request['request'], ['TE', 'SH', 'SS'])) {
                 break;
-            } elseif ($line === '.T&') {
-                list($i, $rowFormats) = self::parseRowFormats($lines, $i + 1);
+            } elseif ($request['raw_line'] === '.T&') {
+                $rowFormats   = self::parseRowFormats($lines);
                 $formatRowNum = 0;
                 continue;
-            } elseif ($line === '_') {
+            } elseif ($request['raw_line'] === '_') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom');
                 }
-            } elseif ($line === '=') {
+            } elseif ($request['raw_line'] === '=') {
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom-double');
                 }
-            } elseif (in_array($line, ['.ft CW', '.ft R', '.P', '.PP'])) {
+            } elseif (in_array($request['raw_line'], ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
             } else {
                 $tr           = $dom->createElement('tr');
-                $cols         = explode($columnSeparator, $line);
+                $tr           = $table->appendChild($tr);
+                $cols         = explode($columnSeparator, $request['raw_line']);
                 $totalColSpan = 0;
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
@@ -132,6 +140,8 @@ class Block_TS
                     }
                     $totalColSpan += $colspan;
 
+                    $cell = $tr->appendChild($cell);
+
                     $tdContents = $cols[$j];
 
                     if ($tdContents === '_') {
@@ -143,15 +153,17 @@ class Block_TS
                         if ($tdContents !== 'T{') {
                             $tBlockLines[] = mb_substr($tdContents, 2);
                         }
-                        for ($i = $i + 1; $i < $numLines; ++$i) {
-                            $tBlockLine = $lines[$i];
+                        while (count($lines)) {
+                            if (mb_strpos($lines[0], '.TE') === 0) { // bug in latex2man.1
+                                break;
+                            }
+                            $tBlockLine = array_shift($lines);
                             if (mb_strpos($tBlockLine, 'T}') === 0) {
                                 if ($tBlockLine !== 'T}') {
                                     $restOfLine = mb_substr($tBlockLine, 3); // also take out separator
                                     $cols       = array_merge($cols, explode($columnSeparator, $restOfLine));
                                 }
-                                Blocks::trim($tBlockLines);
-                                Blocks::handle($cell, $tBlockLines);
+                                Roff::parse($cell, $tBlockLines);
                                 break;
                             } else {
                                 $tBlockLines[] = $tBlockLine;
@@ -160,23 +172,19 @@ class Block_TS
 
                     } else {
                         // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
-                        //Blocks::handle($cell, [$tdContents]);
+                        //Roff::parse($cell, [$tdContents]);
                         if (Inline_VerticalSpace::check($tdContents) === false) {
                             TextContent::interpretAndAppendText($cell, $tdContents);
                         }
                     }
-                    $tr->appendChild($cell);
                 }
                 ++$tableRowNum;
                 ++$formatRowNum;
-                $table->appendBlockIfHasContent($tr);
             }
 
         }
 
-        $parentNode->appendBlockIfHasContent($table);
-
-        return $i;
+        return $parentNode;
 
     }
 

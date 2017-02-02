@@ -4,86 +4,52 @@
 class Roff
 {
 
-    static function parse(DOMElement $parentNode, array &$lines, &$callerArguments = null)
-    {
+    static function parse(
+        DOMElement $parentNode,
+        array &$lines,
+        $stopOnContent = false
+    ): bool {
 
-        $man = Man::instance();
+        while ($request = Request::getLine($lines)) {
 
-        for ($i = 0; $i < count($lines); ++$i) {
+            if ($stopOnContent) {
 
-//            echo $i, "\t", $lines[$i], PHP_EOL;
-//            var_dump(array_slice($lines, 0, 5));
-
-            // Do comments first
-            $result = Roff_Comment::checkEvaluate($lines, $i);
-            if ($result !== false) {
-                if ($result['i'] < $i) { // We want another look at a modified $lines[$i];
-                    --$i;
-                } else {
-                    array_splice($lines, $i, $result['i'] + 1 - $i);
-                    --$i;
+                // \c: Interrupt text processing (groff.7)
+                // \fB\fP see KRATool.1
+                if (in_array($request['raw_line'], ['\\c', '\\fB\\fP'])) {
+                    array_shift($lines);
+                    return true;
                 }
-                continue;
-            }
 
-            $request = Request::get($lines[$i]);
+                if (in_array($request['request'], ['SH', 'SS', 'TP', 'br', 'sp', 'ne', 'PP', 'RS', 'P', 'LP'])) {
+                    return false;
+                }
 
-            if (!is_null($request['request'])) {
-
-                $macros = $man->getMacros();
-                if (isset($macros[$request['request']])) {
-                    $man->setRegister('.$', count($request['arguments']));
-                    if (!is_null($callerArguments)) {
-                        foreach ($request['arguments'] as $k => $v) {
-                            $request['arguments'][$k] = Roff_Macro::applyReplacements($request['arguments'][$k],
-                              $callerArguments);
-                        }
-                    }
-
-                    // Make copies of arrays:
-                    $macroLines           = $macros[$request['request']];
-                    $macroCallerArguments = $request['arguments'];
-                    Roff::parse($parentNode, $macroLines, $macroCallerArguments);
-                    array_splice($lines, $i, 1, $macroLines);
-                    --$i;
-
+                if ($request['raw_line'] === '') {
+                    array_shift($lines);
                     continue;
                 }
 
-                $className = $man->getRoffRequestClass($request['request']);
-                if ($className) {
-                    $result = $className::evaluate($parentNode, $request, $lines, $i, $callerArguments);
-                    if ($result !== false) {
-                        if (isset($result['lines'])) {
-                            foreach ($result['lines'] as $k => $l) {
-                                $result['lines'][$k] = Roff_Macro::applyReplacements($l, $callerArguments);
-                            }
-                            array_splice($lines, $i, $result['i'] + 1 - $i, $result['lines']);
-                        } else {
-                            array_splice($lines, $i, $result['i'] + 1 - $i);
-                        }
-                        --$i;
-                        continue;
-                    }
+            }
+
+            $request = Request::getNextClass($lines);
+
+            if (Block_Preformatted::handle($parentNode, $lines, $request)) {
+                // Do nothing, but don't continue; as need $stopOnContent check below.
+            } else {
+                $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
+                if (!is_null($newParent)) {
+                    $parentNode = $newParent;
                 }
-
             }
 
-            $result = Roff_Skipped::checkEvaluate($lines, $i);
-            if ($result !== false) {
-                array_splice($lines, $i, $result['i'] + 1 - $i);
-                --$i;
-                continue;
+            if ($stopOnContent && ($request['class'] === 'Block_Text' || $parentNode->textContent !== '')) {
+                return true;
             }
-
-            $lines[$i] = Roff_Macro::applyReplacements($lines[$i], $callerArguments);
-
-            // Do this here, e.g. e.g. a macro may be defined multiple times in a document and we want the current one.
-            $lines[$i] = $man->applyAllReplacements($lines[$i]);
-
-
 
         }
+
+        return !$stopOnContent;
 
     }
 

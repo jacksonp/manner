@@ -1,79 +1,74 @@
 <?php
 
-
 class Blocks
 {
 
     const TEXT_CONTAINERS = [
-      'p',
-      'blockquote',
-      'dt',
-      'strong',
-      'em',
-      'small',
-      'code',
-      'td',
-      'th',
-      'pre',
-      'a',
-      'h2',
-      'h3',
+        'p',
+        'blockquote',
+        'dt',
+        'strong',
+        'em',
+        'small',
+        'code',
+        'td',
+        'th',
+        'pre',
+        'a',
+        'h2',
+        'h3',
     ];
 
-    static function trim(array &$lines)
+    const INLINE_ELEMENTS = [
+        'a',
+        'em',
+        'strong',
+        'small',
+        'code',
+        'span'
+    ];
+
+    static function getParentForText(DOMElement $parentNode): DOMElement
     {
-        $trimVals = ['', ' ', '.ad', '.ad n', '.ad b', '.', '\'', '.br', '.sp'];
-        ArrayHelper::ltrim($lines, $trimVals);
-        ArrayHelper::rtrim($lines, array_merge($trimVals, ['.nf']));
+        if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {
+            $parentNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('p'));
+        }
+        return $parentNode;
     }
 
-    static function lineEndsBlock(array $lines, int $i)
+    static function getBlockContainerParent(DOMElement $parentNode, bool $superOnly = false): DOMElement
     {
-        $request = Request::get($lines[$i]);
+        $blockTags = ['body', 'div', 'section', 'pre'];
+        if (!$superOnly) {
+            $blockTags[] = 'dd';
+            $blockTags[] = 'blockquote';
+            $blockTags[] = 'th';
+            $blockTags[] = 'td';
+        }
+
+        while (!in_array($parentNode->tagName, $blockTags)) {
+            $parentNode = $parentNode->parentNode;
+            if (!$parentNode) {
+                throw new Exception('No more parents.');
+            }
+        }
+        return $parentNode;
+    }
+
+    static function getNonInlineParent(DOMElement $parentNode): DOMElement
+    {
+        while (in_array($parentNode->tagName, self::INLINE_ELEMENTS)) {
+            $parentNode = $parentNode->parentNode;
+        }
+        return $parentNode;
+    }
+
+    static function lineEndsBlock(array $request, array &$lines)
+    {
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
-
-        return Block_TabTable::isStart($lines, $i);
-    }
-
-    static function handle(DOMElement $parentNode, array $lines)
-    {
-//        var_dump($parentNode->tagName);
-//        var_dump($lines);
-
-        $numLines = count($lines);
-        for ($i = 0; $i < $numLines; ++$i) {
-
-            $request = Request::getClass($lines, $i);
-
-            $newI = $request['class']::checkAppend($parentNode, $lines, $i, $request['arguments'], $request['request']);
-            if ($newI === false) {
-//            var_dump(array_slice($lines, $i - 5, 10));
-//            var_dump($lines);
-                throw new Exception('"' . $lines[$i] . '" Blocks::handle() could not handle it.');
-            }
-
-            $i = $newI;
-
-        }
-
-    }
-
-    static function getTextParent(DOMElement $parentNode)
-    {
-        if (in_array($parentNode->tagName, Blocks::TEXT_CONTAINERS)) {
-            return [$parentNode, false];
-        } else {
-            $parentNodeLastBlock = $parentNode->getLastBlock();
-            if (is_null($parentNodeLastBlock) ||
-              in_array($parentNodeLastBlock->tagName, ['div', 'pre', 'code', 'table', 'h2', 'h3', 'dl', 'blockquote'])
-            ) {
-                return [$parentNode->ownerDocument->createElement('p'), true];
-            } else {
-                return [$parentNodeLastBlock, false];
-            }
-        }
+        return Block_TabTable::isStart($lines);
     }
 
 }

@@ -1,16 +1,23 @@
 <?php
 
 
-class Roff_Alias
+class Roff_Alias implements Roff_Template
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
-
+        array_shift($lines);
         Man::instance()->addAlias($request['arguments'][0], $request['arguments'][1]);
+        return [];
+    }
 
-        return ['i' => $i];
-
+    static function check(string $requestName): string
+    {
+        $aliases = Man::instance()->getAliases();
+        if (array_key_exists($requestName, $aliases)) {
+            $requestName = $aliases[$requestName];
+        }
+        return $requestName;
     }
 
 }

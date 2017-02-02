@@ -31,18 +31,36 @@ class HybridNode extends DOMElement
         return $this->childNodes->length > 1 || ($this->firstChild && $this->firstChild->nodeValue !== '');
     }
 
+    function ancestor (string $tagName) {
+        $node = $this;
+        while ($node->tagName !== $tagName) {
+            if (!$node->parentNode) {
+                return null;
+            }
+            $node = $node->parentNode;
+            if ($node->nodeType === XML_DOCUMENT_NODE) {
+                return null;
+            }
+        }
+        return $node;
+    }
+
     function appendBlockIfHasContent(HybridNode $block)
     {
         if ($block->hasChildNodes()) {
-            if ($block->childNodes->length > 1 || trim($block->firstChild->textContent) !== '') {
+            if (
+                $block->childNodes->length > 1 ||
+                trim($block->firstChild->textContent, " \t\n\r\0\x0B" . Char::ZERO_WIDTH_SPACE_UTF8) !== ''
+            ) {
                 if (in_array($block->tagName, self::BLOCK_TAGS)) {
+                    // If we are about to append a block, we can prune any trailing <br>s from the element before it.
                     $lastChild = $this->lastChild;
                     if ($lastChild) {
                         $lastChildOfLastChild = $lastChild->lastChild;
                         while (
-                          $lastChildOfLastChild &&
-                          $lastChildOfLastChild->nodeType === XML_ELEMENT_NODE &&
-                          $lastChildOfLastChild->tagName === 'br'
+                            $lastChildOfLastChild &&
+                            $lastChildOfLastChild->nodeType === XML_ELEMENT_NODE &&
+                            $lastChildOfLastChild->tagName === 'br'
                         ) {
                             $lastChild->removeChild($lastChild->lastChild);
                             $lastChildOfLastChild = $lastChild->lastChild;

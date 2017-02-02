@@ -9,8 +9,10 @@ class TextContent
     static function interpretAndAppendText(DOMElement $parentNode, string $line)
     {
 
-        $dom        = $parentNode->ownerDocument;
-        $man        = Man::instance();
+        $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
+        // A macro may be defined multiple times in a document and we want the current one.
+        $line       = $man->applyAllReplacements($line);
         $lineLength = mb_strlen($line);
 
         if (!is_null($man->eq_delim_left) && !is_null($man->eq_delim_right)) {
@@ -309,10 +311,6 @@ class TextContent
           }, $string);
 
         $roffStrings = $man->getStrings();
-//        $string      = Roff_String::substitute($string, $roffStrings);
-
-//        $string = Roff_Glyph::substitute($string);
-
 
         $string = Replace::pregCallback('~\\\\\[u([\dA-F]{4})\]~u', function ($matches) {
             return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
@@ -340,7 +338,8 @@ class TextContent
             // "To begin a line with a control character without it being interpreted, precede it with \&.
             // This represents a zero width space, which means it does not affect the output."
             // (also remove tho if not at start of line.)
-          '&'  => '',
+            // This also is used in practice after a .TP to have indented text without a visible term in front.
+          '&'  => Char::ZERO_WIDTH_SPACE_UTF8,
             // variation on \&
           ')'  => '',
           '\\' => '\\',

@@ -1,33 +1,41 @@
 <?php
 
 
-class Block_ce
+class Block_ce implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i, $arguments)
-    {
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
 
-        $blockLines       = [];
-        $numLinesToCenter = count($arguments) === 0 ? 1 : (int)$arguments[0];
-        $centerLinesUpTo  = min($i + $numLinesToCenter, $numLines - 1);
-        for (; $i < $centerLinesUpTo; ++$i) {
-            $nextLine = $lines[$i + 1];
-            if (Request::is($nextLine, 'ce')) {
+        $dom = $parentNode->ownerDocument;
+
+        $blockLines = [];
+        $numLinesToCenter = count($request['arguments']) === 0 ? 1 : (int)$request['arguments'][0];
+        $centerLinesUpTo = min($numLinesToCenter, count($lines));
+        for ($i = 0; $i < $centerLinesUpTo; ++$i) {
+            if (Request::getLine($lines)['request'] === 'ce') {
                 break;
             }
-            $blockLines[] = $nextLine;
+            $blockLines[] = array_shift($lines);
             $blockLines[] = '.br';
         }
+
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         $block = $dom->createElement('div');
         $block->setAttribute('class', 'center');
-        Blocks::trim($blockLines);
-        Blocks::handle($block, $blockLines);
+        Roff::parse($block, $blockLines);
         $parentNode->appendBlockIfHasContent($block);
 
-        return $i;
+        return $parentNode;
 
     }
 

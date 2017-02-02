@@ -4,7 +4,7 @@
 class Roff_Comment
 {
 
-    static function checkEvaluate(array &$lines, int $i)
+    static function checkLine(array &$lines): bool
     {
 
         // Skip full-line comments
@@ -13,25 +13,28 @@ class Roff_Comment
         // See e.g. flow-import.1 for comment starting with .\\"
         // See e.g. card.1 for comment starting with ."
         // See e.g. node.1 for comment starting with .\
-        if (preg_match('~^([\'\.]?\\\\?\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[$i], $matches)) {
-            return ['i' => $i];
+        if (preg_match('~^([\'\.]?\\\\?\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[0], $matches)) {
+            array_shift($lines);
+            return true;
         }
 
         // \" is start of a comment. Everything up to the end of the line is ignored.
         // Some man pages get this wrong and expect \" to be printed (see fox-calculator.1),
         // but this behaviour is consistent with what the man command renders:
-        $lines[$i] = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $lines[$i], -1, $replacements);
+        $lines[0] = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $lines[0], -1, $replacements);
         if ($replacements > 0) {
+            $lines[0] = rtrim($lines[0], "\t");
             // Look at this same line again:
-            return ['i' => $i - 1];
+            return true;
         }
 
-        if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[$i], $matches)) {
+        if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[0], $matches)) {
+            array_shift($lines);
             $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
-            $numLines  = count($lines);
-            for ($i = $i + 1; $i < $numLines; ++$i) {
-                if ($lines[$i] === $delimiter) {
-                    return ['i' => $i];
+            while (count($lines)) {
+                $line = array_shift($lines);
+                if ($line === $delimiter) {
+                    return true;
                 }
             }
             throw new Exception($matches[0] . ' with no corresponding "' . $delimiter . '"');

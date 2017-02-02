@@ -1,34 +1,30 @@
 <?php
 
 
-class Block_EX
+class Block_EX implements Block_Template
 {
 
-    static function checkAppend(HybridNode $parentNode, array $lines, int $i)
+    static function checkAppend(
+        HybridNode $parentNode,
+        array &$lines,
+        array $request,
+        $needOneLineOnly = false
+    ): ?DOMElement
     {
 
-        $numLines = count($lines);
-        $dom      = $parentNode->ownerDocument;
+        array_shift($lines);
 
-        $blockLines = [];
-        while ($i < $numLines - 1) {
-            $line    = $lines[$i + 1];
-            $request = Request::get($line);
-            if (Block_SS::endSubsection($line) || in_array($request['request'], ['TS', 'EE'])) {
-                break;
-            } elseif (Request::is($line, ['nf', 'fi'])) {
-                // .EX already marks block as preformatted, just skip
-            } else {
-                $blockLines[] = $line;
-            }
-            ++$i;
+        if ($parentNode->isOrInTag('pre')) {
+            return null;
         }
 
-        $block = $dom->createElement('pre');
-        BlockPreformatted::handle($block, $blockLines);
-        $parentNode->appendBlockIfHasContent($block);
+        $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
-        return $i;
+        $pre = $parentNode->ownerDocument->createElement('pre');
+
+        $pre = $parentNode->appendChild($pre);
+
+        return $pre;
 
     }
 

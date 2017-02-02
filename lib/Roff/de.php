@@ -1,36 +1,39 @@
 <?php
 
 
-class Roff_de
+class Roff_de implements Roff_Template
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
+
+        // shift .de
+        array_shift($lines);
 
         if (!preg_match('~^([^\s"]+)\s*$~u', $request['arg_string'], $matches)) {
             throw new Exception('Unexpected argument in Roff_Macro: ' . $request['arg_string']);
         }
 
-        $numLines   = count($lines);
         $newMacro   = $matches[1];
         $macroLines = [];
         $foundEnd   = false;
 
-        for ($i = $i + 1; $i < $numLines; ++$i) {
-            $macroLine = $lines[$i];
-            $request   = Request::get($macroLine);
+        // We don't want to handle the lines at this stage (e.g. a conditional in the macro), so don't iterate with
+        // Request::getLine()
+        while (count($lines)) {
+            $line = array_shift($lines);
             if (
-              $request['request'] === '.' ||
-              ($newMacro === 'P!' && $macroLine === '.') // work around bug in Xm*.3 man pages
+                rtrim($line) === '..' ||
+                ($newMacro === 'P!' && $line === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
                 break;
             }
-            $macroLines[] = Request::massageLine($macroLine);
+            $macroLines[] = Request::massageLine($line);
         }
 
         if (!$foundEnd) {
-            throw new Exception($matches[0] . ' - not followed by expected pattern.');
+            throw new Exception('Macro definition for "' . $matches[1] . '" does not follow expected pattern.');
         }
 
         if (in_array($newMacro, ['SS', 'FONT', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE'])) {
@@ -42,7 +45,7 @@ class Roff_de
             Man::instance()->addMacro($newMacro, $macroLines);
         }
 
-        return ['i' => $i];
+        return [];
 
     }
 

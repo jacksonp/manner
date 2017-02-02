@@ -1,13 +1,13 @@
 <?php
 
 
-class Roff_Rename
+class Roff_Rename implements Roff_Template
 {
 
-    static function evaluate(DOMElement $parentNode, array $request, array &$lines, int $i)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
-
-        return ['i' => $i]; // Just ignore for now!
+        array_shift($lines);
+        return []; // Just ignore for now!
 
     }
 
