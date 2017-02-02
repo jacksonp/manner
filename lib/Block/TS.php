@@ -70,6 +70,7 @@ class Block_TS implements Block_Template
         $tableRowNum  = 0;
         $formatRowNum = 0;
         $tr           = false;
+        $nextRowBold  = false;
 
         $table = $parentNode->appendChild($table);
 
@@ -92,6 +93,8 @@ class Block_TS implements Block_Template
                 }
             } elseif (in_array($request['raw_line'], ['.ft CW', '.ft R', '.P', '.PP'])) {
                 // Do nothing for now - see sox.1
+            } elseif (in_array($request['raw_line'], ['.B'])) {
+                $nextRowBold = true;
             } else {
                 $tr           = $dom->createElement('tr');
                 $tr           = $table->appendChild($tr);
@@ -114,7 +117,11 @@ class Block_TS implements Block_Template
                     $tdClass = str_replace(['e', 'E'], '', $tdClass);
 
                     $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
-                    $bold    = $numReplaced > 0;
+                    if ($nextRowBold) {
+                        $bold = true;
+                    } else {
+                        $bold = $numReplaced > 0;
+                    }
 
                     if ($tableRowNum === 0 && $bold) {
                         $cell = $dom->createElement('th');
@@ -124,6 +131,7 @@ class Block_TS implements Block_Template
                             $tdClass = trim($tdClass . ' bold');
                         }
                     }
+
                     if (!empty($tdClass)) {
                         $cell->setAttribute('class', $tdClass);
                     }
@@ -178,8 +186,10 @@ class Block_TS implements Block_Template
                         }
                     }
                 }
+
                 ++$tableRowNum;
                 ++$formatRowNum;
+                $nextRowBold = false;
             }
 
         }
