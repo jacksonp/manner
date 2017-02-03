@@ -116,10 +116,6 @@ class DOM
                 self::removeNode($firstChild);
             }
 
-            if ($myTag === 'dd' && $firstChild->tagName === 'p') {
-                self::removeNode($firstChild);
-            }
-
         }
 
         if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
