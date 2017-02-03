@@ -33,6 +33,13 @@ class DOM
         $from->parentNode->removeChild($from);
     }
 
+    private static function isEmptyTextNode(DOMNode $node): bool
+    {
+        return
+            $node->nodeType === XML_TEXT_NODE &&
+            in_array(trim($node->textContent), ['', Char::ZERO_WIDTH_SPACE_UTF8]);
+    }
+
     /**
      * @param DOMElement $element
      * @return DOMElement|DOMNode|null The element we should look at next.
@@ -54,7 +61,7 @@ class DOM
         while (
             $firstChild = $element->firstChild and
             (
-                ($myTag !== 'pre' && $firstChild->nodeType === XML_TEXT_NODE && trim($firstChild->textContent) === '') ||
+                ($myTag !== 'pre' && self::isEmptyTextNode($firstChild)) ||
                 ($firstChild->nodeType === XML_ELEMENT_NODE && $firstChild->tagName === 'br')
             )
         ) {
@@ -64,7 +71,7 @@ class DOM
         while (
             $previousSibling = $element->previousSibling and
             (
-                ($previousSibling->nodeType === XML_TEXT_NODE && trim($previousSibling->textContent) === '') ||
+                self::isEmptyTextNode($previousSibling) ||
                 ($previousSibling->nodeType === XML_ELEMENT_NODE && $previousSibling->tagName === 'br')
             )
         ) {
@@ -74,7 +81,7 @@ class DOM
         while (
             $nextSibling = $element->nextSibling and
             (
-                ($nextSibling->nodeType === XML_TEXT_NODE && trim($nextSibling->textContent) === '') ||
+                self::isEmptyTextNode($nextSibling) ||
                 ($nextSibling->nodeType === XML_ELEMENT_NODE && $nextSibling->tagName === 'br')
             )
         ) {
@@ -84,7 +91,7 @@ class DOM
         while (
             $lastChild = $element->lastChild and
             (
-                ($lastChild->nodeType === XML_TEXT_NODE && trim($lastChild->textContent) === '') ||
+                self::isEmptyTextNode($lastChild) ||
                 ($lastChild->nodeType === XML_ELEMENT_NODE && $lastChild->tagName === 'br')
             )
         ) {
