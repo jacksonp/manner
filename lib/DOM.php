@@ -209,23 +209,50 @@ class DOM
     {
         $child = $element->firstChild;
         while ($child) {
+
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
                 in_array($child->tagName,
                     ['section', 'p', 'dl', 'dt', 'dd', 'div', 'blockquote', 'pre', 'table', 'tr', 'th', 'td'])
             ) {
                 $child = self::massage($child);
-            } elseif (
-                $child->nodeType === XML_ELEMENT_NODE &&
-                in_array($child->tagName, Blocks::INLINE_ELEMENTS) &&
-                trim($child->textContent === '')
-            ) {
-                $nextSibling = $child->nextSibling;
-                $child->parentNode->removeChild($child);
-                $child = $nextSibling;
-            } else {
-                $child = $child->nextSibling;
+                continue;
             }
+
+            if ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName, Blocks::INLINE_ELEMENTS)) {
+
+                if (trim($child->textContent === '')) {
+                    $nextSibling = $child->nextSibling;
+                    $child->parentNode->removeChild($child);
+                    $child = $nextSibling;
+                    continue;
+                }
+
+                if (
+                    $child->firstChild &&
+                    $child->firstChild->nodeType == XML_TEXT_NODE &&
+                    preg_match('~^(\s+)(.*?)$~u', $child->firstChild->textContent, $matches)
+                ) {
+                    $child->replaceChild($child->ownerDocument->createTextNode($matches[2]), $child->firstChild);
+                    $child->parentNode->insertBefore($child->ownerDocument->createTextNode($matches[1]), $child);
+                }
+
+                if (
+                    $child->lastChild &&
+                    $child->lastChild->nodeType == XML_TEXT_NODE &&
+                    preg_match('~^(.*?)(\s+)$~u', $child->lastChild->textContent, $matches)
+                ) {
+                    $child->replaceChild($child->ownerDocument->createTextNode($matches[1]), $child->lastChild);
+                    $child->parentNode->insertBefore(
+                        $child->ownerDocument->createTextNode($matches[2]),
+                        $child->nextSibling
+                    );
+                }
+
+            }
+
+            $child = $child->nextSibling;
+
         }
         return self::massageNode($element);
     }

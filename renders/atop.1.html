@@ -56,17 +56,17 @@
   <p>For the resource consumption on system level, <em>atop</em> uses colors to indicate that a critical occupation percentage has been (almost) reached. A critical occupation percentage means that is likely that this load causes a noticeable negative performance influence for applications using this resource. The critical percentage depends on the type of resource: e.g. the performance influence of a disk with a busy percentage of 80% might be more noticeable for applications/user than a CPU with a busy percentage of 90%.<br>
   Currently <em>atop</em> uses the following default values to calculate a weighted percentage per resource:
   <dl class="indent-5">
-    <dt><strong>&nbsp;Processor</strong>
+    <dt>&nbsp;<strong>Processor</strong>
     <dd>A busy percentage of 90% or higher is considered `critical'.
-    <dt><strong>&nbsp;Disk</strong>
+    <dt>&nbsp;<strong>Disk</strong>
     <dd>A busy percentage of 70% or higher is considered `critical'.
-    <dt><strong>&nbsp;Network</strong>
+    <dt>&nbsp;<strong>Network</strong>
     <dd>A busy percentage of 90% or higher for the load of an interface is considered `critical'.
-    <dt><strong>&nbsp;Memory</strong>
+    <dt>&nbsp;<strong>Memory</strong>
     <dd>An occupation percentage of 90% is considered `critical'. Notice that this occupation percentage is the accumulated memory consumption of the kernel (including slab) and all processes; the memory for the page cache (`cache' and `buff' in the MEM-line) and the reclaimable part of the slab (`slrec`) is not implied!<br>
     If the number of pages swapped out (`swout' in the PAG-line) is larger than 10 per second, the memory resource is considered `critical'. A value of at least 1 per second is considered `almost critical'.<br>
     If the committed virtual memory exceeds the limit (`vmcom' and `vmlim' in the SWP-line), the SWP-line is colored due to overcommitting the system.
-    <dt><strong>&nbsp;Swap</strong>
+    <dt>&nbsp;<strong>Swap</strong>
     <dd>An occupation percentage of 80% is considered `critical' because swap space might be completely exhausted in the near future; it is not critical from a performance point-of-view.
   </dl>
   <p>These default values can be modified in the configuration file (see separate man-page of atoprc).
@@ -258,7 +258,7 @@
   <p>When <strong>atop</strong> is installed, the script <strong>atop.daily</strong> is stored in the <em>/etc/atop</em> directory. This scripts takes care that <strong>atop</strong> is activated every day at midnight to write compressed binary data to the file <strong>/var/log/atop/atop_</strong><em>YYYYMMDD</em> with an interval of 10 minutes.<br>
   Furthermore the script removes all raw files which are older than four weeks.<br>
   The script is activated via the <strong>cron</strong> daemon using the file <em>/etc/cron.d/atop</em> with the contents<br>
-  <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 * * * root /etc/atop/atop.daily</strong>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>0 0 * * * root /etc/atop/atop.daily</strong>
   <p>When the package <strong>psacct</strong> is installed, the process accounting is automatically restarted via the <strong>logrotate</strong> mechanism. The file <strong>/etc/logrotate.d/psaccs_atop</strong> takes care that <strong>atop</strong> is finished just before the rotation of the process accounting file and the file <strong>/etc/logrotate.d/psaccu_atop</strong> takes care that <strong>atop</strong> is restarted again after the rotation. When the package <strong>psacct</strong> is not installed, these logrotate-files have no effect.
 </section>
 <section>
@@ -571,21 +571,21 @@
 <section>
   <h2>EXAMPLES</h2>
   <p>To monitor the current system load interactively with an interval of 5 seconds:
-  <p class="indent-12"><strong>&nbsp; atop 5</strong>
+  <p class="indent-12">&nbsp; <strong>atop 5</strong>
   <p>To monitor the system load and write it to a file (in plain ASCII) with an interval of one minute during half an hour with active processes sorted on memory consumption:
-  <p class="indent-12"><strong>&nbsp; atop -M 60 30 &gt; /log/atop.mem</strong>
+  <p class="indent-12">&nbsp; <strong>atop -M 60 30 &gt; /log/atop.mem</strong>
   <p>Store information about the system and process activity in binary compressed form to a file with an interval of ten minutes during an hour:
-  <p class="indent-12"><strong>&nbsp; atop -w /tmp/atop.raw 600 6</strong>
+  <p class="indent-12">&nbsp; <strong>atop -w /tmp/atop.raw 600 6</strong>
   <p>View the contents of this file interactively:
-  <p><strong>&nbsp; atop -r /tmp/atop.raw</strong>
+  <p>&nbsp; <strong>atop -r /tmp/atop.raw</strong>
   <p>View the processor and disk utilization of this file in parseable format:
-  <p><strong>&nbsp; atop -PCPU,DSK -r /tmp/atop.raw</strong>
+  <p>&nbsp; <strong>atop -PCPU,DSK -r /tmp/atop.raw</strong>
   <p>View the contents of today's standard logfile interactively:
-  <p><strong>&nbsp; atop -r</strong>
+  <p>&nbsp; <strong>atop -r</strong>
   <p>View the contents of the standard logfile of the day before yesterday interactively:
-  <p><strong>&nbsp; atop -r yy</strong>
+  <p>&nbsp; <strong>atop -r yy</strong>
   <p>View the contents of the standard logfile of 2014, June 7 from 02:00 PM onwards interactively:
-  <p><strong>&nbsp; atop -r 20140607 -b 14:00</strong>
+  <p>&nbsp; <strong>atop -r 20140607 -b 14:00</strong>
 </section>
 <section>
   <h2>FILES</h2>

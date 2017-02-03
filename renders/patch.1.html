@@ -40,7 +40,7 @@
     <dt><strong>·</strong>
     <dd>If some of the named files exist, <strong>patch</strong> selects the first name if conforming to POSIX, and the best name otherwise.
     <dt><strong>·</strong>
-    <dd>If <strong>patch</strong> is not ignoring RCS, ClearCase, Perforce, and SCCS (see the <strong>-g&nbsp;</strong><em>num</em> or <strong>--get=</strong><em>num</em> option), and no named files exist but an RCS, ClearCase, Perforce, or SCCS master is found, <strong>patch</strong> selects the first named file with an RCS, ClearCase, Perforce, or SCCS master.
+    <dd>If <strong>patch</strong> is not ignoring RCS, ClearCase, Perforce, and SCCS (see the <strong>-g</strong>&nbsp;<em>num</em> or <strong>--get=</strong><em>num</em> option), and no named files exist but an RCS, ClearCase, Perforce, or SCCS master is found, <strong>patch</strong> selects the first named file with an RCS, ClearCase, Perforce, or SCCS master.
     <dt><strong>·</strong>
     <dd>If no named files exist, no RCS, ClearCase, Perforce, or SCCS master was found, some names are given, <strong>patch</strong> is not conforming to POSIX, and the patch appears to create a file, <strong>patch</strong> selects the best name requiring the creation of the fewest directories.
     <dt><strong>·</strong>
@@ -243,7 +243,7 @@
 <section>
   <h2>NOTES FOR PATCH SENDERS</h2>
   <p>There are several things you should bear in mind if you are going to be sending out patches.
-  <p>Create your patch systematically. A good method is the command <strong>diff&nbsp;-Naur&nbsp;</strong><em>old&nbsp;new</em> where <em>old</em> and <em>new</em> identify the old and new directories. The names <em>old</em> and <em>new</em> should not contain any slashes. The <strong>diff</strong> command's headers should have dates and times in Universal Time using traditional Unix format, so that patch recipients can use the <strong>-Z</strong> or <strong>--set-utc</strong> option. Here is an example command, using Bourne shell syntax:
+  <p>Create your patch systematically. A good method is the command <strong>diff&nbsp;-Naur</strong>&nbsp;<em>old&nbsp;new</em> where <em>old</em> and <em>new</em> identify the old and new directories. The names <em>old</em> and <em>new</em> should not contain any slashes. The <strong>diff</strong> command's headers should have dates and times in Universal Time using traditional Unix format, so that patch recipients can use the <strong>-Z</strong> or <strong>--set-utc</strong> option. Here is an example command, using Bourne shell syntax:
   <div class="indent">
     <p><strong>LC_ALL=C TZ=UTC0 diff -Naur gcc-2.7 gcc-2.8</strong>
   </div>
@@ -296,7 +296,7 @@
     <br>
     Conversely, in POSIX <strong>patch</strong>, backups are never made, even when there is a mismatch. In GNU <strong>patch</strong>, this behavior is enabled with the <strong>--no-backup-if-mismatch</strong> option, or by conforming to POSIX with the <strong>--posix</strong> option or by setting the <strong>POSIXLY_CORRECT</strong> environment variable.<br>
     <br>
-    The <strong>-b</strong><em>&nbsp;suffix</em> option of traditional <strong>patch</strong> is equivalent to the <strong>-b&nbsp;-z</strong><em>&nbsp;suffix</em> options of GNU <strong>patch</strong>.
+    The <strong>-b</strong>&nbsp;<em>suffix</em> option of traditional <strong>patch</strong> is equivalent to the <strong>-b&nbsp;-z</strong>&nbsp;<em>suffix</em> options of GNU <strong>patch</strong>.
     <dt><strong>·</strong>
     <dd>Traditional <strong>patch</strong> used a complicated (and incompletely documented) method to intuit the name of the file to be patched from the patch header. This method did not conform to POSIX, and had a few gotchas. Now <strong>patch</strong> uses a different, equally complicated (but better documented) method that is optionally POSIX-conforming; we hope it has fewer gotchas. The two methods are compatible if the file names in the context diff header and the <strong>Index:</strong> line are all identical after prefix-stripping. Your patch is normally compatible if each header's file names all contain the same number of slashes.
     <dt><strong>·</strong>
@@ -307,16 +307,16 @@
     <dd>
       <p>Limit yourself to the following options when sending instructions meant to be executed by anyone running GNU <strong>patch</strong>, traditional <strong>patch</strong>, or a <strong>patch</strong> that conforms to POSIX. Spaces are significant in the following list, and operands are required.
       <pre><strong>-c</strong>
-<strong>-d</strong><em> dir</em>
-<strong>-D</strong><em> define</em>
+<strong>-d</strong> <em>dir</em>
+<strong>-D</strong> <em>define</em>
 <strong>-e</strong>
 <strong>-l</strong>
 <strong>-n</strong>
 <strong>-N</strong>
-<strong>-o</strong><em> outfile</em>
+<strong>-o</strong> <em>outfile</em>
 <strong>-p</strong><em>num</em>
 <strong>-R</strong>
-<strong>-r</strong><em> rejectfile</em></pre>
+<strong>-r</strong> <em>rejectfile</em></pre>
   </dl>
 </section>
 <section>
