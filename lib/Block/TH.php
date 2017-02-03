@@ -14,6 +14,8 @@ class Block_TH implements Block_Template
 
         $man = Man::instance();
 
+        $body = $parentNode->ancestor('body');
+
         if (empty($man->title)) {
 
             if (count($request['arguments']) < 1) {
@@ -38,18 +40,18 @@ class Block_TH implements Block_Template
                 $man->extra3  = @$request['arguments'][4] ?: '';
             }
 
-            $h1 = $parentNode->ownerDocument->createElement('h1');
+            $h1 = $body->ownerDocument->createElement('h1');
             $h1->appendChild(new DOMText($man->title));
-            $parentNode->appendChild($h1);
+            $body->appendChild($h1);
 
         } else {
             // Some pages  have multiple .THs for different commands in one page, just had a horizontal line when we hit
             // .THs with content after the first
-            $hr = $parentNode->ownerDocument->createElement('hr');
-            $parentNode->appendChild($hr);
+            $hr = $body->ownerDocument->createElement('hr');
+            $body->appendChild($hr);
         }
 
-        return null;
+        return $body;
 
     }
 
