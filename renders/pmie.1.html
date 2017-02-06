@@ -19,55 +19,76 @@
   <p>A description of the command line options specific to <strong>pmie</strong> follows:
   <dl class="indent-5">
     <dt><strong>-a</strong>
-    <dd><em>archive</em> which is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives written by <strong>pmlogger</strong>(1). Multiple instances of the <strong>-a</strong> flag may appear on the command line to specify a list of sets of archives. In this case, it is required that only one set of archives be present for any one host. Also, any explicit host names occurring in a <strong>pmie</strong> expression must match the host name recorded in one of the archive labels. In the case of multiple sets of archives, timestamps recorded in the archives are used to ensure temporal consistency.
+    <dd>
+      <p><em>archive</em> which is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives written by <strong>pmlogger</strong>(1). Multiple instances of the <strong>-a</strong> flag may appear on the command line to specify a list of sets of archives. In this case, it is required that only one set of archives be present for any one host. Also, any explicit host names occurring in a <strong>pmie</strong> expression must match the host name recorded in one of the archive labels. In the case of multiple sets of archives, timestamps recorded in the archives are used to ensure temporal consistency.
     <dt><strong>-b</strong>
-    <dd>Output will be line buffered and standard output is attached to standard error. This is most useful for background execution in conjunction with the <strong>-l</strong> option. The <strong>-b</strong> option is always used for <strong>pmie</strong> instances launched from <strong>pmie_check</strong>(1).
+    <dd>
+      <p>Output will be line buffered and standard output is attached to standard error. This is most useful for background execution in conjunction with the <strong>-l</strong> option. The <strong>-b</strong> option is always used for <strong>pmie</strong> instances launched from <strong>pmie_check</strong>(1).
     <dt><strong>-C</strong>
-    <dd>Parse the configuration file(s) and exit before performing any evaluations. Any errors in the configuration file are reported.
+    <dd>
+      <p>Parse the configuration file(s) and exit before performing any evaluations. Any errors in the configuration file are reported.
     <dt><strong>-c</strong>
-    <dd>An alternative to specifying <em>filename</em> at the end of the command line.
+    <dd>
+      <p>An alternative to specifying <em>filename</em> at the end of the command line.
     <dt><strong>-d</strong>
-    <dd>Normally <strong>pmie</strong> would be launched as a non-interactive process to monitor and manage the performance of one or more hosts. Given the <strong>-d</strong> flag however, execution is interactive and the user is presented with a menu of options. Interactive mode is useful mainly for debugging new expressions.
+    <dd>
+      <p>Normally <strong>pmie</strong> would be launched as a non-interactive process to monitor and manage the performance of one or more hosts. Given the <strong>-d</strong> flag however, execution is interactive and the user is presented with a menu of options. Interactive mode is useful mainly for debugging new expressions.
     <dt><strong>-e</strong>
     <dd>
       <p>When used with <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong>, this option forces timestamps to be reported with each expression. The timestamps are in <strong>ctime</strong>(3) format, enclosed in parenthesis and appear after the expression name and before the expression value, e.g.
-      <pre>    expr_1 (Tue Feb  6 19:55:10 2001): 12</pre>
+      <pre> expr_1 (Tue Feb  6 19:55:10 2001): 12</pre>
     <dt><strong>-f</strong>
-    <dd>If the <strong>-l</strong> option is specified and there is no <strong>-a</strong> option (ie. real-time monitoring) then <strong>pmie</strong> is run as a daemon in the background (in all other cases foreground is the default). The <strong>-f</strong> option forces <strong>pmie</strong> to be run in the foreground, independent of any other options.
+    <dd>
+      <p>If the <strong>-l</strong> option is specified and there is no <strong>-a</strong> option (ie. real-time monitoring) then <strong>pmie</strong> is run as a daemon in the background (in all other cases foreground is the default). The <strong>-f</strong> option forces <strong>pmie</strong> to be run in the foreground, independent of any other options.
     <dt><strong>-h</strong>
-    <dd>By default performance data is fetched from the local host (in real-time mode) or the host for the first named set of archives on the command line (in archive mode). The <em>host</em> argument overrides this default. It does not override hosts explicitly named in the expressions being evaluated. The <em>host</em> argument is interpreted as a connection specification for <em>pmNewContext</em>, and is later mapped to the remote pmcd's self-reported host name for reporting purposes. See also the %h vs. %c substitutions in rule action strings below.
+    <dd>
+      <p>By default performance data is fetched from the local host (in real-time mode) or the host for the first named set of archives on the command line (in archive mode). The <em>host</em> argument overrides this default. It does not override hosts explicitly named in the expressions being evaluated. The <em>host</em> argument is interpreted as a connection specification for <em>pmNewContext</em>, and is later mapped to the remote pmcd's self-reported host name for reporting purposes. See also the %h vs. %c substitutions in rule action strings below.
     <dt><strong>-l</strong>
-    <dd>Standard error is sent to <em>logfile</em>.
+    <dd>
+      <p>Standard error is sent to <em>logfile</em>.
     <dt><strong>-j</strong>
-    <dd>An alternative STOMP protocol configuration is loaded from <em>stompfile</em>. If this option is not used, and the <em>stomp</em> action is used in any rule, the default location <em>$PCP_SYSCONF_DIR/pmie/config/stomp</em> will be used.
+    <dd>
+      <p>An alternative STOMP protocol configuration is loaded from <em>stompfile</em>. If this option is not used, and the <em>stomp</em> action is used in any rule, the default location <em>$PCP_SYSCONF_DIR/pmie/config/stomp</em> will be used.
     <dt><strong>-n</strong>
-    <dd>An alternative Performance Metrics Name Space (PMNS) is loaded from the file <em>pmnsfile</em>.
+    <dd>
+      <p>An alternative Performance Metrics Name Space (PMNS) is loaded from the file <em>pmnsfile</em>.
     <dt><strong>-q</strong>
-    <dd>Suppresses diagnostic messages that would be printed to standard output by default, especially the "evaluator exiting" message as this can confuse scripts.
+    <dd>
+      <p>Suppresses diagnostic messages that would be printed to standard output by default, especially the "evaluator exiting" message as this can confuse scripts.
     <dt><strong>-t</strong>
-    <dd>The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds). The value is used to determine the sample interval for expressions that do not explicitly set their sample interval using the <strong>pmie</strong> variable <code>delta</code> described below. The default is 10.0 seconds.
+    <dd>
+      <p>The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds). The value is used to determine the sample interval for expressions that do not explicitly set their sample interval using the <strong>pmie</strong> variable <code>delta</code> described below. The default is 10.0 seconds.
     <dt><strong>-U</strong> <em>username</em>
-    <dd>User account under which to run <strong>pmie</strong>. The default is the current user account for interactive use. When run as a daemon, the unprivileged "pcp" account is used in current versions of PCP, but in older versions the superuser account ("root") was used by default.
+    <dd>
+      <p>User account under which to run <strong>pmie</strong>. The default is the current user account for interactive use. When run as a daemon, the unprivileged "pcp" account is used in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-v</strong>
-    <dd>Unless one of the verbose options <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong> appears on the command line, expressions are evaluated silently, the only output is as a result of any actions being executed. In the verbose mode, specified using the <strong>-v</strong> flag, the value of each expression is printed as it is evaluated. The values are in canonical units; bytes in the dimension of ``space'', seconds in the dimension of ``time'' and events in the dimension of ``count''. See <strong>pmLookupDesc</strong>(3) for details of the supported dimension and scaling mechanisms for performance metrics. The verbose mode is useful in monitoring the value of given expressions, evaluating derived performance metrics, passing these values on to other tools for further processing and in debugging new expressions.
+    <dd>
+      <p>Unless one of the verbose options <strong>-V</strong>, <strong>-v</strong> or <strong>-W</strong> appears on the command line, expressions are evaluated silently, the only output is as a result of any actions being executed. In the verbose mode, specified using the <strong>-v</strong> flag, the value of each expression is printed as it is evaluated. The values are in canonical units; bytes in the dimension of ``space'', seconds in the dimension of ``time'' and events in the dimension of ``count''. See <strong>pmLookupDesc</strong>(3) for details of the supported dimension and scaling mechanisms for performance metrics. The verbose mode is useful in monitoring the value of given expressions, evaluating derived performance metrics, passing these values on to other tools for further processing and in debugging new expressions.
     <dt><strong>-V</strong>
-    <dd>This option has the same effect as the <strong>-v</strong> option, except that the name of the host and instance (if applicable) are printed as well as expression values.
+    <dd>
+      <p>This option has the same effect as the <strong>-v</strong> option, except that the name of the host and instance (if applicable) are printed as well as expression values.
     <dt><strong>-W</strong>
-    <dd>This option has the same effect as the <strong>-V</strong> option described above, except that for boolean expressions, only those names and values that make the expression true are printed. These are the same names and values accessible to rule actions as the %h, %i, %c and %v bindings, as described below.
+    <dd>
+      <p>This option has the same effect as the <strong>-V</strong> option described above, except that for boolean expressions, only those names and values that make the expression true are printed. These are the same names and values accessible to rule actions as the %h, %i, %c and %v bindings, as described below.
     <dt><strong>-x</strong>
-    <dd>Execute in domain agent mode. This mode is used within the Performance Co-Pilot product to derive values for summary metrics, see <strong>pmdasummary</strong>(1). Only restricted functionality is available in this mode (expressions with actions may <strong>not</strong> be used).
+    <dd>
+      <p>Execute in domain agent mode. This mode is used within the Performance Co-Pilot product to derive values for summary metrics, see <strong>pmdasummary</strong>(1). Only restricted functionality is available in this mode (expressions with actions may <strong>not</strong> be used).
     <dt><strong>-Z</strong>
-    <dd>Change the reporting timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
+    <dd>
+      <p>Change the reporting timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
     <dt><strong>-z</strong>
-    <dd>Change the reporting timezone to the timezone of the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> option or the first named set of archives (as described above for the <strong>-a</strong> option).
+    <dd>
+      <p>Change the reporting timezone to the timezone of the host that is the source of the performance metrics, as identified via either the <strong>-h</strong> option or the first named set of archives (as described above for the <strong>-a</strong> option).
   </dl>
   <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong>, and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a ``natural'' alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
   <p>Output from <strong>pmie</strong> is directed to standard output and standard error as follows:
   <dl class="indent-5">
     <dt><strong>stdout</strong>
-    <dd>Expression values printed in the verbose <strong>-v</strong> mode and the output of <strong>print</strong> actions.
+    <dd>
+      <p>Expression values printed in the verbose <strong>-v</strong> mode and the output of <strong>print</strong> actions.
     <dt><strong>stderr</strong>
-    <dd>Error and warning messages for any syntactic or semantic problems during expression parsing, and any semantic or performance metrics availability problems during expression evaluation.
+    <dd>
+      <p>Error and warning messages for any syntactic or semantic problems during expression parsing, and any semantic or performance metrics availability problems during expression evaluation.
   </dl>
 </section>
 <section>
@@ -292,13 +313,17 @@ otherwise -&gt;
   <p>Arguments to actions are an optional suppression time, and then one or more expressions (a string is an expression in this context). Strings appearing as arguments to an action may include the following special selectors that will be replaced at the time the action is executed.
   <dl class="indent-26">
     <dt><code><strong>%h</strong></code>
-    <dd>Host name(s) that make the left-most top-level expression in the condition true.
+    <dd>
+      <p>Host name(s) that make the left-most top-level expression in the condition true.
     <dt><code><strong>%c</strong></code>
-    <dd>Connection specification string(s) or files for a PCP tool to reach the hosts or archives that make the left-most top-level expression in the condition true.
+    <dd>
+      <p>Connection specification string(s) or files for a PCP tool to reach the hosts or archives that make the left-most top-level expression in the condition true.
     <dt><code><strong>%i</strong></code>
-    <dd>Instance(s) that make the left-most top-level expression in the condition true.
+    <dd>
+      <p>Instance(s) that make the left-most top-level expression in the condition true.
     <dt><code><strong>%v</strong></code>
-    <dd>One value from the left-most top-level expression in the condition for each host and instance pair that makes the condition true.
+    <dd>
+      <p>One value from the left-most top-level expression in the condition for each host and instance pair that makes the condition true.
   </dl>
   <p>Note that expansion of the special selectors is done by repeating the whole argument once for each unique binding to any of the qualifying special selectors. For example if a rule were true for the host <strong>mumble</strong> with instances <strong>grunt</strong> and <strong>snort</strong>, and for host <strong>fumble</strong> the instance <strong>puff</strong> makes the rule true, then the action
   <pre>...
@@ -457,19 +482,26 @@ otherwise -&gt;
   <p>The following reserved macro names are understood.
   <dl class="indent-64">
     <dt><code><strong>minute</strong></code>
-    <dd>Current minute of the hour.
+    <dd>
+      <p>Current minute of the hour.
     <dt><code><strong>hour</strong></code>
-    <dd>Current hour of the day, in the range 0 to 23.
+    <dd>
+      <p>Current hour of the day, in the range 0 to 23.
     <dt><code><strong>day</strong></code>
-    <dd>Current day of the month, in the range 1 to 31.
+    <dd>
+      <p>Current day of the month, in the range 1 to 31.
     <dt><code><strong>month</strong></code>
-    <dd>Current month of the year, in the range 0 (January) to 11 (December).
+    <dd>
+      <p>Current month of the year, in the range 0 (January) to 11 (December).
     <dt><code><strong>year</strong></code>
-    <dd>Current year.
+    <dd>
+      <p>Current year.
     <dt><code><strong>day_of_week</strong></code>
-    <dd>Current day of the week, in the range 0 (Sunday) to 6 (Saturday).
+    <dd>
+      <p>Current day of the week, in the range 0 (Sunday) to 6 (Saturday).
     <dt><code><strong>delta</strong></code>
-    <dd>Sample interval in effect for this expression.
+    <dd>
+      <p>Sample interval in effect for this expression.
   </dl>
   <p>Dates and times are presented in the reporting time zone (see description of <strong>-Z</strong> and <strong>-z</strong> command line options above).
 </section>
@@ -496,13 +528,17 @@ topic=PMIE              # JMS topic for pmie messages (optional)</pre>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_DEMOS_DIR/pmie/</strong><em>*</em>
-    <dd>annotated example rules
+    <dd>
+      <p>annotated example rules
     <dt><strong>$PCP_VAR_DIR/pmns/</strong><em>*</em>
-    <dd>default PMNS specification files
+    <dd>
+      <p>default PMNS specification files
     <dt><strong>$PCP_TMP_DIR/pmie</strong>
-    <dd><strong>pmie</strong> maintains files in this directory to identify the running <strong>pmie</strong> instances and to export runtime information about each instance - this data forms the basis of the pmcd.pmie performance metrics
+    <dd>
+      <p><strong>pmie</strong> maintains files in this directory to identify the running <strong>pmie</strong> instances and to export runtime information about each instance - this data forms the basis of the pmcd.pmie performance metrics
     <dt><strong>$PCP_PMIECONTROL_PATH</strong>
-    <dd>the default set of <strong>pmie</strong> instances to start at boot time - refer to <strong>pmie_check</strong>(1) for details
+    <dd>
+      <p>the default set of <strong>pmie</strong> instances to start at boot time - refer to <strong>pmie_check</strong>(1) for details
   </dl>
 </section>
 <section>

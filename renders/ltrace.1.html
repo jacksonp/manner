@@ -25,61 +25,88 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt>-a, --align <em>column</em>
-    <dd>Align return values in a specific <em>column</em> (default column is 5/8 of screen width).
+    <dd>
+      <p>Align return values in a specific <em>column</em> (default column is 5/8 of screen width).
     <dt>-A <em>maxelts</em>
-    <dd>Maximum number of array elements to print before suppressing the rest with an ellipsis ("..."). This also limits number of recursive structure expansions.
+    <dd>
+      <p>Maximum number of array elements to print before suppressing the rest with an ellipsis ("..."). This also limits number of recursive structure expansions.
     <dt>-b, --no-signals
-    <dd>Disable printing of signals received by the traced process.
+    <dd>
+      <p>Disable printing of signals received by the traced process.
     <dt>-c
-    <dd>Count time and calls for each library call and report a summary on program exit.
+    <dd>
+      <p>Count time and calls for each library call and report a summary on program exit.
     <dt>-C, --demangle
-    <dd>Decode (demangle) low-level symbol names into user-level names. Besides removing any initial underscore prefix used by the system, this makes C++ function names readable.
+    <dd>
+      <p>Decode (demangle) low-level symbol names into user-level names. Besides removing any initial underscore prefix used by the system, this makes C++ function names readable.
     <dt>-D, --debug mask
-    <dd>Show debugging output of <strong>ltrace</strong> itself. <em>mask</em> is a number describing which debug messages should be displayed. Use the option -Dh to see what can be used, but note that currently the only reliable debugmask is 77, which shows all debug messages.
+    <dd>
+      <p>Show debugging output of <strong>ltrace</strong> itself. <em>mask</em> is a number describing which debug messages should be displayed. Use the option -Dh to see what can be used, but note that currently the only reliable debugmask is 77, which shows all debug messages.
     <dt>-e <em>filter</em>
-    <dd>A qualifying expression which modifies which library calls (i.e. calls done through PLT slots, which are typically calls from the main binary to a library, or inter-library calls) to trace. Usage examples and the syntax description appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>. If more than one -e option appears on the command line, the library calls that match any of them are traced. If no -e is given, <strong>@MAIN</strong> is assumed as a default.
+    <dd>
+      <p>A qualifying expression which modifies which library calls (i.e. calls done through PLT slots, which are typically calls from the main binary to a library, or inter-library calls) to trace. Usage examples and the syntax description appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>. If more than one -e option appears on the command line, the library calls that match any of them are traced. If no -e is given, <strong>@MAIN</strong> is assumed as a default.
     <dt>-f
-    <dd>Trace child processes as they are created by currently traced processes as a result of the fork(2) or clone(2) system calls. The new process is attached immediately.
+    <dd>
+      <p>Trace child processes as they are created by currently traced processes as a result of the fork(2) or clone(2) system calls. The new process is attached immediately.
     <dt>-F, --config <em>pathlist</em>
-    <dd>Contains a colon-separated list of paths. If a path refers to a directory, that directory is considered when prototype libraries are searched (see the section <strong>PROTOTYPE LIBRARY DISCOVERY</strong>). If it refers to a file, that file is imported implicitly to all loaded prototype libraries.
+    <dd>
+      <p>Contains a colon-separated list of paths. If a path refers to a directory, that directory is considered when prototype libraries are searched (see the section <strong>PROTOTYPE LIBRARY DISCOVERY</strong>). If it refers to a file, that file is imported implicitly to all loaded prototype libraries.
     <dt>-h, --help
-    <dd>Show a summary of the options to ltrace and exit.
+    <dd>
+      <p>Show a summary of the options to ltrace and exit.
     <dt>-i
-    <dd>Print the instruction pointer at the time of the library call.
+    <dd>
+      <p>Print the instruction pointer at the time of the library call.
     <dt>-l, --library <em>library_pattern</em>
-    <dd>Display only calls to functions implemented by libraries that match <em>library_pattern.</em> This is as if you specified one -e for every symbol implemented in a library specified by <em>library_pattern.</em> Multiple library patters can be specified with several instances of this option. Usage examples and the syntax description of library_pattern appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>.<br>
-    <br>
-    Note that while this option selects calls that might be directed to the selected libraries, there's no actual guarantee that the call won't be directed elsewhere due to e.g. LD_PRELOAD or simply dependency ordering. If you want to make sure that symbols in given library are actually called, use <strong>-x @</strong><em>library_pattern</em> instead.
+    <dd>
+      <p>Display only calls to functions implemented by libraries that match <em>library_pattern.</em> This is as if you specified one -e for every symbol implemented in a library specified by <em>library_pattern.</em> Multiple library patters can be specified with several instances of this option. Usage examples and the syntax description of library_pattern appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>.<br>
+      <br>
+      Note that while this option selects calls that might be directed to the selected libraries, there's no actual guarantee that the call won't be directed elsewhere due to e.g. LD_PRELOAD or simply dependency ordering. If you want to make sure that symbols in given library are actually called, use <strong>-x @</strong><em>library_pattern</em> instead.
     <dt>-L
-    <dd>When no -e option is given, don't assume the default action of <strong>@MAIN</strong>. In practice this means that library calls will not be traced.
+    <dd>
+      <p>When no -e option is given, don't assume the default action of <strong>@MAIN</strong>. In practice this means that library calls will not be traced.
     <dt>-n, --indent <em>nr</em>
-    <dd>Indent trace output by <em>nr</em> spaces for each level of call nesting. Using this option makes the program flow visualization easy to follow. This indents uselessly also functions that never return, such as service functions for throwing exceptions in the C++ runtime.
+    <dd>
+      <p>Indent trace output by <em>nr</em> spaces for each level of call nesting. Using this option makes the program flow visualization easy to follow. This indents uselessly also functions that never return, such as service functions for throwing exceptions in the C++ runtime.
     <dt>-o, --output <em>filename</em>
-    <dd>Write the trace output to the file <em>filename</em> rather than to stderr.
+    <dd>
+      <p>Write the trace output to the file <em>filename</em> rather than to stderr.
     <dt>-p <em>pid</em>
-    <dd>Attach to the process with the process ID <em>pid</em> and begin tracing. This option can be used together with passing a command to execute. It is possible to attach to several processes by passing more than one option -p.
+    <dd>
+      <p>Attach to the process with the process ID <em>pid</em> and begin tracing. This option can be used together with passing a command to execute. It is possible to attach to several processes by passing more than one option -p.
     <dt>-r
-    <dd>Print a relative timestamp with each line of the trace. This records the time difference between the beginning of successive lines.
+    <dd>
+      <p>Print a relative timestamp with each line of the trace. This records the time difference between the beginning of successive lines.
     <dt>-s <em>strsize</em>
-    <dd>Specify the maximum string size to print (the default is 32).
+    <dd>
+      <p>Specify the maximum string size to print (the default is 32).
     <dt>-S
-    <dd>Display system calls as well as library calls
+    <dd>
+      <p>Display system calls as well as library calls
     <dt>-t
-    <dd>Prefix each line of the trace with the time of day.
+    <dd>
+      <p>Prefix each line of the trace with the time of day.
     <dt>-tt
-    <dd>If given twice, the time printed will include the microseconds.
+    <dd>
+      <p>If given twice, the time printed will include the microseconds.
     <dt>-ttt
-    <dd>If given thrice, the time printed will include the microseconds and the leading portion will be printed as the number of seconds since the epoch.
+    <dd>
+      <p>If given thrice, the time printed will include the microseconds and the leading portion will be printed as the number of seconds since the epoch.
     <dt>-T
-    <dd>Show the time spent inside each call. This records the time difference between the beginning and the end of each call.
+    <dd>
+      <p>Show the time spent inside each call. This records the time difference between the beginning and the end of each call.
     <dt>-u <em>username</em>
-    <dd>Run command with the userid, groupid and supplementary groups of <em>username</em>. This option is only useful when running as root and enables the correct execution of setuid and/or setgid binaries.
+    <dd>
+      <p>Run command with the userid, groupid and supplementary groups of <em>username</em>. This option is only useful when running as root and enables the correct execution of setuid and/or setgid binaries.
     <dt>-w, --where <em>nr</em>
-    <dd>Show backtrace of <em>nr</em> stack frames for each traced function. This option enabled only if elfutils or libunwind support was enabled at compile time.
+    <dd>
+      <p>Show backtrace of <em>nr</em> stack frames for each traced function. This option enabled only if elfutils or libunwind support was enabled at compile time.
     <dt>-x <em>filter</em>
-    <dd>A qualifying expression which modifies which symbol table entry points to trace (those are typically calls inside a library or main binary, though PLT calls, traced by -e, land on entry points as well). Usage examples and the syntax description appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>. If more than one -x option appears on the command line, the symbols that match any of them are traced. No entry points are traced if no -x is given.
+    <dd>
+      <p>A qualifying expression which modifies which symbol table entry points to trace (those are typically calls inside a library or main binary, though PLT calls, traced by -e, land on entry points as well). Usage examples and the syntax description appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>. If more than one -x option appears on the command line, the symbols that match any of them are traced. No entry points are traced if no -x is given.
     <dt>-V, --version
-    <dd>Show the version number of ltrace and exit.
+    <dd>
+      <p>Show the version number of ltrace and exit.
   </dl>
 </section>
 <section>
@@ -191,9 +218,11 @@
   <h2>FILES</h2>
   <dl>
     <dt><em>/etc/ltrace.conf</em>
-    <dd>System configuration file
+    <dd>
+      <p>System configuration file
     <dt><em>~/.ltrace.conf</em>
-    <dd>Personal config file, overrides <em>/etc/ltrace.conf</em>
+    <dd>
+      <p>Personal config file, overrides <em>/etc/ltrace.conf</em>
   </dl>
 </section>
 <section>

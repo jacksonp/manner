@@ -27,21 +27,29 @@
   <p>The <strong>--clear</strong>, <strong>--read-clear</strong>, <strong>--console-on</strong>, <strong>--console-off</strong>, and <strong>--console-level</strong> options are mutually exclusive.
   <dl>
     <dt><strong>-C</strong>, <strong>--clear</strong>
-    <dd>Clear the ring buffer.
+    <dd>
+      <p>Clear the ring buffer.
     <dt><strong>-c</strong>, <strong>--read-clear</strong>
-    <dd>Clear the ring buffer after first printing its contents.
+    <dd>
+      <p>Clear the ring buffer after first printing its contents.
     <dt><strong>-D</strong>, <strong>--console-off</strong>
-    <dd>Disable the printing of messages to the console.
+    <dd>
+      <p>Disable the printing of messages to the console.
     <dt><strong>-d</strong>, <strong>--show-delta</strong>
-    <dd>Display the timestamp and the time delta spent between messages. If used together with <strong>--notime</strong> then only the time delta without the timestamp is printed.
+    <dd>
+      <p>Display the timestamp and the time delta spent between messages. If used together with <strong>--notime</strong> then only the time delta without the timestamp is printed.
     <dt><strong>-E</strong>, <strong>--console-on</strong>
-    <dd>Enable printing messages to the console.
+    <dd>
+      <p>Enable printing messages to the console.
     <dt><strong>-e</strong>, <strong>--reltime</strong>
-    <dd>Display the local time and the delta in human-readable format. Be aware that conversion to the local time could be inaccurate (see <strong>-T</strong> for more details).
+    <dd>
+      <p>Display the local time and the delta in human-readable format. Be aware that conversion to the local time could be inaccurate (see <strong>-T</strong> for more details).
     <dt><strong>-F</strong>, <strong>--file</strong> <em>file</em>
-    <dd>Read the messages from the given <em>file</em>.
+    <dd>
+      <p>Read the messages from the given <em>file</em>.
     <dt><strong>-f</strong>, <strong>--facility</strong> <em>list</em>
-    <dd>Restrict output to the given (comma-separated) <em>list</em> of facilities. For example:
+    <dd>
+      <p>Restrict output to the given (comma-separated) <em>list</em> of facilities. For example:
   </dl>
   <div class="indent-14">
     <p><strong>dmesg --facility=daemon</strong>
@@ -49,13 +57,17 @@
   <p class="indent">will print messages from system daemons only. For all supported facilities see the <strong>--help</strong> output.
   <dl>
     <dt><strong>-H</strong>, <strong>--human</strong>
-    <dd>Enable human-readable output. See also <strong>--color</strong>, <strong>--reltime</strong> and <strong>--nopager</strong>.
+    <dd>
+      <p>Enable human-readable output. See also <strong>--color</strong>, <strong>--reltime</strong> and <strong>--nopager</strong>.
     <dt><strong>-k</strong>, <strong>--kernel</strong>
-    <dd>Print kernel messages.
+    <dd>
+      <p>Print kernel messages.
     <dt><strong>-L</strong>, <strong>--color</strong>[=<em>when</em>]
-    <dd>Colorize the output. The optional argument <em>when</em> can be <strong>auto</strong>, <strong>never</strong> or <strong>always</strong>. If the <em>when</em> argument is omitted, it defaults to <strong>auto</strong>. The colors can be disabled; for the current built-in default see the <strong>--help</strong> output. See also the <strong>COLORS</strong> section below.
+    <dd>
+      <p>Colorize the output. The optional argument <em>when</em> can be <strong>auto</strong>, <strong>never</strong> or <strong>always</strong>. If the <em>when</em> argument is omitted, it defaults to <strong>auto</strong>. The colors can be disabled; for the current built-in default see the <strong>--help</strong> output. See also the <strong>COLORS</strong> section below.
     <dt><strong>-l</strong>, <strong>--level</strong> <em>list</em>
-    <dd>Restrict output to the given (comma-separated) <em>list</em> of levels. For example:
+    <dd>
+      <p>Restrict output to the given (comma-separated) <em>list</em> of levels. For example:
   </dl>
   <div class="indent-14">
     <p><strong>dmesg --level=err,warn</strong>
@@ -63,39 +75,50 @@
   <p class="indent">will print error and warning messages only. For all supported levels see the <strong>--help</strong> output.
   <dl>
     <dt><strong>-n</strong>, <strong>--console-level</strong> <em>level</em>
-    <dd>Set the <em>level</em> at which printing of messages is done to the console. The <em>level</em> is a level number or abbreviation of the level name. For all supported levels see the <strong>--help</strong> output.<br>
-    <br>
-    For example, <strong>-n 1</strong> or <strong>-n alert</strong> prevents all messages, except emergency (panic) messages, from appearing on the console. All levels of messages are still written to <em>/proc/kmsg</em>, so <strong>syslogd</strong>(8) can still be used to control exactly where kernel messages appear. When the <strong>-n</strong> option is used, <strong>dmesg</strong> will <em>not</em> print or clear the kernel ring buffer.
+    <dd>
+      <p>Set the <em>level</em> at which printing of messages is done to the console. The <em>level</em> is a level number or abbreviation of the level name. For all supported levels see the <strong>--help</strong> output.<br>
+      <br>
+      For example, <strong>-n 1</strong> or <strong>-n alert</strong> prevents all messages, except emergency (panic) messages, from appearing on the console. All levels of messages are still written to <em>/proc/kmsg</em>, so <strong>syslogd</strong>(8) can still be used to control exactly where kernel messages appear. When the <strong>-n</strong> option is used, <strong>dmesg</strong> will <em>not</em> print or clear the kernel ring buffer.
     <dt><strong>-P</strong>, <strong>--nopager</strong>
-    <dd>Do not pipe output into a pager. A pager is enabled by default for <strong>--human</strong> output.
+    <dd>
+      <p>Do not pipe output into a pager. A pager is enabled by default for <strong>--human</strong> output.
     <dt><strong>-r</strong>, <strong>--raw</strong>
-    <dd>Print the raw message buffer, i.e. do not strip the log-level prefixes.<br>
-    <br>
-    Note that the real raw format depends on the method how <strong>dmesg</strong>(1) reads kernel messages. The /dev/kmsg device uses a different format than <strong>syslog</strong>(2)<strong>.</strong> For backward compatibility, <strong>dmesg</strong>(1) returns data always in the <strong>syslog</strong>(2) format. It is possible to read the real raw data from /dev/kmsg by, for example, the command 'dd if=/dev/kmsg iflag=nonblock'.
+    <dd>
+      <p>Print the raw message buffer, i.e. do not strip the log-level prefixes.<br>
+      <br>
+      Note that the real raw format depends on the method how <strong>dmesg</strong>(1) reads kernel messages. The /dev/kmsg device uses a different format than <strong>syslog</strong>(2)<strong>.</strong> For backward compatibility, <strong>dmesg</strong>(1) returns data always in the <strong>syslog</strong>(2) format. It is possible to read the real raw data from /dev/kmsg by, for example, the command 'dd if=/dev/kmsg iflag=nonblock'.
     <dt><strong>-S</strong>, <strong>--syslog</strong>
-    <dd>Force <strong>dmesg</strong> to use the <strong>syslog</strong>(2) kernel interface to read kernel messages. The default is to use /dev/kmsg rather than <strong>syslog</strong>(2) since kernel 3.5.0.
+    <dd>
+      <p>Force <strong>dmesg</strong> to use the <strong>syslog</strong>(2) kernel interface to read kernel messages. The default is to use /dev/kmsg rather than <strong>syslog</strong>(2) since kernel 3.5.0.
     <dt><strong>-s</strong>, <strong>--buffer-size</strong> <em>size</em>
-    <dd>Use a buffer of <em>size</em> to query the kernel ring buffer. This is 16392 by default. (The default kernel syslog buffer size was 4096 at first, 8192 since 1.3.54, 16384 since 2.1.113.) If you have set the kernel buffer to be larger than the default, then this option can be used to view the entire buffer.
+    <dd>
+      <p>Use a buffer of <em>size</em> to query the kernel ring buffer. This is 16392 by default. (The default kernel syslog buffer size was 4096 at first, 8192 since 1.3.54, 16384 since 2.1.113.) If you have set the kernel buffer to be larger than the default, then this option can be used to view the entire buffer.
     <dt><strong>-T</strong>, <strong>--ctime</strong>
     <dd>
       <p>Print human-readable timestamps.
       <p><strong>Be aware that the timestamp could be inaccurate!</strong> The <strong>time</strong> source used for the logs is <strong>not updated after</strong> system <strong>SUSPEND</strong>/<strong>RESUME</strong>.
     <dt><strong>-t</strong>, <strong>--notime</strong>
-    <dd>Do not print kernel's timestamps.
+    <dd>
+      <p>Do not print kernel's timestamps.
     <dt><strong>--time-format</strong> <em>format</em>
     <dd>
       <p>Print timestamps using the given <em>format</em>, which can be <strong>ctime</strong>, <strong>reltime</strong>, <strong>delta</strong> or <strong>iso</strong>. The first three formats are aliases of the time-format-specific options. The <strong>iso</strong> format is a <strong>dmesg</strong> implementation of the ISO-8601 timestamp format. The purpose of this format is to make the comparing of timestamps between two systems, and any other parsing, easy. The definition of the <strong>iso</strong> timestamp is: YYYY-MM-DD&lt;T&gt;HH:MM:SS,&lt;microseconds&gt;&lt;-+&gt;&lt;timezone offset from UTC&gt;.
       <p>The <strong>iso</strong> format has the same issue as <strong>ctime</strong>: the time may be inaccurate when a system is suspended and resumed.
     <dt><strong>-u</strong>, <strong>--userspace</strong>
-    <dd>Print userspace messages.
+    <dd>
+      <p>Print userspace messages.
     <dt><strong>-w</strong>, <strong>--follow</strong>
-    <dd>Wait for new messages. This feature is supported only on systems with a readable /dev/kmsg (since kernel 3.5.0).
+    <dd>
+      <p>Wait for new messages. This feature is supported only on systems with a readable /dev/kmsg (since kernel 3.5.0).
     <dt><strong>-x</strong>, <strong>--decode</strong>
-    <dd>Decode facility and level (priority) numbers to human-readable prefixes.
+    <dd>
+      <p>Decode facility and level (priority) numbers to human-readable prefixes.
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>Display version information and exit.
+    <dd>
+      <p>Display version information and exit.
     <dt><strong>-h</strong>, <strong>--help</strong>
-    <dd>Display help text and exit.
+    <dd>
+      <p>Display help text and exit.
   </dl>
 </section>
 <section>
@@ -104,21 +127,29 @@
   <p>The logical color names supported by <strong>dmesg</strong> are:
   <dl>
     <dt><strong>subsys</strong>
-    <dd>The message sub-system prefix (e.g. "ACPI:").
+    <dd>
+      <p>The message sub-system prefix (e.g. "ACPI:").
     <dt><strong>time</strong>
-    <dd>The message timestamp.
+    <dd>
+      <p>The message timestamp.
     <dt><strong>timebreak</strong>
-    <dd>The message timestamp in short ctime format in <strong>--reltime</strong> or <strong>--human</strong> output.
+    <dd>
+      <p>The message timestamp in short ctime format in <strong>--reltime</strong> or <strong>--human</strong> output.
     <dt><strong>alert</strong>
-    <dd>The text of the message with the alert log priority.
+    <dd>
+      <p>The text of the message with the alert log priority.
     <dt><strong>crit</strong>
-    <dd>The text of the message with the critical log priority.
+    <dd>
+      <p>The text of the message with the critical log priority.
     <dt><strong>err</strong>
-    <dd>The text of the message with the error log priority.
+    <dd>
+      <p>The text of the message with the error log priority.
     <dt><strong>warn</strong>
-    <dd>The text of the message with the warning log priority.
+    <dd>
+      <p>The text of the message with the warning log priority.
     <dt><strong>segfault</strong>
-    <dd>The text of the message that inform about segmentation fault.
+    <dd>
+      <p>The text of the message that inform about segmentation fault.
   </dl>
 </section>
 <section>

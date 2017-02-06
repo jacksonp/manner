@@ -26,39 +26,53 @@
     <p>Note that topology elements (core, socket, etc.) use a sequential unique ID starting from zero, but CPU logical numbers follow the kernel where there is no guarantee of sequential numbering.
     <dl>
       <dt><strong>CPU</strong>
-      <dd>The logical CPU number of a CPU as used by the Linux kernel.
+      <dd>
+        <p>The logical CPU number of a CPU as used by the Linux kernel.
       <dt><strong>CORE</strong>
-      <dd>The logical core number. A core can contain several CPUs.
+      <dd>
+        <p>The logical core number. A core can contain several CPUs.
       <dt><strong>SOCKET</strong>
-      <dd>The logical socket number. A socket can contain several cores.
+      <dd>
+        <p>The logical socket number. A socket can contain several cores.
       <dt><strong>BOOK</strong>
-      <dd>The logical book number. A book can contain several sockets.
+      <dd>
+        <p>The logical book number. A book can contain several sockets.
       <dt><strong>DRAWER</strong>
-      <dd>The logical drawer number. A drawer can contain several books.
+      <dd>
+        <p>The logical drawer number. A drawer can contain several books.
       <dt><strong>NODE</strong>
-      <dd>The logical NUMA node number. A node can contain several drawers.
+      <dd>
+        <p>The logical NUMA node number. A node can contain several drawers.
       <dt><strong>CACHE</strong>
-      <dd>Information about how caches are shared between CPUs.
+      <dd>
+        <p>Information about how caches are shared between CPUs.
       <dt><strong>ADDRESS</strong>
-      <dd>The physical address of a CPU.
+      <dd>
+        <p>The physical address of a CPU.
       <dt><strong>ONLINE</strong>
-      <dd>Indicator that shows whether the Linux instance currently makes use of the CPU.
+      <dd>
+        <p>Indicator that shows whether the Linux instance currently makes use of the CPU.
       <dt><strong>CONFIGURED</strong>
-      <dd>Indicator that shows if the hypervisor has allocated the CPU to the virtual hardware on which the Linux instance runs. CPUs that are configured can be set online by the Linux instance. This column contains data only if your hardware system and hypervisor support dynamic CPU resource allocation.
+      <dd>
+        <p>Indicator that shows if the hypervisor has allocated the CPU to the virtual hardware on which the Linux instance runs. CPUs that are configured can be set online by the Linux instance. This column contains data only if your hardware system and hypervisor support dynamic CPU resource allocation.
       <dt><strong>POLARIZATION</strong>
       <dd>
         <p>This column contains data for Linux instances that run on virtual hardware with a hypervisor that can switch the CPU dispatching mode (polarization). The polarization can be:
         <dl class="indent-12">
           <dt><strong>horizontal</strong>
-          <dd>The workload is spread across all available CPUs.
+          <dd>
+            <p>The workload is spread across all available CPUs.
           <dt><strong>vertical</strong>
-          <dd>The workload is concentrated on few CPUs.
+          <dd>
+            <p>The workload is concentrated on few CPUs.
         </dl>
         <p>For vertical polarization, the column also shows the degree of concentration, high, medium, or low. This column contains data only if your hardware system and hypervisor support CPU polarization.
       <dt><strong>MAXMHZ</strong>
-      <dd>Maximum megahertz value for the CPU. Useful when <strong>lscpu</strong> is used as hardware inventory information gathering tool. Notice that the megahertz value is dynamic, and driven by CPU governor depending on current resource need.
+      <dd>
+        <p>Maximum megahertz value for the CPU. Useful when <strong>lscpu</strong> is used as hardware inventory information gathering tool. Notice that the megahertz value is dynamic, and driven by CPU governor depending on current resource need.
       <dt><strong>MINMHZ</strong>
-      <dd>Minimum megahertz value for the CPU.
+      <dd>
+        <p>Minimum megahertz value for the CPU.
     </dl>
   </section>
 </section>
@@ -66,36 +80,46 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-a</strong>, <strong>--all</strong>
-    <dd>Include lines for online and offline CPUs in the output (default for <strong>-e</strong>). This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
+    <dd>
+      <p>Include lines for online and offline CPUs in the output (default for <strong>-e</strong>). This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
     <dt><strong>-b</strong>, <strong>--online</strong>
-    <dd>Limit the output to online CPUs (default for <strong>-p</strong>). This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
+    <dd>
+      <p>Limit the output to online CPUs (default for <strong>-p</strong>). This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
     <dt><strong>-c</strong>, <strong>--offline</strong>
-    <dd>Limit the output to offline CPUs. This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
+    <dd>
+      <p>Limit the output to offline CPUs. This option may only be specified together with option <strong>-e</strong> or <strong>-p</strong>.
     <dt><strong>-e</strong>, <strong>--extended</strong>[=<em>list</em>]
-    <dd>Display the CPU information in human-readable format.<br>
-    <br>
-    If the <em>list</em> argument is omitted, all columns for which data is available are included in the command output.<br>
-    <br>
-    When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-e=cpu,node</strong>' or '<strong>--extended=cpu,node</strong>'.
+    <dd>
+      <p>Display the CPU information in human-readable format.<br>
+      <br>
+      If the <em>list</em> argument is omitted, all columns for which data is available are included in the command output.<br>
+      <br>
+      When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-e=cpu,node</strong>' or '<strong>--extended=cpu,node</strong>'.
     <dt><strong>-h</strong>, <strong>--help</strong>
-    <dd>Display help text and exit.
+    <dd>
+      <p>Display help text and exit.
     <dt><strong>-p</strong>, <strong>--parse</strong>[=<em>list</em>]
-    <dd>Optimize the command output for easy parsing.<br>
-    <br>
-    If the <em>list</em> argument is omitted, the command output is compatible with earlier versions of <strong>lscpu</strong>. In this compatible format, two commas are used to separate CPU cache columns. If no CPU caches are identified the cache column is omitted.<br>
-    If the <em>list</em> argument is used, cache columns are separated with a colon (:).<br>
-    <br>
-    When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-p=cpu,node</strong>' or '<strong>--parse=cpu,node</strong>'.
+    <dd>
+      <p>Optimize the command output for easy parsing.<br>
+      <br>
+      If the <em>list</em> argument is omitted, the command output is compatible with earlier versions of <strong>lscpu</strong>. In this compatible format, two commas are used to separate CPU cache columns. If no CPU caches are identified the cache column is omitted.<br>
+      If the <em>list</em> argument is used, cache columns are separated with a colon (:).<br>
+      <br>
+      When specifying the <em>list</em> argument, the string of option, equal sign (=), and <em>list</em> must not contain any blanks or other whitespace. Examples: '<strong>-p=cpu,node</strong>' or '<strong>--parse=cpu,node</strong>'.
     <dt><strong>-s</strong>, <strong>--sysroot</strong> <em>directory</em>
-    <dd>Gather CPU data for a Linux instance other than the instance from which the <strong>lscpu</strong> command is issued. The specified <em>directory</em> is the system root of the Linux instance to be inspected.
+    <dd>
+      <p>Gather CPU data for a Linux instance other than the instance from which the <strong>lscpu</strong> command is issued. The specified <em>directory</em> is the system root of the Linux instance to be inspected.
     <dt><strong>-x</strong>, <strong>--hex</strong>
-    <dd>Use hexadecimal masks for CPU sets (for example 0x3). The default is to print the sets in list format (for example 0,1).
+    <dd>
+      <p>Use hexadecimal masks for CPU sets (for example 0x3). The default is to print the sets in list format (for example 0,1).
     <dt><strong>-y</strong>, <strong>--physical</strong>
-    <dd>Display physical IDs for all columns with topology elements (core, socket, etc.). Other than logical IDs, which are assigned by <strong>lscpu</strong>, physical IDs are platform-specific values that are provided by the kernel. Physical IDs are not necessarily unique and they might not be arranged sequentially. If the kernel could not retrieve a physical ID for an element <strong>lscpu</strong> prints the dash (-) character.<br>
-    <br>
-    The CPU logical numbers are not affected by this option.
+    <dd>
+      <p>Display physical IDs for all columns with topology elements (core, socket, etc.). Other than logical IDs, which are assigned by <strong>lscpu</strong>, physical IDs are platform-specific values that are provided by the kernel. Physical IDs are not necessarily unique and they might not be arranged sequentially. If the kernel could not retrieve a physical ID for an element <strong>lscpu</strong> prints the dash (-) character.<br>
+      <br>
+      The CPU logical numbers are not affected by this option.
     <dt><strong>-V</strong>, <strong>--version</strong>
-    <dd>Display version information and exit.
+    <dd>
+      <p>Display version information and exit.
   </dl>
 </section>
 <section>

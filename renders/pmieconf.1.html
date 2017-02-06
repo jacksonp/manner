@@ -17,41 +17,57 @@
   <p>A brief description of the <strong>pmieconf</strong> command line options follows:
   <dl class="indent-8">
     <dt><strong>-c</strong>
-    <dd>When run from automated <strong>pmie</strong> setup processes, this option is used to add a specific message and timestamp indicating that this is the case. It is not appropriate when using the tool interactively.
+    <dd>
+      <p>When run from automated <strong>pmie</strong> setup processes, this option is used to add a specific message and timestamp indicating that this is the case. It is not appropriate when using the tool interactively.
     <dt><strong>-f</strong> <em>file</em>
-    <dd>Any rule modifications resulting from <strong>pmieconf</strong> manipulation of variable values will be written to <em>file</em>. The default value of <em>file</em> is dependent on the user ID - for the root user, the file <em>$PCP_VAR_DIR/config/pmieconf/config.pmie</em> is used, for other users the default is <em>$HOME/.pcp/pmie/config.pmie</em>.
+    <dd>
+      <p>Any rule modifications resulting from <strong>pmieconf</strong> manipulation of variable values will be written to <em>file</em>. The default value of <em>file</em> is dependent on the user ID - for the root user, the file <em>$PCP_VAR_DIR/config/pmieconf/config.pmie</em> is used, for other users the default is <em>$HOME/.pcp/pmie/config.pmie</em>.
     <dt><strong>-F</strong>
-    <dd>Forces the <strong>pmieconf</strong> output <em>file</em> to be created (or updated), after which <strong>pmieconf</strong> immediately exits.
+    <dd>
+      <p>Forces the <strong>pmieconf</strong> output <em>file</em> to be created (or updated), after which <strong>pmieconf</strong> immediately exits.
     <dt><strong>-r</strong> <em>rulepath</em>
-    <dd>Allows the source of generalized <strong>pmie</strong> rules to be changed - <em>rulepath</em> is a colon-delimited list of <strong>pmieconf</strong>(5) rule files and/or subdirectories. The default value for <em>rulepath</em> is <em>$PCP_VAR_DIR/config/pmieconf</em>. Use of this option overrides the <strong>PMIECONF_PATH</strong> environment variable which has a similar function.
+    <dd>
+      <p>Allows the source of generalized <strong>pmie</strong> rules to be changed - <em>rulepath</em> is a colon-delimited list of <strong>pmieconf</strong>(5) rule files and/or subdirectories. The default value for <em>rulepath</em> is <em>$PCP_VAR_DIR/config/pmieconf</em>. Use of this option overrides the <strong>PMIECONF_PATH</strong> environment variable which has a similar function.
     <dt><strong>-v</strong>
-    <dd>Verbose mode. Additional information associated with each rule and its associated variables will be displayed. This is the complete list of variables which affects any given rule (by default, global variables are not displayed with the rule).
+    <dd>
+      <p>Verbose mode. Additional information associated with each rule and its associated variables will be displayed. This is the complete list of variables which affects any given rule (by default, global variables are not displayed with the rule).
   </dl>
   <p>The <strong>pmieconf</strong> <em>command</em>s allow information related to the various rules and configurable variables to be displayed or modified. If no <strong>pmieconf</strong> <em>command</em>s are presented on the command line, <strong>pmieconf</strong> prompts for <em>command</em>s interactively.
   <p>The <strong>pmieconf</strong> <em>command</em> language is described here:
   <dl class="indent-8">
     <dt><strong>help [ { . | all | global | &lt;rule&gt; | &lt;group&gt; } [&lt;variable&gt;] ]</strong>
-    <dd>Without arguments, the <strong>help</strong> command displays the syntax for all of the available <strong>pmieconf</strong> commands. With one argument, a description of one or more of the generalized rules is displayed. With two arguments, a description of a specific variable relating to one or more of the generalized rules is displayed.
+    <dd>
+      <p>Without arguments, the <strong>help</strong> command displays the syntax for all of the available <strong>pmieconf</strong> commands. With one argument, a description of one or more of the generalized rules is displayed. With two arguments, a description of a specific variable relating to one or more of the generalized rules is displayed.
     <dt><strong>rules [ enabled | disabled ]</strong>
-    <dd>Display the name and short summary for all of the generalized rules found on <em>rulepath</em>. Each of the rule names can be used in place of the keyword <strong>&lt;rule&gt;</strong> in this command syntax description. The <strong>enabled</strong> and <strong>disabled</strong> options can be used to filter the set of rules displayed to just those which are enabled or disabled respectfully.
+    <dd>
+      <p>Display the name and short summary for all of the generalized rules found on <em>rulepath</em>. Each of the rule names can be used in place of the keyword <strong>&lt;rule&gt;</strong> in this command syntax description. The <strong>enabled</strong> and <strong>disabled</strong> options can be used to filter the set of rules displayed to just those which are enabled or disabled respectfully.
     <dt><strong>groups</strong>
-    <dd>Display the name of all of the rule groups that were found on <em>rulepath</em>. Each of the group names can be used in place of the keyword <strong>&lt;group&gt;</strong> in this command syntax description, which applies the command to all rules within the rule group.
+    <dd>
+      <p>Display the name of all of the rule groups that were found on <em>rulepath</em>. Each of the group names can be used in place of the keyword <strong>&lt;group&gt;</strong> in this command syntax description, which applies the command to all rules within the rule group.
     <dt><strong>status</strong>
-    <dd>Display status information relating to the current <strong>pmieconf</strong> session, including a list of running <strong>pmie</strong> processes which are currently using <em>file</em>.
+    <dd>
+      <p>Display status information relating to the current <strong>pmieconf</strong> session, including a list of running <strong>pmie</strong> processes which are currently using <em>file</em>.
     <dt><strong>enable { . | all | &lt;rule&gt; | &lt;group&gt; }</strong>
-    <dd>Enables the specified rule or group of rules. An enabled rule is one which will be included in the <strong>pmie</strong> configuration file generated by <strong>pmieconf</strong>. Any enabled "actions" will be appended to the rule's "predicate", in a manner conforming to the <strong>pmie</strong> syntax ("actions" can be viewed using the <strong>list global</strong> command, described below).
+    <dd>
+      <p>Enables the specified rule or group of rules. An enabled rule is one which will be included in the <strong>pmie</strong> configuration file generated by <strong>pmieconf</strong>. Any enabled "actions" will be appended to the rule's "predicate", in a manner conforming to the <strong>pmie</strong> syntax ("actions" can be viewed using the <strong>list global</strong> command, described below).
     <dt><strong>disable { . | all | &lt;rule&gt; | &lt;group&gt; }</strong>
-    <dd>Disables the specified rule or group of rules. If the rule was previously enabled, it will be removed from the <strong>pmie</strong> configuration file generated by <strong>pmieconf</strong>, and hence no longer evaluated when <strong>pmie</strong> is restarted (using <strong>pmieconf</strong> does not affect any existing <strong>pmie</strong> processes using <em>file</em>).
+    <dd>
+      <p>Disables the specified rule or group of rules. If the rule was previously enabled, it will be removed from the <strong>pmie</strong> configuration file generated by <strong>pmieconf</strong>, and hence no longer evaluated when <strong>pmie</strong> is restarted (using <strong>pmieconf</strong> does not affect any existing <strong>pmie</strong> processes using <em>file</em>).
     <dt><strong>list { . | all | global | &lt;rule&gt; | &lt;group&gt; } [&lt;variable&gt;]</strong>
-    <dd>Display the values for a specific rule variable; or for all variables of a rule, a rule group, all rules, or the global variables.
+    <dd>
+      <p>Display the values for a specific rule variable; or for all variables of a rule, a rule group, all rules, or the global variables.
     <dt><strong>modify { . | all | global | &lt;rule&gt; | &lt;group&gt; } &lt;variable&gt; &lt;value&gt;</strong>
-    <dd>Enable, disable, or otherwise change the value for one or more rule variables. This value must be consistent with the type of the variable, which can be inferred from the format of the printed value - e.g. strings will be enclosed in double-quotes, percentages have the ``%'' symbol appended, etc. Note that certain rule variables cannot be modified through <strong>pmieconf</strong> - "predicate" and "help", for example.
+    <dd>
+      <p>Enable, disable, or otherwise change the value for one or more rule variables. This value must be consistent with the type of the variable, which can be inferred from the format of the printed value - e.g. strings will be enclosed in double-quotes, percentages have the ``%'' symbol appended, etc. Note that certain rule variables cannot be modified through <strong>pmieconf</strong> - "predicate" and "help", for example.
     <dt><strong>undo { . | all | global | &lt;rule&gt; | &lt;group&gt; } [&lt;variable&gt;]</strong>
-    <dd>Applicable only to a variable whose value has been modified - this <em>command</em> simply reverts to the default value for the given variable.
+    <dd>
+      <p>Applicable only to a variable whose value has been modified - this <em>command</em> simply reverts to the default value for the given variable.
     <dt><strong>quit</strong>
-    <dd>Save any changes made to <em>file</em> and then exit <strong>pmieconf</strong>.
+    <dd>
+      <p>Save any changes made to <em>file</em> and then exit <strong>pmieconf</strong>.
     <dt><strong>abort</strong>
-    <dd>Exit <strong>pmieconf</strong> immediately without saving any changes to <em>file</em>.
+    <dd>
+      <p>Exit <strong>pmieconf</strong> immediately without saving any changes to <em>file</em>.
   </dl>
   <p>Each of the commands above can be shortened by simply using the first character of the command name, and also ``?'' for help.
   <p>Use of the <strong>all</strong> keyword causes the command to be applied to all of the rules. The <strong>global</strong> keyword refers to those variables which are applied to every rule. Such variables can be changed either globally or locally, for example:
@@ -104,11 +120,14 @@
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><em>$PCP_VAR_DIR/config/pmieconf/</em>*/*
-    <dd>generalized system resource monitoring rules
+    <dd>
+      <p>generalized system resource monitoring rules
     <dt><em>$PCP_VAR_DIR/config/pmieconf/config.pmie</em>
-    <dd>default super-user settings for system resource monitoring rules
+    <dd>
+      <p>default super-user settings for system resource monitoring rules
     <dt><em>$HOME/.pcp/pmie/config.pmie</em>
-    <dd>default user settings for system resource monitoring rules
+    <dd>
+      <p>default user settings for system resource monitoring rules
   </dl>
 </section>
 <section>

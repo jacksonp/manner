@@ -60,55 +60,72 @@ targets, and the "--cross" argument to specify the target, like this:
   <h2>OPTIONS</h2>
   <dl>
     <dt><em>--config FILE</em>
-    <dd>Specifies that a machine.config file must be bundled as well. Typically this is $prefix/etc/mono/1.0/machine.config or $prefix/etc/mono/2.0/machine.config depending on the profile that you are using (1.0 or 2.0)
+    <dd>
+      <p>Specifies that a machine.config file must be bundled as well. Typically this is $prefix/etc/mono/1.0/machine.config or $prefix/etc/mono/2.0/machine.config depending on the profile that you are using (1.0 or 2.0)
     <dt><em>--config-dir DIR</em>
-    <dd>When passed, DIR will be set for the MONO_CFG_DIR environment variable
+    <dd>
+      <p>When passed, DIR will be set for the MONO_CFG_DIR environment variable
     <dt><em>--cross target</em>
-    <dd>Use this to request mkbundle generate a cross-compiled binary. It Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains an SDK installation as produced by the mono-package-runtime tool. You can get a list of the precompiled versions of the runtime using --list-targets and you can fetch a specific target using the --fetch-target command line option.<br>
-    <br>
-    This flag is mutually exclusive with <em>--sdk</em> which is used to specify an absolute path to resolve the Mono runtime from and the --runtime option which is used to manually construct the cross-platform package.
+    <dd>
+      <p>Use this to request mkbundle generate a cross-compiled binary. It Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains an SDK installation as produced by the mono-package-runtime tool. You can get a list of the precompiled versions of the runtime using --list-targets and you can fetch a specific target using the --fetch-target command line option.<br>
+      <br>
+      This flag is mutually exclusive with <em>--sdk</em> which is used to specify an absolute path to resolve the Mono runtime from and the --runtime option which is used to manually construct the cross-platform package.
     <dt><em>--deps</em>
-    <dd>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
+    <dd>
+      <p>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
     <dt><em>--env KEY=VALUE</em>
-    <dd>Use this to hardcode an environment variable at runtime for KEY to be mapped to VALUE. This is useful in scenarios where you want to enable certain Mono runtime configuration options that are controlled by environment variables.
+    <dd>
+      <p>Use this to hardcode an environment variable at runtime for KEY to be mapped to VALUE. This is useful in scenarios where you want to enable certain Mono runtime configuration options that are controlled by environment variables.
     <dt><em>--fetch-target target</em>
-    <dd>Downloads a precompiled runtime for the specified target from the Mono distribution site.
+    <dd>
+      <p>Downloads a precompiled runtime for the specified target from the Mono distribution site.
     <dt><em>--i18n encoding</em>
-    <dd>Specified which encoding tables to ship with the executable. By default, Mono ships the supporting I18N.dll assembly and the I18N.West.dll assembly. If your application will use the System.Text.Encoding.GetEncoding with encodings other than the West encodings, you should specify them here.<br>
-    <br>
-    You can use the <strong>none</strong> parameter to request that no implicit encodings should be bundled, including the supporting I18N.dll, use this option if you have ran a linker on your own.<br>
-    <br>
-    You can use the <strong>all</strong> flag to bundle all available encodings.<br>
-    <br>
-    Or you can use a comma delimited list of the workds CJK, MidWest, Other, Rare and West to specificy which encoding assemblies to distribute.
+    <dd>
+      <p>Specified which encoding tables to ship with the executable. By default, Mono ships the supporting I18N.dll assembly and the I18N.West.dll assembly. If your application will use the System.Text.Encoding.GetEncoding with encodings other than the West encodings, you should specify them here.<br>
+      <br>
+      You can use the <strong>none</strong> parameter to request that no implicit encodings should be bundled, including the supporting I18N.dll, use this option if you have ran a linker on your own.<br>
+      <br>
+      You can use the <strong>all</strong> flag to bundle all available encodings.<br>
+      <br>
+      Or you can use a comma delimited list of the workds CJK, MidWest, Other, Rare and West to specificy which encoding assemblies to distribute.
     <dt><em>-L path</em>
-    <dd>Adds the `path' do the search list for assemblies. The rules are the same as for the compiler -lib: or -L flags.
+    <dd>
+      <p>Adds the `path' do the search list for assemblies. The rules are the same as for the compiler -lib: or -L flags.
     <dt><em>--library [LIB,]PATH</em>
-    <dd>Embeds the dynamic library file pointed to by `PATH' and optionally give it the name `LIB' into the bundled executable. This is used to ship native library dependencies that are unpacked at startup and loaded from the runtime.
+    <dd>
+      <p>Embeds the dynamic library file pointed to by `PATH' and optionally give it the name `LIB' into the bundled executable. This is used to ship native library dependencies that are unpacked at startup and loaded from the runtime.
     <dt><em>--lists-targets</em>
-    <dd>Lists all of the available local cross compilation targets available as precompiled binaries on the Mono distribution server.
+    <dd>
+      <p>Lists all of the available local cross compilation targets available as precompiled binaries on the Mono distribution server.
     <dt><em>--local-targets</em>
-    <dd>Lists all of the available local cross compilation targets.
+    <dd>
+      <p>Lists all of the available local cross compilation targets.
     <dt><em>--machine-config FILE</em>
-    <dd>Uses the given FILE as the machine.config file for the generated application.
+    <dd>
+      <p>Uses the given FILE as the machine.config file for the generated application.
     <dt><em>--nodeps</em>
-    <dd>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
+    <dd>
+      <p>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
     <dt><em>-o filename</em>
-    <dd>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
+    <dd>
+      <p>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
     <dt><em>--options OPTS</em>
-    <dd>Since the resulting executable will be treated as a standalone program, you can use this option to pass configuration options to the Mono runtime and bake those into the resulting executable. These options are specified as <em>OPTS.</em><br>
-    <br>
-    You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed.<br>
-    <br>
-    Additionally, users of your binary can still configure their own options by setting the <em>MONO_ENV_OPTIONS</em> environment variable.
+    <dd>
+      <p>Since the resulting executable will be treated as a standalone program, you can use this option to pass configuration options to the Mono runtime and bake those into the resulting executable. These options are specified as <em>OPTS.</em><br>
+      <br>
+      You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed.<br>
+      <br>
+      Additionally, users of your binary can still configure their own options by setting the <em>MONO_ENV_OPTIONS</em> environment variable.
     <dt><em>--sdk SDK_PATH</em>
-    <dd>Use this flag to specify a path from which mkbundle will resolve the Mono SDK from. The SDK path should be the prefix path that you used to configure a Mono installation. And would typically contain files lik <em>SDK_PATH/bin/mono</em> , <em>SDK_PATH/lib/mono/4.5</em> and so on.<br>
-    <br>
-    When this flag is specified, <em>mkbundle</em> will resolve the runtime, the framework libraries, unmanaged resources and configuration files from the files located in this directory.<br>
-    <br>
-    This flag is mutually exlusive with <em>--cross</em>
+    <dd>
+      <p>Use this flag to specify a path from which mkbundle will resolve the Mono SDK from. The SDK path should be the prefix path that you used to configure a Mono installation. And would typically contain files lik <em>SDK_PATH/bin/mono</em> , <em>SDK_PATH/lib/mono/4.5</em> and so on.<br>
+      <br>
+      When this flag is specified, <em>mkbundle</em> will resolve the runtime, the framework libraries, unmanaged resources and configuration files from the files located in this directory.<br>
+      <br>
+      This flag is mutually exlusive with <em>--cross</em>
     <dt><em>--target-server SERVER</em>
-    <dd>By default the mkbundle tool will download from a Mono server the target runtimes, you can specify a different server to provide cross-compiled runtimes.
+    <dd>
+      <p>By default the mkbundle tool will download from a Mono server the target runtimes, you can specify a different server to provide cross-compiled runtimes.
   </dl>
 </section>
 <section>
@@ -116,7 +133,7 @@ targets, and the "--cross" argument to specify the target, like this:
   <p>The old embedding system compiles a small C stub that embeds the C code and compiles the resulting executable using the system compiler. This requires both a working C compiler installation and only works to bundle binaries for the current host.
   <p>The feature is still available, but we recommend the simpler, faster and more convenient new mode.
   <p>For example, to create a bundle for hello world, use the following command:
-  <pre>       $ mkbundle -o hello hello.exe</pre>
+  <pre>        $ mkbundle -o hello hello.exe</pre>
   <p>The above will pull hello.exe into a native program called "hello". Notice that the produced image still contains the CIL image and no precompilation is done.
   <p>In addition, it is possible to control whether <em>mkbundle</em> should compile the resulting executable or not with the -c option. This is useful if you want to link additional libraries or control the generated output in more detail. For example, this could be used to link some libraries statically:
   <pre>    $ mkbundle -c -o host.c -oo bundles.o --deps hello.exe
@@ -129,17 +146,23 @@ targets, and the "--cross" argument to specify the target, like this:
   <p>These options can only be used instead of using the <strong>--cross, --runtime</strong> or <strong>--simple</strong> options.
   <dl>
     <dt><em>-c</em>
-    <dd>Produce the stub file, do not compile the resulting stub.
+    <dd>
+      <p>Produce the stub file, do not compile the resulting stub.
     <dt><em>-oo filename</em>
-    <dd>Specifies the name to be used for the helper object file that contains the bundle.
+    <dd>
+      <p>Specifies the name to be used for the helper object file that contains the bundle.
     <dt><em>--keeptemp</em>
-    <dd>By default <em>mkbundle</em> will delete the temporary files that it uses to produce the bundle. This option keeps the file around.
+    <dd>
+      <p>By default <em>mkbundle</em> will delete the temporary files that it uses to produce the bundle. This option keeps the file around.
     <dt><em>--nomain</em>
-    <dd>With the -c option, generate the host stub without a main() function.
+    <dd>
+      <p>With the -c option, generate the host stub without a main() function.
     <dt><em>--static</em>
-    <dd>By default <em>mkbundle</em> dynamically links to mono and glib. This option causes it to statically link instead.
+    <dd>
+      <p>By default <em>mkbundle</em> dynamically links to mono and glib. This option causes it to statically link instead.
     <dt><em>-z</em>
-    <dd>Compresses the assemblies before embedding. This results in smaller executable files, but increases startup time and requires zlib to be installed on the target system.
+    <dd>
+      <p>Compresses the assemblies before embedding. This results in smaller executable files, but increases startup time and requires zlib to be installed on the target system.
   </dl>
 </section>
 <section>
@@ -150,11 +173,14 @@ targets, and the "--cross" argument to specify the target, like this:
   <h2>ENVIRONMENT VARIABLES</h2>
   <dl>
     <dt><em>AS</em>
-    <dd>Assembler command. The default is "as".
+    <dd>
+      <p>Assembler command. The default is "as".
     <dt><em>CC</em>
-    <dd>C compiler command. The default is "cc" under Linux and "gcc" under Windows.
+    <dd>
+      <p>C compiler command. The default is "cc" under Linux and "gcc" under Windows.
     <dt><em>MONO_BUNDLED_OPTIONS</em>
-    <dd>Options to be passed to the bundled Mono runtime, separated by spaces. See the mono(1) manual page or run mono --help.
+    <dd>
+      <p>Options to be passed to the bundled Mono runtime, separated by spaces. See the mono(1) manual page or run mono --help.
   </dl>
 </section>
 <section>

@@ -21,13 +21,17 @@
   <p>The command line options for <strong>pmlogreduce</strong> are as follows:
   <dl class="indent-7">
     <dt><strong>-A</strong> <em>align</em>
-    <dd>Specify a ``natural'' alignment of the output sample times; refer to <strong>PCPIntro</strong>(1).
+    <dd>
+      <p>Specify a ``natural'' alignment of the output sample times; refer to <strong>PCPIntro</strong>(1).
     <dt><strong>-S</strong> <em>starttime</em>
-    <dd>Define the start of a time window to restrict the samples retrieved from the <em>input</em> archives; refer to <strong>PCPIntro</strong>(1).
+    <dd>
+      <p>Define the start of a time window to restrict the samples retrieved from the <em>input</em> archives; refer to <strong>PCPIntro</strong>(1).
     <dt><strong>-s</strong> <em>samples</em>
-    <dd>The argument <em>samples</em> defines the number of samples to be written to <em>output</em>. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmlogreduce</strong> will sample until the end of the set of PCP archives, or the end of the time window as specified by <strong>-T</strong>, whichever comes first. The <strong>-s</strong> option will override the <strong>-T</strong> option if it occurs sooner.
+    <dd>
+      <p>The argument <em>samples</em> defines the number of samples to be written to <em>output</em>. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmlogreduce</strong> will sample until the end of the set of PCP archives, or the end of the time window as specified by <strong>-T</strong>, whichever comes first. The <strong>-s</strong> option will override the <strong>-T</strong> option if it occurs sooner.
     <dt><strong>-T</strong> <em>endtime</em>
-    <dd>Define the termination of a time window to restrict the samples retrieved from the <em>input</em> archives; refer to <strong>PCPIntro</strong>(1).
+    <dd>
+      <p>Define the termination of a time window to restrict the samples retrieved from the <em>input</em> archives; refer to <strong>PCPIntro</strong>(1).
     <dt><strong>-v</strong> <em>volsamples</em>
     <dd>
       <p>The <em>output</em> archive is potentially a multi-volume data set, and the <strong>-v</strong> option causes <strong>pmlogreduce</strong> to start a new volume after <em>volsamples</em> log records have been written to the <em>output</em> archive.
@@ -35,11 +39,14 @@
         <p>Independent of any <strong>-v</strong> option, each volume of an archive is limited to no more than 2^31 bytes, so <em>pmlogreduce</em> will automatically create a new volume for the archive before this limit is reached.
       </div>
     <dt><strong>-t</strong> <em>interval</em>
-    <dd>Consecutive samples in the <em>output</em> archive will appear with a time delta defined by <em>interval</em>; refer to <strong>PCPIntro</strong>(1). Note the default value is 600 (seconds, i.e. 10 minutes).
+    <dd>
+      <p>Consecutive samples in the <em>output</em> archive will appear with a time delta defined by <em>interval</em>; refer to <strong>PCPIntro</strong>(1). Note the default value is 600 (seconds, i.e. 10 minutes).
     <dt><strong>-Z</strong> <em>timezone</em>
-    <dd>Use <em>timezone</em> when displaying the date and time, or interpreting the <strong>-S</strong> and <strong>-T</strong> options. <em>Timezone</em> is in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
+    <dd>
+      <p>Use <em>timezone</em> when displaying the date and time, or interpreting the <strong>-S</strong> and <strong>-T</strong> options. <em>Timezone</em> is in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
     <dt><strong>-z</strong>
-    <dd>Use the local timezone of the host from the <em>input</em> archives when displaying the date and time, or interpreting the <strong>-S</strong> and <strong>-T</strong> options. The default is to initially use the timezone of the local host.
+    <dd>
+      <p>Use the local timezone of the host from the <em>input</em> archives when displaying the date and time, or interpreting the <strong>-S</strong> and <strong>-T</strong> options. The default is to initially use the timezone of the local host.
   </dl>
 </section>
 <section>
@@ -47,22 +54,28 @@
   <p>The statistical and temporal reduction follows the following rules:
   <dl class="indent-52">
     <dt>1.
-    <dd>Consecutive records from <em>input</em> are read without interpolation, and at most one output record is written for each <em>interval</em>, summarizing the performance data over that period.
+    <dd>
+      <p>Consecutive records from <em>input</em> are read without interpolation, and at most one output record is written for each <em>interval</em>, summarizing the performance data over that period.
     <dt>2.
-    <dd>If the semantics of a metric indicates it is <strong>instantaneous</strong> or <strong>discrete</strong> then <em>output</em> value is computed as the arithmetic mean of the observations (if any) over each <em>interval</em>.
+    <dd>
+      <p>If the semantics of a metric indicates it is <strong>instantaneous</strong> or <strong>discrete</strong> then <em>output</em> value is computed as the arithmetic mean of the observations (if any) over each <em>interval</em>.
     <dt>3.
     <dd>
       <p>If the semantics of a metric indicates it is a <strong>counter</strong> then the following transformations are applied:
       <dl class="indent-104">
         <dt>a)
-        <dd>Metrics with 32-bit precision are promoted to 64-bit precision.
+        <dd>
+          <p>Metrics with 32-bit precision are promoted to 64-bit precision.
         <dt>b)
-        <dd>Any counter wrap (overflow) is noted, and appropriate adjustment made in the value of the metric over each <em>interval</em>. This will be correct in the case of a single counter wrap, but will silently <strong>underestimate</strong> in the case where more than one counter wrap occurs between consecutive observations in the <em>input</em> archives, and silently <strong>overestimate</strong> in the case where a counter is reset occurs between consecutive observations in the <em>input</em> archives; unfortunately these situations cannot be detected, but are believed to be rare events for the sort of production monitoring environments where <strong>pmlogreduce</strong> is most likely to be deployed.
+        <dd>
+          <p>Any counter wrap (overflow) is noted, and appropriate adjustment made in the value of the metric over each <em>interval</em>. This will be correct in the case of a single counter wrap, but will silently <strong>underestimate</strong> in the case where more than one counter wrap occurs between consecutive observations in the <em>input</em> archives, and silently <strong>overestimate</strong> in the case where a counter is reset occurs between consecutive observations in the <em>input</em> archives; unfortunately these situations cannot be detected, but are believed to be rare events for the sort of production monitoring environments where <strong>pmlogreduce</strong> is most likely to be deployed.
       </dl>
     <dt>4.
-    <dd>Any changes in instance domains, and indeed all metadata, is preserved.
+    <dd>
+      <p>Any changes in instance domains, and indeed all metadata, is preserved.
     <dt>5.
-    <dd>Any ``mark'' records in the <em>input</em> archives (as created by <strong>pmlogextract</strong>(1)) will be preserved in the <em>output</em> archive, so periods where no data is available are maintained, and data interpolation will <strong>not</strong> occur across these periods when the <em>output</em> archive is subsequently processed with PCP applications.
+    <dd>
+      <p>Any ``mark'' records in the <em>input</em> archives (as created by <strong>pmlogextract</strong>(1)) will be preserved in the <em>output</em> archive, so periods where no data is available are maintained, and data interpolation will <strong>not</strong> occur across these periods when the <em>output</em> archive is subsequently processed with PCP applications.
   </dl>
 </section>
 <section>
@@ -70,11 +83,14 @@
   <p>For each of the <em>input</em> and <em>output</em> archives, several physical files are used.
   <dl class="indent-10">
     <dt><em>archive</em><strong>.meta</strong>
-    <dd>metadata (metric descriptions, instance domains, etc.) for the archive log
+    <dd>
+      <p>metadata (metric descriptions, instance domains, etc.) for the archive log
     <dt><em>archive</em><strong>.0</strong>
-    <dd>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...) - for <em>input</em> these files may have been previously compressed with <strong>bzip2</strong>(1) or <strong>gzip</strong>(1) and thus may have an additional <strong>.bz2</strong> or <strong>.gz</strong> suffix.
+    <dd>
+      <p>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...) - for <em>input</em> these files may have been previously compressed with <strong>bzip2</strong>(1) or <strong>gzip</strong>(1) and thus may have an additional <strong>.bz2</strong> or <strong>.gz</strong> suffix.
     <dt><em>archive</em><strong>.index</strong>
-    <dd>temporal index to support rapid random access to the other files in the archive log.
+    <dd>
+      <p>temporal index to support rapid random access to the other files in the archive log.
   </dl>
 </section>
 <section>

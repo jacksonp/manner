@@ -23,35 +23,49 @@
   <h2>OPTIONS</h2>
   <dl class="indent-8">
     <dt><strong>-a</strong>
-    <dd>- shortcut for -f ascii. Produces ASCII text as output. Separates table columns with TAB
+    <dd>
+      <p>- shortcut for -f ascii. Produces ASCII text as output. Separates table columns with TAB
     <dt><strong>-b</strong>
-    <dd>- process broken MS-Word file. Normally, <strong>catdoc checks if first 8 bytes</strong> of file is Microsoft OLE signature. If so, it processes file, otherwise it just copies it to stdin. It is intended to use <strong>catdoc</strong> as filter for viewing all files with <em>.doc</em> extension.
+    <dd>
+      <p>- process broken MS-Word file. Normally, <strong>catdoc checks if first 8 bytes</strong> of file is Microsoft OLE signature. If so, it processes file, otherwise it just copies it to stdin. It is intended to use <strong>catdoc</strong> as filter for viewing all files with <em>.doc</em> extension.
     <dt><strong>-d</strong><em>charset</em>
-    <dd>- specifies destination charset name. Charset file has format described in CHARACTER SETS below and should have <strong>.txt</strong> extension and reside in <strong>catdoc library directory ( @libdir@/catdoc). By default, current</strong> locale charset is used if langinfo support compiled in.
+    <dd>
+      <p>- specifies destination charset name. Charset file has format described in CHARACTER SETS below and should have <strong>.txt</strong> extension and reside in <strong>catdoc library directory ( @libdir@/catdoc). By default, current</strong> locale charset is used if langinfo support compiled in.
     <dt><strong>-f</strong><em>format</em>
-    <dd>- specifies output format as described in CHARACTER SUBSTITUTION below. <strong>catdoc</strong> comes with two output formats - ascii and tex. You can add your own if you wish.
+    <dd>
+      <p>- specifies output format as described in CHARACTER SUBSTITUTION below. <strong>catdoc</strong> comes with two output formats - ascii and tex. You can add your own if you wish.
     <dt><strong>-l</strong>
-    <dd>Causes <strong>catdoc</strong> to list names of available charsets to the stdout and exit successfully.
+    <dd>
+      <p>Causes <strong>catdoc</strong> to list names of available charsets to the stdout and exit successfully.
     <dt><strong>-m</strong><em>number</em>
-    <dd>Specifies right margin for text (default 72). <strong>-m 0</strong> is equivalent to <strong>-w</strong>
+    <dd>
+      <p>Specifies right margin for text (default 72). <strong>-m 0</strong> is equivalent to <strong>-w</strong>
     <dt><strong>-s</strong><em>charset</em>
-    <dd>Specifies source charset. (one used in Word document), if Word document doesn't contain UTF-16 text. When reading rtf documents, it is typically not necessary, because rtf documents contain ansicpg specification. But it can be set wrong by Word (I've seen RTF documents on Russian, where cp1252 was specified). In this case this option would take precedence over charset, specified in the document. But source_charset statement in the configuration file have less priority than charset in the document.
+    <dd>
+      <p>Specifies source charset. (one used in Word document), if Word document doesn't contain UTF-16 text. When reading rtf documents, it is typically not necessary, because rtf documents contain ansicpg specification. But it can be set wrong by Word (I've seen RTF documents on Russian, where cp1252 was specified). In this case this option would take precedence over charset, specified in the document. But source_charset statement in the configuration file have less priority than charset in the document.
     <dt><strong>-t</strong>
-    <dd>- shortcut for <strong>-f tex</strong><br>
-    converts all printable chars, which have special meaning for <strong>LaTeX</strong>(1) into appropriate control sequences. Separates table columns by <strong>&amp;.</strong>
+    <dd>
+      <p>- shortcut for <strong>-f tex</strong><br>
+      converts all printable chars, which have special meaning for <strong>LaTeX</strong>(1) into appropriate control sequences. Separates table columns by <strong>&amp;.</strong>
     <dt><strong>-u</strong>
-    <dd>- declares that Word document contain UNICODE (UTF-16) representation of text (as some Word-97 documents). If catdoc fails to correct Word document with default charset, try this option.
+    <dd>
+      <p>- declares that Word document contain UNICODE (UTF-16) representation of text (as some Word-97 documents). If catdoc fails to correct Word document with default charset, try this option.
     <dt><strong>-8</strong>
-    <dd>- declares is Word document is 8 bit. Just in case that catdoc<br>
-    recognizes file format incorrectly.
+    <dd>
+      <p>- declares is Word document is 8 bit. Just in case that catdoc<br>
+      recognizes file format incorrectly.
     <dt><strong>-w</strong>
-    <dd>disables word wrapping. By default <strong>catdoc</strong> output is split into lines not longer than 72 (or number, specified by -m option) characters and paragraphs are separated by blank line. With this option each paragraph is one long line.
+    <dd>
+      <p>disables word wrapping. By default <strong>catdoc</strong> output is split into lines not longer than 72 (or number, specified by -m option) characters and paragraphs are separated by blank line. With this option each paragraph is one long line.
     <dt><strong>-x</strong>
-    <dd>causes catdoc to output unknown UNICODE character as \xNNNN, instead of question marks.
+    <dd>
+      <p>causes catdoc to output unknown UNICODE character as \xNNNN, instead of question marks.
     <dt><strong>-v</strong>
-    <dd>causes catdoc to print some useless information about word document structure to stdout before actual start of text.
+    <dd>
+      <p>causes catdoc to print some useless information about word document structure to stdout before actual start of text.
     <dt><strong>-V</strong>
-    <dd>outputs catdoc version
+    <dd>
+      <p>outputs catdoc version
   </dl>
 </section>
 <section>
@@ -69,18 +83,22 @@
   <dl class="indent-4">
     <dt>1. Paragraphs are separated by ASCII Line Feed symbol (0x000A)
     <dt>2. Table cells within row are separated by ASCII Field Separator symbol
-    <dd>(0x001C)
+    <dd>
+      <p>(0x001C)
     <dt>3. Table rows are separated by ASCII Record Separator (0x001E)
     <dt>4. All printable characters, including whitespace are represented with their
-    <dd>respective UNICODE codes.
+    <dd>
+      <p>respective UNICODE codes.
   </dl>
   <p>This UNICODE representation is subsequently converted into 8-bit text in target character set using following four-step algorithm:
   <dl class="indent-4">
     <dt>1. List of special characters is searched for given Unicode character.
-    <dd>If found, then appropriate multi-character sequence is output instead of character.
+    <dd>
+      <p>If found, then appropriate multi-character sequence is output instead of character.
     <dt>2. If there is an equivalent in target character set, it is output.
     <dt>3. Otherwise, replacement list is searched and, if there is multi-character
-    <dd>substitution for this UNICODE char, it is output.
+    <dd>
+      <p>substitution for this UNICODE char, it is output.
   </dl>
   <p class="indent-4">4. If all above fails, "Unknown char" symbol (question mark) is output.
   <p>Lists of special characters and list of substitution are character set-independent, because special chars should be escaped regardless of their existence in target character set (usually, they are parts of US-ASCII, and therefore exist in any character set) and replacement list is searched only for those characters, which are not found in target character set.
@@ -93,20 +111,27 @@
   <p>These files can contain following directives:
   <dl class="indent-8">
     <dt><strong>source_charset =</strong> <em>charset-name</em>
-    <dd>Sets default source charset, which would be used if no <strong>-s</strong> option specified. Consult configuration of nearby windows workstation to find one you need.
+    <dd>
+      <p>Sets default source charset, which would be used if no <strong>-s</strong> option specified. Consult configuration of nearby windows workstation to find one you need.
     <dt><strong>target_charset =</strong> <em>charset-name</em>
-    <dd>Sets default output charset. You probably know, which one you use.
+    <dd>
+      <p>Sets default output charset. You probably know, which one you use.
     <dt><strong>charset_path =</strong> <em>directory-list</em>
-    <dd>colon-separated list of directories, which are searched for charset files. This allows you to install additional charsets in your home directory. If first directory component of path is ~ it is replaced by contents of <strong>HOME</strong> environment variable. On MS-DOS platform, if directory name starts with %s, it is replaced with directory of executable file. Empty element in list (i.e. two consequitve colons) is considered current directory.
+    <dd>
+      <p>colon-separated list of directories, which are searched for charset files. This allows you to install additional charsets in your home directory. If first directory component of path is ~ it is replaced by contents of <strong>HOME</strong> environment variable. On MS-DOS platform, if directory name starts with %s, it is replaced with directory of executable file. Empty element in list (i.e. two consequitve colons) is considered current directory.
     <dt><strong>map_path =</strong> <em>directory-list</em>
-    <dd>colon-separated list of directories, which are searched for special character map and replacement map. Same substitution rules as in <strong>charset_path</strong> are applied.
+    <dd>
+      <p>colon-separated list of directories, which are searched for special character map and replacement map. Same substitution rules as in <strong>charset_path</strong> are applied.
     <dt><strong>format =</strong> <em>format name</em>
-    <dd>Output format which would be used by default. <strong>catdoc</strong> comes with two formats - <strong>ascii</strong> and <strong>tex</strong> but nothing prevents you from writing your own format (set two map files - special character map and replacement map).
+    <dd>
+      <p>Output format which would be used by default. <strong>catdoc</strong> comes with two formats - <strong>ascii</strong> and <strong>tex</strong> but nothing prevents you from writing your own format (set two map files - special character map and replacement map).
     <dt><strong>unknown_char =</strong> <em>character specification</em>
-    <dd>sets character to output instead of unknown Unicode character (default '?') Character specification can have one of two form - character enclosed in single quotes or hexadecimal code.
+    <dd>
+      <p>sets character to output instead of unknown Unicode character (default '?') Character specification can have one of two form - character enclosed in single quotes or hexadecimal code.
     <dt><strong>use_locale =</strong><em>(yes|no)</em>
-    <dd>Enables or disables automatic selection of output charset (default <strong>yes</strong>),<br>
-    based on system locale settings (if enabled at compile time). If automatic detection is enabled, than output charset settings in the configuration files (but not in the command line) are ignored, and current system locale charset is used instead. There are no automatic choice of input charset, based of locale language, because most modern Word files (since Word 97) are Unicode anyway
+    <dd>
+      <p>Enables or disables automatic selection of output charset (default <strong>yes</strong>),<br>
+      based on system locale settings (if enabled at compile time). If automatic detection is enabled, than output charset settings in the configuration files (but not in the command line) are ignored, and current system locale charset is used instead. There are no automatic choice of input charset, based of locale language, because most modern Word files (since Word 97) are Unicode anyway
   </dl>
 </section>
 <section>

@@ -20,29 +20,39 @@
   <p>A brief description of the <strong>pmdaweblog</strong> command line options follows:
   <dl>
     <dt><strong>-C</strong>
-    <dd>Check the configuration and exit.
+    <dd>
+      <p>Check the configuration and exit.
     <dt><strong>-d</strong> <em>domain</em>
     <dd>
       <p>Specify the <em>domain</em> number. It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the <strong>pmdaweblog</strong> PMDA on all hosts.
       <p>For most installations, the default <em>domain</em> as encapsulated in the file <strong>$PCP_PMDAS_DIR/weblog/domain.h</strong> will suffice. For alternate values, check <em>$PCP_PMCDCONF_PATH</em> for the <em>domain</em> values already in use on this host, and the file <strong>$PCP_VAR_DIR/pmns/stdpmid</strong> contains a repository of ``well known'' <em>domain</em> assignments that probably should be avoided.
     <dt><strong>-h</strong> <em>helpfile</em>
-    <dd>Get the help text from the supplied <em>helpfile</em> rather than from the default location.
+    <dd>
+      <p>Get the help text from the supplied <em>helpfile</em> rather than from the default location.
     <dt><strong>-i</strong> <em>port</em>
-    <dd>Communicate with <strong>pmcd</strong>(1) on the specified Internet <em>port</em> (which may be a number or a name).
+    <dd>
+      <p>Communicate with <strong>pmcd</strong>(1) on the specified Internet <em>port</em> (which may be a number or a name).
     <dt><strong>-l</strong> <em>logfile</em>
-    <dd>Location of the log file. By default, a log file named <em>weblog.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdaweblog</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>
+      <p>Location of the log file. By default, a log file named <em>weblog.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdaweblog</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-n</strong> <em>idlesec</em>
-    <dd>If a Web server log file has not been modified for <em>idlesec</em> seconds, then the file will be closed and re-opened. This is the only way <strong>pmdaweblog</strong> can detect any asynchronous rotation of the logs by Web server administrative scripts. The default period is 20 seconds. This value may be changed dynamically using <strong>pmstore</strong>(1) to modify the value of the performance metric <strong>web.config.check</strong>.
+    <dd>
+      <p>If a Web server log file has not been modified for <em>idlesec</em> seconds, then the file will be closed and re-opened. This is the only way <strong>pmdaweblog</strong> can detect any asynchronous rotation of the logs by Web server administrative scripts. The default period is 20 seconds. This value may be changed dynamically using <strong>pmstore</strong>(1) to modify the value of the performance metric <strong>web.config.check</strong>.
     <dt><strong>-p</strong>
-    <dd>Communicate with <strong>pmcd</strong>(1) via a pipe.
+    <dd>
+      <p>Communicate with <strong>pmcd</strong>(1) via a pipe.
     <dt><strong>-S</strong> <em>num</em>
-    <dd>Specify the maximum number of Web servers per <em>sproc</em>. It may be desirable (from a latency and load balancing perspective) or necessary (due to file descriptor limits) to delegate responsibility for scanning the Web server log files to several <em>sprocs</em>. <strong>pmdaweblog</strong> will ensure that each <em>sproc</em> handles the log files for at most <em>num</em> Web servers. The default value is 80 Web servers per <em>sproc</em>.
+    <dd>
+      <p>Specify the maximum number of Web servers per <em>sproc</em>. It may be desirable (from a latency and load balancing perspective) or necessary (due to file descriptor limits) to delegate responsibility for scanning the Web server log files to several <em>sprocs</em>. <strong>pmdaweblog</strong> will ensure that each <em>sproc</em> handles the log files for at most <em>num</em> Web servers. The default value is 80 Web servers per <em>sproc</em>.
     <dt><strong>-t</strong> <em>delay</em>
-    <dd>To avoid the need to scan a lot of information from the Web server logs in response to a single request for performance metrics, all log files will be checked at least once every <em>delay</em> seconds. The default is 15 seconds. This value may by changed dynamically using <strong>pmstore</strong>(1) to modify the value of the performance metric <strong>web.config.catchup</strong>.
+    <dd>
+      <p>To avoid the need to scan a lot of information from the Web server logs in response to a single request for performance metrics, all log files will be checked at least once every <em>delay</em> seconds. The default is 15 seconds. This value may by changed dynamically using <strong>pmstore</strong>(1) to modify the value of the performance metric <strong>web.config.catchup</strong>.
     <dt><strong>-u</strong> <em>socket</em>
-    <dd>Communicate with <strong>pmcd</strong>(1) via the given Unix domain <em>socket</em>.
+    <dd>
+      <p>Communicate with <strong>pmcd</strong>(1) via the given Unix domain <em>socket</em>.
     <dt><strong>-U</strong>
-    <dd>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
+    <dd>
+      <p>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
   </dl>
 </section>
 <section>
@@ -93,9 +103,11 @@ regex SYSLOG_FTP_err FTP LOGIN FAILED</pre>
   <p>If <strong>POSIX</strong> compliant regular expressions are used, additional information is required since the order of parameters cannot be specified in the regular expression. For backwards compatibility, the common case of two parameters the order may be specified as <em>method,size</em> or <em>size,method</em> In the general case, the ordering is specified by one of the following methods:
   <dl class="indent-37.5n">
     <dt>n1,n2,n3,n4
-    <dd>where nX is a digit between 1 and 4. Each comma-seperated field represents (in order) the argument number for <em>method,size,client_status,server_status</em>
+    <dd>
+      <p>where nX is a digit between 1 and 4. Each comma-seperated field represents (in order) the argument number for <em>method,size,client_status,server_status</em>
     <dt>-
-    <dd>Used for cases like the error logs where the content is ignored.
+    <dd>
+      <p>Used for cases like the error logs where the content is ignored.
   </dl>
   <p>As for the non- <strong>Posix</strong> format, the <em>SQUID</em> RegexName is treated as a special case to match the non-numerical status codes.
   <p>Some legal <strong>Posix</strong> regex expression specifications for monitoring an access log are:
@@ -142,21 +154,29 @@ server ftpd on SYSLOG_FTP /var/log/messages SYSLOG_FTP_err /var/log/messages</pr
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMDAS_DIR/weblog</strong>
-    <dd>installation directory for the weblog PMDA
+    <dd>
+      <p>installation directory for the weblog PMDA
     <dt><strong>$PCP_PMDAS_DIR/weblog/Install</strong>
-    <dd>installation script for the weblog PMDA
+    <dd>
+      <p>installation script for the weblog PMDA
     <dt><strong>$PCP_PMDAS_DIR/weblog/Remove</strong>
-    <dd>de-installation script for the weblog PMDA
+    <dd>
+      <p>de-installation script for the weblog PMDA
     <dt><strong>$PCP_LOG_DIR/pmcd/weblog.log</strong>
-    <dd>default log file for error reporting
+    <dd>
+      <p>default log file for error reporting
     <dt><em>$PCP_PMCDCONF_PATH</em>
-    <dd><strong>pmcd</strong> configuration file that specifies the command line options to be used when <strong>pmdaweblog</strong> is launched
+    <dd>
+      <p><strong>pmcd</strong> configuration file that specifies the command line options to be used when <strong>pmdaweblog</strong> is launched
     <dt><strong>$PCP_LOG_DIR/NOTICES</strong>
-    <dd>log of PMDA installations and removals
+    <dd>
+      <p>log of PMDA installations and removals
     <dt><strong>$PCP_VAR_DIR/config/web/weblog.conf</strong>
-    <dd>likely location of the weblog PMDA configuration file
+    <dd>
+      <p>likely location of the weblog PMDA configuration file
     <dt><strong>$PCP_DOC_DIR/pcpweb/index.html</strong>
-    <dd>the online HTML documentation for PCPWEB
+    <dd>
+      <p>the online HTML documentation for PCPWEB
   </dl>
 </section>
 <section>

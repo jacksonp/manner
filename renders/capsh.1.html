@@ -20,31 +20,44 @@
   <p>The tool takes a number of optional arguments, acting on them in the order they are provided. They are as follows:
   <dl class="indent-22">
     <dt><strong>--print</strong>
-    <dd>Display prevailing capability and related state.
+    <dd>
+      <p>Display prevailing capability and related state.
     <dt><strong>--</strong> <em>[args]</em>
-    <dd>Execute <strong>/bin/bash</strong> with trailing arguments. Note, you can use <strong>-c 'command to execute'</strong> for specific commands.
+    <dd>
+      <p>Execute <strong>/bin/bash</strong> with trailing arguments. Note, you can use <strong>-c 'command to execute'</strong> for specific commands.
     <dt><strong>==</strong>
-    <dd>Execute <strong>capsh</strong> again with remaining arguments. Useful for testing <strong>exec</strong>() behavior.
+    <dd>
+      <p>Execute <strong>capsh</strong> again with remaining arguments. Useful for testing <strong>exec</strong>() behavior.
     <dt><strong>--caps=</strong><em>cap-set</em>
-    <dd>Set the prevailing process capabilities to those specified by <em>cap-set</em>. Where <em>cap-set</em> is a text-representation of capability state as per <strong>cap_from_text</strong>(3).
+    <dd>
+      <p>Set the prevailing process capabilities to those specified by <em>cap-set</em>. Where <em>cap-set</em> is a text-representation of capability state as per <strong>cap_from_text</strong>(3).
     <dt><strong>--drop=</strong><em>cap-list</em>
-    <dd>Remove the listed capabilities from the prevailing bounding set. The capabilites are a comma separated list of capabilities as recognized by the <strong>cap_from_name</strong>(3) function. Use of this feature requires that the capsh program is operating with <strong>CAP_SETPCAP</strong> in its effective set.
+    <dd>
+      <p>Remove the listed capabilities from the prevailing bounding set. The capabilites are a comma separated list of capabilities as recognized by the <strong>cap_from_name</strong>(3) function. Use of this feature requires that the capsh program is operating with <strong>CAP_SETPCAP</strong> in its effective set.
     <dt><strong>--inh=</strong><em>cap-list</em>
-    <dd>Set the inheritable set of capabilities for the current process to equal those provided in the comma separated list. For this action to succeed, the prevailing process should already have each of these capabilities in the union of the current inheritable and permitted capability sets, or the capsh program is operating with <strong>CAP_SETPCAP</strong> in its effective set.
+    <dd>
+      <p>Set the inheritable set of capabilities for the current process to equal those provided in the comma separated list. For this action to succeed, the prevailing process should already have each of these capabilities in the union of the current inheritable and permitted capability sets, or the capsh program is operating with <strong>CAP_SETPCAP</strong> in its effective set.
     <dt><strong>--user=</strong><em>username</em>
-    <dd>Assume the identity of the named user. That is, look up the user's <em>uid</em> and <em>gid</em> with <strong>getpwuid</strong>(3) and their group memberships with <strong>getgrouplist</strong>(3) and set them all.
+    <dd>
+      <p>Assume the identity of the named user. That is, look up the user's <em>uid</em> and <em>gid</em> with <strong>getpwuid</strong>(3) and their group memberships with <strong>getgrouplist</strong>(3) and set them all.
     <dt><strong>--uid=</strong><em>id</em>
-    <dd>Force all <strong>uid</strong> values to equal <em>id</em> using the <strong>setuid</strong>(2) system call.
+    <dd>
+      <p>Force all <strong>uid</strong> values to equal <em>id</em> using the <strong>setuid</strong>(2) system call.
     <dt><strong>--gid=</strong><em>&lt;id&gt;</em>
-    <dd>Force all <strong>gid</strong> values to equal <em>id</em> using the <strong>setgid</strong>(2) system call.
+    <dd>
+      <p>Force all <strong>gid</strong> values to equal <em>id</em> using the <strong>setgid</strong>(2) system call.
     <dt><strong>--groups=</strong><em>&lt;id-list&gt;</em>
-    <dd>Set the supplementary groups to the numerical list provided. The groups are set with the <strong>setgroups</strong>(2) system call.
+    <dd>
+      <p>Set the supplementary groups to the numerical list provided. The groups are set with the <strong>setgroups</strong>(2) system call.
     <dt><strong>--keep=</strong><em>&lt;0|1&gt;</em>
-    <dd>In a non-pure capability mode, the kernel provides liberal privilege to the super-user. However, it is normally the case that when the super-user changes <em>uid</em> to some lesser user, then capabilities are dropped. For these situations, the kernel can permit the process to retain its capabilities after a <strong>setuid</strong>(2) system call. This feature is known as <em>keep-caps</em> support. The way to activate it using this script is with this argument. Setting the value to 1 will cause <em>keep-caps</em> to be active. Setting it to 0 will cause keep-caps to deactivate for the current process. In all cases, <em>keep-caps</em> is deactivated when an <strong>exec</strong>() is performed. See <strong>--secbits</strong> for ways to disable this feature.
+    <dd>
+      <p>In a non-pure capability mode, the kernel provides liberal privilege to the super-user. However, it is normally the case that when the super-user changes <em>uid</em> to some lesser user, then capabilities are dropped. For these situations, the kernel can permit the process to retain its capabilities after a <strong>setuid</strong>(2) system call. This feature is known as <em>keep-caps</em> support. The way to activate it using this script is with this argument. Setting the value to 1 will cause <em>keep-caps</em> to be active. Setting it to 0 will cause keep-caps to deactivate for the current process. In all cases, <em>keep-caps</em> is deactivated when an <strong>exec</strong>() is performed. See <strong>--secbits</strong> for ways to disable this feature.
     <dt><strong>--secbits=</strong><em>N</em>
-    <dd>XXX - need to document this feature.
+    <dd>
+      <p>XXX - need to document this feature.
     <dt><strong>--chroot=</strong><em>path</em>
-    <dd>Execute the <strong>chroot</strong>(2) system call with the new root-directory (/) equal to <em>path</em>. This operation requires <strong>CAP_SYS_CHROOT</strong> to be in effect.
+    <dd>
+      <p>Execute the <strong>chroot</strong>(2) system call with the new root-directory (/) equal to <em>path</em>. This operation requires <strong>CAP_SYS_CHROOT</strong> to be in effect.
     <dt><strong>--forkfor=</strong><em>sec</em>
     <dt><strong>--killit=</strong><em>sig</em>
     <dt><strong>--decode=</strong><em>N</em>
@@ -70,7 +83,8 @@
       <br>
       we observe that the missing capability is: <strong>cap_setpcap</strong>.
     <dt><strong>--supports=</strong><em>xxx</em>
-    <dd>As the kernel evolves, more capabilities are added. This option can be used to verify the existence of a capability on the system. For example, <strong>--supports=</strong><em>cap_syslog</em> will cause capsh to promptly exit with a status of 1 when run on kernel 2.6.27. However, when run on kernel 2.6.38 it will silently succeed.
+    <dd>
+      <p>As the kernel evolves, more capabilities are added. This option can be used to verify the existence of a capability on the system. For example, <strong>--supports=</strong><em>cap_syslog</em> will cause capsh to promptly exit with a status of 1 when run on kernel 2.6.27. However, when run on kernel 2.6.38 it will silently succeed.
   </dl>
 </section>
 <section>

@@ -24,21 +24,29 @@
   <p>The task option choices are:
   <dl>
     <dt>-m :
-    <dd>move source file to target name. Both must be on the same device. Will not move directories. If the source file is a symbolic link, moves the link without checking if the link's target from the new directory is different than the old.
+    <dd>
+      <p>move source file to target name. Both must be on the same device. Will not move directories. If the source file is a symbolic link, moves the link without checking if the link's target from the new directory is different than the old.
     <dt>-x :
-    <dd>same as -m, except cross-device moves are done by copying, then deleting source. When copying, sets the permission bits and file modification time of the target file to that of the source file.
+    <dd>
+      <p>same as -m, except cross-device moves are done by copying, then deleting source. When copying, sets the permission bits and file modification time of the target file to that of the source file.
     <dt>-r :
-    <dd>rename source file or directory to target name. The target name must not include a path: the file remains in the same directory in all cases. This option is the only way of renaming directories under <em>mmv</em>.
+    <dd>
+      <p>rename source file or directory to target name. The target name must not include a path: the file remains in the same directory in all cases. This option is the only way of renaming directories under <em>mmv</em>.
     <dt>-c :
-    <dd>copy source file to target name. Sets the file modification time and permission bits of the target file to that of the source file, regardless of whether the target file already exists. Chains and cycles (to be explained below) are not allowed.
+    <dd>
+      <p>copy source file to target name. Sets the file modification time and permission bits of the target file to that of the source file, regardless of whether the target file already exists. Chains and cycles (to be explained below) are not allowed.
     <dt>-o :
-    <dd>overwrite target name with source file. If target file exists, it is overwritten, keeping its original owner and permission bits. If it does not exist, it is created, with read-write permission bits set according to <em>umask</em>(1), and the execute permission bits copied from the source file. In either case, the file modification time is set to the current time.
+    <dd>
+      <p>overwrite target name with source file. If target file exists, it is overwritten, keeping its original owner and permission bits. If it does not exist, it is created, with read-write permission bits set according to <em>umask</em>(1), and the execute permission bits copied from the source file. In either case, the file modification time is set to the current time.
     <dt>-a :
-    <dd>append contents of source file to target name. Target file modification time is set to the current time. If target file does not exist, it is created with permission bits set as under -o. Unlike all other options, -a allows multiple source files to have the same target name, e.g. "mmv -a c big" will append all ".c" files to "big". Chains and cycles are also allowed, so "mmv -a f f" will double up "f".
+    <dd>
+      <p>append contents of source file to target name. Target file modification time is set to the current time. If target file does not exist, it is created with permission bits set as under -o. Unlike all other options, -a allows multiple source files to have the same target name, e.g. "mmv -a c big" will append all ".c" files to "big". Chains and cycles are also allowed, so "mmv -a f f" will double up "f".
     <dt>-l :
-    <dd>link target name to source file. Both must be on the same device, and the source must not be a directory. Chains and cycles are not allowed.
+    <dd>
+      <p>link target name to source file. Both must be on the same device, and the source must not be a directory. Chains and cycles are not allowed.
     <dt>-s :
-    <dd>same as -l, but use symbolic links instead of hard links. For the resulting link to aim back at the source, either the source name must begin with a '/', or the target must reside in either the current or the source directory. If none of these conditions are met, the link is refused. However, source and target can reside on different devices, and the source can be a directory.
+    <dd>
+      <p>same as -l, but use symbolic links instead of hard links. For the resulting link to aim back at the source, either the source name must begin with a '/', or the target must reside in either the current or the source directory. If none of these conditions are met, the link is refused. However, source and target can reside on different devices, and the source can be a directory.
   </dl>
   <p>Only one of these option may be given, and it applies to all matching files. Remaining options need not be given separately, i.e. "mmv -mk" is allowed.
   <div class="center">

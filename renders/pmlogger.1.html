@@ -60,13 +60,17 @@
   <p>The syntax for the configuration file is as follows.
   <dl class="indent-32">
     <dt>1.
-    <dd>Words are separated by white space (space, tab or newline).
+    <dd>
+      <p>Words are separated by white space (space, tab or newline).
     <dt>2.
-    <dd>The symbol ``#'' (hash) introduces a comment, and all text up to the next newline is ignored.
+    <dd>
+      <p>The symbol ``#'' (hash) introduces a comment, and all text up to the next newline is ignored.
     <dt>3.
-    <dd>Keywords (shown in <strong>bold</strong> below) must appear literally (i.e. in lower case).
+    <dd>
+      <p>Keywords (shown in <strong>bold</strong> below) must appear literally (i.e. in lower case).
     <dt>4.
-    <dd>Each specification begins with the optional keyword <strong>log</strong>, followed by one of the states <strong>mandatory on</strong>, <strong>mandatory off</strong>, <strong>mandatory maybe</strong>, <strong>advisory on</strong> or <strong>advisory off</strong>.
+    <dd>
+      <p>Each specification begins with the optional keyword <strong>log</strong>, followed by one of the states <strong>mandatory on</strong>, <strong>mandatory off</strong>, <strong>mandatory maybe</strong>, <strong>advisory on</strong> or <strong>advisory off</strong>.
     <dt>5.
     <dd>
       <p>For the <strong>on</strong> states, a logging interval must follow using the syntax ``<strong>once</strong>'', or ``<strong>default</strong>'', or ``<strong>every</strong> <em>N timeunits</em>'', or simply ``<em>N timeunits</em>'' - <em>N</em> is an unsigned integer, and <em>timeunits</em> is one of the keywords <strong>msec</strong>, <strong>millisecond</strong>, <strong>sec</strong>, <strong>second</strong>, <strong>min</strong>, <strong>minute</strong>, <strong>hour</strong> or the plural form of one of the above.<br>
@@ -74,13 +78,15 @@
       Internal limitations require the interval to be smaller than (approximately) 74 hours. An interval value of zero is a synonym for <strong>once</strong>. An interval of <strong>default</strong> means to use the default logging interval of 60 seconds; this default value may be changed to <em>interval</em> with the <strong>-t</strong> command line option.
       <p>The <em>interval</em> argument follows the syntax described in <strong>PCPIntro</strong>(1), and in the simplest form may be an unsigned integer (the implied units in this case are seconds).
     <dt>6.
-    <dd>Following the state and possible interval specifications comes a ``{'', followed by a list of one or more metric specifications and a closing ``}''. The list is white space (or comma) separated. If there is only one metric specification in the list, the braces are optional.
+    <dd>
+      <p>Following the state and possible interval specifications comes a ``{'', followed by a list of one or more metric specifications and a closing ``}''. The list is white space (or comma) separated. If there is only one metric specification in the list, the braces are optional.
     <dt>7.
     <dd>
       <p>A metric specification consists of a metric name optionally followed by a set of instance names. The metric name follows the standard PCP naming conventions, see <strong>pmns</strong>(5), and if the metric name is a non-leaf node in the PMNS (see <strong>pmns</strong>(5)), then <strong>pmlogger</strong> will recursively descend the PMNS and apply the logging specification to all descendent metric names that are leaf nodes in the PMNS. The set of instance names is a ``['', followed by a list of one or more space (or comma) separated names, numbers or strings, and a closing ``]''. Elements in the list that are numbers are assumed to be internal instance identifiers, other elements are assumed to be external instance identifiers - see <strong>pmGetInDom</strong>(3) for more information.
       <p>If no instances are given, then the logging specification is applied to all instances of the associated metric.
     <dt>8.
-    <dd>There may be an arbitrary number of logging specifications.
+    <dd>
+      <p>There may be an arbitrary number of logging specifications.
     <dt>9.
     <dd>
       <p>Following all of the logging specifications, there may be an optional access control section, introduced by the literal token <strong>[access]</strong>. Thereafter come access control rules that allow or disallow operations from particular hosts or groups of hosts.
@@ -88,13 +94,17 @@
         <p>The operations may be used to interrogate or control a running <strong>pmlogger</strong> using <strong>pmlc</strong>(1) and fall into the following classes:
         <dl class="indent-15">
           <dt><strong>enquire</strong>
-          <dd>interrogate the status of <strong>pmlogger</strong> and the metrics it is logging
+          <dd>
+            <p>interrogate the status of <strong>pmlogger</strong> and the metrics it is logging
           <dt><strong>advisory</strong>
-          <dd>Change advisory logging.
+          <dd>
+            <p>Change advisory logging.
           <dt><strong>mandatory</strong>
-          <dd>Change mandatory logging.
+          <dd>
+            <p>Change mandatory logging.
           <dt><strong>all</strong>
-          <dd>All of the above.
+          <dd>
+            <p>All of the above.
         </dl>
         <p>Access control rules are of the form ``<strong>allow</strong> <em>hostlist</em> <strong>:</strong> <em>operationlist</em> <strong>;</strong>'' and ``<strong>disallow</strong> <em>hostlist</em> <strong>:</strong> <em>operationlist</em> <strong>;</strong>''.
         <p>The <em>hostlist</em> follows the syntax and semantics for the access control mechanisms used by PMCD and are fully documented in <strong>pmcd</strong>(1). An <em>operationslist</em> is a comma separated list of the operations <strong>advisory</strong>, <strong>mandatory</strong>, <strong>enquire</strong> and <strong>all</strong>.
@@ -138,24 +148,33 @@ allow localhost : mandatory, advisory;</code></pre>
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><em>archive</em><strong>.meta</strong>
-    <dd>metadata (metric descriptions, instance domains, etc.) for the archive log
+    <dd>
+      <p>metadata (metric descriptions, instance domains, etc.) for the archive log
     <dt><em>archive</em><strong>.0</strong>
-    <dd>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...)
+    <dd>
+      <p>initial volume of metrics values (subsequent volumes have suffixes <strong>1</strong>, <strong>2</strong>, ...)
     <dt><em>archive</em><strong>.index</strong>
-    <dd>temporal index to support rapid random access to the other files in the archive log
+    <dd>
+      <p>temporal index to support rapid random access to the other files in the archive log
     <dt><strong>$PCP_TMP_DIR/pmlogger</strong>
-    <dd><strong>pmlogger</strong> maintains the files in this directory as the map between the process id of the <strong>pmlogger</strong> instance and the IPC port that may be used to control each <strong>pmlogger</strong> instance (as used by <strong>pmlc</strong>(1))
+    <dd>
+      <p><strong>pmlogger</strong> maintains the files in this directory as the map between the process id of the <strong>pmlogger</strong> instance and the IPC port that may be used to control each <strong>pmlogger</strong> instance (as used by <strong>pmlc</strong>(1))
     <dt><strong>$PCP_VAR_DIR/config/pmlogger/config.default</strong>
-    <dd>default configuration file for the primary logger instance launched from <strong>$PCP_RC_DIR/pmlogger</strong>
+    <dd>
+      <p>default configuration file for the primary logger instance launched from <strong>$PCP_RC_DIR/pmlogger</strong>
     <dt><strong>$PCP_VAR_DIR/config/pmlogger/config.</strong>*
-    <dd>assorted configuration files suitable for creating logs that may be subsequently replayed with the PCP visualization and monitoring tools
+    <dd>
+      <p>assorted configuration files suitable for creating logs that may be subsequently replayed with the PCP visualization and monitoring tools
     <dt><strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em>
-    <dd>Default directory for PCP archive files for performance metric values collected from the host <em>hostname</em>.
+    <dd>
+      <p>Default directory for PCP archive files for performance metric values collected from the host <em>hostname</em>.
     <dt><strong>$PCP_SYSCONFIG_DIR/pmlogger</strong>
-    <dd>additional environment variables that will be set when the primary <strong>pmlogger</strong> instance executes. Only settings of the form "PMLOGGER_VARIABLE=value" will be honoured.
+    <dd>
+      <p>additional environment variables that will be set when the primary <strong>pmlogger</strong> instance executes. Only settings of the form "PMLOGGER_VARIABLE=value" will be honoured.
     <dt><em>./pmlogger.log</em>
-    <dd>(or <strong>$PCP_LOG_DIR/pmlogger/<em>hostname</em>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
-    all messages and diagnostics are directed here
+    <dd>
+      <p>(or <strong>$PCP_LOG_DIR/pmlogger/<em>hostname</em>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
+      all messages and diagnostics are directed here
   </dl>
 </section>
 <section>

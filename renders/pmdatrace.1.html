@@ -17,21 +17,29 @@
   <p>A brief description of the <strong>pmdatrace</strong> command line options follows:
   <dl class="indent-5">
     <dt><strong>-d</strong>
-    <dd>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
+    <dd>
+      <p>It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the same PMDA on all hosts.
     <dt><strong>-l</strong>
-    <dd>Location of the log file. By default, a log file named <em>trace.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdatrace</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+    <dd>
+      <p>Location of the log file. By default, a log file named <em>trace.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdatrace</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-A</strong>
-    <dd>Host-based access control for <strong>pmdatrace</strong>. <em>access</em> must be either an allow or deny specification, using either allow:hostspec:maxconns or disallow:hostspec, where `allow' and `disallow' are keywords, `hostspec' is a host specification conforming to the format used by both <strong>pmcd</strong>(1) and <strong>pmlogger</strong>(1), and `maxconns' is the maximum number of connections allowed from a given `hostspec'. Using a maximum connections of zero specifies an unlimited number of connections for the accompanying `hostspec'.
+    <dd>
+      <p>Host-based access control for <strong>pmdatrace</strong>. <em>access</em> must be either an allow or deny specification, using either allow:hostspec:maxconns or disallow:hostspec, where `allow' and `disallow' are keywords, `hostspec' is a host specification conforming to the format used by both <strong>pmcd</strong>(1) and <strong>pmlogger</strong>(1), and `maxconns' is the maximum number of connections allowed from a given `hostspec'. Using a maximum connections of zero specifies an unlimited number of connections for the accompanying `hostspec'.
     <dt><strong>-I</strong>
-    <dd>Communicate with <em>pcp_trace</em> clients via the given Internet <em>port</em>. This can alternatively be specified by setting <strong>$PCP_TRACE_PORT</strong> in the environment to some valid port number (use of the <strong>-I</strong> option overrides this). The default port number is 4323.
+    <dd>
+      <p>Communicate with <em>pcp_trace</em> clients via the given Internet <em>port</em>. This can alternatively be specified by setting <strong>$PCP_TRACE_PORT</strong> in the environment to some valid port number (use of the <strong>-I</strong> option overrides this). The default port number is 4323.
     <dt><strong>-T</strong>
-    <dd><em>period</em> defines the aggregation period used to compute the recent averages and extrema. Specified as a time interval using the syntax described in <strong>PCPIntro</strong>(1) for the common <strong>-t</strong> PCP argument, e.g. <strong>30 seconds</strong> or <strong>1 min</strong>. The default is 60 seconds.
+    <dd>
+      <p><em>period</em> defines the aggregation period used to compute the recent averages and extrema. Specified as a time interval using the syntax described in <strong>PCPIntro</strong>(1) for the common <strong>-t</strong> PCP argument, e.g. <strong>30 seconds</strong> or <strong>1 min</strong>. The default is 60 seconds.
     <dt><strong>-M</strong>
-    <dd>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
+    <dd>
+      <p>User account under which to run the agent. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
     <dt><strong>-N</strong>
-    <dd>Internally, the aggregation <em>period</em> is divided into <em>bucket</em> divisions, and the rolling average is recomputed every <em>period</em>/<em>bucket</em> seconds. For example, the defaults correspond to -T 60 and -N 12, which means the average is recomputed every five seconds for a period covering the prior 60 seconds.
+    <dd>
+      <p>Internally, the aggregation <em>period</em> is divided into <em>bucket</em> divisions, and the rolling average is recomputed every <em>period</em>/<em>bucket</em> seconds. For example, the defaults correspond to -T 60 and -N 12, which means the average is recomputed every five seconds for a period covering the prior 60 seconds.
     <dt><strong>-U</strong>
-    <dd>This option allows the dimension and scale associated with the observation value metric to be configured. <em>units</em> is a comma-separated string of six integer values, which are the space dimension, time dimension, count dimension, space scale, time scale, and count scale, respectively. The default dimension and scale is ``none'', which is equivalent to presenting ``0,0,0,0,0,0'' as the argument to -U. The units associated with a metric are most easily viewed using the -d (metric description) option to <strong>pminfo</strong>(1). The Install script described below steps through this option quite explicitly, so it is recommended that the Install script be used for building up the <em>units</em> specification.
+    <dd>
+      <p>This option allows the dimension and scale associated with the observation value metric to be configured. <em>units</em> is a comma-separated string of six integer values, which are the space dimension, time dimension, count dimension, space scale, time scale, and count scale, respectively. The default dimension and scale is ``none'', which is equivalent to presenting ``0,0,0,0,0,0'' as the argument to -U. The units associated with a metric are most easily viewed using the -d (metric description) option to <strong>pminfo</strong>(1). The Install script described below steps through this option quite explicitly, so it is recommended that the Install script be used for building up the <em>units</em> specification.
   </dl>
   <p>Essentially, the exported metrics provide statistics on the time for completion of each transaction, and an average count of transactions completed and watch points passed over a given time <em>period</em>.
 </section>
@@ -49,17 +57,23 @@
   <h2>FILES</h2>
   <dl class="indent-10">
     <dt><strong>$PCP_PMCDCONF_PATH</strong>
-    <dd>command line options used to launch <strong>pmdatrace</strong>
+    <dd>
+      <p>command line options used to launch <strong>pmdatrace</strong>
     <dt><strong>$PCP_PMDAS_DIR/trace/help</strong>
-    <dd>default help text file for the trace metrics
+    <dd>
+      <p>default help text file for the trace metrics
     <dt><strong>$PCP_DEMOS_DIR/trace/*</strong>
-    <dd>example programs which use the <em>pcp_trace</em> library
+    <dd>
+      <p>example programs which use the <em>pcp_trace</em> library
     <dt><strong>$PCP_PMDAS_DIR/trace/Install</strong>
-    <dd>installation script for the <strong>pmdatrace</strong> agent
+    <dd>
+      <p>installation script for the <strong>pmdatrace</strong> agent
     <dt><strong>$PCP_PMDAS_DIR/trace/Remove</strong>
-    <dd>undo installation script for <strong>pmdatrace</strong>
+    <dd>
+      <p>undo installation script for <strong>pmdatrace</strong>
     <dt><strong>$PCP_LOG_DIR/pmcd/trace.log</strong>
-    <dd>default log file for error messages and other information from <strong>pmdatrace</strong>
+    <dd>
+      <p>default log file for error messages and other information from <strong>pmdatrace</strong>
   </dl>
 </section>
 <section>

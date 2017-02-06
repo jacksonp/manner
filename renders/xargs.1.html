@@ -22,47 +22,67 @@
   <h2>OPTIONS</h2>
   <dl>
     <dt><strong>-0, --null</strong>
-    <dd>Input items are terminated by a null character instead of by whitespace, and the quotes and backslash are not special (every character is taken literally). Disables the end of file string, which is treated like any other argument. Useful when input items might contain white space, quote marks, or backslashes. The GNU find -print0 option produces input suitable for this mode.
+    <dd>
+      <p>Input items are terminated by a null character instead of by whitespace, and the quotes and backslash are not special (every character is taken literally). Disables the end of file string, which is treated like any other argument. Useful when input items might contain white space, quote marks, or backslashes. The GNU find -print0 option produces input suitable for this mode.
     <dt><strong>-a</strong> <em>file</em><strong>, --arg-file=</strong><em>file</em>
-    <dd>Read items from <em>file</em> instead of standard input. If you use this option, stdin remains unchanged when commands are run. Otherwise, stdin is redirected from <em>/dev/null</em>.
+    <dd>
+      <p>Read items from <em>file</em> instead of standard input. If you use this option, stdin remains unchanged when commands are run. Otherwise, stdin is redirected from <em>/dev/null</em>.
     <dt><strong>--delimiter=</strong><em>delim</em><strong>, -d</strong> <em>delim</em>
-    <dd>Input items are terminated by the specified character. The specified delimiter may be a single character, a C-style character escape such as <strong>\n</strong>, or an octal or hexadecimal escape code. Octal and hexadecimal escape codes are understood as for the <strong>printf</strong> command. Multibyte characters are not supported. When processing the input, quotes and backslash are not special; every character in the input is taken literally. The <strong>-d</strong> option disables any end-of-file string, which is treated like any other argument. You can use this option when the input consists of simply newline-separated items, although it is almost always better to design your program to use <strong>--null</strong> where this is possible.
+    <dd>
+      <p>Input items are terminated by the specified character. The specified delimiter may be a single character, a C-style character escape such as <strong>\n</strong>, or an octal or hexadecimal escape code. Octal and hexadecimal escape codes are understood as for the <strong>printf</strong> command. Multibyte characters are not supported. When processing the input, quotes and backslash are not special; every character in the input is taken literally. The <strong>-d</strong> option disables any end-of-file string, which is treated like any other argument. You can use this option when the input consists of simply newline-separated items, although it is almost always better to design your program to use <strong>--null</strong> where this is possible.
     <dt><strong>-E</strong> <em>eof-str</em>
-    <dd>Set the end of file string to <em>eof-str</em>. If the end of file string occurs as a line of input, the rest of the input is ignored. If neither <strong>-E</strong> nor <strong>-e</strong> is used, no end of file string is used.
+    <dd>
+      <p>Set the end of file string to <em>eof-str</em>. If the end of file string occurs as a line of input, the rest of the input is ignored. If neither <strong>-E</strong> nor <strong>-e</strong> is used, no end of file string is used.
     <dt><strong>-e</strong>[<em>eof-str</em>], <strong>--eof</strong>[<em>=eof-str</em>]
-    <dd>This option is a synonym for the <strong>-E</strong> option. Use <strong>-E</strong> instead, because it is POSIX compliant while this option is not. If <em>eof-str</em> is omitted, there is no end of file string. If neither <strong>-E</strong> nor <strong>-e</strong> is used, no end of file string is used.
+    <dd>
+      <p>This option is a synonym for the <strong>-E</strong> option. Use <strong>-E</strong> instead, because it is POSIX compliant while this option is not. If <em>eof-str</em> is omitted, there is no end of file string. If neither <strong>-E</strong> nor <strong>-e</strong> is used, no end of file string is used.
     <dt><strong>-I</strong> <em>replace-str</em>
-    <dd>Replace occurrences of <em>replace-str</em> in the initial-arguments with names read from standard input. Also, unquoted blanks do not terminate input items; instead the separator is the newline character. Implies <strong>-x</strong> and <strong>-L</strong> 1.
+    <dd>
+      <p>Replace occurrences of <em>replace-str</em> in the initial-arguments with names read from standard input. Also, unquoted blanks do not terminate input items; instead the separator is the newline character. Implies <strong>-x</strong> and <strong>-L</strong> 1.
     <dt><strong>-i</strong>[<em>replace-str</em>], <strong>--replace</strong>[<em>=replace-str</em>]
-    <dd>This option is a synonym for <strong>-I</strong><em>replace-str</em> if <em>replace-str</em> is specified. If the <em>replace-str</em> argument is missing, the effect is the same as <strong>-I</strong>{}. This option is deprecated; use <strong>-I</strong> instead.
+    <dd>
+      <p>This option is a synonym for <strong>-I</strong><em>replace-str</em> if <em>replace-str</em> is specified. If the <em>replace-str</em> argument is missing, the effect is the same as <strong>-I</strong>{}. This option is deprecated; use <strong>-I</strong> instead.
     <dt><strong>-L</strong> <em>max-lines</em>
-    <dd>Use at most <em>max-lines</em> nonblank input lines per command line. Trailing blanks cause an input line to be logically continued on the next input line. Implies <strong>-x</strong>.
+    <dd>
+      <p>Use at most <em>max-lines</em> nonblank input lines per command line. Trailing blanks cause an input line to be logically continued on the next input line. Implies <strong>-x</strong>.
     <dt><strong>-l</strong>[<em>max-lines</em>], <strong>--max-lines</strong>[=<em>max-lines</em>]
-    <dd>Synonym for the <strong>-L</strong> option. Unlike <strong>-L</strong>, the <em>max-lines</em> argument is optional. If <em>max-lines</em> is not specified, it defaults to one. The <strong>-l</strong> option is deprecated since the POSIX standard specifies <strong>-L</strong> instead.
+    <dd>
+      <p>Synonym for the <strong>-L</strong> option. Unlike <strong>-L</strong>, the <em>max-lines</em> argument is optional. If <em>max-lines</em> is not specified, it defaults to one. The <strong>-l</strong> option is deprecated since the POSIX standard specifies <strong>-L</strong> instead.
     <dt><strong>-n</strong> <em>max-args<strong>,</strong></em> <strong>--max-args</strong><em>=max-args</em>
-    <dd>Use at most <em>max-args</em> arguments per command line. Fewer than <em>max-args</em> arguments will be used if the size (see the <strong>-s</strong> option) is exceeded, unless the <strong>-x</strong> option is given, in which case <strong>xargs will exit.</strong>
+    <dd>
+      <p>Use at most <em>max-args</em> arguments per command line. Fewer than <em>max-args</em> arguments will be used if the size (see the <strong>-s</strong> option) is exceeded, unless the <strong>-x</strong> option is given, in which case <strong>xargs will exit.</strong>
     <dt><strong>-P</strong> <em>max-procs,</em> <strong>--max-procs</strong><em>=max-procs</em>
-    <dd>Run up to <em>max-procs</em> processes at a time; the default is 1. If <em>max-procs</em> is 0, <strong>xargs</strong> will run as many processes as possible at a time. Use the <strong>-n</strong> option or the <strong>-L</strong> option with <strong>-P</strong>; otherwise chances are that only one exec will be done. While <strong>xargs</strong> is running, you can send its process a SIGUSR1 signal to increase the number of commands to run simultaneously, or a SIGUSR2 to decrease the number. You cannot increase it above an implementation-defined limit (which is shown with --show-limits). You cannot decrease it below 1. <strong>xargs</strong> never terminates its commands; when asked to decrease, it merely waits for more than one existing command to terminate before starting another.<br>
-    <br>
-    <strong>Please note</strong> that it is up to the called processes to properly manage parallel access to shared resources. For example, if more than one of them tries to print to stdout, the output will be produced in an indeterminate order (and very likely mixed up) unless the processes collaborate in some way to prevent this. Using some kind of locking scheme is one way to prevent such problems. In general, using a locking scheme will help ensure correct output but reduce performance. If you don't want to tolerate the performance difference, simply arrange for each process to produce a separate output file (or otherwise use separate resources).
+    <dd>
+      <p>Run up to <em>max-procs</em> processes at a time; the default is 1. If <em>max-procs</em> is 0, <strong>xargs</strong> will run as many processes as possible at a time. Use the <strong>-n</strong> option or the <strong>-L</strong> option with <strong>-P</strong>; otherwise chances are that only one exec will be done. While <strong>xargs</strong> is running, you can send its process a SIGUSR1 signal to increase the number of commands to run simultaneously, or a SIGUSR2 to decrease the number. You cannot increase it above an implementation-defined limit (which is shown with --show-limits). You cannot decrease it below 1. <strong>xargs</strong> never terminates its commands; when asked to decrease, it merely waits for more than one existing command to terminate before starting another.<br>
+      <br>
+      <strong>Please note</strong> that it is up to the called processes to properly manage parallel access to shared resources. For example, if more than one of them tries to print to stdout, the output will be produced in an indeterminate order (and very likely mixed up) unless the processes collaborate in some way to prevent this. Using some kind of locking scheme is one way to prevent such problems. In general, using a locking scheme will help ensure correct output but reduce performance. If you don't want to tolerate the performance difference, simply arrange for each process to produce a separate output file (or otherwise use separate resources).
     <dt><strong>-p, --interactive</strong>
-    <dd>Prompt the user about whether to run each command line and read a line from the terminal. Only run the command line if the response starts with `y' or `Y'. Implies <strong>-t</strong>.
+    <dd>
+      <p>Prompt the user about whether to run each command line and read a line from the terminal. Only run the command line if the response starts with `y' or `Y'. Implies <strong>-t</strong>.
     <dt><strong>--process-slot-var</strong>=<em>name</em>
-    <dd>Set the environment variable <em>name</em> to a unique value in each running child process. Values are reused once child processes exit. This can be used in a rudimentary load distribution scheme, for example.
+    <dd>
+      <p>Set the environment variable <em>name</em> to a unique value in each running child process. Values are reused once child processes exit. This can be used in a rudimentary load distribution scheme, for example.
     <dt><strong>-r, --no-run-if-empty</strong>
-    <dd>If the standard input does not contain any nonblanks, do not run the command. Normally, the command is run once even if there is no input. This option is a GNU extension.
+    <dd>
+      <p>If the standard input does not contain any nonblanks, do not run the command. Normally, the command is run once even if there is no input. This option is a GNU extension.
     <dt><strong>-s</strong> <em>max-chars,</em> <strong>--max-chars</strong><em>=max-chars</em>
-    <dd>Use at most <em>max-chars</em> characters per command line, including the command and initial-arguments and the terminating nulls at the ends of the argument strings. The largest allowed value is system-dependent, and is calculated as the argument length limit for exec, less the size of your environment, less 2048 bytes of headroom. If this value is more than 128KiB, 128Kib is used as the default value; otherwise, the default value is the maximum. 1KiB is 1024 bytes. <strong>xargs</strong> automatically adapts to tighter constraints.
+    <dd>
+      <p>Use at most <em>max-chars</em> characters per command line, including the command and initial-arguments and the terminating nulls at the ends of the argument strings. The largest allowed value is system-dependent, and is calculated as the argument length limit for exec, less the size of your environment, less 2048 bytes of headroom. If this value is more than 128KiB, 128Kib is used as the default value; otherwise, the default value is the maximum. 1KiB is 1024 bytes. <strong>xargs</strong> automatically adapts to tighter constraints.
     <dt><strong>--show-limits</strong>
-    <dd>Display the limits on the command-line length which are imposed by the operating system, <strong>xargs</strong>' choice of buffer size and the <strong>-s</strong> option. Pipe the input from <em>/dev/null</em> (and perhaps specify <strong>--no-run-if-empty</strong>) if you don't want <strong>xargs</strong> to do anything.
+    <dd>
+      <p>Display the limits on the command-line length which are imposed by the operating system, <strong>xargs</strong>' choice of buffer size and the <strong>-s</strong> option. Pipe the input from <em>/dev/null</em> (and perhaps specify <strong>--no-run-if-empty</strong>) if you don't want <strong>xargs</strong> to do anything.
     <dt><strong>-t, --verbose</strong>
-    <dd>Print the command line on the standard error output before executing it.
+    <dd>
+      <p>Print the command line on the standard error output before executing it.
     <dt><strong>-x, --exit</strong>
-    <dd>Exit if the size (see the <strong>-s</strong> option) is exceeded.
+    <dd>
+      <p>Exit if the size (see the <strong>-s</strong> option) is exceeded.
     <dt><strong>--help</strong>
-    <dd>Print a summary of the options to <strong>xargs</strong> and exit.
+    <dd>
+      <p>Print a summary of the options to <strong>xargs</strong> and exit.
     <dt><strong>--version</strong>
-    <dd>Print the version number of <strong>xargs</strong> and exit.
+    <dd>
+      <p>Print the version number of <strong>xargs</strong> and exit.
   </dl>
 </section>
 <section>
