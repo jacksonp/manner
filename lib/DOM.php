@@ -230,14 +230,9 @@ class DOM
                 continue;
             }
 
+            // NB: we don't want to remove the space in the <em> in cases e.g.:
+            // <strong>e</strong><em> </em><strong>f</strong>
             if ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName, Blocks::INLINE_ELEMENTS)) {
-
-                if (trim($child->textContent) === '') {
-                    $nextSibling = $child->nextSibling;
-                    $child->parentNode->removeChild($child);
-                    $child = $nextSibling;
-                    continue;
-                }
 
                 if (
                     $child->firstChild &&
@@ -258,6 +253,13 @@ class DOM
                         $child->ownerDocument->createTextNode($matches[2]),
                         $child->nextSibling
                     );
+                }
+
+                if ($child->textContent === '') {
+                    $nextSibling = $child->nextSibling;
+                    $child->parentNode->removeChild($child);
+                    $child = $nextSibling;
+                    continue;
                 }
 
             }
