@@ -23,10 +23,6 @@ class Inline_AlternatingFont implements Block_Template
             if (!isset($request['request'][$requestCharIndex])) {
                 throw new Exception($lines[0] . ' command ' . $request['request'] . ' has nothing at index ' . $requestCharIndex);
             }
-            if (trim($bit) === '') {
-                TextContent::interpretAndAppendText($parentNode, $bit);
-                continue;
-            }
             switch ($request['request'][$requestCharIndex]) {
                 case 'R':
                     TextContent::interpretAndAppendText($parentNode, $bit);
