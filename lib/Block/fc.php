@@ -12,7 +12,7 @@ class Block_fc implements Block_Template
             TextContent::interpretAndAppendText($td, $contents);
             $tr->appendChild($td);
         }
-        $table->appendBlockIfHasContent($tr);
+        $table->appendChild($tr);
     }
 
     static function checkAppend(
@@ -67,7 +67,7 @@ class Block_fc implements Block_Template
             }
         }
 
-        $parentNode->appendBlockIfHasContent($table);
+        $parentNode->appendChild($table);
 
         return null;
 

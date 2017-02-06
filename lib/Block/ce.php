@@ -33,7 +33,7 @@ class Block_ce implements Block_Template
         $block = $dom->createElement('div');
         $block->setAttribute('class', 'center');
         Roff::parse($block, $blockLines);
-        $parentNode->appendBlockIfHasContent($block);
+        $parentNode->appendChild($block);
 
         return $parentNode;
 
