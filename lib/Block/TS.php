@@ -77,7 +77,9 @@ class Block_TS implements Block_Template
         while ($request = Request::getLine($lines)) {
             array_shift($lines);
 
-            if (in_array($request['request'], ['TE', 'SH', 'SS'])) {
+            if ($request['raw_line'] === '') {
+                continue;
+            } elseif (in_array($request['request'], ['TE', 'SH', 'SS'])) {
                 break;
             } elseif ($request['raw_line'] === '.T&') {
                 $rowFormats   = self::parseRowFormats($lines);

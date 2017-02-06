@@ -119,6 +119,13 @@ class DOM
 
         }
 
+        // This takes out rows with an <hr>, which we don't want.
+//        if ($myTag === 'tr' && trim($element->textContent) === '') {
+//            $nextSibling = $element->nextSibling;
+//            $element->parentNode->removeChild($element);
+//            return $nextSibling;
+//        }
+
         if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
             $nextSibling = $element->nextSibling;
             self::removeNode($element);
