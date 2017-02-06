@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * Make tables out of tab-separated lines

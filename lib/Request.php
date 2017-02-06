@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Request
 {
@@ -170,7 +170,7 @@ class Request
 
             $macros = $man->getMacros();
             if (isset($macros[$return['request']])) {
-                $man->setRegister('.$', count($return['arguments']));
+                $man->setRegister('.$', (string)count($return['arguments']));
                 foreach ($return['arguments'] as $k => $arg) {
                     $return['arguments'][$k] = Roff_Macro::applyReplacements($arg, $callerArguments);
                 }

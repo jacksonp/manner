@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Block_TS implements Block_Template
 {
@@ -144,7 +144,7 @@ class Block_TS implements Block_Template
                         }
                     }
                     if ($colspan > 1) {
-                        $cell->setAttribute('colspan', $colspan);
+                        $cell->setAttribute('colspan', (string)$colspan);
                     }
                     $totalColSpan += $colspan;
 

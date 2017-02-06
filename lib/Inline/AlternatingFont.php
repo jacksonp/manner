@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class Inline_AlternatingFont implements Block_Template
 {
@@ -16,7 +17,7 @@ class Inline_AlternatingFont implements Block_Template
         $parentNode = Blocks::getParentForText($parentNode);
 
         Block_Text::addSpace($parentNode);
-        
+
         foreach ($request['arguments'] as $bi => $bit) {
             $requestCharIndex = $bi % 2;
             if (!isset($request['request'][$requestCharIndex])) {

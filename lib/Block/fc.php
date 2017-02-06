@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class Block_fc implements Block_Template
 {

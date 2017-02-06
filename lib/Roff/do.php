@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )

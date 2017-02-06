@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class DOM
 {
@@ -224,7 +225,7 @@ class DOM
 
             if ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName, Blocks::INLINE_ELEMENTS)) {
 
-                if (trim($child->textContent === '')) {
+                if (trim($child->textContent) === '') {
                     $nextSibling = $child->nextSibling;
                     $child->parentNode->removeChild($child);
                     $child = $nextSibling;

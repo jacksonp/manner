@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Inline_LinkEnd implements Block_Template
 {

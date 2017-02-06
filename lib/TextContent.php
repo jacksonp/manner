@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class TextContent
 {
@@ -114,7 +114,7 @@ class TextContent
         $textSegmentsS = preg_split(
           '~(?<!\\\\)((?:\\\\\\\\)*)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
           $line,
-          null,
+          -1,
           PREG_SPLIT_DELIM_CAPTURE
         );
 
@@ -143,7 +143,7 @@ class TextContent
                 } else {
                     $registerName = trim($registerName, '[]');
                 }
-                $man->setRegister($registerName, $horizontalPosition);
+                $man->setRegister($registerName, (string)$horizontalPosition);
                 continue;
             }
 
@@ -307,7 +307,7 @@ class TextContent
 
         $string = Replace::pregCallback('~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\N\'(?<charnum>\d+)\'~u',
           function ($matches) {
-              return $matches['bspairs'] . chr($matches['charnum']);
+              return $matches['bspairs'] . chr((int)$matches['charnum']);
           }, $string);
 
         $roffStrings = $man->getStrings();

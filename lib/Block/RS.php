@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class Block_RS implements Block_Template
 {

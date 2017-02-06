@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Roff_Unit
 {
@@ -44,7 +44,7 @@ class Roff_Unit
             } catch (ParseError $e) {
                 return $string;
             }
-            $string = round($evalString);
+            $string = (string)round($evalString);
         }
 
         // Careful, we maybe not actually be touching input, in which case we return as-is.

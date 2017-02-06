@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Inline_VerticalSpace implements Block_Template
 {

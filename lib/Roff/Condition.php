@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Roff_Condition implements Roff_Template
 {
@@ -98,14 +98,14 @@ class Roff_Condition implements Roff_Template
 
     }
 
-    private static function test(string $condition, $macroArguments)
+    private static function test(string $condition, $macroArguments): bool
     {
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
         return self::testRecursive($condition, $macroArguments);
     }
 
-    private static function testRecursive(string $condition, $macroArguments)
+    private static function testRecursive(string $condition, $macroArguments): bool
     {
 
         if (mb_strpos($condition, '!') === 0) {
@@ -176,7 +176,7 @@ class Roff_Condition implements Roff_Template
         if (preg_match('~^([-\+\*/\d\(\)><=\.\s]| or | and )+$~u', $condition)) {
             $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
             try {
-                return eval('return ' . $condition . ';');
+                return eval('return ' . $condition . ';') > 0;
             } catch (ParseError $e) {
                 throw new Exception($e->getMessage());
             }

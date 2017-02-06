@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class Inline_ft implements Block_Template
 {

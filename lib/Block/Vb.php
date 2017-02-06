@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Block_Vb implements Block_Template
 {

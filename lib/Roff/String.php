@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 
 class Roff_String implements Roff_Template
 {
