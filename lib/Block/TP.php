@@ -43,6 +43,7 @@ class Block_TP implements Block_Template
             }
         }
 
+        /* @var DomElement $dt */
         $dt         = $dom->createElement('dt');
         $dt         = $dl->appendChild($dt);
         $gotContent = Roff::parse($dt, $lines, true);

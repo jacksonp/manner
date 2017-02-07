@@ -137,6 +137,7 @@ class Block_TS implements Block_Template
                         $bold = $numReplaced > 0;
                     }
 
+                    /* @var DomElement $cell */
                     if ($tableRowNum === 0 && $bold) {
                         $cell = $dom->createElement('th');
                     } else {

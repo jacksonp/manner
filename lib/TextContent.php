@@ -62,6 +62,7 @@ class TextContent
                             mb_substr($line, $lastLetterPosition, $letterPosition - $lastLetterPosition - 1));
                     }
 
+                    /* @var DomElement $newChildNode */
                     if ($letter === 'u' && $nextLetter === 'd') {
                         $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
                     } elseif ($letter === 'd' && $nextLetter === 'u') {

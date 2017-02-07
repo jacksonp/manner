@@ -13,7 +13,7 @@ class Block_Preformatted
         self::$nextIndent = 0;
     }
 
-    public static function handle(HybridNode $parentNode, array &$lines, array $request): bool
+    public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
     {
 
         if (!$parentNode->isOrInTag('pre')) {
@@ -50,6 +50,7 @@ class Block_Preformatted
                 $tr  = $table->appendChild($dom->createElement('tr'));
                 foreach ($tds as $tdLine) {
                     $cell     = $dom->createElement('td');
+                    /* @var DomElement $codeNode */
                     $codeNode = $cell->appendChild($dom->createElement('code'));
                     if (is_null($request['request'])) {
                         TextContent::interpretAndAppendText($codeNode, $tdLine);
@@ -104,10 +105,12 @@ class Block_Preformatted
             return true;
         } elseif ($request['request'] === 'OP') {
             $parentNode->appendChild(new DOMText('['));
+            /* @var DomElement $strong */
             $strong = $parentNode->appendChild($dom->createElement('strong'));
             TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
             if (count($request['arguments']) > 1) {
                 $parentNode->appendChild(new DOMText(' '));
+                /* @var DomElement $em */
                 $em = $parentNode->appendChild($dom->createElement('em'));
                 TextContent::interpretAndAppendText($em, $request['arguments'][1]);
             }

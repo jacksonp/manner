@@ -28,10 +28,12 @@ class Inline_AlternatingFont implements Block_Template
                     TextContent::interpretAndAppendText($parentNode, $bit);
                     break;
                 case 'B':
+                    /* @var DomElement $strongNode */
                     $strongNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('strong'));
                     TextContent::interpretAndAppendText($strongNode, $bit);
                     break;
                 case 'I':
+                    /* @var DomElement $emNode */
                     $emNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('em'));
                     TextContent::interpretAndAppendText($emNode, $bit);
                     break;

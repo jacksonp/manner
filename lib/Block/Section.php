@@ -19,7 +19,7 @@ class Block_Section implements Block_Template
         $body    = $parentNode->ancestor('body');
         /* @var DomElement $section */
         $section = $dom->createElement('section');
-
+        /* @var DomElement $headingNode */
         if ($request['request'] === 'SH') {
             $section     = $body->appendChild($section);
             $headingNode = $dom->createElement('h2');
