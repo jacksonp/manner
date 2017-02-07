@@ -18,19 +18,6 @@ class Request
         // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
             $request['request'] === 'br.' ||
-            in_array($request['request'], [
-                'Sh',
-                'ns',  // TODO: Hack: see groff_mom.7 - this should be already skipped, but maybe not as in .TQ macro
-                // .man page bugs:
-                'sp,',
-                'sp2',
-                'pp', // spurious, in *_selinux.8 pages
-                'RH',
-                'Sp',
-                'Sp ',
-                'TC',
-                'TR',
-            ]) ||
             (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
             preg_match('~^\.\.?\s*$~u', $line) ||
             self::isEmptyRequest($line);
