@@ -4,13 +4,17 @@ declare(strict_types = 1);
 class Block_TS implements Block_Template
 {
 
-    private static function parseRowFormats(array &$lines): array
+    private static function parseRowFormats(array &$lines): ?array
     {
 
         $rowFormats  = [];
         $formatsDone = false;
         while (count($lines)) {
-            $line = array_shift($lines);
+            $request = Request::getLine($lines);
+            $line    = array_shift($lines);
+            if ($request['request'] === 'TE') {
+                return null; // Format is garbage, skip content.
+            }
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
@@ -64,6 +68,9 @@ class Block_TS implements Block_Template
         }
 
         $rowFormats = self::parseRowFormats($lines);
+        if (is_null($rowFormats)) {
+            return null; // We hit a .TE
+        }
 
         $table = $dom->createElement('table');
         $table->setAttribute('class', 'tbl');
@@ -82,7 +89,10 @@ class Block_TS implements Block_Template
             } elseif (in_array($request['request'], ['TE', 'SH', 'SS'])) {
                 break;
             } elseif ($request['raw_line'] === '.T&') {
-                $rowFormats   = self::parseRowFormats($lines);
+                $rowFormats = self::parseRowFormats($lines);
+                if (is_null($rowFormats)) {
+                    return null; // We hit a .TE
+                }
                 $formatRowNum = 0;
                 continue;
             } elseif ($request['raw_line'] === '_') {
