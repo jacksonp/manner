@@ -20,6 +20,7 @@ class Block_EX implements Block_Template
 
         $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
+        /* @var DomElement $pre */
         $pre = $parentNode->ownerDocument->createElement('pre');
 
         $pre = $parentNode->appendChild($pre);

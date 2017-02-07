@@ -38,6 +38,7 @@ class Block_ti implements Block_Template
         }
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
+        /* @var DomElement $p */
         $p          = $parentNode->ownerDocument->createElement('p');
         $p          = $parentNode->appendChild($p);
         $p->setAttribute('class', $className);

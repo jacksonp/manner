@@ -21,6 +21,7 @@ class Block_P implements Block_Template
             if ($parentNode->tagName === 'dd') {
                 $parentNode = $parentNode->parentNode->parentNode;
             }
+            /* @var DomElement $p */
             $p = $parentNode->ownerDocument->createElement('p');
             $p = $parentNode->appendChild($p);
             return $p;

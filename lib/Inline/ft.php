@@ -71,6 +71,7 @@ class Inline_ft implements Block_Template
                 $node->setAttribute('class', 'font-' . $fontAbbreviation);
         }
 
+        /* @var DomElement $node */
         $node = $parentNode->appendChild($node);
 
         return $node;

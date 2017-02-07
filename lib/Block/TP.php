@@ -66,6 +66,7 @@ class Block_TP implements Block_Template
             }
         }
 
+        /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
         $dd = $dl->appendChild($dd);
 

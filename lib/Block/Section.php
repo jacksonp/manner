@@ -17,6 +17,7 @@ class Block_Section implements Block_Template
         $dom = $parentNode->ownerDocument;
 
         $body    = $parentNode->ancestor('body');
+        /* @var DomElement $section */
         $section = $dom->createElement('section');
 
         if ($request['request'] === 'SH') {
@@ -42,10 +43,6 @@ class Block_Section implements Block_Template
                 return null;
             }
         } else {
-//            if ($request['raw_arg_string'] === '\\ ') {
-//                $section->parentNode->removeChild($section);
-//                return null;
-//            }
             $sectionHeading = implode(' ', $request['arguments']);
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
         }

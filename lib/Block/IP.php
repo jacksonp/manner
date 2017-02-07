@@ -45,11 +45,13 @@ class Block_IP implements Block_Template
             TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
             $dl->appendChild($dt);
 
+            /* @var DomElement $dd */
             $dd = $dom->createElement('dd');
             $dd = $dl->appendChild($dd);
 
             return $dd;
         } else {
+            /* @var DomElement $p */
             $p = $dom->createElement('p');
             if (count($request['arguments']) > 1 && $request['arguments'][1] === '0') {
                 // Resetting indentation, exit dd

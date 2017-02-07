@@ -31,6 +31,7 @@ class Block_RS implements Block_Template
             return null;
         }
 
+        /* @var DomElement $div */
         $div = $dom->createElement('div');
         $div->setAttribute('class', $className);
 

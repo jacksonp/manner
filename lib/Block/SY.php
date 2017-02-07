@@ -26,6 +26,7 @@ class Block_SY implements Block_Template
             $commandName = $request['arguments'][0];
         }
 
+        /* @var DomElement $pre */
         $pre = $parentNode->ownerDocument->createElement('pre');
         if ($commandName !== '') {
             $commandName = trim(TextContent::interpretString($commandName));
