@@ -16,7 +16,7 @@ class Preprocessor
             $linePrefix = '';
 
             // Continuations
-            // Can't do these in applyRoffClasses() loop: a continuation could e.g. been in the middle of a conditional
+            // Can't do these in Roff::parse() loop: a continuation could e.g. been in the middle of a conditional
             // picked up Roff_Condition, e.g. man.1
             // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
             while (
@@ -32,10 +32,10 @@ class Preprocessor
                 continue;
             }
 
-            // NB: Workaround for lots of broken tcl man pages (section n, Tk_*, Tcl_*, others...):
+            // Workaround for lots of broken tcl man pages (section n, Tk_*, Tcl_*, others...):
             $line = Replace::preg('~^\.\s*el\s?\\\\}~u', '.el \\{', $line);
 
-            // TODO: fix this hack, see groff_mom.7
+            // TODO: fix this hack, see groff_mom.7 - need to handle .while first.
             $line = Replace::preg('~^\.FONT ~u', '.', $line);
 
             // Don't worry about changes in point size for now (see rc.1 for digit instead of +- in \s10):
@@ -43,17 +43,6 @@ class Preprocessor
 
             // Don't worry colour changes:
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?\])~u', '$1', $line);
-
-            // Copied from Roff_Comment for top.1
-            if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $line, $matches)) {
-                $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
-                for ($i = $i + 1; $i < count($lines); ++$i) {
-                    if ($lines[$i] === $delimiter) {
-                        continue 2;
-                    }
-                }
-                throw new Exception($matches[0] . ' with no corresponding "' . $delimiter . '"');
-            }
 
             $linesNoComments[] = $line;
 
