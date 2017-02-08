@@ -45,7 +45,7 @@ class Block_TH implements Block_Template
             $h1->appendChild(new DOMText($man->title));
             $body->appendChild($h1);
 
-        } else {
+        } elseif (count($request['arguments'])) {
             // Some pages  have multiple .THs for different commands in one page, just had a horizontal line when we hit
             // .THs with content after the first
             $hr = $body->ownerDocument->createElement('hr');

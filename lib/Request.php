@@ -15,7 +15,6 @@ class Request
         // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
         // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
-            (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
             preg_match('~^\.\.?\s*$~u', $line) ||
             self::isEmptyRequest($line);
     }
