@@ -44,38 +44,6 @@ class Block_ti implements Block_Template
         $p->setAttribute('class', $className);
         return $p;
 
-        /*
-        if (!count($lines)) {
-            return null;
-        }
-
-        $blockLines = [];
-        while ($nextRequest = Request::getLine($lines)) {
-            if ($nextRequest['request'] === 'ti') {
-                // Could be a change in indentation, just add a break for now
-                array_shift($lines);
-                $blockLines[] = '.br';
-                continue;
-            } elseif (Blocks::lineEndsBlock($nextRequest, $lines) || $lines[0] === '') {
-                // This check has to come after .ti check, as .ti is otherwise a block-ender.
-                break;
-            } else {
-                $blockLines[] = array_shift($lines);
-            }
-        }
-
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
-
-        $block = $dom->createElement('blockquote');
-        Roff::parse($block, $blockLines);
-        $parentNode->appendBlockIfHasContent($block);
-
-        return $parentNode;
-        */
-
     }
-
 
 }
