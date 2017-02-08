@@ -9,11 +9,6 @@ class Request
         return in_array(rtrim($line), ['.', '\'', '\\.']);
     }
 
-    static function canSkip(string $line, array $request)
-    {
-        return self::isEmptyRequest($line);
-    }
-
     private static function parseArguments(string $argString)
     {
 
@@ -216,8 +211,6 @@ class Request
             $return['request'] = 'sp';
             $return['class']   = 'Inline_VerticalSpace';
         } elseif (self::isEmptyRequest($line)) {
-            $return['class'] = 'Request_Skippable';
-        } elseif (self::canSkip($line, $request)) {
             $return['class'] = 'Request_Skippable';
         } elseif (!is_null($request['request'])) {
             $class = $man->getRequestClass($request['request']);
