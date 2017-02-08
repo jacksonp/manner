@@ -12,12 +12,9 @@ class Request
     static function canSkip(string $line, array $request)
     {
         // Ignore:
-        // stray .RE macros,
-        // .ad macros that haven't been trimmed as in middle of $lines...
         // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
         // .R man page trying to set font to Regular? (not an actual macro, not needed)
         return
-            $request['request'] === 'br.' ||
             (in_array($request['request'], ['R', 'BR', 'TH']) && count($request['arguments']) === 0) || // Empty only
             preg_match('~^\.\.?\s*$~u', $line) ||
             self::isEmptyRequest($line);
