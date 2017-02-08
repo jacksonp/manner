@@ -14,9 +14,7 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><em>Mmv</em> moves (or copies, appends, or links, as specified) each source file matching a <em>from</em> pattern to the target name specified by the <em>to</em> pattern. This multiple action is performed safely, i.e. without any unexpected deletion of files due to collisions of target names with existing filenames or with other target names. Furthermore, before doing anything, <em>mmv</em> attempts to detect any errors that would result from the entire set of actions specified and gives the user the choice of either proceeding by avoiding the offending parts or aborting.
-  <div class="center">
-    <p>The Task Options
-  </div>
+  <p class="center">The Task Options
   <p>Whether <em>mmv</em> moves, copies, appends, or links is governed by the first set of options given above. If none of these are specified, the task is given by the command name under which <em>mmv</em> was invoked (argv[0]): command name default task mmv -x<br>
   mcp -c<br>
   mad -a<br>
@@ -49,9 +47,7 @@
       <p>same as -l, but use symbolic links instead of hard links. For the resulting link to aim back at the source, either the source name must begin with a '/', or the target must reside in either the current or the source directory. If none of these conditions are met, the link is refused. However, source and target can reside on different devices, and the source can be a directory.
   </dl>
   <p>Only one of these option may be given, and it applies to all matching files. Remaining options need not be given separately, i.e. "mmv -mk" is allowed.
-  <div class="center">
-    <p>Multiple Pattern Pairs
-  </div>
+  <p class="center">Multiple Pattern Pairs
   <p>Multiple <em>from</em> -- <em>to</em> pattern pairs may be specified by omitting the pattern pair on the command line, and entering them on the standard input, one pair per line. (If a pattern pair is given on the command line, the standard input is not read.) Thus,<br>
   <br>
   mmv<br>
@@ -65,9 +61,7 @@
   a c<br>
   <br>
   would give the error message "a -&gt; c : no match" because file "a" (even if it exists) was already matched by the first pattern pair.
-  <div class="center">
-    <p>The <em>From</em> Pattern
-  </div>
+  <p class="center">The <em>From</em> Pattern
   <p>The <em>from</em> pattern is a filename with embedded wildcards: '*', '?', '['...']', and ';'. The first three have their usual <em>sh</em>(1) meanings of, respectively, matching any string of characters, matching any single character, and matching any one of a set of characters.
   <p>Between the '[' and ']', a range from character 'a' through character 'z' is specified with "a-z". The set of matching characters can be negated by inserting a '^' after the '['. Thus, "[^b-e2-5_]" will match any character but 'b' through 'e', '2' through '5', and '_'.
   <p>Note that paths are allowed in the patterns, and wildcards may be intermingled with slashes arbitrarily. The ';' wildcard is useful for matching files at any depth in the directory tree. It matches the same as "*/" repeated any number of times, including zero, and can only occur either at the beginning of the pattern or following a '/'. Thus ";*.c" will match all ".c" files in or below the current directory, while "/;*.c" will match them anywhere on the file system.
@@ -75,17 +69,13 @@
   <p>Since matching a directory under a task option other than -r or -s would result in an error, tasks other than -r and -s match directories only against completely explicit <em>from</em> patterns (i.e. not containing wildcards). Under -r and -s, this applies only to "." and "..".
   <p>Files beginning with '.' are only matched against <em>from</em> patterns that begin with an explicit '.'. However, if -h is specified, they are matched normally.
   <p>Warning: since the shell normally expands wildcards before passing the command-line arguments to <em>mmv</em>, it is usually necessary to enclose the command-line <em>from</em> pattern in quotes.
-  <div class="center">
-    <p>The <em>To</em> Pattern
-  </div>
+  <p class="center">The <em>To</em> Pattern
   <p>The <em>to</em> pattern is a filename with embedded <em>wildcard</em> <em>indexes</em>, where an index consists of the character '#' followed by a string of digits. When a source file matches a <em>from</em> pattern, a target name for the file is constructed out of the <em>to</em> pattern by replacing the wildcard indexes by the actual characters that matched the referenced wildcards in the source name. Thus, if the <em>from</em> pattern is "abc*.*" and the <em>to</em> pattern is "xyz#2.#1", then "abc.txt" is targeted to "xyztxt.". (The first '*' matched "", and the second matched "txt".) Similarly, for the pattern pair ";*.[clp]" -&gt; "#1#3/#2", "foo1/foo2/prog.c" is targeted to "foo1/foo2/c/prog". Note that there is no '/' following the "#1" in the <em>to</em> pattern, since the string matched by any ';' is always either empty or ends in a '/'. In this case, it matches "foo1/foo2/".
   <p>To convert the string matched by a wildcard to either lowercase or uppercase before embedding it in the target name, insert 'l' or 'u', respectively, between the '#' and the string of digits.
   <p>The <em>to</em> pattern, like the <em>from</em> pattern, can begin with a "~/" (see above). This does not necessitate enclosing the <em>to</em> pattern in quotes on the command line since <em>csh</em>(1) expands the '~' in the exact same manner as <em>mmv</em> (or, in the case of <em>sh</em>(1), does not expand it at all).
   <p>For all task options other than -r, if the target name is a directory, the real target name is formed by appending a '/' followed by the last component of the source file name. For example, "mmv dir1/a dir2" will, if "dir2" is indeed a directory, actually move "dir1/a" to "dir2/a". However, if "dir2/a" already exists and is itself a directory, this is considered an error.
   <p>To strip any character (e.g. '*', '?', or '#') of its special meaning to <em>mmv</em>, as when the actual replacement name must contain the character '#', precede the special character with a ´\' (and enclose the argument in quotes because of the shell). This also works to terminate a wildcard index when it has to be followed by a digit in the filename, e.g. "a#1\1".
-  <div class="center">
-    <p>Chains and Cycles
-  </div>
+  <p class="center">Chains and Cycles
   <p>A chain is a sequence of specified actions where the target name of one action refers to the source file of another action. For example,<br>
   <br>
   mmv<br>
@@ -93,17 +83,11 @@
   b c<br>
   <br>
   specifies the chain "a" -&gt; "b" -&gt; "c". A cycle is a chain where the last target name refers back to the first source file, e.g. "mmv a a". <em>Mmv</em> detects chains and cycles regardless of the order in which their constituent actions are actually given. Where allowed, i.e. in moving, renaming, and appending files, chains and cycles are handled gracefully, by performing them in the proper order. Cycles are broken by first renaming one of the files to a temporary name (or just remembering its original size when doing appends).
-  <div class="center">
-    <p>Collisions and Deletions
-  </div>
+  <p class="center">Collisions and Deletions
   <p>When any two or more matching files would have to be moved, copied, or linked to the same target filename, <em>mmv</em> detects the condition as an error before performing any actions. Furthermore, <em>mmv</em> checks if any of its actions will result in the destruction of existing files. If the -d (delete) option is specified, all file deletions or overwrites are done silently. Under -p (protect), all deletions or overwrites (except those specified with "(*)" on the standard input, see below) are treated as errors. And if neither option is specified, the user is queried about each deletion or overwrite separately. (A new stream to "/dev/tty" is used for all interactive queries, not the standard input.)
-  <div class="center">
-    <p>Error Handling
-  </div>
+  <p class="center">Error Handling
   <p>Whenever any error in the user's action specifications is detected, an error message is given on the standard output, and <em>mmv</em> proceeds to check the rest of the specified actions. Once all errors are detected, <em>mmv</em> queries the user whether he wishes to continue by avoiding the erroneous actions or to abort altogether. This and all other queries may be avoided by specifying either the -g (go) or -t (terminate) option. The former will resolve all difficulties by avoiding the erroneous actions; the latter will abort <em>mmv</em> if any errors are detected. Specifying either of them defaults <em>mmv</em> to -p, unless -d is specified (see above). Thus, -g and -t are most useful when running <em>mmv</em> in the background or in a shell script, when interactive queries are undesirable.
-  <div class="center">
-    <p>Reports
-  </div>
+  <p class="center">Reports
   <p>Once the actions to be performed are determined, <em>mmv</em> performs them silently, unless either the -v (verbose) or -n (no-execute) option is specified. The former causes <em>mmv</em> to report each performed action on the standard output as<br>
   <br>
   a -&gt; b : done.<br>

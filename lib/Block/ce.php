@@ -9,31 +9,25 @@ class Block_ce implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
+        $dom   = $parentNode->ownerDocument;
+        $block = $dom->createElement('p');
+        $block->setAttribute('class', 'center');
+        $parentNode->appendChild($block);
 
-        $dom = $parentNode->ownerDocument;
-
-        $blockLines = [];
         $numLinesToCenter = count($request['arguments']) === 0 ? 1 : (int)$request['arguments'][0];
-        $centerLinesUpTo = min($numLinesToCenter, count($lines));
-        for ($i = 0; $i < $centerLinesUpTo; ++$i) {
+        $centerLinesUpTo  = min($numLinesToCenter, count($lines));
+        for ($i = 0; $i < $centerLinesUpTo && count($lines); ++$i) {
             if (Request::getLine($lines)['request'] === 'ce') {
                 break;
             }
-            $blockLines[] = array_shift($lines);
-            $blockLines[] = '.br';
+            Roff::parse($block, $lines, true);
+            $block->appendChild($dom->createElement('br'));
         }
-
-        if ($parentNode->tagName === 'p') {
-            $parentNode = $parentNode->parentNode;
-        }
-
-        $block = $dom->createElement('div');
-        $block->setAttribute('class', 'center');
-        Roff::parse($block, $blockLines);
-        $parentNode->appendChild($block);
 
         return $parentNode;
 

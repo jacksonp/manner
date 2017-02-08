@@ -81,22 +81,16 @@
     <dd>
       <p><strong>probe</strong> control lines have the format:
       <div class="indent-19">
-        <div class="center">
-          <p><strong>probe</strong> <em>metric</em> [<em>condition</em> [<em>state_rule</em>] ]
-        </div>
+        <p class="center"><strong>probe</strong> <em>metric</em> [<em>condition</em> [<em>state_rule</em>] ]
         <p>where <em>metric</em> is the name of a PCP metric (must be a leaf node in the PMNS, no instance specification is allowed, and it must not be a derived metric) and the optional <em>condition</em> is the keyword <strong>exists</strong> (true if <em>metric</em> exists, i.e. is defined in the PMNS) or the keyword <strong>values</strong> (true if <em>metric</em> exists in the PMNS and has one or more current values) or an expression of the form
-        <div class="center">
-          <p><em>op</em> <em>val</em>
-        </div>
+        <p class="center"><em>op</em> <em>val</em>
         <p>where <em>op</em> is one of the <strong>awk</strong>(1) operators (<strong>==</strong>, <strong>!=</strong>, <strong>&gt;</strong>, <strong>&gt;=</strong>, <strong>&lt;</strong>, <strong>&lt;=</strong>, <strong>~</strong> (regular expression match) or <strong>!~</strong> (negated regular expression match)) and <em>val</em> is a value (arbitrary sequence of characters, excluding a space) and the <em>condition</em> is true if there is some instance of <em>metric</em> that makes the expression true.
         <p>If the <em>condition</em> is missing, the default is <strong>exists</strong>.
         <p>When an explicit <em>condition</em> is provided, there may also be an optional <em>state_rule</em> of the form
-        <div class="center">
-          <p><strong>?</strong> <em>true_state</em> <strong>:</strong> <em>false_state</em>
-        </div>
+        <p class="center"><strong>?</strong> <em>true_state</em> <strong>:</strong> <em>false_state</em>
         <p>where <em>true_state</em> (applies if <em>condition</em> is true) and <em>false_state</em> (applies if <em>condition</em> is false) are both taken from the keywords <strong>include</strong> (include and enable the group and the associated metrics in <em>configfile</em>), <strong>available</strong> (include and disable the group in <em>configfile</em> - a user action of <strong>y</strong> as described above is needed to enable the group and add the associated metrics into <em>configfile</em>) or <strong>exclude</strong> (the group is not considered for inclusion in <em>configfile</em>).
         <p>The default <em>state_rule</em> is
-        <p>? available : exclude
+        <p class="center"><strong>? available : exclude</strong>
       </div>
     <dt>·
     <dd>
