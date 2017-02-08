@@ -11,12 +11,7 @@ class Request
 
     static function canSkip(string $line, array $request)
     {
-        // Ignore:
-        // '..' Could be the end bit of an "if <> .ig\n[...]\n.." construct, where the .ig doesn't fire.
-        // .R man page trying to set font to Regular? (not an actual macro, not needed)
-        return
-            preg_match('~^\.\.?\s*$~u', $line) ||
-            self::isEmptyRequest($line);
+        return self::isEmptyRequest($line);
     }
 
     private static function parseArguments(string $argString)
