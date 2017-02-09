@@ -6,11 +6,30 @@ class Node
 
     static function addClass(DOMElement $node, string $className): void
     {
-        $existingClassString = $node->getAttribute('class');
-        if (!in_array($className, explode(' ', $existingClassString))) {
-            $node->setAttribute('class', trim($existingClassString . ' ' . $className));
-        }
 
+        if (!self::hasClass($node, $className)) {
+            $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $className));
+        }
+    }
+
+    static function hasClass(DOMElement $node, string $className): bool
+    {
+        $existingClassString = $node->getAttribute('class');
+        return in_array($className, explode(' ', $existingClassString));
+    }
+
+    static function removeClass(DOMElement $node, string $className): void
+    {
+        $existingClassString = $node->getAttribute('class');
+        $existingClasses     = explode(' ', $existingClassString);
+        if (($key = array_search($className, $existingClasses)) !== false) {
+            unset($existingClasses[$key]);
+        }
+        if (count($existingClasses)) {
+            $node->setAttribute('class', implode(' ', $existingClasses));
+        } else {
+            $node->removeAttribute('class');
+        }
     }
 
     public static function remove(DOMNode $from, $preserveChildren = true): void
@@ -32,6 +51,27 @@ class Node
         return
             $node->nodeType === XML_TEXT_NODE &&
             in_array(trim($node->textContent), ['', Char::ZERO_WIDTH_SPACE_UTF8]);
+    }
+
+    static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement
+    {
+
+        $renamed = $node->ownerDocument->createElement($name);
+
+        if ($preserveAttributes) {
+            foreach ($node->attributes as $attribute) {
+                $renamed->setAttribute($attribute->nodeName, $attribute->nodeValue);
+            }
+        }
+
+        while ($node->firstChild) {
+            $renamed->appendChild($node->firstChild);
+        }
+
+        $node->parentNode->replaceChild($renamed, $node);
+
+        return $renamed;
+
     }
 
 }

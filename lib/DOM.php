@@ -134,6 +134,27 @@ class DOM
             return $nextSibling;
         }
 
+        if ($myTag === 'table') {
+            if ($element->firstChild) {
+                $tr          = $element->firstChild;
+                $convertToTH = true;
+                foreach ($tr->childNodes as $td) {
+                    if (!Node::hasClass($td, 'bold')) {
+                        $convertToTH = false;
+                    }
+                }
+                if ($convertToTH) {
+                    $child = $tr->firstChild;
+                    while ($child) {
+                        $td = $child;
+                        $child = $child->nextSibling;
+                        Node::removeClass($td, 'bold');
+                        Node::changeTag($td, 'th');
+                    }
+                }
+            }
+        }
+
         if ($myTag === 'dl') {
             if ($element->previousSibling && $element->previousSibling->nodeType === XML_ELEMENT_NODE && $element->previousSibling->tagName === 'dl') {
                 if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) { // matching indent level
