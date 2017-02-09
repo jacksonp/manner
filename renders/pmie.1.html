@@ -186,10 +186,10 @@ otherwise -&gt;
   <p>Expression evaluation follows the law of ``least surprises''. Where performance metrics have the semantics of a counter, <strong>pmie</strong> will automatically convert to a rate based upon consecutive samples and the time interval between these samples. All numeric expressions are evaluated in double precision, and where appropriate, automatically scaled into canonical units of ``bytes'', ``seconds'' and ``counts''.
   <p>A <strong>rule</strong> is a special form of expression that specifies a condition or logical expression, a special operator (<strong>-&gt;</strong>) and actions to be performed when the condition is found to be true.
   <p>The following table summarizes the basic <strong>pmie</strong> operators:
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="c">Operators
-      <td class="c">Explanation
+      <td class="center">Operators
+      <td class="center">Explanation
     <tr>
       <td class="f(CW)">+ - * /
       <td>Arithmetic
@@ -218,11 +218,11 @@ otherwise -&gt;
   <p>All operators are supported for numeric-valued operands and expressions. For string-valued operands, namely literal string constants enclosed in double quotes or metrics with a data type of string (<strong>PM_TYPE_STRING</strong>), <strong>only</strong> the operators <strong>==</strong> and <strong>!=</strong> are supported.
   <p>The <code><strong>rate</strong></code> and <code><strong>instant</strong></code> operators are the logical inverse of one another, so an arithmetic expression <em>expr</em> is equal to <code><strong>rate instant</strong></code> <em>expr</em>. The more useful cases involve using <code><strong>rate</strong></code> with a metric that is not a counter to determine the rate of change over time or <code><strong>instant</strong></code> with a metric that is a counter to determine if the current value is above or below some threshold.
   <p>Aggregate operators may be used to aggregate or summarize along one dimension of a set-valued expression. The following aggregate operators map from a logical expression to a logical expression of lower dimension.
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="cw(2.4i)">Operators
-      <td class="c">Type
-      <td class="cw(2.4i)">Explanation
+      <td class="center w(2.4i)">Operators
+      <td class="center">Type
+      <td class="center w(2.4i)">Explanation
     <tr class="border-bottom">
       <td class="f(C) bold">some_inst<br>
       some_host<br>
@@ -243,10 +243,10 @@ otherwise -&gt;
       <td>True if at least <em>N</em> percent of set members are true in the associated dimension
   </table>
   <p>The following instantial operators may be used to filter or limit a set-valued logical expression, based on regular expression matching of instance names. The logical expression must be a set involving the dimension of instances, and the regular expression is of the form used by <strong>egrep</strong>(1) or the Extended Regular Expressions of <strong>regcomp</strong>(3).
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="c">Operators
-      <td class="cw(4i)">Explanation
+      <td class="center">Operators
+      <td class="center w(4i)">Explanation
     <tr class="border-bottom">
       <td class="f(C) bold">match_inst
       <td>For each value of the logical expression that is ``true'', the result is ``true'' if the associated instance name matches the regular expression. Otherwise the result is ``false''.
@@ -257,11 +257,11 @@ otherwise -&gt;
   <p>For example, the expression below will be ``true'' for disks attached to controllers 2 or 3 performing more than 20 operations per second:
   <pre>match_inst "^dks[23]d" disk.dev.total &gt; 20;</pre>
   <p>The following aggregate operators map from an arithmetic expression to an arithmetic expression of lower dimension.
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="cw(2.4i)">Operators
-      <td class="c">Type
-      <td class="cw(2.4i)">Explanation
+      <td class="center w(2.4i)">Operators
+      <td class="center">Type
+      <td class="center w(2.4i)">Explanation
     <tr class="border-bottom">
       <td class="f(C) bold">min_inst<br>
       min_host<br>
@@ -289,10 +289,10 @@ otherwise -&gt;
   </table>
   <p>The aggregate operators <code>count_inst</code>, <code>count_host</code> and <code>count_sample</code> map from a logical expression to an arithmetic expression of lower dimension by counting the number of set members for which the expression is true in the associated dimension.
   <p>For action rules, the following actions are defined:
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="c">Operators
-      <td class="c">Explanation
+      <td class="center">Operators
+      <td class="center">Explanation
     <tr>
       <td class="f(C) bold">alarm
       <td>Raise a visible alarm with <strong>xconfirm</strong>(1)
@@ -340,123 +340,123 @@ otherwise -&gt;
   <h2>BOOLEAN EXPRESSIONS</h2>
   <p><strong>pmie</strong> expressions that have the semantics of a Boolean, e.g. <code>foo.bar &gt; 10</code> or <code><strong>some_inst</strong></code> <code>( my.table &lt; 0 )</code> are assigned the values <code><strong>true</strong></code> or <code><strong>false</strong></code> or <code><strong>unknown</strong></code>. A value is <code><strong>unknown</strong></code> if one or more of the underlying metric values is unavailable, e.g. <strong>pmcd</strong>(1) on the host cannot be contacted, the metric is not in the PCP archive, no values are currently available, insufficient values have been fetched to allow a rate converted value to be computed or insufficient values have been fetched to instantiate the required number of samples in the temporal domain.
   <p>Boolean operators follow the normal rules of Kleene logic (aka 3-valued logic) when combining values that include <code><strong>unknown</strong></code>:
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr>
-      <td class="c">A <code><strong>and</strong></code> B
-      <td class="sc" colspan="3">B
+      <td class="center s">A <code><strong>and</strong></code> B
+      <td class="center s s">B
     <tr>
-      <td class="^">
-      <td class="sc" colspan="3">
+      <td class="^ s">
+      <td class="center s s">
         <hr>
     <tr class="border-bottom">
-      <td class="^">
-      <td class="sccc"><code><strong>true</strong></code>
-      <td><code><strong>false</strong></code>
-      <td><code><strong>unknown</strong></code>
+      <td class="^ s">
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
     <tr>
-      <td class="c">A
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
-    <tr>
-      <td class="^">
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
+      <td class="center">A
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
     <tr>
       <td class="^">
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-    <tr>
-      <td class="^">
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
     <tr>
       <td class="^">
-      <td class="c"><code><strong>unknown</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+    <tr>
+      <td class="^">
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+    <tr>
+      <td class="^">
+      <td class="center"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
   </table>
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr>
-      <td class="c">A <code><strong>or</strong></code> B
-      <td class="sc" colspan="3">B
+      <td class="center s">A <code><strong>or</strong></code> B
+      <td class="center s s">B
     <tr>
-      <td class="^">
-      <td class="sc" colspan="3">
+      <td class="^ s">
+      <td class="center s s">
         <hr>
     <tr class="border-bottom">
-      <td class="^">B
-      <td class="sccc"><code><strong>true</strong></code>
-      <td><code><strong>false</strong></code>
-      <td><code><strong>unknown</strong></code>
+      <td class="^ s">B
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
     <tr>
-      <td class="c">A
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-    <tr>
-      <td class="^">
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
-      <td class="c">
-        <hr>
+      <td class="center">A
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>true</strong></code>
     <tr>
       <td class="^">
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
-    <tr>
-      <td class="^">
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
-      <td class="c">
+      <td class="center">
         <hr>
     <tr>
       <td class="^">
-      <td class="c"><code><strong>unknown</strong></code>
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
+    <tr>
+      <td class="^">
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+      <td class="center">
+        <hr>
+    <tr>
+      <td class="^">
+      <td class="center"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
   </table>
-  <table class="tbl">
+  <table class="tbl box center-table">
     <tr class="border-bottom">
-      <td class="c">A
-      <td class="c"><code><strong>not</strong></code> A
+      <td class="center">A
+      <td class="center"><code><strong>not</strong></code> A
     <tr class="border-bottom">
-      <td class="c"><code><strong>true</strong></code>
-      <td class="c"><code><strong>false</strong></code>
+      <td class="center"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
     <tr class="border-bottom">
-      <td class="c"><code><strong>false</strong></code>
-      <td class="c"><code><strong>true</strong></code>
+      <td class="center"><code><strong>false</strong></code>
+      <td class="center"><code><strong>true</strong></code>
     <tr>
-      <td class="c"><code><strong>unknown</strong></code>
-      <td class="c"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
+      <td class="center"><code><strong>unknown</strong></code>
   </table>
 </section>
 <section>
