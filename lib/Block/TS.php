@@ -10,6 +10,7 @@ class Block_TS implements Block_Template
         'L',
         'N',
         'R',
+        'S',
         '^',
         '_',
         '-',
@@ -26,6 +27,7 @@ class Block_TS implements Block_Template
 
     private static function parseRowFormat(string $line): array
     {
+        $line       = ltrim($line);
         $formats    = [];
         $format     = self::getFormatChar($line, 0);
         $lineLength = mb_strlen($line);
@@ -64,7 +66,6 @@ class Block_TS implements Block_Template
 
     private static function parseRowFormats(array &$lines): ?array
     {
-
         $rowFormats  = [];
         $formatsDone = false;
         while (count($lines)) {
@@ -77,19 +78,113 @@ class Block_TS implements Block_Template
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
             }
-            if (preg_match('~^[-|_\s]+$~u', $line)) {
-                $rowFormats[] = '---';
-            } else {
-                $rowFormats[] = self::parseRowFormat($line);
-            }
-
+            $rowFormats[] = self::parseRowFormat($line);
             if ($formatsDone) {
                 break;
             }
+        }
+        return $rowFormats;
+    }
 
+    private static function addRowsFromFormats(DOMElement $table, array &$lines)
+    {
+        $rowFormats = self::parseRowFormats($lines);
+        if (is_null($rowFormats)) {
+            return null; // We hit a .TE
+        }
+        $dom           = $table->ownerDocument;
+        $skippableRows = [];
+        foreach ($rowFormats as $i => $rowFormat) {
+
+            if (preg_match('~^[-|_\s]+$~u', implode('', $rowFormat))) {
+                if ($table->lastChild) {
+                    Node::addClass($table->lastChild, 'border-bottom');
+                } else {
+                    $nextTRClass = 'border-top';
+                }
+                $skippableRows[] = $i;
+                continue;
+            }
+
+            /* @var DomElement $tr */
+            $tr = $dom->createElement('tr');
+            $tr = $table->appendChild($tr);
+
+            if (isset($nextTRClass)) {
+                Node::addClass($tr, $nextTRClass);
+                unset($nextTRClass);
+            }
+
+            for ($i = 0; $i < count($rowFormat); ++$i) {
+
+                $tdClass = $rowFormat[$i];
+
+                if (preg_match('~^\|~', $tdClass)) {
+                    if ($tr->lastChild) {
+                        Node::addClass($tr->lastChild, 'border-right');
+                    } else {
+                        $nextTDClass = 'border-left';
+                    }
+                    continue;
+                }
+
+                if (preg_match('~^S~', $tdClass)) {
+                    if ($tr->lastChild) {
+                        $prevColspan = $tr->lastChild->getAttribute('colspan');
+                        if ($prevColspan !== '') {
+                            $colspan = (int)$prevColspan + 1;
+                        } else {
+                            $colspan = 2;
+                        }
+                        $tr->lastChild->setAttribute('colspan', (string)$colspan);
+                    }
+                    continue;
+                }
+
+
+                // Ignore for now:
+                // * equal-width columns,
+                // * setting the font to Regular
+                $tdClass = str_replace(['e', 'E', 'f(R)'], '', $tdClass);
+
+                $tdClass = str_replace(['f(CW)', 'f(C)'], ' code ', $tdClass);
+
+                $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
+                if ($numReplaced > 0) {
+                    $tdClass .= ' bold';
+                }
+
+                $tdClass = Replace::preg('~^L(.*)$~', '$1', $tdClass);
+                $tdClass = Replace::preg('~^C(.*)$~', 'center $1', $tdClass);
+                $tdClass = Replace::preg('~^[RN](.*)$~', 'right-align $1', $tdClass);
+
+                /* @var DomElement $td */
+                $td = $dom->createElement('td');
+                $td = $tr->appendChild($td);
+
+                if (isset($nextTDClass)) {
+                    $tdClass .= ' ' . $nextTDClass;
+                    unset($nextTDClass);
+                }
+
+                $tdClass = trim($tdClass);
+
+                if ($tdClass === 'f') {
+                    $tdClass = '';
+                }
+
+                if (in_array($tdClass, ['-', '_'])) {
+                    $tdClass = 'border-bottom';
+                }
+
+                if (mb_strlen($tdClass) > 0) {
+                    Node::addClass($td, $tdClass);
+                }
+
+            }
         }
 
-        return $rowFormats;
+        return $skippableRows;
 
     }
 
@@ -129,13 +224,17 @@ class Block_TS implements Block_Template
             }
         }
 
-        $rowFormats = self::parseRowFormats($lines);
-        if (is_null($rowFormats)) {
-            return null; // We hit a .TE
-        }
-
+        /* @var DomElement $table */
         $table = $dom->createElement('table');
         $table->setAttribute('class', implode(' ', $tableClasses));
+
+        $skippableRows = self::addRowsFromFormats($table, $lines);
+        if (is_null($skippableRows)) {
+            return null; // We hit a .TE
+        }
+        $trailingTRPrototype = $table->lastChild->cloneNode(true);
+
+
         $tableRowNum  = 0;
         $formatRowNum = 0;
         $tr           = false;
@@ -146,16 +245,20 @@ class Block_TS implements Block_Template
         while ($request = Request::getLine($lines)) {
             array_shift($lines);
 
-            if ($request['raw_line'] === '') {
+            if ($request['raw_line'] === $columnSeparator && in_array($tableRowNum, $skippableRows)) {
+                // See e.g. 3rd table in md.4
+                continue;
+            } elseif ($request['raw_line'] === '') {
                 continue;
             } elseif (in_array($request['request'], ['TE', 'SH', 'SS'])) {
                 break;
             } elseif ($request['raw_line'] === '.T&') {
-                $rowFormats = self::parseRowFormats($lines);
-                if (is_null($rowFormats)) {
+                $skippableRows = self::addRowsFromFormats($table, $lines);
+                if (is_null($skippableRows)) {
                     return null; // We hit a .TE
                 }
-                $formatRowNum = 0;
+                $trailingTRPrototype = $table->lastChild->cloneNode(true);
+                $formatRowNum        = 0;
                 continue;
             } elseif ($request['raw_line'] === '_') {
                 if ($tr) {
@@ -172,83 +275,25 @@ class Block_TS implements Block_Template
             } elseif (!is_null($request['request']) && $request['request'] !== '') {
                 continue;
             } else {
-                $tr = $dom->createElement('tr');
 
-                if (isset($rowFormats[$formatRowNum])) {
-                    $thisRowFormat = $rowFormats[$formatRowNum];
-                    if (is_string($thisRowFormat) && $thisRowFormat === '---') {
-                        if ($table->lastChild) {
-                            $table->lastChild->setAttribute('class', 'border-bottom');
-                        } else {
-                            $tr->setAttribute('class', 'border-top');
-                        }
-                        ++$formatRowNum;
-                        $thisRowFormat = @$rowFormats[$formatRowNum];
-                    }
+                $tr = $table->childNodes->item($tableRowNum);
+                if (!$tr) {
+                    $tr = $trailingTRPrototype->cloneNode(true);
+                    $tr = $table->appendChild($tr);
                 }
 
-                $tr           = $table->appendChild($tr);
-                $cols         = explode($columnSeparator, $request['raw_line']);
-                $totalColSpan = 0;
+                if ($nextRowBold) {
+                    Node::addClass($tr, 'bold');
+                }
+
+                $cols = explode($columnSeparator, $request['raw_line']);
 
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
 
-                    $tdClass = @$thisRowFormat[$totalColSpan];
-
-                    while ($tdClass && preg_match('~^\|~', $tdClass)) {
-                        $cell = $dom->createElement('td');
-                        $cell->setAttribute('class', 'border-right');
-                        $tr->appendChild($cell);
-                        $tdClass = @$thisRowFormat[++$totalColSpan];
+                    $cell = $tr->childNodes->item($j);
+                    if (!$cell) {
+                        $cell = $tr->lastChild;
                     }
-
-                    // Ignore for now:
-                    // * equal-width columns,
-                    // * setting the font to Regular
-                    $tdClass = str_replace(['e', 'E', 'f(R)'], '', $tdClass);
-
-                    $tdClass = str_replace(['f(CW)'], ' code ', $tdClass);
-
-                    $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
-                    if ($nextRowBold) {
-                        $bold = true;
-                    } else {
-                        $bold = $numReplaced > 0;
-                    }
-
-                    /* @var DomElement $cell */
-                    if ($tableRowNum === 0 && $bold) {
-                        $cell = $dom->createElement('th');
-                    } else {
-                        $cell = $dom->createElement('td');
-                        if ($bold) {
-                            $tdClass = trim($tdClass . ' bold');
-                        }
-                    }
-
-                    $tdClass = Replace::preg('~^L(.*)$~', '$1', $tdClass);
-                    $tdClass = Replace::preg('~^C(.*)$~', 'center $1', $tdClass);
-                    $tdClass = Replace::preg('~^[RN](.*)$~', 'right-align $1', $tdClass);
-                    $tdClass = trim($tdClass);
-
-                    if ($tdClass === 'f') {
-                        $tdClass = '';
-                    }
-
-                    if (mb_strlen($tdClass) > 0) {
-                        $cell->setAttribute('class', $tdClass);
-                    }
-                    $thisColspan = 1;
-                    while (in_array(@$thisRowFormat[$totalColSpan + $thisColspan + 1],
-                        ['s', 'S'])) { // While we span right
-                        ++$thisColspan;
-                    }
-                    if ($thisColspan > 1) {
-                        $cell->setAttribute('colspan', (string)$thisColspan);
-                    }
-                    $totalColSpan += $thisColspan;
-
-                    $cell = $tr->appendChild($cell);
 
                     $tdContents = $cols[$j];
 
