@@ -13,6 +13,7 @@ class Roff_Skipped
         'cu', // Continuous underline in nroff, like .ul in troff.
         'defcolor', // Define color, see https://www.gnu.org/software/groff/manual/html_node/Colors.html
         'em', // .em macro: The macro is run after the end of input.
+        'ec', // Sets/resets the escape character, only ever used to reset after not being changed in body of man pages.
         'eo', // Turn off escape character mechanism.
         'ev',  // Switch to previous environment and pop it off the stack.
         'evc', // Copy the contents of environment env to the current environment. No pushing or popping.
@@ -97,23 +98,9 @@ class Roff_Skipped
         'LO',
     ];
 
-    static function skip(array $request): bool
+    static function skip(string $requestName): bool
     {
-
-        $skipLines = [
-            // Skip stray .ec with no arguments (but not .ec with arguments, in case empty .ec is there to revert).
-            '.ec',
-            // Empty requests:
-            '...',
-            '\\.',
-            '.rr rF',
-        ];
-
-        return
-            in_array(rtrim($request['raw_line']), $skipLines) ||
-            in_array($request['request'], self::requests) ||
-            in_array($request['request'], self::nonStandardRequests);
-
+        return in_array($requestName, self::requests) || in_array($requestName, self::nonStandardRequests);
     }
 
 }

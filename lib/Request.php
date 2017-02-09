@@ -131,7 +131,7 @@ class Request
                 $return['arguments']      = Request::parseArguments($return['arg_string']);
             }
 
-            if (Roff_Skipped::skip($return)) {
+            if (Roff_Skipped::skip($return['request'])) {
                 array_shift($lines);
                 return self::getLine($lines, $callerArguments);
             }
