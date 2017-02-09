@@ -175,7 +175,7 @@ class Block_TS implements Block_Template
                 // Ignore for now:
                 // * equal-width columns,
                 // * setting the font to Regular
-                $tdClass = str_replace(['e', 'E', 'f(R)'], '', $tdClass);
+                $tdClass = str_replace(['e', 'E', 'f(R)', 'f()'], '', $tdClass);
 
                 $tdClass = str_replace(['f(CW)', 'f(C)'], ' code ', $tdClass);
 
@@ -192,6 +192,10 @@ class Block_TS implements Block_Template
                 $tdClass = Replace::preg('~^L(.*)$~', '$1', $tdClass);
                 $tdClass = Replace::preg('~^C(.*)$~', 'center $1', $tdClass);
                 $tdClass = Replace::preg('~^[RN](.*)$~', 'right-align $1', $tdClass);
+                // A number suffix on a key character is interpreted as a column separation in en units (multiplied in
+                // proportion if the expand option is on – in case of overfull tables this might be zero). Default
+                // separation is 3n.
+                $tdClass = Replace::preg('~^\d+(.*)$~', '$1', $tdClass);
 
                 /* @var DomElement $td */
                 $td = $dom->createElement('td');
