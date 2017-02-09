@@ -77,9 +77,7 @@ class Block_TS implements Block_Template
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
             }
-            // Ignore vertical bars for now:
-            $line = str_replace('|', ' ', $line);
-            if (preg_match('~^[-_\s]+$~u', $line)) {
+            if (preg_match('~^[-|_\s]+$~u', $line)) {
                 $rowFormats[] = '---';
             } else {
                 $rowFormats[] = self::parseRowFormat($line);
@@ -196,6 +194,13 @@ class Block_TS implements Block_Template
                 for ($j = 0; $j < count($cols); ++$j) { // NB: $cols can grow more elements with T{...
 
                     $tdClass = @$thisRowFormat[$totalColSpan];
+
+                    while ($tdClass && preg_match('~^\|~', $tdClass)) {
+                        $cell = $dom->createElement('td');
+                        $cell->setAttribute('class', 'border-right');
+                        $tr->appendChild($cell);
+                        $tdClass = @$thisRowFormat[++$totalColSpan];
+                    }
 
                     // Ignore for now:
                     // * equal-width columns,
