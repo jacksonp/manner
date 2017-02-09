@@ -107,7 +107,7 @@ class Block_TS implements Block_Template
                 // Do nothing for now - see sox.1
             } elseif (in_array($request['raw_line'], ['.B'])) {
                 $nextRowBold = true;
-            } elseif (!is_null($request['request'])) {
+            } elseif (!is_null($request['request']) && $request['request'] !== '') {
                 continue;
             } else {
                 $tr           = $dom->createElement('tr');

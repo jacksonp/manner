@@ -4,12 +4,7 @@ declare(strict_types = 1);
 class Request
 {
 
-    static function isEmptyRequest(string $line)
-    {
-        return in_array(rtrim($line), ['.', '\'', '\\.']);
-    }
-
-    private static function parseArguments(string $argString)
+    private static function parseArguments(string $argString): array
     {
 
         // sometimes get double spaces, see e.g. samba_selinux.8:
@@ -68,7 +63,7 @@ class Request
 
     }
 
-    public static function massageLine(string $macroLine)
+    public static function massageLine(string $macroLine): string
     {
         return str_replace('\\\\', '\\', $macroLine);
     }
@@ -79,7 +74,7 @@ class Request
         $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
-            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
             $line, $matches)
         ) {
             $return['name'] = $matches[1];
@@ -126,7 +121,7 @@ class Request
         $return['raw_line'] = Roff_String::substitute($return['raw_line']);
 
         if (preg_match(
-            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]+)((?:\s+|\\\\).*)?$~ui',
+            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
             $return['raw_line'], $matches)
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
@@ -210,8 +205,6 @@ class Request
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             $return['request'] = 'sp';
             $return['class']   = 'Inline_VerticalSpace';
-        } elseif (self::isEmptyRequest($line)) {
-            $return['class'] = 'Request_Skippable';
         } elseif (!is_null($request['request'])) {
             $class = $man->getRequestClass($request['request']);
             if ($class !== false) {
@@ -219,10 +212,13 @@ class Request
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $line);
-            } elseif (preg_match('~^[^' . preg_quote($man->control_char, '~') . '].*\w~u', $line)) {
-                // Lenient with things starting with ' or \. if there's a "word" char later on in the line.
+            } elseif (preg_match('~^(' . preg_quote($man->control_char_2, '~') . '.*\w|\\\\\..)~u', $line)) {
+                // Lenient with things starting with:
+                // \. if there's anything after it, and
+                // '  if there's a "word" char after it.
                 // TODO: eventually just skip requests we don't know, whether they start with . or '
-                $return['class'] = 'Block_Text';
+                $return['request'] = null;
+                $return['class']   = 'Block_Text';
             } else {
                 $return['class'] = 'Request_Skippable';
             }
