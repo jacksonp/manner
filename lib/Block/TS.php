@@ -147,9 +147,9 @@ class Block_TS implements Block_Template
 
             for ($i = 0; $i < count($rowFormat); ++$i) {
 
-                $tdClass = $rowFormat[$i];
+                $tdFormat = $rowFormat[$i];
 
-                if (preg_match('~^\|~', $tdClass)) {
+                if (preg_match('~^\|~', $tdFormat)) {
                     if ($tr->lastChild) {
                         Node::addClass($tr->lastChild, 'border-right');
                     } else {
@@ -158,7 +158,7 @@ class Block_TS implements Block_Template
                     continue;
                 }
 
-                if (preg_match('~^S~', $tdClass)) {
+                if (preg_match('~^S~', $tdFormat)) {
                     if ($tr->lastChild) {
                         $prevColspan = $tr->lastChild->getAttribute('colspan');
                         if ($prevColspan !== '') {
@@ -172,52 +172,57 @@ class Block_TS implements Block_Template
                 }
 
 
-                // Ignore for now:
-                // * equal-width columns,
-                // * setting the font to Regular
-                $tdClass = str_replace(['e', 'E', 'f(R)', 'f()'], '', $tdClass);
-
-                $tdClass = str_replace(['f(CW)', 'f(C)'], ' code ', $tdClass);
-
-                $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
-                if ($numReplaced > 0) {
-                    $tdClass .= ' bold';
-                }
-
-                $tdClass = Replace::preg('~[fF]?[iI]~u', '', $tdClass, -1, $numReplaced);
-                if ($numReplaced > 0) {
-                    $tdClass .= ' italic';
-                }
-
-                $tdClass = Replace::preg('~^L(.*)$~', '$1', $tdClass);
-                $tdClass = Replace::preg('~^C(.*)$~', 'center $1', $tdClass);
-                $tdClass = Replace::preg('~^[RN](.*)$~', 'right-align $1', $tdClass);
-                // A number suffix on a key character is interpreted as a column separation in en units (multiplied in
-                // proportion if the expand option is on – in case of overfull tables this might be zero). Default
-                // separation is 3n.
-                $tdClass = Replace::preg('~^\d+(.*)$~', '$1', $tdClass);
-
                 /* @var DomElement $td */
                 $td = $dom->createElement('td');
                 $td = $tr->appendChild($td);
 
+                // Ignore for now:
+                // * equal-width columns,
+                // * setting the font to Regular
+                $tdFormat = str_replace(['e', 'E', 'f(R)'], '', $tdFormat);
+
+                $tdFormat = Replace::pregCallback('~^([LCRN])~', function ($matches) use ($td) {
+                    switch ($matches[1]) {
+                        case 'C':
+                            Node::addClass($td, 'center');
+                            break;
+                        case 'R':
+                        case 'N':
+                            Node::addClass($td, 'right-align');
+                            break;
+                        default:
+                            break;
+                    }
+                    return '';
+                }, $tdFormat);
+
+                // A number suffix on a key character is interpreted as a column separation in en units (multiplied in
+                // proportion if the expand option is on – in case of overfull tables this might be zero). Default
+                // separation is 3n.
+                $tdFormat = Replace::preg('~^\d+(.*)$~', '$1', $tdFormat);
+
+                $tdFormat = Replace::preg('~([fF]\()?[bB]\)?~u', '', $tdFormat, -1, $numReplaced);
+                if ($numReplaced > 0) {
+                    Node::addClass($td, 'bold');
+                }
+
+                $tdFormat = Replace::preg('~([fF]\()?[cC][wW]?\)?~u', '', $tdFormat, -1, $numReplaced);
+                if ($numReplaced > 0) {
+                    Node::addClass($td, 'code');
+                }
+
+                $tdFormat = Replace::preg('~([fF]\()?[iI]\)?~u', '', $tdFormat, -1, $numReplaced);
+                if ($numReplaced > 0) {
+                    Node::addClass($td, 'italic');
+                }
+
                 if (isset($nextTDClass)) {
-                    $tdClass .= ' ' . $nextTDClass;
+                    Node::addClass($td, $nextTDClass);
                     unset($nextTDClass);
                 }
 
-                $tdClass = trim($tdClass);
-
-                if ($tdClass === 'f') {
-                    $tdClass = '';
-                }
-
-                if (in_array($tdClass, ['-', '_'])) {
-                    $tdClass = 'border-bottom';
-                }
-
-                if (mb_strlen($tdClass) > 0) {
-                    Node::addClass($td, $tdClass);
+                if (in_array($tdFormat, ['-', '_'])) {
+                    Node::addClass($td, 'border-bottom');
                 }
 
             }
