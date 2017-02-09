@@ -27,7 +27,7 @@ class Inline_LinkEnd implements Block_Template
             if ($href) {
                 $anchorNode->setAttribute('href', $href);
             } else {
-                DOM::removeNode($anchorNode);
+                Node::remove($anchorNode);
                 $removed = true;
             }
         }

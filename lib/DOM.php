@@ -20,27 +20,6 @@ class DOM
         }
     }
 
-    static function removeNode(DOMNode $from, $preserveChildren = true): void
-    {
-        if ($preserveChildren) {
-            $sibling = $from->firstChild;
-            if ($sibling) { // ->firstChild is null is there isn't one
-                do {
-                    $next = $sibling->nextSibling;
-                    $from->parentNode->insertBefore($sibling, $from);
-                } while ($sibling = $next);
-            }
-        }
-        $from->parentNode->removeChild($from);
-    }
-
-    private static function isEmptyTextNode(DOMNode $node): bool
-    {
-        return
-            $node->nodeType === XML_TEXT_NODE &&
-            in_array(trim($node->textContent), ['', Char::ZERO_WIDTH_SPACE_UTF8]);
-    }
-
     /**
      * @param DOMElement $element
      * @return DOMElement|DOMNode|null The element we should look at next.
@@ -62,7 +41,7 @@ class DOM
         while (
             $firstChild = $element->firstChild and
             (
-                ($myTag !== 'pre' && self::isEmptyTextNode($firstChild)) ||
+                ($myTag !== 'pre' && Node::isTextAndEmpty($firstChild)) ||
                 ($firstChild->nodeType === XML_ELEMENT_NODE && $firstChild->tagName === 'br')
             )
         ) {
@@ -72,7 +51,7 @@ class DOM
         while (
             $previousSibling = $element->previousSibling and
             (
-                self::isEmptyTextNode($previousSibling) ||
+                Node::isTextAndEmpty($previousSibling) ||
                 ($previousSibling->nodeType === XML_ELEMENT_NODE && $previousSibling->tagName === 'br')
             )
         ) {
@@ -82,7 +61,7 @@ class DOM
         while (
             $nextSibling = $element->nextSibling and
             (
-                self::isEmptyTextNode($nextSibling) ||
+                Node::isTextAndEmpty($nextSibling) ||
                 ($nextSibling->nodeType === XML_ELEMENT_NODE && $nextSibling->tagName === 'br')
             )
         ) {
@@ -92,7 +71,7 @@ class DOM
         while (
             $lastChild = $element->lastChild and
             (
-                self::isEmptyTextNode($lastChild) ||
+                Node::isTextAndEmpty($lastChild) ||
                 ($lastChild->nodeType === XML_ELEMENT_NODE && $lastChild->tagName === 'br')
             )
         ) {
@@ -107,14 +86,14 @@ class DOM
             if ($myTag === 'div' && in_array($firstChild->tagName, ['dl'])) {
                 self::setIndentClass($firstChild, $element);
                 $nextSibling = $element->nextSibling;
-                self::removeNode($element);
+                Node::remove($element);
                 return $nextSibling;
             }
 
             // Could sum indents if both elements have indent-X
             if ($myTag === 'div' && $firstChild->tagName === 'div') {
                 self::setIndentClass($element, $firstChild);
-                self::removeNode($firstChild);
+                Node::remove($firstChild);
             }
 
         }
@@ -128,7 +107,7 @@ class DOM
 
         if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
             $nextSibling = $element->nextSibling;
-            self::removeNode($element);
+            Node::remove($element);
             return $nextSibling;
         }
 
@@ -137,14 +116,14 @@ class DOM
                 self::setIndentClass($element->parentNode, $element);
             }
             $nextSibling = $element->nextSibling;
-            self::removeNode($element);
+            Node::remove($element);
             return $nextSibling;
         }
 
         if ($myTag === 'div' && $element->getAttribute('class') === 'indent') {
             if (in_array($element->parentNode->tagName, ['dd'])) {
                 $nextSibling = $element->nextSibling;
-                self::removeNode($element);
+                Node::remove($element);
                 return $nextSibling;
             }
         }
