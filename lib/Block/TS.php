@@ -37,6 +37,34 @@ class Block_TS implements Block_Template
                 $formats[] = trim($format);
                 $format    = '';
             }
+
+            if (in_array($char, ['w', 'W'])) {
+                // We currently skip - but what we should do:
+                // Minimum column width value. Must be followed either by a troff(1) width expression in parentheses or
+                // a unitless integer. If no unit is given, en units are used. Also used as the default line length for
+                // included text blocks. If used multiple times to specify the width for a particular column, the last
+                // entry takes effect.
+                $charAfterW = self::getFormatChar($line, ++$i);
+                if ($charAfterW === '(') {
+                    $opening = 1;
+                    while ($i < $lineLength) {
+                        $nextChar = self::getFormatChar($line, ++$i);
+                        if ($nextChar === '(') {
+                            ++$opening;
+                        } elseif ($nextChar === ')') {
+                            --$opening;
+                            if ($opening === 0) {
+                                continue 2;
+                            }
+                        }
+                    }
+                }
+                while (preg_match('~\d~', self::getFormatChar($line, $i + 1))) {
+                    ++$i;
+                }
+                continue;
+            }
+
             $format .= $char;
             if (in_array($char, ['f', 'F'])) {
                 // Either of these specifiers may be followed by a font name (either one or two characters long), font
@@ -68,12 +96,14 @@ class Block_TS implements Block_Template
     {
         $rowFormats  = [];
         $formatsDone = false;
+        $man         = Man::instance();
         while (count($lines)) {
             $request = Request::getLine($lines);
-            $line    = array_shift($lines);
+            array_shift($lines);
             if ($request['request'] === 'TE') {
                 return null; // Format is garbage, skip content.
             }
+            $line = $man->applyAllReplacements($request['raw_line']);
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
                 $formatsDone = true;
@@ -152,6 +182,11 @@ class Block_TS implements Block_Template
                 $tdClass = Replace::preg('~[fF]?[bB]~u', '', $tdClass, -1, $numReplaced);
                 if ($numReplaced > 0) {
                     $tdClass .= ' bold';
+                }
+
+                $tdClass = Replace::preg('~[fF]?[iI]~u', '', $tdClass, -1, $numReplaced);
+                if ($numReplaced > 0) {
+                    $tdClass .= ' italic';
                 }
 
                 $tdClass = Replace::preg('~^L(.*)$~', '$1', $tdClass);
