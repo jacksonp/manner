@@ -84,30 +84,6 @@ class TextContent
 
         }
 
-        /*
-        if (preg_match('~^(.*?)\\\\(d|u)(.+?)\\\\(d|u)(.*)$~', $line, $matches)) {
-            if (mb_strlen($matches[1]) > 0) {
-                self::interpretAndAppendText($parentNode, $matches[1]);
-            }
-
-            if ($matches[2] === 'u' && $matches[4] === 'd') {
-                $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
-            } elseif ($matches[2] === 'd' && $matches[4] === 'u') {
-                $newChildNode = $parentNode->appendChild($dom->createElement('sub'));
-            } else {
-                throw new Exception('Cannot handle two consecutive \\' . $matches[2] . ' in ' . $line);
-                // Cases seen are garbage man pages
-            }
-            self::interpretAndAppendText($newChildNode, $matches[3]);
-
-            if (mb_strlen($matches[5]) > 0) {
-                self::interpretAndAppendText($parentNode, $matches[5]);
-            }
-
-            return;
-        }
-        */
-
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;
