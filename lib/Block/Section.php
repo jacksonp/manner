@@ -48,7 +48,11 @@ class Block_Section implements Block_Template
         }
 
         if ($headingNode->lastChild) {
-            $headingNode->lastChild->textContent = Util::rtrim($headingNode->lastChild->textContent);
+            // We don't want empty sections with &nbsp; as heading. See e.g. ntptime.8
+            $headingNode->lastChild->textContent = rtrim(
+                $headingNode->lastChild->textContent,
+                " \t\n\r\0\x0B" . html_entity_decode('&nbsp;')
+            );
         }
 
         // Skip sections with empty headings
