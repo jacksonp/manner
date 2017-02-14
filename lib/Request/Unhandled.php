@@ -38,7 +38,6 @@ class Request_Unhandled implements Block_Template
         'ecr',
         'ecs',
         'fc',
-        'ftr',
         'fzoom',
         'gcolor',
         'hcode',

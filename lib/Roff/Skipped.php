@@ -25,6 +25,7 @@ class Roff_Skipped
         'fp', // mount font at position
         'fspecial', // Reset list of special fonts for font to be empty.
         'fschar', // Define fallback character (or glyph) c for font f
+        'ftr', // Translate font1 to font2.
         'hc', // Set up additional hyphenation indicator character c.
         'hw', // List of words with exceptional hyphenation.
         'hy', // "Switch to hyphenation mode N."
