@@ -36,10 +36,9 @@ class Roff_de implements Roff_Template
             throw new Exception('Macro definition for "' . $matches[1] . '" does not follow expected pattern.');
         }
 
-        if (in_array($newMacro, ['SS', 'FONT', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE'])) {
+        if (in_array($newMacro, ['SS', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE'])) {
             // Do nothing: don't override these macros.
             // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
-            // TODO: .FONT see hack in Preprocessor::strip()
             // .URL: we can do a better job with the semantic info.
         } else {
             Man::instance()->addMacro($newMacro, $macroLines);

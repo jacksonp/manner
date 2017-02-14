@@ -104,6 +104,7 @@ class Man
             'char' => 'Roff_Char',
             'if' => 'Roff_Condition',
             'ie' => 'Roff_Condition',
+            'while' => 'Roff_Loop',
             'de' => 'Roff_de',
             'de1' => 'Roff_de',
             'di' => 'Roff_di',
@@ -111,6 +112,8 @@ class Man
             'nr' => 'Roff_Register',
             'ds' => 'Roff_String',
             'ds1' => 'Roff_String',
+            'as' => 'Roff_as',
+            'as1' => 'Roff_as',
             'als' => 'Roff_Alias',
             'tr' => 'Roff_Translation',
             'rn' => 'Roff_Rename',
@@ -232,6 +235,11 @@ class Man
     public function addString(string $string, string $value)
     {
         $this->strings[$string] = $value;
+    }
+
+    public function getString(string $name): string
+    {
+        return $this->strings[$name] ?: '';
     }
 
     public function getStrings(): array

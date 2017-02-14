@@ -7,9 +7,19 @@ class Roff_Macro
     static function applyReplacements(string $string, array &$arguments, bool $fullLine = false): string
     {
 
-        if ($fullLine && Request::peepAt($string)['name'] === 'shift') {
-            array_shift($arguments);
-            return '.';
+        if ($fullLine) {
+            $request = Request::peepAt($string);
+            if ($request['name'] === 'shift') {
+                $argsToShift = 1;
+                if (preg_match('~^\d+$~', $request['raw_arg_string'])) {
+                    $argsToShift = (int)$request['raw_arg_string'];
+                }
+                for ($i = 0; $i < $argsToShift; ++$i) {
+                    array_shift($arguments);
+                }
+                Man::instance()->setRegister('.$', (string)count($arguments));
+                return '.';
+            }
         }
 
         // \$x - Macro or string argument with one-digit number x in the range 1 to 9.

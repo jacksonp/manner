@@ -5,8 +5,9 @@ class Roff_Condition implements Roff_Template
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
-    // For the last bit, see http://stackoverflow.com/a/366532
-    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
+    // For the nested parens bit, see http://stackoverflow.com/a/3851098
+    // For the last quotes bit, see http://stackoverflow.com/a/366532
+    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
 
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
@@ -98,7 +99,7 @@ class Roff_Condition implements Roff_Template
 
     }
 
-    private static function test(string $condition, $macroArguments): bool
+    static function test(string $condition, $macroArguments): bool
     {
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
@@ -188,7 +189,7 @@ class Roff_Condition implements Roff_Template
 
     }
 
-    private static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
+    static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
     {
 
         $foundEnd         = false;
