@@ -7,9 +7,6 @@ class Request
     private static function parseArguments(string $argString): array
     {
 
-        // sometimes get double spaces, see e.g. samba_selinux.8:
-        $argString = Replace::preg('~(?<!\\\\) +~', ' ', $argString);
-
         $argString = ltrim($argString);
 
         if ($argString === '') {
@@ -28,6 +25,9 @@ class Request
                 // Take this char and the next
                 $thisArg .= $char . mb_substr($argString, ++$i, 1);
             } elseif ($char === ' ' && !$inQuotes) {
+                if ($lastChar === ' ') {
+                    continue; // ignore double spaces outside quotes
+                }
                 // New arg
                 $args[]  = $thisArg;
                 $thisArg = '';
