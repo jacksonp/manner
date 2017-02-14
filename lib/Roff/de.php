@@ -22,8 +22,9 @@ class Roff_de implements Roff_Template
         // Request::getLine()
         while (count($lines)) {
             $line = array_shift($lines);
+            $request = Request::peepAt($line);
             if (
-                rtrim($line) === '..' ||
+                $request['name'] === '.' ||
                 ($newMacro === 'P!' && $line === '.') // work around bug in Xm*.3 man pages
             ) {
                 $foundEnd = true;
