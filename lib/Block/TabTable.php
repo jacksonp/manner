@@ -32,6 +32,7 @@ class Block_TabTable implements Block_Template
     {
         return
             count($lines) > 2 &&
+            !is_null($lines[0]) && !is_null($lines[1]) &&
             !in_array(mb_substr($lines[0], 0, 1), ['.', '\'']) &&
             self::lineContainsTab($lines[0]) &&
             (

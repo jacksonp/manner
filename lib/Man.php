@@ -117,6 +117,7 @@ class Man
             'als' => 'Roff_Alias',
             'tr' => 'Roff_Translation',
             'rn' => 'Roff_Rename',
+            'return' => 'Roff_return',
         ];
 
         $this->blockClasses = [

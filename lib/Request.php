@@ -100,6 +100,12 @@ class Request
             return null;
         }
 
+        if (is_null($lines[0])) {
+            // We hit an end of macro marker.
+            array_shift($lines);
+            return self::getLine($lines, $callerArguments);
+        }
+
         $return = [
             'request' => null,
             'raw_line' => $lines[0],
@@ -155,7 +161,7 @@ class Request
                     }
                     array_shift($macroLines);
                 }
-
+                $evaluatedMacroLines[] = null; // Marker for end of macro
                 array_splice($lines, 0, 1, $evaluatedMacroLines);
                 return self::getLine($lines, $callerArguments);
             }
