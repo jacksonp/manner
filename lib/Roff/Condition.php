@@ -153,10 +153,15 @@ class Roff_Condition implements Roff_Template
             return false; // No colours for now.
         }
 
-        if (preg_match('~^[Fc]~u', $condition)) {
+        if (preg_match('~^F\s?(.*)$~u', $condition, $matches)) {
             // Ffont: True if there exists a font named font.
+            // Check below is based on contents of /usr/share/groff/1.22.3/font/devascii/
+            return in_array($matches[1], ['R', 'B', 'I', 'BI']);
+        }
+
+        if (preg_match('~^c~u', $condition)) {
             // cch: True if there is a glyph ch available.
-            return true; // Assume we have all the glyphs and fonts
+            return true; // Assume we have all the glyphs
         }
 
         if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
