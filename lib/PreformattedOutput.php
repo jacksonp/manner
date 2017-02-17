@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-class Block_Preformatted
+class PreformattedOutput
 {
 
     private static $addIndent = 0;

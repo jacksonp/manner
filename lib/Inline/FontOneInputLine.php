@@ -73,7 +73,7 @@ class Inline_FontOneInputLine implements Block_Template
         } else {
             TextContent::interpretAndAppendText($node, implode(' ', $request['arguments']));
             if ($pre = $parentNode->ancestor('pre')) {
-                Block_Preformatted::endInputLine($pre);
+                PreformattedOutput::endInputLine($pre);
             }
         }
 

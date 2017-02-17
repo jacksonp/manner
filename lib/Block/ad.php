@@ -15,7 +15,7 @@ class Block_ad implements Block_Template
         array_shift($lines);
 
         if (in_array($request['arg_string'], ['', 'n', 'b']) && $parentNode->tagName === 'pre') {
-            Block_Preformatted::reset();
+            PreformattedOutput::reset();
             return $parentNode->parentNode;
         } else {
             return null;

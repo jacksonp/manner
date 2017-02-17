@@ -34,7 +34,7 @@ class Roff
 
             $request = Request::getNextClass($lines);
 
-            if (Block_Preformatted::handle($parentNode, $lines, $request)) {
+            if (PreformattedOutput::handle($parentNode, $lines, $request)) {
                 // Do nothing, but don't continue; as need $stopOnContent check below.
             } else {
                 $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
