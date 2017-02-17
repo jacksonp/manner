@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-class Block_Vb implements Block_Template
+class Block_Preformatted implements Block_Template
 {
 
     static function checkAppend(
@@ -14,11 +14,16 @@ class Block_Vb implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->isOrInTag('pre')) {
+        if ($parentNode->isOrInTag('pre') || !count($lines)) {
             return null;
         }
 
-        $parentNode = Blocks::getBlockContainerParent($parentNode);
+        if (Request::peepAt($lines[0])['name'] === 'PP') {
+            array_shift($lines);
+            $parentNode = Blocks::getBlockContainerParent($parentNode, true);
+        } else {
+            $parentNode = Blocks::getBlockContainerParent($parentNode);
+        }
 
         /* @var DomElement $pre */
         $pre = $parentNode->ownerDocument->createElement('pre');

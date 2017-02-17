@@ -68,9 +68,13 @@ class Request
         return str_replace('\\\\', '\\', $macroLine);
     }
 
-    public static function peepAt($line): array
+    public static function peepAt(?string $line): array
     {
         $return       = ['name' => null, 'raw_arg_string' => ''];
+        if (is_null($line)) {
+            // We hit an end of macro marker.
+            return $return;
+        }
         $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
