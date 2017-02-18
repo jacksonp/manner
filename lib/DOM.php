@@ -111,13 +111,29 @@ class DOM
             return $nextSibling;
         }
 
-        if ($myTag === 'div' && $element->parentNode->tagName === 'pre') {
-            if ($element->parentNode->childNodes->length === 1) {
-                self::setIndentClass($element->parentNode, $element);
+        if ($myTag === 'div') {
+            /*
+            if ($element->previousSibling && $element->previousSibling->nodeType === XML_ELEMENT_NODE && $element->previousSibling->tagName === 'div') {
+                if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) {
+                    $nextSibling = $element->nextSibling;
+                    $element->previousSibling->appendChild($element->ownerDocument->createElement('br'));
+                    while ($element->firstChild) {
+                        $element->previousSibling->appendChild($element->firstChild);
+                    }
+                    $element->parentNode->removeChild($element);
+                    return $nextSibling;
+                }
             }
-            $nextSibling = $element->nextSibling;
-            Node::remove($element);
-            return $nextSibling;
+            */
+
+            if ($element->parentNode->tagName === 'pre') {
+                if ($element->parentNode->childNodes->length === 1) {
+                    self::setIndentClass($element->parentNode, $element);
+                }
+                $nextSibling = $element->nextSibling;
+                Node::remove($element);
+                return $nextSibling;
+            }
         }
 
         if ($myTag === 'div' && $element->getAttribute('class') === 'indent') {
@@ -146,7 +162,7 @@ class DOM
                 if ($convertToTH) {
                     $child = $tr->firstChild;
                     while ($child) {
-                        $td = $child;
+                        $td    = $child;
                         $child = $child->nextSibling;
                         Node::removeClass($td, 'bold');
                         Node::changeTag($td, 'th');

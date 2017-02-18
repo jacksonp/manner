@@ -21,7 +21,7 @@ class Roff
                     return true;
                 }
 
-                if (in_array($request['request'], ['SH', 'SS', 'TP', 'br', 'sp', 'ne', 'PP', 'RS', 'P', 'LP'])) {
+                if (in_array($request['request'], ['SH', 'SS', 'TP', 'br', 'sp', 'ne', 'PP', 'RS', 'RE', 'P', 'LP'])) {
                     return false;
                 }
 

@@ -16,19 +16,24 @@ class Block_RS implements Block_Template
 
         $dom = $parentNode->ownerDocument;
 
+        if (count($request['arguments']) && $request['arguments'][0] === '0') {
+            if ($parentNode->tagName === 'p' && $parentNode->parentNode->tagName === 'section') {
+                $parentNode->appendChild($dom->createElement('br'));
+                return null;
+            } else {
+                $parentNode = $parentNode->ancestor('section');
+            }
+        } else {
+            $parentNode = Blocks::getBlockContainerParent($parentNode);
+        }
+
+
         $className = 'indent';
         if (count($request['arguments']) > 0) {
             $thisIndent = Roff_Unit::normalize($request['arguments'][0]);
             if ($thisIndent) { // note this filters out 0s
                 $className .= '-' . $thisIndent;
             }
-        }
-
-        $parentNode = Blocks::getBlockContainerParent($parentNode);
-
-        if ($className === 'indent' && $parentNode->tagName === 'div' && $parentNode->getAttribute('class') === 'indent') {
-            array_unshift($lines, '.br');
-            return null;
         }
 
         /* @var DomElement $div */

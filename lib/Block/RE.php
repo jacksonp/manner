@@ -14,13 +14,18 @@ class Block_RE implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->isOrInTag('div')) {
-            return $parentNode->ancestor('div')->parentNode;
-        } else {
+        $lastIndentedBlock = $parentNode->ancestor('div');
+        if (is_null($lastIndentedBlock)) {
+            // Some pages use this get out of .IP, .TP:
+            $lastIndentedBlock = $parentNode->ancestor('dl');
+        }
+
+        if (is_null($lastIndentedBlock)) {
             return null;
+        } else {
+            return $lastIndentedBlock->parentNode;
         }
 
     }
-
 
 }
