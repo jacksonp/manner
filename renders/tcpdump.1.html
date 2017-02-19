@@ -383,13 +383,9 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
   <p class="indent"><em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
   <p>Let's assume that we want to watch packets used in establishing a TCP connection. Recall that TCP uses a 3-way handshake protocol when it initializes a new connection; the connection sequence with regard to the TCP control bits is
   <div class="indent">
-    <p>1) Caller sends SYN
-  </div>
-  <div class="indent">
-    <p>2) Recipient responds with SYN, ACK
-  </div>
-  <div class="indent">
-    <p>3) Caller sends ACK
+    <p>1) Caller sends SYN<br>
+    2) Recipient responds with SYN, ACK<br>
+    3) Caller sends ACK
   </div>
   <p>Now we're interested in capturing packets that have only the SYN bit set (Step 1). Note that we don't want packets from step 2 (SYN-ACK), just a plain initial SYN. What we need is a correct filter expression for <em>tcpdump</em>.
   <p>Recall the structure of a TCP header without options:

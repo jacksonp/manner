@@ -20,6 +20,11 @@ class DOM
         }
     }
 
+    private static function isTag(?DOMNode $node, string $tag): bool
+    {
+        return $node && $node->nodeType === XML_ELEMENT_NODE && $node->tagName === $tag;
+    }
+
     /**
      * @param DOMElement $element
      * @return DOMElement|DOMNode|null The element we should look at next.
@@ -112,19 +117,23 @@ class DOM
         }
 
         if ($myTag === 'div') {
-            /*
-            if ($element->previousSibling && $element->previousSibling->nodeType === XML_ELEMENT_NODE && $element->previousSibling->tagName === 'div') {
-                if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) {
-                    $nextSibling = $element->nextSibling;
-                    $element->previousSibling->appendChild($element->ownerDocument->createElement('br'));
-                    while ($element->firstChild) {
-                        $element->previousSibling->appendChild($element->firstChild);
-                    }
-                    $element->parentNode->removeChild($element);
-                    return $nextSibling;
+
+            if (self::isTag($element->previousSibling, 'div') &&
+                $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
+                $element->childNodes->length === 1 &&
+                $element->previousSibling->childNodes->length === 1 &&
+                self::isTag($element->firstChild, 'p') &&
+                self::isTag($element->previousSibling->firstChild, 'p')
+            ) {
+                $nextSibling = $element->nextSibling;
+                $element->previousSibling->firstChild->appendChild($element->ownerDocument->createElement('br'));
+                while ($element->firstChild->firstChild) {
+                    $element->previousSibling->firstChild->appendChild($element->firstChild->firstChild);
                 }
+                $element->parentNode->removeChild($element);
+                return $nextSibling;
+
             }
-            */
 
             if ($element->parentNode->tagName === 'pre') {
                 if ($element->parentNode->childNodes->length === 1) {
