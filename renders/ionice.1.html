@@ -18,23 +18,23 @@
   <h2>DESCRIPTION</h2>
   <p>This program sets or gets the I/O scheduling class and priority for a program. If no arguments or just <strong>-p</strong> is given, <strong>ionice</strong> will query the current I/O scheduling class and priority for that process.<br>
   <br>
-  When <em>command</em> is given, <strong>ionice</strong> will run this command with the given arguments. If no <em>class</em> is specified, then <em>command</em> will be executed with the "best-effort" scheduling class. The default priority level is 4.<br>
+  When <em>command</em> is given, <strong>ionice</strong> will run this command with the given arguments. If no <em>class</em> is specified, then <em>command</em> will be executed with the "best-effort" scheduling class. &nbsp;The default priority level is 4.<br>
   <br>
   As of this writing, a process can be in one of three scheduling classes:
   <dl>
     <dt><strong>Idle</strong>
     <dd>
-      <p>A program running with idle I/O priority will only get disk time when no other program has asked for disk I/O for a defined grace period. The impact of an idle I/O process on normal system activity should be zero. This scheduling class does not take a priority argument. Presently, this scheduling class is permitted for an ordinary user (since kernel 2.6.25).
+      <p>A program running with idle I/O priority will only get disk time when no other program has asked for disk I/O for a defined grace period. &nbsp;The impact of an idle I/O process on normal system activity should be zero. &nbsp;This scheduling class does not take a priority argument. &nbsp;Presently, this scheduling class is permitted for an ordinary user (since kernel 2.6.25).
     <dt><strong>Best-effort</strong>
     <dd>
-      <p>This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. Programs running at the same best-effort priority are served in a round-robin fashion.<br>
+      <p>This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. &nbsp;Programs running at the same best-effort priority are served in a round-robin fashion.<br>
       <br>
-      Note that before kernel 2.6.26 a process that has not asked for an I/O priority formally uses "<strong>none</strong>" as scheduling class, but the I/O scheduler will treat such processes as if it were in the best-effort class. The priority within the best-effort class will be dynamically derived from the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.<br>
+      Note that before kernel 2.6.26 a process that has not asked for an I/O priority formally uses "<strong>none</strong>" as scheduling class, but the I/O scheduler will treat such processes as if it were in the best-effort class. &nbsp;The priority within the best-effort class will be dynamically derived from the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.<br>
       <br>
-      For kernels after 2.6.26 with the CFQ I/O scheduler, a process that has not asked for an I/O priority inherits its CPU scheduling class. The I/O priority is derived from the CPU nice level of the process (same as before kernel 2.6.26).
+      For kernels after 2.6.26 with the CFQ I/O scheduler, a process that has not asked for an I/O priority inherits its CPU scheduling class. &nbsp;The I/O priority is derived from the CPU nice level of the process (same as before kernel 2.6.26).
     <dt><strong>Realtime</strong>
     <dd>
-      <p>The RT scheduling class is given first access to the disk, regardless of what else is going on in the system. Thus the RT class needs to be used with some care, as it can starve other processes. As with the best-effort class, 8 priority levels are defined denoting how big a time slice a given process will receive on each scheduling window. This scheduling class is not permitted for an ordinary (i.e., non-root) user.
+      <p>The RT scheduling class is given first access to the disk, regardless of what else is going on in the system. &nbsp;Thus the RT class needs to be used with some care, as it can starve other processes. &nbsp;As with the best-effort class, 8 priority levels are defined denoting how big a time slice a given process will receive on each scheduling window. &nbsp;This scheduling class is not permitted for an ordinary (i.e., non-root) user.
   </dl>
 </section>
 <section>
@@ -45,7 +45,7 @@
       <p>Specify the name or number of the scheduling class to use; <em>0</em> for none, <em>1</em> for realtime, <em>2</em> for best-effort, <em>3</em> for idle.
     <dt><strong>-n</strong>, <strong>--classdata</strong> <em>level</em>
     <dd>
-      <p>Specify the scheduling class data. This only has an effect if the class accepts an argument. For realtime and best-effort, <em>0-7</em> are valid data (priority levels), and <em>0</em> represents the highest priority level.
+      <p>Specify the scheduling class data. &nbsp;This only has an effect if the class accepts an argument. &nbsp;For realtime and best-effort, <em>0-7</em> are valid data (priority levels), and <em>0</em> represents the highest priority level.
     <dt><strong>-p</strong>, <strong>--pid</strong> <em>PID</em>...
     <dd>
       <p>Specify the process IDs of running processes for which to get or set the scheduling parameters.
@@ -54,7 +54,7 @@
       <p>Specify the process group IDs of running processes for which to get or set the scheduling parameters.
     <dt><strong>-t</strong>, <strong>--ignore</strong>
     <dd>
-      <p>Ignore failure to set the requested priority. If <em>command</em> was specified, run it even in case it was not possible to set the desired scheduling priority, which can happen due to insufficient privileges or an old kernel version.
+      <p>Ignore failure to set the requested priority. &nbsp;If <em>command</em> was specified, run it even in case it was not possible to set the desired scheduling priority, which can happen due to insufficient privileges or an old kernel version.
     <dt><strong>-h</strong>, <strong>--help</strong>
     <dd>
       <p>Display help text and exit.

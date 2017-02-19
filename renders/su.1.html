@@ -15,8 +15,8 @@
   <h2>DESCRIPTION</h2>
   <p><strong>su</strong> allows to run commands with a substitute user and group ID.
   <p>When called without arguments, <strong>su</strong> defaults to running an interactive shell as <em>root</em>.
-  <p>For backward compatibility, <strong>su</strong> defaults to not change the current directory and to only set the environment variables <strong>HOME</strong> and <strong>SHELL</strong> (plus <strong>USER</strong> and <strong>LOGNAME</strong> if the target <em>user</em> is not root). It is recommended to always use the <strong>--login</strong> option (instead of its shortcut <strong>-</strong>) to avoid side effects caused by mixing environments.
-  <p>This version of <strong>su</strong> uses PAM for authentication, account and session management. Some configuration options found in other <strong>su</strong> implementations, such as support for a wheel group, have to be configured via PAM.
+  <p>For backward compatibility, <strong>su</strong> defaults to not change the current directory and to only set the environment variables <strong>HOME</strong> and <strong>SHELL</strong> (plus <strong>USER</strong> and <strong>LOGNAME</strong> if the target <em>user</em> is not root). &nbsp;It is recommended to always use the <strong>--login</strong> option (instead of its shortcut <strong>-</strong>) to avoid side effects caused by mixing environments.
+  <p>This version of <strong>su</strong> uses PAM for authentication, account and session management. &nbsp;Some configuration options found in other <strong>su</strong> implementations, such as support for a wheel group, have to be configured via PAM.
   <p><strong>su</strong> is mostly designed for unprivileged users, the recommended solution for privileged users (e.g. scripts executed by root) is to use non-suid command <strong>runuser</strong>(1) that does not require authentication and provide separate PAM configuration. If the PAM session is not required at all then the recommend solution is to use command <strong>setpriv</strong>(1).
 </section>
 <section>
@@ -30,10 +30,10 @@
       <p>Pass <strong>-f</strong> to the shell, which may or may not be useful, depending on the shell.
     <dt><strong>-g</strong>, <strong>--group</strong>=<strong><em>group</em></strong>
     <dd>
-      <p>Specify the primary group. This option is available to the root user only.
+      <p>Specify the primary group. &nbsp;This option is available to the root user only.
     <dt><strong>-G</strong>, <strong>--supp-group</strong>=<strong><em>group</em></strong>
     <dd>
-      <p>Specify a supplemental group. This option is available to the root user only. The first specified supplementary group is also used as a primary group if the option <strong>--group</strong> is unspecified.
+      <p>Specify a supplemental group. &nbsp;This option is available to the root user only. &nbsp;The first specified supplementary group is also used as a primary group if the option <strong>--group</strong> is unspecified.
     <dt><strong>-</strong>, <strong>-l</strong>, <strong>--login</strong>
     <dd>
       <p>Start the shell as a login shell with an environment similar to a real login:
@@ -56,7 +56,7 @@
       <p>Preserve the entire environment, i.e. it does not set <strong>HOME</strong>, <strong>SHELL</strong>, <strong>USER</strong> nor <strong>LOGNAME</strong>. This option is ignored if the option <strong>--login</strong> is specified.
     <dt><strong>-s</strong>, <strong>--shell</strong>=<strong><em>shell</em></strong>
     <dd>
-      <p>Run the specified <em>shell</em> instead of the default. The shell to run is selected according to the following rules, in order:
+      <p>Run the specified <em>shell</em> instead of the default. &nbsp;The shell to run is selected according to the following rules, in order:
       <dl class="indent-10">
         <dt>o
         <dd>
@@ -74,7 +74,7 @@
       <p>If the target user has a restricted shell (i.e. not listed in /etc/shells), the <strong>--shell</strong> option and the <strong>SHELL</strong> environment variables are ignored unless the calling user is root.
     <dt><strong>--session-command=</strong><em>command</em>
     <dd>
-      <p>Same as <strong>-c</strong> but do not create a new session. (Discouraged.)
+      <p>Same as <strong>-c</strong> but do not create a new session. &nbsp;(Discouraged.)
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>
       <p>Display version information and exit.
@@ -89,19 +89,19 @@
 </section>
 <section>
   <h2>CONFIG FILES</h2>
-  <p><strong>su</strong> reads the <em>/etc/default/su</em> and <em>/etc/login.defs</em> configuration files. The following configuration items are relevant for <strong>su</strong>(1):
+  <p><strong>su</strong> reads the <em>/etc/default/su</em> and <em>/etc/login.defs</em> configuration files. &nbsp;The following configuration items are relevant for <strong>su</strong>(1):
   <p><strong>FAIL_DELAY</strong> (number)
   <div class="indent-4">
     <p>Delay in seconds in case of an authentication failure. The number must be a non-negative integer.
   </div>
   <p><strong>ENV_PATH</strong> (string)
   <div class="indent-4">
-    <p>Defines the PATH environment variable for a regular user. The default value is <em>/usr/local/bin:/bin:/usr/bin</em>.
+    <p>Defines the PATH environment variable for a regular user. &nbsp;The default value is <em>/usr/local/bin:/bin:/usr/bin</em>.
   </div>
   <p><strong>ENV_ROOTPATH</strong> (string)<br>
   <strong>ENV_SUPATH</strong> (string)
   <div class="indent-4">
-    <p>Defines the PATH environment variable for root. The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>.
+    <p>Defines the PATH environment variable for root. &nbsp;The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>.
   </div>
   <p><strong>ALWAYS_SET_PATH</strong> (boolean)
   <div class="indent-4">
@@ -110,7 +110,7 @@
 </section>
 <section>
   <h2>EXIT STATUS</h2>
-  <p><strong>su</strong> normally returns the exit status of the command it executed. If the command was killed by a signal, <strong>su</strong> returns the number of the signal plus 128.
+  <p><strong>su</strong> normally returns the exit status of the command it executed. &nbsp;If the command was killed by a signal, <strong>su</strong> returns the number of the signal plus 128.
   <p>Exit status generated by <strong>su</strong> itself:
   <dl class="indent-10">
     <dt>1
@@ -143,9 +143,9 @@
 </section>
 <section>
   <h2>NOTES</h2>
-  <p>For security reasons <strong>su</strong> always logs failed log-in attempts to the btmp file, but it does not write to the lastlog file at all. This solution allows to control <strong>su</strong> behavior by PAM configuration. If you want to use the pam_lastlog module to print warning message about failed log-in attempts then the pam_lastlog has to be configured to update the lastlog file as well. For example by:
+  <p>For security reasons <strong>su</strong> always logs failed log-in attempts to the btmp file, but it does not write to the lastlog file at all. &nbsp;This solution allows to control <strong>su</strong> behavior by PAM configuration. &nbsp;If you want to use the pam_lastlog module to print warning message about failed log-in attempts then the pam_lastlog has to be configured to update the lastlog file as well. For example by:
   <div class="indent">
-    <p>session required pam_lastlog.so nowtmp
+    <p>session &nbsp;required &nbsp;pam_lastlog.so nowtmp
   </div>
 </section>
 <section>

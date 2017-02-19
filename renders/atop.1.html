@@ -17,16 +17,16 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p>The program <em>atop</em> is an interactive monitor to view the load on a Linux system. It shows the occupation of the most critical hardware resources (from a performance point of view) on system level, i.e. cpu, memory, disk and network.<br>
+  <p>The program <em>atop</em> is an interactive monitor to view the load on a Linux system. It shows the occupation of the most critical hardware resources &nbsp;(from a performance point of view) on system level, i.e. cpu, memory, disk and network.<br>
   It also shows which processes are responsible for the indicated load with respect to cpu and memory load on process level. Disk load is shown per process if "storage accounting" is active in the kernel. Network load is shown per process if the kernel module `netatop' has been installed.
   <p>Every <em>interval</em> (default: 10 seconds) information is shown about the resource occupation on system level (cpu, memory, disks and network layers), followed by a list of processes which have been active during the last interval (note that all processes that were unchanged during the last interval are not shown, unless the key 'a' has been pressed). If the list of active processes does not entirely fit on the screen, only the top of the list is shown (sorted in order of activity).<br>
   The intervals are repeated till the number of <em>samples</em> (specified as command argument) is reached, or till the key 'q' is pressed in interactive mode.
-  <p>When <em>atop</em> is started, it checks whether the standard output channel is connected to a screen, or to a file/pipe. In the first case it produces screen control codes (via the ncurses library) and behaves interactively; in the second case it produces flat ASCII-output.
+  <p>When <em>atop</em> is started, it checks whether the standard output channel is connected to a screen, or to a file/pipe. In the first case it produces screen control &nbsp;codes (via the ncurses library) and behaves interactively; in the second case it produces flat ASCII-output.
   <p>In interactive mode, the output of <em>atop</em> scales dynamically to the current dimensions of the screen/window.<br>
   If the window is resized horizontally, columns will be added or removed automatically. For this purpose, every column has a particular weight. The columns with the highest weights that fit within the current width will be shown.<br>
-  If the window is resized vertically, lines of the process/thread list will be added or removed automatically.
-  <p>Furthermore in interactive mode the output of <em>atop</em> can be controlled by pressing particular keys. However it is also possible to specify such key as <strong>flag</strong> on the command line. In that case <em>atop</em> switches to the indicated mode on beforehand; this mode can be modified again interactively. Specifying such key as flag is especially useful when running <em>atop</em> with output to a pipe or file (non-interactively). These flags are the same as the keys that can be pressed in interactive mode (see section INTERACTIVE COMMANDS).<br>
-  Additional flags are available to support storage of atop-data in raw format (see section RAW DATA STORAGE).
+  If the window is resized vertically, lines of the process/thread list &nbsp;will be added or removed automatically.
+  <p>Furthermore in interactive mode the output of <em>atop</em> can be controlled by pressing particular keys. However it is also possible to specify such key as <strong>flag</strong> on the command line. In that case <em>atop</em> switches to the indicated mode on beforehand; this mode can &nbsp;be modified again interactively. Specifying such key as flag is especially useful when running <em>atop</em> with output to a pipe or file (non-interactively). These flags are the same as the keys that can be pressed in interactive mode (see section INTERACTIVE COMMANDS).<br>
+  Additional flags are available to support storage of atop-data in raw &nbsp;format (see section RAW DATA STORAGE).
 </section>
 <section>
   <h2>PROCESS ACCOUNTING</h2>
@@ -47,7 +47,7 @@
       <p>When the <em>atopacctd</em> daemon is not active, <em>atop</em> verifies if the process accounting mechanism has been switched on via the separate <strong>psacct</strong> package. In that case, the file <strong>/var/account/pacct</strong> is in use as process accounting file and <em>atop</em> opens this file for reading.
     <dt>4.
     <dd>
-      <p>As a last possibility, <em>atop</em> itself tries to activate the process accounting mechanism (requires root privileges) using the file <strong>/tmp/atop.d/atop.acct</strong> (to be written by the kernel, to be read by <em>atop</em> itself). Process accounting remains active as long as at least one <em>atop</em> process is alive. Whenever the last <em>atop</em> process stops (either by pressing `q' or by `kill -15'), it deactivates the process accounting mechanism again. Therefor you should never terminate <em>atop</em> by `kill -9', because then it has no chance to stop process accounting. As a result, the accounting file may consume a lot of disk space after a while.<br>
+      <p>As a last possibility, <em>atop</em> itself tries to activate the process accounting mechanism (requires root privileges) using the file <strong>/tmp/atop.d/atop.acct</strong> (to be written by the kernel, to be read by <em>atop</em> itself). Process accounting remains active as long as at least one <em>atop</em> process is alive. Whenever the last <em>atop</em> process stops (either by pressing `q' or by `kill -15'), it deactivates the process accounting mechanism again. Therefor you should never terminate <em>atop</em> by `kill -9', because then it has no chance to stop process accounting. As a result, the accounting file may consume a lot of &nbsp;disk space after a while.<br>
       To avoid that the process accounting file consumes too much disk space, <em>atop</em> verifies at the end of every sample if the size of the process accounting file exceeds 200 MiB and if this <em>atop</em> process is the only one that is currently using the file. In that case the file is truncated to a size of zero.<br>
       <br>
       Notice that root-privileges are required to switch on/off process accounting in the kernel. You can start <em>atop</em> as a root user or specify setuid-root privileges to the executable file. In the latter case, <em>atop</em> switches on process accounting and drops the root-privileges again.<br>
@@ -57,7 +57,7 @@
 </section>
 <section>
   <h2>COLORS</h2>
-  <p>For the resource consumption on system level, <em>atop</em> uses colors to indicate that a critical occupation percentage has been (almost) reached. A critical occupation percentage means that is likely that this load causes a noticeable negative performance influence for applications using this resource. The critical percentage depends on the type of resource: e.g. the performance influence of a disk with a busy percentage of 80% might be more noticeable for applications/user than a CPU with a busy percentage of 90%.<br>
+  <p>For the resource consumption on system level, <em>atop</em> uses colors to indicate that a critical occupation percentage has been (almost) reached. &nbsp;A critical occupation percentage means that is likely that this load causes a noticeable negative performance influence for applications using this resource. The critical percentage depends on the type of resource: e.g. the performance influence of a disk with a busy percentage of 80% might be more noticeable for applications/user than a CPU with a busy percentage of 90%.<br>
   Currently <em>atop</em> uses the following default values to calculate a weighted percentage per resource:
   <dl class="indent-5">
     <dt>&nbsp;<strong>Processor</strong>
@@ -111,7 +111,7 @@
     <dd>
       <p>Show memory related output.<br>
       <br>
-      Per process the following fields are shown in case of a window-width of 80 positions: process-id, minor and major memory faults, size of virtual shared text, total virtual process size, total resident process size, virtual and resident growth during last interval, memory occupation percentage and process name.<br>
+      Per process the following fields are shown in case of a window-width of 80 positions: process-id, minor and major memory faults, size of virtual shared text, total virtual &nbsp;process size, total resident process size, virtual and resident growth during last interval, memory occupation percentage and process name.<br>
       <br>
       When more than 80 positions are available, other information is added.
     <dt><strong>d</strong>
@@ -317,7 +317,7 @@
 <section>
   <h2>OUTPUT DESCRIPTION</h2>
   <p>The first sample shows the system level activity since boot (the elapsed time in the header shows the time since boot). Note that particular counters could have reached their maximum value (several times) and started by zero again, so do not rely on these figures.
-  <p>For every sample <em>atop</em> first shows the lines related to system level activity. If a particular system resource has not been used during the interval, the entire line related to this resource is suppressed. So the number of system level lines may vary for each sample.<br>
+  <p>For every sample <em>atop</em> first shows the lines related to system level activity. If a particular &nbsp;system resource has not been used during the interval, the entire line related to this resource is suppressed. So the number of system level lines may vary for each sample.<br>
   After that a list is shown of processes which have been active during the last interval. This list is by default sorted on cpu consumption, but this order can be changed by the keys which are previously described.
   <p>If values have to be shown by <em>atop</em> which do not fit in the column width, another format is used. If e.g. a cpu-consumption of 233216 milliseconds should be shown in a column width of 4 positions, it is shown as `233s' (in seconds). For large memory figures, another unit is chosen if the value does not fit (Mb instead of Kb, Gb instead of Mb, Tb instead of Gb, ...). For other values, a kind of exponent notation is used (value 123456789 shown in a column of 5 positions gives 123e6).
 </section>
@@ -328,7 +328,7 @@
     <dt><strong>PRC</strong>
     <dd>
       <p>Process and thread level totals.<br>
-      This line contains the total cpu time consumed in system mode (`sys') and in user mode (`user'), the total number of processes present at this moment (`#proc'), the total number of threads present at this moment in state `running' (`#trun'), `sleeping interruptible' (`#tslpi') and `sleeping uninterruptible' (`#tslpu'), the number of zombie processes (`#zombie'), the number of clone system calls (`clones'), and the number of processes that ended during the interval (`#exit') when process accounting is used. Instead of `#exit` the last column may indicate that process accounting could not be activated (`no procacct`).<br>
+      This line contains the total cpu time consumed &nbsp;in system mode (`sys') and in user mode (`user'), the total number of processes present at this moment (`#proc'), the total number of threads present at this moment in state `running' (`#trun'), `sleeping interruptible' (`#tslpi') and `sleeping uninterruptible' (`#tslpu'), the number of zombie processes (`#zombie'), the number of clone system calls (`clones'), and the number of processes that ended during the interval (`#exit') when process accounting is used. Instead of `#exit` the last column may indicate that process accounting could not be activated (`no procacct`).<br>
       If the screen-width does not allow all of these counters, only a relevant subset is shown.
     <dt><strong>CPU</strong>
     <dd>
@@ -336,7 +336,7 @@
       At least one line is shown for the total occupation of all CPUs together.<br>
       In case of a multi-processor system, an additional line is shown for every individual processor (with `cpu' in lower case), sorted on activity. Inactive CPUs will not be shown by default. The lines showing the per-cpu occupation contain the cpu number in the last field.<br>
       <br>
-      Every line contains the percentage of cpu time spent in kernel mode by all active processes (`sys'), the percentage of cpu time consumed in user mode (`user') for all active processes (including processes running with a nice value larger than zero), the percentage of cpu time spent for interrupt handling (`irq') including softirq, the percentage of unused cpu time while no processes were waiting for disk-I/O (`idle'), and the percentage of unused cpu time while at least one process was waiting for disk-I/O (`wait').<br>
+      Every line contains the percentage of cpu time spent in &nbsp;kernel mode by all active processes (`sys'), &nbsp;the percentage of cpu time consumed in user mode (`user') for all active processes (including processes running with a nice value larger than zero), the percentage of cpu time spent for interrupt handling (`irq') including softirq, the percentage of unused cpu time while no processes were waiting for disk-I/O (`idle'), and the percentage of unused cpu time while at least one process was waiting for disk-I/O (`wait').<br>
       In case of per-cpu occupation, the last column shows the cpu number and the wait percentage (`w') for that cpu. The number of lines showing the per-cpu occupation can be limited.<br>
       <br>
       For virtual machines the steal-percentage is shown (`steal'), reflecting the percentage of cpu time stolen by other virtual machines running on the same hardware.<br>
@@ -363,7 +363,7 @@
     <dd>
       <p>Swap occupation and overcommit info.<br>
       This line contains the total amount of swap space on disk (`tot') and the amount of free swap space (`free').<br>
-      Furthermore the committed virtual memory space (`vmcom') and the maximum limit of the committed space (`vmlim', which is by default swap size plus 50% of memory size) is shown. The committed space is the reserved virtual space for all allocations of private memory space for processes. The kernel only verifies whether the committed space exceeds the limit if strict overcommit handling is configured (vm.overcommit_memory is 2).
+      Furthermore the committed virtual memory space (`vmcom') and the maximum &nbsp;limit of the committed space (`vmlim', which is by default swap size plus 50% of memory size) is shown. The committed space is the reserved virtual space for all allocations of private memory space for processes. The kernel only verifies whether the committed space exceeds the limit if strict overcommit handling is configured (vm.overcommit_memory is 2).
     <dt><strong>PAG</strong>
     <dd>
       <p>Paging frequency.<br>
@@ -372,22 +372,22 @@
     <dt><strong>LVM/MDD/DSK</strong>
     <dd>
       <p>Logical volume/multiple device/disk utilization.<br>
-      Per active unit one line is produced, sorted on unit activity. Such line shows the name (e.g. VolGroup00-lvtmp for a logical volume or sda for a hard disk), the busy percentage i.e. the portion of time that the unit was busy handling requests (`busy'), the number of read requests issued (`read'), the number of write requests issued (`write'), the number of KiBytes per read (`KiB/r'), the number of KiBytes per write (`KiB/w'), the number of MiBytes per second throughput for reads (`MBr/s'), the number of MiBytes per second throughput for writes (`MBw/s'), the average queue depth (`avq') and the average number of milliseconds needed by a request (`avio') for seek, latency and data transfer.<br>
+      Per active unit one line is produced, sorted on unit activity. Such line shows the name (e.g. VolGroup00-lvtmp for a logical volume or sda for a hard disk), the busy percentage i.e. the portion of time that the unit was busy handling requests (`busy'), the number of read requests issued (`read'), the number of write requests issued (`write'), the number of KiBytes per read (`KiB/r'), &nbsp;the number of KiBytes per write (`KiB/w'), &nbsp;the number of MiBytes per second throughput for reads (`MBr/s'), &nbsp;the number of MiBytes per second throughput for writes (`MBw/s'), &nbsp;the average queue depth (`avq') and the average number of milliseconds needed by a request (`avio') for seek, latency and data transfer.<br>
       If the screen-width does not allow all of these counters, only a relevant subset is shown.<br>
       <br>
       The number of lines showing the units can be limited per class (LVM, MDD or DSK) with the 'l' key or statically (see separate man-page of atoprc). By specifying the value 0 for a particular class, no lines will be shown any more for that class.
     <dt><strong>NFM</strong>
     <dd>
       <p>Network Filesystem (NFS) mount at the client side.<br>
-      For each NFS-mounted filesystem, a line is shown that contains the mounted server directory, the name of the server (`srv'), the total number of bytes physically read from the server (`read') and the total number of bytes physically written to the server (`write'). Data transfer is subdivided in the number of bytes read via normal read() system calls (`nread'), the number of bytes written via normal read() system calls (`nwrit'), the number of bytes read via direct I/O (`dread'), the number of bytes written via direct I/O (`dwrit'), the number of bytes read via memory mapped I/O pages (`mread'), and the number of bytes written via memory mapped I/O pages (`mwrit').
+      For each NFS-mounted filesystem, a line is shown that contains &nbsp;the mounted server directory, the name of the server (`srv'), the total number of bytes physically read from the server (`read') and the total number of bytes physically written to the server (`write'). Data transfer is subdivided in the number of bytes read via normal read() system calls (`nread'), the number of bytes written via normal read() system calls (`nwrit'), the number of bytes read via direct I/O (`dread'), the number of bytes written via direct I/O (`dwrit'), the number of bytes read via memory mapped I/O pages (`mread'), and the number of bytes written via memory mapped I/O pages (`mwrit').
     <dt><strong>NFC</strong>
     <dd>
       <p>Network Filesystem (NFS) client side counters.<br>
-      This line contains the number of RPC calls issues by local processes (`rpc'), the number of read RPC calls (`read`) and write RPC calls (`rpwrite') issued to the NFS server, the number of RPC calls being retransmitted (`retxmit') and the number of authorization refreshes (`autref').
+      This line contains the number of RPC calls issues by local processes &nbsp;(`rpc'), the number of read RPC calls (`read`) and write RPC calls (`rpwrite') issued to the NFS server, the number of RPC calls being retransmitted (`retxmit') and the number of authorization refreshes (`autref').
     <dt><strong>NFS</strong>
     <dd>
       <p>Network Filesystem (NFS) server side counters.<br>
-      This line contains the number of RPC calls received from NFS clients (`rpc'), the number of read RPC calls received (`cread`), the number of write RPC calls received (`cwrit'), the number of network requests handled via TCP (`nettcp'), the number of network requests handled via UDP (`netudp'), the number of Megabytes/second returned to read requests by clients (`MBcr/s`), the number of Megabytes/second passed in write requests by clients (`MBcw/s`), the number of reply cache hits (`rchits'), the number of reply cache misses (`rcmiss') and the number of uncached requests (`rcnoca'). Furthermore some error counters indicating the number of requests with a bad format (`badfmt') or a bad authorization (`badaut'), and a counter indicating the number of bad clients (`badcln'). and the number of authorization refreshes (`autref').
+      This line contains the number of RPC calls received from &nbsp;NFS clients (`rpc'), the number of read RPC calls received (`cread`), the number of write RPC calls received (`cwrit'), the number of network requests handled via TCP (`nettcp'), &nbsp;the number of network requests handled via UDP (`netudp'), the number of Megabytes/second returned to read requests by clients (`MBcr/s`), the number of Megabytes/second passed in write requests by clients (`MBcw/s`), the number of reply cache hits (`rchits'), the number of reply cache misses (`rcmiss') and the number of uncached requests (`rcnoca'). Furthermore some error counters indicating the number of requests with a bad format (`badfmt') or a bad authorization (`badaut'), and a counter indicating the number of bad clients (`badcln'). and the number of authorization refreshes (`autref').
     <dt><strong>NET</strong>
     <dd>
       <p>Network utilization (TCP/IP).<br>
@@ -427,18 +427,18 @@
       This information will only be shown when the kernel module `netatop' is loaded.
     <dt><strong>CMD</strong>
     <dd>
-      <p>The name of the process. This name can be surrounded by "less/greater than" signs (`&lt;name&gt;') which means that the process has finished during the last interval.<br>
+      <p>The name of the process. This name can be surrounded by "less/greater than" &nbsp;signs (`&lt;name&gt;') which means that the process has finished during the last interval.<br>
       Behind the abbreviation `CMD' in the header line, the current page number and the total number of pages of the process/thread list are shown.
     <dt><strong>COMMAND-LINE</strong>
     <dd>
-      <p>The full command line of the process (including arguments). If the length of the command line exceeds the length of the screen line, the arrow keys -&gt; and &lt;- can be used for horizontal scroll.<br>
+      <p>The full command line of the process (including arguments). If the length of the command line exceeds the length of the screen line, the arrow &nbsp;keys -&gt; and &lt;- can be used for horizontal scroll.<br>
       Behind the verb `COMMAND-LINE' in the header line, the current page number and the total number of pages of the process/thread list are shown.
     <dt><strong>CPU</strong>
     <dd>
       <p>The occupation percentage of this process related to the available capacity for this resource on system level.
     <dt><strong>CPUNR</strong>
     <dd>
-      <p>The identification of the CPU the (main) thread is running on or has recently been running on.
+      <p>The identification of the CPU the (main) thread is running on or has recently been running on. &nbsp;
     <dt><strong>CTID</strong>
     <dd>
       <p>Container-id. If a process has been started and finished during the last interval, a `?' is shown because the container-id is not part of the standard process accounting record.
@@ -517,7 +517,7 @@
       <p>The real group-id under which the process executes.
     <dt><strong>RGROW</strong>
     <dd>
-      <p>The amount of resident memory that the process has grown during the last interval. A resident growth can be caused by touching memory pages which were not physically created/loaded before (load-on-demand). Note that a resident growth can also be negative e.g. when part of the process is paged out due to lack of memory or when the process frees dynamically allocated memory. For a process which started during the last interval, the resident growth reflects the total resident size of the process at that moment.<br>
+      <p>The amount of resident memory that the process has grown during the last interval. A resident growth can be caused by touching memory pages which were not physically created/loaded before (load-on-demand). &nbsp;Note that a resident growth can also be negative e.g. when part of the process is paged out due to lack of memory or when the process frees dynamically &nbsp;allocated memory. For a process which started during the last interval, the resident growth reflects the total resident size of the process at that moment.<br>
       If a process has finished during the last interval, no value is shown since resident memory occupation is not part of the standard process accounting record.
     <dt><strong>RNET</strong>
     <dd>
@@ -535,7 +535,7 @@
       <p>The real user-id under which the process executes.
     <dt><strong>S</strong>
     <dd>
-      <p>The current state of the (main) thread: `R' for running (currently processing or in the runqueue), `S' for sleeping interruptible (wait for an event to occur), `D' for sleeping non-interruptible, `Z' for zombie (waiting to be synchronized with its parent process), `T' for stopped (suspended or traced), `W' for swapping, and `E' (exit) for processes which have finished during the last interval.
+      <p>The current state of the (main) thread: `R' for running (currently processing or in the runqueue), `S' for sleeping interruptible (wait for an event to occur), &nbsp;`D' for sleeping non-interruptible, `Z' for zombie (waiting to be synchronized with its parent process), `T' for stopped (suspended or traced), `W' for swapping, and `E' (exit) for processes which have finished during the last interval.
     <dt><strong>SGID</strong>
     <dd>
       <p>The saved group-id of the process.
@@ -549,8 +549,8 @@
       <br>
       The second position indicates if the process has been finished during the last interval.<br>
       The value <em>E</em> means 'exit' on the process' own initiative; the exit code is displayed in the column `EXC'.<br>
-      The value <em>S</em> means that the process has been terminated unvoluntarily by a signal; the signal number is displayed in the in the column `EXC'.<br>
-      The value <em>C</em> means that the process has been terminated unvoluntarily by a signal, producing a core dump in its current directory; the signal number is displayed in the column `EXC'.
+      The value <em>S</em> means that the process has been terminated unvoluntarily &nbsp;by a signal; the signal number is displayed in the in the column `EXC'.<br>
+      The value <em>C</em> means that the process has been terminated unvoluntarily &nbsp;by a signal, producing a core dump in its current directory; the signal number is displayed in the column `EXC'.
     <dt><strong>STDATE</strong>
     <dd>
       <p>The start date of the process.
@@ -568,7 +568,7 @@
       <p>CPU time consumption of this process in system mode (kernel mode), usually due to system call handling.
     <dt><strong>TCPRASZ</strong>
     <dd>
-      <p>The average size of a received TCP buffer in bytes. This information will only be shown when the kernel module `netatop' is loaded.
+      <p>The average size of a received TCP buffer in bytes. &nbsp;This information will only be shown when the kernel module `netatop' is loaded.
     <dt><strong>TCPRCV</strong>
     <dd>
       <p>The number of TCP packets received for this process. This information will only be shown when the kernel module `netatop' is loaded.
@@ -671,7 +671,7 @@
       <p>Subsequent fields: page size for this machine (in bytes), size of swap (pages), size of free swap (pages), 0 (future use), size of committed space (pages), and limit for committed space (pages).
     <dt><strong>PAG</strong>
     <dd>
-      <p>Subsequent fields: page size for this machine (in bytes), number of page scans, number of allocstalls, 0 (future use), number of swapins, and number of swapouts.
+      <p>Subsequent fields: page size for this machine (in bytes), number of page scans, number of allocstalls, 0 (future use), number of swapins, and &nbsp;number of swapouts.
     <dt><strong>LVM/MDD/DSK</strong>
     <dd>
       <p>For every logical volume/multiple device/hard disk one line is shown.<br>
@@ -707,7 +707,7 @@
     <dt><strong>PRD</strong>
     <dd>
       <p>For every process one line is shown.<br>
-      Subsequent fields: PID, name (between brackets), state, obsoleted kernel patch installed ('n'), standard io statistics used ('y' or 'n'), number of reads on disk, cumulative number of sectors read, number of writes on disk, cumulative number of sectors written, cancelled number of written sectors, TGID (group number of related tasks/threads) and is_process (y/n).<br>
+      Subsequent fields: PID, name (between brackets), state, obsoleted kernel patch installed ('n'), standard io statistics used ('y' or 'n'), number of reads on disk, cumulative number of sectors read, number of writes on disk, &nbsp;cumulative number of sectors written, cancelled number of written sectors, TGID (group number of related tasks/threads) and is_process (y/n).<br>
       If the standard I/O statistics (&gt;= 2.6.20) are not used, the disk I/O counters per process are not relevant. The counters 'number of reads on disk' and 'number of writes on disk' are obsoleted anyhow.
     <dt><strong>PRN</strong>
     <dd>
@@ -719,21 +719,21 @@
 <section>
   <h2>EXAMPLES</h2>
   <p>To monitor the current system load interactively with an interval of 5 seconds:
-  <p class="indent-12">&nbsp; <strong>atop 5</strong>
+  <p class="indent-12">&nbsp;&nbsp;<strong>atop 5</strong>
   <p>To monitor the system load and write it to a file (in plain ASCII) with an interval of one minute during half an hour with active processes sorted on memory consumption:
-  <p class="indent-12">&nbsp; <strong>atop -M 60 30 &gt; /log/atop.mem</strong>
+  <p class="indent-12">&nbsp;&nbsp;<strong>atop -M 60 30 &gt; /log/atop.mem</strong>
   <p>Store information about the system and process activity in binary compressed form to a file with an interval of ten minutes during an hour:
-  <p class="indent-12">&nbsp; <strong>atop -w /tmp/atop.raw 600 6</strong>
+  <p class="indent-12">&nbsp;&nbsp;<strong>atop -w /tmp/atop.raw 600 6</strong>
   <p>View the contents of this file interactively:
-  <p>&nbsp; <strong>atop -r /tmp/atop.raw</strong>
+  <p>&nbsp;&nbsp;<strong>atop -r /tmp/atop.raw</strong>
   <p>View the processor and disk utilization of this file in parseable format:
-  <p>&nbsp; <strong>atop -PCPU,DSK -r /tmp/atop.raw</strong>
+  <p>&nbsp;&nbsp;<strong>atop -PCPU,DSK -r /tmp/atop.raw</strong>
   <p>View the contents of today's standard logfile interactively:
-  <p>&nbsp; <strong>atop -r</strong>
+  <p>&nbsp;&nbsp;<strong>atop -r</strong>
   <p>View the contents of the standard logfile of the day before yesterday interactively:
-  <p>&nbsp; <strong>atop -r yy</strong>
+  <p>&nbsp;&nbsp;<strong>atop -r yy</strong>
   <p>View the contents of the standard logfile of 2014, June 7 from 02:00 PM onwards interactively:
-  <p>&nbsp; <strong>atop -r 20140607 -b 14:00</strong>
+  <p>&nbsp;&nbsp;<strong>atop -r 20140607 -b 14:00</strong>
 </section>
 <section>
   <h2>FILES</h2>

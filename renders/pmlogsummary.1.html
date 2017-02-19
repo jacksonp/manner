@@ -13,7 +13,7 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p><strong>pmlogsummary</strong> prints statistical information about metrics of numeric type contained within the files of a set of Performance Co-Pilot (PCP) archive logs. The default output prints time averages for both counter and non-counter metrics. The set of archive logs is identified by <em>archive</em>, which is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. The archive logs are typically created using <strong>pmlogger</strong>(1).
+  <p><strong>pmlogsummary</strong> prints statistical information about metrics of numeric type contained within the files of a set of Performance Co-Pilot (PCP) archive logs. &nbsp;The default output prints time averages for both counter and non-counter metrics. The set of archive logs is identified by <em>archive</em>, which is a comma-separated list of names, each of which may be the base name of an archive or the name of a directory containing one or more archives. The archive logs are typically created using <strong>pmlogger</strong>(1).
   <p>The metrics of interest are named in the <em>metricname</em> arguments. If <em>metricname</em> is a non-leaf node in the Performance Metrics Name Space (<strong>pmns</strong>(5)), then <strong>pmlogsummary</strong> will recursively descend the PMNS and report on all leaf nodes. If no <em>metricname</em> argument is given, the root of the namespace is used.
   <p>Normally <strong>pmlogsummary</strong> operates on the default <strong>pmns</strong>(5), however if the <strong>-n</strong> option is specified an alternative namespace is loaded from the file <em>pmnsfile</em>.
   <p>The command line options <strong>-S</strong> and <strong>-T</strong> can be used to specify a time window over which metrics should be summarized. These options are common to most Performance Co-Pilot tools and are fully described in <strong>PCPIntro</strong>(1).
@@ -21,7 +21,7 @@
   <dl>
     <dt><strong>-a</strong>
     <dd>
-      <p>Print all information. This is equivalent to <strong>-blmMy</strong>.
+      <p>Print all information. &nbsp;This is equivalent to <strong>-blmMy</strong>.
     <dt><strong>-b</strong>
     <dd>
       <p>Print both forms of averaging, that is both stochastic and time averaging.
@@ -30,10 +30,10 @@
       <p>Print the approximate distribution of values, using histogram bins such that the value range (minimum - maximum) for each metric is divided equally into <em>nbins</em> bins, and each bin accumulates the frequency of observed values in the corresponding range. Refer to the ``OUTPUT FORMAT'' section below for a description of how the distribution of values is reported).
     <dt><strong>-f</strong>
     <dd>
-      <p>Spreadsheet format - the tab character is used to delimit each field printed. This option is intended to allow <strong>pmlogsummary</strong> output to be imported directly into common spreadsheet applications.
+      <p>Spreadsheet format - the tab character is used to delimit each field printed. &nbsp;This option is intended to allow <strong>pmlogsummary</strong> output to be imported directly into common spreadsheet applications.
     <dt><strong>-F</strong>
     <dd>
-      <p>Spreadsheet format - the comma character is used to delimit each field printed. This option is intended to allow <strong>pmlogsummary</strong> output to be imported directly into common spreadsheet applications which support the Comma Separated Value (.csv) format.
+      <p>Spreadsheet format - the comma character is used to delimit each field printed. &nbsp;This option is intended to allow <strong>pmlogsummary</strong> output to be imported directly into common spreadsheet applications which support the Comma Separated Value (.csv) format.
     <dt><strong>-H</strong>
     <dd>
       <p>Print a one-line header at the start showing what each field represents.
@@ -42,10 +42,10 @@
       <p>Also print the archive label, showing the log format version, the time and date for the start and end of the archive time window, and the host from which the performance metrics values were collected.
     <dt><strong>-i</strong>
     <dd>
-      <p>Also print the time at which the minimum value was logged. The format of this timestamp is described in the ``OUTPUT FORMAT'' section below.
+      <p>Also print the time at which the minimum value was logged. &nbsp;The format of this timestamp is described in the ``OUTPUT FORMAT'' section below.
     <dt><strong>-I</strong>
     <dd>
-      <p>Also print the time at which the maximum value was logged. The format of this timestamp is described in the ``OUTPUT FORMAT'' section below.
+      <p>Also print the time at which the maximum value was logged. &nbsp;The format of this timestamp is described in the ``OUTPUT FORMAT'' section below.
     <dt><strong>-m</strong>
     <dd>
       <p>Also print the minimum logged value for each metric.
@@ -75,7 +75,7 @@
 </section>
 <section>
   <h2>OUTPUT FORMAT</h2>
-  <p>The <strong>pmlogsummary</strong> output format is spartan as it is intended to be post-processed with standard tools. This means that there is no annotation associated with each output field which would make processing harder. The intention is that <strong>pmlogsummary</strong> output be massaged into a format which can be used by a spreadsheet program, is suitable for inclusion in a web page, or whatever.
+  <p>The <strong>pmlogsummary</strong> output format is spartan as it is intended to be post-processed with standard tools. &nbsp;This means that there is no annotation associated with each output field which would make processing harder. &nbsp;The intention is that <strong>pmlogsummary</strong> output be massaged into a format which can be used by a spreadsheet program, is suitable for inclusion in a web page, or whatever.
   <p>For each metric, <strong>pmlogsummary</strong> produces a single output line as follows:
   <pre><em>metricname</em>  <em>value(s)</em> <em>units</em></pre>
   <p>For metrics with multiple instances, <strong>pmlogsummary</strong> produces multiple lines of output as follows:
@@ -83,7 +83,7 @@
 <em>metricname</em> ["<em>instance 2</em>"] <em>value(s)</em> <em>units</em>
 <em>metricname</em> ["<em>instance N</em>"] <em>value(s)</em> <em>units</em></pre>
   <p>The printed <em>value(s)</em> for each metric always follow this order: stochastic average, time average, minimum, minimum timestamp, maximum, maximum timestamp, count, [bin 1 range], bin 1 count, ... [bin <em>nbins</em> range], bin <em>nbins</em> count. The individual values for each metric are space-separated (unless the <strong>-f</strong> option is used).
-  <p>All counter metrics which are measured in units of time will be converted to seconds before being rate converted and used in the <strong>pmlogsummary</strong> calculations. The values calculated for these metrics are also printed in seconds.
+  <p>All counter metrics which are measured in units of time will be converted to seconds before being rate converted and used in the <strong>pmlogsummary</strong> calculations. &nbsp;The values calculated for these metrics are also printed in seconds.
   <p>The units will be displayed in the format described by <strong>pmUnitsStr</strong>(3).
   <p>Given either of the <strong>-i</strong> or <strong>-I</strong> options, <strong>pmlogsummary</strong> produces two different timestamp formats, depending on the interval over which it is run. For an interval greater than 24 hours, the date is displayed in addition to the time at which the maxima and/or minima occurred. If the extent of the data being checked is less than 24 hours, a more precise format is used (time is displayed with millisecond precision, but without the date).
 </section>
@@ -91,7 +91,7 @@
   <h2>NOTES</h2>
   <p>The average for an individual metric is calculated as follows:
   <p>Non-counter metrics are averaged using stochastic averaging - each observation has an equal weighting towards the calculation of the average (the sum of all values divided by the total number of values, for each metric).
-  <p>Counter metrics are averaged using time averaging (by default), but the <strong>-x</strong> option can be used to specify that counters be averaged using the stochastic method instead. When calculating a time average, the sum of the product of each sample value multiplied by the time difference between each sample, is divided by the total time over which that metric was logged.
+  <p>Counter metrics are averaged using time averaging (by default), but the <strong>-x</strong> option can be used to specify that counters be averaged using &nbsp;the stochastic method instead. &nbsp;When calculating a time average, the sum of the product of each sample value multiplied by the time difference between each sample, is divided by the total time over which that metric was logged.
   <p>Counter metrics whose measurements do not span 90% of the set of archives will be printed with the metric name prefixed by an asterisk (*).
 </section>
 <section>
@@ -135,19 +135,19 @@ network.interface.out.bytes ["lo0"] 899.0 895.2 142.6 9583.1 1031 \
       <td>total number of values for this instance
     <tr>
       <td class="code border-right">[&lt;=425435.0]
-      <td>range for first bin (20618.7-425435.0)
+      <td>range for first bin &nbsp;(20618.7-425435.0)
     <tr>
       <td class="code border-right">912
       <td>number of values in first bin
     <tr>
       <td class="code border-right">[&lt;=830251.4]
-      <td>range for second bin (425435.0-830251.4)
+      <td>range for second bin &nbsp;(425435.0-830251.4)
     <tr>
       <td class="code border-right">42
       <td>number of values in second bin
     <tr>
       <td class="code border-right">[&lt;=1235067.7]
-      <td>range for third bin (830251.4-1235067.7)
+      <td>range for third bin &nbsp;(830251.4-1235067.7)
     <tr>
       <td class="code border-right">17
       <td>number of values in third bin

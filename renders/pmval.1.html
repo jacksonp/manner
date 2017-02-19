@@ -16,7 +16,7 @@
   <p><strong>pmval</strong> prints current or archived values for the nominated performance metric. The metric of interest is named in the <em>metricname</em> argument, subject to instance qualification with the <strong>-i</strong> flag as described below.
   <p>Unless directed to another host by the <strong>-h</strong> option, or to a set of archives by the <strong>-a</strong> or <strong>-U</strong> options, <strong>pmval</strong> will contact the Performance Metrics Collector Daemon (PMCD) on the local host to obtain the required information.
   <p>The <em>metricname</em> argument may also be given in the metric specification syntax, as described in <strong>PCPIntro</strong>(1), where the source, metric and instance may all be included in the <em>metricname</em>, e.g. thathost:kernel.all.load["1 minute"]. When this format is used, none of the <strong>-h</strong> or <strong>-a</strong> or <strong>-U</strong> options may be specified.
-  <p>When using the metric specification syntax, the ``hostname'' <strong>@</strong> is treated specially and causes <strong>pmval</strong> to use a local context to collect metrics from PMDAs on the local host without PMCD. Only some metrics are available in this mode.
+  <p>When using the metric specification syntax, the ``hostname'' <strong>@</strong> is treated specially and causes <strong>pmval</strong> to use a local context to collect metrics from PMDAs on the local host without PMCD. &nbsp;Only some metrics are available in this mode.
   <p>When processing a set of archives, <strong>pmval</strong> may relinquish its own timing control, and operate as a ``slave'' of a <strong>pmtime</strong>(1) process that uses a GUI dialog to provide timing control. In this case, either the <strong>-g</strong> option should be used to start <strong>pmval</strong> as the sole slave of a new <strong>pmtime</strong>(1) instance, or <strong>-p</strong> should be used to attach <strong>pmval</strong> to an existing <strong>pmtime</strong>(1) instance via the IPC channel identified by the <em>port</em> argument.
   <p>The <strong>-S</strong>, <strong>-T</strong>, <strong>-O</strong> and <strong>-A</strong> options may be used to define a time window to restrict the samples retrieved, set an initial origin within the time window, or specify a ``natural'' alignment of the sample times; refer to <strong>PCPIntro</strong>(1) for a complete description of these options.
   <p>The other options which control the source, timing and layout of the information reported by <strong>pmval</strong> are as follows:
@@ -29,7 +29,7 @@
       <p>When replaying from a set of archives, this option requests that the prevailing real-time delay be applied between samples (see <strong>-t</strong>) to effect a pause, rather than the default behaviour of replaying at full speed.
     <dt><strong>-f</strong>
     <dd>
-      <p>Numbers are reported in ``fixed point'' notation, rather than the default scientific notation. Each number will be up to the column width determined by the default heuristics, else the <strong>-w</strong> option if specified, and include <em>N</em> digits after the decimal point. So, the options <strong>-f 3 -w 8</strong> would produce numbers of the form 9999.999. A value of zero for <em>N</em> omits the decimal point and any fractional digits.
+      <p>Numbers are reported in ``fixed point'' notation, rather than the default scientific notation. &nbsp;Each number will be up to the column width determined by the default heuristics, else the <strong>-w</strong> option if specified, and include <em>N</em> digits after the decimal point. &nbsp;So, the options <strong>-f 3 -w 8</strong> would produce numbers of the form 9999.999. A value of zero for <em>N</em> omits the decimal point and any fractional digits.
     <dt><strong>-g</strong>
     <dd>
       <p>Start <strong>pmval</strong> as the slave of a new <strong>pmtime</strong>(1) process for replay of archived performance data using the <strong>pmtime</strong>(1) graphical user interface.
@@ -49,7 +49,7 @@ $ pmval -i "'1 minute'" -i "'5 minute'" kernel.all.load
 $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
     <dt><strong>-K</strong>
     <dd>
-      <p>When fetching metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
+      <p>When fetching metrics from a local context, the <strong>-K</strong> option may be used to control the DSO PMDAs that should be made accessible. &nbsp;The <em>spec</em> argument conforms to the syntax described in <strong>__pmSpecLocalPMDA</strong>(3). More than one <strong>-K</strong> option may be used.
     <dt><strong>-n</strong>
     <dd>
       <p>Normally <strong>pmval</strong> operates on the default Performance Metrics Name Space (PMNS), however if the <strong>-n</strong> option is specified an alternative namespace is loaded from the file <em>pmnsfile.</em>
@@ -58,7 +58,7 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
       <p>Attach <strong>pmval</strong> to an existing <strong>pmtime</strong>(1) time control process instance via the IPC channel identified by the <em>port</em> argument. This option is normally only used by other tools, e.g. <strong>pmchart</strong>(1), when they launch <strong>pmval</strong> with synchronized time control.
     <dt><strong>-r</strong>
     <dd>
-      <p>Print raw values for cumulative counter metrics. Normally cumulative counter metrics are converted to rates. For example, disk transfers are reported as number of disk transfers per second during the preceding sample interval, rather than the raw value of number of disk transfers since the machine was booted. If you specify this option, the raw metric values are printed.
+      <p>Print raw values for cumulative counter metrics. &nbsp;Normally cumulative counter metrics are converted to rates. &nbsp;For example, disk transfers are reported as number of disk transfers per second during the preceding sample interval, rather than the raw value of number of disk transfers since the machine was booted. &nbsp;If you specify this option, the raw metric values are printed.
     <dt><strong>-s</strong>
     <dd>
       <p>The argument <em>samples</em> defines the number of samples to be retrieved and reported. If <em>samples</em> is 0 or <strong>-s</strong> is not specified, <strong>pmval</strong> will sample and report continuously (in real time mode) or until the end of the set of PCP archives (in archive mode).
@@ -77,7 +77,7 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
     <dt><strong>-x</strong>
     <dd>
       <p>The given <em>pattern</em> is sent to the performance metric domain agent for the requested <em>metricname</em> before any values are requested. This serves two purposes. Firstly, it provides a mechanism for server-side event filtering that is customisable for individual event streams. In addition, some performance metrics domain agents also use the PMCD store mechanism to provide a basic security model (e.g. for sensitive log files, only a client host with <strong>pmStore</strong>(3) access would be able to access the event stream).
-      <p>As <em>pattern</em> may be processed by <strong>regcomp</strong>(3) it should be a non-empty string. Use . (dot) for a “match all” <em>pattern</em>.
+      <p>As <em>pattern</em> may be processed by <strong>regcomp</strong>(3) it should be a non-empty string. &nbsp;Use . (dot) for a “match all” <em>pattern</em>.
     <dt><strong>-Z</strong>
     <dd>
       <p>By default, <strong>pmval</strong> reports the time of day according to the local timezone on the system where <strong>pmval</strong> is run. The <strong>-Z</strong> option changes the timezone to <em>timezone</em> in the format of the environment variable <strong>TZ</strong> as described in <strong>environ</strong>(7).
@@ -85,7 +85,7 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
     <dd>
       <p>Change the reporting timezone to the local timezone at the host that is the source of the performance metrics, as identified via either the <em>metricname</em> or the <strong>-h</strong> or <strong>-a</strong> or <strong>-U</strong> options.
   </dl>
-  <p>The following symbols may occasionally appear, in place of a metric value, in <strong>pmval</strong> output: A question mark symbol (?) indicates that a value is no longer available for that metric instance. An exclamation mark (!) indicates that a 64-bit counter wrapped during the sample.
+  <p>The following symbols may occasionally appear, in place of a metric value, in <strong>pmval</strong> output: &nbsp;A question mark symbol (?) indicates that a value is no longer available for that metric instance. &nbsp;An exclamation mark (!) indicates that a 64-bit counter wrapped during the sample.
   <p>The output from <strong>pmval</strong> is directed to standard output.
 </section>
 <section>
@@ -110,7 +110,7 @@ $ pmval 'localhost:kernel.all.load["1 minute","5 minute"]'</pre>
 </section>
 <section>
   <h2>CAVEATS</h2>
-  <p>By default, <strong>pmval</strong> attempts to display non-integer numeric values in a way that does not distort the inherent precision (rarely more than 4 significant digits), and tries to maintain a tabular format in the output. These goals are sometimes in conflict.
+  <p>By default, <strong>pmval</strong> attempts to display non-integer numeric values in a way that does not distort the inherent precision (rarely more than 4 significant digits), and tries to maintain a tabular format in the output. &nbsp;These goals are sometimes in conflict.
   <p>In the absence of the <strong>-f</strong> option (described above), the following table describes the formats used for different ranges of numeric values for any metric that is of type <strong>PM_TYPE_FLOAT</strong> or <strong>PM_TYPE_DOUBLE</strong>, or any metric that has the semantics of a counter (for which <strong>pmval</strong> reports the rate converted value):
   <table class="tbl box center-table">
     <tr class="border-bottom">

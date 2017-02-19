@@ -13,13 +13,13 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. By default only the assemblies specified in the command line will be included in the bundle. To automatically include all of the dependencies referenced, use the "--deps" command line option.
-  <p>There are two modes of operation, one uses an existing Mono binary or a server-hosted list of binaries and is enabled when you use either the <strong>--cross,</strong> <strong>--sdk</strong> or the <strong>--runtime</strong> command line options.
-  <p>An older mechanism creates a small C stub that links against the libmono library to produce a self-contained executable and requires a C compiler. It is described in the "OLD EMBEDDING" section below.
+  <p><em>mkbundle</em> generates an executable program that will contain static copies of the assemblies listed on the command line. &nbsp;By default only the assemblies specified in the command line will be included in the bundle. &nbsp;To automatically include all of the dependencies referenced, use the "--deps" command line option.
+  <p>There are two modes of operation, one uses an existing Mono binary or a server-hosted list of binaries and is enabled when you use either the <strong>--cross,</strong> <strong>--sdk</strong> or the <strong>--runtime</strong> command line options. &nbsp;
+  <p>An older mechanism creates a small C stub that links against the libmono library to produce a self-contained executable and requires a C compiler. &nbsp; It is described in the "OLD EMBEDDING" section below.
   <p>For example, to create a bundle for hello world, use the following command:
-  <pre>        $ mkbundle -o hello --simple hello.exe</pre>
-  <p>You can configure options to be passed to the Mono runtime directly into your executable, for this, use the <em>--options</em> flag. For example, the following disables inlining, by passing the "-O=-inline" command line option to the embedded executable:
-  <pre>        $ mkbundle -o hello --options -O=-inline --simple hello.exe
+  <pre>    $ mkbundle -o hello --simple hello.exe</pre>
+  <p>You can configure options to be passed to the Mono runtime directly into your executable, for this, use the <em>--options</em> flag. &nbsp;For example, the following disables inlining, by passing the "-O=-inline" command line option to the embedded executable:
+  <pre>   $ mkbundle -o hello --options -O=-inline --simple hello.exe
 
 
 The simple version allows for cross-compiling, this requires a Mono
@@ -67,21 +67,21 @@ targets, and the "--cross" argument to specify the target, like this:
       <p>When passed, DIR will be set for the MONO_CFG_DIR environment variable
     <dt><em>--cross target</em>
     <dd>
-      <p>Use this to request mkbundle generate a cross-compiled binary. It Creates a bundle for the specified target platform. The target must be a directory in ~/.mono/targets/ that contains an SDK installation as produced by the mono-package-runtime tool. You can get a list of the precompiled versions of the runtime using --list-targets and you can fetch a specific target using the --fetch-target command line option.<br>
+      <p>Use this to request mkbundle generate a cross-compiled binary. &nbsp;It Creates a bundle for the specified target platform. &nbsp;The target must be a directory in ~/.mono/targets/ that contains an SDK installation as produced by the mono-package-runtime tool. &nbsp;You can get a list of the precompiled versions of the runtime using --list-targets and you can fetch a specific target using the --fetch-target command line option.<br>
       <br>
       This flag is mutually exclusive with <em>--sdk</em> which is used to specify an absolute path to resolve the Mono runtime from and the --runtime option which is used to manually construct the cross-platform package.
     <dt><em>--deps</em>
     <dd>
-      <p>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. This is useful to distribute a self-contained image.
+      <p>This option will bundle all of the referenced assemblies for the assemblies listed on the command line option. &nbsp;This is useful to distribute a self-contained image.
     <dt><em>--env KEY=VALUE</em>
     <dd>
-      <p>Use this to hardcode an environment variable at runtime for KEY to be mapped to VALUE. This is useful in scenarios where you want to enable certain Mono runtime configuration options that are controlled by environment variables.
+      <p>Use this to hardcode an environment variable at runtime for KEY to be mapped to VALUE. &nbsp; This is useful in scenarios where you want to enable certain Mono runtime configuration options that are controlled by environment variables.
     <dt><em>--fetch-target target</em>
     <dd>
       <p>Downloads a precompiled runtime for the specified target from the Mono distribution site.
     <dt><em>--i18n encoding</em>
     <dd>
-      <p>Specified which encoding tables to ship with the executable. By default, Mono ships the supporting I18N.dll assembly and the I18N.West.dll assembly. If your application will use the System.Text.Encoding.GetEncoding with encodings other than the West encodings, you should specify them here.<br>
+      <p>Specified which encoding tables to ship with the executable. &nbsp; By default, Mono ships the supporting I18N.dll assembly and the I18N.West.dll assembly. &nbsp; If your application will use the System.Text.Encoding.GetEncoding with encodings other than the West encodings, you should specify them here.<br>
       <br>
       You can use the <strong>none</strong> parameter to request that no implicit encodings should be bundled, including the supporting I18N.dll, use this option if you have ran a linker on your own.<br>
       <br>
@@ -90,10 +90,10 @@ targets, and the "--cross" argument to specify the target, like this:
       Or you can use a comma delimited list of the workds CJK, MidWest, Other, Rare and West to specificy which encoding assemblies to distribute.
     <dt><em>-L path</em>
     <dd>
-      <p>Adds the `path' do the search list for assemblies. The rules are the same as for the compiler -lib: or -L flags.
+      <p>Adds the `path' do the search list for assemblies. &nbsp;The rules are the same as for the compiler -lib: or -L flags.
     <dt><em>--library [LIB,]PATH</em>
     <dd>
-      <p>Embeds the dynamic library file pointed to by `PATH' and optionally give it the name `LIB' into the bundled executable. This is used to ship native library dependencies that are unpacked at startup and loaded from the runtime.
+      <p>Embeds the dynamic library file pointed to by `PATH' and optionally give it the name `LIB' into the bundled executable. &nbsp; This is used to ship native library dependencies that are unpacked at startup and loaded from the runtime.
     <dt><em>--lists-targets</em>
     <dd>
       <p>Lists all of the available local cross compilation targets available as precompiled binaries on the Mono distribution server.
@@ -102,23 +102,23 @@ targets, and the "--cross" argument to specify the target, like this:
       <p>Lists all of the available local cross compilation targets.
     <dt><em>--machine-config FILE</em>
     <dd>
-      <p>Uses the given FILE as the machine.config file for the generated application.
+      <p>Uses the given FILE as the machine.config file for the generated application. &nbsp;
     <dt><em>--nodeps</em>
     <dd>
       <p>This is the default: <em>mkbundle</em> will only include the assemblies that were specified on the command line to reduce the size of the resulting image created.
     <dt><em>-o filename</em>
     <dd>
-      <p>Places the output on `out'. If the flag -c is specified, this is the C host program. If not, this contains the resulting executable.
+      <p>Places the output on `out'. &nbsp;If the flag -c is specified, this is the C host program. &nbsp;If not, this contains the resulting executable.
     <dt><em>--options OPTS</em>
     <dd>
-      <p>Since the resulting executable will be treated as a standalone program, you can use this option to pass configuration options to the Mono runtime and bake those into the resulting executable. These options are specified as <em>OPTS.</em><br>
+      <p>Since the resulting executable will be treated as a standalone program, you can use this option to pass configuration options to the Mono runtime and bake those into the resulting executable. &nbsp;These options are specified as <em>OPTS.</em><br>
       <br>
-      You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed.<br>
+      You can use the above to configure options that you would typically pass on the command line to Mono, before the main program is executed. &nbsp;<br>
       <br>
       Additionally, users of your binary can still configure their own options by setting the <em>MONO_ENV_OPTIONS</em> environment variable.
     <dt><em>--sdk SDK_PATH</em>
     <dd>
-      <p>Use this flag to specify a path from which mkbundle will resolve the Mono SDK from. The SDK path should be the prefix path that you used to configure a Mono installation. And would typically contain files lik <em>SDK_PATH/bin/mono</em> , <em>SDK_PATH/lib/mono/4.5</em> and so on.<br>
+      <p>Use this flag to specify a path from which mkbundle will resolve the Mono SDK from. &nbsp; The SDK path should be the prefix path that you used to configure a Mono installation. &nbsp; And would typically contain files lik <em>SDK_PATH/bin/mono</em> , <em>SDK_PATH/lib/mono/4.5</em> and so on.<br>
       <br>
       When this flag is specified, <em>mkbundle</em> will resolve the runtime, the framework libraries, unmanaged resources and configuration files from the files located in this directory.<br>
       <br>
@@ -130,16 +130,16 @@ targets, and the "--cross" argument to specify the target, like this:
 </section>
 <section>
   <h2>OLD EMBEDDING</h2>
-  <p>The old embedding system compiles a small C stub that embeds the C code and compiles the resulting executable using the system compiler. This requires both a working C compiler installation and only works to bundle binaries for the current host.
+  <p>The old embedding system compiles a small C stub that embeds the C code and compiles the resulting executable using the system compiler. &nbsp; This requires both a working C compiler installation and only works to bundle binaries for the current host.
   <p>The feature is still available, but we recommend the simpler, faster and more convenient new mode.
   <p>For example, to create a bundle for hello world, use the following command:
-  <pre>        $ mkbundle -o hello hello.exe</pre>
-  <p>The above will pull hello.exe into a native program called "hello". Notice that the produced image still contains the CIL image and no precompilation is done.
-  <p>In addition, it is possible to control whether <em>mkbundle</em> should compile the resulting executable or not with the -c option. This is useful if you want to link additional libraries or control the generated output in more detail. For example, this could be used to link some libraries statically:
-  <pre>    $ mkbundle -c -o host.c -oo bundles.o --deps hello.exe
+  <pre>   $ mkbundle -o hello hello.exe</pre>
+  <p>The above will pull hello.exe into a native program called "hello". &nbsp;Notice that the produced image still contains the CIL image and no precompilation is done.
+  <p>In addition, it is possible to control whether <em>mkbundle</em> should compile the resulting executable or not with the -c option. &nbsp;This is useful if you want to link additional libraries or control the generated output in more detail. For example, this could be used to link some libraries statically:
+  <pre>  $ mkbundle -c -o host.c -oo bundles.o --deps hello.exe
 
         $ cc host.c bundles.o /usr/lib/libmono.a -lc -lrt</pre>
-  <p>You may also use <em>mkbundle</em> to generate a bundle you can use when embedding the Mono runtime in a native application. In that case, use both the -c and --nomain options. The resulting host.c file will not have a main() function. Call mono_mkbundle_init() before initializing the JIT in your code so that the bundled assemblies are available to the embedded runtime.
+  <p>You may also use <em>mkbundle</em> to generate a bundle you can use when embedding the Mono runtime in a native application. &nbsp;In that case, use both the -c and --nomain options. &nbsp;The resulting host.c file will not have a main() function. &nbsp;Call mono_mkbundle_init() before initializing the JIT in your code so that the bundled assemblies are available to the embedded runtime.
 </section>
 <section>
   <h2>OLD EMBEDDING OPTIONS</h2>
@@ -153,13 +153,13 @@ targets, and the "--cross" argument to specify the target, like this:
       <p>Specifies the name to be used for the helper object file that contains the bundle.
     <dt><em>--keeptemp</em>
     <dd>
-      <p>By default <em>mkbundle</em> will delete the temporary files that it uses to produce the bundle. This option keeps the file around.
+      <p>By default <em>mkbundle</em> will delete the temporary files that it uses to produce the bundle. &nbsp;This option keeps the file around.
     <dt><em>--nomain</em>
     <dd>
       <p>With the -c option, generate the host stub without a main() function.
     <dt><em>--static</em>
     <dd>
-      <p>By default <em>mkbundle</em> dynamically links to mono and glib. This option causes it to statically link instead.
+      <p>By default <em>mkbundle</em> dynamically links to mono and glib. &nbsp;This option causes it to statically link instead.
     <dt><em>-z</em>
     <dd>
       <p>Compresses the assemblies before embedding. This results in smaller executable files, but increases startup time and requires zlib to be installed on the target system.
@@ -167,7 +167,7 @@ targets, and the "--cross" argument to specify the target, like this:
 </section>
 <section>
   <h2>WINDOWS</h2>
-  <p>If you are using the old embedding on Windows systems, it it necessary to have Unix-like toolchain to be installed for <em>mkbundle</em> to work. You can use cygwin's and install gcc, gcc-mingw and as packages.
+  <p>If you are using the old embedding on Windows systems, it it necessary to have Unix-like toolchain to be installed for <em>mkbundle</em> to work. &nbsp;You can use cygwin's and install gcc, gcc-mingw and as packages.
 </section>
 <section>
   <h2>ENVIRONMENT VARIABLES</h2>

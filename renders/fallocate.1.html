@@ -14,7 +14,7 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p><strong>fallocate</strong> is used to manipulate the allocated disk space for a file, either to deallocate or preallocate it. For filesystems which support the fallocate system call, preallocation is done quickly by allocating blocks and marking them as uninitialized, requiring no IO to the data blocks. This is much faster than creating a file by filling it with zeroes.
+  <p><strong>fallocate</strong> is used to manipulate the allocated disk space for a file, either to deallocate or preallocate it. &nbsp;For filesystems which support the fallocate system call, preallocation is done quickly by allocating blocks and marking them as uninitialized, requiring no IO to the data blocks. &nbsp;This is much faster than creating a file by filling it with zeroes.
   <p>The exit code returned by <strong>fallocate</strong> is 0 on success and 1 on failure.
 </section>
 <section>
@@ -24,12 +24,12 @@
   <dl>
     <dt><strong>-c</strong>, <strong>--collapse-range</strong>
     <dd>
-      <p>Removes a byte range from a file, without leaving a hole. The byte range to be collapsed starts at <em>offset</em> and continues for <em>length</em> bytes. At the completion of the operation, the contents of the file starting at the location <em>offset</em>+<em>length</em> will be appended at the location <em>offset</em>, and the file will be <em>length</em> bytes smaller. The option <strong>--keep-size</strong> may not be specified for the collapse-range operation.<br>
+      <p>Removes a byte range from a file, without leaving a hole. &nbsp;The byte range to be collapsed starts at <em>offset</em> and continues for <em>length</em> bytes. &nbsp;At the completion of the operation, the contents of the file starting at the location <em>offset</em>+<em>length</em> will be appended at the location <em>offset</em>, and the file will be <em>length</em> bytes smaller. &nbsp;The option <strong>--keep-size</strong> may not be specified for the collapse-range operation.<br>
       <br>
       Available since Linux 3.15 for ext4 (only for extent-based files) and XFS.
     <dt><strong>-d</strong>, <strong>--dig-holes</strong>
     <dd>
-      <p>Detect and dig holes. This makes the file sparse in-place, without using extra disk space. The minimum size of the hole depends on filesystem I/O block size (usually 4096 bytes). Also, when using this option, <strong>--keep-size</strong> is implied. If no range is specified by <strong>--offset</strong> and <strong>--length</strong>, then the entire file is analyzed for holes.<br>
+      <p>Detect and dig holes. &nbsp;This makes the file sparse in-place, without using extra disk space. &nbsp;The minimum size of the hole depends on filesystem I/O block size (usually 4096 bytes). &nbsp;Also, when using this option, <strong>--keep-size</strong> is implied. &nbsp;If no range is specified by <strong>--offset</strong> and <strong>--length</strong>, then the entire file is analyzed for holes.<br>
       <br>
       You can think of this option as doing a "<strong>cp --sparse</strong>" and then renaming the destination file to the original, without the need for extra disk space.<br>
       <br>
@@ -39,13 +39,13 @@
       <p>Specifies the length of the range, in bytes.
     <dt><strong>-n</strong>, <strong>--keep-size</strong>
     <dd>
-      <p>Do not modify the apparent length of the file. This may effectively allocate blocks past EOF, which can be removed with a truncate.
+      <p>Do not modify the apparent length of the file. &nbsp;This may effectively allocate blocks past EOF, which can be removed with a truncate.
     <dt><strong>-o</strong>, <strong>--offset</strong> <em>offset</em>
     <dd>
       <p>Specifies the beginning offset of the range, in bytes.
     <dt><strong>-p</strong>, <strong>--punch-hole</strong>
     <dd>
-      <p>Deallocates space (i.e., creates a hole) in the byte range starting at <em>offset</em> and continuing for <em>length</em> bytes. Within the specified range, partial filesystem blocks are zeroed, and whole filesystem blocks are removed from the file. After a successful call, subsequent reads from this range will return zeroes. This option may not be specified at the same time as the <strong>--zero-range</strong> option. Also, when using this option, <strong>--keep-size</strong> is implied.<br>
+      <p>Deallocates space (i.e., creates a hole) in the byte range starting at <em>offset</em> and continuing for <em>length</em> bytes. &nbsp;Within the specified range, partial filesystem blocks are zeroed, and whole filesystem blocks are removed from the file. &nbsp;After a successful call, subsequent reads from this range will return zeroes. &nbsp;This option may not be specified at the same time as &nbsp;the <strong>--zero-range</strong> option. Also, when using this option, <strong>--keep-size</strong> is implied.<br>
       <br>
       Supported for XFS (since Linux 2.6.38), ext4 (since Linux 3.0), Btrfs (since Linux 3.7) and tmpfs (since Linux 3.5).
     <dt><strong>-v</strong>, <strong>--verbose</strong>
@@ -53,9 +53,9 @@
       <p>Enable verbose mode.
     <dt><strong>-z</strong>, <strong>--zero-range</strong>
     <dd>
-      <p>Zeroes space in the byte range starting at <em>offset</em> and continuing for <em>length</em> bytes. Within the specified range, blocks are preallocated for the regions that span the holes in the file. After a successful call, subsequent reads from this range will return zeroes.<br>
+      <p>Zeroes space in the byte range starting at <em>offset</em> and continuing for <em>length</em> bytes. &nbsp;Within the specified range, blocks are preallocated for the regions that span the holes in the file. &nbsp;After a successful call, subsequent reads from this range will return zeroes.<br>
       <br>
-      Zeroing is done within the filesystem preferably by converting the range into unwritten extents. This approach means that the specified range will not be physically zeroed out on the device (except for partial blocks at the either end of the range), and I/O is (otherwise) required only to update metadata.<br>
+      Zeroing is done within the filesystem preferably by converting the range into unwritten extents. &nbsp;This approach means that the specified range will not be physically zeroed out on the device (except for partial blocks at the either end of the range), and I/O is (otherwise) required only to update metadata.<br>
       <br>
       Option <strong>--keep-size</strong> can be specified to prevent file length modification.<br>
       <br>

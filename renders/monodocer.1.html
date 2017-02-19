@@ -21,7 +21,7 @@
       Specify a file path or the name of a GAC'd assembly.
     <dt><em>-delete</em>
     <dd>
-      <p>Allow monodocer to delete members from documentation files. The only members deleted are for members which are no longer present within the assembly.<br>
+      <p>Allow monodocer to delete members from documentation files. &nbsp; The only members deleted are for members which are no longer present within the assembly.<br>
       <br>
       If a type is no longer present, the documentation file is <em>not</em> deleted, but is instead <em>renamed</em> to have a <strong>.remove</strong> extension.
     <dt><em>-?, -help</em>
@@ -34,7 +34,7 @@
       This will add documentation stubs for added types, but will <em>not</em> add or remove documentation for any members of any type (including any added types).
     <dt><em>-importslashdoc:FILE</em>
     <dd>
-      <p><em>FILE</em> is an XML file generated with the <strong>/doc:FILE</strong> C# compiler flag (e.g. <em>mcs -doc:foo.xml foo.cs</em> ). Import the member documentation contained within <em>FILE</em> into the documentation format used by monodoc.
+      <p><em>FILE</em> is an XML file generated with the <strong>/doc:FILE</strong> C# compiler flag (e.g. <em>mcs -doc:foo.xml foo.cs</em> ). &nbsp;Import the member documentation contained within <em>FILE</em> into the documentation format used by monodoc.
     <dt><em>-name:NAME</em>
     <dd>
       <p><em>NAME</em> is the name of the project this documentation is for.<br>
@@ -59,7 +59,7 @@
       <p>Create a &lt;since/&gt; element for added types and members with the value <em>SINCE</em> .<br>
       <br>
       For example, when given <em>-since:"Gtk# 2.4"</em> an element will be inserted into the <em>Docs</em> element for all added types and type members:
-      <pre>       &lt;since version="Gtk# 2.4" /&gt;</pre>
+      <pre>     &lt;since version="Gtk# 2.4" /&gt;</pre>
       <p>The Mono Documentation Browser and <em>monodocs2html</em> will use this element to specify in which version a member was added.
     <dt><em>-type:TYPE</em>
     <dd>
@@ -74,49 +74,50 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p><strong>monodocer</strong> has been obsoleted by <strong>mdoc</strong>(1). See the <strong>mdoc-update</strong>(1) man page.
-  <p><em>monodocer</em> is a program that creates XML documentation stubs in the ECMA Documentation Format. It does not rely on documentation found within the source code.
+  <p><strong>monodocer</strong> has been obsoleted by <strong>mdoc</strong>(1). &nbsp;See the <strong>mdoc-update</strong>(1) man page.
+  <p><em>monodocer</em> is a program that creates XML documentation stubs in the ECMA Documentation Format. &nbsp;It does not rely on documentation found within the source code.
   <p>The advantages are:
   <dl>
     <dt><em>*</em>
     <dd>
-      <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. (For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)<br>
+      <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. &nbsp;(For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)<br>
       <br>
       Inserting good documentation into the source code can frequently bloat the source file, as the documentation can be longer than the actual method that is being documented.
     <dt><em>*</em>
     <dd>
-      <p><strong>Localization.</strong> In-source documentation formats (such as <strong>/doc</strong> ) have no support for multiple human languages. If you need to support more than one human language for documentation purposes, <em>monodocer</em> is useful as it permits each language to get its own directory, and <em>monodocer</em> can add types/members for each separate documentation directory.
+      <p><strong>Localization.</strong> In-source documentation formats (such as <strong>/doc</strong> ) have no support for multiple human languages. &nbsp;If you need to support more than one human language for documentation purposes, <em>monodocer</em> is useful as it permits each language to get its own directory, and <em>monodocer</em> can add types/members for each separate documentation directory.
     <dt><em>*</em>
     <dd>
-      <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. It's also possible that the documentation team will have minimal experience with the programming language being used. In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. <em>monodocer</em> allows the documentation to be kept <em>completely</em> separate and distinct from the source code used to create the assembly.
+      <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. &nbsp;It's also possible that the documentation team will have minimal experience with the programming language being used. &nbsp;In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. <em>monodocer</em> allows the documentation to be kept <em>completely</em> separate and distinct from the source code used to create the assembly.
   </dl>
-  <p>To turn the <em>monodocer</em> documentation into something that can be consumed by the Mono Documentation Browser (the desktop help browser, or the web interface for it) it is necessary to compile the documentation into a packed format. This is done with the mdassembler tool, for example, you could use this toolchain like this:
-  <pre>       $ monodocer -assembly:MyWidgets -path:generated_docs
+  <p>To turn the <em>monodocer</em> documentation into something that can be consumed by the Mono Documentation Browser (the desktop help browser, or the web interface for it) it is necessary to compile the documentation into a packed format. &nbsp;This is done with the mdassembler tool, for example, you could use this toolchain like this:
+  <pre>    $ monodocer -assembly:MyWidgets -path:generated_docs
         $ mdassembler --ecma generated_docs -out:MyWidgets</pre>
-  <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
+  <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. &nbsp; In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
   <pre>&lt;?xml version="1.0"?&gt;
 &lt;monodoc&gt;
   &lt;source provider="ecma" basefile="MyWidgets" path="classlib-gnome"/&gt;
 &lt;/monodoc&gt;</pre>
-  <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the "classlib-gnome" part of the tree. If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml.
+  <p>The above configuration file describes that the documentation is in ECMA format (the compiled version) that the base file name is MyWidgets and that it should be hooked up in the "classlib-gnome" part of the tree. &nbsp; If you want to look at the various nodes defined in the documentation, you can look at monodoc.xml file which is typically installed in /usr/lib/monodoc/monodoc.xml. &nbsp;
   <p>Once you have all of your files (.zip, .tree and .sources) you can install them into the system with the following command:
-  <pre>        $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`</pre>
-  <p>The above will copy the files into the directory that Monodoc has registered (you might need root permissions to do this). The actual directory is returned by the <em>pkg-config</em> invocation.
+  <pre>        $ cp MyWidgets.tree MyWidgets.zip MyWidgets.source `pkg-config monodoc --variable sourcesdir`
+  </pre>
+  <p>The above will copy the files into the directory that Monodoc has registered (you might need root permissions to do this). &nbsp; The actual directory is returned by the <em>pkg-config</em> invocation.
 </section>
 <section>
   <h2>STRING ID FORMAT</h2>
-  <p>String IDs are used to refer to a type or member of a type. String IDs are documented in ECMA-334 3rd Edition, Annex E.3.1. They consist of a <em>member type prefix</em> , the full type name (namespace + name, separated by '.'), possibly followed by the member name and other information.
+  <p>String IDs are used to refer to a type or member of a type. &nbsp;String IDs are documented in ECMA-334 3rd Edition, Annex E.3.1. &nbsp;They consist of a <em>member type prefix</em> , the full type name (namespace + name, separated by '.'), possibly followed by the member name and other information.
   <p>Member type prefixes:
   <dl>
     <dt><em>E:</em>
     <dd>
-      <p>The String ID refers to an event. The event name follows the type name: <em>E:System.AppDomain.AssemblyLoad</em>
+      <p>The String ID refers to an event. &nbsp;The event name follows the type name: <em>E:System.AppDomain.AssemblyLoad</em>
     <dt><em>F:</em>
     <dd>
-      <p>The String ID refers to a field. The field name follows the type name: <em>F:System.Runtime.InteropServices.DllImportAttribute.SetLastError</em>
+      <p>The String ID refers to a field. &nbsp;The field name follows the type name: <em>F:System.Runtime.InteropServices.DllImportAttribute.SetLastError</em>
     <dt><em>M:</em>
     <dd>
-      <p>Refers to a constructor or method. Constructors append <em>.ctor</em> to the type name, while methods append the method name (with an optional count of the number of generic parameters).<br>
+      <p>Refers to a constructor or method. &nbsp;Constructors append <em>.ctor</em> to the type name, while methods append the method name (with an optional count of the number of generic parameters).<br>
       <br>
       If the constructor or method take arguments, these are listed within paranthesis after the constructor/method name:<br>
       <br>
@@ -126,7 +127,7 @@
       <p>Refers to a namespace, e.g. <em>N:System</em>
     <dt><em>P:</em>
     <dd>
-      <p>Refers to a property. If the property is an indexer or takes parameters, the parameter types are appended to the property name and enclosed with paranthesis: <em>P:System.String.Length</em> , <em>P:System.String.Chars(System.Int32)</em> .
+      <p>Refers to a property. &nbsp;If the property is an indexer or takes parameters, &nbsp;the parameter types are appended to the property name and enclosed with paranthesis: <em>P:System.String.Length</em> , <em>P:System.String.Chars(System.Int32)</em> .
     <dt><em>T:</em>
     <dd>
       <p>The String ID refers to a type, with the number of generic types appended: <em>T:System.String</em> , <em>T:System.Collections.Generic.List`1</em>
@@ -135,18 +136,18 @@
   <p><strong>Unbound:</strong> <em>T:System.Collections.Generic.List`1</em> , <em>T:System.Collections.Generic.Dictionary`2</em> .
   <p><strong>Bound:</strong> <em>T:System.Collections.Generic.List{System.Int32}</em> <em>T:System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Predicate{System.String}}}</em> .
   <p>As you can see, bound variants can be arbitrarily complex (just like generics).
-  <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the "index" of the type/method's generic parameter is used as the binding, so given
-  <pre>    class FooType {
+  <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the "index" of the type/method's generic parameter is used &nbsp;as the binding, so given
+  <pre> class FooType {
           public static void Foo&lt;T&gt; (System.Predicate&lt;T&gt; predicate) {}
         }</pre>
   <p>The String ID for this method is <em>M:FooType.Foo``1(System.Predicate{``0})</em> , as <em>``0</em> is the 0th generic parameter index which is bound to <em>System.Predicate&lt;T&gt;</em> .
 </section>
 <section>
   <h2>DOCUMENTATION FORMAT</h2>
-  <p><em>monodocer</em> generates documentation similar to the Ecma documentation format, as described in ECMA-335 3rd Edition, Partition IV, Chapter 7.
+  <p><em>monodocer</em> generates documentation similar to the Ecma documentation format, as described &nbsp;in ECMA-335 3rd Edition, Partition IV, Chapter 7.
   <p>The principal difference from the ECMA format is that each type gets its own file, within a directory identical to the namespace of the type.
-  <p>Most of the information within the documentation should <em>not</em> be edited. This includes the type name ( <em>/Type/@FullName</em> ), implemented interfaces ( <em>/Type/Interfaces</em> ), member information ( <em>/Type/Members/Member/@MemberName</em> , <em>/Type/Members/Member/MemberSignature</em> , <em>/Type/Members/Member/MemberType</em> , <em>/Type/Members/Member/Parameters</em> , etc.).
-  <p>What <em>should</em> be modified are all elements with the text <em>To be added.</em> , which are present under the <em>//Docs</em> elements (e.g. <em>/Type/Docs</em> , <em>/Type/Members/Member/Docs</em> ). The contents of the <em>Docs</em> element is <em>identical</em> in semantics and structure to the inline C# documentation format, consisting of these elements (listed in ECMA-334 3rd Edition, Annex E, Section 2). The following are used within the element descriptions:
+  <p>Most of the information within the documentation should <em>not</em> be edited. &nbsp;This includes the type name ( <em>/Type/@FullName</em> ), implemented interfaces ( <em>/Type/Interfaces</em> ), member information ( <em>/Type/Members/Member/@MemberName</em> , <em>/Type/Members/Member/MemberSignature</em> , <em>/Type/Members/Member/MemberType</em> , <em>/Type/Members/Member/Parameters</em> , etc.).
+  <p>What <em>should</em> be modified are all elements with the text <em>To be added.</em> , which are present under the <em>//Docs</em> elements (e.g. <em>/Type/Docs</em> , <em>/Type/Members/Member/Docs</em> ). &nbsp;The contents of the <em>Docs</em> element is <em>identical</em> in semantics and structure to the inline C# documentation format, consisting of these elements (listed in ECMA-334 3rd Edition, Annex E, Section 2). &nbsp;The following are used within the element descriptions:
   <dl>
     <dt><em>CREF</em>
     <dd>
@@ -165,11 +166,11 @@
   <dl>
     <dt><em>&lt;block subset="SUBSET" type="TYPE"&gt;XML_TEXT&lt;/block&gt;</em>
     <dd>
-      <p>Create a block of text, similar in concept to a paragraph, but is used to create divisions within the text. To some extent, a &lt;block/&gt; is equivalent to the HTML &lt;h2/&gt; tag.<br>
+      <p>Create a block of text, similar in concept to a paragraph, but is used to create divisions within the text. &nbsp;To some extent, a &lt;block/&gt; is equivalent to the HTML &lt;h2/&gt; tag.<br>
       <br>
       <em>SUBSET</em> should always be the value <em>none</em> .<br>
       <br>
-      <em>TYPE</em> specifies the heading and formatting to use. Recognized types are:<br>
+      <em>TYPE</em> specifies the heading and formatting to use. &nbsp;Recognized types are:<br>
       <br>
       <em>behaviors</em> Creates a section with the heading <em>Operation</em> .<br>
       <br>
@@ -183,10 +184,10 @@
       <p>Set text in a code-like font (similar to the HTML &lt;tt/&gt; element).
     <dt><em>&lt;code lang="LANGUAGE"&gt;TEXT&lt;/code&gt;</em>
     <dd>
-      <p>Display multiple lines of text in a code-like font (similar to the HTML &lt;pre/&gt; element). <em>LANGUAGE</em> is the language this code block is for. For example, if <em>LANGUAGE</em> is <strong>C#</strong> , then <em>TEXT</em> will get syntax highlighting for the C# language within the Mono Documentation Browser.
+      <p>Display multiple lines of text in a code-like font (similar to the HTML &lt;pre/&gt; element). <em>LANGUAGE</em> is the language this code block is for. &nbsp;For example, if <em>LANGUAGE</em> is <strong>C#</strong> , then <em>TEXT</em> will get syntax highlighting for the C# language within the Mono Documentation Browser.
     <dt><em>&lt;example&gt;XML_TEXT&lt;/example&gt;</em>
     <dd>
-      <p>Indicates an example that should be displayed specially. For example:
+      <p>Indicates an example that should be displayed specially. &nbsp;For example:
       <pre>      &lt;example&gt;
           &lt;para&gt;An introductory paragraph.&lt;/para&gt;
           &lt;code lang="C#"&gt;
@@ -210,10 +211,10 @@
         &lt;/exception&gt;</pre>
     <dt><em>&lt;list&gt;XML&lt;/list&gt;</em>
     <dd>
-      <p>Create a list or table of items. <em>&lt;list/&gt;</em> makes use of nested <em>&lt;item&gt;XML&lt;/item&gt;</em> , <em>&lt;listheader&gt;XML&lt;/listheader&gt;</em> , <em>&lt;term&gt;XML_TEXT&lt;/term&gt;</em> , and <em>&lt;description&gt;XML_TEXT&lt;/description&gt;</em> elements.<br>
+      <p>Create a list or table of items. &nbsp; <em>&lt;list/&gt;</em> makes use of nested <em>&lt;item&gt;XML&lt;/item&gt;</em> , <em>&lt;listheader&gt;XML&lt;/listheader&gt;</em> , <em>&lt;term&gt;XML_TEXT&lt;/term&gt;</em> , and <em>&lt;description&gt;XML_TEXT&lt;/description&gt;</em> elements.<br>
       <br>
       <em>Lists</em> have the syntax:
-      <pre> &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
+      <pre>    &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
           &lt;item&gt;&lt;term&gt;Bullet 1&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 2&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 3&lt;/term&gt;&lt;/item&gt;
@@ -256,7 +257,7 @@
     <dd>
       <p>Indicates that <em>NAME</em> is a parameter.<br>
       <br>
-      This usually renders <em>NAME</em> as italic text, so it is frequently (ab)used as an equivalent to the HTML &lt;i/&gt; element. See the <em>&lt;exception/&gt;</em> documentation (above) for an example.
+      This usually renders <em>NAME</em> as italic text, so it is frequently (ab)used as an equivalent to the HTML &lt;i/&gt; element. &nbsp;See the <em>&lt;exception/&gt;</em> documentation (above) for an example.
     <dt><em>&lt;permission cref="CREF"&gt;XML_TEXT&lt;/permission&gt;</em>
     <dd>
       <p>Documentes the security accessibility requirements of the current member.<br>
@@ -264,7 +265,7 @@
       <em>&lt;permission/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
       <em>CREF</em> is a type reference to the security permission required, while <em>XML_TEXT</em> is a description of why the permission is required.
-      <pre>   &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
+      <pre>      &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
           Requires permission for reading and writing files. See 
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /&gt;, 
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /&gt;.
@@ -293,8 +294,8 @@
     <dd>
       <p><em>&lt;seealso/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
       <br>
-      Allows an entry to be generated for the <em>See Also</em> subclause. Use <em>&lt;see/&gt;</em> to specify a link from within text.
-      <pre> &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
+      Allows an entry to be generated for the <em>See Also</em> subclause. &nbsp;Use <em>&lt;see/&gt;</em> to specify a link from within text.
+      <pre>    &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
     <dt><em>&lt;since version="VERSION" /&gt;</em>
     <dd>
       <p><em>&lt;since/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
@@ -307,7 +308,7 @@
       <br>
       Provides a (brief!) overview about a type or type member.<br>
       <br>
-      This is usually displayed as part of a class declaration, and should be a reasonably short description of the type/member. Use <em>&lt;remarks/&gt;</em> for more detailed information.
+      This is usually displayed as part of a class declaration, and should be a reasonably short description of the type/member. &nbsp;Use <em>&lt;remarks/&gt;</em> for more detailed information.
     <dt><em>&lt;typeparam name="NAME"&gt;DESCRPITION&lt;/typeparam&gt;</em>
     <dd>
       <p><em>&lt;typeparam/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
@@ -315,7 +316,7 @@
       This is used to describe type parameter for a generic type or generic method.<br>
       <br>
       <em>NAME</em> is the name of the type parameter, while <em>DESCRIPTION</em> contains a description of the parameter (what it's used for, what restrictions it must meet, etc.).
-      <pre>        &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
+      <pre>   &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
     <dt><em>&lt;typeparamref&gt;</em>
     <dd>
       <p>Used to indicate that a word is a type parameter, for use within other text blocks (e.g. within <em>&lt;para/&gt;</em> ).

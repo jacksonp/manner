@@ -16,7 +16,7 @@
   <p><strong>catdoc</strong> behaves much like <strong>cat</strong>(1) but it reads MS-Word file and produces human-readable text on standard output. Optionally it can use <strong>latex</strong>(1) escape sequences for characters which have special meaning for LaTeX. It also makes some effort to recognize MS-Word tables, although it never tries to write correct headers for LaTeX tabular environment. Additional output formats, such is HTML can be easily defined.
   <p><strong>catdoc</strong> doesn't attempt to extract formatting information other than tables from MS-Word document, so different output modes means mainly that different characters should be escaped and different ways used to represent characters, missing from output charset. See CHARACTER SUBSTITUTION below
   <p><strong>catdoc</strong> uses internal <strong>unicode</strong>(7) representation of text, so it is able to convert texts when charset in source document doesn't match charset on target system. See CHARACTER SETS below.
-  <p>If no file names supplied, <strong>catdoc</strong> processes its standard input unless it is terminal. It is unlikely that somebody could type Word document from keyboard, so if <strong>catdoc</strong> invoked without arguments and stdin is not redirected, it prints brief usage message and exits. Processing of standard input (even among other files) can be forced using dash '-' as file name.
+  <p>If no file names supplied, <strong>catdoc</strong> processes its standard input unless it is terminal. It is unlikely that &nbsp;somebody could type Word document from keyboard, so if <strong>catdoc</strong> invoked without arguments and stdin is not redirected, it prints brief usage message and exits. &nbsp;Processing of standard input (even among other files) can be forced using dash '-' as file name.
   <p>By default, <strong>catdoc</strong> wraps lines which are more than 72 chars long and separates paragraphs by blank lines. This behavior can be turned of by <strong>-w</strong> switch. In <em>wide</em> mode <strong>catdoc prints each paragraph as one long line, suitable for import into</strong> word processors which perform word wrapping.
 </section>
 <section>
@@ -30,7 +30,7 @@
       <p>- process broken MS-Word file. Normally, <strong>catdoc checks if first 8 bytes</strong> of file is Microsoft OLE signature. If so, it processes file, otherwise it just copies it to stdin. It is intended to use <strong>catdoc</strong> as filter for viewing all files with <em>.doc</em> extension.
     <dt><strong>-d</strong><em>charset</em>
     <dd>
-      <p>- specifies destination charset name. Charset file has format described in CHARACTER SETS below and should have <strong>.txt</strong> extension and reside in <strong>catdoc library directory ( @libdir@/catdoc). By default, current</strong> locale charset is used if langinfo support compiled in.
+      <p>- specifies destination charset name. Charset file has format described in CHARACTER SETS below and should have <strong>.txt</strong> extension &nbsp;and reside in <strong>catdoc library directory ( @libdir@/catdoc). By default, current</strong> locale charset is used if langinfo support compiled in.
     <dt><strong>-f</strong><em>format</em>
     <dd>
       <p>- specifies output format as described in CHARACTER SUBSTITUTION below. <strong>catdoc</strong> comes with two output formats - ascii and tex. You can add your own if you wish.
@@ -39,24 +39,24 @@
       <p>Causes <strong>catdoc</strong> to list names of available charsets to the stdout and exit successfully.
     <dt><strong>-m</strong><em>number</em>
     <dd>
-      <p>Specifies right margin for text (default 72). <strong>-m 0</strong> is equivalent to <strong>-w</strong>
+      <p>Specifies right margin for text &nbsp;(default 72). <strong>-m 0</strong> is equivalent to <strong>-w</strong>
     <dt><strong>-s</strong><em>charset</em>
     <dd>
-      <p>Specifies source charset. (one used in Word document), if Word document doesn't contain UTF-16 text. When reading rtf documents, it is typically not necessary, because rtf documents contain ansicpg specification. But it can be set wrong by Word (I've seen RTF documents on Russian, where cp1252 was specified). In this case this option would take precedence over charset, specified in the document. But source_charset statement in the configuration file have less priority than charset in the document.
+      <p>Specifies source charset. (one used in Word document), if Word document doesn't contain UTF-16 &nbsp;text. When reading rtf documents, it is typically not necessary, because rtf documents contain ansicpg specification. But it can be set wrong by Word (I've seen RTF documents on Russian, where cp1252 was specified). In this case this option would take precedence over charset, specified in the document. But source_charset statement in the configuration file have less priority than charset in the document.
     <dt><strong>-t</strong>
     <dd>
       <p>- shortcut for <strong>-f tex</strong><br>
       converts all printable chars, which have special meaning for <strong>LaTeX</strong>(1) into appropriate control sequences. Separates table columns by <strong>&amp;.</strong>
     <dt><strong>-u</strong>
     <dd>
-      <p>- declares that Word document contain UNICODE (UTF-16) representation of text (as some Word-97 documents). If catdoc fails to correct Word document with default charset, try this option.
+      <p>- declares that Word &nbsp;document &nbsp;contain &nbsp;UNICODE &nbsp; (UTF-16) representation of text (as some Word-97 documents). If catdoc fails to correct &nbsp;Word document with &nbsp;default charset, &nbsp; try &nbsp; &nbsp;this &nbsp;option.
     <dt><strong>-8</strong>
     <dd>
       <p>- declares is Word document is 8 bit. Just in case that catdoc<br>
       recognizes file format incorrectly.
     <dt><strong>-w</strong>
     <dd>
-      <p>disables word wrapping. By default <strong>catdoc</strong> output is split into lines not longer than 72 (or number, specified by -m option) characters and paragraphs are separated by blank line. With this option each paragraph is one long line.
+      <p>disables word wrapping. By default <strong>catdoc</strong> output is split into lines not longer than 72 (or &nbsp;number, specified by -m &nbsp;option) &nbsp; characters and paragraphs are separated by blank line. With this option each paragraph is one long line.
     <dt><strong>-x</strong>
     <dd>
       <p>causes catdoc to output unknown UNICODE character as \xNNNN, instead of question marks.
@@ -71,15 +71,15 @@
 <section>
   <h2>CHARACTER SETS</h2>
   <p>When processing MS-Word file <strong>catdoc</strong> uses information about two character sets, typically different<br>
-  - input and output. They are stored in plain text files in <strong>catdoc</strong> data directory. Character set files should contain two whitespace-separated hexadecimal numbers - 8-bit code in character set and 16-bit Unicode code. Anything from hash mark to end of line is ignored, as well as blank lines.<br>
+  - &nbsp;input and output. They are stored in plain text files in <strong>catdoc</strong> data directory. Character set files should contain two whitespace-separated hexadecimal numbers - 8-bit code in character set and 16-bit Unicode code. Anything from hash mark to end of line is ignored, as well as blank lines.<br>
   <br>
-  <strong>catdoc</strong> distribution includes some of these character sets. Additional character set definitions, directly usable by <strong>catdoc</strong> can be obtained from ftp.unicode.org. Charset files have <strong>.txt</strong> suffix, which shouldn't be specified in command-line or configuration files.
-  <p>Note that <strong>catdoc</strong> is distributed with Cyrillic charsets as default. If you are not Russian, you probably don't want it, an should reconfigure catdoc at compile time or in runtime configuration file.
+  <strong>catdoc</strong> distribution includes some of these character sets. Additional character set definitions, directly usable by <strong>catdoc</strong> can be obtained from ftp.unicode.org. Charset files have <strong>.txt</strong> suffix, which shouldn't be specified in command-line or configuration files. &nbsp;
+  <p>Note that <strong>catdoc</strong> is distributed with Cyrillic charsets as default. If you are not Russian, you probably don't want it, an should reconfigure catdoc at &nbsp;compile time or in runtime configuration file.
   <p>When dealing with documents with charsets other than default, remember that Microsoft never uses ISO charsets. While letters in, say cp1252 are at the same position as in ISO-8859-1, some punctuation signs would be lost, if you specify ISO-8859-1 as input charset. If you use cp1252, catdoc would deal with those signs as described in CHARACTER SUBSTITUTION below.
 </section>
 <section>
   <h2>CHARACTER SUBSTITUTION</h2>
-  <p><strong>catdoc</strong> converts MS-Word file into following internal Unicode representation:
+  <p><strong>catdoc</strong> converts &nbsp;MS-Word file into following internal Unicode representation:
   <dl class="indent-4">
     <dt>1. Paragraphs are separated by ASCII Line Feed symbol (0x000A)
     <dt>2. Table cells within row are separated by ASCII Field Separator symbol
@@ -101,9 +101,9 @@
       <p>substitution for this UNICODE char, it is output.
   </dl>
   <p class="indent-4">4. If all above fails, "Unknown char" symbol (question mark) is output.
-  <p>Lists of special characters and list of substitution are character set-independent, because special chars should be escaped regardless of their existence in target character set (usually, they are parts of US-ASCII, and therefore exist in any character set) and replacement list is searched only for those characters, which are not found in target character set.
+  <p>Lists of special characters and list of substitution are character set-independent, because special chars should be escaped regardless of their existence in target character set &nbsp;(usually, they are parts of US-ASCII, and therefore exist in any character set) and replacement list is searched only for those characters, which are not found in target character set.
   <p>These lists are stored in <strong>catdoc</strong> data directory in files with prefix of format name. These files have following format:
-  <p>Each line can be either comment (starting with hash mark) or contain hexadecimal UNICODE value, separated by whitespace from string, which would be substituted instead of it. If string contain no whitespace it can be used as is, otherwise it should be enclosed in single or double quotes. Usual backslash sequences like <em>'\n'</em>,<em>'\t'</em> can be used in these string.
+  <p>Each line can be either comment (starting with hash mark) or contain hexadecimal UNICODE value, separated by whitespace from string, which would be substituted instead of it. If string contain no whitespace it &nbsp;can be used as is, otherwise it should be enclosed in single or double quotes. Usual backslash sequences like <em>'\n'</em>,<em>'\t'</em> can be used in these string.
 </section>
 <section>
   <h2>RUNTIME CONFIGURATION</h2>

@@ -84,6 +84,9 @@ class TextContent
 
         }
 
+        // Preserve spaces used for indentation, e.g. autogsdoc.1 (2nd char in replacement is nbsp):
+        $line = Replace::preg('~  ~', " \xC2\xA0", $line);
+
         // See e.g. imgtool.1
         $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$continuation = $replacements > 0;

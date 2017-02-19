@@ -14,7 +14,7 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><strong>pmdaweblog</strong> is a Performance Metrics Domain Agent (<strong>PMDA</strong>(3)) that scans Web server logs to extract metrics characterizing Web server activity. These performance metrics are then made available through the infrastructure of the Performance Co-Pilot (PCP).
-  <p>The <em>configfile</em> specifies which Web servers are to be monitored, their associated access logs and error logs, and a regular-expression based scheme for extracting detailed information about each Web access. This file is maintained as part of the PMDA installation and/or de-installation by the scripts <strong>Install</strong> and <strong>Remove</strong> in the directory <strong>$PCP_PMDAS_DIR/weblog</strong>. For more details, refer to the section below covering installation.
+  <p>The <em>configfile</em> specifies which Web servers are to be monitored, their associated access logs and error logs, and a regular-expression based scheme for extracting detailed information about each Web access. &nbsp;This file is maintained as part of the PMDA installation and/or de-installation by the scripts <strong>Install</strong> and <strong>Remove</strong> in the directory <strong>$PCP_PMDAS_DIR/weblog</strong>. For more details, refer to the section below covering installation.
   <p>Once started, <strong>pmdaweblog</strong> monitors a set of log files and in response to a request for information, will process any new information that has been appended to the log files, similar to a <strong>tail</strong>(1). There is also periodic "catch up" to process new information from all log files, and a scheme to detect the rotation of log files.
   <p>Like all other PMDAs, <strong>pmdaweblog</strong> is launched by <strong>pmcd</strong>(1) using command line options specified in <em>$PCP_PMCDCONF_PATH</em> - the <strong>Install</strong> script will prompt for appropriate values for the command line options, and update <em>$PCP_PMCDCONF_PATH</em>.
   <p>A brief description of the <strong>pmdaweblog</strong> command line options follows:
@@ -24,8 +24,8 @@
       <p>Check the configuration and exit.
     <dt><strong>-d</strong> <em>domain</em>
     <dd>
-      <p>Specify the <em>domain</em> number. It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the <strong>pmdaweblog</strong> PMDA on all hosts.
-      <p>For most installations, the default <em>domain</em> as encapsulated in the file <strong>$PCP_PMDAS_DIR/weblog/domain.h</strong> will suffice. For alternate values, check <em>$PCP_PMCDCONF_PATH</em> for the <em>domain</em> values already in use on this host, and the file <strong>$PCP_VAR_DIR/pmns/stdpmid</strong> contains a repository of ``well known'' <em>domain</em> assignments that probably should be avoided.
+      <p>Specify the <em>domain</em> number. &nbsp;It is absolutely crucial that the performance metrics <em>domain</em> number specified here is unique and consistent. &nbsp;That is, <em>domain</em> should be different for every PMDA on the one host, and the same <em>domain</em> number should be used for the <strong>pmdaweblog</strong> PMDA on all hosts.
+      <p>For most installations, the default <em>domain</em> as encapsulated in the file <strong>$PCP_PMDAS_DIR/weblog/domain.h</strong> will suffice. &nbsp;For alternate values, check <em>$PCP_PMCDCONF_PATH</em> for the <em>domain</em> values already in use on this host, and the file <strong>$PCP_VAR_DIR/pmns/stdpmid</strong> contains a repository of ``well known'' <em>domain</em> assignments that probably should be avoided.
     <dt><strong>-h</strong> <em>helpfile</em>
     <dd>
       <p>Get the help text from the supplied <em>helpfile</em> rather than from the default location.
@@ -34,7 +34,7 @@
       <p>Communicate with <strong>pmcd</strong>(1) on the specified Internet <em>port</em> (which may be a number or a name).
     <dt><strong>-l</strong> <em>logfile</em>
     <dd>
-      <p>Location of the log file. By default, a log file named <em>weblog.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdaweblog</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
+      <p>Location of the log file. &nbsp;By default, a log file named <em>weblog.log</em> is written in the current directory of <strong>pmcd</strong>(1) when <strong>pmdaweblog</strong> is started, i.e. <strong>$PCP_LOG_DIR/pmcd</strong>. If the log file cannot be created or is not writable, output is written to the standard error instead.
     <dt><strong>-n</strong> <em>idlesec</em>
     <dd>
       <p>If a Web server log file has not been modified for <em>idlesec</em> seconds, then the file will be closed and re-opened. This is the only way <strong>pmdaweblog</strong> can detect any asynchronous rotation of the logs by Web server administrative scripts. The default period is 20 seconds. This value may be changed dynamically using <strong>pmstore</strong>(1) to modify the value of the performance metric <strong>web.config.check</strong>.
@@ -57,7 +57,7 @@
 </section>
 <section>
   <h2>INSTALLATION</h2>
-  <p>The PCP framework allows metrics to be collected on one host and monitored from another. These hosts are referred to as <em>collector</em> and <em>monitor</em> hosts, respectively. A host may be both a collector and a monitor.
+  <p>The PCP framework allows metrics to be collected on one host and monitored from another. &nbsp;These hosts are referred to as <em>collector</em> and <em>monitor</em> hosts, respectively. &nbsp;A host may be both a collector and a monitor.
   <p>Collector hosts require the installation of the agent, while monitoring hosts require no agent installation at all.
   <p>For collector hosts do the following as root:
   <pre># cd $PCP_PMDAS_DIR/weblog
@@ -100,7 +100,7 @@ regex CERN_err .
 
 # pattern for FTP Server error logs (normally in SYSLOG)
 regex SYSLOG_FTP_err FTP LOGIN FAILED</pre>
-  <p>If <strong>POSIX</strong> compliant regular expressions are used, additional information is required since the order of parameters cannot be specified in the regular expression. For backwards compatibility, the common case of two parameters the order may be specified as <em>method,size</em> or <em>size,method</em> In the general case, the ordering is specified by one of the following methods:
+  <p>If <strong>POSIX</strong> compliant regular expressions are used, additional information is required &nbsp;since the order of parameters cannot be specified in the regular expression. &nbsp;For backwards compatibility, the common case of two parameters the order &nbsp;may be specified as <em>method,size</em> or <em>size,method</em> In the general case, the ordering is specified by one of the following methods:
   <dl class="indent-37.5n">
     <dt>n1,n2,n3,n4
     <dd>
@@ -148,7 +148,7 @@ server ftpd on SYSLOG_FTP /var/log/messages SYSLOG_FTP_err /var/log/messages</pr
 </section>
 <section>
   <h2>CAVEATS</h2>
-  <p>Specifying regular expressions with an incorrect number of arguments, anything other than 2 for access logs, and none for error logs, may cause the PMDA to behave incorrectly and even crash. This is due to limitations in the interface of <strong>regex</strong>(3).
+  <p>Specifying regular expressions with an incorrect number of arguments, anything other than 2 for access logs, and none for error logs, may cause the PMDA to behave &nbsp;incorrectly and even crash. This is due to limitations in the interface of <strong>regex</strong>(3).
 </section>
 <section>
   <h2>FILES</h2>

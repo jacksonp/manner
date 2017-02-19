@@ -16,7 +16,7 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p>In the simplest case <strong>strace</strong> runs the specified <em>command</em> until it exits. It intercepts and records the system calls which are called by a process and the signals which are received by a process. The name of each system call, its arguments and its return value are printed on standard error or to the file specified with the <strong>-o</strong> option.
-  <p><strong>strace</strong> is a useful diagnostic, instructional, and debugging tool. System administrators, diagnosticians and trouble-shooters will find it invaluable for solving problems with programs for which the source is not readily available since they do not need to be recompiled in order to trace them. Students, hackers and the overly-curious will find that a great deal can be learned about a system and its system calls by tracing even ordinary programs. And programmers will find that since system calls and signals are events that happen at the user/kernel interface, a close examination of this boundary is very useful for bug isolation, sanity checking and attempting to capture race conditions.
+  <p><strong>strace</strong> is a useful diagnostic, instructional, and debugging tool. System administrators, diagnosticians and trouble-shooters will find it invaluable for solving problems with programs for which the source is not readily available since they do not need to be recompiled in order to trace them. Students, hackers and the overly-curious will find that a great deal can be learned about a system and its system calls by tracing even ordinary programs. &nbsp;And programmers will find that since system calls and signals are events that happen at the user/kernel interface, a close examination of this boundary is very useful for bug isolation, sanity checking and attempting to capture race conditions.
   <p>Each line in the trace contains the system call name, followed by its arguments in parentheses and its return value. An example from stracing the command "cat /dev/null" is:
   <pre><code>open("/dev/null", O_RDONLY) = 3</code></pre>
   <p>Errors (typically a return value of -1) have the errno symbol and error string appended.
@@ -36,19 +36,19 @@ rt_sigreturn(0xe)                       = 0
 read(0, "", 1)                          = 0</code></pre>
   <p>Arguments are printed in symbolic form with a passion. This example shows the shell performing "&gt;&gt;xyzzy" output redirection:
   <pre><code>open("xyzzy", O_WRONLY|O_APPEND|O_CREAT, 0666) = 3</code></pre>
-  <p>Here the third argument of open is decoded by breaking down the flag argument into its three bitwise-OR constituents and printing the mode value in octal by tradition. Where traditional or native usage differs from ANSI or POSIX, the latter forms are preferred. In some cases, <strong>strace</strong> output has proven to be more readable than the source.
-  <p>Structure pointers are dereferenced and the members are displayed as appropriate. In all cases arguments are formatted in the most C-like fashion possible. For example, the essence of the command "ls -l /dev/null" is captured as:
+  <p>Here the third argument of open is decoded by breaking down the flag argument into its three bitwise-OR constituents and printing the mode value in octal by tradition. &nbsp;Where traditional or native usage differs from ANSI or POSIX, the latter forms are preferred. In some cases, <strong>strace</strong> output has proven to be more readable than the source.
+  <p>Structure pointers are dereferenced and the members are displayed as appropriate. &nbsp;In all cases arguments are formatted in the most C-like fashion possible. For example, the essence of the command "ls -l /dev/null" is captured as:
   <pre><code>lstat("/dev/null", {st_mode=S_IFCHR|0666, st_rdev=makedev(1, 3), ...}) = 0</code></pre>
-  <p>Notice how the 'struct stat' argument is dereferenced and how each member is displayed symbolically. In particular, observe how the st_mode member is carefully decoded into a bitwise-OR of symbolic and numeric values. Also notice in this example that the first argument to lstat is an input to the system call and the second argument is an output. Since output arguments are not modified if the system call fails, arguments may not always be dereferenced. For example, retrying the "ls -l" example with a non-existent file produces the following line:
+  <p>Notice how the 'struct stat' argument is dereferenced and how each member is displayed symbolically. &nbsp;In particular, observe how the st_mode member is carefully decoded into a bitwise-OR of symbolic and numeric values. Also notice in this example that the first argument to lstat is an input to the system call and the second argument is an output. &nbsp;Since output arguments are not modified if the system call fails, arguments may not always be dereferenced. &nbsp;For example, retrying the "ls -l" example with a non-existent file produces the following line:
   <pre><code>lstat("/foo/bar", 0xb004) = -1 ENOENT (No such file or directory)</code></pre>
   <p>In this case the porch light is on but nobody is home.
   <p>Character pointers are dereferenced and printed as C strings. Non-printing characters in strings are normally represented by ordinary C escape codes. Only the first <em>strsize</em> (32 by default) bytes of strings are printed; longer strings have an ellipsis appended following the closing quote. Here is a line from "ls -l" where the <strong>getpwuid</strong> library routine is reading the password file:
   <pre><code>read(3, "root::0:0:System Administrator:/"..., 1024) = 422</code></pre>
-  <p>While structures are annotated using curly braces, simple pointers and arrays are printed using square brackets with commas separating elements. Here is an example from the command "id" on a system with supplementary group ids:
+  <p>While structures are annotated using curly braces, simple pointers and arrays are printed using square brackets with commas separating elements. &nbsp;Here is an example from the command "id" on a system with supplementary group ids:
   <pre><code>getgroups(32, [100, 0]) = 2</code></pre>
-  <p>On the other hand, bit-sets are also shown using square brackets but set elements are separated only by a space. Here is the shell preparing to execute an external command:
+  <p>On the other hand, bit-sets are also shown using square brackets but set elements are separated only by a space. &nbsp;Here is the shell preparing to execute an external command:
   <pre><code>sigprocmask(SIG_BLOCK, [CHLD TTOU], []) = 0</code></pre>
-  <p>Here the second argument is a bit-set of two signals, SIGCHLD and SIGTTOU. In some cases the bit-set is so full that printing out the unset elements is more valuable. In that case, the bit-set is prefixed by a tilde like this:
+  <p>Here the second argument is a bit-set of two signals, SIGCHLD and SIGTTOU. In some cases the bit-set is so full that printing out the unset elements is more valuable. &nbsp;In that case, the bit-set is prefixed by a tilde like this:
   <pre><code>sigprocmask(SIG_UNBLOCK, ~[], NULL) = 0</code></pre>
   <p>Here the second argument represents the full set of all signals.
 </section>
@@ -57,19 +57,19 @@ read(0, "", 1)                          = 0</code></pre>
   <dl>
     <dt><strong>-c</strong>
     <dd>
-      <p>Count time, calls, and errors for each system call and report a summary on program exit. On Linux, this attempts to show system time (CPU time spent running in the kernel) independent of wall clock time. If <strong>-c</strong> is used with <strong>-f</strong> or <strong>-F</strong> (below), only aggregate totals for all traced processes are kept.
+      <p>Count time, calls, and errors for each system call and report a summary on program exit. &nbsp;On Linux, this attempts to show system time (CPU time spent running in the kernel) independent of wall clock time. &nbsp;If <strong>-c</strong> is used with <strong>-f</strong> or <strong>-F</strong> (below), only aggregate totals for all traced processes are kept.
     <dt><strong>-C</strong>
     <dd>
       <p>Like <strong>-c</strong> but also print regular output while processes are running.
     <dt><strong>-D</strong>
     <dd>
-      <p>Run tracer process as a detached grandchild, not as parent of the tracee. This reduces the visible effect of <strong>strace</strong> by keeping the tracee a direct child of the calling process.
+      <p>Run tracer process as a detached grandchild, not as parent of the tracee. &nbsp;This reduces the visible effect of <strong>strace</strong> by keeping the tracee a direct child of the calling process.
     <dt><strong>-d</strong>
     <dd>
       <p>Show some debugging output of <strong>strace</strong> itself on the standard error.
     <dt><strong>-f</strong>
     <dd>
-      <p>Trace child processes as they are created by currently traced processes as a result of the <strong>fork</strong>(2), <strong>vfork</strong>(2) and <strong>clone</strong>(2) system calls. Note that <strong>-p</strong> <em>PID</em> <strong>-f</strong> will attach all threads of process PID if it is multi-threaded, not only thread with thread_id = PID.
+      <p>Trace child processes as they are created by currently traced processes as a result of the <strong>fork</strong>(2), <strong>vfork</strong>(2) and <strong>clone</strong>(2) system calls. &nbsp;Note that <strong>-p</strong> <em>PID</em> <strong>-f</strong> will attach all threads of process PID if it is multi-threaded, not only thread with thread_id = PID.
     <dt><strong>-ff</strong>
     <dd>
       <p>If the <strong>-o</strong> <em>filename</em> option is in effect, each processes trace is written to <em>filename.pid</em> where pid is the numeric process id of each process. This is incompatible with <strong>-c</strong>, since no per-process counts are kept.
@@ -87,13 +87,13 @@ read(0, "", 1)                          = 0</code></pre>
       <p>Print the execution stack trace of the traced processes after each system call (experimental). This option is available only if <strong>strace</strong> is built with libunwind.
     <dt><strong>-q</strong>
     <dd>
-      <p>Suppress messages about attaching, detaching etc. This happens automatically when output is redirected to a file and the command is run directly instead of attaching.
+      <p>Suppress messages about attaching, detaching etc. &nbsp;This happens automatically when output is redirected to a file and the command is run directly instead of attaching.
     <dt><strong>-qq</strong>
     <dd>
       <p>If given twice, suppress messages about process exit status.
     <dt><strong>-r</strong>
     <dd>
-      <p>Print a relative timestamp upon entry to each system call. This records the time difference between the beginning of successive system calls.
+      <p>Print a relative timestamp upon entry to each system call. &nbsp;This records the time difference between the beginning of successive system calls.
     <dt><strong>-t</strong>
     <dd>
       <p>Prefix each line of the trace with the time of day.
@@ -105,13 +105,13 @@ read(0, "", 1)                          = 0</code></pre>
       <p>If given thrice, the time printed will include the microseconds and the leading portion will be printed as the number of seconds since the epoch.
     <dt><strong>-T</strong>
     <dd>
-      <p>Show the time spent in system calls. This records the time difference between the beginning and the end of each system call.
+      <p>Show the time spent in system calls. &nbsp;This records the time difference between the beginning and the end of each system call.
     <dt><strong>-w</strong>
     <dd>
-      <p>Summarise the time difference between the beginning and end of each system call. The default is to summarise the system time.
+      <p>Summarise the time difference between the beginning and end of each system call. &nbsp;The default is to summarise the system time.
     <dt><strong>-v</strong>
     <dd>
-      <p>Print unabbreviated versions of environment, stat, termios, etc. calls. These structures are very common in calls and so the default behavior displays a reasonable subset of structure members. Use this option to get all of the gory details.
+      <p>Print unabbreviated versions of environment, stat, termios, etc. calls. &nbsp;These structures are very common in calls and so the default behavior displays a reasonable subset of structure members. &nbsp;Use this option to get all of the gory details.
     <dt><strong>-V</strong>
     <dd>
       <p>Print the version number of <strong>strace</strong>.
@@ -132,24 +132,24 @@ read(0, "", 1)                          = 0</code></pre>
       <p>Align return values in a specific column (default column 40).
     <dt><strong>-b</strong> <em>syscall</em>
     <dd>
-      <p>If specified syscall is reached, detach from traced process. Currently, only <em>execve</em> syscall is supported. This option is useful if you want to trace multi-threaded process and therefore require -f, but don't want to trace its (potentially very complex) children.
+      <p>If specified syscall is reached, detach from traced process. Currently, only <em>execve</em> syscall is supported. &nbsp;This option is useful if you want to trace multi-threaded process and therefore require -f, but don't want to trace its (potentially very complex) children.
     <dt><strong>-e</strong> <em>expr</em>
     <dd>
-      <p>A qualifying expression which modifies which events to trace or how to trace them. The format of the expression is:
+      <p>A qualifying expression which modifies which events to trace or how to trace them. &nbsp;The format of the expression is:
       <div class="indent-15">
         <p class="indent">[<em>qualifier</em><strong>=</strong>][<strong>!</strong>]<em>value1</em>[<strong>,</strong><em>value2</em>]...
       </div>
-      <p>where <em>qualifier</em> is one of <strong>trace</strong>, <strong>abbrev</strong>, <strong>verbose</strong>, <strong>raw</strong>, <strong>signal</strong>, <strong>read</strong>, or <strong>write</strong> and <em>value</em> is a qualifier-dependent symbol or number. The default qualifier is <strong>trace</strong>. Using an exclamation mark negates the set of values. For example, <strong>-e</strong>&nbsp;<strong>open</strong> means literally <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>open</strong> which in turn means trace only the <strong>open</strong> system call. By contrast, <strong>-e</strong>&nbsp;<strong>trace</strong>=!<strong>open</strong> means to trace every system call except <strong>open</strong>. In addition, the special values <strong>all</strong> and <strong>none</strong> have the obvious meanings.
-      <p>Note that some shells use the exclamation point for history expansion even inside quoted arguments. If so, you must escape the exclamation point with a backslash.
+      <p>where <em>qualifier</em> is one of <strong>trace</strong>, <strong>abbrev</strong>, <strong>verbose</strong>, <strong>raw</strong>, <strong>signal</strong>, <strong>read</strong>, or <strong>write</strong> and <em>value</em> is a qualifier-dependent symbol or number. &nbsp;The default qualifier is <strong>trace</strong>. Using an exclamation mark negates the set of values. &nbsp;For example, <strong>-e</strong>&nbsp;<strong>open</strong> means literally <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>open</strong> which in turn means trace only the <strong>open</strong> system call. &nbsp;By contrast, <strong>-e</strong>&nbsp;<strong>trace</strong>=!<strong>open</strong> means to trace every system call except <strong>open</strong>. In addition, the special values <strong>all</strong> and <strong>none</strong> have the obvious meanings.
+      <p>Note that some shells use the exclamation point for history expansion even inside quoted arguments. &nbsp;If so, you must escape the exclamation point with a backslash.
     <dt><strong>-e&nbsp;trace</strong>=<em>set</em>
     <dd>
-      <p>Trace only the specified set of system calls. The <strong>-c</strong> option is useful for determining which system calls might be useful to trace. For example, <strong>trace</strong>=<strong>open,close,read,write</strong> means to only trace those four system calls. Be careful when making inferences about the user/kernel boundary if only a subset of system calls are being monitored. The default is <strong>trace</strong>=<strong>all</strong>.
+      <p>Trace only the specified set of system calls. &nbsp;The <strong>-c</strong> option is useful for determining which system calls might be useful to trace. &nbsp;For example, <strong>trace</strong>=<strong>open,close,read,write</strong> means to only trace those four system calls. &nbsp;Be careful when making inferences about the user/kernel boundary if only a subset of system calls are being monitored. &nbsp;The default is <strong>trace</strong>=<strong>all</strong>.
     <dt><strong>-e&nbsp;trace</strong>=<strong>file</strong>
     <dd>
-      <p>Trace all system calls which take a file name as an argument. You can think of this as an abbreviation for <strong>-e&nbsp;trace</strong>=<strong>open</strong>,<strong>stat</strong>,<strong>chmod</strong>,<strong>unlink</strong>,... which is useful to seeing what files the process is referencing. Furthermore, using the abbreviation will ensure that you don't accidentally forget to include a call like <strong>lstat</strong> in the list. Betchya woulda forgot that one.
+      <p>Trace all system calls which take a file name as an argument. &nbsp;You can think of this as an abbreviation for <strong>-e&nbsp;trace</strong>=<strong>open</strong>,<strong>stat</strong>,<strong>chmod</strong>,<strong>unlink</strong>,... which is useful to seeing what files the process is referencing. Furthermore, using the abbreviation will ensure that you don't accidentally forget to include a call like <strong>lstat</strong> in the list. &nbsp;Betchya woulda forgot that one.
     <dt><strong>-e&nbsp;trace</strong>=<strong>process</strong>
     <dd>
-      <p>Trace all system calls which involve process management. This is useful for watching the fork, wait, and exec steps of a process.
+      <p>Trace all system calls which involve process management. &nbsp;This is useful for watching the fork, wait, and exec steps of a process.
     <dt><strong>-e&nbsp;trace</strong>=<strong>network</strong>
     <dd>
       <p>Trace all the network related system calls.
@@ -170,19 +170,19 @@ read(0, "", 1)                          = 0</code></pre>
       <p>Abbreviate the output from printing each member of large structures. The default is <strong>abbrev</strong>=<strong>all</strong>. The <strong>-v</strong> option has the effect of <strong>abbrev</strong>=<strong>none</strong>.
     <dt><strong>-e&nbsp;verbose</strong>=<em>set</em>
     <dd>
-      <p>Dereference structures for the specified set of system calls. The default is <strong>verbose</strong>=<strong>all</strong>.
+      <p>Dereference structures for the specified set of system calls. &nbsp;The default is <strong>verbose</strong>=<strong>all</strong>.
     <dt><strong>-e&nbsp;raw</strong>=<em>set</em>
     <dd>
-      <p>Print raw, undecoded arguments for the specified set of system calls. This option has the effect of causing all arguments to be printed in hexadecimal. This is mostly useful if you don't trust the decoding or you need to know the actual numeric value of an argument.
+      <p>Print raw, undecoded arguments for the specified set of system calls. This option has the effect of causing all arguments to be printed in hexadecimal. &nbsp;This is mostly useful if you don't trust the decoding or you need to know the actual numeric value of an argument.
     <dt><strong>-e&nbsp;signal</strong>=<em>set</em>
     <dd>
-      <p>Trace only the specified subset of signals. The default is <strong>signal</strong>=<strong>all</strong>. For example, <strong>signal =! SIGIO</strong> (or <strong>signal</strong>=!<strong>io</strong>) causes SIGIO signals not to be traced.
+      <p>Trace only the specified subset of signals. &nbsp;The default is <strong>signal</strong>=<strong>all</strong>. For example, <strong>signal =! SIGIO</strong> (or <strong>signal</strong>=!<strong>io</strong>) causes SIGIO signals not to be traced.
     <dt><strong>-e&nbsp;read</strong>=<em>set</em>
     <dd>
-      <p>Perform a full hexadecimal and ASCII dump of all the data read from file descriptors listed in the specified set. For example, to see all input activity on file descriptors <em>3</em> and <em>5</em> use <strong>-e&nbsp;read</strong>=<em>3</em>,<em>5</em>. Note that this is independent from the normal tracing of the <strong>read</strong>(2) system call which is controlled by the option <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>read</strong>.
+      <p>Perform a full hexadecimal and ASCII dump of all the data read from file descriptors listed in the specified set. &nbsp;For example, to see all input activity on file descriptors <em>3</em> and <em>5</em> use <strong>-e&nbsp;read</strong>=<em>3</em>,<em>5</em>. Note that this is independent from the normal tracing of the <strong>read</strong>(2) system call which is controlled by the option <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>read</strong>.
     <dt><strong>-e&nbsp;write</strong>=<em>set</em>
     <dd>
-      <p>Perform a full hexadecimal and ASCII dump of all the data written to file descriptors listed in the specified set. For example, to see all output activity on file descriptors <em>3</em> and <em>5</em> use <strong>-e&nbsp;write</strong>=<em>3</em>,<em>5</em>. Note that this is independent from the normal tracing of the <strong>write</strong>(2) system call which is controlled by the option <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>write</strong>.
+      <p>Perform a full hexadecimal and ASCII dump of all the data written to file descriptors listed in the specified set. &nbsp;For example, to see all output activity on file descriptors <em>3</em> and <em>5</em> use <strong>-e&nbsp;write</strong>=<em>3</em>,<em>5</em>. Note that this is independent from the normal tracing of the <strong>write</strong>(2) system call which is controlled by the option <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>write</strong>.
     <dt><strong>-I</strong> <em>interruptible</em>
     <dd>
       <p>When strace can be interrupted by signals (such as pressing ^C). 1: no signals are blocked; 2: fatal signals are blocked while decoding syscall (default); 3: fatal signals are always blocked (default if '-o FILE PROG'); 4: fatal signals and SIGTSTP (^Z) are always blocked (useful to make strace -o FILE PROG not stop on ^Z).
@@ -191,7 +191,7 @@ read(0, "", 1)                          = 0</code></pre>
       <p>Write the trace output to the file <em>filename</em> rather than to stderr. Use <em>filename.pid</em> if <strong>-ff</strong> is used. If the argument begins with '|' or with '!' then the rest of the argument is treated as a command and all output is piped to it. This is convenient for piping the debugging output to a program without affecting the redirections of executed programs.
     <dt><strong>-O</strong> <em>overhead</em>
     <dd>
-      <p>Set the overhead for tracing system calls to <em>overhead</em> microseconds. This is useful for overriding the default heuristic for guessing how much time is spent in mere measuring when timing system calls using the <strong>-c</strong> option. The accuracy of the heuristic can be gauged by timing a given program run without tracing (using <strong>time</strong>(1)) and comparing the accumulated system call time to the total produced using <strong>-c</strong>.
+      <p>Set the overhead for tracing system calls to <em>overhead</em> microseconds. This is useful for overriding the default heuristic for guessing how much time is spent in mere measuring when timing system calls using the <strong>-c</strong> option. &nbsp;The accuracy of the heuristic can be gauged by timing a given program run without tracing (using <strong>time</strong>(1)) and comparing the accumulated system call time to the total produced using <strong>-c</strong>.
     <dt><strong>-p</strong> <em>pid</em>
     <dd>
       <p>Attach to the process with the process <small>ID</small> <em>pid</em> and begin tracing. The trace may be terminated at any time by a keyboard interrupt signal (<small>CTRL-C).</small> <strong>strace</strong> will respond by detaching itself from the traced process(es) leaving it (them) to continue running. Multiple <strong>-p</strong> options can be used to attach to many processes in addition to <em>command</em> (which is optional if at least one <strong>-p</strong> option is given). <strong>-p</strong> "`pidof PROG`" syntax is supported.
@@ -200,10 +200,10 @@ read(0, "", 1)                          = 0</code></pre>
       <p>Trace only system calls accessing <em>path</em>. Multiple <strong>-P</strong> options can be used to specify several paths.
     <dt><strong>-s</strong> <em>strsize</em>
     <dd>
-      <p>Specify the maximum string size to print (the default is 32). Note that filenames are not considered strings and are always printed in full.
+      <p>Specify the maximum string size to print (the default is 32). &nbsp;Note that filenames are not considered strings and are always printed in full.
     <dt><strong>-S</strong> <em>sortby</em>
     <dd>
-      <p>Sort the output of the histogram printed by the <strong>-c</strong> option by the specified criterion. Legal values are <strong>time</strong>, <strong>calls</strong>, <strong>name</strong>, and <strong>nothing</strong> (default is <strong>time</strong>).
+      <p>Sort the output of the histogram printed by the <strong>-c</strong> option by the specified criterion. &nbsp;Legal values are <strong>time</strong>, <strong>calls</strong>, <strong>name</strong>, and <strong>nothing</strong> (default is <strong>time</strong>).
     <dt><strong>-u</strong> <em>username</em>
     <dd>
       <p>Run command with the user ID, group ID, and supplementary groups of <em>username</em>. This option is only useful when running as root and enables the correct execution of setuid and/or setgid binaries. Unless this option is used setuid and setgid programs are executed without effective privileges.
@@ -231,10 +231,10 @@ read(0, "", 1)                          = 0</code></pre>
 <section>
   <h2>NOTES</h2>
   <p>It is a pity that so much tracing clutter is produced by systems employing shared libraries.
-  <p>It is instructive to think about system call inputs and outputs as data-flow across the user/kernel boundary. Because user-space and kernel-space are separate and address-protected, it is sometimes possible to make deductive inferences about process behavior using inputs and outputs as propositions.
-  <p>In some cases, a system call will differ from the documented behavior or have a different name. For example, on System V-derived systems the true <strong>time</strong>(2) system call does not take an argument and the <strong>stat</strong> function is called <strong>xstat</strong> and takes an extra leading argument. These discrepancies are normal but idiosyncratic characteristics of the system call interface and are accounted for by C library wrapper functions.
-  <p>Some system calls have different names in different architectures and personalities. In these cases, system call filtering and printing uses the names that match corresponding <strong>__NR_</strong>* kernel macros of the tracee's architecture and personality. There are two exceptions from this general rule: <strong>arm_fadvise64_64</strong>(2) ARM syscall and <strong>xtensa_fadvise64_64</strong>(2) Xtensa syscall are filtered and printed as <strong>fadvise64_64</strong>(2).
-  <p>On some platforms a process that is attached to with the <strong>-p</strong> option may observe a spurious EINTR return from the current system call that is not restartable. (Ideally, all system calls should be restarted on strace attach, making the attach invisible to the traced process, but a few system calls aren't. Arguably, every instance of such behavior is a kernel bug.) This may have an unpredictable effect on the process if the process takes no action to restart the system call.
+  <p>It is instructive to think about system call inputs and outputs as data-flow across the user/kernel boundary. &nbsp;Because user-space and kernel-space are separate and address-protected, it is sometimes possible to make deductive inferences about process behavior using inputs and outputs as propositions.
+  <p>In some cases, a system call will differ from the documented behavior or have a different name. &nbsp;For example, on System V-derived systems the true <strong>time</strong>(2) system call does not take an argument and the <strong>stat</strong> function is called <strong>xstat</strong> and takes an extra leading argument. &nbsp;These discrepancies are normal but idiosyncratic characteristics of the system call interface and are accounted for by C library wrapper functions.
+  <p>Some system calls have different names in different architectures and personalities. &nbsp;In these cases, system call filtering and printing uses the names that match corresponding <strong>__NR_</strong>* kernel macros of the tracee's architecture and personality. There are two exceptions from this general rule: <strong>arm_fadvise64_64</strong>(2) ARM syscall and <strong>xtensa_fadvise64_64</strong>(2) Xtensa syscall are filtered and printed as <strong>fadvise64_64</strong>(2).
+  <p>On some platforms a process that is attached to with the <strong>-p</strong> option may observe a spurious EINTR return from the current system call that is not restartable. &nbsp;(Ideally, all system calls should be restarted on strace attach, making the attach invisible to the traced process, but a few system calls aren't. Arguably, every instance of such behavior is a kernel bug.) This may have an unpredictable effect on the process if the process takes no action to restart the system call.
 </section>
 <section>
   <h2>BUGS</h2>
@@ -245,7 +245,7 @@ read(0, "", 1)                          = 0</code></pre>
 </section>
 <section>
   <h2>HISTORY</h2>
-  <p>The original <strong>strace</strong> was written by Paul Kranenburg for SunOS and was inspired by its trace utility. The SunOS version of <strong>strace</strong> was ported to Linux and enhanced by Branko Lankester, who also wrote the Linux kernel support. Even though Paul released <strong>strace</strong> 2.5 in 1992, Branko's work was based on Paul's <strong>strace</strong> 1.5 release from 1991. In 1993, Rick Sladkey merged <strong>strace</strong> 2.5 for SunOS and the second release of <strong>strace</strong> for Linux, added many of the features of <strong>truss</strong>(1) from SVR4, and produced an <strong>strace</strong> that worked on both platforms. In 1994 Rick ported <strong>strace</strong> to SVR4 and Solaris and wrote the automatic configuration support. In 1995 he ported <strong>strace</strong> to Irix and tired of writing about himself in the third person.
+  <p>The original <strong>strace</strong> was written by Paul Kranenburg for SunOS and was inspired by its trace utility. The SunOS version of <strong>strace</strong> was ported to Linux and enhanced by Branko Lankester, who also wrote the Linux kernel support. Even though Paul released <strong>strace</strong> 2.5 in 1992, Branko's work was based on Paul's <strong>strace</strong> 1.5 release from 1991. In 1993, Rick Sladkey merged <strong>strace</strong> 2.5 for SunOS and the second release of <strong>strace</strong> for Linux, added many of the features of <strong>truss</strong>(1) from SVR4, and produced an <strong>strace</strong> that worked on both platforms. &nbsp;In 1994 Rick ported <strong>strace</strong> to SVR4 and Solaris and wrote the automatic configuration support. &nbsp;In 1995 he ported <strong>strace</strong> to Irix and tired of writing about himself in the third person.
 </section>
 <section>
   <h2>PROBLEMS</h2>

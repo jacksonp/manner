@@ -14,18 +14,18 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><strong>sheet2pcp</strong> is intended to read a data spreadsheet (<em>infile</em>) translate this into a Performance Co-Pilot (PCP) archive with the basename <em>outfile</em>.
-  <p>The input spreadsheet can be in any of the common formats, provided the appropriate Perl modules have been installed (see the <strong>CAVEATS</strong> section below). The spreadsheet must be normalized so that each row contains data for the same time interval, and one of the columns contains the date and time for the data in each row.
+  <p>The input spreadsheet can be in any of the common formats, provided the appropriate Perl modules have been installed (see the <strong>CAVEATS</strong> section below). &nbsp;The spreadsheet must be normalized so that each row contains data for the same time interval, and one of the columns contains the date and time for the data in each row.
   <p>The resultant PCP archive may be used with all the PCP client tools to graph subsets of the data using <strong>pmchart</strong>(1), perform data reduction and reporting, filter with the PCP inference engine <strong>pmie</strong>(1), etc.
-  <p>The <em>mapfile</em> controls the import process and defines the data mapping from the spreadsheet columns onto the PCP data model. The file is written in XML and conforms to the syntax defined in the <strong>MAPPING CONFIGURATION</strong> section below.
-  <p>A series of physical files will be created with the prefix <em>outfile</em>. These are <em>outfile</em><strong>.0</strong> (the performance data), <em>outfile</em><strong>.meta</strong> (the metadata that describes the performance data) and <em>outfile</em><strong>.index</strong> (a temporal index to improve efficiency of replay operations for the archive). If any of these files exists already, then <strong>sheet2pcp</strong> will <strong>not</strong> overwrite them and will exit with an error message.
-  <p>The <strong>-h</strong> option is an alternate to the <strong>hostname</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. If both are specified, the value from <em>mapfile</em> is used.
-  <p>The <strong>-Z</strong> option is an alternate to the <strong>timezone</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. If both are specified, the value from <em>mapfile</em> is used.
+  <p>The <em>mapfile</em> controls the import process and defines the data mapping from the spreadsheet columns onto the PCP data model. &nbsp;The file is written in XML and conforms to the syntax defined in the <strong>MAPPING CONFIGURATION</strong> section below.
+  <p>A series of physical files will be created with the prefix <em>outfile</em>. These are <em>outfile</em><strong>.0</strong> (the performance data), <em>outfile</em><strong>.meta</strong> (the metadata that describes the performance data) and <em>outfile</em><strong>.index</strong> (a temporal index to improve efficiency of replay operations for the archive). &nbsp;If any of these files exists already, then <strong>sheet2pcp</strong> will <strong>not</strong> overwrite them and will exit with an error message.
+  <p>The <strong>-h</strong> option is an alternate to the &nbsp;<strong>hostname</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. &nbsp;If both are specified, the value from <em>mapfile</em> is used.
+  <p>The <strong>-Z</strong> option is an alternate to the &nbsp;<strong>timezone</strong> attribute of the <strong>&lt;sheet&gt;</strong> element in <em>mapfile</em> described below. &nbsp;If both are specified, the value from <em>mapfile</em> is used.
   <p><strong>sheet2pcp</strong> is a Perl script that uses the PCP::LogImport Perl wrapper around the PCP <em>libpcp_import</em> library, and as such could be used as an example to develop new tools to import other types of performance data and create PCP archives.
 </section>
 <section>
   <h2>MAPPING CONFIGURATION</h2>
   <p>The <em>mapfile</em> contains specifications in standard XML format.
-  <p>The whole specification is wrapped in a <strong>&lt;sheet&gt;</strong> ... <strong>&lt;/sheet&gt;</strong> element. The <strong>sheet</strong> tag supports the following optional attributes:
+  <p>The whole specification is wrapped in a <strong>&lt;sheet&gt;</strong> ... <strong>&lt;/sheet&gt;</strong> element. The &nbsp;<strong>sheet</strong> tag supports the following optional attributes:
   <dl class="indent-10">
     <dt><strong>heading</strong>
     <dd>
@@ -35,22 +35,22 @@
       <p>Set the source hostname in the PCP archive (the default is to use the hostname of the local host). Example: hostname=some.where.com.
     <dt><strong>timezone</strong>
     <dd>
-      <p>Set the source timezone in the PCP archive (the default is to use UTC). The timezone must have the format +HHMM (for hours and minutes East of UTC) or -HHMM (for hours and minutes West of UTC). Note in particular that <strong>neither</strong> the <strong>zoneinfo</strong> (aka Olson) format, e.g. Europe/Paris, nor the Posix <strong>TZ</strong> format, e.g. EST+5 is allowed. Example: timezone=+1100.
+      <p>Set the source timezone in the PCP archive (the default is to use UTC). &nbsp;The timezone must have the format +HHMM (for hours and minutes East of UTC) or -HHMM (for hours and minutes West of UTC). &nbsp;Note in particular that <strong>neither</strong> the <strong>zoneinfo</strong> (aka Olson) format, e.g. Europe/Paris, nor the Posix <strong>TZ</strong> format, e.g. EST+5 is allowed. Example: timezone=+1100.
     <dt><strong>datefmt</strong>
     <dd>
       <p>The format of the date imported from the spreadsheet may be specified as a concatenation of values that specify the order of the year (<strong>Y</strong>), month (<strong>M</strong>) and day (<strong>D</strong>) fields in a date. The supported variants are <strong>DMY</strong> (the default), <strong>MDY</strong> and <strong>YMD</strong>. Example: datefmt=YMD.
   </dl>
-  <p>A <strong>&lt;sheet&gt;</strong> element contains one or more metric specifications of the form <strong>&lt;metric&gt;</strong><em>metricname</em><strong>&lt;/metric&gt;</strong>. The <strong>metric</strong> tag supports the following optional attributes:
+  <p>A <strong>&lt;sheet&gt;</strong> element contains one or more metric specifications of the form <strong>&lt;metric&gt;</strong><em>metricname</em><strong>&lt;/metric&gt;</strong>. &nbsp;The <strong>metric</strong> tag supports the following optional attributes:
   <dl class="indent-10">
     <dt><strong>pmid</strong>
     <dd>
-      <p>The Performance Metrics Identifier (PMID), specified as 3 numbers separated by a periods (.) to set the <strong>domain</strong>, <strong>cluster</strong> and <strong>item</strong> fields of the PMID, see <strong>PMNS</strong>(5) for more details of PMIDs. If omitted, the PMID will be automatically assigned by <strong>pmiAddMetric</strong>(3). The value <strong>PM_ID_NULL</strong> may be used to explicitly nominate the default behaviour. Examples: pmid=60.0.2, pmid=PM_ID_NULL.
+      <p>The Performance Metrics Identifier (PMID), specified as 3 numbers separated by a periods (.) to set the <strong>domain</strong>, <strong>cluster</strong> and <strong>item</strong> fields of the PMID, see <strong>PMNS</strong>(5) for more details of PMIDs. &nbsp;If omitted, the PMID will be automatically assigned by <strong>pmiAddMetric</strong>(3). The value <strong>PM_ID_NULL</strong> may be used to explicitly nominate the default behaviour. Examples: pmid=60.0.2, pmid=PM_ID_NULL.
     <dt><strong>indom</strong>
     <dd>
-      <p>Each metric may have one or more values. If a metric <strong>always</strong> has one value, it is singular and the Instance Domain should be set to <strong>PM_INDOM_NULL</strong>. Otherwise <strong>indom</strong> should be specified as 2 numbers separated by a period (.) to set the <strong>domain</strong> and <strong>ordinal</strong> fields of the Instance Domain, see the <strong>__pmInDom_int</strong> typedef in <em>&lt;pcp/impl.h&gt;</em>. Examples: indom=PM_INDOM_NULL, indom=60.3, indom=PMI_DOMAIN.4. More than one metric can share the same Instance Domain when the metrics have defined values over similar sets of instances, e.g. all the metrics for each network interface. It is standard practice for the <strong>domain</strong> field to be the same for the <strong>pmid</strong> and the <strong>indom</strong>; if the <strong>pmid</strong> attribute is missing, then the <strong>domain</strong> field for the <strong>indom</strong> should be the reserved domain <strong>PMI_DOMAIN</strong>. If the <strong>indom</strong> attribute is omitted then the default Instance Domain for the metric is <strong>PM_INDOM_NULL</strong>.
+      <p>Each metric may have one or more values. &nbsp;If a metric <strong>always</strong> has one value, it is singular and the Instance Domain should be set to <strong>PM_INDOM_NULL</strong>. Otherwise <strong>indom</strong> should be specified as 2 numbers separated by a period (.) to set the <strong>domain</strong> and <strong>ordinal</strong> fields of the Instance Domain, see the <strong>__pmInDom_int</strong> typedef in <em>&lt;pcp/impl.h&gt;</em>. Examples: indom=PM_INDOM_NULL, indom=60.3, indom=PMI_DOMAIN.4. More than one metric can share the same Instance Domain when the metrics have defined values over similar sets of instances, e.g. all the metrics for each network interface. &nbsp;It is standard practice for the <strong>domain</strong> field to be the same for the <strong>pmid</strong> and the <strong>indom</strong>; if the <strong>pmid</strong> attribute is missing, then the <strong>domain</strong> field for the <strong>indom</strong> should be the reserved domain <strong>PMI_DOMAIN</strong>. If the <strong>indom</strong> attribute is omitted then the default Instance Domain for the metric is <strong>PM_INDOM_NULL</strong>.
     <dt><strong>units</strong>
     <dd>
-      <p>The scale and dimension of the metric values along the axes of space, time and count (events, messages, packets, etc.) is specified with a 6-tuple. These values are passed to the <strong>pmiUnits</strong>(3) function to generate a <em>pmUnits</em> structure. Refer to <strong>pmLookupDesc</strong>(3) for a full description of all the fields of this structure. The default is to assign no scale or dimension to the metric, i.e. units=0,0,0,0,0,0. Examples: units=0,1,0,0,PM_TIME_MSEC,0 (milliseconds), units=1,-1,0,PM_SPACE_MBYTE,PM_TIME_SEC,0 (Mbytes/sec), units=0,1,-1,0,PM_TIME_USEC,PM_COUNT_ONE (microseconds/event).
+      <p>The scale and dimension of the metric values along the axes of space, time and count (events, messages, packets, etc.) is specified with a 6-tuple. These values are passed to the <strong>pmiUnits</strong>(3) function to generate a <em>pmUnits</em> structure. &nbsp;Refer to <strong>pmLookupDesc</strong>(3) for a full description of all the fields of this structure. The default is to assign no scale or dimension to the metric, i.e. units=0,0,0,0,0,0. Examples: units=0,1,0,0,PM_TIME_MSEC,0 (milliseconds), units=1,-1,0,PM_SPACE_MBYTE,PM_TIME_SEC,0 (Mbytes/sec), units=0,1,-1,0,PM_TIME_USEC,PM_COUNT_ONE (microseconds/event).
     <dt><strong>type</strong>
     <dd>
       <p>Defines the data type for the metric. Refer to <strong>pmLookupDesc</strong>(3) for a full description of the possible type values; the default is <strong>PM_TYPE_FLOAT</strong>. Examples: type=PM_TYPE_32, type=PM_TYPE_U64, type=PM_TYPE_STRING.
@@ -62,7 +62,7 @@
   <p>The <strong>&lt;datetime&gt;</strong> element defines the column in which a date and time will be found to form the timestamp in the PCP archive for all the data in each row of the PCP archive.
   <p>For the <strong>&lt;data&gt;</strong> element, a <em>metricspec</em> consists of a metric name (as defined in an earlier <strong>&lt;metric&gt;</strong> element), optionally followed by an instance name that is enclosed by square brackets, e.g. &lt;data&gt;hinv.ncpu&lt;/data&gt;, &lt;data&gt;kernel.all.load[1 minute]&lt;/data&gt;.
   <p>The <strong>skip</strong> tag defines the column that should be skipped when preparing data for the PCP archive.
-  <p>The order of the <strong>&lt;datetime&gt;</strong>, <strong>&lt;data&gt;</strong> and <strong>&lt;skip&gt;</strong> elements matches the order of columns in the spreadsheet. If the number of elements is not the same as the number of columns a warning is issued, and the extra elements or columns generate no metric values in the output archive.
+  <p>The order of the <strong>&lt;datetime&gt;</strong>, <strong>&lt;data&gt;</strong> and <strong>&lt;skip&gt;</strong> elements matches the order of columns in the spreadsheet. &nbsp;If the number of elements is not the same as the number of columns a warning is issued, and the extra elements or columns generate no metric values in the output archive.
   <section>
     <h3>EXAMPLE</h3>
     <p>The <em>mapfile</em> ...
@@ -100,7 +100,7 @@
       <p>Classical Microsoft Office documents require <strong>Spreadsheet::ParseExcel</strong>(3pm), which in turn requires <strong>OLE::Storage_Lite</strong>(3pm).
     <dt><strong>*.xlsx</strong>
     <dd>
-      <p>Microsoft OpenXML documents require <strong>Spreadsheet::XLSX</strong>(3pm). <strong>sheet2pcp</strong> does not appear to work with OpenXML documents saved from OpenOffice.
+      <p>Microsoft OpenXML documents require <strong>Spreadsheet::XLSX</strong>(3pm). &nbsp;<strong>sheet2pcp</strong> does not appear to work with OpenXML documents saved from OpenOffice.
   </dl>
 </section>
 <section>

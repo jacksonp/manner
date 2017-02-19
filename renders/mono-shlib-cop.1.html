@@ -16,7 +16,7 @@
   <dl>
     <dt><em>-p, --prefixes=PREFIX</em>
     <dd>
-      <p>Mono installation prefixes. This is to find $prefix/etc/mono/config. The default is based upon the location of mscorlib.dll, and is normally correct.
+      <p>Mono installation prefixes. &nbsp;This is to find $prefix/etc/mono/config. The default is based upon the location of mscorlib.dll, and is normally correct.
   </dl>
 </section>
 <section>
@@ -36,25 +36,25 @@
   <dl>
     <dt>*
     <dd>
-      <p>Is the target shared library a versioned library? (Relevant only on Unix systems, not Mac OS X or Windows.)
+      <p>Is the target shared library a versioned library? &nbsp;(Relevant only on Unix systems, not Mac OS X or Windows.)
   </dl>
-  <p>In general, only versioned libraries such as <em>libc.so.6</em> are present on the user's machine, and efforts to load <em>libc.so</em> will result in a <strong>System.DllNotFoundException.</strong> There are three solutions to this:
+  <p>In general, only versioned libraries such as <em>libc.so.6</em> are present on the &nbsp;user's machine, and efforts to load <em>libc.so</em> will result in a <strong>System.DllNotFoundException.</strong> There are three solutions to this:
   <dl>
     <dt>1.
     <dd>
-      <p>Require that the user install any <em>-devel</em> packages which provide the unversioned library. This usually requires that the user install a large number of additional packages, complicating the installation process.
+      <p>Require that the user install any <em>-devel</em> packages which provide the &nbsp;unversioned library. &nbsp;This usually requires that the user install a large number of additional packages, complicating the installation process.
     <dt>2.
     <dd>
-      <p>Use a fully versioned name in your <strong>DllImport</strong> statements. This requires editing your source code and recompiling whenever you need to target a different version of the shared library.
+      <p>Use a fully versioned name in your <strong>DllImport</strong> statements. &nbsp;This requires editing your source code and recompiling whenever you need to target a different version of the shared library.
     <dt>3.
     <dd>
-      <p>Provide an <em>assembly.config</em> file which contains &lt;dllmap/&gt; elements to remap the shared library name used by your assembly to the actual versioned shared library present on the users system. Mono provides a number of pre-existing &lt;dllmap/&gt; entries, including ones for <em>libc.so</em> and <em>libX11.so.</em>
+      <p>Provide an <em>assembly.config</em> file which contains &lt;dllmap/&gt; elements to remap the shared library name used by your assembly to the actual versioned shared library present on the users system. &nbsp;Mono provides a number of pre-existing &lt;dllmap/&gt; entries, including ones for <em>libc.so</em> and <em>libX11.so.</em>
   </dl>
 </section>
 <section>
   <h2>EXAMPLE</h2>
   <p>The following code contains examples of the above errors and warnings:
-  <pre>     using System.Runtime.InteropServices; // for DllImport
+  <pre>  using System.Runtime.InteropServices; // for DllImport
         class Demo {
                 [DllImport ("bad-library-name")]
                 private static extern void BadLibraryName ();
@@ -94,10 +94,10 @@
 </section>
 <section>
   <h2>DLLMAP ENTRIES</h2>
-  <p>Mono looks for an <em>ASSEMBLY-NAME</em> .config file for each assembly loaded, and reads this file to find Dll mapping information. For example, with <em>mcs.exe</em> , Mono would read <em>mcs.exe.config</em> , and for <em>Mono.Posix.dll</em> , Mono would read <em>Mono.Posix.dll.config</em>
-  <p>The <em>.config</em> file is an XML document containing a top-level &lt;configuration/&gt; section with nested &lt;dllmap/&gt; entries, which contains <strong>dll</strong> and <strong>target</strong> attributes. The dll attribute should contain the same string used in your <strong>DllImport</strong> attribute value, and the target attribute specifies which shared library mono should <em>actually</em> load at runtime.
+  <p>Mono looks for an <em>ASSEMBLY-NAME</em> .config file for each assembly loaded, and reads this file to find Dll mapping information. &nbsp;For example, with <em>mcs.exe</em> , Mono would read <em>mcs.exe.config</em> , and for <em>Mono.Posix.dll</em> , Mono would read <em>Mono.Posix.dll.config</em>
+  <p>The <em>.config</em> file is an XML document containing a top-level &lt;configuration/&gt; section with nested &lt;dllmap/&gt; entries, which contains <strong>dll</strong> and <strong>target</strong> attributes. &nbsp;The dll attribute should contain the same string used in your <strong>DllImport</strong> attribute value, and the target attribute specifies which shared library mono should <em>actually</em> load at runtime.
   <p>A sample .config file is:
-  <pre>       &lt;configuration&gt;
+  <pre>     &lt;configuration&gt;
                 &lt;dllmap dll="gtkembedmoz" target="libgtkembedmoz.so" /&gt;
         &lt;/configuration&gt;</pre>
 </section>
@@ -106,8 +106,8 @@
   <dl>
     <dt>*
     <dd>
-      <p>Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. Consider this code:
-      <pre> using System.Runtime.InteropServices; // for DllImport
+      <p>Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. &nbsp;Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. &nbsp;Consider this code:
+      <pre>       using System.Runtime.InteropServices; // for DllImport
         class Beep {
                 [DllImport ("kernel32.dll")]
                 private static extern int Beep (int dwFreq, int dwDuration);
@@ -128,7 +128,7 @@
       <p>If <em>mono-shlib-cop</em> is run on this assembly, an error will be reported for using <em>kernel32.dll</em> , even though <em>kernel32.dll</em> will never be used on Unix platforms.
     <dt>*
     <dd>
-      <p><em>mono-shlib-cop</em> currently only examines the shared library file extension to determine if a warning should be generated. A <em>.so</em> extension will always generate a warning, even if the <em>.so</em> is not a symlink, isn't provided in a <em>-devel</em> package, and there is no versioned shared library (possible examples including <em>/usr/lib/libtcl8.4.so,</em> <em>/usr/lib/libubsec.so,</em> etc.).<br>
+      <p><em>mono-shlib-cop</em> currently only examines the shared library file extension to determine if a warning should be generated. &nbsp;A <em>.so</em> extension will always generate a warning, even if the <em>.so</em> is not a symlink, isn't provided in a <em>-devel</em> package, and there is no versioned shared library &nbsp;(possible examples including <em>/usr/lib/libtcl8.4.so,</em> <em>/usr/lib/libubsec.so,</em> etc.).<br>
       <br>
       Consequently, warnings for any such libraries are useless, and incorrect.<br>
       <br>

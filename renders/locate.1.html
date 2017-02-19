@@ -13,10 +13,10 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p>This manual page documents the GNU version of <strong>locate</strong>. For each given pattern, <strong>locate</strong> searches one or more databases of file names and displays the file names that contain the pattern. Patterns can contain shell-style metacharacters: `*', `?', and `[]'. The metacharacters do not treat `/' or `.' specially. Therefore, a pattern `foo*bar' can match a file name that contains `foo3/bar', and a pattern `*duck*' can match a file name that contains `lake/.ducky'. Patterns that contain metacharacters should be quoted to protect them from expansion by the shell.
-  <p>If a pattern is a plain string — it contains no metacharacters — <strong>locate</strong> displays all file names in the database that contain that string anywhere. If a pattern does contain metacharacters, <strong>locate</strong> only displays file names that match the pattern exactly. As a result, patterns that contain metacharacters should usually begin with a `*', and will most often end with one as well. The exceptions are patterns that are intended to explicitly match the beginning or end of a file name.
-  <p>The file name databases contain lists of files that were on the system when the databases were last updated. The system administrator can choose the file name of the default database, the frequency with which the databases are updated, and the directories for which they contain entries; see <strong>updatedb</strong>(1).
-  <p>If <strong>locate</strong>'s output is going to a terminal, unusual characters in the output are escaped in the same way as for the -print action of the <strong>find</strong> command. If the output is not going to a terminal, file names are printed exactly as-is.
+  <p>This manual page documents the GNU version of <strong>locate</strong>. For each given pattern, <strong>locate</strong> searches one or more databases of file names and displays the file names that contain the pattern. &nbsp;Patterns can contain shell-style metacharacters: `*', `?', and `[]'. &nbsp;The metacharacters do not treat `/' or `.' &nbsp;specially. &nbsp;Therefore, a pattern `foo*bar' can match a file name that contains `foo3/bar', and a pattern `*duck*' can match a file name that contains `lake/.ducky'. &nbsp;Patterns that contain metacharacters should be quoted to protect them from expansion by the shell.
+  <p>If a pattern is a plain string — it contains no metacharacters — <strong>locate</strong> displays all file names in the database that contain that string anywhere. &nbsp;If a pattern does contain metacharacters, <strong>locate</strong> only displays file names that match the pattern exactly. &nbsp;As a result, patterns that contain metacharacters should usually begin with a `*', and will most often end with one as well. &nbsp;The exceptions are patterns that are intended to explicitly match the beginning or end of a file name.
+  <p>The file name databases contain lists of files that were on the system when the databases were last updated. &nbsp;The system administrator can choose the file name of the default database, the frequency with which the databases are updated, and the directories for which they contain entries; see <strong>updatedb</strong>(1).
+  <p>If <strong>locate</strong>'s output is going to a terminal, unusual characters in the output are escaped in the same way as for the -print action of the <strong>find</strong> command. &nbsp;If the output is not going to a terminal, file names are printed exactly as-is.
 </section>
 <section>
   <h2>OPTIONS</h2>
@@ -35,11 +35,11 @@
       <p>Instead of printing the matched filenames, just print the total number of matches we found, unless --<em>print</em> (-p) is also present.
     <dt><em>-d path, --database=path</em>
     <dd>
-      <p>Instead of searching the default file name database, search the file name databases in <em>path</em>, which is a colon-separated list of database file names. You can also use the environment variable <strong>LOCATE_PATH</strong> to set the list of database files to search. The option overrides the environment variable if both are used. Empty elements in the path are taken to be synonyms for the file name of the default database. A database can be supplied on stdin, using `-' as an element of <em>path</em>. If more than one element of <em>path</em> is `-', later instances are ignored (and a warning message is printed).
-      <p>The file name database format changed starting with GNU <strong>find</strong> and <strong>locate</strong> version 4.0 to allow machines with different byte orderings to share the databases. This version of <strong>locate</strong> can automatically recognize and read databases produced for older versions of GNU <strong>locate</strong> or Unix versions of <strong>locate</strong> or <strong>find</strong>. Support for the old locate database format will be discontinued in a future release.
+      <p>Instead of searching the default file name database, search the file name databases in <em>path</em>, which is a colon-separated list of database file names. &nbsp;You can also use the environment variable <strong>LOCATE_PATH</strong> to set the list of database files to search. The option overrides the environment variable if both are used. &nbsp;Empty elements in the path are taken to be synonyms for the file name of the default database. A database can be supplied on stdin, using `-' as an element of <em>path</em>. If more than one element of <em>path</em> is `-', later instances are ignored (and a warning message is printed).
+      <p>The file name database format changed starting with GNU <strong>find</strong> and <strong>locate</strong> version 4.0 to allow machines with different byte orderings to share the databases. &nbsp;This version of <strong>locate</strong> can automatically recognize and read databases produced for older versions of GNU <strong>locate</strong> or Unix versions of <strong>locate</strong> or <strong>find</strong>. Support for the old locate database format will be discontinued in a future release.
     <dt><em>-e, --existing</em>
     <dd>
-      <p>Only print out such names that currently exist (instead of such names that existed when the database was created). Note that this may slow down the program a lot, if there are many matches in the database. If you are using this option within a program, please note that it is possible for the file to be deleted after <strong>locate</strong> has checked that it exists, but before you use it.
+      <p>Only print out such names that currently exist (instead of such names that existed when the database was created). Note that this may slow down the program a lot, if there are many matches in the database. &nbsp;If you are using this option within a program, please note that it is possible for the file to be deleted after <strong>locate</strong> has checked that it exists, but before you use it.
     <dt><em>-E, --non-existing</em>
     <dd>
       <p>Only print out such names that currently do not exist (instead of such names that existed when the database was created). Note that this may slow down the program a lot, if there are many matches in the database.
@@ -51,31 +51,31 @@
       <p>Ignore case distinctions in both the pattern and the file names.
     <dt><em>-l N, --limit=N</em>
     <dd>
-      <p>Limit the number of matches to N. If a limit is set via this option, the number of results printed for the -c option will never be larger than this number.
+      <p>Limit the number of matches to N. &nbsp;If a limit is set via this option, the number of results printed for the -c option will never be larger than this number.
     <dt><em>-L, --follow</em>
     <dd>
-      <p>If testing for the existence of files (with the -e or -E options), consider broken symbolic links to be non-existing. This is the default.
+      <p>If testing for the existence of files (with the -e or -E options), consider broken symbolic links to be non-existing. &nbsp; This is the default.
     <dt><em>--max-database-age D</em>
     <dd>
-      <p>Normally, <strong>locate</strong> will issue a warning message when it searches a database which is more than 8 days old. This option changes that value to something other than 8. The effect of specifying a negative value is undefined.
+      <p>Normally, <strong>locate</strong> will issue a warning message when it searches a database which is more than 8 days old. &nbsp;This option changes that value to something other than 8. &nbsp;The effect of specifying a negative value is undefined.
     <dt><em>-m, --mmap</em>
     <dd>
       <p>Accepted but does nothing, for compatibility with BSD <strong>locate</strong>.
     <dt><em>-P, -H, --nofollow</em>
     <dd>
-      <p>If testing for the existence of files (with the -e or -E options), treat broken symbolic links as if they were existing files. The -H form of this option is provided purely for similarity with <strong>find</strong>; the use of -P is recommended over -H.
+      <p>If testing for the existence of files (with the -e or -E options), treat broken symbolic links as if they were existing files. &nbsp;The -H form of this option is provided purely for similarity with <strong>find</strong>; the use of -P is recommended over -H.
     <dt><em>-p, --print</em>
     <dd>
       <p>Print search results when they normally would not, because of the presence of --statistics (-S) or --count (-c).
     <dt><em>-r, --regex</em>
     <dd>
-      <p>The pattern specified on the command line is understood to be a regular expression, as opposed to a glob pattern. The Regular expressions work in the same was as in <strong>emacs</strong> and <strong>find</strong>, except for the fact that "." will match a newline. Filenames whose full paths match the specified regular expression are printed (or, in the case of the -c option, counted). If you wish to anchor your regular expression at the ends of the full path name, then as is usual with regular expressions, you should use the characters ^ and $ to signify this.
+      <p>The pattern specified on the command line is understood to be a regular expression, as opposed to a glob pattern. &nbsp;The Regular expressions work in the same was as in <strong>emacs</strong> and <strong>find</strong>, except for the fact that "." will match a newline. Filenames whose full paths match the specified regular expression are printed (or, in the case of the -c option, counted). &nbsp;If you wish to anchor your regular expression at the ends of the full path name, then as is usual with regular expressions, you should use the characters ^ and $ to signify this.
     <dt><em>-s, --stdio</em>
     <dd>
       <p>Accepted but does nothing, for compatibility with BSD <strong>locate</strong>.
     <dt><em>-S, --statistics</em>
     <dd>
-      <p>Print various statistics about each locate database and then exit without performing a search, unless non-option arguments are given. For compatibility with BSD, -S is accepted as a synonym for --statistics. However, the output of <strong>locate -S</strong> is different for the GNU and BSD implementations of <strong>locate</strong>.
+      <p>Print various statistics about each locate database and then exit without performing a search, unless non-option arguments are given. For compatibility with BSD, -S is accepted as a synonym for --statistics. &nbsp;However, the output of <strong>locate -S</strong> is different for the GNU and BSD implementations of <strong>locate</strong>.
     <dt><em>--version</em>
     <dd>
       <p>Print the version number of <strong>locate</strong> and exit.
@@ -89,18 +89,18 @@
   <dl>
     <dt><strong>LOCATE_PATH</strong>
     <dd>
-      <p>Colon-separated list of databases to search. If the value has a leading or trailing colon, or has two colons in a row, you may get results that vary between different versions of <strong>locate</strong>.
+      <p>Colon-separated list of databases to search. &nbsp;If the value has a leading or trailing colon, or has two colons in a row, you may get results that vary between different versions of <strong>locate</strong>.
   </dl>
 </section>
 <section>
   <h2>SEE ALSO</h2>
   <p><strong>find</strong>(1), <strong>locatedb</strong>(5), <strong>updatedb</strong>(1), <strong>xargs</strong>(1), <strong>glob</strong>(3)<br>
   <br>
-  The full documentation for <strong>locate</strong> is maintained as a Texinfo manual. If the <strong>info</strong> and <strong>locate</strong> programs are properly installed at your site, the command <strong>info locate</strong> should give you access to the complete manual.
+  The full documentation for <strong>locate</strong> is maintained as a Texinfo manual. &nbsp;If the <strong>info</strong> and <strong>locate</strong> programs are properly installed at your site, the command <strong>info locate</strong> should give you access to the complete manual.
 </section>
 <section>
   <h2>HISTORY</h2>
-  <p>The <strong>locate</strong> program started life as the BSD fast find program, contributed to BSD by James A. Woods. This was described by his paper <em>Finding Files Fast</em> which was published in Usenix <em>;login:</em>, Vol 8, No 1, February/March, 1983, pp. 8-10. When the <strong>find</strong> program began to assume a default <strong>-print</strong> action if no action was specified, this changed the interpretation of <strong>find</strong> <strong>pattern</strong>. The BSD developers therefore moved the fast find functionality into <strong>locate</strong>. The GNU implementation of <strong>locate</strong> appears to be derived from the same code.
+  <p>The <strong>locate</strong> program started life as the BSD fast find program, contributed to BSD by James A. Woods. &nbsp;This was described by his paper <em>Finding Files Fast</em> which was published in Usenix <em>;login:</em>, Vol 8, No 1, February/March, 1983, pp. 8-10. &nbsp; When the <strong>find</strong> program began to assume a default <strong>-print</strong> action if no action was specified, this changed the interpretation of <strong>find</strong> <strong>pattern</strong>. The BSD developers therefore moved the fast find functionality into <strong>locate</strong>. The GNU implementation of <strong>locate</strong> appears to be derived from the same code.
   <p>Significant changes to <strong>locate</strong> in reverse order:
   <table class="tbl">
     <tr>
@@ -110,7 +110,7 @@
       <td>4.3.3
       <td>locate <em>-i</em> supports multi-byte characters correctly
     <tr>
-      <td>
+      <td>&nbsp; &nbsp; &nbsp;
       <td>Introduced <em>--max_db_age</em>
     <tr>
       <td>4.3.2
@@ -137,16 +137,16 @@
       <td>4.2.0
       <td>Glob characters cause matching against the whole file name
     <tr>
-      <td>4.0
+      <td>4.0 &nbsp;
       <td>Introduced the LOCATE02 database format
     <tr>
-      <td>3.7
+      <td>3.7 &nbsp;
       <td>Locate can search multiple databases
   </table>
 </section>
 <section>
   <h2>BUGS</h2>
-  <p>The locate database correctly handles filenames containing newlines, but only if the system's sort command has a working -z option. If you suspect that <strong>locate</strong> may need to return filenames containing newlines, consider using its <em>--null</em> option.
-  <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. Other comments about <strong>locate</strong>(1) and about the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
+  <p>The locate database correctly handles filenames containing newlines, but only if the system's sort command has a working -z option. &nbsp;If you suspect that <strong>locate</strong> may need to return filenames containing newlines, consider using its <em>--null</em> option.
+  <p>The best way to report a bug is to use the form at http://savannah.gnu.org/bugs/?group=findutils. The reason for this is that you will then be able to track progress in fixing the problem. &nbsp; Other comments about <strong>locate</strong>(1) and about the findutils package in general can be sent to the <em>bug-findutils</em> mailing list. &nbsp;To join the list, send email to <em>bug-findutils-request@gnu.org</em>.
 </section>
 
