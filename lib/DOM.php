@@ -45,40 +45,28 @@ class DOM
 
         while (
             $firstChild = $element->firstChild and
-            (
-                ($myTag !== 'pre' && Node::isTextAndEmpty($firstChild)) ||
-                ($firstChild->nodeType === XML_ELEMENT_NODE && $firstChild->tagName === 'br')
-            )
+            ($myTag !== 'pre' && Node::isTextAndEmpty($firstChild)) || self::isTag($firstChild, 'br')
         ) {
             $element->removeChild($firstChild);
         }
 
         while (
             $previousSibling = $element->previousSibling and
-            (
-                Node::isTextAndEmpty($previousSibling) ||
-                ($previousSibling->nodeType === XML_ELEMENT_NODE && $previousSibling->tagName === 'br')
-            )
+            (Node::isTextAndEmpty($previousSibling) || self::isTag($previousSibling, 'br'))
         ) {
             $element->parentNode->removeChild($previousSibling);
         }
 
         while (
             $nextSibling = $element->nextSibling and
-            (
-                Node::isTextAndEmpty($nextSibling) ||
-                ($nextSibling->nodeType === XML_ELEMENT_NODE && $nextSibling->tagName === 'br')
-            )
+            (Node::isTextAndEmpty($nextSibling) || self::isTag($nextSibling, 'br'))
         ) {
             $element->parentNode->removeChild($nextSibling);
         }
 
         while (
             $lastChild = $element->lastChild and
-            (
-                Node::isTextAndEmpty($lastChild) ||
-                ($lastChild->nodeType === XML_ELEMENT_NODE && $lastChild->tagName === 'br')
-            )
+            (Node::isTextAndEmpty($lastChild) || self::isTag($lastChild, 'br'))
         ) {
             $element->removeChild($lastChild);
         }
@@ -181,7 +169,7 @@ class DOM
         }
 
         if ($myTag === 'dl') {
-            if ($element->previousSibling && $element->previousSibling->nodeType === XML_ELEMENT_NODE && $element->previousSibling->tagName === 'dl') {
+            if (self::isTag($element->previousSibling, 'dl')) {
                 if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) { // matching indent level
                     $nextSibling = $element->nextSibling;
                     while ($element->firstChild) {
