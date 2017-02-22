@@ -45,56 +45,47 @@
 <section>
   <h2>CONFIG FILE ITEMS</h2>
   <p><strong>login</strong> reads the <em>/etc/login.defs</em>(5) configuration file. &nbsp;Note that the configuration file could be distributed with another package (e.g. shadow-utils). &nbsp;The following configuration items are relevant for <strong>login</strong>(1):
-  <p><strong>MOTD_FILE</strong> (string)
-  <div class="indent-4">
-    <p>If defined, a ":" delimited list of "message of the day" files to be displayed upon login. &nbsp;The default value is <em>/etc/motd</em>. If the <strong>MOTD_FILE</strong> item is empty or a quiet login is enabled, then the message of the day is not displayed. &nbsp;Note that the same functionality is also provided by <strong>pam_motd</strong>(8) PAM module.
-  </div>
-  <p><strong>LOGIN_TIMEOUT</strong> (number)
-  <div class="indent-4">
-    <p>Max time in seconds for login. &nbsp;The default value is <em>60</em>.
-  </div>
-  <p><strong>LOGIN_RETRIES</strong> (number)
-  <div class="indent-4">
-    <p>Maximum number of login retries in case of a bad password. &nbsp;The default value is <em>3</em>.
-  </div>
-  <p><strong>FAIL_DELAY</strong> (number)
-  <div class="indent-4">
-    <p>Delay in seconds before being allowed another three tries after a login failure. &nbsp;The default value is <em>5</em>.
-  </div>
-  <p><strong>TTYPERM</strong> (string)
-  <div class="indent-4">
-    <p>The terminal permissions. &nbsp;The default value is <em>0600</em> or <em>0620</em> if tty group is used.
-  </div>
-  <p><strong>TTYGROUP</strong> (string)
-  <div class="indent-4">
-    <p>The login tty will be owned by the <strong>TTYGROUP</strong>. The default value is <em>tty</em>. If the <strong>TTYGROUP</strong> does not exist, then the ownership of the terminal is set to the user´s primary group.
-    <p>The <strong>TTYGROUP</strong> can be either the name of a group or a numeric group identifier.
-  </div>
-  <p><strong>HUSHLOGIN_FILE</strong> (string)
-  <div class="indent-4">
-    <p>If defined, this file can inhibit all the usual chatter during the login sequence. &nbsp;If a full pathname (e.g. <em>/etc/hushlogins</em>) is specified, then hushed mode will be enabled if the user´s name or shell are found in the file. &nbsp;If this global hush login file is empty then the hushed mode will be enabled for all users.
-    <p>If a full pathname is not specified, then hushed mode will be enabled if the file exists in the user´s home directory.
-    <p>The default is to check <em>/etc/hushlogins</em> and if it does not exist then <em>~/.hushlogin</em>
-    <p>If the <strong>HUSHLOGIN_FILE</strong> item is empty, then all the checks are disabled.
-  </div>
-  <p><strong>DEFAULT_HOME</strong> (boolean)
-  <div class="indent-4">
-    <p>Indicate if login is allowed if we can not change directory to the home directory. &nbsp;If set to <em>yes</em>, the user will login in the root (/) directory if it is not possible to change directory to her home. &nbsp;The default value is <em>yes</em>.
-  </div>
-  <p><strong>LOG_UNKFAIL_ENAB</strong> (boolean)
-  <div class="indent-4">
-    <p>Enable display of unknown usernames when login failures are recorded. The default value is <em>no</em>.
-    <p>Note that logging unknown usernames may be a security issue if a user enters her password instead of her login name.
-  </div>
-  <p><strong>ENV_PATH</strong> (string)
-  <div class="indent-4">
-    <p>If set, it will be used to define the PATH environment variable when a regular user logs in. &nbsp;The default value is <em>/usr/local/bin:/bin:/usr/bin</em>
-  </div>
-  <p><strong>ENV_ROOTPATH</strong> (string)<br>
-  <strong>ENV_SUPATH</strong> (string)
-  <div class="indent-4">
-    <p>If set, it will be used to define the PATH environment variable when the superuser logs in. &nbsp;The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>
-  </div>
+  <dl>
+    <dt><strong>MOTD_FILE</strong> (string)
+    <dd>
+      <p>If defined, a ":" delimited list of "message of the day" files to be displayed upon login. &nbsp;The default value is <em>/etc/motd</em>. If the <strong>MOTD_FILE</strong> item is empty or a quiet login is enabled, then the message of the day is not displayed. &nbsp;Note that the same functionality is also provided by <strong>pam_motd</strong>(8) PAM module.
+    <dt><strong>LOGIN_TIMEOUT</strong> (number)
+    <dd>
+      <p>Max time in seconds for login. &nbsp;The default value is <em>60</em>.
+    <dt><strong>LOGIN_RETRIES</strong> (number)
+    <dd>
+      <p>Maximum number of login retries in case of a bad password. &nbsp;The default value is <em>3</em>.
+    <dt><strong>FAIL_DELAY</strong> (number)
+    <dd>
+      <p>Delay in seconds before being allowed another three tries after a login failure. &nbsp;The default value is <em>5</em>.
+    <dt><strong>TTYPERM</strong> (string)
+    <dd>
+      <p>The terminal permissions. &nbsp;The default value is <em>0600</em> or <em>0620</em> if tty group is used.
+    <dt><strong>TTYGROUP</strong> (string)
+    <dd>
+      <p>The login tty will be owned by the <strong>TTYGROUP</strong>. The default value is <em>tty</em>. If the <strong>TTYGROUP</strong> does not exist, then the ownership of the terminal is set to the user´s primary group.
+      <p>The <strong>TTYGROUP</strong> can be either the name of a group or a numeric group identifier.
+    <dt><strong>HUSHLOGIN_FILE</strong> (string)
+    <dd>
+      <p>If defined, this file can inhibit all the usual chatter during the login sequence. &nbsp;If a full pathname (e.g. <em>/etc/hushlogins</em>) is specified, then hushed mode will be enabled if the user´s name or shell are found in the file. &nbsp;If this global hush login file is empty then the hushed mode will be enabled for all users.
+      <p>If a full pathname is not specified, then hushed mode will be enabled if the file exists in the user´s home directory.
+      <p>The default is to check <em>/etc/hushlogins</em> and if it does not exist then <em>~/.hushlogin</em>
+      <p>If the <strong>HUSHLOGIN_FILE</strong> item is empty, then all the checks are disabled.
+    <dt><strong>DEFAULT_HOME</strong> (boolean)
+    <dd>
+      <p>Indicate if login is allowed if we can not change directory to the home directory. &nbsp;If set to <em>yes</em>, the user will login in the root (/) directory if it is not possible to change directory to her home. &nbsp;The default value is <em>yes</em>.
+    <dt><strong>LOG_UNKFAIL_ENAB</strong> (boolean)
+    <dd>
+      <p>Enable display of unknown usernames when login failures are recorded. The default value is <em>no</em>.
+      <p>Note that logging unknown usernames may be a security issue if a user enters her password instead of her login name.
+    <dt><strong>ENV_PATH</strong> (string)
+    <dd>
+      <p>If set, it will be used to define the PATH environment variable when a regular user logs in. &nbsp;The default value is <em>/usr/local/bin:/bin:/usr/bin</em>
+    <dt><strong>ENV_ROOTPATH</strong> (string)<br>
+    <strong>ENV_SUPATH</strong> (string)
+    <dd>
+      <p>If set, it will be used to define the PATH environment variable when the superuser logs in. &nbsp;The default value is <em>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</em>
+  </dl>
 </section>
 <section>
   <h2>FILES</h2>

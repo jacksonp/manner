@@ -79,9 +79,9 @@
   <p>As a special case <em>serial</em> could be an asterisk ``*'' which means the rule applies to every instance domain with a domain number of <em>domain</em>.
   <p>If a designated instance domain is not in <em>inlog</em> the rule has no effect.
   <p>The <em>indomspec</em> is zero or more of the following clauses:
-  <div class="indent-26">
-    <p><strong><em>INAME</em></strong> "<em>oldname</em>" <strong><em>-&gt;</em></strong> "<em>newname</em>"
-    <div class="indent-26">
+  <dl class="indent-26">
+    <dt><strong><em>INAME</em></strong> "<em>oldname</em>" <strong><em>-&gt;</em></strong> "<em>newname</em>"
+    <dd>
       <p>The instance identified by the external instance name <em>oldname</em> is renamed to <em>newname</em>. Both <em>oldname</em> and <em>newname</em> must be enclosed in quotes.
       <p>As a special case, the new name may be the keyword <strong><em>DELETE</em></strong> (with no quotes), and then the instance <em>oldname</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
       <p>If the instance names contain any embedded spaces then special care needs to be taken in respect of the PCP instance naming rule that treats the leading non-space part of the instance name as the unique portion of the name for the purposes of matching and ensuring uniqueness within an instance domain, refer to <strong>pmdaInstance</strong>(3) for a discussion of this issue.
@@ -102,29 +102,25 @@ eek urk</pre>
         <dd>
           <p>Error, <em>newname</em> "red of another hue" matches the existing "red" instance.
       </dl>
-    </div>
-    <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
-    <div class="indent-26">
+    <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
+    <dd>
       <p>Modifies the metadata for the instance domain and every metric associated with the instance domain. As a special case, <em>newserial</em> could be an asterisk ``*'' which means use <em>serial</em> from the <strong>indom</strong> rewriting rule, although this is most useful when <em>serial</em> is also an asterisk. So for example:
       <div class="indent-26">
         <p><code>indom 29.* { indom -&gt; 109.* }</code>
       </div>
       <p>will move all instance domains from domain 29 to domain 109.
-    </div>
-    <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>DUPLICATE</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
-    <div class="indent-26">
+    <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>DUPLICATE</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em>
+    <dd>
       <p>A special case of the previous <strong><em>INDOM</em></strong> clause where the instance domain is a duplicate copy of the <em>domain</em><strong><em>.</em></strong><em>serial</em> instance domain from the <em>indom</em> rewriting rule, and then any mapping rules are applied to the copied <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> instance domain. &nbsp;This is useful when a PMDA is split and the same instance domain needs to be replicated for domain <em>domain</em> and domain <em>newdomain</em>. So for example if the metrics <em>foo.one</em> and <em>foo.two</em> are both defined over instance domain 12.34, and <em>foo.two</em> is moved to another PMDA using domain 27, then the following rewriting rules could be used:
       <div class="indent-26">
         <p><code>indom 12.34 { indom -&gt; duplicate 27.34 }<br>
         metric foo.two { indom -&gt; 27.34 pmid -&gt; 27.*.* &nbsp;}</code>
       </div>
-    </div>
-    <p><strong><em>INST</em></strong> <em>oldid</em> <strong><em>-&gt;</em></strong> <em>newid</em>
-    <div class="indent-26">
+    <dt><strong><em>INST</em></strong> <em>oldid</em> <strong><em>-&gt;</em></strong> <em>newid</em>
+    <dd>
       <p>The instance identified by the internal instance identifier <em>oldid</em> is renumbered to <em>newid</em>. Both <em>oldid</em> and <em>newid</em> are integers in the range 0 to 2<sup>31</sup>-1.
       <p>As a special case, <em>newid</em> may be the keyword <strong><em>DELETE</em></strong> and then the instance <em>oldid</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
-    </div>
-  </div>
+  </dl>
   <p>A <strong>metric</strong> rewriting rule has the form:
   <p><strong><em>METRIC</em></strong> <em>metricid</em> <strong><em>{</em></strong> <em>metricspec</em> ... <strong><em>}</em></strong>
   <p>where <em>metricid</em> identifies one or more existing metrics from <em>inlog</em> using either a metric name, or the internal encoding for a metric's PMID as <em>domain</em><strong><em>.</em></strong><em>cluster</em><strong><em>.</em></strong><em>item</em>. In the latter case, typically <em>domain</em> would be an integer in the range 1 to 510, <em>cluster</em> would be an integer in the range 0 to 4095, and <em>item</em> would be an integer in the range 0 to 1023.
