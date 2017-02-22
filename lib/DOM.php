@@ -279,7 +279,7 @@ class DOM
             if (
                 $child->nodeType === XML_ELEMENT_NODE &&
                 in_array($child->tagName,
-                    ['section', 'p', 'dl', 'dt', 'dd', 'div', 'blockquote', 'pre', 'table', 'tr', 'th', 'td'])
+                    ['section', 'p', 'dl', 'dt', 'dd', 'div', 'pre', 'table', 'tr', 'th', 'td'])
             ) {
                 $child = self::massage($child);
                 continue;

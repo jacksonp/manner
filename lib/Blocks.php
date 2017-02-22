@@ -6,7 +6,6 @@ class Blocks
 
     const TEXT_CONTAINERS = [
         'p',
-        'blockquote',
         'dt',
         'strong',
         'em',
@@ -42,7 +41,6 @@ class Blocks
         $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
             $blockTags[] = 'dd';
-            $blockTags[] = 'blockquote';
             $blockTags[] = 'th';
             $blockTags[] = 'td';
         }
