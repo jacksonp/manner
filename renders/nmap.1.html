@@ -370,17 +370,18 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
       <p>These three scan types (even more are possible with the <strong>--scanflags</strong> option described in the next section) exploit a subtle loophole in the <strong>TCP RFC</strong><sup>[8]</sup> to differentiate between open and closed ports. Page 65 of RFC 793 says that “if the [destination] port state is CLOSED .... an incoming segment not containing a RST causes a RST to be sent in response.” Then the next page discusses packets sent to open ports without the SYN, RST, or ACK bits set, stating that: “you are unlikely to get here, but if you do, drop the segment, and return.”<br>
       <br>
       When scanning systems compliant with this RFC text, any packet not containing SYN, RST, or ACK bits will result in a returned RST if the port is closed and no response at all if the port is open. As long as none of those three bits are included, any combination of the other three (FIN, PSH, and URG) are OK. Nmap exploits this with three scan types:
-      <dl>
-        <dt>Null scan (<strong>-sN</strong>)
-        <dd>
-          <p>Does not set any bits (TCP flag header is 0)
-        <dt>FIN scan (<strong>-sF</strong>)
-        <dd>
-          <p>Sets just the TCP FIN bit.
-        <dt>Xmas scan (<strong>-sX</strong>)
-        <dd>
-          <p>Sets the FIN, PSH, and URG flags, lighting the packet up like a Christmas tree.
-      </dl>
+      <p>Null scan (<strong>-sN</strong>)
+      <div class="indent-4">
+        <p>Does not set any bits (TCP flag header is 0)
+      </div>
+      <p>FIN scan (<strong>-sF</strong>)
+      <div class="indent-4">
+        <p>Sets just the TCP FIN bit.
+      </div>
+      <p>Xmas scan (<strong>-sX</strong>)
+      <div class="indent-4">
+        <p>Sets the FIN, PSH, and URG flags, lighting the packet up like a Christmas tree.
+      </div>
       <p>These three scan types are exactly the same in behavior except for the TCP flags set in probe packets. If a RST packet is received, the port is considered closed, while no response means it is open|filtered. The port is marked filtered if an ICMP unreachable error (type 3, code 0, 1, 2, 3, 9, 10, or 13) is received.<br>
       <br>
       The key advantage to these scan types is that they can sneak through certain non-stateful firewalls and packet filtering routers. Another advantage is that these scan types are a little more stealthy than even a SYN scan. Don't count on this though—most modern IDS products can be configured to detect them. The big downside is that not all systems follow RFC 793 to the letter. A number of systems send RST responses to the probes regardless of whether the port is open or not. This causes all of the ports to be labeled closed. Major operating systems that do this are Microsoft Windows, many Cisco devices, BSDI, and IBM OS/400. This scan does work against most Unix-based systems though. Another downside of these scans is that they can't distinguish open ports from certain filtered ones, leaving you with the response open|filtered.
@@ -521,25 +522,25 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
   <p>To reflect those different uses and to simplify the choice of which scripts to run, each script contains a field associating it with one or more categories. Currently defined categories are auth, broadcast, default. discovery, dos, exploit, external, fuzzer, intrusive, malware, safe, version, and vuln. These are all described at <strong>https://nmap.org/book/nse-usage.html#nse-categories</strong>.
   <p>Scripts are not run in a sandbox and thus could accidentally or maliciously damage your system or invade your privacy. Never run scripts from third parties unless you trust the authors or have carefully audited the scripts yourself.
   <p>The Nmap Scripting Engine is described in detail at <strong>https://nmap.org/book/nse.html</strong> and is controlled by the following options:
-  <p><strong>-sC</strong>
-  <div class="indent-4">
-    <p>Performs a script scan using the default set of scripts. It is equivalent to <strong>--script=default</strong>. Some of the scripts in this category are considered intrusive and should not be run against a target network without permission.
-  </div>
-  <p><strong>--script</strong> <em>filename</em><strong>|</strong><em>category</em><strong>|</strong><em>directory</em><strong>|</strong><em>expression</em><strong>[,...]</strong>
-  <div class="indent-4">
-    <p>Runs a script scan using the comma-separated list of filenames, script categories, and directories. Each element in the list may also be a Boolean expression describing a more complex set of scripts. Each element is interpreted first as an expression, then as a category, and finally as a file or directory name.<br>
-    <br>
-    There are two special features for advanced users only. One is to prefix script names and expressions with + to force them to run even if they normally wouldn't (e.g. the relevant service wasn't detected on the target port). The other is that the argument all may be used to specify every script in Nmap's database. Be cautious with this because NSE contains dangerous scripts such as exploits, brute force authentication crackers, and denial of service attacks.<br>
-    <br>
-    File and directory names may be relative or absolute. Absolute names are used directly. Relative paths are looked for in the scripts of each of the following places until found: <strong>--datadir</strong><br>
-    <strong>$NMAPDIR</strong><br>
-    ~/.nmap (not searched on Windows)<br>
-    <em>HOME</em>\AppData\Roaming\nmap (only on Windows)<br>
-    the directory containing the nmap executable<br>
-    the directory containing the nmap executable, followed by ../share/nmap<br>
-    <em>NMAPDATADIR</em><br>
-    the current directory.
-  </div>
+  <dl>
+    <dt><strong>-sC</strong>
+    <dd>
+      <p>Performs a script scan using the default set of scripts. It is equivalent to <strong>--script=default</strong>. Some of the scripts in this category are considered intrusive and should not be run against a target network without permission.
+    <dt><strong>--script</strong> <em>filename</em><strong>|</strong><em>category</em><strong>|</strong><em>directory</em><strong>|</strong><em>expression</em><strong>[,...]</strong>
+    <dd>
+      <p>Runs a script scan using the comma-separated list of filenames, script categories, and directories. Each element in the list may also be a Boolean expression describing a more complex set of scripts. Each element is interpreted first as an expression, then as a category, and finally as a file or directory name.<br>
+      <br>
+      There are two special features for advanced users only. One is to prefix script names and expressions with + to force them to run even if they normally wouldn't (e.g. the relevant service wasn't detected on the target port). The other is that the argument all may be used to specify every script in Nmap's database. Be cautious with this because NSE contains dangerous scripts such as exploits, brute force authentication crackers, and denial of service attacks.<br>
+      <br>
+      File and directory names may be relative or absolute. Absolute names are used directly. Relative paths are looked for in the scripts of each of the following places until found: <strong>--datadir</strong><br>
+      <strong>$NMAPDIR</strong><br>
+      ~/.nmap (not searched on Windows)<br>
+      <em>HOME</em>\AppData\Roaming\nmap (only on Windows)<br>
+      the directory containing the nmap executable<br>
+      the directory containing the nmap executable, followed by ../share/nmap<br>
+      <em>NMAPDATADIR</em><br>
+      the current directory.
+  </dl>
   <p>When a directory name is given, Nmap loads every file in the directory whose name ends with .nse. All other files are ignored and directories are not searched recursively. When a filename is given, it does not have to have the .nse extension; it will be added automatically if necessary. Nmap scripts are stored in a scripts subdirectory of the Nmap data directory by default (see <strong>https://nmap.org/book/data-files.html</strong>). For efficiency, scripts are indexed in a database stored in scripts/script.db, which lists the category or categories in which each script belongs. When referring to scripts from script.db by name, you can use a shell-style ‘*’ wildcard.
   <p><strong>nmap --script "http-*"</strong>
   <div class="indent-4">
@@ -897,14 +898,15 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <dt><strong>?</strong>
     <dd>
       <p>Print a runtime interaction help screen
-    <dt>Anything else
-    <dd>
-      <p>Print out a status message like this:
-      <div class="indent-4">
-        <pre>Stats: 0:00:07 elapsed; 20 hosts completed (1 up), 1 undergoing Service Scan
-Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
-      </div>
   </dl>
+  <p>Anything else
+  <div class="indent-4">
+    <p>Print out a status message like this:
+    <div class="indent-4">
+      <pre>Stats: 0:00:07 elapsed; 20 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 33.33% done; ETC: 20:57 (0:00:12 remaining)</pre>
+    </div>
+  </div>
 </section>
 <section>
   <h2>EXAMPLES</h2>

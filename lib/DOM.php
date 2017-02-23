@@ -30,9 +30,10 @@ class DOM
         return
             self::isTag($node, 'p') &&
             $node->getAttribute('class') === '' &&
+            !preg_match('~^[A-Z][a-z]+ [A-Za-z][a-z]+~u', $node->textContent) &&
             self::isTag($node->nextSibling, 'div') &&
-            strpos($node->nextSibling->getAttribute('class'), 'indent-') === 0 &&
-            self::isTag($node->nextSibling->firstChild, 'p') && // starts with indent-
+            strpos($node->nextSibling->getAttribute('class'), 'indent-') === 0 &&  // starts with indent-
+            self::isTag($node->nextSibling->firstChild, 'p') &&
             preg_match('~^[a-z]~ui', $node->nextSibling->textContent); // exclude e.g. "· <fork>" in dbus-daemon.1
     }
 
@@ -236,36 +237,6 @@ class DOM
 
         }
 
-
-        if (
-            self::isParagraphFollowedByIndentedDiv($element) &&
-            self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling) &&
-            self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling->nextSibling->nextSibling)
-        ) {
-
-            $dl = $element->ownerDocument->createElement('dl');
-            $element->parentNode->insertBefore($dl, $element);
-            $nextElementToCheck = $element;
-            while (self::isParagraphFollowedByIndentedDiv($nextElementToCheck)) {
-                $element = $nextElementToCheck;
-                $dt      = $element->ownerDocument->createElement('dt');
-                while ($element->firstChild) {
-                    $dt->appendChild($element->firstChild);
-                }
-                $dl->appendChild($dt);
-                $dd = $element->ownerDocument->createElement('dd');
-                while ($element->nextSibling->firstChild) {
-                    $dd->appendChild($element->nextSibling->firstChild);
-                }
-                $dl->appendChild($dd);
-                $nextElementToCheck = $element->nextSibling->nextSibling;
-                $element->parentNode->removeChild($element->nextSibling);
-                $element->parentNode->removeChild($element);
-            }
-            return $dl;
-
-        }
-
         return $element->nextSibling;
 
     }
@@ -321,6 +292,40 @@ class DOM
             $child = $child->nextSibling;
 
         }
+
+        $child = $element->firstChild;
+        while ($child) {
+
+            if ($child->nodeType === XML_ELEMENT_NODE && $child->tagName === 'p' &&
+                self::isParagraphFollowedByIndentedDiv($child) &&
+                self::isParagraphFollowedByIndentedDiv($child->nextSibling->nextSibling)
+            ) {
+                $dl          = $child->ownerDocument->createElement('dl');
+                $child->parentNode->insertBefore($dl, $child);
+                $nextElementToCheck = $child;
+                while (self::isParagraphFollowedByIndentedDiv($nextElementToCheck)) {
+                    $child = $nextElementToCheck;
+                    $dt    = $child->ownerDocument->createElement('dt');
+                    while ($child->firstChild) {
+                        $dt->appendChild($child->firstChild);
+                    }
+                    $dl->appendChild($dt);
+                    $dd = $child->ownerDocument->createElement('dd');
+                    while ($child->nextSibling->firstChild) {
+                        $dd->appendChild($child->nextSibling->firstChild);
+                    }
+                    $dl->appendChild($dd);
+                    $nextElementToCheck = $child->nextSibling->nextSibling;
+                    $child->parentNode->removeChild($child->nextSibling);
+                    $child->parentNode->removeChild($child);
+                }
+                $child = $dl->nextSibling;
+            } else {
+                $child = $child->nextSibling;
+            }
+
+        }
+
         return self::massageNode($element);
     }
 

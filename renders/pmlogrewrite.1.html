@@ -125,87 +125,81 @@ eek urk</pre>
   <p>If a designated metric is not in <em>inlog</em> the rule has no effect.
   <p>The <em>metricspec</em> is zero or more of the following clauses:
   <div class="indent-26">
-    <p><strong><em>DELETE</em></strong>
-    <div class="indent-26">
-      <p>The metric is completely removed from <em>outlog</em>, both the metadata and all values in results are expunged.
-    </div>
-    <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> [ <em>pick</em> ]
-    <div class="indent-26">
-      <p>Modifies the metadata to change the instance domain for this metric. The new instance domain must exist in <em>outlog</em>.
-      <p>The optional <em>pick</em> clause may be used to select one input value, or compute an aggregate value from the instances in an input result, or assign an internal instance identifier to a single output value. If no <em>pick</em> clause is specified, the default behaviour is to copy all input values from each input result to an output result, however if the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then the one output value must be assigned an internal instance identifier, which is 0 by default, unless over-ridden by a <strong><em>INST</em></strong> or <strong><em>INAME</em></strong> clause as defined below.
-      <p>The choices for <em>pick</em> are as follows:
-      <dl class="indent-77">
-        <dt><strong><em>OUTPUT FIRST</em></strong>
-        <dd>
-          <p>choose the value of the first instance from each input result
-        <dt><strong><em>OUTPUT LAST</em></strong>
-        <dd>
-          <p>choose the value of the last instance from each input result
-        <dt><strong><em>OUTPUT INST</em></strong> <em>instid</em>
-        <dd>
-          <p>choose the value of the instance with internal instance identifier <em>instid</em> from each result; the sequence of rewriting rules ensures the <strong><em>OUTPUT</em></strong> processing happens before instance identifier renumbering from any associated <strong>indom</strong> rule, so <em>instid</em> should be one of the internal instance identifiers that appears in <em>inlog</em>
-        <dt><strong><em>OUTPUT INAME</em></strong> "<em>name</em>"
-        <dd>
-          <p>choose the value of the instance with <em>name</em> for its external instance name from each result; the sequence of rewriting rules ensures the <strong><em>OUTPUT</em></strong> processing happens before instance renaming from any associated <strong>indom</strong> rule, so <em>name</em> should be one of the external instance names that appears in <em>inlog</em>
-        <dt><strong><em>OUTPUT MIN</em></strong>
-        <dd>
-          <p>choose the smallest value in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
-        <dt><strong><em>OUTPUT MAX</em></strong>
-        <dd>
-          <p>choose the largest value in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
-        <dt><strong><em>OUTPUT SUM</em></strong>
-        <dd>
-          <p>choose the sum of all values in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
-        <dt><strong><em>OUTPUT AVG</em></strong>
-        <dd>
-          <p>choose the average of all values in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
-      </dl>
-      <p>If the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then independent of any <em>pick</em> specifications, there is at most one value in each input result and so <strong><em>FIRST</em></strong>, <strong><em>LAST</em></strong>, <strong><em>MIN</em></strong>, <strong><em>MAX</em></strong>, <strong><em>SUM</em></strong> and <strong><em>AVG</em></strong> are all equivalent and the output instance identifier will be 0.
-      <p>In general it is an error to specify a rewriting action for the same metadata or result values more than once, e.g. more than one <strong><em>INDOM</em></strong> clause for the same instance domain. &nbsp;The one exception is the possible interaction between the <strong><em>INDOM</em></strong> clauses in the <strong>indom</strong> and <strong>metric</strong> rules. For example the metric <em>sample.bin</em> is defined over the instance domain 29.2 in <em>inlog</em> and the following is acceptable (albeit redundant):
-      <div class="indent-26">
-        <pre>indom 29.* { indom -&gt; 109.* }
+    <dl>
+      <dt><strong><em>DELETE</em></strong>
+      <dd>
+        <p>The metric is completely removed from <em>outlog</em>, both the metadata and all values in results are expunged.
+      <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> [ <em>pick</em> ]
+      <dd>
+        <p>Modifies the metadata to change the instance domain for this metric. The new instance domain must exist in <em>outlog</em>.
+        <p>The optional <em>pick</em> clause may be used to select one input value, or compute an aggregate value from the instances in an input result, or assign an internal instance identifier to a single output value. If no <em>pick</em> clause is specified, the default behaviour is to copy all input values from each input result to an output result, however if the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then the one output value must be assigned an internal instance identifier, which is 0 by default, unless over-ridden by a <strong><em>INST</em></strong> or <strong><em>INAME</em></strong> clause as defined below.
+        <p>The choices for <em>pick</em> are as follows:
+        <dl class="indent-77">
+          <dt><strong><em>OUTPUT FIRST</em></strong>
+          <dd>
+            <p>choose the value of the first instance from each input result
+          <dt><strong><em>OUTPUT LAST</em></strong>
+          <dd>
+            <p>choose the value of the last instance from each input result
+          <dt><strong><em>OUTPUT INST</em></strong> <em>instid</em>
+          <dd>
+            <p>choose the value of the instance with internal instance identifier <em>instid</em> from each result; the sequence of rewriting rules ensures the <strong><em>OUTPUT</em></strong> processing happens before instance identifier renumbering from any associated <strong>indom</strong> rule, so <em>instid</em> should be one of the internal instance identifiers that appears in <em>inlog</em>
+          <dt><strong><em>OUTPUT INAME</em></strong> "<em>name</em>"
+          <dd>
+            <p>choose the value of the instance with <em>name</em> for its external instance name from each result; the sequence of rewriting rules ensures the <strong><em>OUTPUT</em></strong> processing happens before instance renaming from any associated <strong>indom</strong> rule, so <em>name</em> should be one of the external instance names that appears in <em>inlog</em>
+          <dt><strong><em>OUTPUT MIN</em></strong>
+          <dd>
+            <p>choose the smallest value in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
+          <dt><strong><em>OUTPUT MAX</em></strong>
+          <dd>
+            <p>choose the largest value in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
+          <dt><strong><em>OUTPUT SUM</em></strong>
+          <dd>
+            <p>choose the sum of all values in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
+          <dt><strong><em>OUTPUT AVG</em></strong>
+          <dd>
+            <p>choose the average of all values in each result (metric type must be numeric and output instance will be 0 for a non-singular instance domain)
+        </dl>
+        <p>If the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then independent of any <em>pick</em> specifications, there is at most one value in each input result and so <strong><em>FIRST</em></strong>, <strong><em>LAST</em></strong>, <strong><em>MIN</em></strong>, <strong><em>MAX</em></strong>, <strong><em>SUM</em></strong> and <strong><em>AVG</em></strong> are all equivalent and the output instance identifier will be 0.
+        <p>In general it is an error to specify a rewriting action for the same metadata or result values more than once, e.g. more than one <strong><em>INDOM</em></strong> clause for the same instance domain. &nbsp;The one exception is the possible interaction between the <strong><em>INDOM</em></strong> clauses in the <strong>indom</strong> and <strong>metric</strong> rules. For example the metric <em>sample.bin</em> is defined over the instance domain 29.2 in <em>inlog</em> and the following is acceptable (albeit redundant):
+        <div class="indent-26">
+          <pre>indom 29.* { indom -&gt; 109.* }
 metric sample.bin { indom -&gt; 109.2 }</pre>
-      </div>
-      <p>However the following is an error, because the instance domain for <em>sample.bin</em> has two conflicting definitions:
-      <div class="indent-26">
-        <pre>indom 29.* { indom -&gt; 109.* }
+        </div>
+        <p>However the following is an error, because the instance domain for <em>sample.bin</em> has two conflicting definitions:
+        <div class="indent-26">
+          <pre>indom 29.* { indom -&gt; 109.* }
 metric sample.bin { indom -&gt; 123.2 }</pre>
-      </div>
-    </div>
-    <p><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>NULL</em></strong>[ <em>pick</em> ]
-    <div class="indent-26">
-      <p>The metric (which must have been previously defined over an instance domain) is being modified to be a singular metric. &nbsp;This involves a metadata change and collapsing all results for this metric so that multiple values become one value.
-      <p>The optional <em>pick</em> part of the clause defines how the one value for each result should be calculated and follows the same rules as described for the non-NULL <strong><em>INDOM</em></strong> case above.
-      <p>In the absence of <em>pick</em>, the default is <strong><em>OUTPUT FIRST</em></strong>.
-    </div>
-    <p><strong><em>NAME</em></strong> <strong><em>-&gt;</em></strong> <em>newname</em>
-    <div class="indent-26">
-      <p>Renames the metric in the PCP archive's metadata that supports the Performance Metrics Name Space (PMNS). <em>newname</em> should not match any existing name in the archive's PMNS and must follow the syntactic rules for valid metric names as outlined in <strong>pmns</strong>(5).
-    </div>
-    <p><strong><em>PMID</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newcluster</em><strong><em>.</em></strong><em>newitem</em>
-    <div class="indent-26">
-      <p>Modifies the metadata and results to renumber the metric's PMID. As special cases, <em>newcluster</em> could be an asterisk ``*'' which means use <em>cluster</em> from the <strong>metric</strong> rewriting rule and/or <em>item</em> could be an asterisk which means use <em>item</em> from the <strong>metric</strong> rewriting rule. This is most useful when <em>cluster</em> and/or <em>item</em> is also an asterisk. So for example:
-      <div class="indent-26">
-        <p><code>metric 30.*.* { pmid -&gt; 123.*.* }</code>
-      </div>
-      <p>will move all metrics from domain 30 to domain 123.
-    </div>
-    <p><strong><em>SEM</em></strong> <strong><em>-&gt;</em></strong> <em>newsem</em>
-    <div class="indent-26">
-      <p>Change the semantics of the metric. <em>newsem</em> should be the XXX part of the name of one of the <strong>PM_SEM_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>COUNTER</em></strong> for <strong>PM_TYPE_COUNTER</strong>.
-      <p>No data value rewriting is performed as a result of the <strong><em>SEM</em></strong> clause, so the usefulness is limited to cases where a version of the associated PMDA was exporting incorrect semantics for the metric. <strong>pmlogreduce</strong>(1) may provide an alternative in cases where re-computation of result values is desired.
-    </div>
-    <p><strong><em>TYPE</em></strong> <strong><em>-&gt;</em></strong> <em>newtype</em>
-    <div class="indent-26">
-      <p>Change the type of the metric which alters the metadata and may change the encoding of values in results. <em>newtype</em> should be the XXX part of the name of one of the <strong>PM_TYPE_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>FLOAT</em></strong> for <strong>PM_TYPE_FLOAT</strong>.
-      <p>Type conversion is only supported for cases where the old and new metric type is numeric, so <strong>PM_TYPE_STRING</strong>, <strong>PM_TYPE_AGGREGATE</strong> and <strong>PM_TYPE_EVENT</strong> are not allowed. Even for the numeric cases, some conversions may produce run-time errors, e.g. integer overflow, or attempting to rewrite a negative value into an unsigned type.
-    </div>
-    <p><strong><em>UNITS</em></strong> <strong><em>-&gt;</em></strong> <em>newunits</em> [ <strong><em>RESCALE</em></strong> ]
-    <div class="indent-26">
-      <p><em>newunits</em> is six values separated by commas. &nbsp;The first 3 values describe the dimension of the metric along the dimensions of space, time and count; these are integer values, usually 0, 1 or -1. &nbsp;The remaining 3 values describe the scale of the metric's values in the dimensions of space, time and count. Space scale values should be 0 (if the space dimension is 0), else the XXX part of the name of one of the <strong>PM_SPACE_XXX</strong> macros, e.g. <strong><em>KBYTE</em></strong> for <strong>PM_TYPE_KBYTE</strong>. Time scale values should be 0 (if the time dimension is 0), else the XXX part of the name of one of the <strong>PM_TIME_XXX</strong> macros, e.g. <strong><em>SEC</em></strong> for <strong>PM_TIME_SEC</strong>. Count scale values should be 0 (if the time dimension is 0), else <strong><em>ONE</em></strong> for <strong>PM_COUNT_ONE</strong>.
-      <p>The <strong>PM_SPACE_XXX</strong>, <strong>PM_TIME_XXX</strong> and <strong>PM_COUNT_XXX</strong> macros are defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3).
-      <p>When the scale is changed (but the dimension is unaltered) the optional keyword <strong><em>RESCALE</em></strong> may be used to chose value rescaling as per the <strong>-s</strong> command line option, but applied to just this metric.
-    </div>
+        </div>
+      <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>NULL</em></strong>[ <em>pick</em> ]
+      <dd>
+        <p>The metric (which must have been previously defined over an instance domain) is being modified to be a singular metric. &nbsp;This involves a metadata change and collapsing all results for this metric so that multiple values become one value.
+        <p>The optional <em>pick</em> part of the clause defines how the one value for each result should be calculated and follows the same rules as described for the non-NULL <strong><em>INDOM</em></strong> case above.
+        <p>In the absence of <em>pick</em>, the default is <strong><em>OUTPUT FIRST</em></strong>.
+      <dt><strong><em>NAME</em></strong> <strong><em>-&gt;</em></strong> <em>newname</em>
+      <dd>
+        <p>Renames the metric in the PCP archive's metadata that supports the Performance Metrics Name Space (PMNS). <em>newname</em> should not match any existing name in the archive's PMNS and must follow the syntactic rules for valid metric names as outlined in <strong>pmns</strong>(5).
+      <dt><strong><em>PMID</em></strong> <strong><em>-&gt;</em></strong> <em>newdomain</em><strong><em>.</em></strong><em>newcluster</em><strong><em>.</em></strong><em>newitem</em>
+      <dd>
+        <p>Modifies the metadata and results to renumber the metric's PMID. As special cases, <em>newcluster</em> could be an asterisk ``*'' which means use <em>cluster</em> from the <strong>metric</strong> rewriting rule and/or <em>item</em> could be an asterisk which means use <em>item</em> from the <strong>metric</strong> rewriting rule. This is most useful when <em>cluster</em> and/or <em>item</em> is also an asterisk. So for example:
+        <div class="indent-26">
+          <p><code>metric 30.*.* { pmid -&gt; 123.*.* }</code>
+        </div>
+        <p>will move all metrics from domain 30 to domain 123.
+      <dt><strong><em>SEM</em></strong> <strong><em>-&gt;</em></strong> <em>newsem</em>
+      <dd>
+        <p>Change the semantics of the metric. <em>newsem</em> should be the XXX part of the name of one of the <strong>PM_SEM_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>COUNTER</em></strong> for <strong>PM_TYPE_COUNTER</strong>.
+        <p>No data value rewriting is performed as a result of the <strong><em>SEM</em></strong> clause, so the usefulness is limited to cases where a version of the associated PMDA was exporting incorrect semantics for the metric. <strong>pmlogreduce</strong>(1) may provide an alternative in cases where re-computation of result values is desired.
+      <dt><strong><em>TYPE</em></strong> <strong><em>-&gt;</em></strong> <em>newtype</em>
+      <dd>
+        <p>Change the type of the metric which alters the metadata and may change the encoding of values in results. <em>newtype</em> should be the XXX part of the name of one of the <strong>PM_TYPE_XXX</strong> macros defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3), e.g. <strong><em>FLOAT</em></strong> for <strong>PM_TYPE_FLOAT</strong>.
+        <p>Type conversion is only supported for cases where the old and new metric type is numeric, so <strong>PM_TYPE_STRING</strong>, <strong>PM_TYPE_AGGREGATE</strong> and <strong>PM_TYPE_EVENT</strong> are not allowed. Even for the numeric cases, some conversions may produce run-time errors, e.g. integer overflow, or attempting to rewrite a negative value into an unsigned type.
+      <dt><strong><em>UNITS</em></strong> <strong><em>-&gt;</em></strong> <em>newunits</em> [ <strong><em>RESCALE</em></strong> ]
+      <dd>
+        <p><em>newunits</em> is six values separated by commas. &nbsp;The first 3 values describe the dimension of the metric along the dimensions of space, time and count; these are integer values, usually 0, 1 or -1. &nbsp;The remaining 3 values describe the scale of the metric's values in the dimensions of space, time and count. Space scale values should be 0 (if the space dimension is 0), else the XXX part of the name of one of the <strong>PM_SPACE_XXX</strong> macros, e.g. <strong><em>KBYTE</em></strong> for <strong>PM_TYPE_KBYTE</strong>. Time scale values should be 0 (if the time dimension is 0), else the XXX part of the name of one of the <strong>PM_TIME_XXX</strong> macros, e.g. <strong><em>SEC</em></strong> for <strong>PM_TIME_SEC</strong>. Count scale values should be 0 (if the time dimension is 0), else <strong><em>ONE</em></strong> for <strong>PM_COUNT_ONE</strong>.
+        <p>The <strong>PM_SPACE_XXX</strong>, <strong>PM_TIME_XXX</strong> and <strong>PM_COUNT_XXX</strong> macros are defined in &lt;pcp/pmapi.h&gt; or <strong>pmLookupDesc</strong>(3).
+        <p>When the scale is changed (but the dimension is unaltered) the optional keyword <strong><em>RESCALE</em></strong> may be used to chose value rescaling as per the <strong>-s</strong> command line option, but applied to just this metric.
+    </dl>
     <p>When changing the domain number for a metric or instance domain, the new domain number will usually match an existing PMDA's domain number. &nbsp;If this is not the case, then the new domain number should not be randomly chosen; consult <strong>$PCP_VAR_DIR/pmns/stdpmid</strong> for domain numbers that are already assigned to PMDAs.
   </div>
 </section>
