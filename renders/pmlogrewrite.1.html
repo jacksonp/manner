@@ -59,20 +59,17 @@
   <p>A <strong>global</strong> rewriting rule has the form:
   <p><strong><em>GLOBAL</em></strong> <strong><em>{</em></strong> <em>globalspec</em> ... <strong><em>}</em></strong>
   <p>where <em>globalspec</em> is zero or more of the following clauses:
-  <div class="indent-26">
-    <p><strong><em>HOSTNAME</em></strong> <strong><em>-&gt;</em></strong> <em>hostname</em>
-    <div class="indent-26">
+  <dl class="indent-26">
+    <dt><strong><em>HOSTNAME</em></strong> <strong><em>-&gt;</em></strong> <em>hostname</em>
+    <dd>
       <p>Modifies the label records in the <em>outlog</em> PCP archive, so that the metrics will appear to have been collected from the host <em>hostname</em>.
-    </div>
-    <p><strong><em>TIME</em></strong> <strong><em>-&gt;</em></strong> <em>delta</em>
-    <div class="indent-26">
+    <dt><strong><em>TIME</em></strong> <strong><em>-&gt;</em></strong> <em>delta</em>
+    <dd>
       <p>Both metric values and the instance domain metadata in a PCP archive carry timestamps. This clause forces all the timestamps to be adjusted by <em>delta</em>, where <em>delta</em> is an optional sign ``+'' (the default) or ``-'', an optional number of hours followed by a colon ``:'', an optional number of minutes followed by a &nbsp;colon ``:'', a number of seconds, an optional fraction of seconds following a period ``.''. &nbsp;The simplest example would be ``30'' to increase the timestamps by 30 seconds. &nbsp;A more complex example would be ``-23:59:59.999'' to move the timestamps backwards by one millisecond less than one day.
-    </div>
-    <p><strong><em>TZ</em></strong> <strong><em>-&gt;</em></strong> <strong><em>"</em></strong><em>timezone</em><strong><em>"</em></strong>
-    <div class="indent-26">
+    <dt><strong><em>TZ</em></strong> <strong><em>-&gt;</em></strong> <strong><em>"</em></strong><em>timezone</em><strong><em>"</em></strong>
+    <dd>
       <p>Modifies the label records in the <em>outlog</em> PCP archive, so that the metrics will appear to have been collected from a host with a local timezone of <em>timezone</em>. <em>timezone</em> must be enclosed in quotes, and should conform to the valid timezone syntax rules for the local platform.
-    </div>
-  </div>
+  </dl>
   <p>An <strong>indom</strong> rewriting rule modifies an instance domain and has the form:
   <p><strong><em>INDOM</em></strong> <em>domain</em><strong><em>.</em></strong><em>serial</em> <strong><em>{</em></strong> <em>indomspec</em> ... <strong><em>}</em></strong>
   <p>where <em>domain</em> and <em>serial</em> identify one or more existing instance domains from <em>inlog</em> - typically <em>domain</em> would be an integer in the range 1 to 510 and <em>serial</em> would be an integer in the range 0 to 4194304.

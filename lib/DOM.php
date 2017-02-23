@@ -240,8 +240,7 @@ class DOM
         if (
             self::isParagraphFollowedByIndentedDiv($element) &&
             self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling) &&
-            self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling->nextSibling->nextSibling) &&
-            self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling->nextSibling->nextSibling->nextSibling->nextSibling)
+            self::isParagraphFollowedByIndentedDiv($element->nextSibling->nextSibling->nextSibling->nextSibling)
         ) {
 
             $dl = $element->ownerDocument->createElement('dl');

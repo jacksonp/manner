@@ -370,18 +370,17 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
       <p>These three scan types (even more are possible with the <strong>--scanflags</strong> option described in the next section) exploit a subtle loophole in the <strong>TCP RFC</strong><sup>[8]</sup> to differentiate between open and closed ports. Page 65 of RFC 793 says that “if the [destination] port state is CLOSED .... an incoming segment not containing a RST causes a RST to be sent in response.” Then the next page discusses packets sent to open ports without the SYN, RST, or ACK bits set, stating that: “you are unlikely to get here, but if you do, drop the segment, and return.”<br>
       <br>
       When scanning systems compliant with this RFC text, any packet not containing SYN, RST, or ACK bits will result in a returned RST if the port is closed and no response at all if the port is open. As long as none of those three bits are included, any combination of the other three (FIN, PSH, and URG) are OK. Nmap exploits this with three scan types:
-      <p>Null scan (<strong>-sN</strong>)
-      <div class="indent-4">
-        <p>Does not set any bits (TCP flag header is 0)
-      </div>
-      <p>FIN scan (<strong>-sF</strong>)
-      <div class="indent-4">
-        <p>Sets just the TCP FIN bit.
-      </div>
-      <p>Xmas scan (<strong>-sX</strong>)
-      <div class="indent-4">
-        <p>Sets the FIN, PSH, and URG flags, lighting the packet up like a Christmas tree.
-      </div>
+      <dl>
+        <dt>Null scan (<strong>-sN</strong>)
+        <dd>
+          <p>Does not set any bits (TCP flag header is 0)
+        <dt>FIN scan (<strong>-sF</strong>)
+        <dd>
+          <p>Sets just the TCP FIN bit.
+        <dt>Xmas scan (<strong>-sX</strong>)
+        <dd>
+          <p>Sets the FIN, PSH, and URG flags, lighting the packet up like a Christmas tree.
+      </dl>
       <p>These three scan types are exactly the same in behavior except for the TCP flags set in probe packets. If a RST packet is received, the port is considered closed, while no response means it is open|filtered. The port is marked filtered if an ICMP unreachable error (type 3, code 0, 1, 2, 3, 9, 10, or 13) is received.<br>
       <br>
       The key advantage to these scan types is that they can sneak through certain non-stateful firewalls and packet filtering routers. Another advantage is that these scan types are a little more stealthy than even a SYN scan. Don't count on this though—most modern IDS products can be configured to detect them. The big downside is that not all systems follow RFC 793 to the letter. A number of systems send RST responses to the probes regardless of whether the port is open or not. This causes all of the ports to be labeled closed. Major operating systems that do this are Microsoft Windows, many Cisco devices, BSDI, and IBM OS/400. This scan does work against most Unix-based systems though. Another downside of these scans is that they can't distinguish open ports from certain filtered ones, leaving you with the response open|filtered.
