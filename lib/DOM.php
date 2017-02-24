@@ -4,6 +4,19 @@ declare(strict_types = 1);
 class DOM
 {
 
+    private static function extractContents(DOMElement $containerNode, DOMNode $appendNode)
+    {
+
+        if ($appendNode instanceof DOMText) {
+            $containerNode->appendChild($appendNode);
+        } else {
+            while ($child = $appendNode->firstChild) {
+                $containerNode->appendChild($child);
+            }
+        }
+
+    }
+
     private static function setIndentClass(DOMElement $remainingNode, DOMElement $leavingNode): void
     {
         $remainingNodeClass = $remainingNode->getAttribute('class');
@@ -365,6 +378,45 @@ class DOM
                 $child = $child->nextSibling;
             }
 
+        }
+
+        $child = $element->firstChild;
+        while ($child) {
+            if (self::isTag($child, 'dl')) {
+                $dtChar       = null;
+                $shouldBeList = true;
+                foreach ($child->childNodes as $dlChild) {
+                    if ($dlChild->tagName === 'dt') {
+                        if (mb_strlen($dlChild->textContent) !== 1) {
+                            $shouldBeList = false;
+                            break;
+                        }
+                        if (is_null($dtChar)) {
+                            $dtChar = $dlChild->textContent;
+                        } elseif ($dtChar !== $dlChild->textContent) {
+                            $shouldBeList = false;
+                            break;
+                        }
+                    }
+                }
+                if ($shouldBeList && in_array($dtChar, ['*', 'o'])) {
+                    $ul = $element->ownerDocument->createElement('ul');
+                    $ul = $element->insertBefore($ul, $child);
+                    if ($child->getAttribute('class') !== '') {
+                        $ul->setAttribute('class', $child->getAttribute('class'));
+                    }
+                    foreach ($child->childNodes as $dlChild) {
+                        if ($dlChild->tagName === 'dd') {
+                            $li = $ul->appendChild($element->ownerDocument->createElement('li'));
+                            self::extractContents($li, $dlChild);
+                        }
+                    }
+                    $element->removeChild($child);
+                    $child = $ul->nextSibling;
+                    continue;
+                }
+            }
+            $child = $child->nextSibling;
         }
 
         return self::massageNode($element);

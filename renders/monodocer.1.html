@@ -77,21 +77,18 @@
   <p><strong>monodocer</strong> has been obsoleted by <strong>mdoc</strong>(1). &nbsp;See the <strong>mdoc-update</strong>(1) man page.
   <p><em>monodocer</em> is a program that creates XML documentation stubs in the ECMA Documentation Format. &nbsp;It does not rely on documentation found within the source code.
   <p>The advantages are:
-  <dl>
-    <dt><em>*</em>
-    <dd>
+  <ul>
+    <li>
       <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. &nbsp;(For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)<br>
       <br>
       Inserting good documentation into the source code can frequently bloat the source file, as the documentation can be longer than the actual method that is being documented.
-    <dt><em>*</em>
-    <dd>
+    <li>
       <p><strong>Localization.</strong> In-source documentation formats (such as <strong>/doc</strong> ) have no support for multiple human languages. &nbsp;If you need to support more than one human language for documentation purposes, <em>monodocer</em> is useful as it permits each language to get its own directory, and <em>monodocer</em> can add types/members for each separate documentation directory.
-    <dt><em>*</em>
-    <dd>
+    <li>
       <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. &nbsp;It's also possible that the documentation team will have minimal experience with the programming language being used. &nbsp;In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. <em>monodocer</em> allows the documentation to be kept <em>completely</em> separate and distinct from the source code used to create the assembly.
-  </dl>
+  </ul>
   <p>To turn the <em>monodocer</em> documentation into something that can be consumed by the Mono Documentation Browser (the desktop help browser, or the web interface for it) it is necessary to compile the documentation into a packed format. &nbsp;This is done with the mdassembler tool, for example, you could use this toolchain like this:
-  <pre>    $ monodocer -assembly:MyWidgets -path:generated_docs
+  <pre>     $ monodocer -assembly:MyWidgets -path:generated_docs
         $ mdassembler --ecma generated_docs -out:MyWidgets</pre>
   <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. &nbsp; In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
   <pre>&lt;?xml version="1.0"?&gt;

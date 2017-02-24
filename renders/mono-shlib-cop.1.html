@@ -24,20 +24,17 @@
   <p><em>mono-shlib-cop</em> is a tool that inspects a managed assembly looking for erroneous or suspecious usage of shared libraries.
   <p>The tool takes one or more assembly filenames, and inspects each assembly specified.
   <p>The errors checked for include:
-  <dl>
-    <dt>*
-    <dd>
+  <ul>
+    <li>
       <p>Does the shared library exist?
-    <dt>*
-    <dd>
+    <li>
       <p>Does the requested symbol exist within the shared library?
-  </dl>
+  </ul>
   <p>The warnings checked for include:
-  <dl>
-    <dt>*
-    <dd>
+  <ul>
+    <li>
       <p>Is the target shared library a versioned library? &nbsp;(Relevant only on Unix systems, not Mac OS X or Windows.)
-  </dl>
+  </ul>
   <p>In general, only versioned libraries such as <em>libc.so.6</em> are present on the &nbsp;user's machine, and efforts to load <em>libc.so</em> will result in a <strong>System.DllNotFoundException.</strong> There are three solutions to this:
   <dl>
     <dt>1.
@@ -54,7 +51,7 @@
 <section>
   <h2>EXAMPLE</h2>
   <p>The following code contains examples of the above errors and warnings:
-  <pre>  using System.Runtime.InteropServices; // for DllImport
+  <pre>        using System.Runtime.InteropServices; // for DllImport
         class Demo {
                 [DllImport ("bad-library-name")]
                 private static extern void BadLibraryName ();
@@ -103,11 +100,10 @@
 </section>
 <section>
   <h2>BUGS</h2>
-  <dl>
-    <dt>*
-    <dd>
+  <ul>
+    <li>
       <p>Only <strong>DllImport</strong> entries are checked; the surrounding IL is ignored. &nbsp;Consequently, if a runtime check is performed to choose which shared library to invoke, an error will be reported even though the specified library is never used. &nbsp;Consider this code:
-      <pre>       using System.Runtime.InteropServices; // for DllImport
+      <pre> using System.Runtime.InteropServices; // for DllImport
         class Beep {
                 [DllImport ("kernel32.dll")]
                 private static extern int Beep (int dwFreq, int dwDuration);
@@ -126,14 +122,13 @@
                 }
         }</pre>
       <p>If <em>mono-shlib-cop</em> is run on this assembly, an error will be reported for using <em>kernel32.dll</em> , even though <em>kernel32.dll</em> will never be used on Unix platforms.
-    <dt>*
-    <dd>
+    <li>
       <p><em>mono-shlib-cop</em> currently only examines the shared library file extension to determine if a warning should be generated. &nbsp;A <em>.so</em> extension will always generate a warning, even if the <em>.so</em> is not a symlink, isn't provided in a <em>-devel</em> package, and there is no versioned shared library &nbsp;(possible examples including <em>/usr/lib/libtcl8.4.so,</em> <em>/usr/lib/libubsec.so,</em> etc.).<br>
       <br>
       Consequently, warnings for any such libraries are useless, and incorrect.<br>
       <br>
       Windows and Mac OS X will never generate warnings, as these platforms use different shared library extensions.
-  </dl>
+  </ul>
 </section>
 <section>
   <h2>MAILING LISTS</h2>

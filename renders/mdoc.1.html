@@ -16,37 +16,31 @@
   <p><em>mdoc</em> is an assembly-based documentation management system.
   <p><em>mdoc</em> permits creating and updating documentation <em>stubs</em> based on the contents of an assembly. &nbsp;It does not rely on documentation found within &nbsp;the source code.
   <p>The advantages are:
-  <dl>
-    <dt><strong>*</strong>
-    <dd>
+  <ul>
+    <li>
       <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. &nbsp;(For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)<br>
       <br>
       Inserting good documentation into the source code can frequently bloat the source file, as the documentation can be longer than the actual method that is being documented.
-    <dt><strong>*</strong>
-    <dd>
+    <li>
       <p><strong>Localization.</strong> In-source documentation formats (such as <em>csc /doc</em>) have no support for multiple human languages. &nbsp;If you need to support more than one human language for documentation purposes, <em>mdoc</em> is useful as it permits each language's output to reside in its own directory, &nbsp;and <em>mdoc</em> can add types/members for each separate documentation directory.
-    <dt><strong>*</strong>
-    <dd>
+    <li>
       <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. &nbsp;It's also possible that the documentation team will have minimal experience with the programming language being used. &nbsp;In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. &nbsp;<em>mdoc</em> allows the documentation to be &nbsp;kept <em>completely</em> separate and distinct from the source code used to &nbsp;create the assembly.
-  </dl>
+  </ul>
   <p>Documentation can be generated using the <strong>mdoc update</strong> command:
   <pre>    mdoc update -o docs/en ProjectName.dll</pre>
   <p>Once the documentation stubs have been generated (and hopefully later filled &nbsp;in with actual documentation), there are three ways to view the documentation:
-  <dl>
-    <dt><strong>*</strong>
-    <dd>
+  <ul>
+    <li>
       <p>To generate a simple directory of HTML pages (one HTML file per type), use <strong>mdoc export-html</strong>:
       <pre>    mdoc export-html -o /srv/www/htdocs/ProjectName docs/en</pre>
-    <dt><strong>*</strong>
-    <dd>
+    <li>
       <p>To use an ASP.NET webapp to display the sources, see: <em>http://anonsvn.mono-project.com/source/trunk/monodoc/engine/web/</em>.<br>
       <br>
       From a <em>monodoc</em> source checkout, you can do this:
       <pre>    cd engine
     make web</pre>
       <p>This will use <strong>xsp</strong>(1) to serve the ASP.NET webapp; &nbsp;Visit <em>http://localhost:8080/</em> to view the documentation.
-    <dt><strong>*</strong>
-    <dd>
+    <li>
       <p>To use the <strong>monodoc</strong>(1) documentation browser, you must first <em>assemble</em> the documentation:
       <pre>    mdoc assemble -o ProjectName docs/en</pre>
       <p>The above command creates the files <em>ProjectName.tree</em> and <em>ProjectName.zip</em>. &nbsp;An additional <em>ProjectName.sources</em> file &nbsp;must be provided which describes where in the help system the documentation &nbsp;should be hooked up; it is a very simple XML file, like this:
@@ -61,7 +55,7 @@
       <pre>    cp ProjectName.tree ProjectName.zip ProjectName.source \
       `pkg-config monodoc --variable sourcesdir`</pre>
       <p>The above will copy the files into the directory that Monodoc has registered; you might need root permissions to do this. &nbsp;The actual directory is returned by the <em>pkg-config</em> invocation.
-  </dl>
+  </ul>
 </section>
 <section>
   <h2>MDOC COMMANDS</h2>

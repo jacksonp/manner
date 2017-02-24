@@ -14,16 +14,14 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><strong>mdoc update</strong> is responsible for the following:
-  <dl>
-    <dt><strong>*</strong>
-    <dd>
+  <ul>
+    <li>
       <p>Creating documentation stubs based on <em>ASSEMBLIES</em>. &nbsp;The stub-creation process will create new <strong>mdoc</strong>(5) XML files for each type within <em>ASSEMBLIES</em>, and provide documentation stubs for each member of those types.
-    <dt><strong>*</strong>
-    <dd>
+    <li>
       <p>Update documentation stubs based on <em>ASSEMBLIES</em>. &nbsp;Existing <strong>mdoc</strong>(5) documentation can be updated to reflect changes within <em>ASSEMBLIES</em>, such as added types and members, while preserving existing documentation.<br>
       <br>
       In some limited circumstances, renames will be tracked, minimizing the documentation burden when e.g. a parameter is renamed.
-  </dl>
+  </ul>
   <p><strong>mdoc update</strong> does not rely on documentation found within source code, though it can import XML Documentation Comments via the <strong>-i</strong> option.
   <p>See <strong>mdoc</strong>(1) and <strong>mdoc</strong>(5) for more information.
 </section>
@@ -63,19 +61,16 @@
       <p>If <em>SOURCES</em> isn't provided (the default), then only exceptions created &nbsp;within the member itself will be documented.<br>
       <br>
       LIMITATIONS: Exception searching is currently implemented by looking for the exception types that are explicitly created based on the known compile-time types. &nbsp;This has the following limitations:
-      <dl>
-        <dt><strong>*</strong>
-        <dd>
+      <ul>
+        <li>
           <p>This will not find exceptions which are implicit to the IL, such as NullReferenceException and IndexOutOfRangeException.
-        <dt><strong>*</strong>
-        <dd>
+        <li>
           <p>This will find exceptions which are <em>not</em> thrown, e.g.
           <pre>    public void CreateAnException ()
     {
         Exception e = new Exception ();
     }</pre>
-        <dt><strong>*</strong>
-        <dd>
+        <li>
           <p>This will not "follow" delegate and interface calls:
           <pre>    public void UsesDelegates ()
     {
@@ -83,8 +78,7 @@
         a (4);
     }</pre>
           <p>The function <em>UsesDelegates()</em> won't have any exceptions documented.
-        <dt><strong>*</strong>
-        <dd>
+        <li>
           <p>This will find exceptions which "cannot happen", such as ArgumentNullExceptions for arguments which are "known" to be non-null:
           <pre>    public void A ()
     {
@@ -97,7 +91,7 @@
             throw new ArgumentNullException ("s");
     }</pre>
           <p>For the above, if <strong>--exceptions=asm</strong> is provided then <em>A()</em> will be documented as throwing an ArgumentNullException, which cannot happen.
-      </dl>
+      </ul>
     <dt><strong>-f</strong>=<em>FLAG</em>
     <dd>
       <p>Specify a flag to alter behavior. &nbsp;Valid flags include:

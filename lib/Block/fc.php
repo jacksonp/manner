@@ -26,7 +26,7 @@ class Block_fc implements Block_Template
         array_shift($lines);
 
         $delim = $request['arguments'][0];
-        $pad   = $request['arguments'][1];
+        $pad   = @$request['arguments'][1] ?: ' ';
 
         $dom = $parentNode->ownerDocument;
 
@@ -50,7 +50,7 @@ class Block_fc implements Block_Template
             $nextRequest = Request::getLine($lines);
             array_shift($lines);
 
-            if (in_array($nextRequest['request'], ['ta', 'nf', 'br'])) {
+            if (in_array($nextRequest['request'], ['ta', 'nf', 'br', 'LP'])) {
                 continue; // Ignore
             } elseif (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
                 $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $nextRequest['raw_line']);
@@ -63,7 +63,7 @@ class Block_fc implements Block_Template
                 $cells = preg_split("~\t~u", $nextRequest['raw_line']);
                 self::addRow($dom, $table, $cells);
             } else {
-                throw new Exception('Unexpected ' . $nextRequest['raw_line']);
+                self::addRow($dom, $table, [$nextRequest['raw_line']]);
             }
         }
 
