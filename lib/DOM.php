@@ -25,12 +25,26 @@ class DOM
         return $node && $node->nodeType === XML_ELEMENT_NODE && $node->tagName === $tag;
     }
 
+    /*
+    private static function hasImmediateChild(DOMElement $node, string $tag): bool
+    {
+        $child = $node->firstChild;
+        while ($child) {
+            if ($child->nodeType === XML_ELEMENT_NODE && $child->tagName === $tag) {
+                return true;
+            }
+            $child = $child->nextSibling;
+        }
+        return false;
+    }
+    */
+
     private static function isParagraphFollowedByIndentedDiv(?DomNode $node): bool
     {
         return
             self::isTag($node, 'p') &&
             $node->getAttribute('class') === '' &&
-            !preg_match('~^[A-Z][a-z]+ [A-Za-z][a-z]+~u', $node->textContent) &&
+            !preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $node->textContent) &&
             self::isTag($node->nextSibling, 'div') &&
             strpos($node->nextSibling->getAttribute('class'), 'indent-') === 0 &&  // starts with indent-
             self::isTag($node->nextSibling->firstChild, 'p') &&
@@ -300,7 +314,7 @@ class DOM
                 self::isParagraphFollowedByIndentedDiv($child) &&
                 self::isParagraphFollowedByIndentedDiv($child->nextSibling->nextSibling)
             ) {
-                $dl          = $child->ownerDocument->createElement('dl');
+                $dl = $child->ownerDocument->createElement('dl');
                 $child->parentNode->insertBefore($dl, $child);
                 $nextElementToCheck = $child;
                 while (self::isParagraphFollowedByIndentedDiv($nextElementToCheck)) {
