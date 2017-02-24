@@ -39,16 +39,37 @@ class DOM
     }
     */
 
-    private static function isParagraphFollowedByIndentedDiv(?DomNode $node): bool
+    private static function isParagraphFollowedByIndentedDiv(?DomNode $p): int
     {
-        return
-            self::isTag($node, 'p') &&
-            $node->getAttribute('class') === '' &&
-            !preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $node->textContent) &&
-            self::isTag($node->nextSibling, 'div') &&
-            strpos($node->nextSibling->getAttribute('class'), 'indent-') === 0 &&  // starts with indent-
-            self::isTag($node->nextSibling->firstChild, 'p') &&
-            preg_match('~^[a-z]~ui', $node->nextSibling->textContent); // exclude e.g. "· <fork>" in dbus-daemon.1
+        if (!self::isTag($p, 'p') || $p->getAttribute('class') !== '') {
+            return 0;
+        }
+
+        $div = $p->nextSibling;
+
+        if (
+            !self::isTag($div, 'div') ||
+            strpos($div->getAttribute('class'), 'indent-') !== 0 ||  // doesn't start with indent-
+            !self::isTag($div->firstChild, 'p')
+        ) {
+            return 0;
+        }
+
+        // exclude e.g. "· <fork>" in dbus-daemon.1
+        if (!preg_match('~^[a-z]~ui', $div->textContent)) {
+            return 0;
+        }
+
+        if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $p->textContent)) {
+            return 100;
+        }
+
+        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $p->textContent)) {
+            return 0;
+        }
+
+        return 50;
+
     }
 
     /**
@@ -310,9 +331,15 @@ class DOM
         $child = $element->firstChild;
         while ($child) {
 
-            if ($child->nodeType === XML_ELEMENT_NODE && $child->tagName === 'p' &&
-                self::isParagraphFollowedByIndentedDiv($child) &&
-                self::isParagraphFollowedByIndentedDiv($child->nextSibling->nextSibling)
+            $certainty = self::isParagraphFollowedByIndentedDiv($child);
+
+            if (
+                $certainty > 50 ||
+                (
+                    $certainty > 0 &&
+                    $child->nextSibling &&
+                    self::isParagraphFollowedByIndentedDiv($child->nextSibling->nextSibling) !== 0
+                )
             ) {
                 $dl = $child->ownerDocument->createElement('dl');
                 $child->parentNode->insertBefore($dl, $child);
