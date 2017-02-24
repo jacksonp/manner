@@ -49,6 +49,7 @@ class Man
     public function reset()
     {
         $this->data     = [
+            'escape_char' => '\\',
             'control_char' => '.',
             'control_char_2' => '\'',
             'eq_delim_left' => null,
@@ -99,6 +100,8 @@ class Man
 
         $this->roffClasses = [
             'cc' => 'Roff_cc',
+            'ec' => 'Roff_ec',
+            'eo' => 'Roff_eo',
             'do' => 'Roff_do',
             'nop' => 'Roff_nop',
             'char' => 'Roff_Char',

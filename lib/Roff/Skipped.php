@@ -13,8 +13,6 @@ class Roff_Skipped
         'cu', // Continuous underline in nroff, like .ul in troff.
         'defcolor', // Define color, see https://www.gnu.org/software/groff/manual/html_node/Colors.html
         'em', // .em macro: The macro is run after the end of input.
-        'ec', // Sets/resets the escape character, only ever used to reset after not being changed in body of man pages.
-        'eo', // Turn off escape character mechanism.
         'ev',  // Switch to previous environment and pop it off the stack.
         'evc', // Copy the contents of environment env to the current environment. No pushing or popping.
         'ex', // Exit from roff processing.
