@@ -236,6 +236,15 @@ class Roff_Condition implements Roff_Template
             return [];
         }
 
+        if (count($replacementLines) && !is_null(Man::instance()->escape_char)) {
+            // Catch any trailing line continuations which would have just put closing \} on same line. See SbCylinder.3iv
+            $lastLine = array_pop($replacementLines);
+            if (mb_substr($lastLine, -1, 1) === '\\') {
+                $lastLine = mb_substr($lastLine, 0, -1);
+            }
+            array_push($replacementLines, $lastLine);
+        }
+
         return $replacementLines;
 
     }

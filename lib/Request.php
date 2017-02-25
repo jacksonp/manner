@@ -70,7 +70,7 @@ class Request
 
     public static function peepAt(?string $line): array
     {
-        $return       = ['name' => null, 'raw_arg_string' => ''];
+        $return = ['name' => null, 'raw_arg_string' => ''];
         if (is_null($line)) {
             // We hit an end of macro marker.
             return $return;
@@ -110,6 +110,21 @@ class Request
             return self::getLine($lines, $callerArguments);
         }
 
+        $man = Man::instance();
+
+        if (!is_null($man->escape_char)) {
+            // Continuations
+            while (
+                count($lines) > 1 &&
+                mb_substr($lines[0], -1, 1) === '\\' &&
+                ($lines[0] === '\\' || mb_substr($lines[0], -2, 1) !== '\\')) {
+                $lineWithContinuationsExpanded = mb_substr($lines[0], 0, -1) . $lines[1];
+                array_shift($lines);
+                array_shift($lines);
+                array_unshift($lines, $lineWithContinuationsExpanded);
+            }
+        }
+
         $return = [
             'request' => null,
             'raw_line' => $lines[0],
@@ -124,7 +139,6 @@ class Request
             return self::getLine($lines, $callerArguments);
         }
 
-        $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
         $lines[0]           = Roff_String::substitute($lines[0]);

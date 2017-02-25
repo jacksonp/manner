@@ -15,17 +15,6 @@ class Preprocessor
             $line       = $linePrefix . $lines[$i];
             $linePrefix = '';
 
-            // Continuations
-            // Can't do these in Roff::parse() loop: a continuation could e.g. been in the middle of a conditional
-            // picked up Roff_Condition, e.g. man.1
-            // Do these before comments (see e.g. ppm.5 where first line is just "\" and next one is a comment.
-            while (
-                $i < count($lines) - 1 &&
-                mb_substr($line, -1, 1) === '\\' &&
-                (mb_strlen($line) === 1 || mb_substr($line, -2, 1) !== '\\')) {
-                $line = mb_substr($line, 0, -1) . $lines[++$i];
-            }
-
             // Everything up to and including the next newline is ignored. This is interpreted in copy mode.  This is like \" except that the terminating newline is ignored as well.
             if (preg_match('~(^|.*?[^\\\\])\\\\#~u', $line, $matches)) {
                 $linePrefix = $matches[1];
