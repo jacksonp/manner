@@ -59,11 +59,9 @@ class Block_fc implements Block_Template
                     return trim($contents, $pad);
                 }, $cells);
                 self::addRow($dom, $table, $cells);
-            } elseif (mb_strpos($nextRequest['raw_line'], "\t") !== 0) {
+            } else {
                 $cells = preg_split("~\t~u", $nextRequest['raw_line']);
                 self::addRow($dom, $table, $cells);
-            } else {
-                self::addRow($dom, $table, [$nextRequest['raw_line']]);
             }
         }
 
