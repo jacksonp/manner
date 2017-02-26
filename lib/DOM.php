@@ -373,6 +373,24 @@ class DOM
                     continue;
                 }
 
+                // Hack for cases like this: <dt><strong>-</strong><strong>-eps-file</strong>=&lt;<em>file</em>&gt;</dt>
+                if ($child->textContent === '-') {
+                    if (
+                        $child->firstChild instanceof DOMText &&
+                        $child->nextSibling &&
+                        $child->nextSibling instanceof DOMElement &&
+                        $child->nextSibling->childNodes->length === 1 &&
+                        $child->nextSibling->firstChild instanceof DOMText &&
+                        $child->tagName === $child->nextSibling->tagName
+                    ) {
+                        $child->nextSibling->firstChild->textContent = '-' . $child->nextSibling->firstChild->textContent;
+                        $nextSibling = $child->nextSibling;
+                        $child->parentNode->removeChild($child);
+                        $child = $nextSibling;
+                        continue;
+                    }
+                }
+
             }
 
             $child = $child->nextSibling;
