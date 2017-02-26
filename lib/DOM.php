@@ -285,7 +285,34 @@ class DOM
 
         }
 
+        if ($myTag === 'dt') {
+            self::massageDT($element);
+        }
+
         return $element->nextSibling;
+
+    }
+
+    private static function massageDT(DOMElement $dt): void
+    {
+
+        $child = $dt->lastChild;
+        while ($child) {
+            if (self::isTag($child, 'br')) {
+                $newDT = $dt->ownerDocument->createElement('dt');
+                $newDT = $dt->parentNode->insertBefore($newDT, $dt->nextSibling);
+
+                $nextChild = $child->nextSibling;
+                $dt->removeChild($child);
+                while ($nextChild) {
+                    $sib = $nextChild->nextSibling;
+                    $newDT->appendChild($nextChild);
+                    $nextChild = $sib;
+                }
+                self::massageDT($dt);
+            }
+            $child = $child->previousSibling;
+        }
 
     }
 
@@ -364,6 +391,7 @@ class DOM
                         $dt->appendChild($child->firstChild);
                     }
                     $dl->appendChild($dt);
+                    self::massageDT($dt);
                     $dd = $child->ownerDocument->createElement('dd');
                     while ($child->nextSibling->firstChild) {
                         $dd->appendChild($child->nextSibling->firstChild);
