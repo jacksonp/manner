@@ -58,6 +58,17 @@ class DOM
             return 0;
         }
 
+        $pChild = $p->firstChild;
+        while ($pChild) {
+            if (
+                self::isTag($pChild, 'br') &&
+                $pChild->previousSibling && preg_match('~^[A-Z].*\.$~u', $pChild->previousSibling->textContent)
+            ) {
+                return 0;
+            }
+            $pChild = $pChild->nextSibling;
+        }
+
         $div = $p->nextSibling;
 
         if (
