@@ -192,17 +192,14 @@
     <p>Dithering is a technique used to maximise the dynamic range of audio stored at a particular bit-depth. Any distortion introduced by quantisation is decorrelated by adding a small amount of white noise to the signal. &nbsp;In most cases, SoX can determine whether the selected processing requires dither and will add it during output formatting if appropriate.<br>
     <br>
     Specifically, by default, SoX automatically adds TPDF dither when the output bit-depth is less than 24 and any of the following are true:
-    <dl class="indent-4">
-      <dt>·
-      <dd>
+    <ul class="indent-4">
+      <li>
         <p>bit-depth reduction has been specified explicitly using a command-line option
-      <dt>·
-      <dd>
+      <li>
         <p>the output file format supports only bit-depths lower than that of the input file format
-      <dt>·
-      <dd>
+      <li>
         <p>an effect has increased effective bit-depth within the internal processing chain
-    </dl>
+    </ul>
     <p>For example, adjusting volume with <strong>vol 0.25</strong> requires two additional bits in which to losslessly store its results (since 0.25 decimal equals 0.01 binary). &nbsp;So if the input file bit-depth is 16, then SoX's internal representation will utilise 18 bits after processing this volume change. &nbsp;In order to store the output at the same depth as the input, dithering is used to remove the additional bits.<br>
     <br>
     Use the <strong>-V</strong> option to see what processing SoX has automatically added. The <strong>-D</strong> option may be given to override automatic dithering. &nbsp;To invoke dithering manually (e.g. to select a noise-shaping curve), see the <strong>dither</strong> effect.

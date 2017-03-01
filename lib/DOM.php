@@ -33,6 +33,11 @@ class DOM
         }
     }
 
+    private static function isInlineElement(?DOMNode $node): bool
+    {
+        return $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
+    }
+
     private static function isTag(?DOMNode $node, string $tag): bool
     {
         return $node && $node->nodeType === XML_ELEMENT_NODE && $node->tagName === $tag;
@@ -104,6 +109,7 @@ class DOM
     {
 
         $myTag = $element->tagName;
+        $doc   = $element->ownerDocument;
 
         if ($myTag === 'pre') {
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
@@ -185,7 +191,7 @@ class DOM
                 self::isTag($element->previousSibling->firstChild, 'p')
             ) {
                 $nextSibling = $element->nextSibling;
-                $element->previousSibling->firstChild->appendChild($element->ownerDocument->createElement('br'));
+                $element->previousSibling->firstChild->appendChild($doc->createElement('br'));
                 while ($element->firstChild->firstChild) {
                     $element->previousSibling->firstChild->appendChild($element->firstChild->firstChild);
                 }
@@ -264,7 +270,7 @@ class DOM
             if ($everyChildIsDT) {
                 for ($j = 0; $j < $element->childNodes->length; ++$j) {
                     $strayDT = $element->childNodes->item($j);
-                    $p       = $element->ownerDocument->createElement('p');
+                    $p       = $doc->createElement('p');
                     $class   = $element->getAttribute('class');
                     if (!in_array($class, ['', 'indent'])) {
                         $p->setAttribute('class', $class);
@@ -281,7 +287,7 @@ class DOM
             }
 
             while ($element->lastChild && $element->lastChild->tagName === 'dt') {
-                $p     = $element->ownerDocument->createElement('p');
+                $p     = $doc->createElement('p');
                 $class = $element->getAttribute('class');
                 if (!in_array($class, ['', 'indent'])) {
                     $p->setAttribute('class', $class);
@@ -299,6 +305,35 @@ class DOM
         if ($myTag === 'dt') {
             self::massageDT($element);
         }
+
+        /*
+        if ($myTag === 'p') {
+            //<editor-fold desc="Change two br tags in a row to a new paragraph.">
+            $elementClass = $element->getAttribute('class');
+            $pChild       = $element->firstChild;
+            do {
+                if (self::isTag($pChild, 'br') && self::isTag($pChild->nextSibling, 'br')) {
+                    $p = $doc->createElement('p');
+                    if ($elementClass !== '') {
+                        $p->setAttribute('class', $elementClass);
+                    }
+                    while ($node = $element->firstChild) {
+                        if ($node === $pChild) {
+                            break;
+                        }
+                        $p->appendChild($node);
+                    }
+                    $element->parentNode->insertBefore($p, $element);
+                    $element->removeChild($element->firstChild); // 1st <br>
+                    $element->removeChild($element->firstChild); // 2nd <br>
+                    $pChild = $pChild->firstChild;
+                } else {
+                    $pChild = $pChild->nextSibling;
+                }
+            } while ($pChild);
+            //</editor-fold>
+        }
+        */
 
         return $element->nextSibling;
 
@@ -329,6 +364,7 @@ class DOM
 
     static function massage(DOMElement $element): ?DOMNode
     {
+        $doc   = $element->ownerDocument;
         $child = $element->firstChild;
         while ($child) {
 
@@ -343,7 +379,7 @@ class DOM
 
             // NB: we don't want to remove the space in the <em> in cases e.g.:
             // <strong>e</strong><em> </em><strong>f</strong>
-            if ($child->nodeType === XML_ELEMENT_NODE && in_array($child->tagName, Blocks::INLINE_ELEMENTS)) {
+            if (self::isInlineElement($child)) {
 
                 if (
                     $child->firstChild &&
@@ -384,7 +420,7 @@ class DOM
                         $child->tagName === $child->nextSibling->tagName
                     ) {
                         $child->nextSibling->firstChild->textContent = '-' . $child->nextSibling->firstChild->textContent;
-                        $nextSibling = $child->nextSibling;
+                        $nextSibling                                 = $child->nextSibling;
                         $child->parentNode->removeChild($child);
                         $child = $nextSibling;
                         continue;
@@ -456,15 +492,15 @@ class DOM
                         }
                     }
                 }
-                if ($shouldBeList && in_array($dtChar, ['*', 'o'])) {
-                    $ul = $element->ownerDocument->createElement('ul');
+                if ($shouldBeList && in_array($dtChar, ['*', 'o', '·'])) {
+                    $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
                     if ($child->getAttribute('class') !== '') {
                         $ul->setAttribute('class', $child->getAttribute('class'));
                     }
                     foreach ($child->childNodes as $dlChild) {
                         if ($dlChild->tagName === 'dd') {
-                            $li = $ul->appendChild($element->ownerDocument->createElement('li'));
+                            $li = $ul->appendChild($doc->createElement('li'));
                             self::extractContents($li, $dlChild);
                         }
                     }

@@ -40,45 +40,33 @@
   <p>When an initial <em>configfile</em> is created, the default specifications come from a set of group files below the <em>groupsdir</em> specified with the <strong>-d</strong> option (the default <em>groupsdir</em> is <strong>$PCP_VAR_DIR/config/pmlogconf</strong> which is most commonly correct, so the <strong>-d</strong> option is rarely used in practice).
   <p>The directory structure below <em>groupsdir</em> is arbitrary as all regular files will be found by recursive descent and considered, so add-on products and PMDA developers can easily extend the available defaults to <strong>pmlogconf</strong> by adding new directories and/or group files below <em>groupsdir</em>.
   <p>These group files are processed in the following ways:
-  <dl class="indent-19">
-    <dt>·
-    <dd>
+  <ul class="indent-19">
+    <li>
       <p>When a new <em>configfile</em> is created, all group files are processed.
-    <dt>·
-    <dd>
+    <li>
       <p>Whenever <strong>pmlogconf</strong> is run with an existing <em>configfile</em>, <em>groupsdir</em> is traversed to see if any new groups have been defined and should be considered for inclusion in <em>configfile</em>.
-    <dt>·
-    <dd>
+    <li>
       <p>When <strong>pmlogconf</strong> processes a group in <em>configfile</em> that is enabled, the list of metrics associated with the group is taken from the group file (and replaces any previous list of metrics associated with this group in <em>configfile</em>).
-    <dt>·
-    <dd>
+    <li>
       <p>When the <strong>-r</strong> (reprobe) command line option is specified, every group (not just newly discovered ones) is reprocessed to see if it should be considered for inclusion in <em>configfile</em>.
-  </dl>
+  </ul>
   <p>Each group file is structured as follows:
-  <dl class="indent-19">
-    <dt>·
-    <dd>
+  <ul class="indent-19">
+    <li>
       <p>The first line must contain <strong>#pmlogconf-setup 2.0</strong>
-    <dt>·
-    <dd>
+    <li>
       <p>Other lines beginning with <strong>#</strong> are treated as comments.
-    <dt>·
-    <dd>
+    <li>
       <p>Blank lines are ignored.
-    <dt>·
-    <dd>
+    <li>
       <p>One or more lines starting with the keyword <strong>ident</strong> are used to provide the human-readable description of the group.
-    <dt>·
-    <dd>
+    <li>
       <p>Non-blank lines beginning with white space define metrics to be associated with this group, one per line. &nbsp;Each metric specification follows the rules for a <strong>pmlogger</strong>(1) configuration, namely either the name of a non-leaf node in the PMNS (implying all descendent names in the PMNS), or the name of a leaf node in the PMNS optionally followed by one or more instance names enclosed by ``['' and ``]''.
-    <dt>·
-    <dd>
+    <li>
       <p>A control line starting with one of the keywords <strong>probe</strong> or <strong>force</strong> must be present.
-    <dt>·
-    <dd>
+    <li>
       <p>An optional logging interval control line begins with the keyword <strong>delta</strong> followed by one of the <strong>pmlogger</strong>(1) interval specification described above.
-    <dt>·
-    <dd>
+    <li>
       <p><strong>probe</strong> control lines have the format:
       <div class="indent-19">
         <p class="center"><strong>probe</strong> <em>metric</em> [<em>condition</em> [<em>state_rule</em>] ]
@@ -92,10 +80,9 @@
         <p>The default <em>state_rule</em> is
         <p class="center"><strong>? available : exclude</strong>
       </div>
-    <dt>·
-    <dd>
+    <li>
       <p><strong>force</strong> control lines begin with the keyword <strong>force</strong> followed by one of the states defined above, so one of the actions <strong>include</strong>, <strong>exclude</strong> or <strong>available</strong> is applied unconditionally to the group.
-  </dl>
+  </ul>
   <p>Probing is only done when a new group is being added to <em>configfile</em> or when the <strong>-r</strong> command line option is specified. &nbsp;The evaluation of the probing conditions is done by contacting <strong>pmcd</strong>(1) on <em>hostname</em> (defaults to local:).
 </section>
 <section>
