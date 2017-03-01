@@ -125,14 +125,6 @@ class Request
             }
         }
 
-        $return = [
-            'request' => null,
-            'raw_line' => $lines[0],
-            'arguments' => [],
-            'arg_string' => '',
-            'raw_arg_string' => ''
-        ];
-
         // Do comments first
         if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
             // We want another look at the same line:
@@ -141,8 +133,15 @@ class Request
 
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
-        $lines[0]           = Roff_String::substitute($lines[0]);
-        $return['raw_line'] = Roff_String::substitute($return['raw_line']);
+        $lines[0] = Roff_String::substitute($lines[0]);
+
+        $return = [
+            'request' => null,
+            'raw_line' => $lines[0],
+            'arguments' => [],
+            'arg_string' => '',
+            'raw_arg_string' => ''
+        ];
 
         if (preg_match(
             '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
@@ -224,9 +223,9 @@ class Request
 
         $man = Man::instance();
 
-        if ($line === '') {
-            // empty lines cause a new paragraph, see sar.1
+        if ($line === '' && !Block_Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
+            // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
             $return['request'] = 'sp';
             $return['class']   = 'Inline_VerticalSpace';
         } elseif (!is_null($request['request'])) {

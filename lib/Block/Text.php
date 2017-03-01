@@ -4,7 +4,7 @@ declare(strict_types = 1);
 class Block_Text implements Block_Template
 {
 
-    private static $interruptTextProcessing = false;
+    public static $interruptTextProcessing = false;
 
     static function addSpace(DOMElement $parentNode)
     {
@@ -30,11 +30,14 @@ class Block_Text implements Block_Template
     ): ?DOMElement
     {
 
+        $parentNode = Blocks::getParentForText($parentNode);
+
+        // Reset
+        self::$interruptTextProcessing = false;
+
         $line = self::removeTextProcessingInterrupt($request['raw_line']);
 
         array_shift($lines);
-
-        $parentNode = Blocks::getParentForText($parentNode);
 
         // Implicit line break: "A line that begins with a space causes a break and the space is output at the beginning of the next line. Note that this space isn't adjusted, even in fill mode."
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
@@ -54,7 +57,6 @@ class Block_Text implements Block_Template
 
         // Re-add interrupt if present to last line for TextContent::interpretAndAppendText:
         if (self::$interruptTextProcessing) {
-            self::$interruptTextProcessing = false;
             $line .= '\\c';
         }
 
@@ -64,7 +66,7 @@ class Block_Text implements Block_Template
 
     }
 
-    static private function removeTextProcessingInterrupt(string $line)
+    static private function removeTextProcessingInterrupt(string $line): string
     {
         $line                          = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$interruptTextProcessing = $replacements > 0;
