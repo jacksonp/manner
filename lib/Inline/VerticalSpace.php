@@ -23,9 +23,7 @@ class Inline_VerticalSpace implements Block_Template
 
     static function check(string $string)
     {
-        $stringArray = [$string];
-        $request     = Request::getLine($stringArray);
-        return in_array($request['request'], ['br', 'sp', 'ne']);
+        return in_array(Request::peepAt($string)['name'], ['br', 'sp', 'ne']);
     }
 
     static function checkAppend(

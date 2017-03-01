@@ -49,7 +49,7 @@ class PreformattedOutput
                 $tds = preg_split('~\t+~u', $line);
                 $tr  = $table->appendChild($dom->createElement('tr'));
                 foreach ($tds as $tdLine) {
-                    $cell     = $dom->createElement('td');
+                    $cell = $dom->createElement('td');
                     /* @var DomElement $codeNode */
                     $codeNode = $cell->appendChild($dom->createElement('code'));
                     if (is_null($request['request'])) {
@@ -66,7 +66,15 @@ class PreformattedOutput
             return true;
         }
 
-        if (in_array($request['class'], ['Block_P', 'Inline_VerticalSpace', 'Empty_Request'])) {
+        if ($request['class'] === 'Empty_Request' || $request['request'] === 'br') {
+            array_shift($lines);
+            self::$addIndent = 0;
+            return true;
+        } elseif (
+            $request['raw_line'] === '' ||
+            in_array($request['request'], ['sp', 'ne']) ||
+            in_array($request['class'], ['Block_P'])
+        ) {
             array_shift($lines);
             if ($parentNode->hasChildNodes()) {
                 $parentNode->appendChild(new DOMText("\n"));
@@ -97,10 +105,7 @@ class PreformattedOutput
             self::$nextIndent = 4;
             array_shift($lines);
             return true;
-        } elseif (
-            in_array($request['request'], ['ce']) ||
-            in_array($line, ['\\&', '\\)'])
-        ) {
+        } elseif (in_array($request['request'], ['ce'])) {
             array_shift($lines);
             return true;
         } elseif ($request['request'] === 'OP') {
@@ -139,7 +144,7 @@ class PreformattedOutput
 
     static function endInputLine(DOMElement $parentNode)
     {
-        if (TextContent::$continuation || $parentNode->getAttribute('class') === 'synopsis') {
+        if (TextContent::$interruptTextProcessing || $parentNode->getAttribute('class') === 'synopsis') {
             $parentNode->appendChild(new DOMText(' '));
         } else {
             $parentNode->appendChild(new DOMText("\n"));

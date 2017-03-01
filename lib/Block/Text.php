@@ -16,7 +16,7 @@ class Block_Text implements Block_Template
                 $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
                 in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
             ) &&
-            !TextContent::$continuation
+            !TextContent::$interruptTextProcessing
         ) {
             $parentNode->appendChild(new DOMText(' '));
         }

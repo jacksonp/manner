@@ -4,14 +4,14 @@ declare(strict_types = 1);
 class TextContent
 {
 
-    static $continuation = false;
+    static $interruptTextProcessing = false;
 
     static function interpretAndAppendText(DOMElement $parentNode, string $line)
     {
 
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
-        // A macro may be defined multiple times in a document and we want the current one.
+
         $line       = $man->applyAllReplacements($line);
         $lineLength = mb_strlen($line);
 
@@ -88,8 +88,8 @@ class TextContent
         $line = Replace::preg('~  ~', " \xC2\xA0", $line);
 
         // See e.g. imgtool.1
-        $line               = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
-        self::$continuation = $replacements > 0;
+        $line                          = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
+        self::$interruptTextProcessing = $replacements > 0;
 
         $textSegmentsS = preg_split(
             '~(?<!\\\\)((?:\\\\\\\\)*)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',

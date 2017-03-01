@@ -108,7 +108,7 @@ class DOM
         if ($myTag === 'pre') {
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
                 $codeNode = $element->lastChild;
-                if ($codeNode->lastChild->nodeType === XML_TEXT_NODE) {
+                if ($codeNode->lastChild && $codeNode->lastChild->nodeType === XML_TEXT_NODE) {
                     $codeNode->lastChild->textContent = preg_replace('~\n+$~', '', $codeNode->lastChild->textContent);
                 }
             }
