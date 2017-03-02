@@ -39,21 +39,17 @@
       <p>List all known capabilities. &nbsp;This option must be specified alone.
     <dt><strong>--no-new-privs</strong>
     <dd>
-      <p>Set the <em>no_new_privs</em> bit. &nbsp;With this bit set, <strong>execve</strong>(2) will not grant new privileges. &nbsp;For example, the setuid and setgid bits as well as file capabilities will be disabled. &nbsp;(Executing binaries with these bits set will still work, but they will not gain privileges. &nbsp;Certain LSMs, especially AppArmor, may result in failures to execute certain programs.) &nbsp;This bit is inherited by child processes and cannot be unset. &nbsp;See <strong>prctl</strong>(2) and <em>Documentation/prctl/no_new_privs.txt</em> in the Linux kernel source.<br>
-      <br>
-      The no_new_privs bit is supported since Linux 3.5.
+      <p>Set the <em>no_new_privs</em> bit. &nbsp;With this bit set, <strong>execve</strong>(2) will not grant new privileges. &nbsp;For example, the setuid and setgid bits as well as file capabilities will be disabled. &nbsp;(Executing binaries with these bits set will still work, but they will not gain privileges. &nbsp;Certain LSMs, especially AppArmor, may result in failures to execute certain programs.) &nbsp;This bit is inherited by child processes and cannot be unset. &nbsp;See <strong>prctl</strong>(2) and <em>Documentation/prctl/no_new_privs.txt</em> in the Linux kernel source.
+      <p>The no_new_privs bit is supported since Linux 3.5.
     <dt><strong>--rgid</strong> <em>gid,</em> <strong>--egid</strong> <em>gid,</em> <strong>--regid</strong> <em>gid</em>
     <dd>
-      <p>Set the real, effective, or both gids. &nbsp;The <em>gid</em> argument can be given as textual group name.<br>
-      <br>
-      For safety, you must specify one of <strong>--clear-groups</strong>, <strong>--groups</strong>, or <strong>--keep-groups</strong> if you set any primary <em>gid</em>.
+      <p>Set the real, effective, or both gids. &nbsp;The <em>gid</em> argument can be given as textual group name.
+      <p>For safety, you must specify one of <strong>--clear-groups</strong>, <strong>--groups</strong>, or <strong>--keep-groups</strong> if you set any primary <em>gid</em>.
     <dt><strong>--ruid</strong> <em>uid,</em> <strong>--euid</strong> <em>uid,</em> <strong>--reuid</strong> <em>uid</em>
     <dd>
-      <p>Set the real, effective, or both uids. &nbsp;The <em>uid</em> argument can be given as textual login name.<br>
-      <br>
-      Setting a <em>uid</em> or <em>gid</em> does not change capabilities, although the exec call at the end might change capabilities. &nbsp;This means that, if you are root, you probably want to do something like:<br>
-      <br>
-      &nbsp; &nbsp; &nbsp; &nbsp;<strong>setpriv --reuid=1000 --regid=1000 --caps=-all</strong>
+      <p>Set the real, effective, or both uids. &nbsp;The <em>uid</em> argument can be given as textual login name.
+      <p>Setting a <em>uid</em> or <em>gid</em> does not change capabilities, although the exec call at the end might change capabilities. &nbsp;This means that, if you are root, you probably want to do something like:
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;<strong>setpriv --reuid=1000 --regid=1000 --caps=-all</strong>
     <dt><strong>--securebits</strong> (<strong>+</strong>|<strong>-</strong>)<strong><em>securebit</em></strong>...
     <dd>
       <p>Set or clear securebits. &nbsp;The argument is a comma-separated list. The valid securebits are <em>noroot</em>, <em>noroot_locked</em>, <em>no_setuid_fixup</em>, <em>no_setuid_fixup_locked</em>, and <em>keep_caps_locked</em>. <em>keep_caps</em> is cleared by <strong>execve</strong>(2) and is therefore not allowed.

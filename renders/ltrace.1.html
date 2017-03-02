@@ -17,9 +17,8 @@
 <section>
   <h2>DESCRIPTION</h2>
   <p><strong>ltrace</strong> is a program that simply runs the specified <em>command</em> until it exits. &nbsp;It intercepts and records the dynamic library calls which are called by the executed process and the signals which are received by that process. It can also intercept and print the system calls executed by the program.
-  <p>Its use is very similar to <strong>strace(1)</strong>.<br>
-  <br>
-  <strong>ltrace</strong> shows parameters of invoked functions and system calls. &nbsp;To determine what arguments each function has, it needs external declaration of function prototypes. &nbsp;Those are stored in files called <em>prototype libraries</em>--see ltrace.conf(5) for details on the syntax of these files. &nbsp;See the section <strong>PROTOTYPE LIBRARY DISCOVERY</strong> to learn how <strong>ltrace</strong> finds prototype libraries.
+  <p>Its use is very similar to <strong>strace(1)</strong>.
+  <p><strong>ltrace</strong> shows parameters of invoked functions and system calls. &nbsp;To determine what arguments each function has, it needs external declaration of function prototypes. &nbsp;Those are stored in files called <em>prototype libraries</em>--see ltrace.conf(5) for details on the syntax of these files. &nbsp;See the section <strong>PROTOTYPE LIBRARY DISCOVERY</strong> to learn how <strong>ltrace</strong> finds prototype libraries.
 </section>
 <section>
   <h2>OPTIONS</h2>
@@ -59,9 +58,8 @@
       <p>Print the instruction pointer at the time of the library call.
     <dt>-l, --library <em>library_pattern</em>
     <dd>
-      <p>Display only calls to functions implemented by libraries that match <em>library_pattern.</em> This is as if you specified one -e for every symbol implemented in a library specified by <em>library_pattern.</em> Multiple library patters can be specified with several instances of this option. Usage examples and the syntax description of library_pattern appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>.<br>
-      <br>
-      Note that while this option selects calls that might be directed to the selected libraries, there's no actual guarantee that the call won't be directed elsewhere due to e.g. LD_PRELOAD or simply dependency ordering. &nbsp;If you want to make sure that symbols in given library are actually called, use <strong>-x @</strong><em>library_pattern</em> instead.
+      <p>Display only calls to functions implemented by libraries that match <em>library_pattern.</em> This is as if you specified one -e for every symbol implemented in a library specified by <em>library_pattern.</em> Multiple library patters can be specified with several instances of this option. Usage examples and the syntax description of library_pattern appear below in sections <strong>FILTER SPECIFICATIONS</strong> and <strong>FILTER EXPRESSIONS</strong>.
+      <p>Note that while this option selects calls that might be directed to the selected libraries, there's no actual guarantee that the call won't be directed elsewhere due to e.g. LD_PRELOAD or simply dependency ordering. &nbsp;If you want to make sure that symbols in given library are actually called, use <strong>-x @</strong><em>library_pattern</em> instead.
     <dt>-L
     <dd>
       <p>When no -e option is given, don't assume the default action of <strong>@MAIN</strong>. &nbsp;In practice this means that library calls will not be traced.
@@ -170,43 +168,27 @@
 </section>
 <section>
   <h2>FILTER EXPRESSIONS</h2>
-  <p>Filter expression is a chain of glob- or regexp-based rules that are used to pick symbols for tracing from libraries that the process uses. Most of it is intuitive, so as an example, the following would trace calls to malloc and free, except those done by libc:<br>
-  <br>
-  -e malloc+free-@libc.so*<br>
-  <br>
-  This reads: trace malloc and free, but don't trace anything that comes from libc. &nbsp;Semi-formally, the syntax of the above example looks approximately like this:<br>
-  <br>
-  {[+-][<em>symbol_pattern</em>][@<em>library_pattern</em>]}<br>
-  <br>
-  <em>Symbol_pattern</em> is used to match symbol names, <em>library_pattern</em> to match library SONAMEs. &nbsp;Both are implicitly globs, but can be regular expressions as well (see below). &nbsp;The glob syntax supports meta-characters <strong>*</strong> and <strong>?</strong> and character classes, similarly to what basic bash globs support. &nbsp;<strong>^</strong> and <strong>$</strong> are recognized to mean, respectively, start and end of given name.<br>
-  <br>
-  Both <em>symbol_pattern</em> and <em>library_pattern</em> have to match the whole name. &nbsp;If you want to match only part of the name, surround it with one or two *'s as appropriate. &nbsp;The exception is if the pattern is not mentioned at all, in which case it's as if the corresponding pattern were <strong>*</strong>. &nbsp;(So <strong>malloc</strong> is really <strong>malloc@*</strong> and <strong>@libc.*</strong> is really <strong>*@libc.*</strong>.)<br>
-  <br>
-  In libraries that don't have an explicit SONAME, basename is taken for SONAME. &nbsp;That holds for main binary as well: <strong>/bin/echo</strong> has an implicit SONAME of <strong>echo</strong>. &nbsp;In addition to that, special library pattern <strong>MAIN</strong> always matches symbols in the main binary and never a library with actual SONAME <strong>MAIN</strong> (use e.g. <strong>^MAIN</strong> or <strong>[M]AIN</strong> for that).<br>
-  <br>
-  If the symbol or library pattern is surrounded in slashes (/like this/), then it is considered a regular expression instead. &nbsp;As a shorthand, instead of writing <strong>/x/@/y/</strong>, you can write <strong>/x@y/</strong>.<br>
-  <br>
-  If the library pattern starts with a slash, it is not a SONAME expression, but a path expression, and is matched against the library path name.<br>
-  <br>
-  The first rule may lack a sign, in which case <strong>+</strong> is assumed. &nbsp;If, on the other hand, the first rule has a <strong>-</strong> sign, it is as if there was another rule <strong>@</strong> in front of it, which has the effect of tracing complement of given rule.<br>
-  <br>
-  The above rules are used to construct the set of traced symbols. &nbsp;Each candidate symbol is passed through the chain of above rules. Initially, the symbol is <em>unmarked</em>. &nbsp;If it matches a <strong>+</strong> rule, it becomes <em>marked</em>, if it matches a <strong>-</strong> rule, it becomes <em>unmarked</em> again. &nbsp;If, after applying all rules, the symbol is <em>marked</em>, it will be traced.
+  <p>Filter expression is a chain of glob- or regexp-based rules that are used to pick symbols for tracing from libraries that the process uses. Most of it is intuitive, so as an example, the following would trace calls to malloc and free, except those done by libc:
+  <p>-e malloc+free-@libc.so*
+  <p>This reads: trace malloc and free, but don't trace anything that comes from libc. &nbsp;Semi-formally, the syntax of the above example looks approximately like this:
+  <p>{[+-][<em>symbol_pattern</em>][@<em>library_pattern</em>]}
+  <p><em>Symbol_pattern</em> is used to match symbol names, <em>library_pattern</em> to match library SONAMEs. &nbsp;Both are implicitly globs, but can be regular expressions as well (see below). &nbsp;The glob syntax supports meta-characters <strong>*</strong> and <strong>?</strong> and character classes, similarly to what basic bash globs support. &nbsp;<strong>^</strong> and <strong>$</strong> are recognized to mean, respectively, start and end of given name.
+  <p>Both <em>symbol_pattern</em> and <em>library_pattern</em> have to match the whole name. &nbsp;If you want to match only part of the name, surround it with one or two *'s as appropriate. &nbsp;The exception is if the pattern is not mentioned at all, in which case it's as if the corresponding pattern were <strong>*</strong>. &nbsp;(So <strong>malloc</strong> is really <strong>malloc@*</strong> and <strong>@libc.*</strong> is really <strong>*@libc.*</strong>.)
+  <p>In libraries that don't have an explicit SONAME, basename is taken for SONAME. &nbsp;That holds for main binary as well: <strong>/bin/echo</strong> has an implicit SONAME of <strong>echo</strong>. &nbsp;In addition to that, special library pattern <strong>MAIN</strong> always matches symbols in the main binary and never a library with actual SONAME <strong>MAIN</strong> (use e.g. <strong>^MAIN</strong> or <strong>[M]AIN</strong> for that).
+  <p>If the symbol or library pattern is surrounded in slashes (/like this/), then it is considered a regular expression instead. &nbsp;As a shorthand, instead of writing <strong>/x/@/y/</strong>, you can write <strong>/x@y/</strong>.
+  <p>If the library pattern starts with a slash, it is not a SONAME expression, but a path expression, and is matched against the library path name.
+  <p>The first rule may lack a sign, in which case <strong>+</strong> is assumed. &nbsp;If, on the other hand, the first rule has a <strong>-</strong> sign, it is as if there was another rule <strong>@</strong> in front of it, which has the effect of tracing complement of given rule.
+  <p>The above rules are used to construct the set of traced symbols. &nbsp;Each candidate symbol is passed through the chain of above rules. Initially, the symbol is <em>unmarked</em>. &nbsp;If it matches a <strong>+</strong> rule, it becomes <em>marked</em>, if it matches a <strong>-</strong> rule, it becomes <em>unmarked</em> again. &nbsp;If, after applying all rules, the symbol is <em>marked</em>, it will be traced.
 </section>
 <section>
   <h2>PROTOTYPE LIBRARY DISCOVERY</h2>
-  <p>When a library is mapped into the address space of a traced process, ltrace needs to know what the prototypes are of functions that this library implements. &nbsp;For purposes of ltrace, prototype really is a bit more than just type signature: it's also formatting of individual parameters and of return value. &nbsp;These prototypes are stored in files called prototype libraries.<br>
-  <br>
-  After a library is mapped, ltrace finds out what its SONAME is. &nbsp;It then looks for a file named SONAME.conf--e.g. protolib for libc.so.6 would be in a file called libc.so.6.conf. &nbsp;When such file is found (more about where ltrace looks for these files is below), ltrace reads all prototypes stored therein. &nbsp;When a symbol table entry point (such as those traced by -x) is hit, the prototype is looked up in a prototype library corresponding to the library where the hit occurred. When a library call (such as those traced by -e and -l) is hit, the prototype is looked up in all prototype libraries loaded for given process. &nbsp;That is necessary, because a library call is traced in a PLT table of a caller library, but the prototype is described at callee library.<br>
-  <br>
-  If a library has no SONAME, basename of library file is considered instead. &nbsp;For the main program binary, basename is considered as well (e.g. protolib for /bin/echo would be called echo.conf). &nbsp;If a name corresponding to soname (e.g. libc.so.6.conf) is not found, and the module under consideration is a shared library, ltrace also tries partial matches. &nbsp;Ltrace snips one period after another, retrying the search, until either a protolib is found, or X.so is all that's left. Thus libc.so.conf would be considered, but libc.conf not.<br>
-  <br>
-  When looking for a prototype library, ltrace potentially looks into several directories. &nbsp;On Linux, those are $XDG_CONFIG_HOME/ltrace, $HOME/.ltrace, <em>X</em>/ltrace for each <em>X</em> in $XDG_CONFIG_DIRS and /usr/share/ltrace. &nbsp;If the environment variable XDG_CONFIG_HOME is not defined, ltrace looks into $HOME/.config/ltrace instead.<br>
-  <br>
-  There's also a mechanism for loading legacy config files. &nbsp;If $HOME/.ltrace.conf exists it is imported to every loaded prototype library. &nbsp;Similarly for /etc/ltrace.conf. &nbsp;If both exist, both are imported, and $HOME/.ltrace.conf is consulted before /etc/ltrace.conf.<br>
-  <br>
-  If -F contains any directories, those are searched in precedence to the above system directories, in the same order in which they are mentioned in -F. &nbsp;Any files passed in -F are imported similarly to above legacy config files, before them.<br>
-  <br>
-  See ltrace.conf(5) for details on the syntax of ltrace prototype library files.
+  <p>When a library is mapped into the address space of a traced process, ltrace needs to know what the prototypes are of functions that this library implements. &nbsp;For purposes of ltrace, prototype really is a bit more than just type signature: it's also formatting of individual parameters and of return value. &nbsp;These prototypes are stored in files called prototype libraries.
+  <p>After a library is mapped, ltrace finds out what its SONAME is. &nbsp;It then looks for a file named SONAME.conf--e.g. protolib for libc.so.6 would be in a file called libc.so.6.conf. &nbsp;When such file is found (more about where ltrace looks for these files is below), ltrace reads all prototypes stored therein. &nbsp;When a symbol table entry point (such as those traced by -x) is hit, the prototype is looked up in a prototype library corresponding to the library where the hit occurred. When a library call (such as those traced by -e and -l) is hit, the prototype is looked up in all prototype libraries loaded for given process. &nbsp;That is necessary, because a library call is traced in a PLT table of a caller library, but the prototype is described at callee library.
+  <p>If a library has no SONAME, basename of library file is considered instead. &nbsp;For the main program binary, basename is considered as well (e.g. protolib for /bin/echo would be called echo.conf). &nbsp;If a name corresponding to soname (e.g. libc.so.6.conf) is not found, and the module under consideration is a shared library, ltrace also tries partial matches. &nbsp;Ltrace snips one period after another, retrying the search, until either a protolib is found, or X.so is all that's left. Thus libc.so.conf would be considered, but libc.conf not.
+  <p>When looking for a prototype library, ltrace potentially looks into several directories. &nbsp;On Linux, those are $XDG_CONFIG_HOME/ltrace, $HOME/.ltrace, <em>X</em>/ltrace for each <em>X</em> in $XDG_CONFIG_DIRS and /usr/share/ltrace. &nbsp;If the environment variable XDG_CONFIG_HOME is not defined, ltrace looks into $HOME/.config/ltrace instead.
+  <p>There's also a mechanism for loading legacy config files. &nbsp;If $HOME/.ltrace.conf exists it is imported to every loaded prototype library. &nbsp;Similarly for /etc/ltrace.conf. &nbsp;If both exist, both are imported, and $HOME/.ltrace.conf is consulted before /etc/ltrace.conf.
+  <p>If -F contains any directories, those are searched in precedence to the above system directories, in the same order in which they are mentioned in -F. &nbsp;Any files passed in -F are imported similarly to above legacy config files, before them.
+  <p>See ltrace.conf(5) for details on the syntax of ltrace prototype library files.
 </section>
 <section>
   <h2>BUGS</h2>

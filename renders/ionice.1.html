@@ -16,22 +16,18 @@
 </section>
 <section>
   <h2>DESCRIPTION</h2>
-  <p>This program sets or gets the I/O scheduling class and priority for a program. If no arguments or just <strong>-p</strong> is given, <strong>ionice</strong> will query the current I/O scheduling class and priority for that process.<br>
-  <br>
-  When <em>command</em> is given, <strong>ionice</strong> will run this command with the given arguments. If no <em>class</em> is specified, then <em>command</em> will be executed with the "best-effort" scheduling class. &nbsp;The default priority level is 4.<br>
-  <br>
-  As of this writing, a process can be in one of three scheduling classes:
+  <p>This program sets or gets the I/O scheduling class and priority for a program. If no arguments or just <strong>-p</strong> is given, <strong>ionice</strong> will query the current I/O scheduling class and priority for that process.
+  <p>When <em>command</em> is given, <strong>ionice</strong> will run this command with the given arguments. If no <em>class</em> is specified, then <em>command</em> will be executed with the "best-effort" scheduling class. &nbsp;The default priority level is 4.
+  <p>As of this writing, a process can be in one of three scheduling classes:
   <dl>
     <dt><strong>Idle</strong>
     <dd>
       <p>A program running with idle I/O priority will only get disk time when no other program has asked for disk I/O for a defined grace period. &nbsp;The impact of an idle I/O process on normal system activity should be zero. &nbsp;This scheduling class does not take a priority argument. &nbsp;Presently, this scheduling class is permitted for an ordinary user (since kernel 2.6.25).
     <dt><strong>Best-effort</strong>
     <dd>
-      <p>This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. &nbsp;Programs running at the same best-effort priority are served in a round-robin fashion.<br>
-      <br>
-      Note that before kernel 2.6.26 a process that has not asked for an I/O priority formally uses "<strong>none</strong>" as scheduling class, but the I/O scheduler will treat such processes as if it were in the best-effort class. &nbsp;The priority within the best-effort class will be dynamically derived from the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.<br>
-      <br>
-      For kernels after 2.6.26 with the CFQ I/O scheduler, a process that has not asked for an I/O priority inherits its CPU scheduling class. &nbsp;The I/O priority is derived from the CPU nice level of the process (same as before kernel 2.6.26).
+      <p>This is the effective scheduling class for any process that has not asked for a specific I/O priority. This class takes a priority argument from <em>0-7</em>, with a lower number being higher priority. &nbsp;Programs running at the same best-effort priority are served in a round-robin fashion.
+      <p>Note that before kernel 2.6.26 a process that has not asked for an I/O priority formally uses "<strong>none</strong>" as scheduling class, but the I/O scheduler will treat such processes as if it were in the best-effort class. &nbsp;The priority within the best-effort class will be dynamically derived from the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.
+      <p>For kernels after 2.6.26 with the CFQ I/O scheduler, a process that has not asked for an I/O priority inherits its CPU scheduling class. &nbsp;The I/O priority is derived from the CPU nice level of the process (same as before kernel 2.6.26).
     <dt><strong>Realtime</strong>
     <dd>
       <p>The RT scheduling class is given first access to the disk, regardless of what else is going on in the system. &nbsp;Thus the RT class needs to be used with some care, as it can starve other processes. &nbsp;As with the best-effort class, 8 priority levels are defined denoting how big a time slice a given process will receive on each scheduling window. &nbsp;This scheduling class is not permitted for an ordinary (i.e., non-root) user.

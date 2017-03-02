@@ -16,38 +16,33 @@
   <dl>
     <dt><em>-assembly:ASSEMBLY</em>
     <dd>
-      <p><em>ASSEMBLY</em> is a .NET assembly to generate documentation stubs for.<br>
-      <br>
-      Specify a file path or the name of a GAC'd assembly.
+      <p><em>ASSEMBLY</em> is a .NET assembly to generate documentation stubs for.
+      <p>Specify a file path or the name of a GAC'd assembly.
     <dt><em>-delete</em>
     <dd>
-      <p>Allow monodocer to delete members from documentation files. &nbsp; The only members deleted are for members which are no longer present within the assembly.<br>
-      <br>
-      If a type is no longer present, the documentation file is <em>not</em> deleted, but is instead <em>renamed</em> to have a <strong>.remove</strong> extension.
+      <p>Allow monodocer to delete members from documentation files. &nbsp; The only members deleted are for members which are no longer present within the assembly.
+      <p>If a type is no longer present, the documentation file is <em>not</em> deleted, but is instead <em>renamed</em> to have a <strong>.remove</strong> extension.
     <dt><em>-?, -help</em>
     <dd>
       <p>Show program argument information.
     <dt><em>-ignoremembers</em>
     <dd>
-      <p>Do not update members.<br>
-      <br>
-      This will add documentation stubs for added types, but will <em>not</em> add or remove documentation for any members of any type (including any added types).
+      <p>Do not update members.
+      <p>This will add documentation stubs for added types, but will <em>not</em> add or remove documentation for any members of any type (including any added types).
     <dt><em>-importslashdoc:FILE</em>
     <dd>
       <p><em>FILE</em> is an XML file generated with the <strong>/doc:FILE</strong> C# compiler flag (e.g. <em>mcs -doc:foo.xml foo.cs</em> ). &nbsp;Import the member documentation contained within <em>FILE</em> into the documentation format used by monodoc.
     <dt><em>-name:NAME</em>
     <dd>
-      <p><em>NAME</em> is the name of the project this documentation is for.<br>
-      <br>
-      This sets the <em>/Overview/Title</em> element within the <em>index.xml</em> file created at the directory specified by <em>-path</em> . This is used by some programs for title information (e.g. <em>monodocs2html</em> ).
+      <p><em>NAME</em> is the name of the project this documentation is for.
+      <p>This sets the <em>/Overview/Title</em> element within the <em>index.xml</em> file created at the directory specified by <em>-path</em> . This is used by some programs for title information (e.g. <em>monodocs2html</em> ).
     <dt><em>-namespace:NAMESPACE</em>
     <dd>
       <p>Only update the types within the namespace <em>NAMESPACE</em> .
     <dt><em>-overrides</em>
     <dd>
-      <p>Include overridden methods in documentation.<br>
-      <br>
-      This normally isn't necessary, as the Mono Documentation Browser will provide a link to the base type members anyway, as will <em>monodocs2html</em> if the base type is within the same assembly.
+      <p>Include overridden methods in documentation.
+      <p>This normally isn't necessary, as the Mono Documentation Browser will provide a link to the base type members anyway, as will <em>monodocs2html</em> if the base type is within the same assembly.
     <dt><em>-path:OUTPUT_DIR</em>
     <dd>
       <p><em>OUTPUT_DIR</em> is the directory which will contain the new/updated documentation stubs.
@@ -56,10 +51,9 @@
       <p>Indent the XML files nicely.
     <dt><em>-since:SINCE</em>
     <dd>
-      <p>Create a &lt;since/&gt; element for added types and members with the value <em>SINCE</em> .<br>
-      <br>
-      For example, when given <em>-since:"Gtk# 2.4"</em> an element will be inserted into the <em>Docs</em> element for all added types and type members:
-      <pre>     &lt;since version="Gtk# 2.4" /&gt;</pre>
+      <p>Create a &lt;since/&gt; element for added types and members with the value <em>SINCE</em> .
+      <p>For example, when given <em>-since:"Gtk# 2.4"</em> an element will be inserted into the <em>Docs</em> element for all added types and type members:
+      <pre>   &lt;since version="Gtk# 2.4" /&gt;</pre>
       <p>The Mono Documentation Browser and <em>monodocs2html</em> will use this element to specify in which version a member was added.
     <dt><em>-type:TYPE</em>
     <dd>
@@ -79,16 +73,15 @@
   <p>The advantages are:
   <ul>
     <li>
-      <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. &nbsp;(For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)<br>
-      <br>
-      Inserting good documentation into the source code can frequently bloat the source file, as the documentation can be longer than the actual method that is being documented.
+      <p><strong>Code readability.</strong> Good documentation is frequently (a) verbose, and (b) filled with examples. &nbsp;(For comparison, compare Microsoft .NET Framework documentation, which is often a page or more of docs for each member, to JavaDoc documentation, which can often be a sentence for each member.)
+      <p>Inserting good documentation into the source code can frequently bloat the source file, as the documentation can be longer than the actual method that is being documented.
     <li>
       <p><strong>Localization.</strong> In-source documentation formats (such as <strong>/doc</strong> ) have no support for multiple human languages. &nbsp;If you need to support more than one human language for documentation purposes, <em>monodocer</em> is useful as it permits each language to get its own directory, and <em>monodocer</em> can add types/members for each separate documentation directory.
     <li>
       <p><strong>Administration.</strong> It's not unusual to have separate documentation and development teams. &nbsp;It's also possible that the documentation team will have minimal experience with the programming language being used. &nbsp;In such circumstances, inline documentation is not desirable as the documentation team could inadvertantly insert an error into the source code while updating the documentation. Alternatively, you may not want the documentation team to have access to the source code for security reasons. <em>monodocer</em> allows the documentation to be kept <em>completely</em> separate and distinct from the source code used to create the assembly.
   </ul>
   <p>To turn the <em>monodocer</em> documentation into something that can be consumed by the Mono Documentation Browser (the desktop help browser, or the web interface for it) it is necessary to compile the documentation into a packed format. &nbsp;This is done with the mdassembler tool, for example, you could use this toolchain like this:
-  <pre>     $ monodocer -assembly:MyWidgets -path:generated_docs
+  <pre>      $ monodocer -assembly:MyWidgets -path:generated_docs
         $ mdassembler --ecma generated_docs -out:MyWidgets</pre>
   <p>The above would generate a MyWidgets.zip and a MyWidgets.tree that can then be installed in the system. &nbsp; In addition to the two files (.zip and .tree) you must provide a .sources file which describes where in the help system the documentation should be hooked up, it is a very simple XML file, like this:
   <pre>&lt;?xml version="1.0"?&gt;
@@ -114,11 +107,9 @@
       <p>The String ID refers to a field. &nbsp;The field name follows the type name: <em>F:System.Runtime.InteropServices.DllImportAttribute.SetLastError</em>
     <dt><em>M:</em>
     <dd>
-      <p>Refers to a constructor or method. &nbsp;Constructors append <em>.ctor</em> to the type name, while methods append the method name (with an optional count of the number of generic parameters).<br>
-      <br>
-      If the constructor or method take arguments, these are listed within paranthesis after the constructor/method name:<br>
-      <br>
-      <em>M:System.Object..ctor</em> , <em>M:System.String..ctor(System.Char[])</em> , <em>M:System.String.Concat(System.Object)</em> , <em>M:System.Array.Sort``1(``0[])</em> , <em>M:System.Collections.Generic.List`1..ctor</em> , <em>M:System.Collections.Generic.List`1.Add(`0)</em> .
+      <p>Refers to a constructor or method. &nbsp;Constructors append <em>.ctor</em> to the type name, while methods append the method name (with an optional count of the number of generic parameters).
+      <p>If the constructor or method take arguments, these are listed within paranthesis after the constructor/method name:
+      <p><em>M:System.Object..ctor</em> , <em>M:System.String..ctor(System.Char[])</em> , <em>M:System.String.Concat(System.Object)</em> , <em>M:System.Array.Sort``1(``0[])</em> , <em>M:System.Collections.Generic.List`1..ctor</em> , <em>M:System.Collections.Generic.List`1.Add(`0)</em> .
     <dt><em>N:</em>
     <dd>
       <p>Refers to a namespace, e.g. <em>N:System</em>
@@ -134,7 +125,7 @@
   <p><strong>Bound:</strong> <em>T:System.Collections.Generic.List{System.Int32}</em> <em>T:System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Predicate{System.String}}}</em> .
   <p>As you can see, bound variants can be arbitrarily complex (just like generics).
   <p>Furthermore, if a generic parameter is bound to the generic parameter of a type or method, the "index" of the type/method's generic parameter is used &nbsp;as the binding, so given
-  <pre> class FooType {
+  <pre>   class FooType {
           public static void Foo&lt;T&gt; (System.Predicate&lt;T&gt; predicate) {}
         }</pre>
   <p>The String ID for this method is <em>M:FooType.Foo``1(System.Predicate{``0})</em> , as <em>``0</em> is the 0th generic parameter index which is bound to <em>System.Predicate&lt;T&gt;</em> .
@@ -163,19 +154,13 @@
   <dl>
     <dt><em>&lt;block subset="SUBSET" type="TYPE"&gt;XML_TEXT&lt;/block&gt;</em>
     <dd>
-      <p>Create a block of text, similar in concept to a paragraph, but is used to create divisions within the text. &nbsp;To some extent, a &lt;block/&gt; is equivalent to the HTML &lt;h2/&gt; tag.<br>
-      <br>
-      <em>SUBSET</em> should always be the value <em>none</em> .<br>
-      <br>
-      <em>TYPE</em> specifies the heading and formatting to use. &nbsp;Recognized types are:<br>
-      <br>
-      <em>behaviors</em> Creates a section with the heading <em>Operation</em> .<br>
-      <br>
-      <em>note</em> Creates a section with the heading <em>Note:</em> .<br>
-      <br>
-      <em>overrides</em> Creates a section with the heading <em>Note to Inheritors</em> .<br>
-      <br>
-      <em>usage</em> Creates a section with the heading <em>Usage</em> .
+      <p>Create a block of text, similar in concept to a paragraph, but is used to create divisions within the text. &nbsp;To some extent, a &lt;block/&gt; is equivalent to the HTML &lt;h2/&gt; tag.
+      <p><em>SUBSET</em> should always be the value <em>none</em> .
+      <p><em>TYPE</em> specifies the heading and formatting to use. &nbsp;Recognized types are:
+      <p><em>behaviors</em> Creates a section with the heading <em>Operation</em> .
+      <p><em>note</em> Creates a section with the heading <em>Note:</em> .
+      <p><em>overrides</em> Creates a section with the heading <em>Note to Inheritors</em> .
+      <p><em>usage</em> Creates a section with the heading <em>Usage</em> .
     <dt><em>&lt;c&gt;XML_TEXT&lt;/c&gt;</em>
     <dd>
       <p>Set text in a code-like font (similar to the HTML &lt;tt/&gt; element).
@@ -185,7 +170,7 @@
     <dt><em>&lt;example&gt;XML_TEXT&lt;/example&gt;</em>
     <dd>
       <p>Indicates an example that should be displayed specially. &nbsp;For example:
-      <pre>      &lt;example&gt;
+      <pre>    &lt;example&gt;
           &lt;para&gt;An introductory paragraph.&lt;/para&gt;
           &lt;code lang="C#"&gt;
             class Example {
@@ -198,20 +183,17 @@
         &lt;/example&gt;</pre>
     <dt><em>&lt;exception cref="CREF"&gt;XML_TEXT&lt;/exception&gt;</em>
     <dd>
-      <p>Identifies an exception that can be thrown by the documented member.<br>
-      <br>
-      <em>&lt;exception/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      <em>CREF</em> is the exception type that is thrown, while <em>XML_TEXT</em> contains the circumstances that would cause <em>CREF</em> to be thrown.
-      <pre>        &lt;exception cref="T:System.ArgumentNullException"&gt;
+      <p>Identifies an exception that can be thrown by the documented member.
+      <p><em>&lt;exception/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p><em>CREF</em> is the exception type that is thrown, while <em>XML_TEXT</em> contains the circumstances that would cause <em>CREF</em> to be thrown.
+      <pre>  &lt;exception cref="T:System.ArgumentNullException"&gt;
           &lt;paramref name="foo" /&gt; was &lt;see langword="null" /&gt;.
         &lt;/exception&gt;</pre>
     <dt><em>&lt;list&gt;XML&lt;/list&gt;</em>
     <dd>
-      <p>Create a list or table of items. &nbsp; <em>&lt;list/&gt;</em> makes use of nested <em>&lt;item&gt;XML&lt;/item&gt;</em> , <em>&lt;listheader&gt;XML&lt;/listheader&gt;</em> , <em>&lt;term&gt;XML_TEXT&lt;/term&gt;</em> , and <em>&lt;description&gt;XML_TEXT&lt;/description&gt;</em> elements.<br>
-      <br>
-      <em>Lists</em> have the syntax:
-      <pre>    &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
+      <p>Create a list or table of items. &nbsp; <em>&lt;list/&gt;</em> makes use of nested <em>&lt;item&gt;XML&lt;/item&gt;</em> , <em>&lt;listheader&gt;XML&lt;/listheader&gt;</em> , <em>&lt;term&gt;XML_TEXT&lt;/term&gt;</em> , and <em>&lt;description&gt;XML_TEXT&lt;/description&gt;</em> elements.
+      <p><em>Lists</em> have the syntax:
+      <pre>     &lt;list type="bullet"&gt; &lt;!-- or type="number" --&gt;
           &lt;item&gt;&lt;term&gt;Bullet 1&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 2&lt;/term&gt;&lt;/item&gt;
           &lt;item&gt;&lt;term&gt;Bullet 3&lt;/term&gt;&lt;/item&gt;
@@ -237,48 +219,41 @@
     <dt><em>&lt;para&gt;XML_TEXT&lt;/para&gt;</em>
     <dd>
       <p>Insert a paragraph of <em>XML_TEXT</em><br>
-      . This is for use within other tags, such as <em>&lt;example/&gt;</em> , <em>&lt;remarks/&gt;</em> , <em>&lt;returns/&gt;</em> , <em>&lt;term/&gt;</em> and <em>&lt;description/&gt;</em> (see <em>&lt;list/&gt;</em> , above), and most other elements.<br>
-      <br>
-      For example,
-      <pre>  &lt;para&gt;This is a paragraph of text.&lt;/para&gt;</pre>
+      . This is for use within other tags, such as <em>&lt;example/&gt;</em> , <em>&lt;remarks/&gt;</em> , <em>&lt;returns/&gt;</em> , <em>&lt;term/&gt;</em> and <em>&lt;description/&gt;</em> (see <em>&lt;list/&gt;</em> , above), and most other elements.
+      <p>For example,
+      <pre>   &lt;para&gt;This is a paragraph of text.&lt;/para&gt;</pre>
     <dt><em>&lt;param name="NAME"&gt;XML_TEXT&lt;/param&gt;</em>
     <dd>
-      <p><em>&lt;param/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Describes the parameter <em>NAME</em> of the current constructor, method, or property:
-      <pre> &lt;param name="count"&gt;
+      <p><em>&lt;param/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Describes the parameter <em>NAME</em> of the current constructor, method, or property:
+      <pre>  &lt;param name="count"&gt;
           A &lt;see cref="T:System.Int32" /&gt; containing the number
           of widgets to process.
         &lt;/param&gt;</pre>
     <dt><em>&lt;paramref name="NAME" /&gt;</em>
     <dd>
-      <p>Indicates that <em>NAME</em> is a parameter.<br>
-      <br>
-      This usually renders <em>NAME</em> as italic text, so it is frequently (ab)used as an equivalent to the HTML &lt;i/&gt; element. &nbsp;See the <em>&lt;exception/&gt;</em> documentation (above) for an example.
+      <p>Indicates that <em>NAME</em> is a parameter.
+      <p>This usually renders <em>NAME</em> as italic text, so it is frequently (ab)used as an equivalent to the HTML &lt;i/&gt; element. &nbsp;See the <em>&lt;exception/&gt;</em> documentation (above) for an example.
     <dt><em>&lt;permission cref="CREF"&gt;XML_TEXT&lt;/permission&gt;</em>
     <dd>
-      <p>Documentes the security accessibility requirements of the current member.<br>
-      <br>
-      <em>&lt;permission/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      <em>CREF</em> is a type reference to the security permission required, while <em>XML_TEXT</em> is a description of why the permission is required.
-      <pre>      &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
+      <p>Documentes the security accessibility requirements of the current member.
+      <p><em>&lt;permission/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p><em>CREF</em> is a type reference to the security permission required, while <em>XML_TEXT</em> is a description of why the permission is required.
+      <pre> &lt;permission cref="T:System.Security.Permissions.FileIOPermission"&gt;
           Requires permission for reading and writing files. See 
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Read" /&gt;, 
           &lt;see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /&gt;.
         &lt;/permission&gt;</pre>
     <dt><em>&lt;remarks&gt;XML_TEXT&lt;/remarks&gt;</em>
     <dd>
-      <p>Contains detailed information about a member.<br>
-      <br>
-      <em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
-      <pre>  &lt;remarks&gt;Insert detailed information here.&lt;/remarks&gt;</pre>
+      <p>Contains detailed information about a member.
+      <p><em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <pre>   &lt;remarks&gt;Insert detailed information here.&lt;/remarks&gt;</pre>
     <dt><em>&lt;returns&gt;XML_TEXT&lt;/returns&gt;</em>
     <dd>
-      <p><em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Describes the return value of a method:
-      <pre>   &lt;returns&gt;
+      <p><em>&lt;remarks/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Describes the return value of a method:
+      <pre>    &lt;returns&gt;
           A &lt;see cref="T:System.Boolean" /&gt; specifying whether 
           or not the process can access 
           &lt;see cref="P:Mono.Unix.UnixFileSystemInfo.FullName" /&gt;.
@@ -289,41 +264,34 @@
       <pre>   &lt;see cref="M:Some.Namespace.With.Type.Method" /&gt;</pre>
     <dt><em>&lt;seealso cref="CREF" /&gt;</em>
     <dd>
-      <p><em>&lt;seealso/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Allows an entry to be generated for the <em>See Also</em> subclause. &nbsp;Use <em>&lt;see/&gt;</em> to specify a link from within text.
-      <pre>    &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
+      <p><em>&lt;seealso/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Allows an entry to be generated for the <em>See Also</em> subclause. &nbsp;Use <em>&lt;see/&gt;</em> to specify a link from within text.
+      <pre>     &lt;seealso cref="P:System.Exception.Message" /&gt;</pre>
     <dt><em>&lt;since version="VERSION" /&gt;</em>
     <dd>
-      <p><em>&lt;since/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Permits specification of which version introduced the specified type or member.
-      <pre>        &lt;since version="Gtk# 2.4" /&gt;</pre>
+      <p><em>&lt;since/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Permits specification of which version introduced the specified type or member.
+      <pre> &lt;since version="Gtk# 2.4" /&gt;</pre>
     <dt><em>&lt;summary&gt;DESCRIPTION&lt;/summary&gt;</em>
     <dd>
-      <p><em>&lt;summary/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Provides a (brief!) overview about a type or type member.<br>
-      <br>
-      This is usually displayed as part of a class declaration, and should be a reasonably short description of the type/member. &nbsp;Use <em>&lt;remarks/&gt;</em> for more detailed information.
+      <p><em>&lt;summary/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Provides a (brief!) overview about a type or type member.
+      <p>This is usually displayed as part of a class declaration, and should be a reasonably short description of the type/member. &nbsp;Use <em>&lt;remarks/&gt;</em> for more detailed information.
     <dt><em>&lt;typeparam name="NAME"&gt;DESCRPITION&lt;/typeparam&gt;</em>
     <dd>
-      <p><em>&lt;typeparam/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      This is used to describe type parameter for a generic type or generic method.<br>
-      <br>
-      <em>NAME</em> is the name of the type parameter, while <em>DESCRIPTION</em> contains a description of the parameter (what it's used for, what restrictions it must meet, etc.).
-      <pre>   &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
+      <p><em>&lt;typeparam/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>This is used to describe type parameter for a generic type or generic method.
+      <p><em>NAME</em> is the name of the type parameter, while <em>DESCRIPTION</em> contains a description of the parameter (what it's used for, what restrictions it must meet, etc.).
+      <pre>       &lt;typeparam name="T"&gt;The type of the underlying collection&lt;/typeparam&gt;</pre>
     <dt><em>&lt;typeparamref&gt;</em>
     <dd>
       <p>Used to indicate that a word is a type parameter, for use within other text blocks (e.g. within <em>&lt;para/&gt;</em> ).
       <pre>    &lt;para&gt;If &lt;typeparamref name="T" /&gt; is a struct, then...&lt;/para&gt;</pre>
     <dt><em>&lt;value&gt;DESCRIPTION&lt;/value&gt;</em>
     <dd>
-      <p><em>&lt;value/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.<br>
-      <br>
-      Allows a property to be described.
-      <pre>   &lt;value&gt;
+      <p><em>&lt;value/&gt;</em> is a top-level element, and should be nested directly under the <em>&lt;Docs/&gt;</em> element.
+      <p>Allows a property to be described.
+      <pre>    &lt;value&gt;
           A &lt;see cref="T:System.String" /&gt; containing a widget name.
         &lt;/value&gt;</pre>
   </dl>

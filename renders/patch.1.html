@@ -9,11 +9,9 @@
 </section>
 <section>
   <h2>SYNOPSIS</h2>
-  <p><strong>patch</strong> [<em>options</em>] [<em>originalfile</em> [<em>patchfile</em>]]<br>
-  <br>
-  but usually just<br>
-  <br>
-  <strong>patch -p</strong><em>num</em> <strong>&lt;</strong><em>patchfile</em>
+  <p><strong>patch</strong> [<em>options</em>] [<em>originalfile</em> [<em>patchfile</em>]]
+  <p>but usually just
+  <p><strong>patch -p</strong><em>num</em> <strong>&lt;</strong><em>patchfile</em>
 </section>
 <section>
   <h2>DESCRIPTION</h2>
@@ -122,9 +120,8 @@
 <em>new lines from the patch</em>
 <strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</strong></pre>
   </div>
-  <p class="indent">The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. &nbsp;The merge format is the default.<br>
-  <br>
-  This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
+  <p class="indent">The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. &nbsp;The merge format is the default.
+  <p class="indent">This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
   <dl>
     <dt><strong>-n</strong> &nbsp;or &nbsp;<strong>--normal</strong>
     <dd>
@@ -185,9 +182,8 @@
       <p>Put rejects into <em>rejectfile</em> instead of the default <strong>.rej</strong> file. &nbsp;When <em>rejectfile</em> is <strong>-</strong>, discard rejects.
     <dt><strong>-R</strong> &nbsp;or &nbsp;<strong>--reverse</strong>
     <dd>
-      <p>Assume that this patch was created with the old and new files swapped. (Yes, I'm afraid that does happen occasionally, human nature being what it is.) <strong>patch</strong> attempts to swap each hunk around before applying it. Rejects come out in the swapped format. The <strong>-R</strong> option does not work with <strong>ed</strong> diff scripts because there is too little information to reconstruct the reverse operation.<br>
-      <br>
-      If the first hunk of a patch fails, <strong>patch</strong> reverses the hunk to see if it can be applied that way. If it can, you are asked if you want to have the <strong>-R</strong> option set. If it can't, the patch continues to be applied normally. (Note: this method cannot detect a reversed patch if it is a normal diff and if the first command is an append (i.e. it should have been a delete) since appends always succeed, due to the fact that a null context matches anywhere. Luckily, most patches add or change lines rather than delete them, so most reversed normal diffs begin with a delete, which fails, triggering the heuristic.)
+      <p>Assume that this patch was created with the old and new files swapped. (Yes, I'm afraid that does happen occasionally, human nature being what it is.) <strong>patch</strong> attempts to swap each hunk around before applying it. Rejects come out in the swapped format. The <strong>-R</strong> option does not work with <strong>ed</strong> diff scripts because there is too little information to reconstruct the reverse operation.
+      <p>If the first hunk of a patch fails, <strong>patch</strong> reverses the hunk to see if it can be applied that way. If it can, you are asked if you want to have the <strong>-R</strong> option set. If it can't, the patch continues to be applied normally. (Note: this method cannot detect a reversed patch if it is a normal diff and if the first command is an append (i.e. it should have been a delete) since appends always succeed, due to the fact that a null context matches anywhere. Luckily, most patches add or change lines rather than delete them, so most reversed normal diffs begin with a delete, which fails, triggering the heuristic.)
     <dt><strong>--read-only=</strong><em>behavior</em>
     <dd>
       <p>Behave as requested when trying to modify a read-only file: <strong>ignore</strong> the potential problem, <strong>warn</strong> about it (the default), or <strong>fail</strong>.
@@ -205,9 +201,8 @@
       <p>Suppress questions like <strong>-f</strong>, but make some different assumptions: skip patches whose headers do not contain file names (the same as <strong>-f</strong>); skip patches for which the file has the wrong version for the <strong>Prereq:</strong> line in the patch; and assume that patches are reversed if they look like they are.
     <dt><strong>-T</strong> &nbsp;or &nbsp;<strong>--set-time</strong>
     <dd>
-      <p>Set the modification and access times of patched files from time stamps given in context diff headers. &nbsp;Unless specified in the time stamps, assume that the context diff headers use local time.<br>
-      <br>
-      Use of this option with time stamps that do not include time zones is not recommended, because patches using local time cannot easily be used by people in other time zones, and because local time stamps are ambiguous when local clocks move backwards during daylight-saving time adjustments. &nbsp;Make sure that time stamps include time zones, or generate patches with UTC and use the <strong>-Z</strong> or <strong>--set-utc</strong> option instead.
+      <p>Set the modification and access times of patched files from time stamps given in context diff headers. &nbsp;Unless specified in the time stamps, assume that the context diff headers use local time.
+      <p>Use of this option with time stamps that do not include time zones is not recommended, because patches using local time cannot easily be used by people in other time zones, and because local time stamps are ambiguous when local clocks move backwards during daylight-saving time adjustments. &nbsp;Make sure that time stamps include time zones, or generate patches with UTC and use the <strong>-Z</strong> or <strong>--set-utc</strong> option instead.
     <dt><strong>-u</strong> &nbsp;or &nbsp;<strong>--unified</strong>
     <dd>
       <p>Interpret the patch file as a unified context diff.
@@ -216,9 +211,8 @@
       <p>Print out <strong>patch</strong>'s revision header and patch level, and exit.
     <dt><strong>-V</strong> <em>method</em> &nbsp;or &nbsp;<strong>--version-control=</strong><em>method</em>
     <dd>
-      <p>Use <em>method</em> to determine backup file names. &nbsp;The method can also be given by the <strong>PATCH_VERSION_CONTROL</strong> (or, if that's not set, the <strong>VERSION_CONTROL</strong>) environment variable, which is overridden by this option. The method does not affect whether backup files are made; it affects only the names of any backup files that are made.<br>
-      <br>
-      The value of <em>method</em> is like the GNU Emacs `version-control' variable; <strong>patch</strong> also recognizes synonyms that are more descriptive. &nbsp;The valid values for <em>method</em> are (unique abbreviations are accepted):
+      <p>Use <em>method</em> to determine backup file names. &nbsp;The method can also be given by the <strong>PATCH_VERSION_CONTROL</strong> (or, if that's not set, the <strong>VERSION_CONTROL</strong>) environment variable, which is overridden by this option. The method does not affect whether backup files are made; it affects only the names of any backup files that are made.
+      <p>The value of <em>method</em> is like the GNU Emacs `version-control' variable; <strong>patch</strong> also recognizes synonyms that are more descriptive. &nbsp;The valid values for <em>method</em> are (unique abbreviations are accepted):
       <dl class="indent-3">
         <dt><strong>existing</strong> &nbsp;or &nbsp;<strong>nil</strong>
         <dd>
@@ -245,11 +239,9 @@
       <p>Use the <strong>simple</strong> method to determine backup file names (see the <strong>-V</strong> <em>method</em> or <strong>--version-control</strong> <em>method</em> option), and use <em>suffix</em> as the suffix. For example, with <strong>-z&nbsp;-</strong> the backup file name for <strong>src/patch/util.c</strong> is <strong>src/patch/util.c-</strong>.
     <dt><strong>-Z</strong> &nbsp;or &nbsp;<strong>--set-utc</strong>
     <dd>
-      <p>Set the modification and access times of patched files from time stamps given in context diff headers. Unless specified in the time stamps, assume that the context diff headers use Coordinated Universal Time (UTC, often known as GMT). &nbsp;Also see the <strong>-T</strong> or <strong>--set-time</strong> option.<br>
-      <br>
-      The <strong>-Z</strong> or <strong>--set-utc</strong> and <strong>-T</strong> or <strong>--set-time</strong> options normally refrain from setting a file's time if the file's original time does not match the time given in the patch header, or if its contents do not match the patch exactly. &nbsp;However, if the <strong>-f</strong> or <strong>--force</strong> option is given, the file time is set regardless.<br>
-      <br>
-      Due to the limitations of <strong>diff</strong> output format, these options cannot update the times of files whose contents have not changed. &nbsp;Also, if you use these options, you should remove (e.g. with <strong>make&nbsp;clean</strong>) all files that depend on the patched files, so that later invocations of <strong>make</strong> do not get confused by the patched files' times.
+      <p>Set the modification and access times of patched files from time stamps given in context diff headers. Unless specified in the time stamps, assume that the context diff headers use Coordinated Universal Time (UTC, often known as GMT). &nbsp;Also see the <strong>-T</strong> or <strong>--set-time</strong> option.
+      <p>The <strong>-Z</strong> or <strong>--set-utc</strong> and <strong>-T</strong> or <strong>--set-time</strong> options normally refrain from setting a file's time if the file's original time does not match the time given in the patch header, or if its contents do not match the patch exactly. &nbsp;However, if the <strong>-f</strong> or <strong>--force</strong> option is given, the file time is set regardless.
+      <p>Due to the limitations of <strong>diff</strong> output format, these options cannot update the times of files whose contents have not changed. &nbsp;Also, if you use these options, you should remove (e.g. with <strong>make&nbsp;clean</strong>) all files that depend on the patched files, so that later invocations of <strong>make</strong> do not get confused by the patched files' times.
   </dl>
 </section>
 <section>
@@ -288,9 +280,8 @@
 </section>
 <section>
   <h2>SEE ALSO</h2>
-  <p><strong>diff</strong>(1), <strong>ed</strong>(1), <strong>merge</strong>(1).<br>
-  <br>
-  Marshall T. Rose and Einar A. Stefferud, Proposed Standard for Message Encapsulation, Internet RFC 934 &lt;URL:ftp://ftp.isi.edu/in-notes/rfc934.txt&gt; (1985-01).
+  <p><strong>diff</strong>(1), <strong>ed</strong>(1), <strong>merge</strong>(1).
+  <p>Marshall T. Rose and Einar A. Stefferud, Proposed Standard for Message Encapsulation, Internet RFC 934 &lt;URL:ftp://ftp.isi.edu/in-notes/rfc934.txt&gt; (1985-01).
 </section>
 <section>
   <h2>NOTES FOR PATCH SENDERS</h2>
@@ -340,15 +331,12 @@
   <p>The POSIX standard specifies behavior that differs from <strong>patch</strong>'s traditional behavior. You should be aware of these differences if you must interoperate with <strong>patch</strong> versions 2.1 and earlier, which do not conform to POSIX.
   <ul class="indent-3">
     <li>
-      <p>In traditional <strong>patch</strong>, the <strong>-p</strong> option's operand was optional, and a bare <strong>-p</strong> was equivalent to <strong>-p0.</strong> The <strong>-p</strong> option now requires an operand, and <strong>-p&nbsp;0</strong> is now equivalent to <strong>-p0</strong>. For maximum compatibility, use options like <strong>-p0</strong> and <strong>-p1</strong>.<br>
-      <br>
-      Also, traditional <strong>patch</strong> simply counted slashes when stripping path prefixes; <strong>patch</strong> now counts pathname components. That is, a sequence of one or more adjacent slashes now counts as a single slash. For maximum portability, avoid sending patches containing <strong>//</strong> in file names.
+      <p>In traditional <strong>patch</strong>, the <strong>-p</strong> option's operand was optional, and a bare <strong>-p</strong> was equivalent to <strong>-p0.</strong> The <strong>-p</strong> option now requires an operand, and <strong>-p&nbsp;0</strong> is now equivalent to <strong>-p0</strong>. For maximum compatibility, use options like <strong>-p0</strong> and <strong>-p1</strong>.
+      <p>Also, traditional <strong>patch</strong> simply counted slashes when stripping path prefixes; <strong>patch</strong> now counts pathname components. That is, a sequence of one or more adjacent slashes now counts as a single slash. For maximum portability, avoid sending patches containing <strong>//</strong> in file names.
     <li>
-      <p>In traditional <strong>patch</strong>, backups were enabled by default. This behavior is now enabled with the <strong>-b</strong> or <strong>--backup</strong> option.<br>
-      <br>
-      Conversely, in POSIX <strong>patch</strong>, backups are never made, even when there is a mismatch. In GNU <strong>patch</strong>, this behavior is enabled with the <strong>--no-backup-if-mismatch</strong> option, or by conforming to POSIX with the <strong>--posix</strong> option or by setting the <strong>POSIXLY_CORRECT</strong> environment variable.<br>
-      <br>
-      The <strong>-b</strong>&nbsp;<em>suffix</em> option of traditional <strong>patch</strong> is equivalent to the <strong>-b&nbsp;-z</strong>&nbsp;<em>suffix</em> options of GNU <strong>patch</strong>.
+      <p>In traditional <strong>patch</strong>, backups were enabled by default. This behavior is now enabled with the <strong>-b</strong> or <strong>--backup</strong> option.
+      <p>Conversely, in POSIX <strong>patch</strong>, backups are never made, even when there is a mismatch. In GNU <strong>patch</strong>, this behavior is enabled with the <strong>--no-backup-if-mismatch</strong> option, or by conforming to POSIX with the <strong>--posix</strong> option or by setting the <strong>POSIXLY_CORRECT</strong> environment variable.
+      <p>The <strong>-b</strong>&nbsp;<em>suffix</em> option of traditional <strong>patch</strong> is equivalent to the <strong>-b&nbsp;-z</strong>&nbsp;<em>suffix</em> options of GNU <strong>patch</strong>.
     <li>
       <p>Traditional <strong>patch</strong> used a complicated (and incompletely documented) method to intuit the name of the file to be patched from the patch header. This method did not conform to POSIX, and had a few gotchas. Now <strong>patch</strong> uses a different, equally complicated (but better documented) method that is optionally POSIX-conforming; we hope it has fewer gotchas. &nbsp;The two methods are compatible if the file names in the context diff header and the <strong>Index:</strong> line are all identical after prefix-stripping. Your patch is normally compatible if each header's file names all contain the same number of slashes.
     <li>

@@ -306,7 +306,6 @@ class DOM
             self::massageDT($element);
         }
 
-        /*
         if ($myTag === 'p') {
             //<editor-fold desc="Change two br tags in a row to a new paragraph.">
             $elementClass = $element->getAttribute('class');
@@ -317,23 +316,22 @@ class DOM
                     if ($elementClass !== '') {
                         $p->setAttribute('class', $elementClass);
                     }
-                    while ($node = $element->firstChild) {
-                        if ($node === $pChild) {
+                    while ($element->firstChild) {
+                        if ($element->firstChild === $pChild) {
                             break;
                         }
-                        $p->appendChild($node);
+                        $p->appendChild($element->firstChild);
                     }
                     $element->parentNode->insertBefore($p, $element);
                     $element->removeChild($element->firstChild); // 1st <br>
                     $element->removeChild($element->firstChild); // 2nd <br>
-                    $pChild = $pChild->firstChild;
+                    $pChild = $element->firstChild;
                 } else {
                     $pChild = $pChild->nextSibling;
                 }
             } while ($pChild);
             //</editor-fold>
         }
-        */
 
         return $element->nextSibling;
 

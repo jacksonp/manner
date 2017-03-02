@@ -48,19 +48,15 @@
   </dl>
   <p>Only one of these option may be given, and it applies to all matching files. Remaining options need not be given separately, i.e. "mmv -mk" is allowed.
   <p class="center">Multiple Pattern Pairs
-  <p>Multiple <em>from</em> -- <em>to</em> pattern pairs may be specified by omitting the pattern pair on the command line, and entering them on the standard input, one pair per line. (If a pattern pair is given on the command line, the standard input is not read.) Thus,<br>
-  <br>
-  mmv<br>
+  <p>Multiple <em>from</em> -- <em>to</em> pattern pairs may be specified by omitting the pattern pair on the command line, and entering them on the standard input, one pair per line. (If a pattern pair is given on the command line, the standard input is not read.) Thus,
+  <p>mmv<br>
   a b<br>
-  c d<br>
-  <br>
-  would rename "a" to "b" and "c" to "d". If a file can be matched to several of the given <em>from</em> patterns, the <em>to</em> pattern of the first matching pair is used. Thus,<br>
-  <br>
-  mmv<br>
+  c d
+  <p>would rename "a" to "b" and "c" to "d". If a file can be matched to several of the given <em>from</em> patterns, the <em>to</em> pattern of the first matching pair is used. Thus,
+  <p>mmv<br>
   a b<br>
-  a c<br>
-  <br>
-  would give the error message "a -&gt; c : no match" because file "a" (even if it exists) was already matched by the first pattern pair.
+  a c
+  <p>would give the error message "a -&gt; c : no match" because file "a" (even if it exists) was already matched by the first pattern pair.
   <p class="center">The <em>From</em> Pattern
   <p>The <em>from</em> pattern is a filename with embedded wildcards: '*', '?', '['...']', and ';'. The first three have their usual <em>sh</em>(1) meanings of, respectively, matching any string of characters, matching any single character, and matching any one of a set of characters.
   <p>Between the '[' and ']', a range from character 'a' through character 'z' is specified with "a-z". The set of matching characters can be negated by inserting a '^' after the '['. Thus, "[^b-e2-5_]" will match any character but 'b' through 'e', '2' through '5', and '_'.
@@ -76,23 +72,19 @@
   <p>For all task options other than -r, if the target name is a directory, the real target name is formed by appending a '/' followed by the last component of the source file name. For example, "mmv dir1/a dir2" will, if "dir2" is indeed a directory, actually move "dir1/a" to "dir2/a". However, if "dir2/a" already exists and is itself a directory, this is considered an error.
   <p>To strip any character (e.g. '*', '?', or '#') of its special meaning to <em>mmv</em>, as when the actual replacement name must contain the character '#', precede the special character with a ´\' (and enclose the argument in quotes because of the shell). This also works to terminate a wildcard index when it has to be followed by a digit in the filename, e.g. "a#1\1".
   <p class="center">Chains and Cycles
-  <p>A chain is a sequence of specified actions where the target name of one action refers to the source file of another action. For example,<br>
-  <br>
-  mmv<br>
+  <p>A chain is a sequence of specified actions where the target name of one action refers to the source file of another action. For example,
+  <p>mmv<br>
   a b<br>
-  b c<br>
-  <br>
-  specifies the chain "a" -&gt; "b" -&gt; "c". A cycle is a chain where the last target name refers back to the first source file, e.g. "mmv a a". <em>Mmv</em> detects chains and cycles regardless of the order in which their constituent actions are actually given. Where allowed, i.e. in moving, renaming, and appending files, chains and cycles are handled gracefully, by performing them in the proper order. Cycles are broken by first renaming one of the files to a temporary name (or just remembering its original size when doing appends).
+  b c
+  <p>specifies the chain "a" -&gt; "b" -&gt; "c". A cycle is a chain where the last target name refers back to the first source file, e.g. "mmv a a". <em>Mmv</em> detects chains and cycles regardless of the order in which their constituent actions are actually given. Where allowed, i.e. in moving, renaming, and appending files, chains and cycles are handled gracefully, by performing them in the proper order. Cycles are broken by first renaming one of the files to a temporary name (or just remembering its original size when doing appends).
   <p class="center">Collisions and Deletions
   <p>When any two or more matching files would have to be moved, copied, or linked to the same target filename, <em>mmv</em> detects the condition as an error before performing any actions. Furthermore, <em>mmv</em> checks if any of its actions will result in the destruction of existing files. If the -d (delete) option is specified, all file deletions or overwrites are done silently. Under -p (protect), all deletions or overwrites (except those specified with "(*)" on the standard input, see below) are treated as errors. And if neither option is specified, the user is queried about each deletion or overwrite separately. (A new stream to "/dev/tty" is used for all interactive queries, not the standard input.)
   <p class="center">Error Handling
   <p>Whenever any error in the user's action specifications is detected, an error message is given on the standard output, and <em>mmv</em> proceeds to check the rest of the specified actions. Once all errors are detected, <em>mmv</em> queries the user whether he wishes to continue by avoiding the erroneous actions or to abort altogether. This and all other queries may be avoided by specifying either the -g (go) or -t (terminate) option. The former will resolve all difficulties by avoiding the erroneous actions; the latter will abort <em>mmv</em> if any errors are detected. Specifying either of them defaults <em>mmv</em> to -p, unless -d is specified (see above). Thus, -g and -t are most useful when running <em>mmv</em> in the background or in a shell script, when interactive queries are undesirable.
   <p class="center">Reports
-  <p>Once the actions to be performed are determined, <em>mmv</em> performs them silently, unless either the -v (verbose) or -n (no-execute) option is specified. The former causes <em>mmv</em> to report each performed action on the standard output as<br>
-  <br>
-  a -&gt; b : done.<br>
-  <br>
-  Here, "a" and "b" would be replaced by the source and target names, respectively. If the action deletes the old target, a "(*)" is inserted after the the target name. Also, the "-&gt;" symbol is modified when a cycle has to be broken: the '&gt;' is changed to a '^' on the action prior to which the old target is renamed to a temporary, and the '-' is changed to a '=' on the action where the temporary is used.
+  <p>Once the actions to be performed are determined, <em>mmv</em> performs them silently, unless either the -v (verbose) or -n (no-execute) option is specified. The former causes <em>mmv</em> to report each performed action on the standard output as
+  <p>a -&gt; b : done.
+  <p>Here, "a" and "b" would be replaced by the source and target names, respectively. If the action deletes the old target, a "(*)" is inserted after the the target name. Also, the "-&gt;" symbol is modified when a cycle has to be broken: the '&gt;' is changed to a '^' on the action prior to which the old target is renamed to a temporary, and the '-' is changed to a '=' on the action where the temporary is used.
   <p>Under -n, none of the actions are performed, but messages like the above are printed on the standard output with the ": done." omitted.
   <p>The output generated by -n can (after editing, if desired) be fed back to <em>mmv</em> on the standard input (by omitting the <em>from</em> -- <em>to</em> pair on the <em>mmv</em> command line). To facilitate this, <em>mmv</em> ignores lines on the standard input that look like its own error and "done" messages, as well as all lines beginning with white space, and will accept pattern pairs with or without the intervening "-&gt;" (or "-^", "=&gt;", or "=^"). Lines with "(*)" after the target pattern have the effect of enabling -d for the files matching this pattern only, so that such deletions are done silently. When feeding <em>mmv</em> its own output, one must remember to specify again the task option (if any) originally used to generate it.
   <p>Although <em>mmv</em> attempts to predict all mishaps prior to performing any specified actions, accidents may happen. For example, <em>mmv</em> does not check for adequate free space when copying. Thus, despite all efforts, it is still possible for an action to fail after some others have already been done. To make recovery as easy as possible, <em>mmv</em> reports which actions have already been done and which are still to be performed after such a failure occurs. It then aborts, not attempting to do anything else. Once the user has cleared up the problem, he can feed this report back to <em>mmv</em> on the standard input to have it complete the task. (The user is queried for a file name to dump this report if the standard output has not been redirected.)

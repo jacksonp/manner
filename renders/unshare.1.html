@@ -19,9 +19,8 @@
   <dl>
     <dt><strong>mount namespace</strong>
     <dd>
-      <p>Mounting and unmounting filesystems will not affect the rest of the system (<strong>CLONE_NEWNS</strong> flag), except for filesystems which are explicitly marked as shared (with <strong>mount --make-shared</strong>; see <em>/proc/self/mountinfo</em> or <strong>findmnt -o+PROPAGATION</strong> for the <strong>shared</strong> flags).<br>
-      <br>
-      <strong>unshare</strong> since util-linux version 2.27 automatically sets propagation to <strong>private</strong> in a new mount namespace to make sure that the new namespace is really unshared. &nbsp;It's possible to disable this feature with option <strong>--propagation unchanged</strong>. Note that <strong>private</strong> is the kernel default.
+      <p>Mounting and unmounting filesystems will not affect the rest of the system (<strong>CLONE_NEWNS</strong> flag), except for filesystems which are explicitly marked as shared (with <strong>mount --make-shared</strong>; see <em>/proc/self/mountinfo</em> or <strong>findmnt -o+PROPAGATION</strong> for the <strong>shared</strong> flags).
+      <p><strong>unshare</strong> since util-linux version 2.27 automatically sets propagation to <strong>private</strong> in a new mount namespace to make sure that the new namespace is really unshared. &nbsp;It's possible to disable this feature with option <strong>--propagation unchanged</strong>. Note that <strong>private</strong> is the kernel default.
     <dt><strong>UTS namespace</strong>
     <dd>
       <p>Setting hostname or domainname will not affect the rest of the system. (<strong>CLONE_NEWUTS</strong> flag)
@@ -81,9 +80,8 @@
       <p>Recursively set the mount propagation flag in the new mount namespace. &nbsp;The default is to set the propagation to <em>private</em>. &nbsp;It is possible to disable this feature with the argument <strong>unchanged</strong>. &nbsp;The option is silently ignored when the mount namespace (<strong>--mount</strong>) is not requested.
     <dt><strong>--setgroups allow</strong>|<strong>deny</strong>
     <dd>
-      <p>Allow or deny the <strong>setgroups</strong>(2) syscall in a user namespace.<br>
-      <br>
-      To be able to call <strong>setgroups</strong>(2), the calling process must at least have CAP_SETGID. But since Linux 3.19 a further restriction applies: the kernel gives permission to call <strong>setgroups</strong>(2) only after the GID map (<strong>/proc/</strong><em>pid</em><strong>/gid_map</strong>) has been set. The GID map is writable by root when <strong>setgroups</strong>(2) is enabled (i.e. <strong>allow</strong>, the default), and the GID map becomes writable by unprivileged processes when <strong>setgroups</strong>(2) is permanently disabled (with <strong>deny</strong>).
+      <p>Allow or deny the <strong>setgroups</strong>(2) syscall in a user namespace.
+      <p>To be able to call <strong>setgroups</strong>(2), the calling process must at least have CAP_SETGID. But since Linux 3.19 a further restriction applies: the kernel gives permission to call <strong>setgroups</strong>(2) only after the GID map (<strong>/proc/</strong><em>pid</em><strong>/gid_map</strong>) has been set. The GID map is writable by root when <strong>setgroups</strong>(2) is enabled (i.e. <strong>allow</strong>, the default), and the GID map becomes writable by unprivileged processes when <strong>setgroups</strong>(2) is permanently disabled (with <strong>deny</strong>).
     <dt><strong>-V</strong>, <strong>--version</strong>
     <dd>
       <p>Display version information and exit.

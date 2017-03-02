@@ -26,9 +26,8 @@
       <p>Specify a directory to the linker where to look for assemblies.
     <dt><em>-o output_directory</em>
     <dd>
-      <p>Specify the output directory, default is 'output'.<br>
-      <br>
-      If you specify the directory `.', please ensure that you won't write over important assemblies of yours.
+      <p>Specify the output directory, default is 'output'.
+      <p>If you specify the directory `.', please ensure that you won't write over important assemblies of yours.
     <dt><em>-b true | false</em>
     <dd>
       <p>Specify whether to generate debug symbols or not, default is false.
@@ -37,10 +36,9 @@
       <p>Specify whether to generate a new guid for each linked module or reuse the existing one, default is true.
     <dt><em>-l i18n_assemblies</em>
     <dd>
-      <p>Specify what to do with the region specific assemblies<br>
-      <br>
-      Mono have a few assemblies which contains everything region specific:
-      <pre>      I18N.CJK.dll
+      <p>Specify what to do with the region specific assemblies
+      <p>Mono have a few assemblies which contains everything region specific:
+      <pre>        I18N.CJK.dll
         I18N.MidEast.dll
         I18N.Other.dll
         I18N.Rare.dll
@@ -48,11 +46,9 @@
       <p>By default, they will all be copied to the output directory, but you can specify which one you want using this command. The choice can either be: none, all, cjk, mideast, other, rare or west. You can combine the values with a comma.
     <dt><em>-c action</em>
     <dd>
-      <p>Specify the action to apply to the core assemblies.<br>
-      <br>
-      Core assemblies are the assemblies that belongs to the base class library, like mscorlib.dll, System.dll or System.Windows.Forms.dll.<br>
-      <br>
-      The linker supports three operations on these assemblies, you can specify one of the following actions:
+      <p>Specify the action to apply to the core assemblies.
+      <p>Core assemblies are the assemblies that belongs to the base class library, like mscorlib.dll, System.dll or System.Windows.Forms.dll.
+      <p>The linker supports three operations on these assemblies, you can specify one of the following actions:
       <dl>
         <dt><em>skip</em>
         <dd>
@@ -69,9 +65,8 @@
       <p>Specify per assembly which action to apply.
     <dt><em>-x descriptor</em>
     <dd>
-      <p>Use an XML descriptor as a source for the linker.<br>
-      <br>
-      Here is an example that shows all the possibilities of this format:
+      <p>Use an XML descriptor as a source for the linker.
+      <p>Here is an example that shows all the possibilities of this format:
       <pre>&lt;linker&gt;
         &lt;assembly fullname="Library"&gt;
                 &lt;type fullname="Foo" /&gt;
@@ -84,30 +79,23 @@
                 &lt;/type&gt;
         &lt;/assembly&gt;
 &lt;/linker&gt;</pre>
-      <p>In this example, the linker will link the types Foo, Bar, Baz and Gazonk.<br>
-      <br>
-      The preserve attribute ensures that all the fields of the type Baz will be always be linked, not matter if they are used or not, but that neither the fields or the methods of Bar will be linked if they are not used. Not specifying a preserve attribute implies that we are preserving everything in the specified type.<br>
-      <br>
-      The required attribute specifies that if the type is not marked, during the mark operation, it will not be linked.<br>
-      <br>
-      The type Gazonk will be linked, as well as its constructor taking a string as a parameter, and it's _blah field.<br>
-      <br>
-      You can have multiple assembly nodes.
+      <p>In this example, the linker will link the types Foo, Bar, Baz and Gazonk.
+      <p>The preserve attribute ensures that all the fields of the type Baz will be always be linked, not matter if they are used or not, but that neither the fields or the methods of Bar will be linked if they are not used. Not specifying a preserve attribute implies that we are preserving everything in the specified type.
+      <p>The required attribute specifies that if the type is not marked, during the mark operation, it will not be linked.
+      <p>The type Gazonk will be linked, as well as its constructor taking a string as a parameter, and it's _blah field.
+      <p>You can have multiple assembly nodes.
     <dt><em>-a assemblies</em>
     <dd>
-      <p>use an assembly as a source for the linker.<br>
-      <br>
-      The linker will walk through all the methods of the assembly to generate only what is necessary for this assembly to run.
+      <p>use an assembly as a source for the linker.
+      <p>The linker will walk through all the methods of the assembly to generate only what is necessary for this assembly to run.
     <dt><em>-i info_file</em>
     <dd>
-      <p>use a .info xml file as a source for the linker.<br>
-      <br>
-      An info file is a file produced by the tool mono-api-info. The linker will use it to generate an assembly that contains only what the public API defined in the info file needs.
+      <p>use a .info xml file as a source for the linker.
+      <p>An info file is a file produced by the tool mono-api-info. The linker will use it to generate an assembly that contains only what the public API defined in the info file needs.
     <dt><em>-s [StepBefore:]StepFullName,StepAssembly[:StepAfter]</em>
     <dd>
-      <p>You can ask the linker to execute custom steps by using the -s command. This command takes the standard TypeFullName,Assembly format to locate the step. You can customize its position in the pipeline by either adding it before a step, or after.<br>
-      <br>
-      Example:
+      <p>You can ask the linker to execute custom steps by using the -s command. This command takes the standard TypeFullName,Assembly format to locate the step. You can customize its position in the pipeline by either adding it before a step, or after.
+      <p>Example:
       <pre>using System;
 
 using Mono.Linker;

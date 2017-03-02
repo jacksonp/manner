@@ -36,7 +36,12 @@ class Inline_VerticalSpace implements Block_Template
 
         array_shift($lines);
 
-        if (
+        /*if (count($request['arguments']) && $request['arguments'][0] === '-1') {
+            if ($parentNode->lastChild instanceof DOMElement && $parentNode->lastChild->tagName === 'br') {
+                $parentNode->removeChild($parentNode->lastChild);
+            }
+        } else*/
+            if (
             !($parentNode->lastChild instanceof DOMElement) ||
             $parentNode->lastChild->tagName !== 'pre'
         ) {

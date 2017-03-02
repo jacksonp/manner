@@ -321,9 +321,8 @@
 </section>
 <section>
   <h2>OUTPUT FORMAT</h2>
-  <p>The output of <em>tcpdump</em> is protocol dependent. The following gives a brief description and examples of most of the formats.<br>
-  <br>
-  <strong>Link Level Headers</strong>
+  <p>The output of <em>tcpdump</em> is protocol dependent. The following gives a brief description and examples of most of the formats.
+  <p><strong>Link Level Headers</strong>
   <p>If the '-e' option is given, the link level header is printed out. On Ethernets, the source and destination addresses, protocol, and packet length are printed.
   <p>On FDDI networks, the &nbsp;'-e' option causes <em>tcpdump</em> to print the `frame control' field, &nbsp;the source and destination addresses, and the packet length. (The `frame control' field governs the interpretation of the rest of the packet. Normal packets (such as those containing IP datagrams) are `async' packets, with a priority value between 0 and 7; for example, `<strong>async4</strong>'. Such packets are assumed to contain an 802.2 Logical Link Control (LLC) packet; the LLC header is printed if it is <em>not</em> an ISO datagram or a so-called SNAP packet.
   <p>On Token Ring networks, the '-e' option causes <em>tcpdump</em> to print the `access control' and `frame control' fields, the source and destination addresses, and the packet length. As on FDDI networks, packets are assumed to contain an LLC packet. Regardless of whether the '-e' option is specified or not, the source routing information is printed for source-routed packets.
@@ -351,9 +350,8 @@ arp reply 128.3.254.6 is-at 02:07:01:00:01:c4</pre>
     <pre><code>RTSG Broadcast 0806  64: arp who-has csam tell rtsg</code>
 CSAM RTSG 0806  64: arp reply csam is-at CSAM</pre>
   </div>
-  <p>For the first packet this says the Ethernet source address is RTSG, the destination is the Ethernet broadcast address, the type field contained hex 0806 (type ETHER_ARP) and the total length was 64 bytes.<br>
-  <br>
-  <strong>TCP Packets</strong>
+  <p>For the first packet this says the Ethernet source address is RTSG, the destination is the Ethernet broadcast address, the type field contained hex 0806 (type ETHER_ARP) and the total length was 64 bytes.
+  <p><strong>TCP Packets</strong>
   <p><em>(N.B.:The following description assumes familiarity with the TCP protocol described in RFC-793. If you are not familiar with the protocol, neither this description nor</em> <em>tcpdump</em> will be of much use to you.)
   <p>The general format of a tcp protocol line is:
   <div class="indent">
@@ -376,9 +374,8 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
   <p>The first line says that tcp port 1023 on rtsg sent a packet to port <em>login</em> on csam. The <strong>S</strong> indicates that the <em>SYN</em> flag was set. The packet sequence number was 768512 and it contained no data. (The notation is `first:last(nbytes)' which means `sequence numbers <em>first</em> up to but not including <em>last</em> which is <em>nbytes</em> bytes of user data'.) There was no piggy-backed ack, the available receive window was 4096 bytes and there was a max-segment-size option requesting an mss of 1024 bytes.
   <p>Csam replies with a similar packet except it includes a piggy-backed ack for rtsg's SYN. Rtsg then acks csam's SYN. The `.' means the ACK flag was set. The packet contained no data so there is no data sequence number. Note that the ack sequence number is a small integer (1). The first time <em>tcpdump</em> sees a tcp `conversation', it prints the sequence number from the packet. On subsequent packets of the conversation, the difference between the current packet's sequence number and this initial sequence number is printed. This means that sequence numbers after the first can be interpreted as relative byte positions in the conversation's data stream (with the first data byte each direction being `1'). `-S' will override this feature, causing the original sequence numbers to be output.
   <p>On the 6th line, rtsg sends csam 19 bytes of data (bytes 2 through 20 in the rtsg → csam side of the conversation). The PUSH flag is set in the packet. On the 7th line, csam says it's received data sent by rtsg up to but not including byte 21. Most of this data is apparently sitting in the socket buffer since csam's receive window has gotten 19 bytes smaller. Csam also sends one byte of data to rtsg in this packet. On the 8th and 9th lines, csam sends two bytes of urgent, pushed data to rtsg.
-  <p>If the snapshot was small enough that <em>tcpdump</em> didn't capture the full TCP header, it interprets as much of the header as it can and then reports ``[|<em>tcp</em>]'' to indicate the remainder could not be interpreted. If the header contains a bogus option (one with a length that's either too small or beyond the end of the header), <em>tcpdump</em> reports it as ``[<em>bad opt</em>]'' and does not interpret any further options (since it's impossible to tell where they start). If the header length indicates options are present but the IP datagram length is not long enough for the options to actually be there, <em>tcpdump</em> reports it as ``[<em>bad hdr length</em>]''.<br>
-  <br>
-  <strong>Capturing TCP packets with particular flag combinations (SYN-ACK, URG-ACK, etc.)</strong>
+  <p>If the snapshot was small enough that <em>tcpdump</em> didn't capture the full TCP header, it interprets as much of the header as it can and then reports ``[|<em>tcp</em>]'' to indicate the remainder could not be interpreted. If the header contains a bogus option (one with a length that's either too small or beyond the end of the header), <em>tcpdump</em> reports it as ``[<em>bad opt</em>]'' and does not interpret any further options (since it's impossible to tell where they start). If the header length indicates options are present but the IP datagram length is not long enough for the options to actually be there, <em>tcpdump</em> reports it as ``[<em>bad hdr length</em>]''.
+  <p><strong>Capturing TCP packets with particular flag combinations (SYN-ACK, URG-ACK, etc.)</strong>
   <p>There are 8 bits in the control bits section of the TCP header:
   <p class="indent"><em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
   <p>Let's assume that we want to watch packets used in establishing a TCP connection. Recall that TCP uses a 3-way handshake protocol when it initializes a new connection; the connection sequence with regard to the TCP control bits is
@@ -465,17 +462,15 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
   <div class="indent">
     <p>&nbsp; &nbsp; <strong>tcpdump -i xl0 'tcp[tcpflags] & tcp-push != 0'</strong>
   </div>
-  <p>Note that you should use single quotes or a backslash in the expression to hide the AND ('&amp;') special character from the shell.<br>
-  <br>
-  <strong>UDP Packets</strong>
+  <p>Note that you should use single quotes or a backslash in the expression to hide the AND ('&amp;') special character from the shell.
+  <p><strong>UDP Packets</strong>
   <p>UDP format is illustrated by this rwho packet:
   <div class="indent">
     <pre><code>actinide.who &gt; broadcast.who: udp 84</code></pre>
   </div>
   <p>This says that port <em>who</em> on host <em>actinide</em> sent a udp datagram to port <em>who</em> on host <em>broadcast</em>, the Internet broadcast address. The packet contained 84 bytes of user data.
-  <p>Some UDP services are recognized (from the source or destination port number) and the higher level protocol information printed. In particular, Domain Name service requests (RFC-1034/1035) and Sun RPC calls (RFC-1050) to NFS.<br>
-  <br>
-  <strong>UDP Name Server Requests</strong>
+  <p>Some UDP services are recognized (from the source or destination port number) and the higher level protocol information printed. In particular, Domain Name service requests (RFC-1034/1035) and Sun RPC calls (RFC-1050) to NFS.
+  <p><strong>UDP Name Server Requests</strong>
   <p><em>(N.B.:The following description assumes familiarity with the Domain Service protocol described in RFC-1035. If you are not familiar with the protocol, the following description will appear to be written in greek.)</em>
   <p>Name server requests are formatted as
   <div class="indent">
@@ -484,9 +479,8 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
 <code>h2opolo.1538 &gt; helios.domain: 3+ A? ucbvax.berkeley.edu. (37)</code></pre>
   </div>
   <p>Host <em>h2opolo</em> asked the domain server on <em>helios</em> for an address record (qtype=A) associated with the name <em>ucbvax.berkeley.edu.</em> The query id was `3'. The `+' indicates the <em>recursion desired</em> flag was set. The query length was 37 bytes, not including the UDP and IP protocol headers. The query operation was the normal one, <em>Query</em>, so the op field was omitted. If the op had been anything else, it would have been printed between the `3' and the `+'. Similarly, the qclass was the normal one, <em>C_IN</em>, and omitted. Any other qclass would have been printed immediately after the `A'.
-  <p>A few anomalies are checked and may result in extra fields enclosed in square brackets: &nbsp;If a query contains an answer, authority records or additional records section, <em>ancount</em>, <em>nscount</em>, or <em>arcount</em> are printed as `[<em>n</em>a]', `[<em>n</em>n]' or &nbsp;`[<em>n</em>au]' where <em>n</em> is the appropriate count. If any of the response bits are set (AA, RA or rcode) or any of the `must be zero' bits are set in bytes two and three, `[b2&amp;3=<em>x</em>]' is printed, where <em>x</em> is the hex value of header bytes two and three.<br>
-  <br>
-  <strong>UDP Name Server Responses</strong>
+  <p>A few anomalies are checked and may result in extra fields enclosed in square brackets: &nbsp;If a query contains an answer, authority records or additional records section, <em>ancount</em>, <em>nscount</em>, or <em>arcount</em> are printed as `[<em>n</em>a]', `[<em>n</em>n]' or &nbsp;`[<em>n</em>au]' where <em>n</em> is the appropriate count. If any of the response bits are set (AA, RA or rcode) or any of the `must be zero' bits are set in bytes two and three, `[b2&amp;3=<em>x</em>]' is printed, where <em>x</em> is the hex value of header bytes two and three.
+  <p><strong>UDP Name Server Responses</strong>
   <p>Name server responses are formatted as
   <div class="indent">
     <pre><em>src &gt; dst:  id op rcode flags a/n/au type class data (len)</em>
@@ -496,14 +490,12 @@ helios.domain &gt; h2opolo.1537: 2 NXDomain* 0/1/0 (97)</pre>
   </div>
   <p>In the first example, <em>helios</em> responds to query id 3 from <em>h2opolo</em> with 3 answer records, 3 name server records and 7 additional records. The first answer record is type A (address) and its data is internet address 128.32.137.3. The total size of the response was 273 bytes, excluding UDP and IP headers. The op (Query) and response code (NoError) were omitted, as was the class (C_IN) of the A record.
   <p>In the second example, <em>helios</em> responds to query 2 with a response code of non-existent domain (NXDomain) with no answers, one name server and no authority records. The `*' indicates that the <em>authoritative answer</em> bit was set. Since there were no answers, no type, class or data were printed.
-  <p>Other flag characters that might appear are `-' (recursion available, RA, <em>not</em> set) and `|' (truncated message, TC, set). If the `question' section doesn't contain exactly one entry, `[<em>n</em>q]' is printed.<br>
-  <br>
-  <strong>SMB/CIFS decoding</strong>
+  <p>Other flag characters that might appear are `-' (recursion available, RA, <em>not</em> set) and `|' (truncated message, TC, set). If the `question' section doesn't contain exactly one entry, `[<em>n</em>q]' is printed.
+  <p><strong>SMB/CIFS decoding</strong>
   <p><em>tcpdump</em> now includes fairly extensive SMB/CIFS/NBT decoding for data on UDP/137, UDP/138 and TCP/139. Some primitive decoding of IPX and NetBEUI SMB data is also done.
   <p>By default a fairly minimal decode is done, with a much more detailed decode done if -v is used. Be warned that with -v a single SMB packet may take up a page or more, so only use -v if you really want all the gory details.
-  <p>For information on SMB packet formats and what all the fields mean see www.cifs.org or the pub/samba/specs/ directory on your favorite samba.org mirror site. The SMB patches were written by Andrew Tridgell (tridge@samba.org).<br>
-  <br>
-  <strong>NFS Requests and Replies</strong>
+  <p>For information on SMB packet formats and what all the fields mean see www.cifs.org or the pub/samba/specs/ directory on your favorite samba.org mirror site. The SMB patches were written by Andrew Tridgell (tridge@samba.org).
+  <p><strong>NFS Requests and Replies</strong>
   <p>Sun NFS (Network File System) requests and replies are printed as:
   <div class="indent">
     <pre><em>src.sport &gt; dst.nfs: NFS request xid xid len op args</em>
@@ -533,9 +525,8 @@ wrl.nfs &gt; sushi.1023: NFS reply xid 79658
   <p>(-v also prints the IP header TTL, ID, length, and fragmentation fields, which have been omitted from this example.) &nbsp;In the first line, <em>sushi</em> asks <em>wrl</em> to read 8192 bytes from file 21,11/12.195, at byte offset 24576. <em>Wrl</em> replies `ok'; the packet shown on the second line is the first fragment of the reply, and hence is only 1472 bytes long (the other bytes will follow in subsequent fragments, but these fragments do not have NFS or even UDP headers and so might not be printed, depending on the filter expression used). Because the -v flag is given, some of the file attributes (which are returned in addition to the file data) are printed: the file type (``REG'', for regular file), the file mode (in octal), the uid and gid, and the file size.
   <p>If the -v flag is given more than once, even more details are printed.
   <p>Note that NFS requests are very large and much of the detail won't be printed unless <em>snaplen</em> is increased. Try using `<strong>-s 192</strong>' to watch NFS traffic.
-  <p>NFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the transaction ID. If a reply does not closely follow the corresponding request, it might not be parsable.<br>
-  <br>
-  <strong>AFS Requests and Replies</strong>
+  <p>NFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the transaction ID. If a reply does not closely follow the corresponding request, it might not be parsable.
+  <p><strong>AFS Requests and Replies</strong>
   <p>Transarc AFS (Andrew File System) requests and replies are printed as:
   <div class="indent">
     <pre><em>src.sport &gt; dst.dport: rx packet-type</em>
@@ -556,12 +547,11 @@ pike.afsfs &gt; elvis.7001: rx data fs reply rename</pre>
   <p>If the -v flag is given three times, the security index and service id are printed.
   <p>Error codes are printed for abort packets, with the exception of Ubik beacon packets (because abort packets are used to signify a yes vote for the Ubik protocol).
   <p>Note that AFS requests are very large and many of the arguments won't be printed unless <em>snaplen</em> is increased. Try using `<strong>-s 256</strong>' to watch AFS traffic.
-  <p>AFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the call number and service ID. If a reply does not closely follow the corresponding request, it might not be parsable.<br>
-  <br>
-  <strong>KIP AppleTalk (DDP in UDP)</strong>
+  <p>AFS reply packets do not explicitly identify the RPC operation. Instead, <em>tcpdump</em> keeps track of ``recent'' requests, and matches them to the replies using the call number and service ID. If a reply does not closely follow the corresponding request, it might not be parsable.
+  <p><strong>KIP AppleTalk (DDP in UDP)</strong>
   <p>AppleTalk DDP packets encapsulated in UDP datagrams are de-encapsulated and dumped as DDP packets (i.e., all the UDP header information is discarded). The file <em>/etc/atalk.names</em> is used to translate AppleTalk net and node numbers to names. Lines in this file have the form
   <div class="indent">
-    <pre><em>number     name</em>
+    <pre><em>number      name</em>
 
 <code>1.254             ether</code>
 16.1            icsd-net
@@ -577,17 +567,15 @@ office.2 &gt; icsd-net.112.220
 jssmag.149.235 &gt; icsd-net.2</pre>
   </div>
   <p>(If the <em>/etc/atalk.names</em> doesn't exist or doesn't contain an entry for some AppleTalk host/net number, addresses are printed in numeric form.) In the first example, NBP (DDP port 2) on net 144.1 node 209 is sending to whatever is listening on port 220 of net icsd node 112. The second line is the same except the full name of the source node is known (`office'). The third line is a send from port 235 on net jssmag node 149 to broadcast on the icsd-net NBP port (note that the broadcast address (255) is indicated by a net name with no host number - for this reason it's a good idea to keep node names and net names distinct in /etc/atalk.names).
-  <p>NBP (name binding protocol) and ATP (AppleTalk transaction protocol) packets have their contents interpreted. Other protocols just dump the protocol name (or number if no name is registered for the protocol) and packet size.<br>
-  <br>
-  <strong>NBP packets</strong> are formatted like the following examples:
+  <p>NBP (name binding protocol) and ATP (AppleTalk transaction protocol) packets have their contents interpreted. Other protocols just dump the protocol name (or number if no name is registered for the protocol) and packet size.
+  <p><strong>NBP packets</strong> are formatted like the following examples:
   <div class="indent">
     <pre><code>icsd-net.112.220 &gt; jssmag.2: nbp-lkup 190: "=:LaserWriter@*"</code>
 jssmag.209.2 &gt; icsd-net.112.220: nbp-reply 190: "RM1140:LaserWriter@*" 250
 techpit.2 &gt; icsd-net.112.220: nbp-reply 190: "techpit:LaserWriter@*" 186</pre>
   </div>
-  <p>The first line is a name lookup request for laserwriters sent by net icsd host 112 and broadcast on net jssmag. The nbp id for the lookup is 190. The second line shows a reply for this request (note that it has the same id) from host jssmag.209 saying that it has a laserwriter resource named "RM1140" registered on port 250. The third line is another reply to the same request saying host techpit has laserwriter "techpit" registered on port 186.<br>
-  <br>
-  <strong>ATP packet</strong> formatting is demonstrated by the following example:
+  <p>The first line is a name lookup request for laserwriters sent by net icsd host 112 and broadcast on net jssmag. The nbp id for the lookup is 190. The second line shows a reply for this request (note that it has the same id) from host jssmag.209 saying that it has a laserwriter resource named "RM1140" registered on port 250. The third line is another reply to the same request saying host techpit has laserwriter "techpit" registered on port 186.
+  <p><strong>ATP packet</strong> formatting is demonstrated by the following example:
   <div class="indent">
     <pre><code>jssmag.209.165 &gt; helios.132: atp-req  12266&lt;0-7&gt; 0xae030001</code>
 helios.132 &gt; jssmag.209.165: atp-resp 12266:0 (512) 0xae040000
@@ -606,9 +594,8 @@ jssmag.209.133 &gt; helios.132: atp-req* 12267&lt;0-7&gt; 0xae030002</pre>
   </div>
   <p>Jssmag.209 initiates transaction id 12266 with host helios by requesting up to 8 packets (the `&lt;0-7&gt;'). The hex number at the end of the line is the value of the `userdata' field in the request.
   <p>Helios responds with 8 512-byte packets. The `:digit' following the transaction id gives the packet sequence number in the transaction and the number in parens is the amount of data in the packet, excluding the atp header. The `*' on packet 7 indicates that the EOM bit was set.
-  <p>Jssmag.209 then requests that packets 3 & 5 be retransmitted. Helios resends them then jssmag.209 releases the transaction. Finally, jssmag.209 initiates the next request. The `*' on the request indicates that XO (`exactly once') was <em>not</em> set.<br>
-  <br>
-  <strong>IP Fragmentation</strong>
+  <p>Jssmag.209 then requests that packets 3 & 5 be retransmitted. Helios resends them then jssmag.209 releases the transaction. Finally, jssmag.209 initiates the next request. The `*' on the request indicates that XO (`exactly once') was <em>not</em> set.
+  <p><strong>IP Fragmentation</strong>
   <p>Fragmented Internet datagrams are printed as
   <div class="indent">
     <pre><strong>(frag</strong> <em>id</em><strong>:</strong><em>size</em><strong>@</strong><em>offset</em><strong>+)</strong>
@@ -623,9 +610,8 @@ arizona &gt; rtsg: (frag 595a:204@328)
 rtsg.1170 &gt; arizona.ftp-data: . ack 1536 win 2560</pre>
   </div>
   <p>There are a couple of things to note here: &nbsp;First, addresses in the 2nd line don't include port numbers. This is because the TCP protocol information is all in the first fragment and we have no idea what the port or sequence numbers are when we print the later fragments. Second, the tcp sequence information in the first line is printed as if there were 308 bytes of user data when, in fact, there are 512 bytes (308 in the first frag and 204 in the second). If you are looking for holes in the sequence space or trying to match up acks with packets, this can fool you.
-  <p>A packet with the IP <em>don't fragment</em> flag is marked with a trailing <strong>(DF)</strong>.<br>
-  <br>
-  <strong>Timestamps</strong>
+  <p>A packet with the IP <em>don't fragment</em> flag is marked with a trailing <strong>(DF)</strong>.
+  <p><strong>Timestamps</strong>
   <p>By default, all output lines are preceded by a timestamp. The timestamp is the current clock time in the form
   <div class="indent">
     <pre><em>hh:mm:ss.frac</em></pre>

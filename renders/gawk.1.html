@@ -56,9 +56,8 @@
     <dt><strong>-d</strong>[<em>file</em>]
     <dt><strong>--dump-variables</strong>[<strong>=</strong><em>file</em>]
     <dd>
-      <p>Print a sorted list of global variables, their types and final values to <em>file</em>. If no <em>file</em> is provided, <em>gawk</em> uses a file named <strong>awkvars.out</strong> in the current directory.<br>
-      <br>
-      Having a list of all the global variables is a good way to look for typographical errors in your programs. You would also use this option if you have a large program with a lot of functions, and you want to be sure that your functions don't inadvertently use global variables that you meant to be local. (This is a particularly easy mistake to make with simple variable names like <strong>i</strong>, <strong>j</strong>, and so on.)
+      <p>Print a sorted list of global variables, their types and final values to <em>file</em>. If no <em>file</em> is provided, <em>gawk</em> uses a file named <strong>awkvars.out</strong> in the current directory.
+      <p>Having a list of all the global variables is a good way to look for typographical errors in your programs. You would also use this option if you have a large program with a lot of functions, and you want to be sure that your functions don't inadvertently use global variables that you meant to be local. (This is a particularly easy mistake to make with simple variable names like <strong>i</strong>, <strong>j</strong>, and so on.)
     <dt><strong>-D</strong>[<em>file</em>]
     <dt><strong>--debug</strong>[<strong>=</strong><em>file</em>]
     <dd>
@@ -225,9 +224,8 @@
         <p>The conversion format for numbers, <strong>"%.6g"</strong>, by default.
       <dt><strong>ENVIRON</strong>
       <dd>
-        <p>An array containing the values of the current environment. The array is indexed by the environment variables, each element being the value of that variable (e.g., <strong>ENVIRON["HOME"]</strong> might be <strong>"/home/arnold"</strong>).<br>
-        <br>
-        In POSIX mode, changing this array does not affect the environment seen by programs which <em>gawk</em> spawns via redirection or the <strong>system()</strong> function. Otherwise, <em>gawk</em> updates its real environment so that programs it spawns see the changes.
+        <p>An array containing the values of the current environment. The array is indexed by the environment variables, each element being the value of that variable (e.g., <strong>ENVIRON["HOME"]</strong> might be <strong>"/home/arnold"</strong>).
+        <p>In POSIX mode, changing this array does not affect the environment seen by programs which <em>gawk</em> spawns via redirection or the <strong>system()</strong> function. Otherwise, <em>gawk</em> updates its real environment so that programs it spawns see the changes.
       <dt><strong>ERRNO</strong>
       <dd>
         <p>If a system error occurs either doing a redirection for <strong>getline</strong>, during a read for <strong>getline</strong>, or during a <strong>close()</strong>, then <strong>ERRNO</strong> will contain a string describing the error. The value is subject to translation in non-English locales. If the string in <strong>ERRNO</strong> corresponds to a system error in the <em>errno</em>(3) variable, then the numeric value can be found in <strong>PROCINFO["errno"].</strong> For non-system errors, <strong>PROCINFO["errno"]</strong> will be zero.
@@ -251,9 +249,8 @@
         <p>An array whose indices and corresponding values are the names of all the user-defined or extension functions in the program. <strong>NOTE</strong>: You may not use the <strong>delete</strong> statement with the <strong>FUNCTAB</strong> array.
       <dt><strong>IGNORECASE</strong>
       <dd>
-        <p>Controls the case-sensitivity of all regular expression and string operations. &nbsp;If <strong>IGNORECASE</strong> has a non-zero value, then string comparisons and pattern matching in rules, field splitting with <strong>FS</strong> and <strong>FPAT</strong>, record separating with <strong>RS</strong>, regular expression matching with <strong>~</strong> and <strong>!~</strong>, and the <strong>gensub()</strong>, <strong>gsub()</strong>, <strong>index()</strong>, <strong>match()</strong>, <strong>patsplit()</strong>, <strong>split()</strong>, and <strong>sub()</strong> built-in functions all ignore case when doing regular expression operations. <strong>NOTE</strong>: Array subscripting is <em>not</em> affected. However, the <strong>asort()</strong> and <strong>asorti()</strong> functions are affected.<br>
-        <br>
-        Thus, if <strong>IGNORECASE</strong> is not equal to zero, <strong>/aB/</strong> matches all of the strings <strong>"ab"</strong>, <strong>"aB"</strong>, <strong>"Ab"</strong>, and <strong>"AB"</strong>. As with all AWK variables, the initial value of <strong>IGNORECASE</strong> is zero, so all regular expression and string operations are normally case-sensitive.
+        <p>Controls the case-sensitivity of all regular expression and string operations. &nbsp;If <strong>IGNORECASE</strong> has a non-zero value, then string comparisons and pattern matching in rules, field splitting with <strong>FS</strong> and <strong>FPAT</strong>, record separating with <strong>RS</strong>, regular expression matching with <strong>~</strong> and <strong>!~</strong>, and the <strong>gensub()</strong>, <strong>gsub()</strong>, <strong>index()</strong>, <strong>match()</strong>, <strong>patsplit()</strong>, <strong>split()</strong>, and <strong>sub()</strong> built-in functions all ignore case when doing regular expression operations. <strong>NOTE</strong>: Array subscripting is <em>not</em> affected. However, the <strong>asort()</strong> and <strong>asorti()</strong> functions are affected.
+        <p>Thus, if <strong>IGNORECASE</strong> is not equal to zero, <strong>/aB/</strong> matches all of the strings <strong>"ab"</strong>, <strong>"aB"</strong>, <strong>"Ab"</strong>, and <strong>"AB"</strong>. As with all AWK variables, the initial value of <strong>IGNORECASE</strong> is zero, so all regular expression and string operations are normally case-sensitive.
       <dt><strong>LINT</strong>
       <dd>
         <p>Provides dynamic control of the <strong>--lint</strong> option from within an AWK program. When true, <em>gawk</em> prints lint warnings. When false, it does not. When assigned the string value <strong>"fatal"</strong>, lint warnings become fatal errors, exactly like <strong>--lint=fatal</strong>. Any other true value just prints warnings.
@@ -379,11 +376,9 @@
             <p>If an I/O error that may be retried occurs when reading data from <em>input</em>, and this array entry exists, then <strong>getline</strong> will return -2 instead of following the default behavior of returning -1 and configuring <em>input</em> to return no further data. An I/O error that may be retried is one where <em>errno</em>(3) has the value EAGAIN, EWOULDBLOCK, EINTR, or ETIMEDOUT. This may be useful in conjunction with <strong>PROCINFO["</strong><em>input</em><strong>", "READ_TIMEOUT"]</strong> or situations where a file descriptor has been configured to behave in a non-blocking fashion.
           <dt><strong>PROCINFO["sorted_in"]</strong>
           <dd>
-            <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>"@ind_str_asc"</strong>, <strong>"@ind_num_asc"</strong>, <strong>"@val_type_asc"</strong>, <strong>"@val_str_asc"</strong>, <strong>"@val_num_asc"</strong>, <strong>"@ind_str_desc"</strong>, <strong>"@ind_num_desc"</strong>, <strong>"@val_type_desc"</strong>, <strong>"@val_str_desc"</strong>, <strong>"@val_num_desc"</strong>, and <strong>"@unsorted"</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:<br>
-            <br>
-            <strong>function cmp_func(i1, v1, i2, v2)</strong><br>
-            <br>
-            where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
+            <p>If this element exists in <strong>PROCINFO</strong>, then its value controls the order in which array elements are traversed in <strong>for</strong> loops. Supported values are <strong>"@ind_str_asc"</strong>, <strong>"@ind_num_asc"</strong>, <strong>"@val_type_asc"</strong>, <strong>"@val_str_asc"</strong>, <strong>"@val_num_asc"</strong>, <strong>"@ind_str_desc"</strong>, <strong>"@ind_num_desc"</strong>, <strong>"@val_type_desc"</strong>, <strong>"@val_str_desc"</strong>, <strong>"@val_num_desc"</strong>, and <strong>"@unsorted"</strong>. The value can also be the name (as a <em>string</em>) of any comparison function defined as follows:
+            <p><strong>function cmp_func(i1, v1, i2, v2)</strong>
+            <p>where <em>i1</em> and <em>i2</em> are the indices, and <em>v1</em> and <em>v2</em> are the corresponding values of the two elements being compared. It should return a number less than, equal to, or greater than 0, depending on how the elements of the array are to be ordered.
         </dl>
       <dt><strong>ROUNDMODE</strong>
       <dd>
@@ -1090,19 +1085,16 @@ b = a ""</pre>
     <dl>
       <dt><strong>bindtextdomain(</strong><em>directory</em> [<strong>,</strong> <em>domain</em>]<strong>)</strong>
       <dd>
-        <p>Specify the directory where <em>gawk</em> looks for the <strong>.gmo</strong> files, in case they will not or cannot be placed in the ``standard'' locations (e.g., during testing). It returns the directory where <em>domain</em> is ``bound.''<br>
-        <br>
-        The default <em>domain</em> is the value of <strong>TEXTDOMAIN</strong>. If <em>directory</em> is the null string (<strong>""</strong>), then <strong>bindtextdomain()</strong> returns the current binding for the given <em>domain</em>.
+        <p>Specify the directory where <em>gawk</em> looks for the <strong>.gmo</strong> files, in case they will not or cannot be placed in the ``standard'' locations (e.g., during testing). It returns the directory where <em>domain</em> is ``bound.''
+        <p>The default <em>domain</em> is the value of <strong>TEXTDOMAIN</strong>. If <em>directory</em> is the null string (<strong>""</strong>), then <strong>bindtextdomain()</strong> returns the current binding for the given <em>domain</em>.
       <dt><strong>dcgettext(</strong><em>string</em> [<strong>,</strong> <em>domain</em> [<strong>,</strong> <em>category</em>]]<strong>)</strong>
       <dd>
-        <p>Return the translation of <em>string</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.<br>
-        <br>
-        If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. &nbsp;Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
+        <p>Return the translation of <em>string</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.
+        <p>If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. &nbsp;Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
       <dt><strong>dcngettext(</strong><em>string1</em><strong>,</strong> <em>string2</em><strong>,</strong> <em>number</em> [<strong>,</strong> <em>domain</em> [<strong>,</strong> <em>category</em>]]<strong>)</strong>
       <dd>
-        <p>Return the plural form used for <em>number</em> of the translation of <em>string1</em> and <em>string2</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.<br>
-        <br>
-        If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. &nbsp;Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
+        <p>Return the plural form used for <em>number</em> of the translation of <em>string1</em> and <em>string2</em> in text domain <em>domain</em> for locale category <em>category</em>. The default value for <em>domain</em> is the current value of <strong>TEXTDOMAIN</strong>. The default value for <em>category</em> is <strong>"LC_MESSAGES"</strong>.
+        <p>If you supply a value for <em>category</em>, it must be a string equal to one of the known locale categories described in <em>GAWK: Effective AWK Programming</em>. You must also supply a text domain. &nbsp;Use <strong>TEXTDOMAIN</strong> if you want to use the current domain.
     </dl>
   </section>
 </section>
@@ -1115,7 +1107,7 @@ b = a ""</pre>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. &nbsp;Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. &nbsp;The convention is to separate local variables from real parameters by extra spaces in the parameter list. &nbsp;For example:
   <div class="indent">
-    <pre>function  f(p, q,     a, b)  # a and b are local
+    <pre>function  f(p, q,     a, b)     # a and b are local
 {
         ...
 }
@@ -1166,11 +1158,9 @@ b = a ""</pre>
   <dl class="indent-18">
     <dt>1.
     <dd>
-      <p>Add a <strong>BEGIN</strong> action to assign a value to the <strong>TEXTDOMAIN</strong> variable to set the text domain to a name associated with your program:<br>
-      <br>
-      <strong>BEGIN { TEXTDOMAIN = "myprog" }</strong><br>
-      <br>
-      This allows <em>gawk</em> to find the <strong>.gmo</strong> file associated with your program. Without this step, <em>gawk</em> uses the <strong>messages</strong> text domain, which likely does not contain translations for your program.
+      <p>Add a <strong>BEGIN</strong> action to assign a value to the <strong>TEXTDOMAIN</strong> variable to set the text domain to a name associated with your program:
+      <p><strong>BEGIN { TEXTDOMAIN = "myprog" }</strong>
+      <p>This allows <em>gawk</em> to find the <strong>.gmo</strong> file associated with your program. Without this step, <em>gawk</em> uses the <strong>messages</strong> text domain, which likely does not contain translations for your program.
     <dt>2.
     <dd>
       <p>Mark all strings that should be translated with leading underscores.

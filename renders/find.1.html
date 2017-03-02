@@ -32,12 +32,10 @@
     <dd>
       <p>Do not follow symbolic links, except while processing the command line arguments. &nbsp;When <strong>find</strong> examines or prints information about files, the information used shall be taken from the properties of the symbolic link itself. &nbsp; The only exception to this behaviour is when a file specified on the command line is a symbolic link, and the link can be resolved. &nbsp;For that situation, the information used is taken from whatever the link points to (that is, the link is followed). &nbsp;The information about the link itself is used as a fallback if the file pointed to by the symbolic link cannot be examined. &nbsp;If <strong>-H</strong> is in effect and one of the paths specified on the command line is a symbolic link to a directory, the contents of that directory will be examined (though of course -maxdepth 0 would prevent this).
   </dl>
-  <p>If more than one of <strong>-H</strong>, <strong>-L</strong> and <strong>-P</strong> is specified, each overrides the others; the last one appearing on the command line takes effect. Since it is the default, the <strong>-P</strong> option should be considered to be in effect unless either <strong>-H</strong> or <strong>-L</strong> is specified.<br>
-  <br>
-  GNU <strong>find</strong> frequently stats files during the processing of the command line itself, before any searching has begun. &nbsp;These options also affect how those arguments are processed. &nbsp;Specifically, there are a number of tests that compare files listed on the command line against a file we are currently considering. &nbsp;In each case, the file specified on the command line will have been examined and some of its properties will have been saved. &nbsp;If the named file is in fact a symbolic link, and the <strong>-P</strong> option is in effect (or if neither <strong>-H</strong> nor <strong>-L</strong> were specified), the information used for the comparison will be taken from the properties of the symbolic link. &nbsp;Otherwise, it will be taken from the properties of the file the link points to. &nbsp;If <strong>find</strong> cannot follow the link (for example because it has insufficient privileges or the link points to a nonexistent file) the properties of the link itself will be used.
-  <p>When the <strong>-H</strong> or <strong>-L options are in effect, any symbolic links listed</strong> as the argument of <strong>-newer</strong> will be dereferenced, and the timestamp will be taken from the file to which the symbolic link points. &nbsp;The same consideration applies to <strong>-newerXY</strong>, <strong>-anewer</strong> and <strong>-cnewer</strong>.<br>
-  <br>
-  The <strong>-follow</strong> option has a similar effect to <strong>-L</strong>, though it takes effect at the point where it appears (that is, if <strong>-L</strong> is not used but <strong>-follow</strong> is, any symbolic links appearing after <strong>-follow</strong> on the command line will be dereferenced, and those before it will not).
+  <p>If more than one of <strong>-H</strong>, <strong>-L</strong> and <strong>-P</strong> is specified, each overrides the others; the last one appearing on the command line takes effect. Since it is the default, the <strong>-P</strong> option should be considered to be in effect unless either <strong>-H</strong> or <strong>-L</strong> is specified.
+  <p>GNU <strong>find</strong> frequently stats files during the processing of the command line itself, before any searching has begun. &nbsp;These options also affect how those arguments are processed. &nbsp;Specifically, there are a number of tests that compare files listed on the command line against a file we are currently considering. &nbsp;In each case, the file specified on the command line will have been examined and some of its properties will have been saved. &nbsp;If the named file is in fact a symbolic link, and the <strong>-P</strong> option is in effect (or if neither <strong>-H</strong> nor <strong>-L</strong> were specified), the information used for the comparison will be taken from the properties of the symbolic link. &nbsp;Otherwise, it will be taken from the properties of the file the link points to. &nbsp;If <strong>find</strong> cannot follow the link (for example because it has insufficient privileges or the link points to a nonexistent file) the properties of the link itself will be used.
+  <p>When the <strong>-H</strong> or <strong>-L options are in effect, any symbolic links listed</strong> as the argument of <strong>-newer</strong> will be dereferenced, and the timestamp will be taken from the file to which the symbolic link points. &nbsp;The same consideration applies to <strong>-newerXY</strong>, <strong>-anewer</strong> and <strong>-cnewer</strong>.
+  <p>The <strong>-follow</strong> option has a similar effect to <strong>-L</strong>, though it takes effect at the point where it appears (that is, if <strong>-L</strong> is not used but <strong>-follow</strong> is, any symbolic links appearing after <strong>-follow</strong> on the command line will be dereferenced, and those before it will not).
   <dl>
     <dt>-D debugopts
     <dd>
@@ -105,9 +103,8 @@
     <dd>
       <p>Operators join together the other items within the expression. &nbsp;They include for example <strong>-o</strong> (meaning logical OR) and <strong>-a</strong> (meaning logical AND). &nbsp;Where an operator is missing, <strong>-a</strong> is assumed.
   </dl>
-  <p>If the whole expression contains no actions other than <strong>-prune</strong> or <strong>-print</strong>, <strong>-print</strong> is performed on all files for which the whole expression is true.<br>
-  <br>
-  The <strong>-delete</strong> action also acts like an option (since it implies <strong>-depth</strong>).
+  <p>If the whole expression contains no actions other than <strong>-prune</strong> or <strong>-print</strong>, <strong>-print</strong> is performed on all files for which the whole expression is true.
+  <p>The <strong>-delete</strong> action also acts like an option (since it implies <strong>-depth</strong>).
   <section>
     <h3>POSITIONAL OPTIONS</h3>
     <p>Positional options always return true. &nbsp;They affect only tests occurring later on the command line.
@@ -128,9 +125,8 @@
   </section>
   <section>
     <h3>GLOBAL OPTIONS</h3>
-    <p>Global options always return true. Global options take effect even for tests which occur earlier on the command line. &nbsp;To prevent confusion, global options should specified on the command-line after the list of start points, just before the first test, positional option or action. If you specify a global option in some other place, <strong>find</strong> will issue a warning message explaining that this can be confusing.<br>
-    <br>
-    The global options occur after the list of start points, and so are not the same kind of option as <strong>-L</strong>, for example.
+    <p>Global options always return true. Global options take effect even for tests which occur earlier on the command line. &nbsp;To prevent confusion, global options should specified on the command-line after the list of start points, just before the first test, positional option or action. If you specify a global option in some other place, <strong>find</strong> will issue a warning message explaining that this can be confusing.
+    <p>The global options occur after the list of start points, and so are not the same kind of option as <strong>-L</strong>, for example.
     <dl>
       <dt>-d
       <dd>
@@ -397,9 +393,8 @@
     <dl>
       <dt>-delete
       <dd>
-        <p>Delete files; true if removal succeeded. &nbsp;If the removal failed, an error message is issued. If <strong>-delete</strong> fails, <strong>find</strong>'s exit status will be nonzero (when it eventually exits). Use of <strong>-delete</strong> automatically turns on the `<strong>-depth</strong>' option.<br>
-        <br>
-        <strong>Warnings</strong>: Don't forget that the find command line is evaluated as an expression, so putting <strong>-delete</strong> first will make <strong>find</strong> try to delete everything below the starting points you specified. When testing a <strong>find</strong> command line that you later intend to use with <strong>-delete</strong>, you should explicitly specify <strong>-depth</strong> in order to avoid later surprises. &nbsp;Because <strong>-delete</strong> implies <strong>-depth</strong>, you cannot usefully use <strong>-prune</strong> and <strong>-delete</strong> together.
+        <p>Delete files; true if removal succeeded. &nbsp;If the removal failed, an error message is issued. If <strong>-delete</strong> fails, <strong>find</strong>'s exit status will be nonzero (when it eventually exits). Use of <strong>-delete</strong> automatically turns on the `<strong>-depth</strong>' option.
+        <p><strong>Warnings</strong>: Don't forget that the find command line is evaluated as an expression, so putting <strong>-delete</strong> first will make <strong>find</strong> try to delete everything below the starting points you specified. When testing a <strong>find</strong> command line that you later intend to use with <strong>-delete</strong>, you should explicitly specify <strong>-depth</strong> in order to avoid later surprises. &nbsp;Because <strong>-delete</strong> implies <strong>-depth</strong>, you cannot usefully use <strong>-prune</strong> and <strong>-delete</strong> together.
       <dt>-exec <em>command</em> ;
       <dd>
         <p>Execute <em>command</em>; true if 0 status is returned. &nbsp;All following arguments to <strong>find</strong> are taken to be arguments to the command until an argument consisting of `;' is encountered. &nbsp;The string `{}' is replaced by the current file name being processed everywhere it occurs in the arguments to the command, not just in arguments where it is alone, as in some versions of <strong>find</strong>. Both of these constructions might need to be escaped (with a `\') or quoted to protect them from expansion by the shell. &nbsp;See the <strong>EXAMPLES</strong> section for examples of the use of the <strong>-exec</strong> option. &nbsp;The specified command is run once for each matched file. The command is executed in the starting directory. &nbsp; There are unavoidable security problems surrounding use of the <strong>-exec</strong> action; you should use the <strong>-execdir</strong> option instead.
@@ -670,9 +665,8 @@
           <dd>
             <p>Reserved for future use.
         </dl>
-        <p>A `%' character followed by any other character is discarded, but the other character is printed (don't rely on this, as further format characters may be introduced). &nbsp;A `%' at the end of the format argument causes undefined behaviour since there is no following character. &nbsp;In some locales, it may hide your door keys, while in others it may remove the final page from the novel you are reading.<br>
-        <br>
-        The %m and %d directives support the <strong>#</strong> , <strong>0</strong> and <strong>+</strong> flags, but the other directives do not, even if they print numbers. &nbsp;Numeric directives that do not support these flags include <strong>G</strong>, <strong>U</strong>, <strong>b</strong>, <strong>D</strong>, <strong>k</strong> and <strong>n</strong>. The `-' format flag is supported and changes the alignment of a field from right-justified (which is the default) to left-justified.
+        <p>A `%' character followed by any other character is discarded, but the other character is printed (don't rely on this, as further format characters may be introduced). &nbsp;A `%' at the end of the format argument causes undefined behaviour since there is no following character. &nbsp;In some locales, it may hide your door keys, while in others it may remove the final page from the novel you are reading.
+        <p>The %m and %d directives support the <strong>#</strong> , <strong>0</strong> and <strong>+</strong> flags, but the other directives do not, even if they print numbers. &nbsp;Numeric directives that do not support these flags include <strong>G</strong>, <strong>U</strong>, <strong>b</strong>, <strong>D</strong>, <strong>k</strong> and <strong>n</strong>. The `-' format flag is supported and changes the alignment of a field from right-justified (which is the default) to left-justified.
         <p>See the <strong>UNUSUAL FILENAMES</strong> section for information about how unusual characters in filenames are handled.
       <dt>-prune
       <dd>
@@ -812,9 +806,8 @@
   <h2>EXAMPLES</h2>
   <pre><strong>find /tmp -name core -type f -print | xargs /bin/rm -f</strong></pre>
   <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them. &nbsp;Note that this will work incorrectly if there are any filenames containing newlines, single or double quotes, or spaces.
-  <p><strong>find /tmp -name core -type f -print0 | xargs -0 /bin/rm -f</strong><br>
-  <br>
-  Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them, processing filenames in such a way that file or directory names containing single or double quotes, spaces or newlines are correctly handled. &nbsp;The <strong>-name</strong> test comes before the <strong>-type</strong> test in order to avoid having to call <strong>stat(2)</strong> on every file.
+  <p><strong>find /tmp -name core -type f -print0 | xargs -0 /bin/rm -f</strong>
+  <p>Find files named <strong>core</strong> in or below the directory <strong>/tmp</strong> and delete them, processing filenames in such a way that file or directory names containing single or double quotes, spaces or newlines are correctly handled. &nbsp;The <strong>-name</strong> test comes before the <strong>-type</strong> test in order to avoid having to call <strong>stat(2)</strong> on every file.
   <pre><strong>find . -type f -exec file '{}' \;</strong></pre>
   <p>Runs `file' on every file in or below the current directory. &nbsp;Notice that the braces are enclosed in single quote marks to protect them from interpretation as shell script punctuation. &nbsp;The semicolon is similarly protected by the use of a backslash, though single quotes could have been used in that case also.
   <pre><strong>find / \( -perm -4000 -fprintf /root/suid.txt '%#m %u %p\n' \) , \</strong>
@@ -860,15 +853,13 @@
 </section>
 <section>
   <h2>EXIT STATUS</h2>
-  <p><strong>find</strong> exits with status 0 if all files are processed successfully, greater than 0 if errors occur. &nbsp; This is deliberately a very broad description, but if the return value is non-zero, you should not rely on the correctness of the results of <strong>find</strong>.<br>
-  <br>
-  When some error occurs, <strong>find</strong> may stop immediately, without completing all the actions specified. For example, some starting points may not have been examined or some pending program invocations for <strong>-exec ... {} +</strong> or <strong>-execdir ... {} +</strong> may not have been performed.
+  <p><strong>find</strong> exits with status 0 if all files are processed successfully, greater than 0 if errors occur. &nbsp; This is deliberately a very broad description, but if the return value is non-zero, you should not rely on the correctness of the results of <strong>find</strong>.
+  <p>When some error occurs, <strong>find</strong> may stop immediately, without completing all the actions specified. For example, some starting points may not have been examined or some pending program invocations for <strong>-exec ... {} +</strong> or <strong>-execdir ... {} +</strong> may not have been performed.
 </section>
 <section>
   <h2>SEE ALSO</h2>
-  <p><strong>locate</strong>(1), <strong>locatedb</strong>(5), <strong>updatedb</strong>(1), <strong>xargs</strong>(1), <strong>chmod</strong>(1), <strong>fnmatch</strong>(3), <strong>regex</strong>(7), <strong>stat</strong>(2), <strong>lstat</strong>(2), <strong>ls</strong>(1), <strong>printf</strong>(3), <strong>strftime</strong>(3), <strong>ctime</strong>(3)<br>
-  <br>
-  The full documentation for <strong>find</strong> is maintained as a Texinfo manual. &nbsp;If the <strong>info</strong> and <strong>find</strong> programs are properly installed at your site, the command <strong>info find</strong> should give you access to the complete manual.
+  <p><strong>locate</strong>(1), <strong>locatedb</strong>(5), <strong>updatedb</strong>(1), <strong>xargs</strong>(1), <strong>chmod</strong>(1), <strong>fnmatch</strong>(3), <strong>regex</strong>(7), <strong>stat</strong>(2), <strong>lstat</strong>(2), <strong>ls</strong>(1), <strong>printf</strong>(3), <strong>strftime</strong>(3), <strong>ctime</strong>(3)
+  <p>The full documentation for <strong>find</strong> is maintained as a Texinfo manual. &nbsp;If the <strong>info</strong> and <strong>find</strong> programs are properly installed at your site, the command <strong>info find</strong> should give you access to the complete manual.
 </section>
 <section>
   <h2>HISTORY</h2>
