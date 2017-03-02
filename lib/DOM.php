@@ -89,13 +89,33 @@ class DOM
             return 0;
         }
 
+        if (preg_match('~^[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent)) {
+            return 0;
+        }
+
+        if (preg_match('~^\S$~ui', $p->textContent)) {
+            return 100;
+        }
+
         if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $p->textContent)) {
             return 100;
         }
 
-        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $p->textContent)) {
-            return 0;
+        if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $p->textContent)) {
+            return 100;
         }
+
+        if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+            return 100;
+        }
+
+        if (mb_strlen($p->textContent) < 9) {
+            return 100;
+        }
+
+//        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $p->textContent)) {
+//            return 50;
+//        }
 
         return 50;
 
@@ -436,14 +456,33 @@ class DOM
 
             $certainty = self::isParagraphFollowedByIndentedDiv($child);
 
-            if (
-                $certainty > 50 ||
-                (
-                    $certainty > 0 &&
-                    $child->nextSibling &&
-                    self::isParagraphFollowedByIndentedDiv($child->nextSibling->nextSibling) !== 0
-                )
-            ) {
+            if ($certainty === 0) {
+                $go = false;
+            } elseif ($certainty > 50) {
+                $go = true;
+            } else {
+                $go        = false;
+                $nextP     = $child->nextSibling->nextSibling;
+                $iteration = 0;
+                while ($nextP) {
+                    $followingCertainty = self::isParagraphFollowedByIndentedDiv($nextP);
+                    if ($followingCertainty === 100) {
+                        $go = true;
+                        break;
+                    }
+                    if ($followingCertainty === 0) {
+                        break;
+                    }
+                    ++$iteration;
+                    if ($iteration > 2) {
+                        $go = true;
+                        break;
+                    }
+                    $nextP = $nextP->nextSibling->nextSibling;
+                }
+            }
+
+            if ($go) {
                 $dl = $child->ownerDocument->createElement('dl');
                 $child->parentNode->insertBefore($dl, $child);
                 $nextElementToCheck = $child;
