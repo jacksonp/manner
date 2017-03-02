@@ -84,12 +84,20 @@ class DOM
             return 0;
         }
 
-        // exclude e.g. "· <fork>" in dbus-daemon.1
-        if (!preg_match('~^[a-z]~ui', $div->textContent)) {
+        // Exclude sentences in $p
+        if (
+            preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent) ||
+            preg_match('~(\s[a-z]+){3,}[:\.]$~u', $p->textContent)
+        ) {
             return 0;
         }
 
-        if (preg_match('~^[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent)) {
+        if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+            return 100;
+        }
+
+        // exclude e.g. "· <fork>" in dbus-daemon.1
+        if (!preg_match('~^[a-z]~ui', $div->textContent)) {
             return 0;
         }
 
@@ -102,10 +110,6 @@ class DOM
         }
 
         if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $p->textContent)) {
-            return 100;
-        }
-
-        if (preg_match('~^(--?|\+)~u', $p->textContent)) {
             return 100;
         }
 
