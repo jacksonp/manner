@@ -4,14 +4,14 @@ declare(strict_types = 1);
 class DOM
 {
 
-    private static function extractContents(DOMElement $containerNode, DOMNode $appendNode)
+    private static function extractContents(DOMElement $target, DOMNode $source): void
     {
 
-        if ($appendNode instanceof DOMText) {
-            $containerNode->appendChild($appendNode);
+        if ($source instanceof DOMText) {
+            $target->appendChild($source);
         } else {
-            while ($child = $appendNode->firstChild) {
-                $containerNode->appendChild($child);
+            while ($child = $source->firstChild) {
+                $target->appendChild($child);
             }
         }
 
@@ -219,6 +219,18 @@ class DOM
 
         if ($myTag === 'div') {
 
+            if (
+                $element->childNodes->length === 1 &&
+                self::isTag($element->firstChild, 'p') &&
+                preg_match('~^\t~', $element->textContent)
+            ) {
+                $nextSibling = $element->nextSibling;
+                $pre         = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
+                self::extractContents($pre, $element->firstChild);
+                $element->parentNode->removeChild($element);
+                return $nextSibling;
+            }
+
             if (self::isTag($element->previousSibling, 'div') &&
                 $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
                 $element->childNodes->length === 1 &&
@@ -233,7 +245,6 @@ class DOM
                 }
                 $element->parentNode->removeChild($element);
                 return $nextSibling;
-
             }
 
             if ($element->parentNode->tagName === 'pre') {
