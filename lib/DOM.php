@@ -99,7 +99,7 @@ class DOM
                 return 100;
             }
 
-            if (!preg_match('~^[\(a-z]~ui', $div->textContent)) {
+            if (!preg_match('~^\s*[\(a-z]~ui', $div->textContent)) {
                 return 0;
             }
 
