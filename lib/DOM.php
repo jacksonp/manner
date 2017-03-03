@@ -78,50 +78,62 @@ class DOM
 
         if (
             !self::isTag($div, 'div') ||
-            strpos($div->getAttribute('class'), 'indent-') !== 0 ||  // doesn't start with indent-
+            strpos($div->getAttribute('class'), 'indent') !== 0 ||  // doesn't start with indent-
             !self::isTag($div->firstChild, 'p')
         ) {
             return 0;
         }
 
-        // Exclude sentences in $p
-        if (
-            preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent) ||
-            preg_match('~(\s[a-z]+){3,}[:\.]$~u', $p->textContent)
-        ) {
-            return 0;
-        }
+        if (strpos($div->getAttribute('class'), 'indent-') === 0) {
 
-        if (preg_match('~^(--?|\+)~u', $p->textContent)) {
-            return 100;
-        }
+            // Exclude sentences in $p
+            if (
+                preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent) ||
+                preg_match('~(\s[a-z]+){3,}[:\.]$~u', $p->textContent)
+            ) {
+                return 0;
+            }
 
-        // exclude e.g. "· <fork>" in dbus-daemon.1
-        if (!preg_match('~^[a-z]~ui', $div->textContent)) {
-            return 0;
-        }
+            if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+                return 100;
+            }
 
-        if (preg_match('~^\S$~ui', $p->textContent)) {
-            return 100;
-        }
+            // exclude e.g. "· <fork>" in dbus-daemon.1
+            if (!preg_match('~^[a-z]~ui', $div->textContent)) {
+                return 0;
+            }
 
-        if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $p->textContent)) {
-            return 100;
-        }
+            if (preg_match('~^\S$~ui', $p->textContent)) {
+                return 100;
+            }
 
-        if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $p->textContent)) {
-            return 100;
-        }
+            if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $p->textContent)) {
+                return 100;
+            }
 
-        if (mb_strlen($p->textContent) < 9) {
-            return 100;
-        }
+            if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $p->textContent)) {
+                return 100;
+            }
+
+            if (mb_strlen($p->textContent) < 9) {
+                return 100;
+            }
 
 //        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $p->textContent)) {
 //            return 50;
 //        }
 
-        return 50;
+            return 50;
+
+        } else {
+
+            if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+                return 100;
+            }
+
+            return 0;
+
+        }
 
     }
 
