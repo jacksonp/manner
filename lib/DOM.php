@@ -545,7 +545,7 @@ class DOM
                         }
                     }
                 }
-                if ($shouldBeList && in_array($dtChar, ['*', 'o', '·', '+'])) {
+                if ($shouldBeList && in_array($dtChar, ['*', 'o', '·', '+', '-'])) {
                     $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
                     if ($child->getAttribute('class') !== '') {
