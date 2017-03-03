@@ -38,9 +38,10 @@ class DOM
         return $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
     }
 
-    private static function isTag(?DOMNode $node, string $tag): bool
+    private static function isTag(?DOMNode $node, $tag): bool
     {
-        return $node && $node->nodeType === XML_ELEMENT_NODE && $node->tagName === $tag;
+        $tag = (array)$tag;
+        return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, $tag);
     }
 
     /*
@@ -78,8 +79,8 @@ class DOM
 
         if (
             !self::isTag($div, 'div') ||
-            strpos($div->getAttribute('class'), 'indent') !== 0 ||  // doesn't start with indent-
-            !self::isTag($div->firstChild, 'p')
+            strpos($div->getAttribute('class'), 'indent') !== 0 ||  // doesn't start with indent
+            !self::isTag($div->firstChild, ['p', 'div'])
         ) {
             return 0;
         }
