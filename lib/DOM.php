@@ -99,8 +99,7 @@ class DOM
                 return 100;
             }
 
-            // exclude e.g. "· <fork>" in dbus-daemon.1
-            if (!preg_match('~^[a-z]~ui', $div->textContent)) {
+            if (!preg_match('~^[\(a-z]~ui', $div->textContent)) {
                 return 0;
             }
 
