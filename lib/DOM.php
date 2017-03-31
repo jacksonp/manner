@@ -565,7 +565,11 @@ class DOM
                     foreach ($child->childNodes as $dlChild) {
                         if ($dlChild->tagName === 'dd') {
                             $li = $ul->appendChild($doc->createElement('li'));
-                            self::extractContents($li, $dlChild);
+                            if ($dlChild->childNodes->length === 1 && $dlChild->firstChild->tagName === 'p') {
+                                self::extractContents($li, $dlChild->firstChild);
+                            } else {
+                                self::extractContents($li, $dlChild);
+                            }
                         }
                     }
                     $element->removeChild($child);
