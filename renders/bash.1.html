@@ -1333,39 +1333,24 @@
   <h2>COMMAND EXECUTION ENVIRONMENT</h2>
   <p>The shell has an <em>execution environment</em>, which consists of the following:
   <ul>
-    <li>
-      <p>open files inherited by the shell at invocation, as modified by redirections supplied to the <strong>exec</strong> builtin
-    <li>
-      <p>the current working directory as set by <strong>cd</strong>, <strong>pushd</strong>, or <strong>popd</strong>, or inherited by the shell at invocation
-    <li>
-      <p>the file creation mode mask as set by <strong>umask</strong> or inherited from the shell's parent
-    <li>
-      <p>current traps set by <strong>trap</strong>
-    <li>
-      <p>shell parameters that are set by variable assignment or with <strong>set</strong> or inherited from the shell's parent in the environment
-    <li>
-      <p>shell functions defined during execution or inherited from the shell's parent in the environment
-    <li>
-      <p>options enabled at invocation (either by default or with command-line arguments) or by <strong>set</strong>
-    <li>
-      <p>options enabled by <strong>shopt</strong>
-    <li>
-      <p>shell aliases defined with <strong>alias</strong>
-    <li>
-      <p>various process IDs, including those of background jobs, the value of <strong>$$</strong>, and the value of <small><strong>PPID</strong></small>
+    <li>open files inherited by the shell at invocation, as modified by redirections supplied to the <strong>exec</strong> builtin
+    <li>the current working directory as set by <strong>cd</strong>, <strong>pushd</strong>, or <strong>popd</strong>, or inherited by the shell at invocation
+    <li>the file creation mode mask as set by <strong>umask</strong> or inherited from the shell's parent
+    <li>current traps set by <strong>trap</strong>
+    <li>shell parameters that are set by variable assignment or with <strong>set</strong> or inherited from the shell's parent in the environment
+    <li>shell functions defined during execution or inherited from the shell's parent in the environment
+    <li>options enabled at invocation (either by default or with command-line arguments) or by <strong>set</strong>
+    <li>options enabled by <strong>shopt</strong>
+    <li>shell aliases defined with <strong>alias</strong>
+    <li>various process IDs, including those of background jobs, the value of <strong>$$</strong>, and the value of <small><strong>PPID</strong></small>
   </ul>
   <p>When a simple command other than a builtin or shell function is to be executed, it is invoked in a separate execution environment that consists of the following. &nbsp;Unless otherwise noted, the values are inherited from the shell.
   <ul>
-    <li>
-      <p>the shell's open files, plus any modifications and additions specified by redirections to the command
-    <li>
-      <p>the current working directory
-    <li>
-      <p>the file creation mode mask
-    <li>
-      <p>shell variables and functions marked for export, along with variables exported for the command, passed in the environment
-    <li>
-      <p>traps caught by the shell are reset to the values inherited from the shell's parent, and traps ignored by the shell are ignored
+    <li>the shell's open files, plus any modifications and additions specified by redirections to the command
+    <li>the current working directory
+    <li>the file creation mode mask
+    <li>shell variables and functions marked for export, along with variables exported for the command, passed in the environment
+    <li>traps caught by the shell are reset to the values inherited from the shell's parent, and traps ignored by the shell are ignored
   </ul>
   <p>A command invoked in this separate environment cannot affect the shell's execution environment.
   <p>Command substitution, commands grouped with parentheses, and asynchronous commands are invoked in a subshell environment that is a duplicate of the shell environment, except that traps caught by the shell are reset to the values that the shell inherited from its parent at invocation. &nbsp;Builtin commands that are invoked as part of a pipeline are also executed in a subshell environment. &nbsp;Changes made to the subshell environment cannot affect the shell's execution environment.
@@ -3377,32 +3362,19 @@
   <h2>RESTRICTED SHELL</h2>
   <p>If <strong>bash</strong> is started with the name <strong>rbash</strong>, or the <strong>-r</strong> option is supplied at invocation, the shell becomes restricted. A restricted shell is used to set up an environment more controlled than the standard shell. It behaves identically to <strong>bash</strong> with the exception that the following are disallowed or not performed:
   <ul>
-    <li>
-      <p>changing directories with <strong>cd</strong>
-    <li>
-      <p>setting or unsetting the values of <small><strong>SHELL</strong>,</small> <small><strong>PATH</strong>,</small> <small><strong>ENV</strong>,</small> or <small><strong>BASH_ENV</strong></small>
-    <li>
-      <p>specifying command names containing <strong>/</strong>
-    <li>
-      <p>specifying a filename containing a <strong>/</strong> as an argument to the <strong>.</strong> builtin command
-    <li>
-      <p>specifying a filename containing a slash as an argument to the <strong>-p</strong> option to the <strong>hash</strong> builtin command
-    <li>
-      <p>importing function definitions from the shell environment at startup
-    <li>
-      <p>parsing the value of <small><strong>SHELLOPTS</strong></small> from the shell environment at startup
-    <li>
-      <p>redirecting output using the &gt;, &gt;|, &lt;&gt;, &gt;&amp;, &amp;&gt;, and &gt;&gt; redirection operators
-    <li>
-      <p>using the <strong>exec</strong> builtin command to replace the shell with another command
-    <li>
-      <p>adding or deleting builtin commands with the <strong>-f</strong> and <strong>-d</strong> options to the <strong>enable</strong> builtin command
-    <li>
-      <p>using the <strong>enable</strong> builtin command to enable disabled shell builtins
-    <li>
-      <p>specifying the <strong>-p</strong> option to the <strong>command</strong> builtin command
-    <li>
-      <p>turning off restricted mode with <strong>set +r</strong> or <strong>set +o restricted</strong>.
+    <li>changing directories with <strong>cd</strong>
+    <li>setting or unsetting the values of <small><strong>SHELL</strong>,</small> <small><strong>PATH</strong>,</small> <small><strong>ENV</strong>,</small> or <small><strong>BASH_ENV</strong></small>
+    <li>specifying command names containing <strong>/</strong>
+    <li>specifying a filename containing a <strong>/</strong> as an argument to the <strong>.</strong> builtin command
+    <li>specifying a filename containing a slash as an argument to the <strong>-p</strong> option to the <strong>hash</strong> builtin command
+    <li>importing function definitions from the shell environment at startup
+    <li>parsing the value of <small><strong>SHELLOPTS</strong></small> from the shell environment at startup
+    <li>redirecting output using the &gt;, &gt;|, &lt;&gt;, &gt;&amp;, &amp;&gt;, and &gt;&gt; redirection operators
+    <li>using the <strong>exec</strong> builtin command to replace the shell with another command
+    <li>adding or deleting builtin commands with the <strong>-f</strong> and <strong>-d</strong> options to the <strong>enable</strong> builtin command
+    <li>using the <strong>enable</strong> builtin command to enable disabled shell builtins
+    <li>specifying the <strong>-p</strong> option to the <strong>command</strong> builtin command
+    <li>turning off restricted mode with <strong>set +r</strong> or <strong>set +o restricted</strong>.
   </ul>
   <p>These restrictions are enforced after any startup files are read.
   <p>When a command that is found to be a shell script is executed (see <small><strong>COMMAND EXECUTION</strong></small> above), <strong>rbash</strong> turns off any restrictions in the shell spawned to execute the script.

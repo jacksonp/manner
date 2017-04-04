@@ -9,20 +9,13 @@
   <p>This is accomplished by logging the events provided by the Mono runtime through the profiling interface and periodically writing them to a file which can be later inspected with the command line <em>mprof-report</em> program or with a GUI (not developed yet).
   <p>The events collected include (among others):
   <ul class="indent-2">
-    <li>
-      <p>method enter and leave
-    <li>
-      <p>object allocation
-    <li>
-      <p>garbage collection
-    <li>
-      <p>JIT compilation
-    <li>
-      <p>metadata loading
-    <li>
-      <p>lock contention
-    <li>
-      <p>exceptions
+    <li>method enter and leave
+    <li>object allocation
+    <li>garbage collection
+    <li>JIT compilation
+    <li>metadata loading
+    <li>lock contention
+    <li>exceptions
   </ul>
   <p>In addition, the profiler can periodically collect info about all the objects present in the heap at the end of a garbage collection (this is called heap shot and currently implemented only for the sgen garbage collector). Another available profiler mode is the <em>sampling</em> or <em>statistical</em> mode: periodically the program is sampled and the information about what the program was busy with is saved. This allows to get information about the program behaviour without degrading its performance too much (usually less than 10%).
   <section>
@@ -49,62 +42,43 @@
     <p><strong>--profile=log:calls,alloc,output=output.mlpd,maxframes=32,calldepth=100</strong>
     <p>The following options can be used to modify this default behaviour. Each option is separated from the next by a <strong>,</strong> character, with no spaces and all the options are included after the <em>log:</em> profile module specifier.
     <ul class="indent-2">
-      <li>
-        <p><em>help</em>: display concise help info about each available option
-      <li>
-        <p><em>[no]alloc</em>: <em>noalloc</em> disables collecting object allocation info, <em>alloc</em> enables it if it was disabled by another option like <em>heapshot</em>.
-      <li>
-        <p><em>[no]calls</em>: <em>nocalls</em> disables collecting method enter and leave events. When this option is used at each object allocation and at some other events (like lock contentions and exception throws) a stack trace is collected by default. See the <em>maxframes</em> option to control this behaviour. <em>calls</em> enables method enter/leave events if they were disabled by another option like <em>heapshot</em>.
+      <li><em>help</em>: display concise help info about each available option
+      <li><em>[no]alloc</em>: <em>noalloc</em> disables collecting object allocation info, <em>alloc</em> enables it if it was disabled by another option like <em>heapshot</em>.
+      <li><em>[no]calls</em>: <em>nocalls</em> disables collecting method enter and leave events. When this option is used at each object allocation and at some other events (like lock contentions and exception throws) a stack trace is collected by default. See the <em>maxframes</em> option to control this behaviour. <em>calls</em> enables method enter/leave events if they were disabled by another option like <em>heapshot</em>.
       <li>
         <p><em>heapshot[=MODE]</em>: collect heap shot data at each major collection. The frequency of the heap shots can be changed with the <em>MODE</em> parameter. When this option is used allocation events and method enter/leave events are not recorded by default: if they are needed, they need to be enabled explicitly. The optional parameter <em>MODE</em> can modify the default heap shot frequency. heapshot can be used multiple times with different modes: in that case a heap shot is taken if either of the conditions are met. MODE can be one of:
         <div class="indent-2">
           <ul class="indent-2">
-            <li>
-              <p><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
-            <li>
-              <p><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
-            <li>
-              <p><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
+            <li><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
+            <li><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
+            <li><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
           </ul>
         </div>
-      <li>
-        <p><em>sample[=FREQ]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “100”. A value of zero for <em>FREQ</em> effectively disables sampling.
-      <li>
-        <p><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 32.
-      <li>
-        <p><em>maxsamples=NUM</em>: stop allocating reusable sample events once <em>NUM</em> events have been allocated (a value of zero for all intents and purposes means unlimited). By default, the value of this setting is the number of CPU cores multiplied by 1000. This is usually a good enough value for typical desktop and mobile apps. If you're losing too many samples due to this default (which is possible in apps with an unusually high amount of threads), you may want to tinker with this value to find a good balance between sample hit rate and performance impact on the app. The way it works is that sample events are enqueued for reuse after they're flushed to the output file; if a thread gets a sampling signal but there are no sample events in the reuse queue and the profiler has reached the maximum number of sample allocations, the sample gets dropped. So a higher number for this setting will increase the chance that a thread is able to collect a sample, but also necessarily means that there will be more work done by the profiler. You can run Mono with the <em>--stats</em> option to see statistics about sample events.
-      <li>
-        <p><em>calldepth=NUM</em>: ignore method enter/leave events when the call chain depth is bigger than NUM.
-      <li>
-        <p><em>zip</em>: automatically compress the output data in gzip format.
+      <li><em>sample[=FREQ]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “100”. A value of zero for <em>FREQ</em> effectively disables sampling.
+      <li><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 32.
+      <li><em>maxsamples=NUM</em>: stop allocating reusable sample events once <em>NUM</em> events have been allocated (a value of zero for all intents and purposes means unlimited). By default, the value of this setting is the number of CPU cores multiplied by 1000. This is usually a good enough value for typical desktop and mobile apps. If you're losing too many samples due to this default (which is possible in apps with an unusually high amount of threads), you may want to tinker with this value to find a good balance between sample hit rate and performance impact on the app. The way it works is that sample events are enqueued for reuse after they're flushed to the output file; if a thread gets a sampling signal but there are no sample events in the reuse queue and the profiler has reached the maximum number of sample allocations, the sample gets dropped. So a higher number for this setting will increase the chance that a thread is able to collect a sample, but also necessarily means that there will be more work done by the profiler. You can run Mono with the <em>--stats</em> option to see statistics about sample events.
+      <li><em>calldepth=NUM</em>: ignore method enter/leave events when the call chain depth is bigger than NUM.
+      <li><em>zip</em>: automatically compress the output data in gzip format.
       <li>
         <p><em>output=OUTSPEC</em>: instead of writing the profiling data to the output.mlpd file, substitute <em>%p</em> in <em>OUTSPEC</em> with the current process id and <em>%t</em> with the current date and time, then do according to <em>OUTSPEC</em>:
         <div class="indent-2">
           <ul class="indent-2">
-            <li>
-              <p>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
-            <li>
-              <p>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
-            <li>
-              <p>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
+            <li>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
+            <li>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
+            <li>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
           </ul>
         </div>
-      <li>
-        <p><em>report</em>: the profiling data is sent to mprof-report, which will print a summary report. This is equivalent to the option: <strong>output=mprof-report&nbsp;-</strong>. If the <em>output</em> option is specified as well, the report will be written to the output file instead of the console.
+      <li><em>report</em>: the profiling data is sent to mprof-report, which will print a summary report. This is equivalent to the option: <strong>output=mprof-report&nbsp;-</strong>. If the <em>output</em> option is specified as well, the report will be written to the output file instead of the console.
       <li>
         <p><em>port=PORT</em>: specify the tcp/ip port to use for the listening command server. Currently not available for windows. This server is started for example when heapshot=ondemand is used: it will read commands line by line. The following commands are available:
         <div class="indent-2">
           <ul class="indent-2">
-            <li>
-              <p><em>heapshot</em>: perform a heapshot as soon as possible
+            <li><em>heapshot</em>: perform a heapshot as soon as possible
           </ul>
         </div>
-      <li>
-        <p><em>nocounters</em>: disables sampling of runtime and performance counters, which is normally done every 1 second.
-      <li>
-        <p><em>coverage</em>: collect code coverage data. This implies enabling the <em>calls</em> option.
-      <li>
-        <p><em>onlycoverage</em>: can only be used with <em>coverage</em>. This disables most other events so that the profiler mostly only collects coverage data.
+      <li><em>nocounters</em>: disables sampling of runtime and performance counters, which is normally done every 1 second.
+      <li><em>coverage</em>: collect code coverage data. This implies enabling the <em>calls</em> option.
+      <li><em>onlycoverage</em>: can only be used with <em>coverage</em>. This disables most other events so that the profiler mostly only collects coverage data.
     </ul>
   </section>
   <section>
@@ -129,31 +103,24 @@
     <p><strong>--method-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
     <ul class="indent-2">
-      <li>
-        <p><em>self</em>: amount of time spent in the method itself and not in its callees
-      <li>
-        <p><em>calls</em>: the number of method invocations
-      <li>
-        <p><em>total</em>: the total time spent in the method.
+      <li><em>self</em>: amount of time spent in the method itself and not in its callees
+      <li><em>calls</em>: the number of method invocations
+      <li><em>total</em>: the total time spent in the method.
     </ul>
     <p>Object allocation lists are sorted by default depending on the total amount of bytes used by each type.
     <p>To change the sort order of object allocations, use the option:
     <p><strong>--alloc-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
     <ul class="indent-2">
-      <li>
-        <p><em>count</em>: the number of allocated objects of the given type
-      <li>
-        <p><em>bytes</em>: the total number of bytes used by objects of the given type
+      <li><em>count</em>: the number of allocated objects of the given type
+      <li><em>bytes</em>: the total number of bytes used by objects of the given type
     </ul>
     <p>To change the sort order of counters, use the option:
     <p><strong>--counters-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
     <ul class="indent-2">
-      <li>
-        <p><em>time</em>: sort values by time then category
-      <li>
-        <p><em>category</em>: sort values by category then time
+      <li><em>time</em>: sort values by time then category
+      <li><em>category</em>: sort values by category then time
     </ul>
   </section>
   <section>
@@ -162,38 +129,22 @@
     <p><strong>--reports=R1[,R2...]</strong>
     <p>where the report names R1, R2 etc. can be:
     <ul class="indent-2">
-      <li>
-        <p><em>header</em>: information about program startup and profiler version
-      <li>
-        <p><em>jit</em>: JIT compiler information
-      <li>
-        <p><em>sample</em>: statistical sampling information
-      <li>
-        <p><em>gc</em>: garbage collection information
-      <li>
-        <p><em>alloc</em>: object allocation information
-      <li>
-        <p><em>call</em>: method profiling information
-      <li>
-        <p><em>metadata</em>: metadata events like image loads
-      <li>
-        <p><em>exception</em>: exception throw and handling information
-      <li>
-        <p><em>monitor</em>: lock contention information
-      <li>
-        <p><em>thread</em>: thread information
-      <li>
-        <p><em>domain</em>: app domain information
-      <li>
-        <p><em>context</em>: remoting context information
-      <li>
-        <p><em>heapshot</em>: live heap usage at heap shots
-      <li>
-        <p><em>counters</em>: counters samples
-      <li>
-        <p><em>coverage</em>: code coverage data
-      <li>
-        <p><em>stats</em>: event statistics
+      <li><em>header</em>: information about program startup and profiler version
+      <li><em>jit</em>: JIT compiler information
+      <li><em>sample</em>: statistical sampling information
+      <li><em>gc</em>: garbage collection information
+      <li><em>alloc</em>: object allocation information
+      <li><em>call</em>: method profiling information
+      <li><em>metadata</em>: metadata events like image loads
+      <li><em>exception</em>: exception throw and handling information
+      <li><em>monitor</em>: lock contention information
+      <li><em>thread</em>: thread information
+      <li><em>domain</em>: app domain information
+      <li><em>context</em>: remoting context information
+      <li><em>heapshot</em>: live heap usage at heap shots
+      <li><em>counters</em>: counters samples
+      <li><em>coverage</em>: code coverage data
+      <li><em>stats</em>: event statistics
     </ul>
     <p>It is possible to limit some of the data displayed to a timeframe of the program execution with the option:
     <p><strong>--time=FROM-TO</strong>
@@ -211,10 +162,8 @@
     <p>The reported info (if available in the data file), will be class name, size, creation time, stack trace of creation (with the <em>--traces</em> option), etc. If heapshot data is available it will be possible to also track what other objects reference one of the listed addresses.
     <p>The object addresses can be gathered either from the profiler report in some cases (like in the monitor lock report), from the live application or they can be selected with the <em>--find=FINDSPEC</em> option. FINDSPEC can be one of the following:
     <ul class="indent-2">
-      <li>
-        <p><em>S:SIZE</em>: where the object is selected if its size is at least <em>SIZE</em>
-      <li>
-        <p><em>T:NAME</em>: where the object is selected if <em>NAME</em> partially matches its class name
+      <li><em>S:SIZE</em>: where the object is selected if its size is at least <em>SIZE</em>
+      <li><em>T:NAME</em>: where the object is selected if <em>NAME</em> partially matches its class name
     </ul>
     <p>This option can be specified multiple times with one of the different kinds of FINDSPEC. For example, the following:
     <p><strong>--find=S:10000&nbsp;--find=T:Byte[]</strong>
