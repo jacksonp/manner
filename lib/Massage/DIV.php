@@ -21,28 +21,7 @@ class Massage_DIV
         return
             DOM::isTag($div, 'div') &&
             $div->getAttribute('class') === 'indent-4' &&
-            in_array(mb_substr(ltrim($div->textContent), 0, 1), Massage_UL::CHAR_PREFIXES);
-    }
-
-    private static function getFirstNonEmptyTextNode(?DOMNode $domNode): ?DOMText
-    {
-
-        if ($domNode instanceof DOMText) {
-            if (trim($domNode->textContent) === '') {
-                $domNode->parentNode->removeChild($domNode);
-                return null;
-            }
-            return $domNode;
-        }
-
-        foreach ($domNode->childNodes as $node) {
-            if ($el = self::getFirstNonEmptyTextNode($node)) {
-                return $el;
-            }
-        }
-
-        return null;
-
+            Massage_UL::startsWithBullet($div->textContent);
     }
 
     static function postProcess(DOMElement $div): ?DOMNode
@@ -77,10 +56,10 @@ class Massage_DIV
                     DOM::extractContents($li, $div);
                 }
 
-                $firstTextNode = self::getFirstNonEmptyTextNode($li);
-                if ($firstTextNode) {
-                    $firstTextNode->textContent = ltrim(mb_substr(ltrim($firstTextNode->textContent), 1));
-                }
+                Massage_UL::pruneBulletChar($li);
+
+                Massage_UL::checkLIForLIs($li);
+
                 $div->parentNode->removeChild($div);
                 $div = self::getNextNonBRNode($ul, true);
 

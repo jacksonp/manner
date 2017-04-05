@@ -33,7 +33,7 @@ class DOM
         }
     }
 
-    private static function isInlineElement(?DOMNode $node): bool
+    static function isInlineElement(?DOMNode $node): bool
     {
         return $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
     }

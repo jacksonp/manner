@@ -4,13 +4,13 @@ declare(strict_types=1);
 class Massage_Block
 {
 
-    static function removeAdjacentEmptyTextNodesAndBRs(?DOMElement $blockElement)
+    static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
         self::removePreviousEmptyTextNodesAndBRs($blockElement);
         self::removeFollowingEmptyTextNodesAndBRs($blockElement);
     }
 
-    static function removePreviousEmptyTextNodesAndBRs(?DOMElement $blockElement)
+    static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
 
         if (is_null($blockElement)) {
@@ -21,7 +21,7 @@ class Massage_Block
             $previousSibling = $blockElement->previousSibling and
             (
                 Node::isTextAndEmpty($previousSibling) ||
-                ($blockElement->tagName !== 'div' && DOM::isTag($previousSibling, 'br'))
+                (DOM::isTag($previousSibling, 'br'))
             )
         ) {
             $blockElement->parentNode->removeChild($previousSibling);
@@ -29,7 +29,7 @@ class Massage_Block
 
     }
 
-    static function removeFollowingEmptyTextNodesAndBRs(?DOMElement $blockElement)
+    static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
 
         if (is_null($blockElement)) {
@@ -40,7 +40,7 @@ class Massage_Block
             $nextSibling = $blockElement->nextSibling and
             (
                 Node::isTextAndEmpty($nextSibling) ||
-                ($blockElement->tagName !== 'div' && DOM::isTag($nextSibling, 'br'))
+                (DOM::isTag($nextSibling, 'br'))
             )
         ) {
             $blockElement->parentNode->removeChild($nextSibling);
