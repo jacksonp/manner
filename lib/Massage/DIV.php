@@ -21,6 +21,7 @@ class Massage_DIV
         return
             DOM::isTag($div, 'div') &&
             $div->getAttribute('class') === 'indent-4' &&
+            !DOM::isTag($div->firstChild, 'pre') &&
             Massage_UL::startsWithBullet($div->textContent);
     }
 
@@ -35,7 +36,7 @@ class Massage_DIV
 
             $nextNonBR = self::getNextNonBRNode($div);
 
-            if (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR)) {
+            if (is_null($nextNonBR) || (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR))) {
 
                 /* @var DOMElement $ul */
                 $ul = $doc->createElement('ul');
@@ -60,6 +61,8 @@ class Massage_DIV
                     $div = self::getNextNonBRNode($ul, true);
 
                 }
+
+                Massage_UL::removeLonePs($ul);
 
                 return $ul->nextSibling;
 
@@ -87,6 +90,8 @@ class Massage_DIV
                     $div->parentNode->removeChild($div);
 
                     Massage_UL::pruneBulletChar($ul->firstChild);
+
+                    Massage_UL::removeLonePs($ul);
 
                     return $ul->nextSibling;
 

@@ -8,7 +8,7 @@ class Massage_UL
 
     private static function getBulletRegex(): string
     {
-        return '~^\s*[' . preg_quote(implode('', Massage_UL::CHAR_PREFIXES), '~') . '](\s|$)~u';
+        return '~^\s*[' . preg_quote(implode('', Massage_UL::CHAR_PREFIXES), '~') . ']\s~u';
     }
 
     static function startsWithBullet(string $text)
@@ -21,6 +21,18 @@ class Massage_UL
         $firstTextNode = self::getFirstNonEmptyTextNode($li);
         if ($firstTextNode) {
             $firstTextNode->textContent = preg_replace(self::getBulletRegex(), '', $firstTextNode->textContent);
+        }
+    }
+
+    static function removeLonePs(DOMElement $ul)
+    {
+        $child = $ul->firstChild;
+        while ($child) {
+            if ($child->childNodes->length === 1 && DOM::isTag($child->firstChild, 'p')) {
+                DOM::extractContents($child, $child->firstChild);
+                $child->removeChild($child->firstChild);
+            }
+            $child = $child->nextSibling;
         }
     }
 
@@ -41,7 +53,8 @@ class Massage_UL
             ) {
 
                 $foundInnerLI = true;
-                $newLI        = $li->ownerDocument->createElement('li');
+
+                $newLI = $li->ownerDocument->createElement('li');
                 while ($li->firstChild) {
                     if ($li->firstChild === $child) {
                         $li->removeChild($child); // remove the <br>
@@ -52,9 +65,30 @@ class Massage_UL
                 $li->parentNode->insertBefore($newLI, $li);
                 self::pruneBulletChar($li);
                 $child = $li->firstChild;
+
+            } elseif (
+                DOM::isTag($child, 'p') &&
+                self::startsWithBullet($child->textContent)
+            ) {
+
+                $foundInnerLI = true;
+
+                $newLI = $li->ownerDocument->createElement('li');
+                while ($li->firstChild) {
+                    if ($li->firstChild === $child) {
+                        break;
+                    }
+                    $newLI->appendChild($li->firstChild);
+                }
+                $li->parentNode->insertBefore($newLI, $li);
+                self::pruneBulletChar($li);
+                $child = $li->firstChild;
+
             } else {
                 $child = $child->nextSibling;
             }
+
+
         } while ($child);
 
         return $foundInnerLI;
