@@ -95,12 +95,13 @@
     <p>Schedule files to be version controlled and added to the repository.
     <p>The files will be added to the repository at the next commit. To undo an add before that, see <strong>hg forget</strong>.
     <p>If no names are given, add all files to the repository (except files matching <strong>.hgignore</strong>).
-    <p>Examples:
-    <div class="indent-4">
-      <ul class="indent-2">
-        <li>
-          <p>New (unknown) files are added automatically by <strong>hg add</strong>:
-          <pre><code>$ ls
+    <dl>
+      <dt>Examples:
+      <dd>
+        <ul class="indent-2">
+          <li>
+            <p>New (unknown) files are added automatically by <strong>hg add</strong>:
+            <pre><code>$ ls
 foo.c
 $ hg status
 ? foo.c
@@ -108,9 +109,9 @@ $ hg add
 adding foo.c
 $ hg status
 A foo.c</code></pre>
-        <li>
-          <p>Specific files to be added can be specified:
-          <pre><code>$ ls
+          <li>
+            <p>Specific files to be added can be specified:
+            <pre><code>$ ls
 bar.c  foo.c
 $ hg status
 ? bar.c
@@ -119,8 +120,8 @@ $ hg add bar.c
 $ hg status
 A bar.c
 ? foo.c</code></pre>
-      </ul>
-    </div>
+        </ul>
+    </dl>
     <p>Returns 0 if all files are successfully added.
     <p>Options:
     <dl>
@@ -146,12 +147,13 @@ A bar.c
     <p>Add all new files and remove all missing files from the repository.
     <p>Unless names are given, new files are ignored if they match any of the patterns in <strong>.hgignore</strong>. As with add, these changes take effect at the next commit.
     <p>Use the -s/--similarity option to detect renamed files. This option takes a percentage between 0 (disabled) and 100 (files must be identical) as its parameter. With a parameter greater than 0, this compares every removed file with every added file and records those similar enough as renames. Detecting renamed files this way can be expensive. After using this option, <strong>hg status -C</strong> can be used to check which files were identified as moved or renamed. If not specified, -s/--similarity defaults to 100 and only renames of identical files are detected.
-    <p>Examples:
-    <div class="indent-4">
-      <ul class="indent-2">
-        <li>
-          <p>A number of files (bar.c and foo.c) are new, while foobar.c has been removed (without using <strong>hg remove</strong>) from the repository:
-          <pre><code>$ ls
+    <dl>
+      <dt>Examples:
+      <dd>
+        <ul class="indent-2">
+          <li>
+            <p>A number of files (bar.c and foo.c) are new, while foobar.c has been removed (without using <strong>hg remove</strong>) from the repository:
+            <pre><code>$ ls
 bar.c foo.c
 $ hg status
 ! foobar.c
@@ -165,9 +167,9 @@ $ hg status
 A bar.c
 A foo.c
 R foobar.c</code></pre>
-        <li>
-          <p>A file foobar.c was moved to foo.c without using <strong>hg rename</strong>. Afterwards, it was edited slightly:
-          <pre><code>$ ls
+          <li>
+            <p>A file foobar.c was moved to foo.c without using <strong>hg rename</strong>. Afterwards, it was edited slightly:
+            <pre><code>$ ls
 foo.c
 $ hg status
 ! foobar.c
@@ -180,8 +182,8 @@ $ hg status -C
 A foo.c
   foobar.c
 R foobar.c</code></pre>
-      </ul>
-    </div>
+        </ul>
+    </dl>
     <p>Returns 0 if all files are successfully added.
     <p>Options:
     <dl>
@@ -6226,36 +6228,37 @@ dropmissing = True</code></pre>
     </div>
     <p>If you use --outgoing, this command will abort if there are ambiguous outgoing revisions. For example, if there are multiple branches containing outgoing revisions.
     <p>Use "min(outgoing() and ::.)" or similar revset specification instead of --outgoing to specify edit target revision exactly in such ambiguous situation. See <strong>hg help revsets</strong> for detail about selecting revisions.
-    <p>Examples:
-    <div class="indent-4">
-      <ul class="indent-2">
-        <li>
-          <p>A number of changes have been made. Revision 3 is no longer needed.
-          <p>Start history editing from revision 3:
-          <pre><code>hg histedit -r 3</code></pre>
-          <p>An editor opens, containing the list of revisions, with specific actions specified:
-          <pre><code>pick 5339bf82f0ca 3 Zworgle the foobar
+    <dl>
+      <dt>Examples:
+      <dd>
+        <ul class="indent-2">
+          <li>
+            <p>A number of changes have been made. Revision 3 is no longer needed.
+            <p>Start history editing from revision 3:
+            <pre><code>hg histedit -r 3</code></pre>
+            <p>An editor opens, containing the list of revisions, with specific actions specified:
+            <pre><code>pick 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 0a9639fcda9d 5 Morgify the cromulancy</code></pre>
-          <p>Additional information about the possible actions to take appears below the list of revisions.
-          <p>To remove revision 3 from the history, its action (at the beginning of the relevant line) is changed to 'drop':
-          <pre><code>drop 5339bf82f0ca 3 Zworgle the foobar
+            <p>Additional information about the possible actions to take appears below the list of revisions.
+            <p>To remove revision 3 from the history, its action (at the beginning of the relevant line) is changed to 'drop':
+            <pre><code>drop 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 0a9639fcda9d 5 Morgify the cromulancy</code></pre>
-        <li>
-          <p>A number of changes have been made. Revision 2 and 4 need to be swapped.
-          <p>Start history editing from revision 2:
-          <pre><code>hg histedit -r 2</code></pre>
-          <p>An editor opens, containing the list of revisions, with specific actions specified:
-          <pre><code>pick 252a1af424ad 2 Blorb a morgwazzle
+          <li>
+            <p>A number of changes have been made. Revision 2 and 4 need to be swapped.
+            <p>Start history editing from revision 2:
+            <pre><code>hg histedit -r 2</code></pre>
+            <p>An editor opens, containing the list of revisions, with specific actions specified:
+            <pre><code>pick 252a1af424ad 2 Blorb a morgwazzle
 pick 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog</code></pre>
-          <p>To swap revision 2 and 4, its lines are swapped in the editor:
-          <pre><code>pick 8ef592ce7cc4 4 Bedazzle the zerlog
+            <p>To swap revision 2 and 4, its lines are swapped in the editor:
+            <pre><code>pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 5339bf82f0ca 3 Zworgle the foobar
 pick 252a1af424ad 2 Blorb a morgwazzle</code></pre>
-      </ul>
-    </div>
+        </ul>
+    </dl>
     <p>Returns 0 on success, 1 if user intervention is required (not only for intentional "edit" command, but also for resolving unexpected conflicts).
     <p>Options:
     <dl>

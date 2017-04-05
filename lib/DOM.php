@@ -17,7 +17,7 @@ class DOM
 
     }
 
-    private static function setIndentClass(DOMElement $remainingNode, DOMElement $leavingNode): void
+    static function setIndentClass(DOMElement $remainingNode, DOMElement $leavingNode): void
     {
         $remainingNodeClass = $remainingNode->getAttribute('class');
         $leavingNodeClass   = $leavingNode->getAttribute('class');
@@ -80,7 +80,7 @@ class DOM
         if (
             !self::isTag($div, 'div') ||
             strpos($div->getAttribute('class'), 'indent') !== 0 ||  // doesn't start with indent
-            !self::isTag($div->firstChild, ['p', 'div'])
+            !self::isTag($div->firstChild, ['p', 'div', 'ul'])
         ) {
             return 0;
         }

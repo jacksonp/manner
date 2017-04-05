@@ -37,6 +37,7 @@ class Massage_DIV
 
             if (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR)) {
 
+                /* @var DOMElement $ul */
                 $ul = $doc->createElement('ul');
                 $ul = $div->parentNode->insertBefore($ul, $div);
 
@@ -70,6 +71,7 @@ class Massage_DIV
                     Massage_UL::checkElementForLIs($div->firstChild)
                 ) {
 
+                    /* @var DOMElement $ul */
                     $ul = $doc->createElement('ul');
                     $ul = $div->parentNode->insertBefore($ul, $div);
 
