@@ -1,10 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class DOM
 {
 
-    private static function extractContents(DOMElement $target, DOMNode $source): void
+    static function extractContents(DOMElement $target, DOMNode $source): void
     {
 
         if ($source instanceof DOMText) {
@@ -38,7 +38,7 @@ class DOM
         return $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
     }
 
-    private static function isTag(?DOMNode $node, $tag): bool
+    static function isTag(?DOMNode $node, $tag): bool
     {
         $tag = (array)$tag;
         return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, $tag);
@@ -163,19 +163,7 @@ class DOM
             $element->removeChild($firstChild);
         }
 
-        while (
-            $previousSibling = $element->previousSibling and
-            (Node::isTextAndEmpty($previousSibling) || self::isTag($previousSibling, 'br'))
-        ) {
-            $element->parentNode->removeChild($previousSibling);
-        }
-
-        while (
-            $nextSibling = $element->nextSibling and
-            (Node::isTextAndEmpty($nextSibling) || self::isTag($nextSibling, 'br'))
-        ) {
-            $element->parentNode->removeChild($nextSibling);
-        }
+        Massage_Block::removeAdjacentEmptyTextNodesAndBRs($element);
 
         while (
             $lastChild = $element->lastChild and
@@ -191,9 +179,9 @@ class DOM
             // TODO: could also do <p>s here, but need to handle cases like amaddclient.8 where the option handling then gets messed up.
             if ($myTag === 'div' && in_array($firstChild->tagName, ['dl'])) {
                 self::setIndentClass($firstChild, $element);
-                $nextSibling = $element->nextSibling;
                 Node::remove($element);
-                return $nextSibling;
+                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
+                return $firstChild->nextSibling;
             }
 
             // Could sum indents if both elements have indent-X
@@ -219,23 +207,37 @@ class DOM
 
         if ($myTag === 'div') {
 
+            $firstChild = $element->firstChild;
+
+            if (!$firstChild) {
+                $previousSibling = $element->previousSibling;
+                $nextSibling     = $element->nextSibling;
+                $element->parentNode->removeChild($element);
+                if ($previousSibling) {
+                    Massage_Block::removeFollowingEmptyTextNodesAndBRs($previousSibling);
+                    return $previousSibling->nextSibling;
+                } else {
+                    return $nextSibling;
+                }
+            }
+
             if (
                 $element->childNodes->length === 1 &&
-                self::isTag($element->firstChild, 'p') &&
+                self::isTag($firstChild, 'p') &&
                 preg_match('~^\t~', $element->textContent)
             ) {
-                $nextSibling = $element->nextSibling;
-                $pre         = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
-                self::extractContents($pre, $element->firstChild);
+                $pre = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
+                self::extractContents($pre, $firstChild);
                 $element->parentNode->removeChild($element);
-                return $nextSibling;
+                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($pre);
+                return $pre->nextSibling;
             }
 
             if (self::isTag($element->previousSibling, 'div') &&
                 $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
                 $element->childNodes->length === 1 &&
                 $element->previousSibling->childNodes->length === 1 &&
-                self::isTag($element->firstChild, 'p') &&
+                self::isTag($firstChild, 'p') &&
                 self::isTag($element->previousSibling->firstChild, 'p')
             ) {
                 $nextSibling = $element->nextSibling;
@@ -255,14 +257,16 @@ class DOM
                 Node::remove($element);
                 return $nextSibling;
             }
-        }
 
-        if ($myTag === 'div' && $element->getAttribute('class') === 'indent') {
-            if (in_array($element->parentNode->tagName, ['dd'])) {
-                $nextSibling = $element->nextSibling;
-                Node::remove($element);
-                return $nextSibling;
+            if ($element->getAttribute('class') === 'indent') {
+                if (in_array($element->parentNode->tagName, ['dd'])) {
+                    $nextSibling = Massage_DIV::getNextNonBRNode($element);
+                    Node::remove($element);
+                    Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
+                    return $nextSibling;
+                }
             }
+
         }
 
         if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {
@@ -413,13 +417,24 @@ class DOM
         $child = $element->firstChild;
         while ($child) {
 
-            if (
-                $child->nodeType === XML_ELEMENT_NODE &&
-                in_array($child->tagName,
-                    ['section', 'p', 'dl', 'dt', 'dd', 'div', 'pre', 'table', 'tr', 'th', 'td'])
-            ) {
-                $child = self::massage($child);
-                continue;
+            if ($child->nodeType === XML_ELEMENT_NODE) {
+
+                $myTag = $child->tagName;
+
+                if (in_array($myTag, ['section', 'p', 'dl', 'dt', 'dd', 'div', 'pre', 'table', 'tr', 'th', 'td'])) {
+                    $child = self::massage($child);
+                    continue;
+                }
+
+                if (in_array($myTag, ['h2', 'h3'])) {
+                    while (
+                        $nextSibling = $child->nextSibling and
+                        (Node::isTextAndEmpty($nextSibling) || self::isTag($nextSibling, 'br'))
+                    ) {
+                        $element->removeChild($nextSibling);
+                    }
+                }
+
             }
 
             // NB: we don't want to remove the space in the <em> in cases e.g.:
@@ -530,6 +545,7 @@ class DOM
                     $child->parentNode->removeChild($child->nextSibling);
                     $child->parentNode->removeChild($child);
                 }
+                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($dl);
                 $child = $dl->nextSibling;
             } else {
                 $child = $child->nextSibling;
@@ -556,7 +572,7 @@ class DOM
                         }
                     }
                 }
-                if ($shouldBeList && in_array($dtChar, ['*', 'o', '·', '+', '-'])) {
+                if ($shouldBeList && in_array($dtChar, Massage_UL::CHAR_PREFIXES)) {
                     $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
                     if ($child->getAttribute('class') !== '') {
@@ -578,6 +594,15 @@ class DOM
                 }
             }
             $child = $child->nextSibling;
+        }
+
+        $child = $element->firstChild;
+        while ($child) {
+            if (self::isTag($child, 'div')) {
+                $child = Massage_DIV::postProcess($child);
+            } else {
+                $child = $child->nextSibling;
+            }
         }
 
         return self::massageNode($element);
