@@ -24,18 +24,24 @@ class Massage_UL
         }
     }
 
-    static function checkLIForLIs(DOMElement $li)
+    static function checkElementForLIs(DOMElement $li): bool
     {
+
+        $foundInnerLI = false;
 
         $child = $li->firstChild;
 
         do {
+
             if (
                 DOM::isTag($child, 'br') &&
+                $child->nextSibling &&
                 ($child->nextSibling instanceof DOMText || DOM::isInlineElement($child->nextSibling)) &&
                 self::startsWithBullet($child->nextSibling->textContent)
             ) {
-                $newLI = $li->ownerDocument->createElement('li');
+
+                $foundInnerLI = true;
+                $newLI        = $li->ownerDocument->createElement('li');
                 while ($li->firstChild) {
                     if ($li->firstChild === $child) {
                         $li->removeChild($child); // remove the <br>
@@ -50,6 +56,8 @@ class Massage_UL
                 $child = $child->nextSibling;
             }
         } while ($child);
+
+        return $foundInnerLI;
 
     }
 

@@ -29,43 +29,68 @@ class Massage_DIV
 
         $doc = $div->ownerDocument;
 
-        $nextNonBR = self::getNextNonBRNode($div);
-
-        if (!DOM::isTag($nextNonBR, 'div')) {
-            return $div->nextSibling;
-        }
-
         /* @var DOMElement $nextNonBR */
 
-        if (
-            self::isPotentialLI($div) &&
-            self::isPotentialLI($nextNonBR)
-        ) {
+        if (self::isPotentialLI($div)) {
 
-            $ul = $doc->createElement('ul');
-            $ul = $div->parentNode->insertBefore($ul, $div);
+            $nextNonBR = self::getNextNonBRNode($div);
 
-            while (self::isPotentialLI($div)) {
+            if (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR)) {
 
-                /* @var DOMElement $li */
-                $li = $ul->appendChild($doc->createElement('li'));
+                $ul = $doc->createElement('ul');
+                $ul = $div->parentNode->insertBefore($ul, $div);
 
-                if ($div->childNodes->length === 1 && $div->firstChild->tagName === 'p') {
-                    DOM::extractContents($li, $div->firstChild);
-                } else {
-                    DOM::extractContents($li, $div);
+                while (self::isPotentialLI($div)) {
+
+                    /* @var DOMElement $li */
+                    $li = $ul->appendChild($doc->createElement('li'));
+
+                    if ($div->childNodes->length === 1 && $div->firstChild->tagName === 'p') {
+                        DOM::extractContents($li, $div->firstChild);
+                    } else {
+                        DOM::extractContents($li, $div);
+                    }
+
+                    Massage_UL::pruneBulletChar($li);
+
+                    Massage_UL::checkElementForLIs($li);
+
+                    $div->parentNode->removeChild($div);
+                    $div = self::getNextNonBRNode($ul, true);
+
                 }
 
-                Massage_UL::pruneBulletChar($li);
+                return $ul->nextSibling;
 
-                Massage_UL::checkLIForLIs($li);
+            } else {
 
-                $div->parentNode->removeChild($div);
-                $div = self::getNextNonBRNode($ul, true);
+                if (
+                    $div->childNodes->length === 1 &&
+                    Dom::isTag($div->firstChild, 'p') &&
+                    Massage_UL::checkElementForLIs($div->firstChild)
+                ) {
+
+                    $ul = $doc->createElement('ul');
+                    $ul = $div->parentNode->insertBefore($ul, $div);
+
+                    while (DOM::isTag($div->firstChild, 'li')) {
+                        $ul->appendChild($div->firstChild);
+                    }
+
+                    /* @var DOMElement $li */
+                    $li = $ul->appendChild($doc->createElement('li'));
+
+                    DOM::extractContents($li, $div->firstChild);
+
+                    $div->parentNode->removeChild($div);
+
+                    Massage_UL::pruneBulletChar($ul->firstChild);
+
+                    return $ul->nextSibling;
+
+                }
 
             }
-
-            return $ul->nextSibling;
 
         }
 

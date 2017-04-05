@@ -35,7 +35,7 @@ class DOM
 
     static function isInlineElement(?DOMNode $node): bool
     {
-        return $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
+        return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
     }
 
     static function isTag(?DOMNode $node, $tag): bool
