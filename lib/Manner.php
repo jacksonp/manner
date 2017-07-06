@@ -48,14 +48,14 @@ class Manner
 
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',
-            '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">',
+            '<meta charset="utf-8">',
             $manPageInfo,
             '<title>', htmlspecialchars($title), '</title>',
             $html;
         } else {
             $fp = fopen($outputFile, 'w');
             fwrite($fp, '<!DOCTYPE html>');
-            fwrite($fp, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">');
+            fwrite($fp, '<meta charset="utf-8">');
             fwrite($fp, $manPageInfo);
             fwrite($fp, '<title>' . htmlspecialchars($title) . '</title>');
             fwrite($fp, $html);
