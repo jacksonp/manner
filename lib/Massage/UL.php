@@ -76,6 +76,7 @@ class Massage_UL
                 $newLI = $li->ownerDocument->createElement('li');
                 while ($li->firstChild) {
                     if ($li->firstChild === $child) {
+                        Node::remove($child); // remove the <p>
                         break;
                     }
                     $newLI->appendChild($li->firstChild);
