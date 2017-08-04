@@ -233,22 +233,6 @@ class DOM
                 return $pre->nextSibling;
             }
 
-            if (self::isTag($element->previousSibling, 'div') &&
-                $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
-                $element->childNodes->length === 1 &&
-                $element->previousSibling->childNodes->length === 1 &&
-                self::isTag($firstChild, 'p') &&
-                self::isTag($element->previousSibling->firstChild, 'p')
-            ) {
-                $nextSibling = $element->nextSibling;
-                $element->previousSibling->firstChild->appendChild($doc->createElement('br'));
-                while ($element->firstChild->firstChild) {
-                    $element->previousSibling->firstChild->appendChild($element->firstChild->firstChild);
-                }
-                $element->parentNode->removeChild($element);
-                return $nextSibling;
-            }
-
             if ($element->parentNode->tagName === 'pre') {
                 if ($element->parentNode->childNodes->length === 1) {
                     self::setIndentClass($element->parentNode, $element);
@@ -265,6 +249,17 @@ class DOM
                     Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
                     return $nextSibling;
                 }
+            }
+
+            if (
+                self::isTag($element->previousSibling, 'dl') &&
+                $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
+                self::isTag($element->previousSibling->lastChild, 'dd')
+            ) {
+                $nextSibling = $element->nextSibling;
+                self::extractContents($element->previousSibling->lastChild, $element);
+                $element->parentNode->removeChild($element);
+                return $nextSibling;
             }
 
         }
@@ -397,6 +392,10 @@ class DOM
             if ($child->nodeType === XML_ELEMENT_NODE) {
 
                 $myTag = $child->tagName;
+
+                if (in_array($myTag, ['section', 'dd', 'div', 'td'])) {
+                    Massage_Block::coalesceAdjacentChildDIVs($child);
+                }
 
                 if (in_array($myTag, ['section', 'p', 'dl', 'dt', 'dd', 'div', 'pre', 'table', 'tr', 'th', 'td'])) {
                     $child = self::massage($child);

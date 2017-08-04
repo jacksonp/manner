@@ -479,17 +479,15 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES<
     <dd>
       <p>Runs a script scan using the comma-separated list of filenames, script categories, and directories. Each element in the list may also be a Boolean expression describing a more complex set of scripts. Each element is interpreted first as an expression, then as a category, and finally as a file or directory name.
       <p>There are two special features for advanced users only. One is to prefix script names and expressions with + to force them to run even if they normally wouldn't (e.g. the relevant service wasn't detected on the target port). The other is that the argument all may be used to specify every script in Nmap's database. Be cautious with this because NSE contains dangerous scripts such as exploits, brute force authentication crackers, and denial of service attacks.
-      <p>File and directory names may be relative or absolute. Absolute names are used directly. Relative paths are looked for in the scripts of each of the following places until found: <strong>--datadir</strong>
+      <p>File and directory names may be relative or absolute. Absolute names are used directly. Relative paths are looked for in the scripts of each of the following places until found: <strong>--datadir</strong><br>
+      <strong>$NMAPDIR</strong><br>
+      ~/.nmap (not searched on Windows)<br>
+      <em>HOME</em>\AppData\Roaming\nmap (only on Windows)<br>
+      the directory containing the nmap executable<br>
+      the directory containing the nmap executable, followed by ../share/nmap<br>
+      <em>NMAPDATADIR</em><br>
+      the current directory.
   </dl>
-  <div class="indent-4">
-    <p><strong>$NMAPDIR</strong><br>
-    ~/.nmap (not searched on Windows)<br>
-    <em>HOME</em>\AppData\Roaming\nmap (only on Windows)<br>
-    the directory containing the nmap executable<br>
-    the directory containing the nmap executable, followed by ../share/nmap<br>
-    <em>NMAPDATADIR</em><br>
-    the current directory.
-  </div>
   <p>When a directory name is given, Nmap loads every file in the directory whose name ends with .nse. All other files are ignored and directories are not searched recursively. When a filename is given, it does not have to have the .nse extension; it will be added automatically if necessary. Nmap scripts are stored in a scripts subdirectory of the Nmap data directory by default (see <strong>https://nmap.org/book/data-files.html</strong>). For efficiency, scripts are indexed in a database stored in scripts/script.db, which lists the category or categories in which each script belongs. When referring to scripts from script.db by name, you can use a shell-style ‘*’ wildcard.
   <p><strong>nmap --script "http-*"</strong>
   <div class="indent-4">
