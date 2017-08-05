@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_RS implements Block_Template
 {
@@ -15,6 +15,7 @@ class Block_RS implements Block_Template
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
 
         if (count($request['arguments']) && $request['arguments'][0] === '0') {
             $parentNode = $parentNode->ancestor('section');
@@ -24,16 +25,24 @@ class Block_RS implements Block_Template
 
 
         $className = 'indent';
-        if (count($request['arguments']) > 0) {
-            $thisIndent = Roff_Unit::normalize($request['arguments'][0]);
-            if ($thisIndent) { // note this filters out 0s
-                $className .= '-' . $thisIndent;
-            }
+
+        if (count($request['arguments'])) {
+            $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
+            $man->indentation = $indentVal;
+        } else {
+            $indentVal = $man->indentation;
+        }
+
+        if ($indentVal) { // note this filters out 0s
+            $className .= '-' . $indentVal;
         }
 
         /* @var DomElement $div */
         $div = $dom->createElement('div');
-        $div->setAttribute('class', $className);
+
+        if (!in_array($parentNode->tagName, ['dd']) || $className !== 'indent-7') {
+            $div->setAttribute('class', $className);
+        }
 
         $div = $parentNode->appendChild($div);
         return $div;

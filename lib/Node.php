@@ -1,12 +1,11 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Node
 {
 
     static function addClass(DOMElement $node, string $className): void
     {
-
         if (!self::hasClass($node, $className)) {
             $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $className));
         }

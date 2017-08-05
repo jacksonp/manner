@@ -37,14 +37,14 @@
   <section>
     <h3>TARGET SELECTION</h3>
     <p>This set of configuration files identifies where <strong>pmmgr</strong> should search for <strong>pmcd</strong> instances, how to uniquely identify them, and where state such as log files should be kept for each. &nbsp;Ideally, a persistent and unique host-id string is computed for each potential target pmcd from specified metric values. &nbsp;This host-id is also used as a subdirectory name for locating daemon data.
-    <dl>
+    <dl class="indent-5">
       <dt><em>hostid-metrics</em>
       <dd>
         <p>This file contains one or more lines of metric specifications in the format accepted by <em>pmParseMetricSpec</em>. Metrics without instance specifiers mean all instances of that metric. These are used to generate the <em>unique</em> host-id string for each <strong>pmcd</strong> server that <strong>pmmgr</strong> discovers. Upon discovery, all the metrics/instances named are queried, string values fetched, and normalized/concatenated into a single hyphenated printable string. The default is the single metric <strong>pmcd.hostname</strong>, which is sufficient if all the hosts discovered have unique hostname(2). &nbsp;If they don't, you should add other pcp metric specifications to set them apart at your site. &nbsp;The more you add, the longer the host-id string, but the more likely that accidental duplication is prevented.
     </dl>
     <p>However, it may be desirable for a host-id to also be <em>persistent</em>, so that if the target host goes offline and later returns, the new host-id matches the previous one, because then old and new histories can be joined. This argues against using metrics whose values vary from boot to boot.
     <p>Some candidate metrics to consider: <em>network.interface.hw_addr</em>, <em>network.interface.inet_addr["eth0"]</em>, <em>network.interface.ipv6_addr</em>, <em>kernel.uname.nodename</em>
-    <dl>
+    <dl class="indent-5">
       <dt><em>log-directory</em>
       <dd>
         <p>This file contains the path of a directory beneath which the per-host-id subdirectories are to be created by <strong>pmmgr</strong>. If it is not a full path, it is implicitly relative to the configuration directory itself. &nbsp;The default is <strong>$PCP_LOG_DIR/pmmgr/</strong>.
@@ -68,7 +68,7 @@
   <section>
     <h3>PMLOGGER CONFIGURATION</h3>
     <p>This group of configuration options controls a <strong>pmlogger</strong> daemon for each host. &nbsp;This may include generating its configuration, and managing its archives.
-    <dl>
+    <dl class="indent-5">
       <dt><em>pmlogger</em>
       <dd>
         <p>If and only if this file exists, pmmgr will maintain a <strong>pmlogger</strong> daemon for each targeted host. This file contains one line of additional space-separated options for the <strong>pmie</strong> daemon. &nbsp;(<strong>pmmgr</strong> already adds -h, -f, -r, -l, and perhaps -c.) The default is to maintain <strong>no pmlogger</strong> (and no other configuration in this section is processed).
@@ -84,7 +84,7 @@
   <section>
     <h3>ARCHIVE LOG MANAGEMENT - pmlogmerge</h3>
     <p>This style of archive log management regularly creates a single merged archive from prior archives for each target host, in effect lopping off old data and appending the new. &nbsp;A single merged archive can be relatively large (defaults to approximately 100-400 MB per host), and puts a corresponding I/O load on storage, but is most convenient for a detailed long-timeframe analysis. Once <strong>pmlogger</strong> is restarted, it always creates a new archive, so in the steady state, there will be one merged archive of recent history, and one current archive being written-to by <strong>pmlogger</strong>.
-    <dl>
+    <dl class="indent-5">
       <dt><em>pmlogmerge</em>
       <dd>
         <p>If this file exists, <strong>pmmgr</strong> will run <strong>pmlogextract</strong> to periodically merge together preexisting log archives for each target pmcd into a single large one. &nbsp;Then, the preexisting log archives are deleted (including any prior merged ones). This configuration file may contain a time interval specification as per the <strong>PCPintro</strong>(1) manual page, representing the period after which <strong>pmlogger</strong> should be temporarily stopped, and archives merged. It represents the maximum amount of time that the merged archive <em>lags</em> the present time. The default is <em>24hours</em>.
@@ -111,7 +111,7 @@
   <section>
     <h3>PMIE CONFIGURATION</h3>
     <p>This group of configuration options controls a <strong>pmie</strong> daemon for each host. This may include generating a custom configuration.
-    <dl>
+    <dl class="indent-5">
       <dt><em>pmie</em>
       <dd>
         <p>If and only if this file exists, pmmgr will maintain a <strong>pmie</strong> daemon for each targeted <strong>pmcd</strong>. This file contains one line of additional space-separated options for the <strong>pmie</strong> daemon. &nbsp;(pmmgr already adds -h, -f, -l, and perhaps -c.) The default is to maintain <strong>no pmie</strong> (and no other configuration in this section is processed).
@@ -123,7 +123,7 @@
   <section>
     <h3>MONITOR DAEMON MANAGEMENT</h3>
     <p><strong>pmmgr</strong> may be used to invoke arbitrary PCP client programs for each target <strong>pmcd</strong>. This can enable automated invocation of reporting or relaying tools, such as <strong>pmrep</strong>, <strong>pcp2graphite</strong> or <strong>pcp2influxdb</strong> without needing a specialized system service.
-    <dl>
+    <dl class="indent-5">
       <dt><em>monitor</em>
       <dd>
         <p>If this file exists, then for each line in this file, a new background process will be invoked. &nbsp;(It is restarted if it exits.) &nbsp;The line specifies the beginning of the command line (including the program name); <strong>pmmgr</strong> appends a -h HOSTSPEC, and arranges to collect the standard output and standard error into separate <strong>monitor-NN.out</strong> and <strong>monitor-NN.err</strong> files under the log directory.

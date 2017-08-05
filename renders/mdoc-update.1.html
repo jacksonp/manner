@@ -54,25 +54,26 @@
                   assemblies.</pre>
       <p>If <em>SOURCES</em> isn't provided (the default), then only exceptions created &nbsp;within the member itself will be documented.
       <p>LIMITATIONS: Exception searching is currently implemented by looking for the exception types that are explicitly created based on the known compile-time types. &nbsp;This has the following limitations:
-      <ul>
-        <li>This will not find exceptions which are implicit to the IL, such as NullReferenceException and IndexOutOfRangeException.
-        <li>
-          <p>This will find exceptions which are <em>not</em> thrown, e.g.
-          <pre>    public void CreateAnException ()
+      <div>
+        <ul class="indent-7">
+          <li>This will not find exceptions which are implicit to the IL, such as NullReferenceException and IndexOutOfRangeException.
+          <li>
+            <p>This will find exceptions which are <em>not</em> thrown, e.g.
+            <pre>    public void CreateAnException ()
     {
         Exception e = new Exception ();
     }</pre>
-        <li>
-          <p>This will not "follow" delegate and interface calls:
-          <pre>    public void UsesDelegates ()
+          <li>
+            <p>This will not "follow" delegate and interface calls:
+            <pre>    public void UsesDelegates ()
     {
         Func&lt;int, int&gt; a = x =&gt; {throw new Exception ();};
         a (4);
     }</pre>
-          <p>The function <em>UsesDelegates()</em> won't have any exceptions documented.
-        <li>
-          <p>This will find exceptions which "cannot happen", such as ArgumentNullExceptions for arguments which are "known" to be non-null:
-          <pre>    public void A ()
+            <p>The function <em>UsesDelegates()</em> won't have any exceptions documented.
+          <li>
+            <p>This will find exceptions which "cannot happen", such as ArgumentNullExceptions for arguments which are "known" to be non-null:
+            <pre>    public void A ()
     {
         B ("this parameter isn't null");
     }
@@ -82,12 +83,13 @@
         if (s == null)
             throw new ArgumentNullException ("s");
     }</pre>
-          <p>For the above, if <strong>--exceptions=asm</strong> is provided then <em>A()</em> will be documented as throwing an ArgumentNullException, which cannot happen.
-      </ul>
+            <p>For the above, if <strong>--exceptions=asm</strong> is provided then <em>A()</em> will be documented as throwing an ArgumentNullException, which cannot happen.
+        </ul>
+      </div>
     <dt><strong>-f</strong>=<em>FLAG</em>
     <dd>
       <p>Specify a flag to alter behavior. &nbsp;Valid flags include:
-      <dl>
+      <dl class="indent-7">
         <dt><strong>no-assembly-versions</strong>
         <dd>
           <p>See the <strong>-fno-assembly-versions</strong> documentation, below.

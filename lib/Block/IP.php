@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_IP implements Block_Template
 {
@@ -15,6 +15,7 @@ class Block_IP implements Block_Template
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
@@ -23,12 +24,11 @@ class Block_IP implements Block_Template
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
 
-            $indentVal = null;
-            if (
-                count($request['arguments']) > 1 &&
-                $normalizedVal = Roff_Unit::normalize($request['arguments'][1]) // note this filters out 0s
-            ) {
-                $indentVal = $normalizedVal;
+            if (count($request['arguments']) > 1) {
+                $indentVal        = Roff_Unit::normalize($request['arguments'][1]);
+                $man->indentation = $indentVal;
+            } else {
+                $indentVal = $man->indentation;
             }
 
             $dl = Block_DefinitionList::getParentDL($parentNode);

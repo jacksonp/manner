@@ -74,15 +74,8 @@ class Massage_Block
                     }
                     $blockElement->removeChild($child->nextSibling);
                     continue;
-                }
-
-                if (
-                    DOM::isTag($child->lastChild, 'dl') &&
-                    DOM::isTag($child->nextSibling->firstChild, 'dl')
-                ) {
-                    while ($child->nextSibling->firstChild->firstChild) {
-                        $child->lastChild->appendChild($child->nextSibling->firstChild->firstChild);
-                    }
+                } else {
+                    $child->appendChild($child->nextSibling->firstChild);
                     $blockElement->removeChild($child->nextSibling);
                     continue;
                 }

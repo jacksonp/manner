@@ -34,84 +34,86 @@
     <dt><strong>--aot</strong>, <strong>--aot[=options]</strong>
     <dd>
       <p>This option is used to precompile the CIL code in the specified assembly to native code. &nbsp;The generated code is stored in a file with the extension .so. &nbsp;This file will be automatically picked up by the runtime when the assembly is executed. &nbsp; Ahead-of-Time compilation is most useful if you use it in combination with the -O=all,-shared flag which enables all of the optimizations in the code generator to be performed. &nbsp;Some of those optimizations are not practical for Just-in-Time compilation since they might be very time consuming. Unlike the .NET Framework, Ahead-of-Time compilation will not generate domain independent code: it generates the same code that the Just-in-Time compiler would produce. &nbsp; Since most applications use a single domain, this is fine. &nbsp; If you want to optimize the generated code for use in multi-domain applications, consider using the -O=shared flag. This pre-compiles the methods, but the original assembly is still required to execute as this one contains the metadata and exception information which is not available on the generated file. &nbsp;When precompiling code, you might want to compile with all optimizations (-O=all). &nbsp;Pre-compiled code is position independent code. Pre compilation is just a mechanism to reduce startup time, increase code sharing across multiple mono processes and avoid just-in-time compilation program startup costs. &nbsp;The original assembly must still be present, as the metadata is contained there. AOT code typically can not be moved from one computer to another (CPU-specific optimizations that are detected at runtime) so you should not try to move the pre-generated assemblies or package the pre-generated assemblies for deployment. &nbsp; &nbsp; A few options are available as a parameter to the <strong>--aot</strong> command line option. &nbsp; The options are separated by commas, and more than one can be specified:
-      <dl>
-        <dt><em>autoreg</em>
-        <dd>
-          <p>The AOT compiler will emit a (ELF only) library initializer to automatically register the aot compiled module with the runtime. &nbsp;This is only useful in static mode
-        <dt><em>asmonly</em>
-        <dd>
-          <p>Instructs the AOT compiler to output assembly code instead of an object file.
-        <dt><em>bind-to-runtime-version</em>
-        <dd>
-          <p>If specified, forces the generated AOT files to be bound to the runtime version of the compiling Mono. &nbsp; This will prevent the AOT files from being consumed by a different Mono runtime. <em>full</em> This is currently an experimental feature as it is not complete. This instructs Mono to precompile code that has historically not been precompiled with AOT. &nbsp;
-        <dt><em>data-outfile=FILE.dll.aotdata</em>
-        <dd>
-          <p>This instructs the AOT code generator to output certain data constructs into a separate file. &nbsp; This can reduce the executable images some five to twenty percent. &nbsp; Developers need to then ship the resulting aotdata as a resource and register a hook to load the data on demand by using the <em>mono_install_load_aot_data_hook</em> method.
-        <dt><em>direct-pinvoke</em>
-        <dd>
-          <p>When this option is specified, P/Invoke methods are invoked directly instead of going through the operating system symbol lookup operation.
-        <dt><em>llvm-path=&lt;PREFIX&gt;</em>
-        <dd>
-          <p>Same for the llvm tools 'opt' and 'llc'.
-        <dt><em>msym-dir=&lt;PATH&gt;</em>
-        <dd>
-          <p>Instructs the AOT compiler to generate offline sequence points .msym files. The generated .msym files will be stored into a subfolder of &lt;PATH&gt; named as the compilation AOTID.
-        <dt><em>mtriple=&lt;TRIPLE&gt;</em>
-        <dd>
-          <p>Use the GNU style target triple &lt;TRIPLE&gt; to determine some code generation options, i.e. --mtriple=armv7-linux-gnueabi will generate code that targets ARMv7. This is currently only supported by the ARM backend. In LLVM mode, this triple is passed on to the LLVM llc compiler.
-        <dt><em>nimt-trampolines=[number]</em>
-        <dd>
-          <p>When compiling in full aot mode, the IMT trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 128.
-        <dt><em>nodebug</em>
-        <dd>
-          <p>Instructs the AOT compiler to not output any debugging information.
-        <dt><em>no-direct-calls</em>
-        <dd>
-          <p>This prevents the AOT compiler from generating a direct calls to a method. &nbsp; The AOT compiler usually generates direct calls for certain methods that do not require going through the PLT (for example, methods that are known to not require a hook like a static constructor) or call into simple internal calls.
-        <dt><em>dwarfdebug</em>
-        <dd>
-          <p>Instructs the AOT compiler to emit DWARF debugging information. When used together with the nodebug option, only DWARF debugging information is emitted, but not the information that can be used at runtime.
-        <dt><em>nrgctx-trampolines=[number]</em>
-        <dd>
-          <p>When compiling in full aot mode, the generic sharing trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 1024.
-        <dt><em>ntrampolines=[number]</em>
-        <dd>
-          <p>When compiling in full aot mode, the method trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 1024.
-        <dt><em>outfile=[filename]</em>
-        <dd>
-          <p>Instructs the AOT compiler to save the output to the specified file.
-        <dt><em>print-skipped-methods</em>
-        <dd>
-          <p>If the AOT compiler cannot compile a method for any reason, enabling this flag will output the skipped methods to the console.
-        <dt><em>readonly-value=namespace.typename.fieldname=type/value</em>
-        <dd>
-          <p>Override the value of a static readonly field. Usually, during JIT compilation, the static constructor is ran eagerly, so the value of a static readonly field is known at compilation time and the compiler can do a number of optimizations based on it. During AOT, instead, the static constructor can't be ran, so this option can be used to set the value of such a field and enable the same set of optimizations. Type can be any of i1, i2, i4 for integers of the respective sizes (in bytes). Note that signed/unsigned numbers do not matter here, just the storage size. This option can be specified multiple times and it doesn't prevent the static constructor for the type defining the field to execute with the usual rules at runtime (hence possibly computing a different value for the field).
-        <dt><em>save-temps,keep-temps</em>
-        <dd>
-          <p>Instructs the AOT compiler to keep temporary files.
-        <dt><em>soft-debug</em>
-        <dd>
-          <p>This instructs the compiler to generate sequence point checks that allow Mono's soft debugger to debug applications even on systems where it is not possible to set breakpoints or to single step (certain hardware configurations like the cell phones and video gaming consoles).
-        <dt><em>static</em>
-        <dd>
-          <p>Create an ELF object file (.o) or .s file which can be statically linked into an executable when embedding the mono runtime. When this option is used, the object file needs to be registered with the embedded runtime using the mono_aot_register_module function which takes as its argument the mono_aot_module_&lt;ASSEMBLY NAME&gt;_info global symbol from the object file:
-          <pre>extern void *mono_aot_module_hello_info;
+      <div>
+        <dl class="indent-7">
+          <dt><em>autoreg</em>
+          <dd>
+            <p>The AOT compiler will emit a (ELF only) library initializer to automatically register the aot compiled module with the runtime. &nbsp;This is only useful in static mode
+          <dt><em>asmonly</em>
+          <dd>
+            <p>Instructs the AOT compiler to output assembly code instead of an object file.
+          <dt><em>bind-to-runtime-version</em>
+          <dd>
+            <p>If specified, forces the generated AOT files to be bound to the runtime version of the compiling Mono. &nbsp; This will prevent the AOT files from being consumed by a different Mono runtime. <em>full</em> This is currently an experimental feature as it is not complete. This instructs Mono to precompile code that has historically not been precompiled with AOT. &nbsp;
+          <dt><em>data-outfile=FILE.dll.aotdata</em>
+          <dd>
+            <p>This instructs the AOT code generator to output certain data constructs into a separate file. &nbsp; This can reduce the executable images some five to twenty percent. &nbsp; Developers need to then ship the resulting aotdata as a resource and register a hook to load the data on demand by using the <em>mono_install_load_aot_data_hook</em> method.
+          <dt><em>direct-pinvoke</em>
+          <dd>
+            <p>When this option is specified, P/Invoke methods are invoked directly instead of going through the operating system symbol lookup operation.
+          <dt><em>llvm-path=&lt;PREFIX&gt;</em>
+          <dd>
+            <p>Same for the llvm tools 'opt' and 'llc'.
+          <dt><em>msym-dir=&lt;PATH&gt;</em>
+          <dd>
+            <p>Instructs the AOT compiler to generate offline sequence points .msym files. The generated .msym files will be stored into a subfolder of &lt;PATH&gt; named as the compilation AOTID.
+          <dt><em>mtriple=&lt;TRIPLE&gt;</em>
+          <dd>
+            <p>Use the GNU style target triple &lt;TRIPLE&gt; to determine some code generation options, i.e. --mtriple=armv7-linux-gnueabi will generate code that targets ARMv7. This is currently only supported by the ARM backend. In LLVM mode, this triple is passed on to the LLVM llc compiler.
+          <dt><em>nimt-trampolines=[number]</em>
+          <dd>
+            <p>When compiling in full aot mode, the IMT trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 128.
+          <dt><em>nodebug</em>
+          <dd>
+            <p>Instructs the AOT compiler to not output any debugging information.
+          <dt><em>no-direct-calls</em>
+          <dd>
+            <p>This prevents the AOT compiler from generating a direct calls to a method. &nbsp; The AOT compiler usually generates direct calls for certain methods that do not require going through the PLT (for example, methods that are known to not require a hook like a static constructor) or call into simple internal calls.
+          <dt><em>dwarfdebug</em>
+          <dd>
+            <p>Instructs the AOT compiler to emit DWARF debugging information. When used together with the nodebug option, only DWARF debugging information is emitted, but not the information that can be used at runtime.
+          <dt><em>nrgctx-trampolines=[number]</em>
+          <dd>
+            <p>When compiling in full aot mode, the generic sharing trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 1024.
+          <dt><em>ntrampolines=[number]</em>
+          <dd>
+            <p>When compiling in full aot mode, the method trampolines must be precreated in the AOT image. &nbsp;You can add additional method trampolines with this argument. Defaults to 1024.
+          <dt><em>outfile=[filename]</em>
+          <dd>
+            <p>Instructs the AOT compiler to save the output to the specified file.
+          <dt><em>print-skipped-methods</em>
+          <dd>
+            <p>If the AOT compiler cannot compile a method for any reason, enabling this flag will output the skipped methods to the console.
+          <dt><em>readonly-value=namespace.typename.fieldname=type/value</em>
+          <dd>
+            <p>Override the value of a static readonly field. Usually, during JIT compilation, the static constructor is ran eagerly, so the value of a static readonly field is known at compilation time and the compiler can do a number of optimizations based on it. During AOT, instead, the static constructor can't be ran, so this option can be used to set the value of such a field and enable the same set of optimizations. Type can be any of i1, i2, i4 for integers of the respective sizes (in bytes). Note that signed/unsigned numbers do not matter here, just the storage size. This option can be specified multiple times and it doesn't prevent the static constructor for the type defining the field to execute with the usual rules at runtime (hence possibly computing a different value for the field).
+          <dt><em>save-temps,keep-temps</em>
+          <dd>
+            <p>Instructs the AOT compiler to keep temporary files.
+          <dt><em>soft-debug</em>
+          <dd>
+            <p>This instructs the compiler to generate sequence point checks that allow Mono's soft debugger to debug applications even on systems where it is not possible to set breakpoints or to single step (certain hardware configurations like the cell phones and video gaming consoles).
+          <dt><em>static</em>
+          <dd>
+            <p>Create an ELF object file (.o) or .s file which can be statically linked into an executable when embedding the mono runtime. When this option is used, the object file needs to be registered with the embedded runtime using the mono_aot_register_module function which takes as its argument the mono_aot_module_&lt;ASSEMBLY NAME&gt;_info global symbol from the object file:
+            <pre>extern void *mono_aot_module_hello_info;
 
 mono_aot_register_module (mono_aot_module_hello_info);</pre>
-        <dt><em>stats</em>
-        <dd>
-          <p>Print various stats collected during AOT compilation.
-        <dt><em>threads=[number]</em>
-        <dd>
-          <p>This is an experimental option for the AOT compiler to use multiple threads when compiling the methods.
-        <dt><em>tool-prefix=&lt;PREFIX&gt;</em>
-        <dd>
-          <p>Prepends &lt;PREFIX&gt; to the name of tools ran by the AOT compiler, i.e. 'as'/'ld'. For example, --tool=prefix=arm-linux-gnueabi- will make the AOT compiler run 'arm-linux-gnueabi-as' instead of 'as'.
-        <dt><em>write-symbols</em>
-        <dd>
-          <p>Instructs the AOT compiler to emit debug symbol information.
-      </dl>
-      <p>For more information about AOT, see: http://www.mono-project.com/docs/advanced/aot/
+          <dt><em>stats</em>
+          <dd>
+            <p>Print various stats collected during AOT compilation.
+          <dt><em>threads=[number]</em>
+          <dd>
+            <p>This is an experimental option for the AOT compiler to use multiple threads when compiling the methods.
+          <dt><em>tool-prefix=&lt;PREFIX&gt;</em>
+          <dd>
+            <p>Prepends &lt;PREFIX&gt; to the name of tools ran by the AOT compiler, i.e. 'as'/'ld'. For example, --tool=prefix=arm-linux-gnueabi- will make the AOT compiler run 'arm-linux-gnueabi-as' instead of 'as'.
+          <dt><em>write-symbols</em>
+          <dd>
+            <p>Instructs the AOT compiler to emit debug symbol information.
+        </dl>
+        <p>For more information about AOT, see: http://www.mono-project.com/docs/advanced/aot/
+      </div>
     <dt><strong>--attach=[options]</strong>
     <dd>
       <p>Currently the only option supported by this command line argument is <strong>disable</strong> which disables the attach functionality.
@@ -123,7 +125,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       <p>This instructs the Mono runtime to start a debugging agent inside the Mono runtime and connect it to a client user interface will control the Mono process. This option is typically used by IDEs, like the MonoDevelop IDE.
   </dl>
   <p>The configuration is specified using one of more of the following options:
-  <dl>
+  <dl class="indent-14">
     <dt><em>address=host:port</em>
     <dd>
       <p>Use this option to specify the IP address where your debugger client is listening to.
@@ -145,6 +147,8 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><em>transport=transport_name</em>
     <dd>
       <p>This is used to specify the transport that the debugger will use to communicate. &nbsp; It must be specified and currently requires this to be 'dt_socket'.
+  </dl>
+  <dl>
     <dt><strong>--desktop</strong>
     <dd>
       <p>Configures the virtual machine to be better suited for desktop applications. &nbsp;Currently this sets the GC system to avoid expanding the heap as much as possible at the expense of slowing down garbage collection a bit.
@@ -201,15 +205,17 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
       <p>For example, to enable all the optimization but dead code elimination and inlining, you can use:
       <pre>    -O=all,-deadce,-inline</pre>
       <p>The flags that are flagged with [arch-dependency] indicate that the given option if used in combination with Ahead of Time compilation (--aot flag) would produce pre-compiled code that will depend on the current CPU and might not be safely moved to another computer.
-      <p>The following optimizations are supported
-      <dl>
-        <dt><em>float32</em>
-        <dd>
-          <p>Requests that the runtime performn 32-bit floating point operations using only 32-bits. &nbsp; By default the Mono runtime tries to use the highest precision available for floating point operations, but while this might render better results, the code might run slower. &nbsp; This options also affects the code generated by the LLVM backend.
-        <dt><em>inline</em>
-        <dd>
-          <p>Controls whether the runtime should attempt to inline (the default), or not inline methods invocations
-      </dl>
+      <div>
+        <p>The following optimizations are supported
+        <dl class="indent-7">
+          <dt><em>float32</em>
+          <dd>
+            <p>Requests that the runtime performn 32-bit floating point operations using only 32-bits. &nbsp; By default the Mono runtime tries to use the highest precision available for floating point operations, but while this might render better results, the code might run slower. &nbsp; This options also affects the code generated by the LLVM backend.
+          <dt><em>inline</em>
+          <dd>
+            <p>Controls whether the runtime should attempt to inline (the default), or not inline methods invocations
+        </dl>
+      </div>
     <dt><strong>--runtime=VERSION</strong>
     <dd>
       <p>Mono supports different runtime versions. The version used depends on the program that is being run or on its configuration file (named program.exe.config). This option can be used to override such autodetection, by forcing a different runtime version to be used. Note that this should only be used to select a later compatible runtime version than the one the program was compiled against. A typical usage is for running a 1.1 program on a 2.0 version:
@@ -217,20 +223,22 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--security</strong>, <strong>--security=mode</strong>
     <dd>
       <p>Activate the security manager, a currently experimental feature in Mono and it is OFF by default. The new code verifier can be enabled with this option as well.
-      <p>Using security without parameters is equivalent as calling it with the "cas" parameter. &nbsp;
-      <p>The following modes are supported:
-      <dl>
-        <dt><em>core-clr</em>
-        <dd>
-          <p>Enables the core-clr security system, typically used for Moonlight/Silverlight applications. &nbsp;It provides a much simpler security system than CAS, see http://www.mono-project.com/docs/web/moonlight/ for more details and links to the descriptions of this new system.
-        <dt><em>validil</em>
-        <dd>
-          <p>Enables the new verifier and performs basic verification for code validity. &nbsp;In this mode, unsafe code and P/Invoke are allowed. This mode provides a better safety guarantee but it is still possible for managed code to crash Mono.
-        <dt><em>verifiable</em>
-        <dd>
-          <p>Enables the new verifier and performs full verification of the code being executed. &nbsp;It only allows verifiable code to be executed. Unsafe code is not allowed but P/Invoke is. &nbsp;This mode should not allow managed code to crash mono. &nbsp;The verification is not as strict as ECMA 335 standard in order to stay compatible with the MS runtime.
-      </dl>
-      <p>The security system acts on user code: code contained in mscorlib or the global assembly cache is always trusted.
+      <div>
+        <p>Using security without parameters is equivalent as calling it with the "cas" parameter. &nbsp;
+        <p>The following modes are supported:
+        <dl class="indent-7">
+          <dt><em>core-clr</em>
+          <dd>
+            <p>Enables the core-clr security system, typically used for Moonlight/Silverlight applications. &nbsp;It provides a much simpler security system than CAS, see http://www.mono-project.com/docs/web/moonlight/ for more details and links to the descriptions of this new system.
+          <dt><em>validil</em>
+          <dd>
+            <p>Enables the new verifier and performs basic verification for code validity. &nbsp;In this mode, unsafe code and P/Invoke are allowed. This mode provides a better safety guarantee but it is still possible for managed code to crash Mono.
+          <dt><em>verifiable</em>
+          <dd>
+            <p>Enables the new verifier and performs full verification of the code being executed. &nbsp;It only allows verifiable code to be executed. Unsafe code is not allowed but P/Invoke is. &nbsp;This mode should not allow managed code to crash mono. &nbsp;The verification is not as strict as ECMA 335 standard in order to stay compatible with the MS runtime.
+        </dl>
+        <p>The security system acts on user code: code contained in mscorlib or the global assembly cache is always trusted.
+      </div>
     <dt><strong>--server</strong>
     <dd>
       <p>Configures the virtual machine to be better suited for server operations (currently, allows a heavier threadpool initialization).
@@ -250,19 +258,21 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--debug</strong>, <strong>--debug=OPTIONS</strong>
     <dd>
       <p>Turns on the debugging mode in the runtime. &nbsp;If an assembly was compiled with debugging information, it will produce line number information for stack traces.
-      <p>The optional OPTIONS argument is a comma separated list of debugging options. &nbsp;These options are turned off by default since they generate much larger and slower code at runtime.
-      <dl>
-        <dt>The following options are supported:
-        <dt><em>casts</em>
-        <dd>
-          <p>Produces a detailed error when throwing a InvalidCastException. &nbsp; This option needs to be enabled as this generates more verbose code at execution time.
-        <dt><em>mdb-optimizations</em>
-        <dd>
-          <p>Disable some JIT optimizations which are usually only disabled when running inside the debugger. &nbsp;This can be helpful if you want to attach to the running process with mdb.
-        <dt><em>gdb</em>
-        <dd>
-          <p>Generate and register debugging information with gdb. This is only supported on some platforms, and only when using gdb 7.0 or later.
-      </dl>
+      <div>
+        <p>The optional OPTIONS argument is a comma separated list of debugging options. &nbsp;These options are turned off by default since they generate much larger and slower code at runtime.
+        <dl class="indent-7">
+          <dt>The following options are supported:
+          <dt><em>casts</em>
+          <dd>
+            <p>Produces a detailed error when throwing a InvalidCastException. &nbsp; This option needs to be enabled as this generates more verbose code at execution time.
+          <dt><em>mdb-optimizations</em>
+          <dd>
+            <p>Disable some JIT optimizations which are usually only disabled when running inside the debugger. &nbsp;This can be helpful if you want to attach to the running process with mdb.
+          <dt><em>gdb</em>
+          <dd>
+            <p>Generate and register debugging information with gdb. This is only supported on some platforms, and only when using gdb 7.0 or later.
+        </dl>
+      </div>
     <dt><strong>--profile[=profiler[:profiler_args]]</strong>
     <dd>
       <p>Turns on profiling. &nbsp;For more information about profiling applications and code coverage see the sections "PROFILING" and "CODE COVERAGE" below.
@@ -272,7 +282,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. &nbsp;By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. &nbsp;A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. &nbsp;The words `program', `all' and `disabled' have special meaning. &nbsp;`program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. &nbsp;It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>       mono --trace=System app.exe</pre>
+      <pre>   mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. &nbsp;For example, to trace all calls to the System.String class, use:
       <pre>   mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -501,18 +511,20 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_EVENTLOG_TYPE</strong>
     <dd>
       <p>Sets the type of event log provider to use (for System.Diagnostics.EventLog). Possible values are:
-      <dl>
-        <dt><em>local[:path]</em>
-        <dd>
-          <p>Persists event logs and entries to the local file system. The directory in which to persist the event logs, event sources and entries can be specified as part of the value. If the path is not explicitly set, it defaults to "/var/lib/mono/eventlog" on unix and "%APPDATA%mono\ventlog" on Windows.
-        <dt><em>win32</em>
-        <dd>
-          <p><strong>Uses the native win32 API to write events and registers event logs and</strong> event sources in the registry. &nbsp; This is only available on Windows. On Unix, the directory permission for individual event log and event source directories is set to 777 (with +t bit) allowing everyone to read and write event log entries while only allowing entries to be deleted by the user(s) that created them.
-        <dt><em>null</em>
-        <dd>
-          <p>Silently discards any events.
-      </dl>
-      <p>The default is "null" on Unix (and versions of Windows before NT), and &nbsp;"win32" on Windows NT (and higher).
+      <div>
+        <dl class="indent-7">
+          <dt><em>local[:path]</em>
+          <dd>
+            <p>Persists event logs and entries to the local file system. The directory in which to persist the event logs, event sources and entries can be specified as part of the value. If the path is not explicitly set, it defaults to "/var/lib/mono/eventlog" on unix and "%APPDATA%mono\ventlog" on Windows.
+          <dt><em>win32</em>
+          <dd>
+            <p><strong>Uses the native win32 API to write events and registers event logs and</strong> event sources in the registry. &nbsp; This is only available on Windows. On Unix, the directory permission for individual event log and event source directories is set to 777 (with +t bit) allowing everyone to read and write event log entries while only allowing entries to be deleted by the user(s) that created them.
+          <dt><em>null</em>
+          <dd>
+            <p>Silently discards any events.
+        </dl>
+        <p>The default is "null" on Unix (and versions of Windows before NT), and &nbsp;"win32" on Windows NT (and higher).
+      </div>
     <dt><strong>MONO_EXTERNAL_ENCODINGS</strong>
     <dd>
       <p>If set, contains a colon-separated list of text encodings to try when turning externally-generated text (e.g. command-line arguments or filenames) into Unicode. &nbsp;The encoding names come from the list provided by iconv, and the special case "default_locale" which refers to the current locale's default encoding.
@@ -521,7 +533,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_GC_PARAMS</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this variable controls several parameters of the collector. &nbsp;The variable's value is a comma separated list of words.
-      <dl>
+      <dl class="indent-7">
         <dt><strong>max-heap-size=</strong><em>size</em>
         <dd>
           <p>Sets the maximum size of the heap. The size is specified in bytes and must be a power of two. The suffixes `k', `m' and `g' can be used to specify kilo-, mega- and gigabytes, respectively. The limit is the sum of the nursery, major heap and large object heap. Once the limit is reached the application will receive OutOfMemoryExceptions when trying to allocate. Not the full extent of memory set in max-heap-size could be available to satisfy a single allocation due to internal fragmentation. By default heap limits is disabled and the GC will try to use all available memory.
@@ -571,7 +583,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_GC_DEBUG</strong>
     <dd>
       <p>When using Mono with the SGen garbage collector this environment variable can be used to turn on various debugging features of the collector. &nbsp;The value of this variable is a comma separated list of words. &nbsp;Do not use these options in production.
-      <dl>
+      <dl class="indent-7">
         <dt><em>number</em>
         <dd>
           <p>Sets the debug level to the specified number.
@@ -650,7 +662,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_IOMAP</strong>
     <dd>
       <p>Enables some filename rewriting support to assist badly-written applications that hard-code Windows paths. &nbsp;Set to a colon-separated list of "drive" to strip drive letters, or "case" to do case-insensitive file matching in every directory in a path. &nbsp;"all" enables all rewriting methods. &nbsp;(Backslashes are always mapped to slashes if this variable is set to a valid option). For example, this would work from the shell:
-      <pre>    MONO_IOMAP=drive:case
+      <pre>      MONO_IOMAP=drive:case
         export MONO_IOMAP</pre>
       <p>If you are using mod_mono to host your web applications, you can use the <strong>MonoIOMAP</strong> directive instead, like this:
       <pre>   MonoIOMAP &lt;appalias&gt; all</pre>
@@ -748,7 +760,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_DEBUG</strong>
     <dd>
       <p>If set, enables some features of the runtime useful for debugging. This variable should contain a comma separated list of debugging options. Currently, the following options are supported:
-      <dl>
+      <dl class="indent-7">
         <dt><strong>align-small-structs</strong>
         <dd>
           <p>Enables small structs alignment to 4/8 bytes.
@@ -837,7 +849,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>MONO_TRACE</strong>
     <dd>
       <p>Used for runtime tracing of method calls. The format of the comma separated trace options is:
-      <pre>        [-]M:method name
+      <pre>       [-]M:method name
         [-]N:namespace
         [-]T:class name
         [-]all

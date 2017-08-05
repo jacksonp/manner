@@ -27,6 +27,8 @@ class Manner
     static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
     {
 
+//        set_time_limit(3);
+
         $dom  = self::roffToDOM($fileLines, $filePath);
         $html = $dom->saveHTML();
 

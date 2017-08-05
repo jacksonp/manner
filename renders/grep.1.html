@@ -285,43 +285,45 @@
     <dt><strong>GREP_COLORS</strong>
     <dd>
       <p>Specifies the colors and other attributes used to highlight various parts of the output. Its value is a colon-separated list of capabilities that defaults to <strong>ms=01;31:mc=01;31:sl=:cx=:fn=35:ln=32:bn=32:se=36</strong> with the <strong>rv</strong> and <strong>ne</strong> boolean capabilities omitted (i.e., false). Supported capabilities are as follows.
-      <dl>
-        <dt><strong>sl=</strong>
-        <dd>
-          <p>SGR substring for whole selected lines (i.e., matching lines when the <strong>-v</strong> command-line option is omitted, or non-matching lines when <strong>-v</strong> is specified). If however the boolean <strong>rv</strong> capability and the <strong>-v</strong> command-line option are both specified, it applies to context matching lines instead. The default is empty (i.e., the terminal's default color pair).
-        <dt><strong>cx=</strong>
-        <dd>
-          <p>SGR substring for whole context lines (i.e., non-matching lines when the <strong>-v</strong> command-line option is omitted, or matching lines when <strong>-v</strong> is specified). If however the boolean <strong>rv</strong> capability and the <strong>-v</strong> command-line option are both specified, it applies to selected non-matching lines instead. The default is empty (i.e., the terminal's default color pair).
-        <dt><strong>rv</strong>
-        <dd>
-          <p>Boolean value that reverses (swaps) the meanings of the <strong>sl=</strong> and <strong>cx=</strong> capabilities when the <strong>-v</strong> command-line option is specified. The default is false (i.e., the capability is omitted).
-        <dt><strong>mt=01;31</strong>
-        <dd>
-          <p>SGR substring for matching non-empty text in any matching line (i.e., a selected line when the <strong>-v</strong> command-line option is omitted, or a context line when <strong>-v</strong> is specified). Setting this is equivalent to setting both <strong>ms=</strong> and <strong>mc=</strong> at once to the same value. The default is a bold red text foreground over the current line background.
-        <dt><strong>ms=01;31</strong>
-        <dd>
-          <p>SGR substring for matching non-empty text in a selected line. (This is only used when the <strong>-v</strong> command-line option is omitted.) The effect of the <strong>sl=</strong> (or <strong>cx=</strong> if <strong>rv</strong>) capability remains active when this kicks in. The default is a bold red text foreground over the current line background.
-        <dt><strong>mc=01;31</strong>
-        <dd>
-          <p>SGR substring for matching non-empty text in a context line. (This is only used when the <strong>-v</strong> command-line option is specified.) The effect of the <strong>cx=</strong> (or <strong>sl=</strong> if <strong>rv</strong>) capability remains active when this kicks in. The default is a bold red text foreground over the current line background.
-        <dt><strong>fn=35</strong>
-        <dd>
-          <p>SGR substring for file names prefixing any content line. The default is a magenta text foreground over the terminal's default background.
-        <dt><strong>ln=32</strong>
-        <dd>
-          <p>SGR substring for line numbers prefixing any content line. The default is a green text foreground over the terminal's default background.
-        <dt><strong>bn=32</strong>
-        <dd>
-          <p>SGR substring for byte offsets prefixing any content line. The default is a green text foreground over the terminal's default background.
-        <dt><strong>se=36</strong>
-        <dd>
-          <p>SGR substring for separators that are inserted between selected line fields (<strong>:</strong>), between context line fields, (<strong>-</strong>), and between groups of adjacent lines when nonzero context is specified (<strong>--</strong>). The default is a cyan text foreground over the terminal's default background.
-        <dt><strong>ne</strong>
-        <dd>
-          <p>Boolean value that prevents clearing to the end of line using Erase in Line (EL) to Right (<strong>\33[K</strong>) each time a colorized item ends. This is needed on terminals on which EL is not supported. It is otherwise useful on terminals for which the <strong>back_color_erase</strong> (<strong>bce</strong>) boolean terminfo capability does not apply, when the chosen highlight colors do not affect the background, or when EL is too slow or causes too much flicker. The default is false (i.e., the capability is omitted).
-      </dl>
-      <p>Note that boolean capabilities have no <strong>=</strong>... part. They are omitted (i.e., false) by default and become true when specified.
-      <p>See the Select Graphic Rendition (SGR) section in the documentation of the text terminal that is used for permitted values and their meaning as character attributes. These substring values are integers in decimal representation and can be concatenated with semicolons. <strong>grep</strong> takes care of assembling the result into a complete SGR sequence (<strong>\33[</strong>...<strong>m</strong>). Common values to concatenate include <strong>1</strong> for bold, <strong>4</strong> for underline, <strong>5</strong> for blink, <strong>7</strong> for inverse, <strong>39</strong> for default foreground color, <strong>30</strong> to <strong>37</strong> for foreground colors, <strong>90</strong> to <strong>97</strong> for 16-color mode foreground colors, <strong>38;5;0</strong> to <strong>38;5;255</strong> for 88-color and 256-color modes foreground colors, <strong>49</strong> for default background color, <strong>40</strong> to <strong>47</strong> for background colors, <strong>100</strong> to <strong>107</strong> for 16-color mode background colors, and <strong>48;5;0</strong> to <strong>48;5;255</strong> for 88-color and 256-color modes background colors.
+      <div>
+        <dl class="indent-7">
+          <dt><strong>sl=</strong>
+          <dd>
+            <p>SGR substring for whole selected lines (i.e., matching lines when the <strong>-v</strong> command-line option is omitted, or non-matching lines when <strong>-v</strong> is specified). If however the boolean <strong>rv</strong> capability and the <strong>-v</strong> command-line option are both specified, it applies to context matching lines instead. The default is empty (i.e., the terminal's default color pair).
+          <dt><strong>cx=</strong>
+          <dd>
+            <p>SGR substring for whole context lines (i.e., non-matching lines when the <strong>-v</strong> command-line option is omitted, or matching lines when <strong>-v</strong> is specified). If however the boolean <strong>rv</strong> capability and the <strong>-v</strong> command-line option are both specified, it applies to selected non-matching lines instead. The default is empty (i.e., the terminal's default color pair).
+          <dt><strong>rv</strong>
+          <dd>
+            <p>Boolean value that reverses (swaps) the meanings of the <strong>sl=</strong> and <strong>cx=</strong> capabilities when the <strong>-v</strong> command-line option is specified. The default is false (i.e., the capability is omitted).
+          <dt><strong>mt=01;31</strong>
+          <dd>
+            <p>SGR substring for matching non-empty text in any matching line (i.e., a selected line when the <strong>-v</strong> command-line option is omitted, or a context line when <strong>-v</strong> is specified). Setting this is equivalent to setting both <strong>ms=</strong> and <strong>mc=</strong> at once to the same value. The default is a bold red text foreground over the current line background.
+          <dt><strong>ms=01;31</strong>
+          <dd>
+            <p>SGR substring for matching non-empty text in a selected line. (This is only used when the <strong>-v</strong> command-line option is omitted.) The effect of the <strong>sl=</strong> (or <strong>cx=</strong> if <strong>rv</strong>) capability remains active when this kicks in. The default is a bold red text foreground over the current line background.
+          <dt><strong>mc=01;31</strong>
+          <dd>
+            <p>SGR substring for matching non-empty text in a context line. (This is only used when the <strong>-v</strong> command-line option is specified.) The effect of the <strong>cx=</strong> (or <strong>sl=</strong> if <strong>rv</strong>) capability remains active when this kicks in. The default is a bold red text foreground over the current line background.
+          <dt><strong>fn=35</strong>
+          <dd>
+            <p>SGR substring for file names prefixing any content line. The default is a magenta text foreground over the terminal's default background.
+          <dt><strong>ln=32</strong>
+          <dd>
+            <p>SGR substring for line numbers prefixing any content line. The default is a green text foreground over the terminal's default background.
+          <dt><strong>bn=32</strong>
+          <dd>
+            <p>SGR substring for byte offsets prefixing any content line. The default is a green text foreground over the terminal's default background.
+          <dt><strong>se=36</strong>
+          <dd>
+            <p>SGR substring for separators that are inserted between selected line fields (<strong>:</strong>), between context line fields, (<strong>-</strong>), and between groups of adjacent lines when nonzero context is specified (<strong>--</strong>). The default is a cyan text foreground over the terminal's default background.
+          <dt><strong>ne</strong>
+          <dd>
+            <p>Boolean value that prevents clearing to the end of line using Erase in Line (EL) to Right (<strong>\33[K</strong>) each time a colorized item ends. This is needed on terminals on which EL is not supported. It is otherwise useful on terminals for which the <strong>back_color_erase</strong> (<strong>bce</strong>) boolean terminfo capability does not apply, when the chosen highlight colors do not affect the background, or when EL is too slow or causes too much flicker. The default is false (i.e., the capability is omitted).
+        </dl>
+        <p>Note that boolean capabilities have no <strong>=</strong>... part. They are omitted (i.e., false) by default and become true when specified.
+        <p>See the Select Graphic Rendition (SGR) section in the documentation of the text terminal that is used for permitted values and their meaning as character attributes. These substring values are integers in decimal representation and can be concatenated with semicolons. <strong>grep</strong> takes care of assembling the result into a complete SGR sequence (<strong>\33[</strong>...<strong>m</strong>). Common values to concatenate include <strong>1</strong> for bold, <strong>4</strong> for underline, <strong>5</strong> for blink, <strong>7</strong> for inverse, <strong>39</strong> for default foreground color, <strong>30</strong> to <strong>37</strong> for foreground colors, <strong>90</strong> to <strong>97</strong> for 16-color mode foreground colors, <strong>38;5;0</strong> to <strong>38;5;255</strong> for 88-color and 256-color modes foreground colors, <strong>49</strong> for default background color, <strong>40</strong> to <strong>47</strong> for background colors, <strong>100</strong> to <strong>107</strong> for 16-color mode background colors, and <strong>48;5;0</strong> to <strong>48;5;255</strong> for 88-color and 256-color modes background colors.
+      </div>
     <dt><strong>LC_ALL</strong>, <strong>LC_COLLATE</strong>, <strong>LANG</strong>
     <dd>
       <p>These variables specify the locale for the <strong>LC_COLLATE</strong> category, which determines the collating sequence used to interpret range expressions like <strong>[a-z]</strong>.

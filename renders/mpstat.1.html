@@ -28,16 +28,18 @@
       <p>Possible keywords are <strong>SUM</strong>, <strong>CPU</strong> and <strong>SCPU</strong>.
       <p>With the <strong>SUM</strong> keyword, the <strong>mpstat</strong> command reports the total number of interrupts per processor. The following values are displayed:
       <p><strong>CPU</strong>
-      <div class="indent">
-        <p>Processor number. The keyword <em>all</em> indicates that statistics are calculated as averages among all processors.
+      <div>
+        <div class="indent-7">
+          <p>Processor number. The keyword <em>all</em> indicates that statistics are calculated as averages among all processors.
+        </div>
+        <p><strong>intr/s</strong>
+        <div class="indent-7">
+          <p>Show the total number of interrupts received per second by the CPU or CPUs.
+        </div>
+        <p>With the <strong>CPU</strong> keyword, the number of each individual interrupt received per second by the CPU or CPUs is displayed. Interrupts are those listed in /proc/interrupts file.
+        <p>With the <strong>SCPU</strong> keyword, the number of each individual software interrupt received per second by the CPU or CPUs is displayed. This option works only with kernels 2.6.31 and later. Software interrupts are those listed in /proc/softirqs file.
+        <p>The <strong>ALL</strong> keyword is equivalent to specifying all the keywords above and therefore all the interrupts statistics are displayed.
       </div>
-      <p><strong>intr/s</strong>
-      <div class="indent">
-        <p>Show the total number of interrupts received per second by the CPU or CPUs.
-      </div>
-      <p>With the <strong>CPU</strong> keyword, the number of each individual interrupt received per second by the CPU or CPUs is displayed. Interrupts are those listed in /proc/interrupts file.
-      <p>With the <strong>SCPU</strong> keyword, the number of each individual software interrupt received per second by the CPU or CPUs is displayed. This option works only with kernels 2.6.31 and later. Software interrupts are those listed in /proc/softirqs file.
-      <p>The <strong>ALL</strong> keyword is equivalent to specifying all the keywords above and therefore all the interrupts statistics are displayed.
     <dt>-o JSON
     <dd>
       <p>Display the statistics in JSON (Javascript Object Notation) format. JSON output field order is undefined, and new fields may be added in the future.
@@ -48,50 +50,52 @@
     <dd>
       <p>Report CPU utilization. The following values are displayed:
       <p><strong>CPU</strong>
-      <div class="indent">
-        <p>Processor number. The keyword <em>all</em> indicates that statistics are calculated as averages among all processors.
+      <div>
+        <div class="indent-7">
+          <p>Processor number. The keyword <em>all</em> indicates that statistics are calculated as averages among all processors.
+        </div>
+        <p><strong>%usr</strong>
+        <div class="indent-7">
+          <p>Show the percentage of CPU utilization that occurred while executing at the user level (application).
+        </div>
+        <p><strong>%nice</strong>
+        <div class="indent-7">
+          <p>Show the percentage of CPU utilization that occurred while executing at the user level with nice priority.
+        </div>
+        <p><strong>%sys</strong>
+        <div class="indent-7">
+          <p>Show the percentage of CPU utilization that occurred while executing at the system level (kernel). Note that this does not include time spent servicing hardware and software interrupts.
+        </div>
+        <p><strong>%iowait</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time that the CPU or CPUs were idle during which the system had an outstanding disk I/O request.
+        </div>
+        <p><strong>%irq</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time spent by the CPU or CPUs to service hardware interrupts.
+        </div>
+        <p><strong>%soft</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time spent by the CPU or CPUs to service software interrupts.
+        </div>
+        <p><strong>%steal</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time spent in involuntary wait by the virtual CPU or CPUs while the hypervisor was servicing another virtual processor.
+        </div>
+        <p><strong>%guest</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time spent by the CPU or CPUs to run a virtual processor.
+        </div>
+        <p><strong>%gnice</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time spent by the CPU or CPUs to run a niced guest.
+        </div>
+        <p><strong>%idle</strong>
+        <div class="indent-7">
+          <p>Show the percentage of time that the CPU or CPUs were idle and the system did not have an outstanding disk I/O request.
+        </div>
+        <p>Note: On SMP machines a processor that does not have any activity at all is a disabled (offline) processor.
       </div>
-      <p><strong>%usr</strong>
-      <div class="indent">
-        <p>Show the percentage of CPU utilization that occurred while executing at the user level (application).
-      </div>
-      <p><strong>%nice</strong>
-      <div class="indent">
-        <p>Show the percentage of CPU utilization that occurred while executing at the user level with nice priority.
-      </div>
-      <p><strong>%sys</strong>
-      <div class="indent">
-        <p>Show the percentage of CPU utilization that occurred while executing at the system level (kernel). Note that this does not include time spent servicing hardware and software interrupts.
-      </div>
-      <p><strong>%iowait</strong>
-      <div class="indent">
-        <p>Show the percentage of time that the CPU or CPUs were idle during which the system had an outstanding disk I/O request.
-      </div>
-      <p><strong>%irq</strong>
-      <div class="indent">
-        <p>Show the percentage of time spent by the CPU or CPUs to service hardware interrupts.
-      </div>
-      <p><strong>%soft</strong>
-      <div class="indent">
-        <p>Show the percentage of time spent by the CPU or CPUs to service software interrupts.
-      </div>
-      <p><strong>%steal</strong>
-      <div class="indent">
-        <p>Show the percentage of time spent in involuntary wait by the virtual CPU or CPUs while the hypervisor was servicing another virtual processor.
-      </div>
-      <p><strong>%guest</strong>
-      <div class="indent">
-        <p>Show the percentage of time spent by the CPU or CPUs to run a virtual processor.
-      </div>
-      <p><strong>%gnice</strong>
-      <div class="indent">
-        <p>Show the percentage of time spent by the CPU or CPUs to run a niced guest.
-      </div>
-      <p><strong>%idle</strong>
-      <div class="indent">
-        <p>Show the percentage of time that the CPU or CPUs were idle and the system did not have an outstanding disk I/O request.
-      </div>
-      <p>Note: On SMP machines a processor that does not have any activity at all is a disabled (offline) processor.
     <dt>-V
     <dd>
       <p>Print version number then exit.
@@ -108,7 +112,7 @@
     <dt>S_COLORS_SGR
     <dd>
       <p>Specify the colors and other attributes used to display statistics on the terminal. Its value is a colon-separated list of capabilities that defaults to <strong>H=31;1:I=32;22:M=34;1:N=33;1:Z=33;22</strong>. Supported capabilities are:
-      <dl>
+      <dl class="indent-7">
         <dt><strong>H=</strong>
         <dd>
           <p>SGR (Select Graphic Rendition) substring for percentage values greater than or equal to 75%.
@@ -133,11 +137,11 @@
 <section>
   <h2>EXAMPLES</h2>
   <p><strong>mpstat 2 5</strong>
-  <div class="indent">
+  <div>
     <p>Display five reports of global statistics among all processors at two second intervals.
   </div>
   <p><strong>mpstat -P ALL 2 5</strong>
-  <div class="indent">
+  <div>
     <p>Display five reports of statistics for all processors at two second intervals.
   </div>
 </section>

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_TP implements Block_Template
 {
@@ -22,15 +22,15 @@ class Block_TP implements Block_Template
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
+        $man = Man::instance();
 
         $blockContainerParentNode = Blocks::getBlockContainerParent($parentNode);
 
-        $indentVal = null;
-        if (
-            count($request['arguments']) &&
-            $normalizedVal = Roff_Unit::normalize($request['arguments'][0]) // note this filters out 0s
-        ) {
-            $indentVal = $normalizedVal;
+        if (count($request['arguments'])) {
+            $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
+            $man->indentation = $indentVal;
+        } else {
+            $indentVal = $man->indentation;
         }
 
         $dl = Block_DefinitionList::getParentDL($blockContainerParentNode);

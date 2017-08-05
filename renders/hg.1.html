@@ -277,16 +277,14 @@ R foobar.c</code></pre>
     <p>By default, the revision used is the parent of the working directory; use -r/--rev to specify a different revision.
     <p>The archive type is automatically detected based on file extension (to override, use -t/--type).
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>create a zip file containing the 1.0 release:
-          <pre><code>hg archive -r 1.0 project-1.0.zip</code></pre>
-        <li>
-          <p>create a tarball excluding .hg files:
-          <pre><code>hg archive project.tar.gz -X ".hg*"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>create a zip file containing the 1.0 release:
+        <pre><code>hg archive -r 1.0 project-1.0.zip</code></pre>
+      <li>
+        <p>create a tarball excluding .hg files:
+        <pre><code>hg archive project.tar.gz -X ".hg*"</code></pre>
+    </ul>
     <p>Valid types are:
     <dl>
       <dt><strong>files</strong>
@@ -349,20 +347,18 @@ R foobar.c</code></pre>
         <p><strong>hg backout</strong> cannot be used to fix either an unwanted or incorrect merge.
     </dl>
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>Reverse the effect of the parent of the working directory. This backout will be committed immediately:
-          <pre><code>hg backout -r .</code></pre>
-        <li>
-          <p>Reverse the effect of previous bad revision 23:
-          <pre><code>hg backout -r 23</code></pre>
-        <li>
-          <p>Reverse the effect of previous bad revision 23 and leave changes uncommitted:
-          <pre><code>hg backout -r 23 --no-commit
+    <ul class="indent-2">
+      <li>
+        <p>Reverse the effect of the parent of the working directory. This backout will be committed immediately:
+        <pre><code>hg backout -r .</code></pre>
+      <li>
+        <p>Reverse the effect of previous bad revision 23:
+        <pre><code>hg backout -r 23</code></pre>
+      <li>
+        <p>Reverse the effect of previous bad revision 23 and leave changes uncommitted:
+        <pre><code>hg backout -r 23 --no-commit
 hg commit -m "Backout revision 23"</code></pre>
-      </ul>
-    </div>
+    </ul>
     <p>By default, the pending changeset will have one parent, maintaining a linear history. With --merge, the pending changeset will instead have two parents: the old parent of the working directory and a new child of REV that simply undoes REV.
     <p>Before version 1.7, the behavior without --merge was equivalent to specifying --merge followed by <strong>hg update --clean .</strong> to cancel the merge and leave the child of REV as a head to be merged separately.
     <p>See <strong>hg help dates</strong> for a list of formats valid for -d/--date.
@@ -420,46 +416,44 @@ hg commit -m "Backout revision 23"</code></pre>
     <p>As a shortcut, you can also use the revision argument to mark a revision as good or bad without checking it out first.
     <p>If you supply a command, it will be used for automatic bisection. The environment variable HG_NODE will contain the ID of the changeset being tested. The exit status of the command will be used to mark revisions as good or bad: status 0 means good, 125 means to skip the revision, 127 (command not found) will abort the bisection, and any other non-zero exit status means the revision is bad.
     <p>Some examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>start a bisection with known bad revision 34, and good revision 12:
-          <pre><code>hg bisect --bad 34
+    <ul class="indent-2">
+      <li>
+        <p>start a bisection with known bad revision 34, and good revision 12:
+        <pre><code>hg bisect --bad 34
 hg bisect --good 12</code></pre>
-        <li>
-          <p>advance the current bisection by marking current revision as good or bad:
-          <pre><code>hg bisect --good
+      <li>
+        <p>advance the current bisection by marking current revision as good or bad:
+        <pre><code>hg bisect --good
 hg bisect --bad</code></pre>
-        <li>
-          <p>mark the current revision, or a known revision, to be skipped (e.g. if that revision is not usable because of another issue):
-          <pre><code>hg bisect --skip
+      <li>
+        <p>mark the current revision, or a known revision, to be skipped (e.g. if that revision is not usable because of another issue):
+        <pre><code>hg bisect --skip
 hg bisect --skip 23</code></pre>
-        <li>
-          <p>skip all revisions that do not touch directories <strong>foo</strong> or <strong>bar</strong>:
-          <pre><code>hg bisect --skip "!( file('path:foo') & file('path:bar') )"</code></pre>
-        <li>
-          <p>forget the current bisection:
-          <pre><code>hg bisect --reset</code></pre>
-        <li>
-          <p>use 'make &amp;& make tests' to automatically find the first broken revision:
-          <pre><code>hg bisect --reset
+      <li>
+        <p>skip all revisions that do not touch directories <strong>foo</strong> or <strong>bar</strong>:
+        <pre><code>hg bisect --skip "!( file('path:foo') & file('path:bar') )"</code></pre>
+      <li>
+        <p>forget the current bisection:
+        <pre><code>hg bisect --reset</code></pre>
+      <li>
+        <p>use 'make &amp;& make tests' to automatically find the first broken revision:
+        <pre><code>hg bisect --reset
 hg bisect --bad 34
 hg bisect --good 12
 hg bisect --command "make &amp;& make tests"</code></pre>
-        <li>
-          <p>see all changesets whose states are already known in the current bisection:
-          <pre><code>hg log -r "bisect(pruned)"</code></pre>
-        <li>
-          <p>see the changeset currently being bisected (especially useful if running with -U/--noupdate):
-          <pre><code>hg log -r "bisect(current)"</code></pre>
-        <li>
-          <p>see all changesets that took part in the current bisection:
-          <pre><code>hg log -r "bisect(range)"</code></pre>
-        <li>
-          <p>you can even get a nice graph:
-          <pre><code>hg log --graph -r "bisect(range)"</code></pre>
-      </ul>
-    </div>
+      <li>
+        <p>see all changesets whose states are already known in the current bisection:
+        <pre><code>hg log -r "bisect(pruned)"</code></pre>
+      <li>
+        <p>see the changeset currently being bisected (especially useful if running with -U/--noupdate):
+        <pre><code>hg log -r "bisect(current)"</code></pre>
+      <li>
+        <p>see all changesets that took part in the current bisection:
+        <pre><code>hg log -r "bisect(range)"</code></pre>
+      <li>
+        <p>you can even get a nice graph:
+        <pre><code>hg log --graph -r "bisect(range)"</code></pre>
+    </ul>
     <p>See <strong>hg help revsets</strong> for more about the <em>bisect()</em> keyword.
     <p>Returns 0 on success.
     <p>Options:
@@ -496,25 +490,23 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <p>Bookmarks can be pushed and pulled between repositories (see <strong>hg help push</strong> and <strong>hg help pull</strong>). If a shared bookmark has diverged, a new 'divergent bookmark' of the form 'name@path' will be created. Using <strong>hg merge</strong> will resolve the divergence.
     <p>A bookmark named '@' has the special property that <strong>hg clone</strong> will check it out by default if it exists.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>create an active bookmark for a new line of development:
-          <pre><code>hg book new-feature</code></pre>
-        <li>
-          <p>create an inactive bookmark as a place marker:
-          <pre><code>hg book -i reviewed</code></pre>
-        <li>
-          <p>create an inactive bookmark on another changeset:
-          <pre><code>hg book -r .^ tested</code></pre>
-        <li>
-          <p>rename bookmark turkey to dinner:
-          <pre><code>hg book -m turkey dinner</code></pre>
-        <li>
-          <p>move the '@' bookmark from another branch:
-          <pre><code>hg book -f @</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>create an active bookmark for a new line of development:
+        <pre><code>hg book new-feature</code></pre>
+      <li>
+        <p>create an inactive bookmark as a place marker:
+        <pre><code>hg book -i reviewed</code></pre>
+      <li>
+        <p>create an inactive bookmark on another changeset:
+        <pre><code>hg book -r .^ tested</code></pre>
+      <li>
+        <p>rename bookmark turkey to dinner:
+        <pre><code>hg book -m turkey dinner</code></pre>
+      <li>
+        <p>move the '@' bookmark from another branch:
+        <pre><code>hg book -f @</code></pre>
+    </ul>
     <p>Options:
     <dl>
       <dt><strong>-f, --force</strong>
@@ -732,28 +724,26 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     </dl>
     <p>When cloning from servers that support it, Mercurial may fetch pre-generated data from a server-advertised URL. When this is done, hooks operating on incoming changesets and changegroups may fire twice, once for the bundle fetched from the URL and another for any additional data not fetched from this URL. In addition, if an error occurs, the repository may be rolled back to a partial clone. This behavior may change in future releases. See <strong>hg help -e clonebundles</strong> for more.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>clone a remote repository to a new directory named hg/:
-          <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/</code></pre>
-        <li>
-          <p>create a lightweight local clone:
-          <pre><code>hg clone project/ project-feature/</code></pre>
-        <li>
-          <p>clone from an absolute path on an ssh server (note double-slash):
-          <pre><code>hg clone ssh://user@server//home/projects/alpha/</code></pre>
-        <li>
-          <p>do a high-speed clone over a LAN while checking out a specified version:
-          <pre><code>hg clone --uncompressed http://server/repo -u 1.5</code></pre>
-        <li>
-          <p>create a repository without changesets after a particular revision:
-          <pre><code>hg clone -r 04e544 experimental/ good/</code></pre>
-        <li>
-          <p>clone (and track) a particular named branch:
-          <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/#stable</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>clone a remote repository to a new directory named hg/:
+        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/</code></pre>
+      <li>
+        <p>create a lightweight local clone:
+        <pre><code>hg clone project/ project-feature/</code></pre>
+      <li>
+        <p>clone from an absolute path on an ssh server (note double-slash):
+        <pre><code>hg clone ssh://user@server//home/projects/alpha/</code></pre>
+      <li>
+        <p>do a high-speed clone over a LAN while checking out a specified version:
+        <pre><code>hg clone --uncompressed http://server/repo -u 1.5</code></pre>
+      <li>
+        <p>create a repository without changesets after a particular revision:
+        <pre><code>hg clone -r 04e544 experimental/ good/</code></pre>
+      <li>
+        <p>clone (and track) a particular named branch:
+        <pre><code>hg clone https://www.mercurial-scm.org/repo/hg/#stable</code></pre>
+    </ul>
     <p>See <strong>hg help urls</strong> for details on specifying URLs.
     <p>Returns 0 on success.
     <p>Options:
@@ -803,19 +793,17 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <p>See <strong>hg help dates</strong> for a list of formats valid for -d/--date.
     <p>Returns 0 on success, 1 if nothing changed.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>commit all files ending in .py:
-          <pre><code>hg commit --include "set:**.py"</code></pre>
-        <li>
-          <p>commit all non-binary files:
-          <pre><code>hg commit --exclude "set:binary()"</code></pre>
-        <li>
-          <p>amend the current commit and set the date to now:
-          <pre><code>hg commit --amend --date now</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>commit all files ending in .py:
+        <pre><code>hg commit --include "set:**.py"</code></pre>
+      <li>
+        <p>commit all non-binary files:
+        <pre><code>hg commit --exclude "set:binary()"</code></pre>
+      <li>
+        <p>amend the current commit and set the date to now:
+        <pre><code>hg commit --amend --date now</code></pre>
+    </ul>
     <p>Options:
     <dl>
       <dt><strong>-A, --addremove</strong>
@@ -931,7 +919,7 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <pre><code>hg diff [OPTION]... ([-c REV] | [-r REV1 [-r REV2]]) [FILE]...</code></pre>
     <p>Show differences between revisions for the specified files.
     <p>Differences between files are shown using the unified diff format.
-    <dl>
+    <dl class="indent-4">
       <dt>Note
       <dd>
         <p><strong>hg diff</strong> may generate unexpected results for merges, as it will default to comparing against the working directory's first parent changeset if no revisions are specified.
@@ -941,27 +929,25 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <p>Without the -a/--text option, diff will avoid generating diffs of files it detects as binary. With -a, diff will generate a diff anyway, probably with undesirable results.
     <p>Use the -g/--git option to generate diffs in the git extended diff format. For more information, read <strong>hg help diffs</strong>.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>compare a file in the current working directory to its parent:
-          <pre><code>hg diff foo.c</code></pre>
-        <li>
-          <p>compare two historical versions of a directory, with rename info:
-          <pre><code>hg diff --git -r 1.0:1.2 lib/</code></pre>
-        <li>
-          <p>get change stats relative to the last change on some date:
-          <pre><code>hg diff --stat -r "date('may 2')"</code></pre>
-        <li>
-          <p>diff all newly-added files that contain a keyword:
-          <pre><code>hg diff "set:added() and grep(GNU)"</code></pre>
-        <li>
-          <p>compare a revision and its parents:
-          <pre><code>hg diff -c 9353         # compare against first parent
+    <ul class="indent-2">
+      <li>
+        <p>compare a file in the current working directory to its parent:
+        <pre><code>hg diff foo.c</code></pre>
+      <li>
+        <p>compare two historical versions of a directory, with rename info:
+        <pre><code>hg diff --git -r 1.0:1.2 lib/</code></pre>
+      <li>
+        <p>get change stats relative to the last change on some date:
+        <pre><code>hg diff --stat -r "date('may 2')"</code></pre>
+      <li>
+        <p>diff all newly-added files that contain a keyword:
+        <pre><code>hg diff "set:added() and grep(GNU)"</code></pre>
+      <li>
+        <p>compare a revision and its parents:
+        <pre><code>hg diff -c 9353         # compare against first parent
 hg diff -r 9353^:9353   # same using revset syntax
 hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
-      </ul>
-    </div>
+    </ul>
     <p>Returns 0 on success.
     <p>Options:
     <dl>
@@ -1064,19 +1050,17 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
     <p>Use the -g/--git option to generate diffs in the git extended diff format. See <strong>hg help diffs</strong> for more information.
     <p>With the --switch-parent option, the diff will be against the second parent. It can be useful to review a merge.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>use export and import to transplant a bugfix to the current branch:
-          <pre><code>hg export -r 9353 | hg import -</code></pre>
-        <li>
-          <p>export all the changesets between two revisions to a file with rename information:
-          <pre><code>hg export --git -r 123:150 &gt; changes.txt</code></pre>
-        <li>
-          <p>split outgoing changes into a series of patches with descriptive names:
-          <pre><code>hg export -r "outgoing()" -o "%n-%m.patch"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>use export and import to transplant a bugfix to the current branch:
+        <pre><code>hg export -r 9353 | hg import -</code></pre>
+      <li>
+        <p>export all the changesets between two revisions to a file with rename information:
+        <pre><code>hg export --git -r 123:150 &gt; changes.txt</code></pre>
+      <li>
+        <p>split outgoing changes into a series of patches with descriptive names:
+        <pre><code>hg export -r "outgoing()" -o "%n-%m.patch"</code></pre>
+    </ul>
     <p>Returns 0 on success.
     <p>Options:
     <dl>
@@ -1108,28 +1092,26 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
     <p>Print files under Mercurial control in the working directory or specified revision for given files (excluding removed files). Files can be specified as filenames or filesets.
     <p>If no files are given to match, this command prints the names of all files under Mercurial control.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>list all files under the current directory:
-          <pre><code>hg files .</code></pre>
-        <li>
-          <p>shows sizes and flags for current revision:
-          <pre><code>hg files -vr .</code></pre>
-        <li>
-          <p>list all files named README:
-          <pre><code>hg files -I "**/README"</code></pre>
-        <li>
-          <p>list all binary files:
-          <pre><code>hg files "set:binary()"</code></pre>
-        <li>
-          <p>find files containing a regular expression:
-          <pre><code>hg files "set:grep('bob')"</code></pre>
-        <li>
-          <p>search tracked file contents with xargs and grep:
-          <pre><code>hg files -0 | xargs -0 grep foo</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>list all files under the current directory:
+        <pre><code>hg files .</code></pre>
+      <li>
+        <p>shows sizes and flags for current revision:
+        <pre><code>hg files -vr .</code></pre>
+      <li>
+        <p>list all files named README:
+        <pre><code>hg files -I "**/README"</code></pre>
+      <li>
+        <p>list all binary files:
+        <pre><code>hg files "set:binary()"</code></pre>
+      <li>
+        <p>find files containing a regular expression:
+        <pre><code>hg files "set:grep('bob')"</code></pre>
+      <li>
+        <p>search tracked file contents with xargs and grep:
+        <pre><code>hg files -0 | xargs -0 grep foo</code></pre>
+    </ul>
     <p>See <strong>hg help patterns</strong> and <strong>hg help filesets</strong> for more information on specifying file patterns.
     <p>Returns 0 if a match is found, 1 otherwise.
     <p>Options:
@@ -1164,16 +1146,14 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
     <p>To delete the file from the working directory, see <strong>hg remove</strong>.
     <p>To undo a forget before the next commit, see <strong>hg add</strong>.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>forget newly-added binary files:
-          <pre><code>hg forget "set:added() and binary()"</code></pre>
-        <li>
-          <p>forget files that would be excluded by .hgignore:
-          <pre><code>hg forget "set:hgignore()"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>forget newly-added binary files:
+        <pre><code>hg forget "set:added() and binary()"</code></pre>
+      <li>
+        <p>forget files that would be excluded by .hgignore:
+        <pre><code>hg forget "set:hgignore()"</code></pre>
+    </ul>
     <p>Returns 0 on success.
     <p>Options:
     <dl>
@@ -1202,26 +1182,24 @@ hg diff -r 9353^2:9353  # compare against the second parent</code></pre>
         <p>The -c/--continue option does not reapply earlier options, except for --force.
     </dl>
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>copy a single change to the stable branch and edit its description:
-          <pre><code>hg update stable
+    <ul class="indent-2">
+      <li>
+        <p>copy a single change to the stable branch and edit its description:
+        <pre><code>hg update stable
 hg graft --edit 9393</code></pre>
-        <li>
-          <p>graft a range of changesets with one exception, updating dates:
-          <pre><code>hg graft -D "2085::2093 and not 2091"</code></pre>
-        <li>
-          <p>continue a graft after resolving conflicts:
-          <pre><code>hg graft -c</code></pre>
-        <li>
-          <p>show the source of a grafted changeset:
-          <pre><code>hg log --debug -r .</code></pre>
-        <li>
-          <p>show revisions sorted by date:
-          <pre><code>hg log -r "sort(all(), date)"</code></pre>
-      </ul>
-    </div>
+      <li>
+        <p>graft a range of changesets with one exception, updating dates:
+        <pre><code>hg graft -D "2085::2093 and not 2091"</code></pre>
+      <li>
+        <p>continue a graft after resolving conflicts:
+        <pre><code>hg graft -c</code></pre>
+      <li>
+        <p>show the source of a grafted changeset:
+        <pre><code>hg log --debug -r .</code></pre>
+      <li>
+        <p>show revisions sorted by date:
+        <pre><code>hg log -r "sort(all(), date)"</code></pre>
+    </ul>
     <p>See <strong>hg help revisions</strong> and <strong>hg help revsets</strong> for more about specifying revisions.
     <p>Returns 0 on successful completion.
     <p>Options:
@@ -1379,19 +1357,17 @@ hg graft --edit 9393</code></pre>
     <p>When REV is not given, print a summary of the current state of the repository.
     <p>Specifying a path to a repository root or Mercurial bundle will cause lookup to operate on that repository/bundle.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>generate a build identifier for the working directory:
-          <pre><code>hg id --id &gt; build-id.dat</code></pre>
-        <li>
-          <p>find the revision corresponding to a tag:
-          <pre><code>hg id -n -r 1.3</code></pre>
-        <li>
-          <p>check the most recent revision of a remote repository:
-          <pre><code>hg id -r tip https://www.mercurial-scm.org/repo/hg/</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>generate a build identifier for the working directory:
+        <pre><code>hg id --id &gt; build-id.dat</code></pre>
+      <li>
+        <p>find the revision corresponding to a tag:
+        <pre><code>hg id -n -r 1.3</code></pre>
+      <li>
+        <p>check the most recent revision of a remote repository:
+        <pre><code>hg id -r tip https://www.mercurial-scm.org/repo/hg/</code></pre>
+    </ul>
     <p>See <strong>hg log</strong> for generating more information about specific revisions, including full hash identifiers.
     <p>Returns 0 if successful.
     <p>Options:
@@ -1447,32 +1423,30 @@ hg graft --edit 9393</code></pre>
     <p>It is possible to use external patch programs to perform the patch by setting the <strong>ui.patch</strong> configuration option. For the default internal tool, the fuzz can also be configured via <strong>patch.fuzz</strong>. See <strong>hg help config</strong> for more information about configuration files and how to use these options.
     <p>See <strong>hg help dates</strong> for a list of formats valid for -d/--date.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>import a traditional patch from a website and detect renames:
-          <pre><code>hg import -s 80 http://example.com/bugfix.patch</code></pre>
-        <li>
-          <p>import a changeset from an hgweb server:
-          <pre><code>hg import https://www.mercurial-scm.org/repo/hg/rev/5ca8c111e9aa</code></pre>
-        <li>
-          <p>import all the patches in an Unix-style mbox:
-          <pre><code>hg import incoming-patches.mbox</code></pre>
-        <li>
-          <p>attempt to exactly restore an exported changeset (not always possible):
-          <pre><code>hg import --exact proposed-fix.patch</code></pre>
-        <li>
-          <p>use an external tool to apply a patch which is too fuzzy for the default internal tool.
-          <div class="indent-6">
-            <p>hg import --config ui.patch="patch --merge" fuzzy.patch
-          </div>
-        <li>
-          <p>change the default fuzzing from 2 to a less strict 7
-          <div class="indent-6">
-            <p>hg import --config ui.fuzz=7 fuzz.patch
-          </div>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>import a traditional patch from a website and detect renames:
+        <pre><code>hg import -s 80 http://example.com/bugfix.patch</code></pre>
+      <li>
+        <p>import a changeset from an hgweb server:
+        <pre><code>hg import https://www.mercurial-scm.org/repo/hg/rev/5ca8c111e9aa</code></pre>
+      <li>
+        <p>import all the patches in an Unix-style mbox:
+        <pre><code>hg import incoming-patches.mbox</code></pre>
+      <li>
+        <p>attempt to exactly restore an exported changeset (not always possible):
+        <pre><code>hg import --exact proposed-fix.patch</code></pre>
+      <li>
+        <p>use an external tool to apply a patch which is too fuzzy for the default internal tool.
+        <div class="indent-6">
+          <p>hg import --config ui.patch="patch --merge" fuzzy.patch
+        </div>
+      <li>
+        <p>change the default fuzzing from 2 to a less strict 7
+        <div class="indent-6">
+          <p>hg import --config ui.fuzz=7 fuzz.patch
+        </div>
+    </ul>
     <p>Returns 0 on success, 1 on partial success (see --partial).
     <p>Options:
     <dl>
@@ -1553,20 +1527,18 @@ BM4               34567890abcd changed</code></pre>
     <p>From the point of view of pulling behavior, bookmark existing only in the remote repository are treated as <strong>added</strong>, even if it is in fact locally deleted.
     <p>For remote repository, using --bundle avoids downloading the changesets twice if the incoming is followed by a pull.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>show incoming changes with patches and full description:
-          <pre><code>hg incoming -vp</code></pre>
-        <li>
-          <p>show incoming changes excluding merges, store a bundle:
-          <pre><code>hg in -vpM --bundle incoming.hg
+    <ul class="indent-2">
+      <li>
+        <p>show incoming changes with patches and full description:
+        <pre><code>hg incoming -vp</code></pre>
+      <li>
+        <p>show incoming changes excluding merges, store a bundle:
+        <pre><code>hg in -vpM --bundle incoming.hg
 hg pull incoming.hg</code></pre>
-        <li>
-          <p>briefly list changes inside a bundle:
-          <pre><code>hg in changes.hg -T "{desc|firstline}\n"</code></pre>
-      </ul>
-    </div>
+      <li>
+        <p>briefly list changes inside a bundle:
+        <pre><code>hg in changes.hg -T "{desc|firstline}\n"</code></pre>
+    </ul>
     <p>Returns 0 if there are incoming changes, 1 otherwise.
     <p>Options:
     <dl>
@@ -1699,43 +1671,41 @@ hg pull incoming.hg</code></pre>
         <p>For performance reasons, <strong>hg log FILE</strong> may omit duplicate changes made on branches and will not show removals or mode changes. To see all such changes, use the --removed switch.
     </dl>
     <p>Some examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>changesets with full descriptions and file lists:
-          <pre><code>hg log -v</code></pre>
-        <li>
-          <p>changesets ancestral to the working directory:
-          <pre><code>hg log -f</code></pre>
-        <li>
-          <p>last 10 commits on the current branch:
-          <pre><code>hg log -l 10 -b .</code></pre>
-        <li>
-          <p>changesets showing all modifications of a file, including removals:
-          <pre><code>hg log --removed file.c</code></pre>
-        <li>
-          <p>all changesets that touch a directory, with diffs, excluding merges:
-          <pre><code>hg log -Mp lib/</code></pre>
-        <li>
-          <p>all revision numbers that match a keyword:
-          <pre><code>hg log -k bug --template "{rev}\n"</code></pre>
-        <li>
-          <p>the full hash identifier of the working directory parent:
-          <pre><code>hg log -r . --template "{node}\n"</code></pre>
-        <li>
-          <p>list available log templates:
-          <pre><code>hg log -T list</code></pre>
-        <li>
-          <p>check if a given changeset is included in a tagged release:
-          <pre><code>hg log -r "a21ccf and ancestor(1.9)"</code></pre>
-        <li>
-          <p>find all changesets by some user in a date range:
-          <pre><code>hg log -k alice -d "may 2008 to jul 2008"</code></pre>
-        <li>
-          <p>summary of all changesets after the last tag:
-          <pre><code>hg log -r "last(tagged())::" --template "{desc|firstline}\n"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>changesets with full descriptions and file lists:
+        <pre><code>hg log -v</code></pre>
+      <li>
+        <p>changesets ancestral to the working directory:
+        <pre><code>hg log -f</code></pre>
+      <li>
+        <p>last 10 commits on the current branch:
+        <pre><code>hg log -l 10 -b .</code></pre>
+      <li>
+        <p>changesets showing all modifications of a file, including removals:
+        <pre><code>hg log --removed file.c</code></pre>
+      <li>
+        <p>all changesets that touch a directory, with diffs, excluding merges:
+        <pre><code>hg log -Mp lib/</code></pre>
+      <li>
+        <p>all revision numbers that match a keyword:
+        <pre><code>hg log -k bug --template "{rev}\n"</code></pre>
+      <li>
+        <p>the full hash identifier of the working directory parent:
+        <pre><code>hg log -r . --template "{node}\n"</code></pre>
+      <li>
+        <p>list available log templates:
+        <pre><code>hg log -T list</code></pre>
+      <li>
+        <p>check if a given changeset is included in a tagged release:
+        <pre><code>hg log -r "a21ccf and ancestor(1.9)"</code></pre>
+      <li>
+        <p>find all changesets by some user in a date range:
+        <pre><code>hg log -k alice -d "may 2008 to jul 2008"</code></pre>
+      <li>
+        <p>summary of all changesets after the last tag:
+        <pre><code>hg log -r "last(tagged())::" --template "{desc|firstline}\n"</code></pre>
+    </ul>
     <p>See <strong>hg help dates</strong> for a list of formats valid for -d/--date.
     <p>See <strong>hg help revisions</strong> and <strong>hg help revsets</strong> for more about specifying and ordering revisions.
     <p>See <strong>hg help templates</strong> for more about pre-packaged styles and specifying custom templates.
@@ -2229,15 +2199,13 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     <pre><code>hg resolve [OPTION]... [FILE]...</code></pre>
     <p>Merges with unresolved conflicts are often the result of non-interactive merging using the <strong>internal:merge</strong> configuration setting, or a command-line merge tool like <strong>diff3</strong>. The resolve command is used to manage the files involved in a merge, after <strong>hg merge</strong> has been run, and before <strong>hg commit</strong> is run (i.e. the working directory must have two parents). See <strong>hg help merge-tools</strong> for information on configuring merge tools.
     <p>The resolve command can be used in the following ways:
-    <div class="indent">
-      <ul class="indent-2">
-        <li><strong>hg resolve [--tool TOOL] FILE...</strong>: attempt to re-merge the specified files, discarding any previous merge attempts. Re-merging is not performed for files already marked as resolved. Use <strong>--all/-a</strong> to select all unresolved files. <strong>--tool</strong> can be used to specify the merge tool used for the given files. It overrides the HGMERGE environment variable and your configuration files. &nbsp;Previous file contents are saved with a <strong>.orig</strong> suffix.
-        <li><strong>hg resolve -m [FILE]</strong>: mark a file as having been resolved (e.g. after having manually fixed-up the files). The default is to mark all unresolved files.
-        <li><strong>hg resolve -u [FILE]...</strong>: mark a file as unresolved. The default is to mark all resolved files.
-        <li><strong>hg resolve -l</strong>: list files which had or still have conflicts. In the printed list, <strong>U</strong> = unresolved and <strong>R</strong> = resolved.
-      </ul>
-    </div>
-    <dl>
+    <ul class="indent-2">
+      <li><strong>hg resolve [--tool TOOL] FILE...</strong>: attempt to re-merge the specified files, discarding any previous merge attempts. Re-merging is not performed for files already marked as resolved. Use <strong>--all/-a</strong> to select all unresolved files. <strong>--tool</strong> can be used to specify the merge tool used for the given files. It overrides the HGMERGE environment variable and your configuration files. &nbsp;Previous file contents are saved with a <strong>.orig</strong> suffix.
+      <li><strong>hg resolve -m [FILE]</strong>: mark a file as having been resolved (e.g. after having manually fixed-up the files). The default is to mark all unresolved files.
+      <li><strong>hg resolve -u [FILE]...</strong>: mark a file as unresolved. The default is to mark all resolved files.
+      <li><strong>hg resolve -l</strong>: list files which had or still have conflicts. In the printed list, <strong>U</strong> = unresolved and <strong>R</strong> = resolved.
+    </ul>
+    <dl class="indent-2">
       <dt>Note
       <dd>
         <p>Mercurial will not let you commit files with unresolved merge conflicts. You must use <strong>hg resolve -m ...</strong> before you can commit after a conflicting merge.
@@ -2327,15 +2295,13 @@ hg log -r "max(::p1(REV) and file(FILE))+max(::p2(REV) and file(FILE))"</code></
     <p>This command should be used with care. There is only one level of rollback, and there is no way to undo a rollback. It will also restore the dirstate at the time of the last transaction, losing any dirstate changes since that time. This command does not alter the working directory.
     <p>Transactions are used to encapsulate the effects of all commands that create new changesets or propagate existing changesets into a repository.
     <p>For example, the following commands are transactional, and their effects can be rolled back:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>commit
-        <li>import
-        <li>pull
-        <li>push (with this repository as the destination)
-        <li>unbundle
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>commit
+      <li>import
+      <li>pull
+      <li>push (with this repository as the destination)
+      <li>unbundle
+    </ul>
     <p>To avoid permanent data loss, rollback will refuse to rollback a commit transaction if it isn't checked out. Use --force to override this protection.
     <p>The rollback command can be entirely disabled by setting the <strong>ui.rollback</strong> configuration setting to false. If you're here because you want to use rollback and it's disabled, you can re-enable the command by setting <strong>ui.rollback</strong> to true.
     <p>This command is not intended for use on public repositories. Once changes are visible for pull by other users, rolling a transaction back locally is ineffective (someone else may already have pulled the changes). Furthermore, a race is possible with readers of the repository; for example an in-progress pull from the repository may fail if a rollback is performed.
@@ -2444,22 +2410,20 @@ C = clean
 I = ignored
   = origin of the previous file (with --copies)</code></pre>
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>show changes in the working directory relative to a changeset:
-          <pre><code>hg status --rev 9353</code></pre>
-        <li>
-          <p>show changes in the working directory relative to the current directory (see <strong>hg help patterns</strong> for more information):
-          <pre><code>hg status re:</code></pre>
-        <li>
-          <p>show all changes including copies in an existing changeset:
-          <pre><code>hg status --copies --change 9353</code></pre>
-        <li>
-          <p>get a NUL separated list of added files, suitable for xargs:
-          <pre><code>hg status -an0</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>show changes in the working directory relative to a changeset:
+        <pre><code>hg status --rev 9353</code></pre>
+      <li>
+        <p>show changes in the working directory relative to the current directory (see <strong>hg help patterns</strong> for more information):
+        <pre><code>hg status re:</code></pre>
+      <li>
+        <p>show all changes including copies in an existing changeset:
+        <pre><code>hg status --copies --change 9353</code></pre>
+      <li>
+        <p>get a NUL separated list of added files, suitable for xargs:
+        <pre><code>hg status -an0</code></pre>
+    </ul>
     <p>Returns 0 on success.
     <p>Options:
     <dl>
@@ -2694,62 +2658,52 @@ I = ignored
 <section>
   <h2>DATE FORMATS</h2>
   <p>Some commands allow the user to specify a date, e.g.:
-  <div class="indent">
-    <ul class="indent-2">
-      <li>backout, commit, import, tag: Specify the commit date.
-      <li>log, revert, update: Select revision(s) by date.
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li>backout, commit, import, tag: Specify the commit date.
+    <li>log, revert, update: Select revision(s) by date.
+  </ul>
   <p>Many date formats are valid. Here are some examples:
-  <div class="indent">
-    <ul class="indent-2">
-      <li><strong>Wed Dec 6 13:18:29 2006</strong> (local timezone assumed)
-      <li><strong>Dec 6 13:18 -0600</strong> (year assumed, time offset provided)
-      <li><strong>Dec 6 13:18 UTC</strong> (UTC and GMT are aliases for +0000)
-      <li><strong>Dec 6</strong> (midnight)
-      <li><strong>13:18</strong> (today assumed)
-      <li><strong>3:39</strong> (3:39AM assumed)
-      <li><strong>3:39pm</strong> (15:39)
-      <li><strong>2006-12-06 13:18:29</strong> (ISO 8601 format)
-      <li><strong>2006-12-6 13:18</strong>
-      <li><strong>2006-12-6</strong>
-      <li><strong>12-6</strong>
-      <li><strong>12/6</strong>
-      <li><strong>12/6/6</strong> (Dec 6 2006)
-      <li><strong>today</strong> (midnight)
-      <li><strong>yesterday</strong> (midnight)
-      <li><strong>now</strong> - right now
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li><strong>Wed Dec 6 13:18:29 2006</strong> (local timezone assumed)
+    <li><strong>Dec 6 13:18 -0600</strong> (year assumed, time offset provided)
+    <li><strong>Dec 6 13:18 UTC</strong> (UTC and GMT are aliases for +0000)
+    <li><strong>Dec 6</strong> (midnight)
+    <li><strong>13:18</strong> (today assumed)
+    <li><strong>3:39</strong> (3:39AM assumed)
+    <li><strong>3:39pm</strong> (15:39)
+    <li><strong>2006-12-06 13:18:29</strong> (ISO 8601 format)
+    <li><strong>2006-12-6 13:18</strong>
+    <li><strong>2006-12-6</strong>
+    <li><strong>12-6</strong>
+    <li><strong>12/6</strong>
+    <li><strong>12/6/6</strong> (Dec 6 2006)
+    <li><strong>today</strong> (midnight)
+    <li><strong>yesterday</strong> (midnight)
+    <li><strong>now</strong> - right now
+  </ul>
   <p>Lastly, there is Mercurial's internal format:
-  <div class="indent">
-    <ul class="indent-2">
-      <li><strong>1165411109 0</strong> (Wed Dec 6 13:18:29 2006 UTC)
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li><strong>1165411109 0</strong> (Wed Dec 6 13:18:29 2006 UTC)
+  </ul>
   <p>This is the internal representation format for dates. The first number is the number of seconds since the epoch (1970-01-01 00:00 UTC). The second is the offset of the local timezone, in seconds west of UTC (negative if the timezone is east of UTC).
   <p>The log command also accepts date ranges:
-  <div class="indent">
-    <ul class="indent-2">
-      <li><strong>&lt;DATE</strong> - at or before a given date/time
-      <li><strong>&gt;DATE</strong> - on or after a given date/time
-      <li><strong>DATE to DATE</strong> - a date range, inclusive
-      <li><strong>-DAYS</strong> - within a given number of days of today
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li><strong>&lt;DATE</strong> - at or before a given date/time
+    <li><strong>&gt;DATE</strong> - on or after a given date/time
+    <li><strong>DATE to DATE</strong> - a date range, inclusive
+    <li><strong>-DAYS</strong> - within a given number of days of today
+  </ul>
 </section>
 <section>
   <h2>DIFF FORMATS</h2>
   <p>Mercurial's default format for showing changes between two versions of a file is compatible with the unified format of GNU diff, which can be used by GNU patch and many other standard tools.
   <p>While this standard format is often enough, it does not encode the following information:
-  <div class="indent">
-    <ul class="indent-2">
-      <li>executable status and other permission bits
-      <li>copy or rename information
-      <li>changes in binary files
-      <li>creation or deletion of empty files
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li>executable status and other permission bits
+    <li>copy or rename information
+    <li>changes in binary files
+    <li>creation or deletion of empty files
+  </ul>
   <p>Mercurial also supports the extended diff format from the git VCS which addresses these limitations. The git diff format is not produced by default because a few widespread tools still do not understand this format.
   <p>This means that when generating diffs from a Mercurial repository (e.g. with <strong>hg export</strong>), you should be careful about things like file copies and renames or other things mentioned above, because when applying a standard diff to a different repository, this extra information is lost. Mercurial's internal operations (like push and pull) are not affected by this, because they use an internal binary format for communicating changes.
   <p>To make Mercurial produce the git extended diff format, use the --git option available for many commands, or set 'git = True' in the [diff] section of your configuration file. You do not need to set this option when importing diffs in this format or using them in the mq extension.
@@ -2781,7 +2735,7 @@ I = ignored
     <dd>
       <p>A list of files or directories to search for configuration files. Item separator is ":" on Unix, ";" on Windows. If HGRCPATH is not set, platform default search path is used. If empty, only the .hg/hgrc from the current repository is read.
       <p>For each element in HGRCPATH:
-      <div class="indent-7">
+      <div>
         <ul class="indent-2">
           <li>if it's a directory, all files ending with .rc are added
           <li>otherwise, the file itself will be added
@@ -2815,7 +2769,7 @@ I = ignored
     <dt><strong>HGUSER</strong>
     <dd>
       <p>This is the string used as the author of a commit. If not set, available values will be considered in this order:
-      <div class="indent-7">
+      <div>
         <ul class="indent-2">
           <li>HGUSER (deprecated)
           <li>configuration files from the HGRCPATH
@@ -3033,7 +2987,7 @@ baz = !</code></pre>
     <dt><strong>size(expression)</strong>
     <dd>
       <p>File size matches the given expression. Examples:
-      <div class="indent-7">
+      <div>
         <ul class="indent-2">
           <li>size('1k') - files from 1024 to 2047 bytes
           <li>size('&lt; 20k') - files less than 20480 bytes
@@ -3055,28 +3009,26 @@ baz = !</code></pre>
       <p>File that is marked unresolved according to <strong>hg resolve -l</strong>.
   </dl>
   <p>Some sample queries:
-  <div class="indent">
-    <ul class="indent-2">
-      <li>
-        <p>Show status of files that appear to be binary in the working directory:
-        <pre><code>hg status -A "set:binary()"</code></pre>
-      <li>
-        <p>Forget files that are in .hgignore but are already tracked:
-        <pre><code>hg forget "set:hgignore() and not ignored()"</code></pre>
-      <li>
-        <p>Find text files that contain a string:
-        <pre><code>hg files "set:grep(magic) and not binary()"</code></pre>
-      <li>
-        <p>Find C files in a non-standard encoding:
-        <pre><code>hg files "set:**.c and not encoding('UTF-8')"</code></pre>
-      <li>
-        <p>Revert copies of large binary files:
-        <pre><code>hg revert "set:copied() and binary() and size('&gt;1M')"</code></pre>
-      <li>
-        <p>Remove files listed in foo.lst that contain the letter a or b:
-        <pre><code>hg remove "set: 'listfile:foo.lst' and (**a* or **b*)"</code></pre>
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li>
+      <p>Show status of files that appear to be binary in the working directory:
+      <pre><code>hg status -A "set:binary()"</code></pre>
+    <li>
+      <p>Forget files that are in .hgignore but are already tracked:
+      <pre><code>hg forget "set:hgignore() and not ignored()"</code></pre>
+    <li>
+      <p>Find text files that contain a string:
+      <pre><code>hg files "set:grep(magic) and not binary()"</code></pre>
+    <li>
+      <p>Find C files in a non-standard encoding:
+      <pre><code>hg files "set:**.c and not encoding('UTF-8')"</code></pre>
+    <li>
+      <p>Revert copies of large binary files:
+      <pre><code>hg revert "set:copied() and binary() and size('&gt;1M')"</code></pre>
+    <li>
+      <p>Remove files listed in foo.lst that contain the letter a or b:
+      <pre><code>hg remove "set: 'listfile:foo.lst' and (**a* or **b*)"</code></pre>
+  </ul>
   <p>See also <strong>hg help patterns</strong>.
 </section>
 <section>
@@ -3393,13 +3345,11 @@ syntax: regexp
 /projects/b = c:/repos/b
 / = /srv/repos/*
 /user/bob = /home/bob/repos/**</code></pre>
-  <div class="indent">
-    <ul class="indent-2">
-      <li>The first two entries make two repositories in different directories appear under the same directory in the web interface
-      <li>The third entry will publish every Mercurial repository found in <strong>/srv/repos/</strong>, for instance the repository <strong>/srv/repos/quux/</strong> will appear as <strong>http://server/quux/</strong>
-      <li>The fourth entry will publish both <strong>http://server/user/bob/quux/</strong> and <strong>http://server/user/bob/quux/testsubrepo/</strong>
-    </ul>
-  </div>
+  <ul class="indent-2">
+    <li>The first two entries make two repositories in different directories appear under the same directory in the web interface
+    <li>The third entry will publish every Mercurial repository found in <strong>/srv/repos/</strong>, for instance the repository <strong>/srv/repos/quux/</strong> will appear as <strong>http://server/quux/</strong>
+    <li>The fourth entry will publish both <strong>http://server/user/bob/quux/</strong> and <strong>http://server/user/bob/quux/testsubrepo/</strong>
+  </ul>
   <p>The <strong>collections</strong> section is deprecated and has been superseded by <strong>paths</strong>.
   <section>
     <h3>URLs and Common Arguments</h3>
@@ -3633,8 +3583,6 @@ syntax: regexp
       <dt>8.
       <dd>
         <p>The merge of the file fails and must be resolved before commit.
-    </dl>
-    <dl>
       <dt>Note
       <dd>
         <p>After selecting a merge program, Mercurial will by default attempt to merge the files using a simple merge algorithm first. Only if it doesn't succeed because of conflicting changes Mercurial will actually execute the merge program. Whether to use the simple merge algorithm first can be controlled by the premerge setting of the merge tool. Premerge is enabled by default unless the file is binary or a symlink.
@@ -3654,7 +3602,7 @@ syntax: regexp
   <p>Mercurial accepts several notations for identifying one or more files at a time.
   <p>By default, Mercurial treats filenames as shell-style extended glob patterns.
   <p>Alternate pattern notations must be specified explicitly.
-  <dl>
+  <dl class="indent-3">
     <dt>Note
     <dd>
       <p>Patterns specified in <strong>.hgignore</strong> are not rooted. Please see <strong>hg help hgignore</strong> for details.
@@ -3722,7 +3670,7 @@ public on the client
 client and server
 
 - secret changesets are neither pushed, pulled, or cloned</code></pre>
-    <dl>
+    <dl class="indent-2">
       <dt>Note
       <dd>
         <p>Pulling a draft changeset from a publishing server does not mark it as public on the server side due to the read-only nature of pull.
@@ -3731,7 +3679,7 @@ client and server
     <pre><code>[phases]
 publish = False</code></pre>
     <p>See <strong>hg help config</strong> for more information on configuration files.
-    <dl>
+    <dl class="indent-2">
       <dt>Note
       <dd>
         <p>Servers running older versions of Mercurial are treated as publishing.
@@ -3866,7 +3814,7 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dt><strong>bisect(string)</strong>
       <dd>
         <p>Changesets marked in the specified bisect status:
-        <div class="indent-7">
+        <div>
           <ul class="indent-2">
             <li><strong>good</strong>, <strong>bad</strong>, <strong>skip</strong>: csets explicitly marked as good/bad/skip
             <li><strong>goods</strong>, <strong>bads</strong> &nbsp; &nbsp; &nbsp;: csets topologically good/bad
@@ -4051,7 +3999,7 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dd>
         <p>Sort set by keys. The default sort order is ascending, specify a key as <strong>-key</strong> to sort in descending order.
         <p>The keys can be:
-        <div class="indent-7">
+        <div>
           <ul class="indent-2">
             <li><strong>rev</strong> for the revision number,
             <li><strong>branch</strong> for the branch name,
@@ -4105,28 +4053,26 @@ rs(s, k) = reverse(sort(s, k))</code></pre>
   <section>
     <h3>Examples</h3>
     <p>Some sample queries:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>Changesets on the default branch:
-          <pre><code>hg log -r "branch(default)"</code></pre>
-        <li>
-          <p>Changesets on the default branch since tag 1.5 (excluding merges):
-          <pre><code>hg log -r "branch(default) and 1.5:: and not merge()"</code></pre>
-        <li>
-          <p>Open branch heads:
-          <pre><code>hg log -r "head() and not closed()"</code></pre>
-        <li>
-          <p>Changesets between tags 1.3 and 1.5 mentioning "bug" that affect <strong>hgext/*</strong>:
-          <pre><code>hg log -r "1.3::1.5 and keyword(bug) and file('hgext/*')"</code></pre>
-        <li>
-          <p>Changesets committed in May 2008, sorted by user:
-          <pre><code>hg log -r "sort(date('May 2008'), user)"</code></pre>
-        <li>
-          <p>Changesets mentioning "bug" or "issue" that are not in a tagged release:
-          <pre><code>hg log -r "(keyword(bug) or keyword(issue)) and not ancestors(tag())"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>Changesets on the default branch:
+        <pre><code>hg log -r "branch(default)"</code></pre>
+      <li>
+        <p>Changesets on the default branch since tag 1.5 (excluding merges):
+        <pre><code>hg log -r "branch(default) and 1.5:: and not merge()"</code></pre>
+      <li>
+        <p>Open branch heads:
+        <pre><code>hg log -r "head() and not closed()"</code></pre>
+      <li>
+        <p>Changesets between tags 1.3 and 1.5 mentioning "bug" that affect <strong>hgext/*</strong>:
+        <pre><code>hg log -r "1.3::1.5 and keyword(bug) and file('hgext/*')"</code></pre>
+      <li>
+        <p>Changesets committed in May 2008, sorted by user:
+        <pre><code>hg log -r "sort(date('May 2008'), user)"</code></pre>
+      <li>
+        <p>Changesets mentioning "bug" or "issue" that are not in a tagged release:
+        <pre><code>hg log -r "(keyword(bug) or keyword(issue)) and not ancestors(tag())"</code></pre>
+    </ul>
   </section>
 </section>
 <section>
@@ -4135,18 +4081,16 @@ rs(s, k) = reverse(sort(s, k))</code></pre>
   <section>
     <h3>Choosing an Interface</h3>
     <p>Machines have a choice of several methods to interface with Mercurial. These include:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Executing the <strong>hg</strong> process
-        <li>Querying a HTTP server
-        <li>Calling out to a command server
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Executing the <strong>hg</strong> process
+      <li>Querying a HTTP server
+      <li>Calling out to a command server
+    </ul>
     <p>Executing <strong>hg</strong> processes is very similar to how humans interact with Mercurial in the shell. It should already be familiar to you.
     <p><strong>hg serve</strong> can be used to start a server. By default, this will start a "hgweb" HTTP server. This HTTP server has support for machine-readable output, such as JSON. For more, see <strong>hg help hgweb</strong>.
     <p><strong>hg serve</strong> can also start a "command server." Clients can connect to this server and issue Mercurial commands over a special protocol. For more details on the command server, including links to client libraries, see https://www.mercurial-scm.org/wiki/CommandServer.
     <p><strong>hg serve</strong> based interfaces (the hgweb and command servers) have the advantage over simple <strong>hg</strong> process invocations in that they are likely more efficient. This is because there is significant overhead to spawn new Python processes.
-    <dl>
+    <dl class="indent-2">
       <dt>Tip
       <dd>
         <p>If you need to invoke several <strong>hg</strong> processes in short order and/or performance is important to you, use of a server-based interface is highly recommended.
@@ -4631,68 +4575,66 @@ nodedate = "{node|short}: {date(date, "%Y-%m-%d")}\n"</code></pre>
   <p>defines a template, <strong>nodedate</strong>, which can be called like:
   <pre><code>$ hg log -r . -Tnodedate</code></pre>
   <p>Some sample command line templates:
-  <div class="indent">
-    <ul class="indent-2">
-      <li>
-        <p>Format lists, e.g. files:
-        <pre><code>$ hg log -r 0 --template "files:\n{files % '  {file}\n'}"</code></pre>
-      <li>
-        <p>Join the list of files with a ", ":
-        <pre><code>$ hg log -r 0 --template "files: {join(files, ', ')}\n"</code></pre>
-      <li>
-        <p>Join the list of files ending with ".py" with a ", ":
-        <pre><code>$ hg log -r 0 --template "pythonfiles: {join(files('**.py'), ', ')}\n"</code></pre>
-      <li>
-        <p>Separate non-empty arguments by a " ":
-        <pre><code>$ hg log -r 0 --template "{separate(' ', node, bookmarks, tags}\n"</code></pre>
-      <li>
-        <p>Modify each line of a commit description:
-        <pre><code>$ hg log --template "{splitlines(desc) % '**** {line}\n'}"</code></pre>
-      <li>
-        <p>Format date:
-        <pre><code>$ hg log -r 0 --template "{date(date, '%Y')}\n"</code></pre>
-      <li>
-        <p>Display date in UTC:
-        <pre><code>$ hg log -r 0 --template "{localdate(date, 'UTC')|date}\n"</code></pre>
-      <li>
-        <p>Output the description set to a fill-width of 30:
-        <pre><code>$ hg log -r 0 --template "{fill(desc, 30)}"</code></pre>
-      <li>
-        <p>Use a conditional to test for the default branch:
-        <pre><code>$ hg log -r 0 --template "{ifeq(branch, 'default', 'on the main branch',
+  <ul class="indent-2">
+    <li>
+      <p>Format lists, e.g. files:
+      <pre><code>$ hg log -r 0 --template "files:\n{files % '  {file}\n'}"</code></pre>
+    <li>
+      <p>Join the list of files with a ", ":
+      <pre><code>$ hg log -r 0 --template "files: {join(files, ', ')}\n"</code></pre>
+    <li>
+      <p>Join the list of files ending with ".py" with a ", ":
+      <pre><code>$ hg log -r 0 --template "pythonfiles: {join(files('**.py'), ', ')}\n"</code></pre>
+    <li>
+      <p>Separate non-empty arguments by a " ":
+      <pre><code>$ hg log -r 0 --template "{separate(' ', node, bookmarks, tags}\n"</code></pre>
+    <li>
+      <p>Modify each line of a commit description:
+      <pre><code>$ hg log --template "{splitlines(desc) % '**** {line}\n'}"</code></pre>
+    <li>
+      <p>Format date:
+      <pre><code>$ hg log -r 0 --template "{date(date, '%Y')}\n"</code></pre>
+    <li>
+      <p>Display date in UTC:
+      <pre><code>$ hg log -r 0 --template "{localdate(date, 'UTC')|date}\n"</code></pre>
+    <li>
+      <p>Output the description set to a fill-width of 30:
+      <pre><code>$ hg log -r 0 --template "{fill(desc, 30)}"</code></pre>
+    <li>
+      <p>Use a conditional to test for the default branch:
+      <pre><code>$ hg log -r 0 --template "{ifeq(branch, 'default', 'on the main branch',
 'on branch {branch}')}\n"</code></pre>
-      <li>
-        <p>Append a newline if not empty:
-        <pre><code>$ hg tip --template "{if(author, '{author}\n')}"</code></pre>
-      <li>
-        <p>Label the output for use with the color extension:
-        <pre><code>$ hg log -r 0 --template "{label('changeset.{phase}', node|short)}\n"</code></pre>
-      <li>
-        <p>Invert the firstline filter, i.e. everything but the first line:
-        <pre><code>$ hg log -r 0 --template "{sub(r'^.*\n?\n?', '', desc)}\n"</code></pre>
-      <li>
-        <p>Display the contents of the 'extra' field, one per line:
-        <pre><code>$ hg log -r 0 --template "{join(extras, '\n')}\n"</code></pre>
-      <li>
-        <p>Mark the active bookmark with '*':
-        <pre><code>$ hg log --template "{bookmarks % '{bookmark}{ifeq(bookmark, active, '*')} '}\n"</code></pre>
-      <li>
-        <p>Find the previous release candidate tag, the distance and changes since the tag:
-        <pre><code>$ hg log -r . --template "{latesttag('re:^.*-rc$') % '{tag}, {changes}, {distance}'}\n"</code></pre>
-      <li>
-        <p>Mark the working copy parent with '@':
-        <pre><code>$ hg log --template "{ifcontains(rev, revset('.'), '@')}\n"</code></pre>
-      <li>
-        <p>Show details of parent revisions:
-        <pre><code>$ hg log --template "{revset('parents(%d)', rev) % '{desc|firstline}\n'}"</code></pre>
-      <li>
-        <p>Show only commit descriptions that start with "template":
-        <pre><code>$ hg log --template "{startswith('template', firstline(desc))}\n"</code></pre>
-      <li>
-        <p>Print the first word of each line of a commit message:
-        <pre><code>$ hg log --template "{word(0, desc)}\n"</code></pre>
-    </ul>
-  </div>
+    <li>
+      <p>Append a newline if not empty:
+      <pre><code>$ hg tip --template "{if(author, '{author}\n')}"</code></pre>
+    <li>
+      <p>Label the output for use with the color extension:
+      <pre><code>$ hg log -r 0 --template "{label('changeset.{phase}', node|short)}\n"</code></pre>
+    <li>
+      <p>Invert the firstline filter, i.e. everything but the first line:
+      <pre><code>$ hg log -r 0 --template "{sub(r'^.*\n?\n?', '', desc)}\n"</code></pre>
+    <li>
+      <p>Display the contents of the 'extra' field, one per line:
+      <pre><code>$ hg log -r 0 --template "{join(extras, '\n')}\n"</code></pre>
+    <li>
+      <p>Mark the active bookmark with '*':
+      <pre><code>$ hg log --template "{bookmarks % '{bookmark}{ifeq(bookmark, active, '*')} '}\n"</code></pre>
+    <li>
+      <p>Find the previous release candidate tag, the distance and changes since the tag:
+      <pre><code>$ hg log -r . --template "{latesttag('re:^.*-rc$') % '{tag}, {changes}, {distance}'}\n"</code></pre>
+    <li>
+      <p>Mark the working copy parent with '@':
+      <pre><code>$ hg log --template "{ifcontains(rev, revset('.'), '@')}\n"</code></pre>
+    <li>
+      <p>Show details of parent revisions:
+      <pre><code>$ hg log --template "{revset('parents(%d)', rev) % '{desc|firstline}\n'}"</code></pre>
+    <li>
+      <p>Show only commit descriptions that start with "template":
+      <pre><code>$ hg log --template "{startswith('template', firstline(desc))}\n"</code></pre>
+    <li>
+      <p>Print the first word of each line of a commit message:
+      <pre><code>$ hg log --template "{word(0, desc)}\n"</code></pre>
+  </ul>
 </section>
 <section>
   <h2>URL PATHS</h2>
@@ -4707,21 +4649,19 @@ ssh://[user@]host[:port]/[path][#revision]</code></pre>
   <p>Some features, such as pushing to http:// and https:// URLs are only possible if the feature is explicitly enabled on the remote Mercurial server.
   <p>Note that the security of HTTPS URLs depends on proper configuration of web.cacerts.
   <p>Some notes about using SSH with Mercurial:
-  <div class="indent">
-    <ul class="indent-2">
-      <li>SSH requires an accessible shell account on the destination machine and a copy of hg in the remote path or specified with as remotecmd.
-      <li>
-        <p>path is relative to the remote user's home directory by default. Use an extra slash at the start of a path to specify an absolute path:
-        <pre><code>ssh://example.com//tmp/repository</code></pre>
-      <li>
-        <p>Mercurial doesn't use its own compression via SSH; the right thing to do is to configure it in your ~/.ssh/config, e.g.:
-        <pre><code>Host *.mylocalnetwork.example.com
+  <ul class="indent-2">
+    <li>SSH requires an accessible shell account on the destination machine and a copy of hg in the remote path or specified with as remotecmd.
+    <li>
+      <p>path is relative to the remote user's home directory by default. Use an extra slash at the start of a path to specify an absolute path:
+      <pre><code>ssh://example.com//tmp/repository</code></pre>
+    <li>
+      <p>Mercurial doesn't use its own compression via SSH; the right thing to do is to configure it in your ~/.ssh/config, e.g.:
+      <pre><code>Host *.mylocalnetwork.example.com
   Compression no
 Host *
   Compression yes</code></pre>
-        <p>Alternatively specify "ssh -C" as your ssh command in your configuration file or with the --ssh command line option.
-    </ul>
-  </div>
+      <p>Alternatively specify "ssh -C" as your ssh command in your configuration file or with the --ssh command line option.
+  </ul>
   <p>These URLs can all be stored in your configuration file with path aliases under the [paths] section like so:
   <pre><code>[paths]
 alias1 = URL1
@@ -4767,19 +4707,15 @@ alias2 = URL2
   <section>
     <h3>Branch-based Access Control</h3>
     <p>Use the <strong>acl.deny.branches</strong> and <strong>acl.allow.branches</strong> sections to have branch-based access control. Keys in these sections can be either:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>a branch name, or
-        <li>an asterisk, to match any branch;
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>a branch name, or
+      <li>an asterisk, to match any branch;
+    </ul>
     <p>The corresponding values can be either:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>a comma-separated list containing users and groups, or
-        <li>an asterisk, to match anyone;
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>a comma-separated list containing users and groups, or
+      <li>an asterisk, to match anyone;
+    </ul>
     <p>You can add the "!" prefix to a user or group name to invert the sense of the match.
   </section>
   <section>
@@ -5327,13 +5263,11 @@ hg churn -f "%Y" -s</code></pre>
     </dl>
     <p>Instead of the server generating full repository bundles for every clone request, it generates full bundles once and they are subsequently reused to bootstrap new clones. The server may still transfer data at clone time. However, this is only data that has been added/changed since the bundle was created. For large, established repositories, this can reduce server load for clones to less than 1% of original.
     <p>To work, this extension requires the following of server operators:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Generating bundle files of repository content (typically periodically, such as once per day).
-        <li>A file server that clients have network access to and that Python knows how to talk to through its normal URL handling facility (typically an HTTP server).
-        <li>A process for keeping the bundles manifest in sync with available bundle files.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Generating bundle files of repository content (typically periodically, such as once per day).
+      <li>A file server that clients have network access to and that Python knows how to talk to through its normal URL handling facility (typically an HTTP server).
+      <li>A process for keeping the bundles manifest in sync with available bundle files.
+    </ul>
     <p>Strictly speaking, using a static file hosting server isn't required: a server operator could use a dynamic service for retrieving bundle data. However, static file hosting services are simple and scalable and should be sufficient for most needs.
     <p>Bundle files can be generated with the <strong>hg bundle</strong> command. Typically <strong>hg bundle --all</strong> is used to produce a bundle of the entire repository.
     <p><strong>hg debugcreatestreamclonebundle</strong> can be used to produce a special <em>streaming clone bundle</em>. These are bundle files that are extremely efficient to produce and consume (read: fast). However, they are larger than traditional bundle formats and require that clients support the exact set of repository data store formats in use by the repository that created them. Typically, a newer server can serve data that is compatible with older clients. However, <em>streaming clone bundles</em> don't have this guarantee. <strong>Server operators need to be aware that newer versions of Mercurial may produce streaming clone bundles incompatible with older Mercurial versions.</strong>
@@ -5478,26 +5412,22 @@ pagermode = ansi</code></pre>
     <p>convert a foreign SCM repository to a Mercurial one.:
     <pre><code>hg convert [OPTION]... SOURCE [DEST [REVMAP]]</code></pre>
     <p>Accepted source formats [identifiers]:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Mercurial [hg]
-        <li>CVS [cvs]
-        <li>Darcs [darcs]
-        <li>git [git]
-        <li>Subversion [svn]
-        <li>Monotone [mtn]
-        <li>GNU Arch [gnuarch]
-        <li>Bazaar [bzr]
-        <li>Perforce [p4]
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Mercurial [hg]
+      <li>CVS [cvs]
+      <li>Darcs [darcs]
+      <li>git [git]
+      <li>Subversion [svn]
+      <li>Monotone [mtn]
+      <li>GNU Arch [gnuarch]
+      <li>Bazaar [bzr]
+      <li>Perforce [p4]
+    </ul>
     <p>Accepted destination formats [identifiers]:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Mercurial [hg]
-        <li>Subversion [svn] (history on branches is not preserved)
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Mercurial [hg]
+      <li>Subversion [svn] (history on branches is not preserved)
+    </ul>
     <p>If no revision is given, all revisions will be converted. Otherwise, convert will only import up to the named revision (given in a format understood by the source).
     <p>If no destination directory name is specified, it defaults to the basename of the source with <strong>-hg</strong> appended. If the destination repository doesn't exist, it will be created.
     <p>By default, all sources except Mercurial will use --branchsort. Mercurial uses --sourcesort to preserve original revision numbers order. Sort modes have the following effects:
@@ -5743,13 +5673,11 @@ native = LF</code></pre>
         <p>The rules will first apply when files are touched in the working directory, e.g. by updating to null and back to tip to touch all files.
     </dl>
     <p>The extension uses an optional <strong>[eol]</strong> section read from both the normal Mercurial configuration files and the <strong>.hgeol</strong> file, with the latter overriding the former. You can use that section to control the overall behavior. There are three settings:
-    <div class="indent">
-      <ul class="indent-2">
-        <li><strong>eol.native</strong> (default <strong>os.linesep</strong>) can be set to <strong>LF</strong> or <strong>CRLF</strong> to override the default interpretation of <strong>native</strong> for checkout. This can be used with <strong>hg archive</strong> on Unix, say, to generate an archive where files have line endings for Windows.
-        <li><strong>eol.only-consistent</strong> (default True) can be set to False to make the extension convert files with inconsistent EOLs. Inconsistent means that there is both <strong>CRLF</strong> and <strong>LF</strong> present in the file. Such files are normally not touched under the assumption that they have mixed EOLs on purpose.
-        <li><strong>eol.fix-trailing-newline</strong> (default False) can be set to True to ensure that converted files end with a EOL character (either <strong>\n</strong> or <strong>\r\n</strong> as per the configured patterns).
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li><strong>eol.native</strong> (default <strong>os.linesep</strong>) can be set to <strong>LF</strong> or <strong>CRLF</strong> to override the default interpretation of <strong>native</strong> for checkout. This can be used with <strong>hg archive</strong> on Unix, say, to generate an archive where files have line endings for Windows.
+      <li><strong>eol.only-consistent</strong> (default True) can be set to False to make the extension convert files with inconsistent EOLs. Inconsistent means that there is both <strong>CRLF</strong> and <strong>LF</strong> present in the file. Such files are normally not touched under the assumption that they have mixed EOLs on purpose.
+      <li><strong>eol.fix-trailing-newline</strong> (default False) can be set to True to ensure that converted files end with a EOL character (either <strong>\n</strong> or <strong>\r\n</strong> as per the configured patterns).
+    </ul>
     <p>The extension provides <strong>cleverencode:</strong> and <strong>cleverdecode:</strong> filters like the deprecated win32text extension does. This means that you can disable win32text and enable eol and your filters will still work. You only need to these filters until you have prepared a <strong>.hgeol</strong> file.
     <p>The <strong>win32text.forbid*</strong> hooks provided by the win32text extension have been unified into a single hook named <strong>eol.checkheadshook</strong>. The hook will lookup the expected line endings from the <strong>.hgeol</strong> file, which means you must migrate to a <strong>.hgeol</strong> file first before using the hook. <strong>eol.checkheadshook</strong> only checks heads, intermediate invalid revisions will be pushed. To forbid them completely, use the <strong>eol.checkallhook</strong> hook. These hooks are best used as <strong>pretxnchangegroup</strong> hooks.
     <p>See <strong>hg help patterns</strong> for more information about the glob patterns used.
@@ -6208,24 +6136,20 @@ dropmissing = True</code></pre>
     <p>interactively edit changeset history:
     <pre><code>hg histedit [OPTIONS] ([ANCESTOR] | --outgoing [URL])</code></pre>
     <p>This command lets you edit a linear series of changesets (up to and including the working directory, which should be clean). You can:
-    <div class="indent">
-      <ul class="indent-2">
-        <li><em>pick</em> to [re]order a changeset
-        <li><em>drop</em> to omit changeset
-        <li><em>mess</em> to reword the changeset commit message
-        <li><em>fold</em> to combine it with the preceding changeset
-        <li><em>roll</em> like fold, but discarding this commit's description
-        <li><em>edit</em> to edit this changeset
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li><em>pick</em> to [re]order a changeset
+      <li><em>drop</em> to omit changeset
+      <li><em>mess</em> to reword the changeset commit message
+      <li><em>fold</em> to combine it with the preceding changeset
+      <li><em>roll</em> like fold, but discarding this commit's description
+      <li><em>edit</em> to edit this changeset
+    </ul>
     <p>There are a number of ways to select the root changeset:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Specify ANCESTOR directly
-        <li>Use --outgoing -- it will be the first linear changeset not included in destination. (See <strong>hg help config.paths.default-push</strong>)
-        <li>Otherwise, the value from the "histedit.defaultrev" config option is used as a revset to select the base revision when ANCESTOR is not specified. The first revision returned by the revset is used. By default, this selects the editable history that is unique to the ancestry of the working directory.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Specify ANCESTOR directly
+      <li>Use --outgoing -- it will be the first linear changeset not included in destination. (See <strong>hg help config.paths.default-push</strong>)
+      <li>Otherwise, the value from the "histedit.defaultrev" config option is used as a revset to select the base revision when ANCESTOR is not specified. The first revision returned by the revset is used. By default, this selects the editable history that is unique to the ancestry of the working directory.
+    </ul>
     <p>If you use --outgoing, this command will abort if there are ambiguous outgoing revisions. For example, if there are multiple branches containing outgoing revisions.
     <p>Use "min(outgoing() and ::.)" or similar revset specification instead of --outgoing to specify edit target revision exactly in such ambiguous situation. See <strong>hg help revsets</strong> for detail about selecting revisions.
     <dl>
@@ -6519,16 +6443,14 @@ patterns =
     <p>Pull largefiles that are referenced from local changesets but missing locally, pulling from a remote repository to the local cache.
     <p>If SOURCE is omitted, the 'default' path will be used. See <strong>hg help urls</strong> for more information.
     <p>Some examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>pull largefiles for all branch heads:
-          <pre><code>hg lfpull -r "head() and not closed()"</code></pre>
-        <li>
-          <p>pull largefiles on the default branch:
-          <pre><code>hg lfpull -r "branch(default)"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>pull largefiles for all branch heads:
+        <pre><code>hg lfpull -r "head() and not closed()"</code></pre>
+      <li>
+        <p>pull largefiles on the default branch:
+        <pre><code>hg lfpull -r "branch(default)"</code></pre>
+    </ul>
     <p>Options:
     <dl>
       <dt><strong>-r,</strong><em>--rev</em>&nbsp;<strong>&lt;VALUE[+]&gt;</strong>
@@ -7370,13 +7292,11 @@ will also work).</code></pre>
     <p>command to send changesets as (a series of) patch emails
     <p>The series is started off with a "[PATCH 0 of N]" introduction, which describes the series as a whole.
     <p>Each patch email has a Subject line of "[PATCH M of N] ...", using the first line of the changeset description as the subject text. The message contains two or three body parts:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>The changeset description.
-        <li>[Optional] The result of running diffstat on the patch.
-        <li>The patch itself, as generated by <strong>hg export</strong>.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>The changeset description.
+      <li>[Optional] The result of running diffstat on the patch.
+      <li>The patch itself, as generated by <strong>hg export</strong>.
+    </ul>
     <p>Each message refers to the first in the series using the In-Reply-To and References headers, so they will show up as a sequence in threaded mail and news readers, and in mail archives.
     <p>To configure other defaults, add a section like this to your configuration file:
     <pre><code>[email]
@@ -7544,20 +7464,16 @@ hg email -o -m mbox &amp;&    # generate an mbox file ...
     <pre><code>hg purge [OPTION]... [DIR]...</code></pre>
     <p>Delete files not known to Mercurial. This is useful to test local and uncommitted changes in an otherwise-clean source tree.
     <p>This means that purge will delete the following by default:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Unknown files: files marked with "?" by <strong>hg status</strong>
-        <li>Empty directories: in fact Mercurial ignores directories unless they contain files under source control management
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Unknown files: files marked with "?" by <strong>hg status</strong>
+      <li>Empty directories: in fact Mercurial ignores directories unless they contain files under source control management
+    </ul>
     <p>But it will leave untouched:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Modified and unmodified tracked files
-        <li>Ignored files (unless --all is specified)
-        <li>New files added to the repository (with <strong>hg add</strong>)
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Modified and unmodified tracked files
+      <li>Ignored files (unless --all is specified)
+      <li>New files added to the repository (with <strong>hg add</strong>)
+    </ul>
     <p>The --files and --dirs options can be used to direct purge to delete only files, only directories, or both. If neither option is given, both will be deleted.
     <p>If directories are given on the command line, only files in these directories are considered.
     <p>Be careful with purge, as you could irreversibly delete some files you forgot to add to the repository. If you only want to print the list of files that this program would delete, use the --print option.
@@ -7610,7 +7526,7 @@ hg email -o -m mbox &amp;&    # generate an mbox file ...
     <p>Published commits cannot be rebased (see <strong>hg help phases</strong>). To copy commits, see <strong>hg help graft</strong>.
     <p>If you don't specify a destination changeset (<strong>-d/--dest</strong>), rebase will use the same logic as <strong>hg merge</strong> to pick a destination. &nbsp;if the current branch contains exactly one other head, the other head is merged with by default. &nbsp;Otherwise, an explicit revision with which to merge with must be provided. &nbsp;(destination changeset is not modified by rebasing, but new changesets are added as its descendants.)
     <p>Here are the ways to select changesets:
-    <dl class="indent-7">
+    <dl>
       <dt>1.
       <dd>
         <p>Explicitly select them using <strong>--rev</strong>.
@@ -7630,28 +7546,26 @@ hg email -o -m mbox &amp;&    # generate an mbox file ...
     <p>If you need to use a tool to automate merge/conflict decisions, you can specify one with <strong>--tool</strong>, see <strong>hg help merge-tools</strong>. As a caveat: the tool will not be used to mediate when a file was deleted, there is no hook presently available for this.
     <p>If a rebase is interrupted to manually resolve a conflict, it can be continued with --continue/-c or aborted with --abort/-a.
     <p>Examples:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>move "local changes" (current commit back to branching point) to the current branch tip after a pull:
-          <pre><code>hg rebase</code></pre>
-        <li>
-          <p>move a single changeset to the stable branch:
-          <pre><code>hg rebase -r 5f493448 -d stable</code></pre>
-        <li>
-          <p>splice a commit and all its descendants onto another part of history:
-          <pre><code>hg rebase --source c0c3 --dest 4cf9</code></pre>
-        <li>
-          <p>rebase everything on a branch marked by a bookmark onto the default branch:
-          <pre><code>hg rebase --base myfeature --dest default</code></pre>
-        <li>
-          <p>collapse a sequence of changes into a single commit:
-          <pre><code>hg rebase --collapse -r 1520:1525 -d .</code></pre>
-        <li>
-          <p>move a named branch while preserving its name:
-          <pre><code>hg rebase -r "branch(featureX)" -d 1.3 --keepbranches</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>move "local changes" (current commit back to branching point) to the current branch tip after a pull:
+        <pre><code>hg rebase</code></pre>
+      <li>
+        <p>move a single changeset to the stable branch:
+        <pre><code>hg rebase -r 5f493448 -d stable</code></pre>
+      <li>
+        <p>splice a commit and all its descendants onto another part of history:
+        <pre><code>hg rebase --source c0c3 --dest 4cf9</code></pre>
+      <li>
+        <p>rebase everything on a branch marked by a bookmark onto the default branch:
+        <pre><code>hg rebase --base myfeature --dest default</code></pre>
+      <li>
+        <p>collapse a sequence of changes into a single commit:
+        <pre><code>hg rebase --collapse -r 1520:1525 -d .</code></pre>
+      <li>
+        <p>move a named branch while preserving its name:
+        <pre><code>hg rebase -r "branch(featureX)" -d 1.3 --keepbranches</code></pre>
+    </ul>
     <p>Returns 0 on success, 1 if nothing to rebase or there are unresolved conflicts.
     <p>Options:
     <dl>
@@ -8046,13 +7960,11 @@ kiln = https://{1}.kilnhg.com/Repo/</code></pre>
     <p>You can rewrite the changelog message with the --filter option. Its argument will be invoked with the current changelog message as $1 and the patch as $2.
     <p>--source/-s specifies another repository to use for selecting changesets, just as if it temporarily had been pulled. If --branch/-b is specified, these revisions will be used as heads when deciding which changesets to transplant, just as if only these revisions had been pulled. If --all/-a is specified, all the revisions up to the heads specified with --branch will be transplanted.
     <p>Example:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>
-          <p>transplant all changes up to REV on top of your current revision:
-          <pre><code>hg transplant --branch REV --all</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>
+        <p>transplant all changes up to REV on top of your current revision:
+        <pre><code>hg transplant --branch REV --all</code></pre>
+    </ul>
     <p>You can optionally mark selected transplanted changesets as merge changesets. You will not be prompted to transplant any ancestors of a merged transplant, and you can merge descendants of them normally instead of transplanting them.
     <p>Merge changesets may be transplanted directly by specifying the proper parent changeset by calling <strong>hg transplant --parent</strong>.
     <p>If no merges or revisions are provided, <strong>hg transplant</strong> will start an interactive changeset browser.
@@ -8097,28 +8009,22 @@ kiln = https://{1}.kilnhg.com/Repo/</code></pre>
     <p>allow the use of MBCS paths with problematic encodings
     <p>Some MBCS encodings are not good for some path operations (i.e. splitting path, case conversion, etc.) with its encoded bytes. We call such a encoding (i.e. shift_jis and big5) as "problematic encoding". This extension can be used to fix the issue with those encodings by wrapping some functions to convert to Unicode string before path operation.
     <p>This extension is useful for:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Japanese Windows users using shift_jis encoding.
-        <li>Chinese Windows users using big5 encoding.
-        <li>All users who use a repository with one of problematic encodings on case-insensitive file system.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Japanese Windows users using shift_jis encoding.
+      <li>Chinese Windows users using big5 encoding.
+      <li>All users who use a repository with one of problematic encodings on case-insensitive file system.
+    </ul>
     <p>This extension is not needed for:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>Any user who use only ASCII chars in path.
-        <li>Any user who do not use any of problematic encodings.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>Any user who use only ASCII chars in path.
+      <li>Any user who do not use any of problematic encodings.
+    </ul>
     <p>Note that there are some limitations on using this extension:
-    <div class="indent">
-      <ul class="indent-2">
-        <li>You should use single encoding in one repository.
-        <li>If the repository path ends with 0x5c, .hg/hgrc cannot be read.
-        <li>win32mbcs is not compatible with fixutf8 extension.
-      </ul>
-    </div>
+    <ul class="indent-2">
+      <li>You should use single encoding in one repository.
+      <li>If the repository path ends with 0x5c, .hg/hgrc cannot be read.
+      <li>win32mbcs is not compatible with fixutf8 extension.
+    </ul>
     <p>By default, win32mbcs uses encoding.encoding decided by Mercurial. You can specify the encoding by config option:
     <pre><code>[win32mbcs]
 encoding = sjis</code></pre>

@@ -85,17 +85,23 @@ class DOM
             return 0;
         }
 
-        if (strpos($div->getAttribute('class'), 'indent-') === 0) {
+        $divClass = $div->getAttribute('class');
+
+        $pText = $p->textContent;
+
+        if (strpos($divClass, 'indent-') === 0 && $divClass !== 'indent-7') {
 
             // Exclude sentences in $p
             if (
-                preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $p->textContent) ||
-                preg_match('~(\s[a-z]+){3,}[:\.]$~u', $p->textContent)
+                $pText === 'or' ||
+                preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
+                preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
+                preg_match('~(\s[a-z]+){3,}[:\.]$~u', $pText)
             ) {
                 return 0;
             }
 
-            if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+            if (preg_match('~^(--?|\+)~u', $pText)) {
                 return 100;
             }
 
@@ -103,23 +109,23 @@ class DOM
                 return 0;
             }
 
-            if (preg_match('~^\S$~ui', $p->textContent)) {
+            if (preg_match('~^\S$~ui', $pText)) {
                 return 100;
             }
 
-            if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $p->textContent)) {
+            if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $pText)) {
                 return 100;
             }
 
-            if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $p->textContent)) {
+            if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $pText)) {
                 return 100;
             }
 
-            if (mb_strlen($p->textContent) < 9) {
+            if (mb_strlen($pText) < 9) {
                 return 100;
             }
 
-//        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $p->textContent)) {
+//        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $pText)) {
 //            return 50;
 //        }
 
@@ -127,7 +133,7 @@ class DOM
 
         } else {
 
-            if (preg_match('~^(--?|\+)~u', $p->textContent)) {
+            if (preg_match('~^(--?|\+)~u', $pText)) {
                 return 100;
             }
 
@@ -242,7 +248,7 @@ class DOM
                 return $nextSibling;
             }
 
-            if ($element->getAttribute('class') === 'indent') {
+            if ($element->getAttribute('class') === '') {
                 if (in_array($element->parentNode->tagName, ['dd'])) {
                     $nextSibling = Massage_DIV::getNextNonBRNode($element);
                     Node::remove($element);
@@ -385,6 +391,7 @@ class DOM
 
     static function massage(DOMElement $element): ?DOMNode
     {
+
         $doc   = $element->ownerDocument;
         $child = $element->firstChild;
         while ($child) {
@@ -577,6 +584,16 @@ class DOM
             if (self::isTag($child, 'div')) {
                 $child = Massage_DIV::postProcess($child);
             } else {
+                $child = $child->nextSibling;
+            }
+        }
+
+        if (DOM::isTag($element, 'section')) {
+            $child = $element->firstChild;
+            while ($child) {
+                if ($child->getAttribute('class') === 'indent-7') {
+                    $child->removeAttribute('class');
+                }
                 $child = $child->nextSibling;
             }
         }

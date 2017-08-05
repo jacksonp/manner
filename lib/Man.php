@@ -49,6 +49,7 @@ class Man
     public function reset()
     {
         $this->data     = [
+            'indentation' => '7', // The default indentation is 7.2n in troff mode and 7n in nroff mode except for grohtml, which ignores indentation. (https://www.mankier.com/7/groff_man#Miscellaneous)
             'escape_char' => '\\',
             'control_char' => '.',
             'control_char_2' => '\'',
