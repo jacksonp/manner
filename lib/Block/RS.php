@@ -33,6 +33,8 @@ class Block_RS implements Block_Template
             $indentVal = $man->indentation;
         }
 
+        Man::instance()->resetIndentationToDefault();
+
         if ($indentVal) { // note this filters out 0s
             $className .= '-' . $indentVal;
         }

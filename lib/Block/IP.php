@@ -19,18 +19,17 @@ class Block_IP implements Block_Template
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
-        // TODO $arguments will contain the indentation level, try to use this to handle nested dls?
+        if (count($request['arguments']) > 1) {
+            $indentVal        = Roff_Unit::normalize($request['arguments'][1]);
+            $man->indentation = $indentVal;
+        } else {
+            $indentVal = $man->indentation;
+        }
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
 
-            if (count($request['arguments']) > 1) {
-                $indentVal        = Roff_Unit::normalize($request['arguments'][1]);
-                $man->indentation = $indentVal;
-            } else {
-                $indentVal = $man->indentation;
-            }
-
+            // TODO: only keep this one if indentation matches?
             $dl = Block_DefinitionList::getParentDL($parentNode);
 
             if (is_null($dl)) {
@@ -57,8 +56,13 @@ class Block_IP implements Block_Template
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
             } else {
-                if ($parentNode->tagName !== 'dd') {
-                    $p->setAttribute('class', 'indent');
+                if ($indentVal) {
+                    $dl = Block_DefinitionList::getParentDL($parentNode);
+                    if ($dl && $dl->getAttribute('class') === 'indent-' . $indentVal) {
+                        $parentNode = $dl->lastChild;
+                    } else {
+                        $p->setAttribute('class', 'indent-' . $indentVal);
+                    }
                 }
             }
             $p = $parentNode->appendChild($p);

@@ -919,7 +919,7 @@ hg bisect --command "make &amp;& make tests"</code></pre>
     <pre><code>hg diff [OPTION]... ([-c REV] | [-r REV1 [-r REV2]]) [FILE]...</code></pre>
     <p>Show differences between revisions for the specified files.
     <p>Differences between files are shown using the unified diff format.
-    <dl class="indent-4">
+    <dl>
       <dt>Note
       <dd>
         <p><strong>hg diff</strong> may generate unexpected results for merges, as it will default to comparing against the working directory's first parent changeset if no revisions are specified.
@@ -2735,12 +2735,10 @@ I = ignored
     <dd>
       <p>A list of files or directories to search for configuration files. Item separator is ":" on Unix, ";" on Windows. If HGRCPATH is not set, platform default search path is used. If empty, only the .hg/hgrc from the current repository is read.
       <p>For each element in HGRCPATH:
-      <div>
-        <ul class="indent-2">
-          <li>if it's a directory, all files ending with .rc are added
-          <li>otherwise, the file itself will be added
-        </ul>
-      </div>
+      <ul class="indent-2">
+        <li>if it's a directory, all files ending with .rc are added
+        <li>otherwise, the file itself will be added
+      </ul>
     <dt><strong>HGPLAIN</strong>
     <dd>
       <p>When set, this disables any configuration settings that might change Mercurial's default output. This includes encoding, defaults, verbose mode, debug mode, quiet mode, tracebacks, and localization. This can be useful when scripting against Mercurial in the face of existing user configuration.
@@ -2769,15 +2767,13 @@ I = ignored
     <dt><strong>HGUSER</strong>
     <dd>
       <p>This is the string used as the author of a commit. If not set, available values will be considered in this order:
-      <div>
-        <ul class="indent-2">
-          <li>HGUSER (deprecated)
-          <li>configuration files from the HGRCPATH
-          <li>EMAIL
-          <li>interactive prompt
-          <li>LOGNAME (with <strong>@hostname</strong> appended)
-        </ul>
-      </div>
+      <ul class="indent-2">
+        <li>HGUSER (deprecated)
+        <li>configuration files from the HGRCPATH
+        <li>EMAIL
+        <li>interactive prompt
+        <li>LOGNAME (with <strong>@hostname</strong> appended)
+      </ul>
       <p>(deprecated, use configuration file)
     <dt><strong>EMAIL</strong>
     <dd>
@@ -2814,7 +2810,7 @@ bar = !/path/to/extension/bar.py
 # ditto, but no path was supplied for extension baz
 baz = !</code></pre>
   <p>disabled extensions:
-  <dl class="indent-4">
+  <dl class="indent-11">
     <dt><strong>acl</strong>
     <dd>
       <p>hooks for controlling repository access
@@ -2987,14 +2983,12 @@ baz = !</code></pre>
     <dt><strong>size(expression)</strong>
     <dd>
       <p>File size matches the given expression. Examples:
-      <div>
-        <ul class="indent-2">
-          <li>size('1k') - files from 1024 to 2047 bytes
-          <li>size('&lt; 20k') - files less than 20480 bytes
-          <li>size('&gt;= .5MB') - files at least 524288 bytes
-          <li>size('4k - 1MB') - files from 4096 bytes to 1048576 bytes
-        </ul>
-      </div>
+      <ul class="indent-2">
+        <li>size('1k') - files from 1024 to 2047 bytes
+        <li>size('&lt; 20k') - files less than 20480 bytes
+        <li>size('&gt;= .5MB') - files at least 524288 bytes
+        <li>size('4k - 1MB') - files from 4096 bytes to 1048576 bytes
+      </ul>
     <dt><strong>subrepo([pattern])</strong>
     <dd>
       <p>Subrepositories whose paths match the given pattern.
@@ -3489,7 +3483,7 @@ syntax: regexp
 </section>
 <section>
   <h2>TECHNICAL IMPLEMENTATION TOPICS</h2>
-  <dl class="indent-4">
+  <dl class="indent-11">
     <dt><strong>bundles</strong>
     <dd>
       <p>Bundles
@@ -3602,7 +3596,7 @@ syntax: regexp
   <p>Mercurial accepts several notations for identifying one or more files at a time.
   <p>By default, Mercurial treats filenames as shell-style extended glob patterns.
   <p>Alternate pattern notations must be specified explicitly.
-  <dl class="indent-3">
+  <dl>
     <dt>Note
     <dd>
       <p>Patterns specified in <strong>.hgignore</strong> are not rooted. Please see <strong>hg help hgignore</strong> for details.
@@ -3670,7 +3664,7 @@ public on the client
 client and server
 
 - secret changesets are neither pushed, pulled, or cloned</code></pre>
-    <dl class="indent-2">
+    <dl>
       <dt>Note
       <dd>
         <p>Pulling a draft changeset from a publishing server does not mark it as public on the server side due to the read-only nature of pull.
@@ -3679,7 +3673,7 @@ client and server
     <pre><code>[phases]
 publish = False</code></pre>
     <p>See <strong>hg help config</strong> for more information on configuration files.
-    <dl class="indent-2">
+    <dl>
       <dt>Note
       <dd>
         <p>Servers running older versions of Mercurial are treated as publishing.
@@ -3814,17 +3808,15 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dt><strong>bisect(string)</strong>
       <dd>
         <p>Changesets marked in the specified bisect status:
-        <div>
-          <ul class="indent-2">
-            <li><strong>good</strong>, <strong>bad</strong>, <strong>skip</strong>: csets explicitly marked as good/bad/skip
-            <li><strong>goods</strong>, <strong>bads</strong> &nbsp; &nbsp; &nbsp;: csets topologically good/bad
-            <li><strong>range</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: csets taking part in the bisection
-            <li><strong>pruned</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : csets that are goods, bads or skipped
-            <li><strong>untested</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : csets whose fate is yet unknown
-            <li><strong>ignored</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: csets ignored due to DAG topology
-            <li><strong>current</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: the cset currently being bisected
-          </ul>
-        </div>
+        <ul class="indent-2">
+          <li><strong>good</strong>, <strong>bad</strong>, <strong>skip</strong>: csets explicitly marked as good/bad/skip
+          <li><strong>goods</strong>, <strong>bads</strong> &nbsp; &nbsp; &nbsp;: csets topologically good/bad
+          <li><strong>range</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: csets taking part in the bisection
+          <li><strong>pruned</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : csets that are goods, bads or skipped
+          <li><strong>untested</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : csets whose fate is yet unknown
+          <li><strong>ignored</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: csets ignored due to DAG topology
+          <li><strong>current</strong> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: the cset currently being bisected
+        </ul>
       <dt><strong>bookmark([name])</strong>
       <dd>
         <p>The named bookmark or all bookmarks.
@@ -3999,16 +3991,14 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dd>
         <p>Sort set by keys. The default sort order is ascending, specify a key as <strong>-key</strong> to sort in descending order.
         <p>The keys can be:
-        <div>
-          <ul class="indent-2">
-            <li><strong>rev</strong> for the revision number,
-            <li><strong>branch</strong> for the branch name,
-            <li><strong>desc</strong> for the commit message (description),
-            <li><strong>user</strong> for user name (<strong>author</strong> can be used as an alias),
-            <li><strong>date</strong> for the commit date
-            <li><strong>topo</strong> for a reverse topographical sort
-          </ul>
-        </div>
+        <ul class="indent-2">
+          <li><strong>rev</strong> for the revision number,
+          <li><strong>branch</strong> for the branch name,
+          <li><strong>desc</strong> for the commit message (description),
+          <li><strong>user</strong> for user name (<strong>author</strong> can be used as an alias),
+          <li><strong>date</strong> for the commit date
+          <li><strong>topo</strong> for a reverse topographical sort
+        </ul>
         <p>The <strong>topo</strong> sort order cannot be combined with other sort keys. This sort takes one optional argument, <strong>topo.firstbranch</strong>, which takes a revset that specifies what topographical branches to prioritize in the sort.
       <dt><strong>subrepo([pattern])</strong>
       <dd>

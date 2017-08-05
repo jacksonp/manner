@@ -40,7 +40,7 @@
   <p>To determine the <em>best</em> of a nonempty list of file names, <strong>patch</strong> first takes all the names with the fewest path name components; of those, it then takes all the names with the shortest basename; of those, it then takes all the shortest names; finally, it takes the first remaining name.
   <p>Additionally, if the leading garbage contains a <strong>Prereq:</strong> line, <strong>patch</strong> takes the first word from the prerequisites line (normally a version number) and checks the original file to see if that word can be found. If not, <strong>patch</strong> asks for confirmation before proceeding.
   <p>The upshot of all this is that you should be able to say, while in a news interface, something like the following:
-  <div class="indent-3">
+  <div>
     <p><strong>| patch -d /usr/src/local/blurfl</strong>
   </div>
   <p>and patch a file in the <strong>blurfl</strong> directory directly from the article containing the patch.
@@ -103,17 +103,18 @@
     <dt><strong>--merge</strong> or <strong>--merge=merge</strong> or <strong>--merge=diff3</strong>
     <dd>
       <p>Merge a patch file into the original files similar to <strong>diff3</strong>(1) or <strong>merge</strong>(1). &nbsp;If a conflict is found, <strong>patch</strong> outputs a warning and brackets the conflict with <strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</strong> and <strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</strong> lines. A typical conflict will look like this:
-      <pre><strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</strong>
+      <div class="indent-4">
+        <pre><strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</strong>
 <em>lines from the original file</em>
 <strong>|||||||</strong>
 <em>original lines from the patch</em>
 <strong>=======</strong>
 <em>new lines from the patch</em>
 <strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</strong></pre>
-  </dl>
-  <p class="indent">The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. &nbsp;The merge format is the default.
-  <p class="indent">This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
-  <dl class="indent-3">
+      </div>
+      <p>The optional argument of <strong>--merge</strong> determines the output format for conflicts: the diff3 format shows the <strong>|||||||</strong> section with the original lines from the patch; in the merge format, this section is missing. &nbsp;The merge format is the default.<br>
+      <br>
+      This option implies <strong>--forward</strong> and does not take the <strong>--fuzz</strong>=<em>num</em> option into account.
     <dt><strong>-n</strong> &nbsp;or &nbsp;<strong>--normal</strong>
     <dd>
       <p>Interpret the patch file as a normal diff.
@@ -130,31 +131,25 @@
         <p><strong>/u/howard/src/blurfl/blurfl.c</strong>
       </div>
       <p>setting <strong>-p0</strong> gives the entire file name unmodified, <strong>-p1</strong> gives
-      <div class="indent-3">
-        <p><strong>u/howard/src/blurfl/blurfl.c</strong>
-      </div>
+      <p><strong>u/howard/src/blurfl/blurfl.c</strong>
       <p>without the leading slash, <strong>-p4</strong> gives
-      <div class="indent-3">
-        <p><strong>blurfl/blurfl.c</strong>
-      </div>
+      <p><strong>blurfl/blurfl.c</strong>
       <p>and not specifying <strong>-p</strong> at all just gives you <strong>blurfl.c</strong>. Whatever you end up with is looked for either in the current directory, or the directory specified by the <strong>-d</strong> option.
     <dt><strong>--posix</strong>
     <dd>
       <p>Conform more strictly to the POSIX standard, as follows.
-      <div class="indent-3">
-        <ul class="indent-3">
-          <li>Take the first existing file from the list (old, new, index) when intuiting file names from diff headers.
-          <li>Do not remove files that are empty after patching.
-          <li>Do not ask whether to get files from RCS, ClearCase, Perforce, or SCCS.
-          <li>Require that all options precede the files in the command line.
-          <li>Do not backup files when there is a mismatch.
-        </ul>
-      </div>
+      <ul class="indent-3">
+        <li>Take the first existing file from the list (old, new, index) when intuiting file names from diff headers.
+        <li>Do not remove files that are empty after patching.
+        <li>Do not ask whether to get files from RCS, ClearCase, Perforce, or SCCS.
+        <li>Require that all options precede the files in the command line.
+        <li>Do not backup files when there is a mismatch.
+      </ul>
     <dt><strong>--quoting-style=</strong><em>word</em>
     <dd>
       <p>Use style <em>word</em> to quote output names. The <em>word</em> should be one of the following:
       <div class="indent-3">
-        <dl class="indent-3">
+        <dl class="indent-7">
           <dt><strong>literal</strong>
           <dd>
             <p>Output names as-is.
@@ -209,20 +204,18 @@
     <dd>
       <p>Use <em>method</em> to determine backup file names. &nbsp;The method can also be given by the <strong>PATCH_VERSION_CONTROL</strong> (or, if that's not set, the <strong>VERSION_CONTROL</strong>) environment variable, which is overridden by this option. The method does not affect whether backup files are made; it affects only the names of any backup files that are made.
       <p>The value of <em>method</em> is like the GNU Emacs `version-control' variable; <strong>patch</strong> also recognizes synonyms that are more descriptive. &nbsp;The valid values for <em>method</em> are (unique abbreviations are accepted):
-      <div class="indent-3">
-        <dl class="indent-3">
-          <dt><strong>existing</strong> &nbsp;or &nbsp;<strong>nil</strong>
-          <dd>
-            <p>Make numbered backups of files that already have them, otherwise simple backups. This is the default.
-          <dt><strong>numbered</strong> &nbsp;or &nbsp;<strong>t</strong>
-          <dd>
-            <p>Make numbered backups. &nbsp;The numbered backup file name for <em>F</em> is <em>F</em><strong>.~</strong><em>N</em><strong>~</strong> where <em>N</em> is the version number.
-          <dt><strong>simple</strong> &nbsp;or &nbsp;<strong>never</strong>
-          <dd>
-            <p>Make simple backups. The <strong>-B</strong> or <strong>--prefix</strong>, <strong>-Y</strong> or <strong>--basename-prefix</strong>, and <strong>-z</strong> or <strong>--suffix</strong> options specify the simple backup file name. If none of these options are given, then a simple backup suffix is used; it is the value of the <strong>SIMPLE_BACKUP_SUFFIX</strong> environment variable if set, and is <strong>.orig</strong> otherwise.
-        </dl>
-        <p>With numbered or simple backups, if the backup file name is too long, the backup suffix <strong>~</strong> is used instead; if even appending <strong>~</strong> would make the name too long, then <strong>~</strong> replaces the last character of the file name.
-      </div>
+      <dl class="indent-3">
+        <dt><strong>existing</strong> &nbsp;or &nbsp;<strong>nil</strong>
+        <dd>
+          <p>Make numbered backups of files that already have them, otherwise simple backups. This is the default.
+        <dt><strong>numbered</strong> &nbsp;or &nbsp;<strong>t</strong>
+        <dd>
+          <p>Make numbered backups. &nbsp;The numbered backup file name for <em>F</em> is <em>F</em><strong>.~</strong><em>N</em><strong>~</strong> where <em>N</em> is the version number.
+        <dt><strong>simple</strong> &nbsp;or &nbsp;<strong>never</strong>
+        <dd>
+          <p>Make simple backups. The <strong>-B</strong> or <strong>--prefix</strong>, <strong>-Y</strong> or <strong>--basename-prefix</strong>, and <strong>-z</strong> or <strong>--suffix</strong> options specify the simple backup file name. If none of these options are given, then a simple backup suffix is used; it is the value of the <strong>SIMPLE_BACKUP_SUFFIX</strong> environment variable if set, and is <strong>.orig</strong> otherwise.
+      </dl>
+      <p>With numbered or simple backups, if the backup file name is too long, the backup suffix <strong>~</strong> is used instead; if even appending <strong>~</strong> would make the name too long, then <strong>~</strong> replaces the last character of the file name.
     <dt><strong>--verbose</strong>
     <dd>
       <p>Output extra information about the work being done.
@@ -285,14 +278,14 @@
   <h2>NOTES FOR PATCH SENDERS</h2>
   <p>There are several things you should bear in mind if you are going to be sending out patches.
   <p>Create your patch systematically. A good method is the command <strong>diff&nbsp;-Naur</strong>&nbsp;<em>old&nbsp;new</em> where <em>old</em> and <em>new</em> identify the old and new directories. The names <em>old</em> and <em>new</em> should not contain any slashes. The <strong>diff</strong> command's headers should have dates and times in Universal Time using traditional Unix format, so that patch recipients can use the <strong>-Z</strong> or <strong>--set-utc</strong> option. Here is an example command, using Bourne shell syntax:
-  <div class="indent-3">
+  <div>
     <p><strong>LC_ALL=C TZ=UTC0 diff -Naur gcc-2.7 gcc-2.8</strong>
   </div>
   <p>Tell your recipients how to apply the patch by telling them which directory to <strong>cd</strong> to, and which <strong>patch</strong> options to use. &nbsp;The option string <strong>-Np1</strong> is recommended. Test your procedure by pretending to be a recipient and applying your patch to a copy of the original files.
   <p>You can save people a lot of grief by keeping a <strong>patchlevel.h</strong> file which is patched to increment the patch level as the first diff in the patch file you send out. If you put a <strong>Prereq:</strong> line in with the patch, it won't let them apply patches out of order without some warning.
   <p>You can create a file by sending out a diff that compares <strong>/dev/null</strong> or an empty file dated the Epoch (1970-01-01 00:00:00 UTC) to the file you want to create. This only works if the file you want to create doesn't exist already in the target directory. Conversely, you can remove a file by sending out a context diff that compares the file to be deleted with an empty file dated the Epoch. The file will be removed unless <strong>patch</strong> is conforming to POSIX and the <strong>-E</strong> or <strong>--remove-empty-files</strong> option is not given. An easy way to generate patches that create and remove files is to use GNU <strong>diff</strong>'s <strong>-N</strong> or <strong>--new-file</strong> option.
   <p>If the recipient is supposed to use the <strong>-p</strong><em>N</em> option, do not send output that looks like this:
-  <div class="indent-3">
+  <div>
     <p><code><br>
     <br>
     diff -Naur v2.0.29/prog/README prog/README<br>
@@ -300,7 +293,7 @@
     +++ prog/README &nbsp; Mon Mar 17 14:58:22 1997</code>
   </div>
   <p>because the two file names have different numbers of slashes, and different versions of <strong>patch</strong> interpret the file names differently. To avoid confusion, send output that looks like this instead:
-  <div class="indent-3">
+  <div>
     <p><code><br>
     <br>
     diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>

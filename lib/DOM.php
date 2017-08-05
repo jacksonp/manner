@@ -257,17 +257,41 @@ class DOM
                 }
             }
 
+        }
+
+        if ($myTag === 'div' || $myTag === 'p') { // TODO: remove if?
+
             if (
                 self::isTag($element->previousSibling, 'dl') &&
-                $element->getAttribute('class') === $element->previousSibling->getAttribute('class') &&
                 self::isTag($element->previousSibling->lastChild, 'dd')
             ) {
-                $nextSibling = $element->nextSibling;
-                self::extractContents($element->previousSibling->lastChild, $element);
-                $element->parentNode->removeChild($element);
-                return $nextSibling;
-            }
 
+                $divClass = $element->getAttribute('class');
+                $dlClass  = $element->previousSibling->getAttribute('class');
+
+                if ($divClass === $dlClass) {
+                    $nextSibling = $element->nextSibling;
+                    if ($myTag === 'div') {
+                        self::extractContents($element->previousSibling->lastChild, $element);
+                        $element->parentNode->removeChild($element);
+                    } else {
+                        $element->previousSibling->lastChild->appendChild($element);
+                        $element->removeAttribute('class');
+                    }
+                    return $nextSibling;
+                }
+
+                $divIndentVal = (int)str_replace('indent-', '', $divClass);
+                $dlIndentVal  = (int)str_replace('indent-', '', $dlClass);
+
+                if ($divIndentVal > $dlIndentVal) {
+                    $nextSibling = $element->nextSibling;
+                    $element->setAttribute('class', 'indent-' . ($divIndentVal - $dlIndentVal));
+                    $element->previousSibling->lastChild->appendChild($element);
+                    return $nextSibling;
+                }
+
+            }
         }
 
         if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {

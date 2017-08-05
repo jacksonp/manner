@@ -27,9 +27,9 @@
   <p><em>Tcpdump</em> prints out a description of the contents of packets on a network interface that match the boolean <em>expression</em>; the description is preceded by a time stamp, printed, by default, as hours, minutes, seconds, and fractions of a second since midnight. &nbsp;It can also be run with the <strong>-w</strong> flag, which causes it to save the packet data to a file for later analysis, and/or with the <strong>-r</strong> flag, which causes it to read from a saved packet file rather than to read packets from a network interface. &nbsp;It can also be run with the <strong>-V</strong> flag, which causes it to read a list of saved packet files. In all cases, only packets that match <em>expression</em> will be processed by <em>tcpdump</em>.
   <p><em>Tcpdump</em> will, if not run with the <strong>-c</strong> flag, continue capturing packets until it is interrupted by a SIGINT signal (generated, for example, by typing your interrupt character, typically control-C) or a SIGTERM signal (typically generated with the <strong>kill</strong>(1) command); if run with the <strong>-c</strong> flag, it will capture packets until it is interrupted by a SIGINT or SIGTERM signal or the specified number of packets have been processed.
   <p>When <em>tcpdump</em> finishes capturing packets, it will report counts of:
-  <p class="indent">packets ``captured'' (this is the number of packets that <em>tcpdump</em> has received and processed);
-  <p class="indent">packets ``received by filter'' (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);
-  <p class="indent">packets ``dropped by kernel'' (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
+  <p>packets ``captured'' (this is the number of packets that <em>tcpdump</em> has received and processed);
+  <p>packets ``received by filter'' (the meaning of this depends on the OS on which you're running <em>tcpdump</em>, and possibly on the way the OS was configured - if a filter was specified on the command line, on some OSes it counts packets regardless of whether they were matched by the filter expression and, even if they were matched by the filter expression, regardless of whether <em>tcpdump</em> has read and processed them yet, on other OSes it counts only packets that were matched by the filter expression regardless of whether <em>tcpdump</em> has read and processed them yet, and on other OSes it counts only packets that were matched by the filter expression and were processed by <em>tcpdump</em>);
+  <p>packets ``dropped by kernel'' (this is the number of packets that were dropped, due to a lack of buffer space, by the packet capture mechanism in the OS on which <em>tcpdump</em> is running, if the OS reports that information to applications; if not, it will be reported as 0).
   <p>On platforms that support the SIGINFO signal, such as most BSDs (including Mac OS X) and Digital/Tru64 UNIX, it will report those counts when it receives a SIGINFO signal (generated, for example, by typing your ``status'' character, typically control-T, although on some platforms, such as Mac OS X, the ``status'' character is not set by default, so you must set it with <strong>stty</strong>(1) in order to use it) and will continue capturing packets. On platforms that do not support the SIGINFO signal, the same can be achieved by using the SIGUSR1 signal.
   <p>Reading packets from a network interface may require that you have special privileges; see the <strong>pcap (3PCAP)</strong> man page for details. &nbsp;Reading a saved packet file doesn't require special privileges.
 </section>
@@ -136,9 +136,13 @@
     <dt><strong>-l</strong>
     <dd>
       <p>Make stdout line buffered. Useful if you want to see the data while capturing it. E.g.,
-      <pre><strong>tcpdump -l | tee dat</strong></pre>
+      <div class="indent-7">
+        <pre><strong>tcpdump -l | tee dat</strong></pre>
+      </div>
       <p>or
-      <pre><strong>tcpdump -l &gt; dat & tail -f dat</strong></pre>
+      <div class="indent-7">
+        <pre><strong>tcpdump -l &gt; dat & tail -f dat</strong></pre>
+      </div>
       <p>Note that on Windows,``line buffered'' means ``unbuffered'', so that WinDump will write each character individually if <strong>-l</strong> is specified.
       <p><strong>-U</strong> is similar to <strong>-l</strong> in its behavior, but it will cause output to be ``packet-buffered'', so that the output is written to stdout at the end of each packet rather than at the end of each line; this is buffered on all platforms, including Windows.
     <dt><strong>-L</strong>
@@ -267,11 +271,9 @@
       <p>This behavior can also be enabled by default at compile time.
     <dt><em>expression</em>
     <dd>
-      <div>
-        <p>selects which packets will be dumped. If no <em>expression</em> is given, all packets on the net will be dumped. Otherwise, only packets for which <em>expression</em> is `true' will be dumped.
-        <p>For the <em>expression</em> syntax, see <strong>pcap-filter</strong>(@MAN_MISC_INFO@).
-        <p>The <em>expression</em> argument can be passed to <em>tcpdump</em> as either a single Shell argument, or as multiple Shell arguments, whichever is more convenient. Generally, if the expression contains Shell metacharacters, such as backslashes used to escape protocol names, it is easier to pass it as a single, quoted argument rather than to escape the Shell metacharacters. Multiple arguments are concatenated with spaces before being parsed.
-      </div>
+      <p>selects which packets will be dumped. If no <em>expression</em> is given, all packets on the net will be dumped. Otherwise, only packets for which <em>expression</em> is `true' will be dumped.
+      <p>For the <em>expression</em> syntax, see <strong>pcap-filter</strong>(@MAN_MISC_INFO@).
+      <p>The <em>expression</em> argument can be passed to <em>tcpdump</em> as either a single Shell argument, or as multiple Shell arguments, whichever is more convenient. Generally, if the expression contains Shell metacharacters, such as backslashes used to escape protocol names, it is easier to pass it as a single, quoted argument rather than to escape the Shell metacharacters. Multiple arguments are concatenated with spaces before being parsed.
   </dl>
 </section>
 <section>
@@ -379,7 +381,7 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
   <p>If the snapshot was small enough that <em>tcpdump</em> didn't capture the full TCP header, it interprets as much of the header as it can and then reports ``[|<em>tcp</em>]'' to indicate the remainder could not be interpreted. If the header contains a bogus option (one with a length that's either too small or beyond the end of the header), <em>tcpdump</em> reports it as ``[<em>bad opt</em>]'' and does not interpret any further options (since it's impossible to tell where they start). If the header length indicates options are present but the IP datagram length is not long enough for the options to actually be there, <em>tcpdump</em> reports it as ``[<em>bad hdr length</em>]''.
   <p><strong>Capturing TCP packets with particular flag combinations (SYN-ACK, URG-ACK, etc.)</strong>
   <p>There are 8 bits in the control bits section of the TCP header:
-  <p class="indent"><em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
+  <p><em>CWR | ECE | URG | ACK | PSH | RST | SYN | FIN</em>
   <p>Let's assume that we want to watch packets used in establishing a TCP connection. Recall that TCP uses a 3-way handshake protocol when it initializes a new connection; the connection sequence with regard to the TCP control bits is
   <div>
     <p>1) Caller sends SYN<br>
@@ -422,7 +424,7 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
                 |7 6 5 4 3 2 1 0|</pre>
   <p>Looking at the control bits section we see that only bit number 1 (SYN) is set.
   <p>Assuming that octet number 13 is an 8-bit unsigned integer in network byte order, the binary value of this octet is
-  <p class="indent">00000010
+  <p>00000010
   <p>and its decimal representation is
   <pre>   7     6     5     4     3     2     1     0
 0*2 + 0*2 + 0*2 + 0*2 + 0*2 + 0*2 + 1*2 + 0*2  =  2</pre>
@@ -443,7 +445,7 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
      |---------------|
      |7 6 5 4 3 2 1 0|</pre>
   <p>Now bits 1 and 4 are set in the 13th octet. The binary value of octet 13 is
-  <p class="indent">&nbsp; &nbsp; 00010010
+  <p>&nbsp; &nbsp; 00010010
   <p>which translates to decimal
   <pre>   7     6     5     4     3     2     1     0
 0*2 + 0*2 + 0*2 + 1*2 + 0*2 + 0*2 + 1*2 + 0*2   = 18</pre>
@@ -454,7 +456,7 @@ csam.login &gt; rtsg.1023: P 3:4(1) ack 21 win 4077 urg 1</pre>
           --------                      --------
      =    00000010                 =    00000010</pre>
   <p>We see that this AND operation delivers the same result regardless whether ACK or another TCP control bit is set. The decimal representation of the AND value as well as the result of this operation is 2 (binary 00000010), so we know that for packets with SYN set the following relation must hold true:
-  <p class="indent">( ( value of octet 13 ) AND ( 2 ) ) == ( 2 )
+  <p>( ( value of octet 13 ) AND ( 2 ) ) == ( 2 )
   <p>This points us to the <em>tcpdump</em> filter expression
   <div>
     <p>&nbsp; &nbsp; <strong>tcpdump -i xl0 'tcp[13] & 2 == 2'</strong>
@@ -650,10 +652,10 @@ rtsg.1170 &gt; arizona.ftp-data: . ack 1536 win 2560</pre>
   </div>
   <p>NIT doesn't let you watch your own outbound traffic, BPF will. We recommend that you use the latter.
   <p>On Linux systems with 2.0[.x] kernels:
-  <p class="indent">packets on the loopback device will be seen twice;
-  <p class="indent">packet filtering cannot be done in the kernel, so that all packets must be copied from the kernel in order to be filtered in user mode;
-  <p class="indent">all of a packet, not just the part that's within the snapshot length, will be copied from the kernel (the 2.0[.x] packet capture mechanism, if asked to copy only part of a packet to userland, will not report the true length of the packet; this would cause most IP packets to get an error from <strong>tcpdump</strong>);
-  <p class="indent">capturing on some PPP devices won't work correctly.
+  <p>packets on the loopback device will be seen twice;
+  <p>packet filtering cannot be done in the kernel, so that all packets must be copied from the kernel in order to be filtered in user mode;
+  <p>all of a packet, not just the part that's within the snapshot length, will be copied from the kernel (the 2.0[.x] packet capture mechanism, if asked to copy only part of a packet to userland, will not report the true length of the packet; this would cause most IP packets to get an error from <strong>tcpdump</strong>);
+  <p>capturing on some PPP devices won't work correctly.
   <p>We recommend that you upgrade to a 2.2 or later kernel.
   <p>Some attempt should be made to reassemble IP fragments or, at least to compute the right length for the higher level protocol.
   <p>Name server inverse queries are not dumped correctly: the (empty) question section is printed rather than real query in the answer section. Some believe that inverse queries are themselves a bug and prefer to fix the program generating them rather than <em>tcpdump</em>.

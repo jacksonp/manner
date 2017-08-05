@@ -69,29 +69,25 @@
     <dt><strong>-t</strong> <em>timeout</em>
     <dd>
       <p>To prevent misbehaving clients or agents from hanging the entire Performance Metrics Collection System (PMCS), <strong>pmcd</strong> uses timeouts on PDU exchanges with clients and agents running as processes. By default the timeout interval is five seconds. The <strong>-t</strong> option allows an alternative timeout interval in seconds to be specified. If <em>timeout</em> is zero, timeouts are turned off. It is almost impossible to use the debugger interactively on an agent unless timeouts have been turned off for its "parent" <strong>pmcd</strong>.
-      <div>
-        <p>Once <strong>pmcd</strong> is running, the timeout may be dynamically modified by storing an integer value (the timeout in seconds) into the metric <strong>pmcd.control.timeout</strong> via <strong>pmstore</strong>(1).
-      </div>
+      <p>Once <strong>pmcd</strong> is running, the timeout may be dynamically modified by storing an integer value (the timeout in seconds) into the metric <strong>pmcd.control.timeout</strong> via <strong>pmstore</strong>(1).
     <dt><strong>-T</strong> <em>traceflag</em>
     <dd>
       <p>To assist with error diagnosis for agents and/or clients of <strong>pmcd</strong> that are not behaving correctly, an internal event tracing mechanism is supported within <strong>pmcd</strong>. The value of <em>traceflag</em> is interpreted as a bit field with the following control functions:
-      <div>
-        <dl class="indent-26">
-          <dt><strong>1</strong>
-          <dd>
-            <p>enable client connection tracing
-          <dt><strong>2</strong>
-          <dd>
-            <p>enable PDU tracing
-          <dt><strong>256</strong>
-          <dd>
-            <p>unbuffered event tracing
-        </dl>
-        <p>By default, event tracing is buffered using a circular buffer that is over-written as new events are recorded. &nbsp;The default buffer size holds the last 20 events, although this number may be over-ridden by using <strong>pmstore</strong>(1) to modify the metric <strong>pmcd.control.tracebufs</strong>.
-        <p>Similarly once <strong>pmcd</strong> is running, the event tracing control may be dynamically modified by storing 1 (enable) or 0 (disable) into the metrics <strong>pmcd.control.traceconn</strong>, <strong>pmcd.control.tracepdu</strong> and <strong>pmcd.control.tracenobuf</strong>. These metrics map to the bit fields associated with the <em>traceflag</em> argument for the <strong>-T</strong> option.
-        <p>When operating in buffered mode, the event trace buffer will be dumped whenever an agent connection is terminated by <strong>pmcd</strong>, or when any value is stored into the metric <strong>pmcd.control.dumptrace</strong> via <strong>pmstore</strong>(1).
-        <p>In unbuffered mode, <strong>every</strong> event will be reported when it occurs.
-      </div>
+      <dl class="indent-26">
+        <dt><strong>1</strong>
+        <dd>
+          <p>enable client connection tracing
+        <dt><strong>2</strong>
+        <dd>
+          <p>enable PDU tracing
+        <dt><strong>256</strong>
+        <dd>
+          <p>unbuffered event tracing
+      </dl>
+      <p>By default, event tracing is buffered using a circular buffer that is over-written as new events are recorded. &nbsp;The default buffer size holds the last 20 events, although this number may be over-ridden by using <strong>pmstore</strong>(1) to modify the metric <strong>pmcd.control.tracebufs</strong>.
+      <p>Similarly once <strong>pmcd</strong> is running, the event tracing control may be dynamically modified by storing 1 (enable) or 0 (disable) into the metrics <strong>pmcd.control.traceconn</strong>, <strong>pmcd.control.tracepdu</strong> and <strong>pmcd.control.tracenobuf</strong>. These metrics map to the bit fields associated with the <em>traceflag</em> argument for the <strong>-T</strong> option.
+      <p>When operating in buffered mode, the event trace buffer will be dumped whenever an agent connection is terminated by <strong>pmcd</strong>, or when any value is stored into the metric <strong>pmcd.control.dumptrace</strong> via <strong>pmstore</strong>(1).
+      <p>In unbuffered mode, <strong>every</strong> event will be reported when it occurs.
     <dt><strong>-U</strong> <em>username</em>
     <dd>
       <p>User account under which to run <strong>pmcd</strong>. The default is the unprivileged "pcp" account in current versions of PCP, but in older versions the superuser account ("root") was used by default.
@@ -118,7 +114,7 @@
   <p>Each line of the agent configuration section of the configuration file must be either an agent specification, a comment, or a blank line. Lexical elements are separated by whitespace characters, however a single agent specification may not be broken across lines unless a <strong>\</strong> (backslash) is used to continue the line.
   <p>Each agent specification must start with a textual label (string) followed by an integer in the range 1 to 510. The label is a tag used to refer to the agent and the integer specifies the domain for which the agent supplies data. This domain identifier corresponds to the domain portion of the PMIDs handled by the agent. Each agent must have a unique label and domain identifier.
   <p>For DSO agents a line of the form:
-  <dl class="indent-26">
+  <dl>
     <dd>
       <p><em>label</em> <em>domain-no</em> <strong>dso</strong> <em>entry-point</em> <em>path</em>
   </dl>
@@ -139,7 +135,7 @@
       <p>For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. &nbsp;The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
   </dl>
   <p>For agents providing socket connections, a line of the form
-  <dl class="indent-14">
+  <dl>
     <dd>
       <p><em>label</em> <em>domain-no</em> <strong>socket</strong> <em>addr-family</em> <em>address</em> [ <em>command</em> ]
   </dl>
@@ -162,7 +158,7 @@
       <p>is an optional parameter used to specify a command line to start the agent when <strong>pmcd</strong> initializes. If <em>command</em> is not present, <strong>pmcd</strong> assumes that the specified agent has already been created. The <em>command</em> is considered to start from the first non-white character after the socket address and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>
   <p>For agents interacting with the <strong>pmcd</strong> via stdin/stdout, a line of the form:
-  <dl class="indent-14">
+  <dl>
     <dd>
       <p><em>label</em> <em>domain-no</em> <strong>pipe</strong> <em>protocol</em> <em>command</em>
   </dl>
@@ -187,7 +183,7 @@
   <h2>ACCESS CONTROL CONFIGURATION</h2>
   <p>The access control section of the configuration file is optional, but if present it must follow the agent configuration data. The case of reserved words is ignored, but elsewhere case is preserved. Lexical elements in the access control section are separated by whitespace or the special delimiter characters: square brackets (``['' and ``]''), braces (``{'' and ``}''), colon (``:''), semicolon (``;'') and comma (``,''). The special characters are not treated as special in the agent configuration section. Lexical elements may be quoted (double quotes) as necessary.
   <p>The access control section of the file must start with a line of the form:
-  <p class="indent-14"><strong>[access]</strong>
+  <p><strong>[access]</strong>
   <p>Leading and trailing whitespace may appear around and within the brackets and the case of the <strong>access</strong> keyword is ignored. No other text may appear on the line except a trailing comment.
   <p>Following this line, the remainder of the configuration file should contain lines that allow or disallow operations from particular hosts or groups of hosts.
   <p>There are two kinds of operations that occur via <strong>pmcd</strong>:
@@ -230,7 +226,7 @@ fe80*</pre>
   <p>The first example is not allowed because only (numeric) IP addresses may contain a wildcard. The second and fifth examples are not valid because there is more than one wildcard character. The third and sixth contain an embedded wildcard, the fourth and seventh have a wildcard character that is not the last component of the address (the last components are <code>127*</code> and <code>fe80*</code> respectively).
   <p>The name <strong>localhost</strong> is given special treatment to make the behavior of host wildcarding consistent. Rather than being 127.0.0.1 and ::1, it is mapped to the primary inet and IPv6 addresses associated with the name of the host on which <strong>pmcd</strong> is running. Beware of this when running <strong>pmcd</strong> on multi-homed hosts.
   <p>Access for users, groups or hosts are allowed or disallowed by specifying statements of the form:
-  <dl class="indent-15">
+  <dl>
     <dd>
       <p><strong>allow users</strong> <em>userlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
       <strong>disallow users</strong> <em>userlist</em> <strong>:</strong> <em>operations</em> <strong>;</strong><br>
@@ -261,7 +257,7 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>because the former contains a specific host name (equivalent to a fully specified IP address), whereas the latter has a wildcard. In turn, the latter would override
   <pre>disallow host * : all;</pre>
   <p>It is possible to limit the number of connections from a user, group or host to <strong>pmcd</strong>. This may be done by adding a clause of the form
-  <dl class="indent-14">
+  <dl>
     <dd>
       <p><strong>maximum</strong> <em>n</em> <strong>connections</strong>
   </dl>
@@ -271,7 +267,7 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>Group access controls and the wildcarding in host identifiers means that once <strong>pmcd</strong> actually accepts a connection from a client, the connection may contribute to the current connection count of more than one access control statement - the client's host may match more than one access control statement, and similarly the user ID may be in more than one group. This may be significant for subsequent connection requests.
   <p>Note that <strong>pmcd</strong> enters a mode where it runs effectively with a higher-level of security as soon as a user or group access control section is added to the configuration. In this mode only authenticated connections are allowed - either from a SASL authenticated connection, or a Unix domain socket (which implicitly passes client credentials). This is the same mode that is entered explicitly using the <strong>-S</strong> option. Assuming permission is allowed, one can determine whether <strong>pmcd</strong> is running in this mode by querying the value of the <em>pmcd.feature.creds_required</em> metric.
   <p>Note also that because most specific match semantics are used when checking the connection limit, for the host-based access control case, priority is given to clients with more specific host identifiers. It is also possible to exceed connection limits in some situations. Consider the following:
-  <p class="indent">allow host clank : all, maximum 5 connections;<br>
+  <p>allow host clank : all, maximum 5 connections;<br>
   allow host * : all except store, maximum 2 connections;
   <p>This says that only 2 client connections at a time are permitted for all hosts other than "clank", which is permitted 5. If a client from host "boing" is the first to connect to <strong>pmcd</strong>, its connection is checked against the second statement (that is the most specific match with a connection limit). As there are no other clients, the connection is accepted and contributes towards the limit for only the second statement above. If the next client connects from "clank", its connection is checked against the limit for the first statement. There are no other connections from "clank", so the connection is accepted. Once this connection is accepted, it counts towards <strong>both</strong> statements' limits because "clank" matches the host identifier in both statements. Remember that the decision to accept a new connection is made using only the most specific matching access control statement with a connection limit. Now, the connection limit for the second statement has been reached. Any connections from hosts other than "clank" will be refused.
   <p>If instead, <strong>pmcd</strong> with no clients saw three successive connections arrived from "boing", the first two would be accepted and the third refused. After that, if a connection was requested from "clank" it would be accepted. It matches the first statement, which is more specific than the second, so the connection limit in the first is used to determine that the client has the right to connect. Now there are 3 connections contributing to the second statement's connection limit. Even though the connection limit for the second statement has been exceeded, the earlier connections from "boing" are maintained. The connection limit is only checked at the time a client attempts a connection rather than being re-evaluated every time a new client connects to <strong>pmcd</strong>.

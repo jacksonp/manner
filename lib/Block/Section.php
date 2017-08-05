@@ -16,6 +16,8 @@ class Block_Section implements Block_Template
 
         $dom = $parentNode->ownerDocument;
 
+        Man::instance()->resetIndentationToDefault();
+
         $body    = $parentNode->ancestor('body');
         /* @var DomElement $section */
         $section = $dom->createElement('section');

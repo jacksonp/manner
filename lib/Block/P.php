@@ -14,6 +14,8 @@ class Block_P implements Block_Template
 
         array_shift($lines);
 
+        Man::instance()->resetIndentationToDefault();
+
         if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
             return null; // Use existing parent node for content that will follow.
         } else {
