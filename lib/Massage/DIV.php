@@ -29,13 +29,6 @@ class Massage_DIV
 
         $doc = $div->ownerDocument;
 
-        // TODO: remove this?
-        if (DOM::isTag($div->parentNode, 'section') && $div->getAttribute('class') === 'indent') {
-            $nextSibling = $div->nextSibling;
-            Node::remove($div);
-            return $nextSibling;
-        }
-
         /* @var DOMElement $nextNonBR */
 
         if (self::isPotentialLI($div)) {
