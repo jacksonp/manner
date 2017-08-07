@@ -20,7 +20,6 @@ class Massage_DIV
     {
         return
             DOM::isTag($div, 'div') &&
-            $div->getAttribute('class') === 'indent-4' &&
             !DOM::isTag($div->firstChild, 'pre') &&
             Massage_UL::startsWithBullet($div->textContent);
     }
