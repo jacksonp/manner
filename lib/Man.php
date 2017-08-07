@@ -50,6 +50,7 @@ class Man
     {
         $this->data     = [
             'indentation' => Indentation::DEFAULT,
+            'left_margin_level' => 1, // The first level (i.e., no call to .RS yet) has number 1.
             'escape_char' => '\\',
             'control_char' => '.',
             'control_char_2' => '\'',

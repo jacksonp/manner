@@ -20,7 +20,7 @@
   <p>Everything you type is sent to the program running in the current window. The only exception to this is the one keystroke that is used to initiate a command to the window manager. By default, each command begins with a control-a (abbreviated C-a from now on), and is followed by one other keystroke. The command character and all the key bindings can be fully customized to be anything you like, though they are always two characters in length.
   <p><em>Screen</em> does not understand the prefix “C-” to mean control, although this notation is &nbsp;used in this manual for readability. &nbsp;Please use the caret notation (“^A” instead of “C-a”) as arguments to e.g. the <em>escape</em> command or the <em>-e</em> option. <em>Screen</em> will also print out control characters in caret notation.
   <p>The standard way to create a new window is to type “C-a c”. This creates a new window running a shell and switches to that window immediately, regardless of the state of the process running in the current window. Similarly, you can create a new window with a custom command in it by first binding the command to a keystroke (in your .screenrc file or at the “C-a :” command line) and then using it just like the “C-a c” command. In addition, new windows can be created by running a command like:
-  <p>screen emacs prog.c
+  <p class="indent-7">screen emacs prog.c
   <p>from a shell prompt within a previously created window. This will not run another copy of <em>screen</em>, but will instead supply the command name and its arguments to the window manager (specified in the $STY environment variable) who will use it to create the new window. The above example would start the emacs editor (editing prog.c) and switch to its window. - Note that you cannot transport environment variables from the invoking shell to the application (emacs in this case), because it is forked from the parent screen process, not from the invoking shell.
   <p>If “/etc/utmp” is writable by <em>screen</em>, an appropriate record will be written to this file for each window, and removed when the window is terminated. This is useful for working with “talk”, “script”, “shutdown”, “rsend”, “sccs” and other similar programs that use the utmp file to determine who you are. As long as <em>screen</em> is active on your terminal, the terminal's own record is removed from the utmp file. See also “C-a L”.
 </section>
@@ -33,7 +33,7 @@
 <section>
   <h2>COMMAND-LINE OPTIONS</h2>
   <p>Screen has the following command-line options:
-  <dl class="indent-5">
+  <dl>
     <dt><strong>-a</strong>
     <dd>
       <p>include <em>all</em> capabilities (with some minor exceptions) in each window's termcap, even if <em>screen</em> must redraw parts of the display in order to implement a function.
@@ -64,7 +64,7 @@
     <dt><strong>-D -RR</strong>
     <dd>
       <p>Attach here and now. Whatever that means, just do it.
-      <p>Note: It is always a good idea to check the status of your sessions by means of “screen -list”.
+      <p class="indent-5">Note: It is always a good idea to check the status of your sessions by means of “screen -list”.
     <dt><strong>-e</strong> <em>xy</em>
     <dd>
       <p>specifies the command character to be <em>x</em> and the character generating a literal command character to <em>y</em> (when typed after the command character). The default is “C-a” and `a', which can be specified as “-e^Aa”. When creating a <em>screen</em> session, this option sets the default command character. In a multiuser session all users added will start off with this command character. But when attaching to an already running session, this option changes only the command character of the attaching user. This option is equivalent to either the commands “defescape” or “escape” respectively.
@@ -445,13 +445,13 @@
   <p><strong>attrcolor</strong> <em>attrib</em> <strong>[</strong><em>attribute/color-modifier</em><strong>]</strong>
   <p>This command can be used to highlight attributes by changing the color of the text. If the attribute <em>attrib</em> is in use, the specified attribute/color modifier is also applied. If no modifier is given, the current one is deleted. See the “STRING ESCAPES” chapter for the syntax of the modifier. Screen understands two pseudo-attributes, “i” stands for high-intensity foreground color and “I” for high-intensity background color.
   <p>Examples:
-  <p>attrcolor b "R"
+  <p class="indent-7">attrcolor b "R"
   <p>Change the color to bright red if bold text is to be printed.
-  <p>attrcolor u "-u b"
+  <p class="indent-7">attrcolor u "-u b"
   <p>Use blue text instead of underline.
-  <p>attrcolor b ".I"
+  <p class="indent-7">attrcolor b ".I"
   <p>Use bright colors for bold text. Most terminal emulators do this already.
-  <p>attrcolor i "+b"
+  <p class="indent-7">attrcolor i "+b"
   <p>Make bright colored text also bold.
   <p><strong>autodetach on</strong>|<strong>off</strong>
   <p>Sets whether <em>screen</em> will automatically detach upon hangup, which saves all your running programs until they are resumed with a <strong>screen -r</strong> command. When turned off, a hangup signal will terminate <em>screen</em> and all the processes it contains. Autodetach is on by default.
@@ -466,7 +466,7 @@
   <p>Change background-color-erase setting. If “bce” is set to on, all characters cleared by an erase/insert/scroll/clear operation will be displayed in the current background color. Otherwise the default background color is used.
   <p><strong>bell_msg</strong> [<strong><em>message</em></strong>]
   <p>When a bell character is sent to a background window, <em>screen</em> displays a notification in the message line. The notification message can be re-defined by this command. Each occurrence of `%' in <em>message</em> is replaced by the number of the window to which a bell has been sent, and each occurrence of `^G' is replaced by the definition for bell in your termcap (usually an audible bell). The default message is
-  <pre>    'Bell in window %n'</pre>
+  <pre>        'Bell in window %n'</pre>
   <p>An empty message can be supplied to the “bell_msg” command to suppress output of a message line (bell_msg ""). Without parameter, the current message is shown.
   <p><strong>bind</strong> [<strong><em>class</em></strong>] <strong><em>key</em></strong> [<strong><em>command</em></strong> [<strong><em>args</em></strong>]]
   <p>Bind a command to a key. By default, most of the commands provided by <em>screen</em> are bound to one or more keys as indicated in the “DEFAULT KEY BINDINGS” section, e.g. the command to create a new window is bound to “C-c” and “c”. The “bind” command can be used to redefine the key bindings and to define new bindings. The <em>key</em> argument is either a single character, a two-character sequence of the form “^x” (meaning “C-x”), a backslash followed by an octal number (specifying the ASCII code of the character), or a backslash followed by a second character, such as “\^” or “\\”. The argument can also be quoted, if you like. If no further argument is given, any previously established binding for this key is removed. The <em>command</em> argument can be any command listed in this section.
@@ -622,26 +622,26 @@
   <p>Note: Emacs style movement keys can be customized by a .screenrc command. &nbsp;(E.g. markkeys "h=^B:l=^F:$=^E") There is no simple method for a full emacs-style keymap, as this involves multi-character codes.
   <p>Some keys are defined to do mark and replace operations.
   <p>The copy range is specified by setting two marks. The text between these marks &nbsp;will be highlighted. Press:
-  <p><strong>space</strong> or <strong>enter</strong> to set the first or second mark respectively. If <strong>mousetrack</strong> is set to `on', marks can also be set using left mouse click.
-  <p><strong>Y</strong> and <strong>y</strong> used to mark one whole line or to mark from &nbsp;start of line.
-  <p><strong>W</strong> marks exactly one word.
+  <p class="indent-7"><strong>space</strong> or <strong>enter</strong> to set the first or second mark respectively. If <strong>mousetrack</strong> is set to `on', marks can also be set using left mouse click.
+  <p class="indent-7"><strong>Y</strong> and <strong>y</strong> used to mark one whole line or to mark from &nbsp;start of line.
+  <p class="indent-7"><strong>W</strong> marks exactly one word.
   <p>Any of these commands can be prefixed with a repeat count number by pressing &nbsp;digits
-  <p><strong>0</strong>..<strong>9</strong> which is taken as a repeat count.
+  <p class="indent-7"><strong>0</strong>..<strong>9</strong> which is taken as a repeat count.
   <p>Example: “C-a C-[ H 10 j 5 Y” will copy lines 11 to 15 into the paste buffer.
   <p>The folllowing search keys are defined:
-  <p><strong>/</strong> <em>Vi</em>-like search forward.
-  <p><strong>?</strong> <em>Vi</em>-like search backward.
-  <p><strong>C-a s</strong> <em>Emacs</em> style incremental search forward.
-  <p><strong>C-r</strong> <em>Emacs</em> style reverse i-search.
-  <p><strong>n</strong> Find next search pattern.
-  <p><strong>N</strong> Find previous search pattern.
+  <p class="indent-7"><strong>/</strong> <em>Vi</em>-like search forward.
+  <p class="indent-7"><strong>?</strong> <em>Vi</em>-like search backward.
+  <p class="indent-7"><strong>C-a s</strong> <em>Emacs</em> style incremental search forward.
+  <p class="indent-7"><strong>C-r</strong> <em>Emacs</em> style reverse i-search.
+  <p class="indent-7"><strong>n</strong> Find next search pattern.
+  <p class="indent-7"><strong>N</strong> Find previous search pattern.
   <p>There are however some keys that act differently than in <em>vi</em>. <em>Vi</em> does not allow one to yank rectangular blocks of text, but <em>screen</em> does. Press: <strong>c</strong> or <strong>C</strong> to set the left or right margin respectively. If no repeat count is given, both default to the current cursor position.
   <p>Example: Try this on a rather full text screen:
-  <div>
+  <div class="indent-7">
     <p>“C-a [ M 20 l SPACE c 10 l 5 j C SPACE”.
   </div>
   <p>This moves one to the middle line of the screen, moves in 20 columns left, marks the beginning of the paste buffer, sets the left column, moves 5 columns down, sets the right column, and then marks the end of the paste buffer. Now try:
-  <div>
+  <div class="indent-7">
     <p>“C-a [ M 20 l SPACE 10 l 5 j SPACE”
   </div>
   <p>and notice the difference in the amount of text copied.
@@ -756,14 +756,14 @@
       <td>Exit the list
   </table>
   <p>The following is an example of what “displays” could look like:
-  <div>
+  <div class="indent-7">
     <pre>xterm 80x42 jnweiger@/dev/ttyp4     0(m11)   &amp;rWx
 facit 80x24 mlschroe@/dev/ttyhf nb 11(tcsh)   rwx
 xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
  (A)   (B)     (C)     (D)     (E) (F)(G)   (H)(I)</pre>
   </div>
   <p>The legend is as follows:
-  <p>(A) The terminal type known by screen for this display.
+  <p class="indent-7">(A) The terminal type known by screen for this display.
   <p>(B) Displays geometry as width x height.
   <p>(C) Username who is logged in at the display.
   <p>(D) Device name of the display or the attached device
@@ -772,7 +772,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
   <p>(G) Name/title of window
   <p>(H) Whether the window is shared
   <p>(I) Window permissions. Made up of three characters:
-  <div>
+  <div class="indent-7">
     <pre>      (1st character)
          ‘-’ : no read
          ‘r’ : read
@@ -785,10 +785,8 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
       (3rd character)
          ‘-’ : no execute
          ‘x’ : execute</pre>
-    <div class="indent-7">
-      <p>“Displays” needs a region size of at least 10 characters wide and 5 characters high in order to display.
-    </div>
-    <p class="indent-7"><em><strong>digraph</strong></em> [<em>preset</em>[<em>unicode-value</em>]]
+    <p>“Displays” needs a region size of at least 10 characters wide and 5 characters high in order to display.
+    <p><em><strong>digraph</strong></em> [<em>preset</em>[<em>unicode-value</em>]]
   </div>
   <p>This command prompts the user for a digraph sequence. The next two characters typed are looked up in a builtin table and the resulting character is inserted in the input stream. For example, if the user enters 'a"', an a-umlaut will be inserted. If the first character entered is a 0 (zero), <em>screen</em> will treat the following characters (up to three) as an octal number instead. &nbsp;The optional argument <em>preset</em> is treated as user input, thus one can create an “umlaut” key. For example the command "bindkey ^K digraph '"'" enables the user to generate an a-umlaut by typing CTRL-K a. When a non-zero <em>unicode-value</em> is specified, a new digraph is created with the specified preset. The digraph is unset if a zero value is provided for the <em>unicode-value.</em>
   <p><strong>dumptermcap</strong>
@@ -812,7 +810,7 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
   <p>Refer to the postscript file `doc/fdpat.ps' for a confusing illustration of all 21 possible combinations. Each drawing shows the digits 2,1,0 representing the three file descriptors of newcommand. The box marked `W' is the usual pty that has the application-process on its slave side. The box marked `P' is the secondary pty that now has <em>screen</em> at its master side.
   <p>Abbreviations: Whitespace between the word `exec' and fdpat and the command can be omitted. Trailing dots and a fdpat consisting only of dots can be omitted. A simple `|' is synonymous for the pattern `!..|'; the word exec can be omitted here and can always be replaced by `!'.
   <p>Examples:
-  <dl class="indent-14">
+  <dl class="indent-7">
     <dt>exec … /bin/sh
     <dt>exec /bin/sh
     <dt>!/bin/sh
@@ -1027,7 +1025,7 @@ C-a : paste p</pre>
   <p>Reset the virtual terminal to its “power-on” values. Useful when strange settings (like scroll regions or graphics character set) are left over from an application.
   <p><strong>resize</strong>
   <p>Resize the current region. The space will be removed from or added to the region below or if there's not enough space from the region above.
-  <dl class="indent-14">
+  <dl class="indent-7">
     <dt>resize +N
     <dd>
       <p>increase current region height by N
@@ -1050,7 +1048,7 @@ C-a : paste p</pre>
   <p><strong>screen [<em>-opts</em>] [<em>n</em>] [<em>cmd</em> [<em>args</em>]|//group]</strong>
   <p>Establish a new window. The flow-control options (<strong>-f</strong>, <strong>-fn</strong> and <strong>-fa</strong>), title (a.k.a.) option (<strong>-t</strong>), login options (<strong>-l</strong> and <strong>-ln</strong>) , terminal type option (<strong>-T</strong> &lt;term&gt;), the all-capability-flag (<strong>-a</strong>) and scrollback option (<strong>-h</strong> &lt;num&gt;) may be specified with each command. The option (<strong>-M</strong>) turns monitoring on for this window. The option (<strong>-L</strong>) turns output logging on for this window. If an optional number <em>n</em> in the range 0..MAXWIN-1 is given, the window number <em>n</em> is assigned to the newly created window (or, if this number is already in-use, the next available number). If a command is specified after “screen”, this command (with the given arguments) is started in the window; otherwise, a shell is created. If <strong>//group</strong> is supplied, a container-type window is created in which other windows may be created inside it.
   <p>Thus, if your “.screenrc” contains the lines
-  <pre>        # example for .screenrc:
+  <pre> # example for .screenrc:
         screen 1
         screen -fn -t foobar -L 2 telnet foobar</pre>
   <p><em>screen</em> creates a shell window (in window #1) and a window with a TELNET connection to the machine foobar (with no flow-control using the title “foobar” in window #2) and will write a logfile (“screenlog.2”) of the telnet &nbsp;session. Note, that unlike previous versions of <em>screen</em> no additional default window is created when “screen” commands are &nbsp;included in your “.screenrc” file. When the initialization is completed, <em>screen</em> switches to the last window specified in your .screenrc file or, if none, opens a default window #0.
@@ -1111,16 +1109,16 @@ C-a : paste p</pre>
   <p>The first argument specifies which terminal(s) should be affected by this definition. You can specify multiple terminal names by separating them with `|'s. Use `*' to match all terminals and `vt*' to match all terminals that begin with “vt”.
   <p>Each <em>tweak</em> argument contains one or more termcap defines (separated by `:'s) to be inserted at the start of the appropriate termcap entry, enhancing it or overriding existing values. The first tweak modifies your terminal's termcap, and contains definitions that your terminal uses to perform certain functions. Specify a null string to leave this unchanged (e.g. ''). The second (optional) tweak modifies all the window termcaps, and should contain definitions that <em>screen</em> understands (see the “VIRTUAL TERMINAL” section).
   <p>Some examples:
-  <p>termcap xterm* &nbsp;LP:hs@
+  <p class="indent-7">termcap xterm* &nbsp;LP:hs@
   <p>Informs <em>screen</em> that all terminals that begin with `xterm' have firm auto-margins that allow the last position on the screen to be updated (LP), but they don't really have a status line (no 'hs' - append `@' to turn entries off). Note that we assume `LP' for all terminal names that start with “vt”, but only if you don't specify a termcap command for that terminal.
-  <div>
+  <div class="indent-7">
     <pre>termcap vt*  LP</pre>
   </div>
   <p>termcap vt102|vt220 &nbsp;Z0=\E[?3h:Z1=\E[?3l
   <p>Specifies the firm-margined `LP' capability for all terminals that begin with `vt', and the second line will also add the escape-sequences to switch into (Z0) and back out of (Z1) 132-character-per-line mode if this is a VT102 or VT220. (You must specify Z0 and Z1 in your termcap to use the width-changing commands.)
-  <p>termcap vt100 &nbsp;"" &nbsp;l0=PF1:l1=PF2:l2=PF3:l3=PF4
+  <p class="indent-7">termcap vt100 &nbsp;"" &nbsp;l0=PF1:l1=PF2:l2=PF3:l3=PF4
   <p>This leaves your vt100 termcap alone and adds the function key labels to each window's termcap entry.
-  <p>termcap h19|z19 &nbsp;am@:im=\E@:ei=\EO &nbsp;dc=\E[P
+  <p class="indent-7">termcap h19|z19 &nbsp;am@:im=\E@:ei=\EO &nbsp;dc=\E[P
   <p>Takes a h19 or z19 termcap and turns off auto-margins (am@) and enables the insert mode (im) and end-insert (ei) capabilities (the `@' in the `im' string is after the `=', so it is part of the string). Having the `im' and `ei' definitions put into your terminal's termcap will cause <em>screen</em> to automatically advertise the character-insert capability in each window's termcap. Each window will also get the delete-character capability (dc) added to its termcap, which <em>screen</em> will translate into a line-update for the terminal (we're pretending it doesn't support character deletion).
   <p>If you would like to fully specify each window's termcap entry, you should instead set the $SCREENCAP variable prior to running <em>screen</em>. See the discussion on the “VIRTUAL TERMINAL” in this manual, and the termcap(5) man page for more information on termcap definitions.
   <dl>
@@ -1253,18 +1251,18 @@ C-a : paste p</pre>
   <h2>THE MESSAGE LINE</h2>
   <p><em>Screen</em> displays informational messages and other diagnostics in a <em>message line</em>. While this line is distributed to appear at the bottom of the screen, it can be defined to appear at the top of the screen during compilation. If your terminal has a status line defined in its termcap, <em>screen</em> will use this for displaying its messages, otherwise a line of the current screen will be temporarily overwritten and output will be momentarily interrupted. The message line is automatically removed after a few seconds delay, but it can also be removed early (on terminals without a status line) by beginning to type.
   <p>The message line facility can be used by an application running in the current window by means of the ANSI <em>Privacy message</em> control sequence. For instance, from within the shell, try something like:
-  <p>echo '&lt;esc&gt;^Hello world from window '$WINDOW'&lt;esc&gt;\\'
+  <p class="indent-7">echo '&lt;esc&gt;^Hello world from window '$WINDOW'&lt;esc&gt;\\'
   <p>where '&lt;esc&gt;' is an <em>escape</em>, '^' is a literal up-arrow, and '\\' turns into a single backslash.
 </section>
 <section>
   <h2>WINDOW TYPES</h2>
   <p>Screen provides three different window types. New windows are created with <em>screen</em>'s <strong>screen</strong> command (see also the entry in chapter “CUSTOMIZATION”). The first parameter to the <strong>screen</strong> command defines which type of window is created. The different window types are all special cases of the normal type. They have been added in order to allow <em>screen</em> to be used efficiently as a console multiplexer with 100 or more windows.
-  <ul class="indent-3">
+  <ul>
     <li>The normal window contains a shell (default, if no parameter is given) or any other system command that could be executed from a shell (e.g. &nbsp; <strong>slogin</strong>, etc…)
     <li>
       <p>If a tty (character special device) name (e.g. “/dev/ttya”) is specified as the first parameter, then the window is directly connected to this device. &nbsp;This window type is similar to “screen cu -l /dev/ttya”. Read and write access is required on the device node, an exclusive open is attempted on the node to mark the connection line as busy. An optional parameter is allowed consisting of a comma separated list of flags in the notation used by stty(1):
       <div class="indent-3">
-        <dl class="indent-7">
+        <dl>
           <dt>&lt;baud_rate&gt;
           <dd>
             <p>Usually 300, 1200, 9600 or 19200. This affects transmission as well as receive speed.
@@ -1289,8 +1287,8 @@ C-a : paste p</pre>
     <li>If the first parameter is “//telnet”, the second parameter is expected to be a host name, and an optional third parameter may specify a TCP port number (default decimal 23). &nbsp;Screen will connect to a server listening on the remote host and use the telnet protocol to communicate with that server.
   </ul>
   <p>For telnet windows, the command <strong>info</strong> shows details about the connection in square brackets ([ and ]) at the end of the status line.
-  <div>
-    <dl class="indent-7">
+  <div class="indent-7">
+    <dl>
       <dt>b
       <dd>
         <p>BINARY. The connection is in binary mode.
@@ -1496,16 +1494,16 @@ C-a : paste p</pre>
   <p>Finally, <em>screen</em> has a shell-specific heuristic that is enabled by setting the window's name to “<em>search|name</em>” and arranging to have a null title escape-sequence output as a part of your prompt. The <em>search</em> portion specifies an end-of-prompt search string, while the <em>name</em> portion specifies the default shell name for the window. If the <em>name</em> ends in a `:' <em>screen</em> will add what it believes to be the current command running in the window to the end of the window's shell name (e.g. “<em>name:cmd</em>”). Otherwise the current command name supersedes the shell name while it is running.
   <p>Here's how it works: &nbsp;you must modify your shell prompt to output a null title-escape-sequence (&lt;esc&gt;k&lt;esc&gt;\) as a part of your prompt. The last part of your prompt must be the same as the string you specified for the <em>search</em> portion of the title. Once this is set up, <em>screen</em> will use the title-escape-sequence to clear the previous command name and get ready for the next command. Then, when a newline is received from the shell, a search is made for the end of the prompt. If found, it will grab the first word after the matched string and use it as the command name. If the command name begins with either '!', '%', or '^' <em>screen</em> will use the first word on the following line (if found) in preference to the just-found name. This helps csh users get better command names when using job control or history recall commands.
   <p>Here's some .screenrc examples:
-  <p>screen -t top 2 nice top
+  <p class="indent-7">screen -t top 2 nice top
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre> shelltitle '&gt; |csh'
+  <pre>        shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
-  <p>/usr/joe/src/dir&gt; trn
+  <p class="indent-7">/usr/joe/src/dir&gt; trn
   <p>(it looks after the '&gt; ' for the command name). The window status would show the name “trn” while the command was running, and revert to “csh” upon completion.
-  <p>bind R screen -t '% |root:' su
+  <p class="indent-7">bind R screen -t '% |root:' su
   <p>Having this command in your .screenrc would bind the key sequence “C-a R” to the “su” command and give it an auto-title name of “root:”. For this auto-title to work, the screen could look something like this:
-  <pre>   % !em
+  <pre> % !em
         emacs file.c</pre>
   <p>Here the user typed the csh history command “!em” which ran the previously entered “emacs” command. The window status would show “root:emacs” during the execution of the command, and revert to simply “root:” at its completion.
   <pre>        bind o title
@@ -1513,9 +1511,9 @@ C-a : paste p</pre>
         bind u title (unknown)</pre>
   <p>The first binding doesn't have any arguments, so it would prompt you for a title. when you type “C-a o”. The second binding would clear an auto-title's current setting (C-a E). The third binding would set the current window's title to “(unknown)” (C-a u).
   <p>One thing to keep in mind when adding a null title-escape-sequence to your prompt is that some shells (like the csh) count all the non-control characters as part of the prompt's length. If these invisible characters aren't a multiple of 8 then backspacing over a tab will result in an incorrect display. One way to get around this is to use a prompt like this:
-  <p>set prompt='^[[0000m^[k^[\% '
+  <p class="indent-7">set prompt='^[[0000m^[k^[\% '
   <p>The escape-sequence “&lt;esc&gt;[0000m” not only normalizes the character attributes, but all the zeros round the length of the invisible characters up to 8. Bash users will probably want to echo the escape sequence in the PROMPT_COMMAND:
-  <p>PROMPT_COMMAND='printf "\033k\033\134"'
+  <p class="indent-7">PROMPT_COMMAND='printf "\033k\033\134"'
   <p>(I used “\134” to output a `\' because of a bug in bash v1.04).
 </section>
 <section>
@@ -1534,7 +1532,7 @@ C-a : paste p</pre>
   <p>Some capabilities are only put into the $TERMCAP variable of the virtual terminal if they can be efficiently implemented by the physical terminal. For instance, `dl' (delete line) is only put into the $TERMCAP variable if the terminal supports either delete line itself or scrolling regions. Note that this may provoke confusion, when &nbsp;the session is reattached on a different terminal, as the value of $TERMCAP cannot be modified by parent processes.
   <p>The "alternate screen" capability is not enabled by default. Set the <strong>altscreen</strong> .screenrc command to enable it.
   <p>The following is a list of control sequences recognized by <em>screen</em>. “(V)” and “(A)” indicate VT100-specific and ANSI- or ISO-specific functions, respectively.
-  <dl class="indent-27">
+  <dl>
     <dt><strong>ESC E</strong>
     <dd>
       <p>Next Line
@@ -1571,7 +1569,7 @@ C-a : paste p</pre>
     <dt><strong>ESC Pn p</strong>
     <dd>
       <p>Cursor Visibility (97801)
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Pn = <strong>6</strong>
         <dd>
           <p>Invisible
@@ -1651,7 +1649,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn J</strong>
     <dd>
       <p>Erase in Display
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>From Cursor to End of Screen
@@ -1665,7 +1663,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn K</strong>
     <dd>
       <p>Erase in Line
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>From Cursor to End of Line
@@ -1709,7 +1707,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Ps ;…; Ps m</strong>
     <dd>
       <p>Select Graphic Rendition
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Ps = None or <strong>0</strong>
         <dd>
           <p>Default Rendition
@@ -1786,7 +1784,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn g</strong>
     <dd>
       <p>Tab Clear
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>Clear Tab at Current Position
@@ -1830,7 +1828,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Ps ;…; Ps l</strong>
     <dd>
       <p>Reset Mode
-      <dl class="indent-54">
+      <dl class="indent-27">
         <dt>Ps = <strong>4</strong> (A)
         <dd>
           <p>Insert Mode
@@ -2117,7 +2115,7 @@ C-a : paste p</pre>
 <section>
   <h2>SPECIAL TERMINAL CAPABILITIES</h2>
   <p>The following table describes all terminal capabilities that are recognized by <em>screen</em> and are not in the termcap(5) manual. You can place these capabilities in your termcap entries (in `/etc/termcap') or use them with the commands `termcap', `terminfo' and `termcapinfo' in your screenrc files. It is often not possible to place these capabilities in the terminfo database.
-  <dl class="indent-13">
+  <dl>
     <dt><strong>LP</strong> <em>(bool)</em>
     <dd>
       <p>Terminal has VT100 style margins (`magic margins'). Note that this capability is obsolete because <em>screen</em> uses the standard 'xn' instead.
@@ -2202,7 +2200,7 @@ C-a : paste p</pre>
 </section>
 <section>
   <h2>ENVIRONMENT</h2>
-  <dl class="indent-15">
+  <dl>
     <dt>COLUMNS
     <dd>
       <p>Number of columns on the terminal (overrides termcap entry).
@@ -2252,7 +2250,7 @@ C-a : paste p</pre>
 </section>
 <section>
   <h2>FILES</h2>
-  <dl class="indent-34">
+  <dl>
     <dt>…/screen-4.?.??/etc/screenrc
     <dt>…/screen-4.?.??/etc/etcscreenrc
     <dd>
@@ -2368,7 +2366,7 @@ Pablo Averbuj &lt;pablo@averbuj.com&gt;.</pre>
 </section>
 <section>
   <h2>BUGS</h2>
-  <ul class="indent-3">
+  <ul>
     <li>`dm' (delete mode) and `xs' are not handled correctly (they are ignored). `xn' is treated as a magic-margin indicator.
     <li><em>Screen</em> has no clue about double-high or double-wide characters. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;But this is the only area where <em>vttest</em> is allowed to fail.
     <li>It is not possible to change the environment variable $TERMCAP when &nbsp;reattaching under a different terminal type.

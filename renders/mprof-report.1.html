@@ -8,7 +8,7 @@
   <p>The Mono <em>log</em> profiler can be used to collect a lot of information about a program running in the Mono runtime. This data can be used (both while the process is running and later) to do analyses of the program behaviour, determine resource usage, performance issues or even look for particular execution patterns.
   <p>This is accomplished by logging the events provided by the Mono runtime through the profiling interface and periodically writing them to a file which can be later inspected with the command line <em>mprof-report</em> program or with a GUI (not developed yet).
   <p>The events collected include (among others):
-  <ul class="indent-2">
+  <ul>
     <li>method enter and leave
     <li>object allocation
     <li>garbage collection
@@ -41,14 +41,14 @@
     <p>By default the <em>log</em> profiler will gather all the events provided by the Mono runtime and write them to a file named <em>output.mlpd</em>. When no option is specified, it is equivalent to using:
     <p><strong>--profile=log:calls,alloc,output=output.mlpd,maxframes=32,calldepth=100</strong>
     <p>The following options can be used to modify this default behaviour. Each option is separated from the next by a <strong>,</strong> character, with no spaces and all the options are included after the <em>log:</em> profile module specifier.
-    <ul class="indent-2">
+    <ul>
       <li><em>help</em>: display concise help info about each available option
       <li><em>[no]alloc</em>: <em>noalloc</em> disables collecting object allocation info, <em>alloc</em> enables it if it was disabled by another option like <em>heapshot</em>.
       <li><em>[no]calls</em>: <em>nocalls</em> disables collecting method enter and leave events. When this option is used at each object allocation and at some other events (like lock contentions and exception throws) a stack trace is collected by default. See the <em>maxframes</em> option to control this behaviour. <em>calls</em> enables method enter/leave events if they were disabled by another option like <em>heapshot</em>.
       <li>
         <p><em>heapshot[=MODE]</em>: collect heap shot data at each major collection. The frequency of the heap shots can be changed with the <em>MODE</em> parameter. When this option is used allocation events and method enter/leave events are not recorded by default: if they are needed, they need to be enabled explicitly. The optional parameter <em>MODE</em> can modify the default heap shot frequency. heapshot can be used multiple times with different modes: in that case a heap shot is taken if either of the conditions are met. MODE can be one of:
         <div class="indent-2">
-          <ul class="indent-2">
+          <ul>
             <li><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
             <li><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
             <li><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
@@ -62,7 +62,7 @@
       <li>
         <p><em>output=OUTSPEC</em>: instead of writing the profiling data to the output.mlpd file, substitute <em>%p</em> in <em>OUTSPEC</em> with the current process id and <em>%t</em> with the current date and time, then do according to <em>OUTSPEC</em>:
         <div class="indent-2">
-          <ul class="indent-2">
+          <ul>
             <li>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
             <li>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
             <li>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
@@ -72,7 +72,7 @@
       <li>
         <p><em>port=PORT</em>: specify the tcp/ip port to use for the listening command server. Currently not available for windows. This server is started for example when heapshot=ondemand is used: it will read commands line by line. The following commands are available:
         <div class="indent-2">
-          <ul class="indent-2">
+          <ul>
             <li><em>heapshot</em>: perform a heapshot as soon as possible
           </ul>
         </div>
@@ -102,7 +102,7 @@
     <p>To change the sort order, use the option:
     <p><strong>--method-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
-    <ul class="indent-2">
+    <ul>
       <li><em>self</em>: amount of time spent in the method itself and not in its callees
       <li><em>calls</em>: the number of method invocations
       <li><em>total</em>: the total time spent in the method.
@@ -111,14 +111,14 @@
     <p>To change the sort order of object allocations, use the option:
     <p><strong>--alloc-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
-    <ul class="indent-2">
+    <ul>
       <li><em>count</em>: the number of allocated objects of the given type
       <li><em>bytes</em>: the total number of bytes used by objects of the given type
     </ul>
     <p>To change the sort order of counters, use the option:
     <p><strong>--counters-sort=MODE</strong>
     <p>where <em>MODE</em> can be:
-    <ul class="indent-2">
+    <ul>
       <li><em>time</em>: sort values by time then category
       <li><em>category</em>: sort values by category then time
     </ul>
@@ -128,7 +128,7 @@
     <p>The profiler by default collects data about many runtime subsystems and mprof-report prints a summary of all the subsystems that are found in the data file. It is possible to tell mprof-report to only show information about some of them with the following option:
     <p><strong>--reports=R1[,R2...]</strong>
     <p>where the report names R1, R2 etc. can be:
-    <ul class="indent-2">
+    <ul>
       <li><em>header</em>: information about program startup and profiler version
       <li><em>jit</em>: JIT compiler information
       <li><em>sample</em>: statistical sampling information
@@ -161,7 +161,7 @@
     <p><strong>--track=0xaddr1[,0xaddr2,...]</strong>
     <p>The reported info (if available in the data file), will be class name, size, creation time, stack trace of creation (with the <em>--traces</em> option), etc. If heapshot data is available it will be possible to also track what other objects reference one of the listed addresses.
     <p>The object addresses can be gathered either from the profiler report in some cases (like in the monitor lock report), from the live application or they can be selected with the <em>--find=FINDSPEC</em> option. FINDSPEC can be one of the following:
-    <ul class="indent-2">
+    <ul>
       <li><em>S:SIZE</em>: where the object is selected if its size is at least <em>SIZE</em>
       <li><em>T:NAME</em>: where the object is selected if <em>NAME</em> partially matches its class name
     </ul>
@@ -183,7 +183,7 @@
   <section>
     <h3>Dealing with profiler slowness</h3>
     <p>If the profiler needs to collect lots of data, the execution of the program will slow down significantly, usually 10 to 20 times slower. There are several ways to reduce the impact of the profiler on the program execution.
-    <dl class="indent-4">
+    <dl>
       <dt><em>Use the statistical sampling mode</em>
       <dd>
         <p>Statistical sampling allows executing a program under the profiler with minimal performance overhead (usually less than 10%). This mode allows checking where the program is spending most of its execution time without significantly perturbing its behaviour.
@@ -197,7 +197,7 @@
   <section>
     <h3>Dealing with the size of the data files</h3>
     <p>When collecting a lot of information about a profiled program, huge data files can be generated. There are a few ways to minimize the amount of data, for example by not collecting some of the more space-consuming information or by compressing the information on the fly or by just generating a summary report.
-    <dl class="indent-4">
+    <dl>
       <dt><em>Reducing the amount of data</em>
       <dd>
         <p>Method enter/leave events can be excluded completely with the <em>nocalls</em> option or they can be limited to just a few levels of calls with the <em>calldepth</em> option. For example, the option:

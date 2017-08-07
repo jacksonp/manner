@@ -38,9 +38,6 @@ class Block_TP implements Block_Template
         if (is_null($dl)) {
             $dl = $dom->createElement('dl');
             $dl = $blockContainerParentNode->appendChild($dl);
-            if ($indentVal) {
-                $dl->setAttribute('class', 'indent-' . $indentVal);
-            }
         }
 
         /* @var DomElement $dt */
@@ -69,6 +66,7 @@ class Block_TP implements Block_Template
 
         /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
+        $dd->setAttribute('indent', $indentVal);
         $dd = $dl->appendChild($dd);
 
         return $dd;

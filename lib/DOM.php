@@ -19,17 +19,16 @@ class DOM
 
     static function setIndentClass(DOMElement $remainingNode, DOMElement $leavingNode): void
     {
-        $remainingNodeClass = $remainingNode->getAttribute('class');
-        $leavingNodeClass   = $leavingNode->getAttribute('class');
+        $remainingNodeIndent = (int)$remainingNode->getAttribute('indent');
+        $leavingNodeIndent   = (int)$leavingNode->getAttribute('indent');
 
-        if (in_array($leavingNodeClass, ['', 'indent'])) {
+        if (!$leavingNodeIndent) {
             // Do nothing
-        } elseif (in_array($remainingNodeClass, ['', 'indent'])) {
-            $remainingNode->setAttribute('class', $leavingNodeClass);
+        } elseif (!$remainingNodeIndent) {
+            $remainingNode->setAttribute('indent', (string)$leavingNodeIndent);
         } else {
-            $remainingNodeIndentVal = abs((int)filter_var($remainingNodeClass, FILTER_SANITIZE_NUMBER_INT));
-            $leavingNodeIndentVal   = abs((int)filter_var($leavingNodeClass, FILTER_SANITIZE_NUMBER_INT));
-            $remainingNode->setAttribute('class', 'indent-' . ($remainingNodeIndentVal + $leavingNodeIndentVal));
+            $newIndent = $remainingNodeIndent + $leavingNodeIndent;
+            $remainingNode->setAttribute('indent', (string)$newIndent);
         }
     }
 
@@ -60,7 +59,7 @@ class DOM
 
     private static function isParagraphFollowedByIndentedDiv(?DomNode $p): int
     {
-        if (!self::isTag($p, 'p') || $p->getAttribute('class') !== '') {
+        if (!self::isTag($p, 'p') || $p->getAttribute('indent') !== '') {
             return 0;
         }
 
@@ -79,17 +78,17 @@ class DOM
 
         if (
             !self::isTag($div, 'div') ||
-            strpos($div->getAttribute('class'), 'indent') !== 0 ||  // doesn't start with indent
+            !$div->hasAttribute('indent') === '' ||
             !self::isTag($div->firstChild, ['p', 'div', 'ul'])
         ) {
             return 0;
         }
 
-        $divClass = $div->getAttribute('class');
+        $divIndent = $div->getAttribute('indent');
 
         $pText = $p->textContent;
 
-        if (strpos($divClass, 'indent-') === 0 && $divClass !== 'indent-7') {
+        if ($divIndent !== '') {
 
             // Exclude sentences in $p
             if (
@@ -152,6 +151,12 @@ class DOM
 
         $myTag = $element->tagName;
         $doc   = $element->ownerDocument;
+
+        if ($element->childNodes->length === 0 && $myTag === 'p') {
+            $nextSibling = $element->nextSibling;
+            $element->parentNode->removeChild($element);
+            return $nextSibling;
+        }
 
         if ($myTag === 'pre') {
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
@@ -248,7 +253,7 @@ class DOM
                 return $nextSibling;
             }
 
-            if ($element->getAttribute('class') === '') {
+            if ($element->getAttribute('indent') === '') {
                 if (in_array($element->parentNode->tagName, ['dd'])) {
                     $nextSibling = Massage_DIV::getNextNonBRNode($element);
                     Node::remove($element);
@@ -266,27 +271,26 @@ class DOM
                 self::isTag($element->previousSibling->lastChild, 'dd')
             ) {
 
-                $divClass = $element->getAttribute('class');
-                $dlClass  = $element->previousSibling->getAttribute('class');
+                $elIndent = (int)$element->getAttribute('indent');
+                $ddIndent = (int)$element->previousSibling->lastChild->getAttribute('indent');
 
-                if ($divClass === $dlClass) {
+                if ($elIndent === $ddIndent) {
                     $nextSibling = $element->nextSibling;
                     if ($myTag === 'div') {
                         self::extractContents($element->previousSibling->lastChild, $element);
                         $element->parentNode->removeChild($element);
                     } else {
+                        $element->removeAttribute('indent');
                         $element->previousSibling->lastChild->appendChild($element);
-                        $element->removeAttribute('class');
                     }
                     return $nextSibling;
                 }
 
-                $divIndentVal = (int)str_replace('indent-', '', $divClass);
-                $dlIndentVal  = (int)str_replace('indent-', '', $dlClass);
-
-                if ($divIndentVal > $dlIndentVal) {
+                if ($elIndent > $ddIndent) {
                     $nextSibling = $element->nextSibling;
-                    $element->setAttribute('class', 'indent-' . ($divIndentVal - $dlIndentVal));
+                    // Indent will be reduced in tidy() phase.
+//                    $newIndent   = $elIndent - $ddIndent;
+//                    $element->setAttribute('indent', (string)$newIndent);
                     $element->previousSibling->lastChild->appendChild($element);
                     return $nextSibling;
                 }
@@ -322,17 +326,6 @@ class DOM
         }
 
         if ($myTag === 'dl') {
-            if (self::isTag($element->previousSibling, 'dl')) {
-                if ($element->getAttribute('class') === $element->previousSibling->getAttribute('class')) { // matching indent level
-                    $nextSibling = $element->nextSibling;
-                    while ($element->firstChild) {
-                        $element->previousSibling->appendChild($element->firstChild);
-                    }
-                    $element->parentNode->removeChild($element);
-                    return $nextSibling;
-                }
-            }
-
 
             $everyChildIsDT = true;
             for ($j = 0; $j < $element->childNodes->length; ++$j) {
@@ -347,10 +340,6 @@ class DOM
                 for ($j = 0; $j < $element->childNodes->length; ++$j) {
                     $strayDT = $element->childNodes->item($j);
                     $p       = $doc->createElement('p');
-                    $class   = $element->getAttribute('class');
-                    if (!in_array($class, ['', 'indent'])) {
-                        $p->setAttribute('class', $class);
-                    }
                     while ($strayDT->firstChild) {
                         $p->appendChild($strayDT->firstChild);
                     }
@@ -363,11 +352,7 @@ class DOM
             }
 
             while ($element->lastChild && $element->lastChild->tagName === 'dt') {
-                $p     = $doc->createElement('p');
-                $class = $element->getAttribute('class');
-                if (!in_array($class, ['', 'indent'])) {
-                    $p->setAttribute('class', $class);
-                }
+                $p       = $doc->createElement('p');
                 $strayDT = $element->lastChild;
                 while ($strayDT->firstChild) {
                     $p->appendChild($strayDT->firstChild);
@@ -380,33 +365,6 @@ class DOM
 
         if ($myTag === 'dt') {
             Massage_DT::postProcess($element);
-        }
-
-        if ($myTag === 'p') {
-            //<editor-fold desc="Change two br tags in a row to a new paragraph.">
-            $elementClass = $element->getAttribute('class');
-            $pChild       = $element->firstChild;
-            do {
-                if (self::isTag($pChild, 'br') && self::isTag($pChild->nextSibling, 'br')) {
-                    $p = $doc->createElement('p');
-                    if ($elementClass !== '') {
-                        $p->setAttribute('class', $elementClass);
-                    }
-                    while ($element->firstChild) {
-                        if ($element->firstChild === $pChild) {
-                            break;
-                        }
-                        $p->appendChild($element->firstChild);
-                    }
-                    $element->parentNode->insertBefore($p, $element);
-                    $element->removeChild($element->firstChild); // 1st <br>
-                    $element->removeChild($element->firstChild); // 2nd <br>
-                    $pChild = $element->firstChild;
-                } else {
-                    $pChild = $pChild->nextSibling;
-                }
-            } while ($pChild);
-            //</editor-fold>
         }
 
         return $element->nextSibling;
@@ -582,9 +540,6 @@ class DOM
                 if ($shouldBeList && in_array($dtChar, Massage_UL::CHAR_PREFIXES)) {
                     $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
-                    if ($child->getAttribute('class') !== '') {
-                        $ul->setAttribute('class', $child->getAttribute('class'));
-                    }
                     foreach ($child->childNodes as $dlChild) {
                         if ($dlChild->tagName === 'dd') {
                             $li = $ul->appendChild($doc->createElement('li'));
@@ -612,17 +567,63 @@ class DOM
             }
         }
 
-        if (DOM::isTag($element, 'section')) {
-            $child = $element->firstChild;
-            while ($child) {
-                if ($child->getAttribute('class') === 'indent-7') {
-                    $child->removeAttribute('class');
+        return self::massageNode($element);
+    }
+
+    static function tidy(DOMDocument $element): void
+    {
+
+        $xpath = new DOMXpath($element);
+
+        $divs = $xpath->query('//div');
+        foreach ($divs as $div) {
+            if ($div->hasAttribute('indent')) {
+
+                $leftMargin = (int)$div->getAttribute('indent');
+                $parentNode = $div->parentNode;
+                while ($parentNode) {
+                    if ($parentNode instanceof DOMDocument) {
+                        break;
+                    }
+                    if ($parentNode->hasAttribute('indent')) {
+                        $leftMargin -= (int)$parentNode->getAttribute('indent');
+                    }
+                    $parentNode = $parentNode->parentNode;
                 }
-                $child = $child->nextSibling;
+                if ($leftMargin > 0) {
+                    $div->setAttribute('indent', (string)$leftMargin);
+                } else {
+                    Node::remove($div);
+                }
+            } else {
+                Node::remove($div);
             }
         }
 
-        return self::massageNode($element);
+        $dls = $xpath->query('//dl');
+        foreach ($dls as $dl) {
+            while (self::isTag($dl->nextSibling, 'dl')) {
+                self::extractContents($dl, $dl->nextSibling);
+                $dl->parentNode->removeChild($dl->nextSibling);
+            }
+        }
+
+
+        Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
+
+        /** @var DOMElement $el */
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent]');
+        foreach ($els as $el) {
+            $el->setAttribute('class', 'indent-' . $el->getAttribute('indent'));
+            $el->removeAttribute('indent');
+        }
+
+        // Do this after changing @indent to @class
+        $ps = $xpath->query('//p');
+        foreach ($ps as $p) {
+            Massage_P::tidy($p);
+        }
+
     }
 
 }

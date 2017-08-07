@@ -7,6 +7,15 @@ declare(strict_types=1);
  * moves one level back. The first level (i.e., no call to .RS yet) has number 1, and each call to .RS increases the
  * level by 1.
  *
+ * .de1 RE
+ * .  ie \\n[.$] .nr an-level ((;\\$1) <? \\n[an-level])
+ * .  el         .nr an-level -1
+ * .  nr an-level (1 >? \\n[an-level])
+ * .  nr an-margin \\n[an-saved-margin\\n[an-level]]
+ * .  nr an-prevailing-indent \\n[an-saved-prevailing-indent\\n[an-level]]
+ * .  in \\n[an-margin]u
+ * ..
+ *
  */
 class Block_RE implements Block_Template
 {
@@ -21,23 +30,49 @@ class Block_RE implements Block_Template
 
         array_shift($lines);
 
+        $man             = Man::instance();
+        $leftMarginLevel = $man->left_margin_level;
 
-        if (count($request['arguments']) && $request['arguments'][0] === '1') {
-            // 1 is back to base level, handle that specially as it is used e.g. in lsmcli.1
+        $backToLevel = $leftMarginLevel - 1; // Back to one before last by default.
+        if (count($request['arguments'])) {
+            $backToLevel = (int)$request['arguments'][0];
+        }
+
+        if ($backToLevel < 2) {
+            // .RE 1 is back to base level (used e.g. in lsmcli.1).
+            $man->left_margin_level = 1;
+            $man->resetIndentationToDefault();
             return $parentNode->ancestor('section');
         }
 
-        $lastIndentedBlock = $parentNode->ancestor('div');
-        if (is_null($lastIndentedBlock)) {
-            // Some pages use this get out of .IP, .TP:
-            $lastIndentedBlock = $parentNode->ancestor('dl');
+        $lastDIV = $parentNode;
+
+        while ($leftMarginLevel > $backToLevel) {
+
+            --$leftMarginLevel;
+            $lastDIV = $lastDIV->ancestor('div');
+            if (is_null($lastDIV)) {
+
+                // TODO: see about this comment we used to have
+                // Some pages use this get out of .IP, .TP:
+                // $lastIndentedBlock = $parentNode->ancestor('dl');
+
+                $man->left_margin_level = 1;
+                $man->resetIndentationToDefault();
+                return $parentNode->ancestor('section');
+            }
         }
 
-        if (is_null($lastIndentedBlock)) {
-            return null;
+        $man->left_margin_level = $leftMarginLevel;
+
+        // Restore prevailing indent (see macro definition above)
+        if ($lastDIV->parentNode->hasAttribute('indent')) {
+            $man->indent = $lastDIV->parentNode->getAttribute('indent');
         } else {
-            return $lastIndentedBlock->parentNode;
+            $man->resetIndentationToDefault();
         }
+
+        return $lastDIV->parentNode;
 
     }
 

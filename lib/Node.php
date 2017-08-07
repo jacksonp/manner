@@ -73,4 +73,17 @@ class Node
 
     }
 
+    public static function removeAttributeAll($nodes, $attributes)
+    {
+
+        /** @var DOMElement $node */
+        $attributes = (array)$attributes;
+        foreach ($nodes as $node) {
+            foreach ($attributes as $attribute) {
+                $node->removeAttribute($attribute);
+            }
+        }
+
+    }
+
 }

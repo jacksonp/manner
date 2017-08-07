@@ -29,40 +29,37 @@ class Block_IP implements Block_Template
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
 
-            // TODO: only keep this one if indentation matches?
             $dl = Block_DefinitionList::getParentDL($parentNode);
+
+            /* @var DomElement $dd */
+            $dt = $dom->createElement('dt');
+            $dd = $dom->createElement('dd');
+
+            // TODO: See about adding a check like $dl->lastChild->getAttribute('indent') <= $indentVal
+            // And reducing indent if $indentVal is greater
+            // And creating new $dl if $indentVal is less
 
             if (is_null($dl)) {
                 $dl = $dom->createElement('dl');
                 $dl = $parentNode->appendChild($dl);
-                if ($indentVal) {
-                    $dl->setAttribute('class', 'indent-' . $indentVal);
-                }
             }
 
-            $dt = $dom->createElement('dt');
             TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
             $dl->appendChild($dt);
 
-            /* @var DomElement $dd */
-            $dd = $dom->createElement('dd');
+            $dd->setAttribute('indent', $indentVal);
             $dd = $dl->appendChild($dd);
 
             return $dd;
         } else {
             /* @var DomElement $p */
             $p = $dom->createElement('p');
-            if (count($request['arguments']) > 1 && $request['arguments'][1] === '0') {
+            if ($indentVal === '0') {
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
             } else {
-                if ($indentVal) {
-                    $dl = Block_DefinitionList::getParentDL($parentNode);
-                    if ($dl && $dl->getAttribute('class') === 'indent-' . $indentVal) {
-                        $parentNode = $dl->lastChild;
-                    } else {
-                        $p->setAttribute('class', 'indent-' . $indentVal);
-                    }
+                if ($parentNode->tagName !== 'dd' || $parentNode->getAttribute('indent') !== $indentVal) {
+                    $p->setAttribute('indent', $indentVal);
                 }
             }
             $p = $parentNode->appendChild($p);

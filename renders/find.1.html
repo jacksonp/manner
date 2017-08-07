@@ -436,7 +436,7 @@
       <dt>-printf <em>format</em>
       <dd>
         <p>True; print <em>format</em> on the standard output, interpreting `\' escapes and `%' directives. &nbsp;Field widths and precisions can be specified as with the `printf' C function. &nbsp;Please note that many of the fields are printed as %s rather than %d, and this may mean that flags don't work as you might expect. &nbsp;This also means that the `-' flag does work (it forces fields to be left-aligned). &nbsp;Unlike <strong>-print</strong>, <strong>-printf</strong> does not add a newline at the end of the string. &nbsp;The escapes and directives are:
-        <dl class="indent-7">
+        <dl>
           <dt>\a
           <dd>
             <p>Alarm bell.
@@ -472,7 +472,7 @@
             <p>The character whose ASCII code is NNN (octal).
         </dl>
         <p>A `\' character followed by any other character is treated as an ordinary character, so they both are printed.
-        <dl class="indent-7">
+        <dl>
           <dt>%%
           <dd>
             <p>A literal percent sign.
@@ -482,13 +482,13 @@
           <dt>%A<em>k</em>
           <dd>
             <p>File's last access time in the format specified by <em>k</em>, which is either `@' or a directive for the C `strftime' function. &nbsp;The possible values for <em>k</em> are listed below; some of them might not be available on all systems, due to differences in `strftime' between systems.
-            <dl class="indent-7">
+            <dl>
               <dt>@
               <dd>
                 <p>seconds since Jan. 1, 1970, 00:00 GMT, with fractional part.
             </dl>
             <p>Time fields:
-            <dl class="indent-7">
+            <dl>
               <dt>H
               <dd>
                 <p>hour (00..23)
@@ -527,7 +527,7 @@
                 <p>time zone (e.g., EDT), or nothing if no time zone is determinable
             </dl>
             <p>Date fields:
-            <dl class="indent-7">
+            <dl>
               <dt>a
               <dd>
                 <p>locale's abbreviated weekday name (Sun..Sat)
@@ -762,7 +762,7 @@
   <p>The POSIX standard specifies parentheses `(', `)', negation `!' and the `and' and `or' operators ( <strong>-a</strong>, <strong>-o</strong>).
   <p>All other options, predicates, expressions and so forth are extensions beyond the POSIX standard. &nbsp;Many of these extensions are not unique to GNU find, however.
   <p>The POSIX standard requires that <strong>find</strong> detects loops:
-  <p>The <strong>find</strong> utility shall detect infinite loops; that is, entering a previously visited directory that is an ancestor of the last file encountered. &nbsp;When it detects an infinite loop, find shall write a diagnostic message to standard error and shall either recover its position in the hierarchy or terminate.
+  <p class="indent-7">The <strong>find</strong> utility shall detect infinite loops; that is, entering a previously visited directory that is an ancestor of the last file encountered. &nbsp;When it detects an infinite loop, find shall write a diagnostic message to standard error and shall either recover its position in the hierarchy or terminate.
   <p>GNU <strong>find</strong> complies with these requirements. &nbsp;The link count of directories which contain entries which are hard links to an ancestor will often be lower than they otherwise should be. &nbsp;This can mean that GNU find will sometimes optimise away the visiting of a subdirectory which is actually a link to an ancestor. &nbsp;Since <strong>find</strong> does not actually enter such a subdirectory, it is allowed to avoid emitting a diagnostic message. &nbsp;Although this behaviour may be somewhat confusing, it is unlikely that anybody actually depends on this behaviour. &nbsp;If the leaf optimisation has been turned off with <strong>-noleaf</strong>, the directory entry will always be examined and the diagnostic message will be issued where it is appropriate. &nbsp;Symbolic links cannot be used to create filesystem cycles as such, but if the <strong>-L</strong> option or the <strong>-follow</strong> option is in use, a diagnostic message is issued when <strong>find</strong> encounters a loop of symbolic links. &nbsp;As with loops containing hard links, the leaf optimisation will often mean that <strong>find</strong> knows that it doesn't need to call <em>stat()</em> or <em>chdir()</em> on the symbolic link, so this diagnostic is frequently not necessary.
   <p>The <strong>-d</strong> option is supported for compatibility with various BSD systems, but you should use the POSIX-compliant option <strong>-depth</strong> instead.
   <p>The POSIXLY_CORRECT environment variable does not affect the behaviour of the <strong>-regex</strong> or <strong>-iregex</strong> tests because those tests aren't specified in the POSIX standard.

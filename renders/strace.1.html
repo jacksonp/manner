@@ -53,7 +53,7 @@ read(0, "", 1)                          = 0</code></pre>
 </section>
 <section>
   <h2>OPTIONS</h2>
-  <dl class="indent-12">
+  <dl>
     <dt><strong>-c</strong>
     <dd>
       <p>Count time, calls, and errors for each system call and report a summary on program exit. &nbsp;On Linux, this attempts to show system time (CPU time spent running in the kernel) independent of wall clock time. &nbsp;If <strong>-c</strong> is used with <strong>-f</strong> or <strong>-F</strong> (below), only aggregate totals for all traced processes are kept.
@@ -135,11 +135,13 @@ read(0, "", 1)                          = 0</code></pre>
     <dt><strong>-e</strong> <em>expr</em>
     <dd>
       <p>A qualifying expression which modifies which events to trace or how to trace them. &nbsp;The format of the expression is:
-      <div class="indent-15">
+      <div class="indent-3">
         <p class="indent-7">[<em>qualifier</em><strong>=</strong>][<strong>!</strong>]<em>value1</em>[<strong>,</strong><em>value2</em>]...
       </div>
-      <p class="indent-7">where <em>qualifier</em> is one of <strong>trace</strong>, <strong>abbrev</strong>, <strong>verbose</strong>, <strong>raw</strong>, <strong>signal</strong>, <strong>read</strong>, or <strong>write</strong> and <em>value</em> is a qualifier-dependent symbol or number. &nbsp;The default qualifier is <strong>trace</strong>. Using an exclamation mark negates the set of values. &nbsp;For example, <strong>-e</strong>&nbsp;<strong>open</strong> means literally <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>open</strong> which in turn means trace only the <strong>open</strong> system call. &nbsp;By contrast, <strong>-e</strong>&nbsp;<strong>trace</strong>=!<strong>open</strong> means to trace every system call except <strong>open</strong>. In addition, the special values <strong>all</strong> and <strong>none</strong> have the obvious meanings.
-      <p class="indent-7">Note that some shells use the exclamation point for history expansion even inside quoted arguments. &nbsp;If so, you must escape the exclamation point with a backslash.
+  </dl>
+  <p class="indent-7">where <em>qualifier</em> is one of <strong>trace</strong>, <strong>abbrev</strong>, <strong>verbose</strong>, <strong>raw</strong>, <strong>signal</strong>, <strong>read</strong>, or <strong>write</strong> and <em>value</em> is a qualifier-dependent symbol or number. &nbsp;The default qualifier is <strong>trace</strong>. Using an exclamation mark negates the set of values. &nbsp;For example, <strong>-e</strong>&nbsp;<strong>open</strong> means literally <strong>-e</strong>&nbsp;<strong>trace</strong>=<strong>open</strong> which in turn means trace only the <strong>open</strong> system call. &nbsp;By contrast, <strong>-e</strong>&nbsp;<strong>trace</strong>=!<strong>open</strong> means to trace every system call except <strong>open</strong>. In addition, the special values <strong>all</strong> and <strong>none</strong> have the obvious meanings.
+  <p class="indent-7">Note that some shells use the exclamation point for history expansion even inside quoted arguments. &nbsp;If so, you must escape the exclamation point with a backslash.
+  <dl>
     <dt><strong>-e&nbsp;trace</strong>=<em>set</em>
     <dd>
       <p>Trace only the specified set of system calls. &nbsp;The <strong>-c</strong> option is useful for determining which system calls might be useful to trace. &nbsp;For example, <strong>trace</strong>=<strong>open,close,read,write</strong> means to only trace those four system calls. &nbsp;Be careful when making inferences about the user/kernel boundary if only a subset of system calls are being monitored. &nbsp;The default is <strong>trace</strong>=<strong>all</strong>.

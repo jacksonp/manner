@@ -20,7 +20,7 @@
   The starting and ending times of the report can be defined using the options <strong>-b</strong> and <strong>-e</strong> followed by a time argument of the form hh:mm.
   <p>In the second synopsis line, <strong>atopsar</strong> reads actual activity counters from the kernel with the specified <em>interval</em> (in seconds) and the specified number of <em>samples</em> (optionally). When <strong>atopsar</strong> is activated in this way it immediately sends the output for every requested report to standard output. If only one type of report is requested, the header is printed once and after every <em>interval</em> seconds the statistical counters are shown for that period. If several reports are requested, a header is printed per sample followed by the statistical counters for that period.
   <p>Some generic flags can be specified to influence the behaviour of the <strong>atopsar</strong> program:
-  <dl class="indent-5">
+  <dl>
     <dt><strong>-S</strong>
     <dd>
       <p>By default the timestamp at the beginning of a line is suppressed if more lines are shown for one interval. With this flag a timestamp is given for every output-line (easier for post-processing).
@@ -46,7 +46,7 @@
       <p>Summarize <em>cnt</em> samples into one sample. When the logfile contains e.g. samples of 10 minutes, the use of the flag '-R 6' shows a report with one sample for every hour.
   </dl>
   <p>Other flags are used to define which reports are required:
-  <dl class="indent-5">
+  <dl>
     <dt><strong>-A</strong>
     <dd>
       <p>Show all possible reports.
@@ -143,7 +143,7 @@
   <h2>OUTPUT DESCRIPTION</h2>
   <p>Depending on the requested report, a number of columns with output values are produced. The values are mostly presented as a number of events per second.
   <p>The output for the flag <strong>-c</strong> contains the following columns per cpu:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>usr%</strong>
     <dd>
       <p>Percentage of cpu-time consumed in user mode (program text) for all active processes running with a nice value of zero (default) or a negative nice value (which means a higher priority than usual). The cpu consumption in user mode of processes with a nice value larger than zero (lower priority) is indicated in the nice%-column.
@@ -173,7 +173,7 @@
       <p>Percentage of unused cpu time because all processes are in a wait-state but not waiting for disk-I/O.
   </dl>
   <p>The output for the flag <strong>-p</strong> contains the following values:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pswch/s</strong>
     <dd>
       <p>Number of process switches (also called context switches) per second on this cpu. A process switch occurs at the moment that an active thread (i.e. the thread using a cpu) enters a wait state or has used its time slice completely; another thread will then be chosen to use the cpu.
@@ -194,7 +194,7 @@
       <p>Load average reflecting the average number of threads in the runqueue or in non-interruptible wait state (usually waiting for disk or tape I/O) during the last 15 minutes.
   </dl>
   <p>The output for the flag <strong>-P</strong> contains information about the processes and threads:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>clones/s</strong>
     <dd>
       <p>The number of new threads started per second.
@@ -216,7 +216,7 @@
       <p>Total number of threads present in the system in state 'uninterruptible sleeping'.
   </dl>
   <p>The output for the flag <strong>-m</strong> contains information about the memory- and swap-utilization:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>memtotal</strong>
     <dd>
       <p>Total usable main memory size.
@@ -243,7 +243,7 @@
       <p>Available swap space at this moment (snapshot).
   </dl>
   <p>The output for the flag <strong>-s</strong> contains information about the frequency of swapping:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pagescan/s</strong>
     <dd>
       <p>Number of scanned pages per second due to the fact that free memory drops below a particular threshold.
@@ -261,7 +261,7 @@
       <p>The maximum limit for the committed space, which is by default swap size plus 50% of memory size. The kernel only verifies whether the committed space exceeds the limit if strict overcommit handling is configured (vm.overcommit_memory is 2).
   </dl>
   <p>The output for the flags <strong>-l</strong> (LVM), <strong>-f</strong> (MD), and <strong>-d</strong> (hard disk) contains the following columns per active unit:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>disk</strong>
     <dd>
       <p>Name.
@@ -288,7 +288,7 @@
       <p>Average number of milliseconds needed by a request on this unit (seek, latency and data-transfer).
   </dl>
   <p>The output for the flag <strong>-n</strong> contains information about activity on NFS mounted filesystems (client):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>mounted_device</strong>
     <dd>
       <p>Mounted device containing server name and server directory being mounted.
@@ -301,7 +301,7 @@
       When the NFS filesystem was mounted during the interval, the state 'M' is shown.
   </dl>
   <p>The output for the flag <strong>-j</strong> contains information about NFS client activity:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>rpc/s</strong>
     <dd>
       <p>Number of RPC calls per second issued to NFS server(s).
@@ -319,7 +319,7 @@
       <p>Number of authorization refreshes per second.
   </dl>
   <p>The output for the flag <strong>-J</strong> contains information about NFS server activity:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>rpc/s</strong>
     <dd>
       <p>Number of RPC calls per second received from NFS client(s).
@@ -343,7 +343,7 @@
       <p>Number of requests per second handled via UDP.
   </dl>
   <p>The output for the flag <strong>-i</strong> provides information about utilization of network interfaces:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>interf</strong>
     <dd>
       <p>Name of interface.
@@ -374,7 +374,7 @@
       The linespeed is followed by the indication 'f' (full duplex) or 'h' (half duplex).
   </dl>
   <p>The output for the flag <strong>-I</strong> provides information about the failures that were detected for network interfaces:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>interf</strong>
     <dd>
       <p>Name of interface.
@@ -401,7 +401,7 @@
       <p>Number of carrier-errors encountered per second on transmitted packets.
   </dl>
   <p>The output for the flag <strong>-w</strong> provides information about the utilization of the IPv4-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>inrecv/s</strong>
     <dd>
       <p>Number of IP datagrams received from interfaces per second, including those received in error (ipInReceives).
@@ -422,7 +422,7 @@
       <p>Number of IP datagram fragments generated per second at this entity (ipFragCreates).
   </dl>
   <p>The output for the flag <strong>-W</strong> provides information about the failures that were detected in the IPv4-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>in: dsc/s</strong>
     <dd>
       <p>Number of input IP datagrams per second for which no problems were encountered to prevent their continued processing but that were discarded, e.g. for lack of buffer space (ipInDiscards).
@@ -449,7 +449,7 @@
       <p>Number of IP datagrams per second discarded because no route could be found (ipOutNoRoutes).
   </dl>
   <p>The output for the flag <strong>-y</strong> provides information about the general utilization of the ICMPv4-layer and some information per type of ICMP-message (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>intot/s</strong>
     <dd>
       <p>Number of ICMP messages (any type) received per second at this entity (icmpInMsgs).
@@ -470,7 +470,7 @@
       <p>Number of ICMP Echo-Reply messages transmitted per second (icmpOutEchoReps).
   </dl>
   <p>The output for the flag <strong>-Y</strong> provides information about other types of ICMPv4-messages (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>ierr/s</strong>
     <dd>
       <p>Number of ICMP messages received per second but determined to have ICMP-specific errors (icmpInErrors).
@@ -503,7 +503,7 @@
       <p>Number of ICMP Time Exceeded messages transmitted per second (icmpOutTimeExcds).
   </dl>
   <p>The output for the flag <strong>-u</strong> provides information about the utilization of the UDPv4-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>indgram/s</strong>
     <dd>
       <p>Number of UDP datagrams per second delivered to UDP users (udpInDatagrams).
@@ -518,7 +518,7 @@
       <p>Number of received UDP datagrams per second for which there was no application at the destination port (udpNoPorts).
   </dl>
   <p>The output for the flag <strong>-z</strong> provides information about the utilization of the IPv6-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>inrecv/s</strong>
     <dd>
       <p>Number of input IPv6-datagrams received from interfaces per second, including those received in error (ipv6IfStatsInReceives).
@@ -542,7 +542,7 @@
       <p>Number of IPv6 datagram fragments generated per second at this entity (ipv6IfStatsOutFragCreates).
   </dl>
   <p>The output for the flag <strong>-Z</strong> provides information about the failures that were detected in the IPv6-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>in: dsc/s</strong>
     <dd>
       <p>Number of input IPv6 datagrams per second for which no problems were encountered to prevent their continued processing but that were discarded, e.g. for lack of buffer space (ipv6IfStatsInDiscards).
@@ -569,7 +569,7 @@
       <p>Number of IPv6 datagrams per second discarded because no route could be found (ipv6IfStatsInNoRoutes).
   </dl>
   <p>The output for the flag <strong>-k</strong> provides information about the general utilization of the ICMPv6-layer and some information per type of ICMP-message (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>intot/s</strong>
     <dd>
       <p>Number of ICMPv6 messages (any type) received per second at the interface (ipv6IfIcmpInMsgs).
@@ -593,7 +593,7 @@
       <p>Number of ICMP Neighbor Advertisement messages transmitted per second (ipv6IfIcmpOutNeighborAdvertisements).
   </dl>
   <p>The output for the flag <strong>-K</strong> provides information about other types of ICMPv6-messages (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>iecho/s</strong>
     <dd>
       <p>Number of ICMP Echo (request) messages received per second (ipv6IfIcmpInEchos).
@@ -623,7 +623,7 @@
       <p>Number of ICMP Time Exceeded messages transmitted per second (ipv6IfIcmpOutTimeExcds).
   </dl>
   <p>The output for the flag <strong>-U</strong> provides information about the utilization of the UDPv6-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>indgram/s</strong>
     <dd>
       <p>Number of UDPv6 datagrams per second delivered to UDP users (udpInDatagrams),
@@ -638,7 +638,7 @@
       <p>Number of received UDPv6 datagrams per second for which there was no application at the destination port (udpNoPorts).
   </dl>
   <p>The output for the flag <strong>-t</strong> provides information about the utilization of the TCP-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>insegs/s</strong>
     <dd>
       <p>Number of received segments per second, including those received in error (tcpInSegs).
@@ -656,7 +656,7 @@
       <p>Number of connections currently open (snapshot), for which the state is either ESTABLISHED or CLOSE-WAIT (tcpCurrEstab).
   </dl>
   <p>The output for the flag <strong>-T</strong> provides information about the failures that were detected in the TCP-layer (formal SNMP-names between brackets):
-  <dl class="indent-12">
+  <dl>
     <dt><strong>inerr/s</strong>
     <dd>
       <p>Number of received segments per second received in error (tcpInErrs).
@@ -674,7 +674,7 @@
       <p>Number of transmitted segments per second containing the RST flag (tcpOutRsts).
   </dl>
   <p>The output for the flag <strong>-O</strong> provides information about the top-3 of processes with the highest processor consumption:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pid</strong>
     <dd>
       <p>Process-id (if zero, the process has exited while the pid could not be determined).
@@ -686,7 +686,7 @@
       <p>The percentage of cpu-capacity being consumed. This value can exceed 100% for a multithreaded process running on a multiprocessor machine.
   </dl>
   <p>The output for the flag <strong>-G</strong> provides information about the top-3 of processes with the highest memory consumption:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pid</strong>
     <dd>
       <p>Process-id (if zero, the process has exited while the pid could not be determined).
@@ -698,7 +698,7 @@
       <p>The percentage of resident memory-utilization by this process.
   </dl>
   <p>The output for the flag <strong>-D</strong> provides information about the top-3 of processes that issue the most read and write accesses to disk:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pid</strong>
     <dd>
       <p>Process-id (if zero, the process has exited while the pid could not be determined).
@@ -710,7 +710,7 @@
       <p>The percentage of read and write accesses related to the total number of read and write accesses issued on disk by all processes, so a high percentage does not imply a high disk load on system level.
   </dl>
   <p>The output for the flag <strong>-N</strong> provides information about the top-3 of processes that issue the most socket transfers for IPv4/IPv6:
-  <dl class="indent-12">
+  <dl>
     <dt><strong>pid</strong>
     <dd>
       <p>Process-id (if zero, the process has exited while the pid could not be determined).
@@ -725,9 +725,9 @@
 <section>
   <h2>EXAMPLES</h2>
   <p>To see today's cpu-activity so far &nbsp;(supposed that <strong>atop</strong> is logging in the background):
-  <p class="indent-12">&nbsp;&nbsp;<strong>atopsar</strong>
+  <p>&nbsp;&nbsp;<strong>atopsar</strong>
   <p>To see the memory occupation for June 5, 2012 between 10:00 and 12:30 (supposed that <strong>atop</strong> has been logging daily in the background):
-  <dl class="indent-12">
+  <dl>
     <dt>&nbsp;&nbsp;<strong>atopsar -m -r /var/log/atop_20120605 -b 10:00 -e 12:30</strong>
     <dd>
       <p>&nbsp;<br>
@@ -736,19 +736,19 @@
     <dd>
       <p>&nbsp;<br>
       &nbsp; &nbsp;or, suppose it is June 8, 2012 at this moment
-      <p>&nbsp;&nbsp;<strong>atopsar -m -r yyy -b 10:00 -e 12:30</strong>
   </dl>
+  <p>&nbsp;&nbsp;<strong>atopsar -m -r yyy -b 10:00 -e 12:30</strong>
   <p>Write a logfile with <strong>atop</strong> to record the system behaviour for 30 minutes (30 samples of one minute) and produce all available reports afterwards:
-  <p class="indent-12">&nbsp;&nbsp;<strong>atop -w /tmp/atoplog 60 30</strong>
-  <p class="indent-12">&nbsp;&nbsp;<strong>atopsar -A -r /tmp/atoplog</strong>
+  <p>&nbsp;&nbsp;<strong>atop -w /tmp/atoplog 60 30</strong>
+  <p>&nbsp;&nbsp;<strong>atopsar -A -r /tmp/atoplog</strong>
   <p>To watch TCP activity evolve for ten minutes (10 samples with sixty seconds interval):
-  <p class="indent-12">&nbsp;&nbsp;<strong>atopsar -t 60 10</strong>
+  <p>&nbsp;&nbsp;<strong>atopsar -t 60 10</strong>
   <p>To watch the header-lines ('_' as last character) of all reports with only &nbsp;the detail-lines showing critical resource consumption (marker '*' or '+' as last character):
-  <p class="indent-12">&nbsp;&nbsp;<strong>atopsar -AM | grep '[_*+]$'</strong>
+  <p>&nbsp;&nbsp;<strong>atopsar -AM | grep '[_*+]$'</strong>
 </section>
 <section>
   <h2>FILES</h2>
-  <dl class="indent-5">
+  <dl>
     <dt><strong>/etc/atoprc</strong>
     <dd>
       <p>Configuration file containing system-wide default values (mainly flags). See related man-page.

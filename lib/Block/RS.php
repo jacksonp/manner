@@ -1,6 +1,20 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Class Block_RS
+ *
+ * .de1 RS
+ * .  nr an-saved-margin\\n[an-level] \\n[an-margin]
+ * .  nr an-saved-prevailing-indent\\n[an-level] \\n[an-prevailing-indent]
+ * .  ie \\n[.$] .nr an-margin +(n;\\$1)
+ * .  el         .nr an-margin +\\n[an-prevailing-indent]
+ * .  in \\n[an-margin]u
+ * .  nr an-prevailing-indent \\n[IN]
+ * .  nr an-level +1
+ * ..
+ *
+ */
 class Block_RS implements Block_Template
 {
 
@@ -23,27 +37,21 @@ class Block_RS implements Block_Template
             $parentNode = Blocks::getBlockContainerParent($parentNode);
         }
 
-
-        $className = 'indent';
-
         if (count($request['arguments'])) {
-            $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
-            $man->indentation = $indentVal;
+            $leftMargin = Roff_Unit::normalize($request['arguments'][0]);
         } else {
-            $indentVal = $man->indentation;
+            $leftMargin = $man->indentation;
         }
 
-        Man::instance()->resetIndentationToDefault();
+        $man->left_margin_level = $man->left_margin_level + 1;
 
-        if ($indentVal) { // note this filters out 0s
-            $className .= '-' . $indentVal;
-        }
+        $man->resetIndentationToDefault();
 
         /* @var DomElement $div */
         $div = $dom->createElement('div');
 
-        if (!in_array($parentNode->tagName, ['dd']) || $className !== 'indent-7') {
-            $div->setAttribute('class', $className);
+        if ($leftMargin !== '0') {
+            $div->setAttribute('indent', $leftMargin);
         }
 
         $div = $parentNode->appendChild($div);
