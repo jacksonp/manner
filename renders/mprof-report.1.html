@@ -47,13 +47,11 @@
       <li><em>[no]calls</em>: <em>nocalls</em> disables collecting method enter and leave events. When this option is used at each object allocation and at some other events (like lock contentions and exception throws) a stack trace is collected by default. See the <em>maxframes</em> option to control this behaviour. <em>calls</em> enables method enter/leave events if they were disabled by another option like <em>heapshot</em>.
       <li>
         <p><em>heapshot[=MODE]</em>: collect heap shot data at each major collection. The frequency of the heap shots can be changed with the <em>MODE</em> parameter. When this option is used allocation events and method enter/leave events are not recorded by default: if they are needed, they need to be enabled explicitly. The optional parameter <em>MODE</em> can modify the default heap shot frequency. heapshot can be used multiple times with different modes: in that case a heap shot is taken if either of the conditions are met. MODE can be one of:
-        <div class="indent-2">
-          <ul>
-            <li><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
-            <li><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
-            <li><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
-          </ul>
-        </div>
+        <ul>
+          <li><em>NUM</em>ms: perform a heap shot if at least <em>NUM</em> milliseconds passed since the last one.
+          <li><em>NUM</em>gc: perform a heap shot every <em>NUM</em> major garbage collections
+          <li><em>ondemand</em>: perform a heap shot when such a command is sent to the control port
+        </ul>
       <li><em>sample[=FREQ]</em>: collect statistical samples of the program behaviour. The default is to collect a 100 times per second (100 Hz) the instruction pointer. This is equivalent to the value “100”. A value of zero for <em>FREQ</em> effectively disables sampling.
       <li><em>maxframes=NUM</em>: when a stack trace needs to be performed, collect <em>NUM</em> frames at the most. The default is 32.
       <li><em>maxsamples=NUM</em>: stop allocating reusable sample events once <em>NUM</em> events have been allocated (a value of zero for all intents and purposes means unlimited). By default, the value of this setting is the number of CPU cores multiplied by 1000. This is usually a good enough value for typical desktop and mobile apps. If you're losing too many samples due to this default (which is possible in apps with an unusually high amount of threads), you may want to tinker with this value to find a good balance between sample hit rate and performance impact on the app. The way it works is that sample events are enqueued for reuse after they're flushed to the output file; if a thread gets a sampling signal but there are no sample events in the reuse queue and the profiler has reached the maximum number of sample allocations, the sample gets dropped. So a higher number for this setting will increase the chance that a thread is able to collect a sample, but also necessarily means that there will be more work done by the profiler. You can run Mono with the <em>--stats</em> option to see statistics about sample events.
@@ -61,21 +59,17 @@
       <li><em>zip</em>: automatically compress the output data in gzip format.
       <li>
         <p><em>output=OUTSPEC</em>: instead of writing the profiling data to the output.mlpd file, substitute <em>%p</em> in <em>OUTSPEC</em> with the current process id and <em>%t</em> with the current date and time, then do according to <em>OUTSPEC</em>:
-        <div class="indent-2">
-          <ul>
-            <li>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
-            <li>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
-            <li>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
-          </ul>
-        </div>
+        <ul>
+          <li>if <em>OUTSPEC</em> begins with a <em>|</em> character, execute the rest as a program and feed the data to its standard input
+          <li>if <em>OUTSPEC</em> begins with a <em>-</em> character, use the rest of OUTSPEC as the filename, but force overwrite any existing file by that name
+          <li>otherwise write the data the the named file: note that is a file by that name already exists, a warning is issued and profiling is disabled.
+        </ul>
       <li><em>report</em>: the profiling data is sent to mprof-report, which will print a summary report. This is equivalent to the option: <strong>output=mprof-report&nbsp;-</strong>. If the <em>output</em> option is specified as well, the report will be written to the output file instead of the console.
       <li>
         <p><em>port=PORT</em>: specify the tcp/ip port to use for the listening command server. Currently not available for windows. This server is started for example when heapshot=ondemand is used: it will read commands line by line. The following commands are available:
-        <div class="indent-2">
-          <ul>
-            <li><em>heapshot</em>: perform a heapshot as soon as possible
-          </ul>
-        </div>
+        <ul>
+          <li><em>heapshot</em>: perform a heapshot as soon as possible
+        </ul>
       <li><em>nocounters</em>: disables sampling of runtime and performance counters, which is normally done every 1 second.
       <li><em>coverage</em>: collect code coverage data. This implies enabling the <em>calls</em> option.
       <li><em>onlycoverage</em>: can only be used with <em>coverage</em>. This disables most other events so that the profiler mostly only collects coverage data.

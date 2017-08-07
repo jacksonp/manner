@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Blocks
 {
@@ -45,7 +45,8 @@ class Blocks
             $blockTags[] = 'td';
         }
 
-        while (!in_array($parentNode->tagName, $blockTags)) {
+        // We use <div>s to "remap" .IP temporarily so it can contain other <div>s, so treat remaps as non-blocks.
+        while (!in_array($parentNode->tagName, $blockTags) || $parentNode->hasAttribute('remap')) {
             $parentNode = $parentNode->parentNode;
             if (!$parentNode) {
                 throw new Exception('No more parents.');

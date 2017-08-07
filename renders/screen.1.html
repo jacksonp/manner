@@ -785,7 +785,9 @@ xterm 80x42 jnhollma@/dev/ttyp5     0(m11)   &amp;R.x
       (3rd character)
          ‘-’ : no execute
          ‘x’ : execute</pre>
-    <p>“Displays” needs a region size of at least 10 characters wide and 5 characters high in order to display.
+    <div class="indent-7">
+      <p>“Displays” needs a region size of at least 10 characters wide and 5 characters high in order to display.
+    </div>
     <p><em><strong>digraph</strong></em> [<em>preset</em>[<em>unicode-value</em>]]
   </div>
   <p>This command prompts the user for a digraph sequence. The next two characters typed are looked up in a builtin table and the resulting character is inserted in the input stream. For example, if the user enters 'a"', an a-umlaut will be inserted. If the first character entered is a 0 (zero), <em>screen</em> will treat the following characters (up to three) as an octal number instead. &nbsp;The optional argument <em>preset</em> is treated as user input, thus one can create an “umlaut” key. For example the command "bindkey ^K digraph '"'" enables the user to generate an a-umlaut by typing CTRL-K a. When a non-zero <em>unicode-value</em> is specified, a new digraph is created with the specified preset. The digraph is unset if a zero value is provided for the <em>unicode-value.</em>
@@ -1261,29 +1263,27 @@ C-a : paste p</pre>
     <li>The normal window contains a shell (default, if no parameter is given) or any other system command that could be executed from a shell (e.g. &nbsp; <strong>slogin</strong>, etc…)
     <li>
       <p>If a tty (character special device) name (e.g. “/dev/ttya”) is specified as the first parameter, then the window is directly connected to this device. &nbsp;This window type is similar to “screen cu -l /dev/ttya”. Read and write access is required on the device node, an exclusive open is attempted on the node to mark the connection line as busy. An optional parameter is allowed consisting of a comma separated list of flags in the notation used by stty(1):
-      <div class="indent-3">
-        <dl>
-          <dt>&lt;baud_rate&gt;
-          <dd>
-            <p>Usually 300, 1200, 9600 or 19200. This affects transmission as well as receive speed.
-          <dt>cs8 or cs7
-          <dd>
-            <p>Specify the transmission of eight (or seven) bits per byte.
-          <dt>ixon or -ixon
-          <dd>
-            <p>Enables (or disables) software flow-control (CTRL-S/CTRL-Q) for sending data.
-          <dt>ixoff or -ixoff
-          <dd>
-            <p>Enables (or disables) software flow-control for receiving data.
-          <dt>istrip or -istrip
-          <dd>
-            <p>Clear (or keep) the eight bit in each received byte.
-        </dl>
-        <p>You may want to specify as many of these options as applicable. Unspecified options cause the terminal driver to make up the parameter values of the connection. &nbsp;These values are system dependent and may be in defaults or values saved from a previous connection.
-        <p>For tty windows, the <strong>info</strong> command shows some of the modem control lines in the status line. These may include `RTS', `CTS', 'DTR', `DSR', `CD' and more. This depends on the available ioctl()'s and system header files as well as the on the physical capabilities of the serial board. &nbsp;Signals that are logical low (inactive) have their name preceded by an exclamation mark (!), otherwise the signal is logical high (active). Signals not supported by the hardware but available to the ioctl() interface are usually shown low.
-        <p>When the CLOCAL status bit is true, the whole set of modem signals is placed &nbsp;inside curly braces ({ and }). When the CRTSCTS or TIOCSOFTCAR bit is set, the signals `CTS' or `CD' &nbsp;are shown in parenthesis, respectively.
-        <p>For tty windows, the command <strong>break</strong> causes the Data transmission line (TxD) to go low for a specified period of time. This is expected to be interpreted as break signal on the other side. No data is sent and no modem control line is changed when a <strong>break</strong> is issued.
-      </div>
+      <dl>
+        <dt>&lt;baud_rate&gt;
+        <dd>
+          <p>Usually 300, 1200, 9600 or 19200. This affects transmission as well as receive speed.
+        <dt>cs8 or cs7
+        <dd>
+          <p>Specify the transmission of eight (or seven) bits per byte.
+        <dt>ixon or -ixon
+        <dd>
+          <p>Enables (or disables) software flow-control (CTRL-S/CTRL-Q) for sending data.
+        <dt>ixoff or -ixoff
+        <dd>
+          <p>Enables (or disables) software flow-control for receiving data.
+        <dt>istrip or -istrip
+        <dd>
+          <p>Clear (or keep) the eight bit in each received byte.
+      </dl>
+      <p>You may want to specify as many of these options as applicable. Unspecified options cause the terminal driver to make up the parameter values of the connection. &nbsp;These values are system dependent and may be in defaults or values saved from a previous connection.
+      <p>For tty windows, the <strong>info</strong> command shows some of the modem control lines in the status line. These may include `RTS', `CTS', 'DTR', `DSR', `CD' and more. This depends on the available ioctl()'s and system header files as well as the on the physical capabilities of the serial board. &nbsp;Signals that are logical low (inactive) have their name preceded by an exclamation mark (!), otherwise the signal is logical high (active). Signals not supported by the hardware but available to the ioctl() interface are usually shown low.
+      <p>When the CLOCAL status bit is true, the whole set of modem signals is placed &nbsp;inside curly braces ({ and }). When the CRTSCTS or TIOCSOFTCAR bit is set, the signals `CTS' or `CD' &nbsp;are shown in parenthesis, respectively.
+      <p>For tty windows, the command <strong>break</strong> causes the Data transmission line (TxD) to go low for a specified period of time. This is expected to be interpreted as break signal on the other side. No data is sent and no modem control line is changed when a <strong>break</strong> is issued.
     <li>If the first parameter is “//telnet”, the second parameter is expected to be a host name, and an optional third parameter may specify a TCP port number (default decimal 23). &nbsp;Screen will connect to a server listening on the remote host and use the telnet protocol to communicate with that server.
   </ul>
   <p>For telnet windows, the command <strong>info</strong> shows details about the connection in square brackets ([ and ]) at the end of the status line.
@@ -1496,7 +1496,7 @@ C-a : paste p</pre>
   <p>Here's some .screenrc examples:
   <p class="indent-7">screen -t top 2 nice top
   <p>Adding this line to your .screenrc would start a nice-d version of the “top” command in window 2 named “top” rather than “nice”.
-  <pre>        shelltitle '&gt; |csh'
+  <pre>      shelltitle '&gt; |csh'
         screen 1</pre>
   <p>These commands would start a shell with the given shelltitle. The title specified is an auto-title that would expect the prompt and the typed command to look something like the following:
   <p class="indent-7">/usr/joe/src/dir&gt; trn
@@ -1569,7 +1569,7 @@ C-a : paste p</pre>
     <dt><strong>ESC Pn p</strong>
     <dd>
       <p>Cursor Visibility (97801)
-      <dl class="indent-27">
+      <dl>
         <dt>Pn = <strong>6</strong>
         <dd>
           <p>Invisible
@@ -1649,7 +1649,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn J</strong>
     <dd>
       <p>Erase in Display
-      <dl class="indent-27">
+      <dl>
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>From Cursor to End of Screen
@@ -1663,7 +1663,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn K</strong>
     <dd>
       <p>Erase in Line
-      <dl class="indent-27">
+      <dl>
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>From Cursor to End of Line
@@ -1707,7 +1707,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Ps ;…; Ps m</strong>
     <dd>
       <p>Select Graphic Rendition
-      <dl class="indent-27">
+      <dl>
         <dt>Ps = None or <strong>0</strong>
         <dd>
           <p>Default Rendition
@@ -1784,7 +1784,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Pn g</strong>
     <dd>
       <p>Tab Clear
-      <dl class="indent-27">
+      <dl>
         <dt>Pn = None or <strong>0</strong>
         <dd>
           <p>Clear Tab at Current Position
@@ -1828,7 +1828,7 @@ C-a : paste p</pre>
     <dt><strong>ESC [ Ps ;…; Ps l</strong>
     <dd>
       <p>Reset Mode
-      <dl class="indent-27">
+      <dl>
         <dt>Ps = <strong>4</strong> (A)
         <dd>
           <p>Insert Mode

@@ -18,6 +18,11 @@ class Manner
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
+        $xpath = new DOMXpath($dom);
+        Massage_P::removeEmpty($xpath);
+        Massage_DL::mergeAdjacent($xpath);
+        DOM::remap($dom);
+        DOM::calcIndents($dom);
         DOM::massage($manPageContainer);
         DOM::tidy($dom);
 

@@ -17,21 +17,6 @@ class DOM
 
     }
 
-    static function setIndentClass(DOMElement $remainingNode, DOMElement $leavingNode): void
-    {
-        $remainingNodeIndent = (int)$remainingNode->getAttribute('indent');
-        $leavingNodeIndent   = (int)$leavingNode->getAttribute('indent');
-
-        if (!$leavingNodeIndent) {
-            // Do nothing
-        } elseif (!$remainingNodeIndent) {
-            $remainingNode->setAttribute('indent', (string)$leavingNodeIndent);
-        } else {
-            $newIndent = $remainingNodeIndent + $leavingNodeIndent;
-            $remainingNode->setAttribute('indent', (string)$newIndent);
-        }
-    }
-
     static function isInlineElement(?DOMNode $node): bool
     {
         return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
@@ -63,6 +48,8 @@ class DOM
             return 0;
         }
 
+        /** @var DOMElement $div , $p */
+
         $pChild = $p->firstChild;
         while ($pChild) {
             if (
@@ -78,7 +65,7 @@ class DOM
 
         if (
             !self::isTag($div, 'div') ||
-            !$div->hasAttribute('indent') === '' ||
+            !$div->hasAttribute('indent') ||
             !self::isTag($div->firstChild, ['p', 'div', 'ul'])
         ) {
             return 0;
@@ -152,12 +139,6 @@ class DOM
         $myTag = $element->tagName;
         $doc   = $element->ownerDocument;
 
-        if ($element->childNodes->length === 0 && $myTag === 'p') {
-            $nextSibling = $element->nextSibling;
-            $element->parentNode->removeChild($element);
-            return $nextSibling;
-        }
-
         if ($myTag === 'pre') {
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
                 $codeNode = $element->lastChild;
@@ -189,15 +170,14 @@ class DOM
 
             // TODO: could also do <p>s here, but need to handle cases like amaddclient.8 where the option handling then gets messed up.
             if ($myTag === 'div' && in_array($firstChild->tagName, ['dl'])) {
-                self::setIndentClass($firstChild, $element);
+                Indentation::addElIndent($firstChild, $element);
                 Node::remove($element);
                 Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
                 return $firstChild->nextSibling;
             }
 
-            // Could sum indents if both elements have indent-X
             if ($myTag === 'div' && $firstChild->tagName === 'div') {
-                self::setIndentClass($element, $firstChild);
+                Indentation::addElIndent($element, $firstChild);
                 Node::remove($firstChild);
             }
 
@@ -246,7 +226,7 @@ class DOM
 
             if ($element->parentNode->tagName === 'pre') {
                 if ($element->parentNode->childNodes->length === 1) {
-                    self::setIndentClass($element->parentNode, $element);
+                    Indentation::addElIndent($element->parentNode, $element);
                 }
                 $nextSibling = $element->nextSibling;
                 Node::remove($element);
@@ -271,8 +251,8 @@ class DOM
                 self::isTag($element->previousSibling->lastChild, 'dd')
             ) {
 
-                $elIndent = (int)$element->getAttribute('indent');
-                $ddIndent = (int)$element->previousSibling->lastChild->getAttribute('indent');
+                $elIndent = Indentation::get($element);
+                $ddIndent = Indentation::get($element->previousSibling->lastChild);
 
                 if ($elIndent === $ddIndent) {
                     $nextSibling = $element->nextSibling;
@@ -288,9 +268,7 @@ class DOM
 
                 if ($elIndent > $ddIndent) {
                     $nextSibling = $element->nextSibling;
-                    // Indent will be reduced in tidy() phase.
-//                    $newIndent   = $elIndent - $ddIndent;
-//                    $element->setAttribute('indent', (string)$newIndent);
+                    Indentation::set($element, $elIndent - $ddIndent);
                     $element->previousSibling->lastChild->appendChild($element);
                     return $nextSibling;
                 }
@@ -570,52 +548,31 @@ class DOM
         return self::massageNode($element);
     }
 
-    static function tidy(DOMDocument $element): void
+    static function tidy(DOMDocument $dom): void
     {
 
-        $xpath = new DOMXpath($element);
+        $xpath = new DOMXpath($dom);
 
-        $divs = $xpath->query('//div');
-        foreach ($divs as $div) {
-            if ($div->hasAttribute('indent')) {
-
-                $leftMargin = (int)$div->getAttribute('indent');
-                $parentNode = $div->parentNode;
-                while ($parentNode) {
-                    if ($parentNode instanceof DOMDocument) {
-                        break;
-                    }
-                    if ($parentNode->hasAttribute('indent')) {
-                        $leftMargin -= (int)$parentNode->getAttribute('indent');
-                    }
-                    $parentNode = $parentNode->parentNode;
-                }
-                if ($leftMargin > 0) {
-                    $div->setAttribute('indent', (string)$leftMargin);
-                } else {
-                    Node::remove($div);
-                }
-            } else {
-                Node::remove($div);
-            }
+        $unindentedDIVs = $xpath->query('//div[not(@indent)]');
+        foreach ($unindentedDIVs as $div) {
+            Node::remove($div);
         }
 
-        $dls = $xpath->query('//dl');
-        foreach ($dls as $dl) {
-            while (self::isTag($dl->nextSibling, 'dl')) {
-                self::extractContents($dl, $dl->nextSibling);
-                $dl->parentNode->removeChild($dl->nextSibling);
-            }
-        }
-
+        Massage_DL::mergeAdjacent($xpath);
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
         /** @var DOMElement $el */
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent]');
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent]');
         foreach ($els as $el) {
-            $el->setAttribute('class', 'indent-' . $el->getAttribute('indent'));
+            $indentVal = (int)$el->getAttribute('indent');
+            if ($indentVal !== 0) {
+                $el->setAttribute('class', 'indent-' . $indentVal);
+            }
             $el->removeAttribute('indent');
+            if ($indentVal === 0 && $el->tagName === 'div') {
+                Node::remove($el);
+            }
         }
 
         // Do this after changing @indent to @class
@@ -625,5 +582,55 @@ class DOM
         }
 
     }
+
+    public static function calcIndents(DOMDocument $dom)
+    {
+
+        $xpath = new DOMXpath($dom);
+
+        $divs = $xpath->query('//div[@left-margin]');
+        foreach ($divs as $div) {
+
+            $leftMargin = (int)$div->getAttribute('left-margin');
+            $parentNode = $div->parentNode;
+            while ($parentNode) {
+                if ($parentNode instanceof DOMDocument || $parentNode->tagName === 'div') {
+                    break;
+                }
+                if ($parentNode->hasAttribute('indent')) {
+                    $leftMargin -= (int)$parentNode->getAttribute('indent');
+                }
+                $parentNode = $parentNode->parentNode;
+            }
+            $div->setAttribute('indent', (string)$leftMargin);
+            $div->removeAttribute('left-margin');
+
+        }
+    }
+
+    public static function remap(DOMDocument $dom)
+    {
+
+        $xpath = new DOMXpath($dom);
+
+        $divs = $xpath->query('//div[@remap]');
+        /** @var DOMElement $div */
+        foreach ($divs as $div) {
+            if ($div->getAttribute('remap') === 'IP') {
+                $indentVal = (int)$div->getAttribute('indent');
+                if ($indentVal !== 0) {
+                    $child = $div->firstChild;
+                    while ($child) {
+                        Indentation::add($child, $indentVal);
+                        $child = $child->nextSibling;
+                    }
+                }
+            }
+            Node::remove($div);
+        }
+
+
+    }
+
 
 }

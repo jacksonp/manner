@@ -4,6 +4,12 @@ declare(strict_types=1);
 /**
  * Class Block_RS
  *
+ * This macro moves the left margin to the right by the value nnn if specified (default unit is ‘n’); otherwise it is
+ * set to the previous indentation value specified with .TP, .IP, or .HP (or to the default value if none of them have
+ * been used yet). The indentation value is then set to the default.
+ *
+ * Calls to the RS macro can be nested.
+ *
  * .de1 RS
  * .  nr an-saved-margin\\n[an-level] \\n[an-margin]
  * .  nr an-saved-prevailing-indent\\n[an-level] \\n[an-prevailing-indent]
@@ -51,7 +57,7 @@ class Block_RS implements Block_Template
         $div = $dom->createElement('div');
 
         if ($leftMargin !== '0') {
-            $div->setAttribute('indent', $leftMargin);
+            $div->setAttribute('left-margin', $leftMargin);
         }
 
         $div = $parentNode->appendChild($div);

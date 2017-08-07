@@ -52,18 +52,19 @@ class Block_IP implements Block_Template
 
             return $dd;
         } else {
-            /* @var DomElement $p */
-            $p = $dom->createElement('p');
+            /* @var DomElement $div */
+            $div = $dom->createElement('div');
+            $div->setAttribute('remap', 'IP');
             if ($indentVal === '0') {
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
             } else {
                 if ($parentNode->tagName !== 'dd' || $parentNode->getAttribute('indent') !== $indentVal) {
-                    $p->setAttribute('indent', $indentVal);
+                    $div->setAttribute('indent', $indentVal);
                 }
             }
-            $p = $parentNode->appendChild($p);
-            return $p;
+            $div = $parentNode->appendChild($div);
+            return $div;
         }
 
     }

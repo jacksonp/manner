@@ -4,6 +4,16 @@ declare(strict_types=1);
 class Massage_P
 {
 
+    static function removeEmpty(DOMXPath $xpath)
+    {
+        $ps = $xpath->query('//p');
+        foreach ($ps as $p) {
+            if (!$p->firstChild || trim($p->textContent) === '') {
+                $p->parentNode->removeChild($p);
+            }
+        }
+    }
+
     static function tidy(DOMElement $p)
     {
 
