@@ -548,10 +548,8 @@ class DOM
         return self::massageNode($element);
     }
 
-    static function tidy(DOMDocument $dom): void
+    static function tidy(DOMXPath $xpath): void
     {
-
-        $xpath = new DOMXpath($dom);
 
         $unindentedDIVs = $xpath->query('//div[not(@indent)]');
         foreach ($unindentedDIVs as $div) {
@@ -583,10 +581,8 @@ class DOM
 
     }
 
-    public static function calcIndents(DOMDocument $dom)
+    public static function calcIndents(DOMXPath $xpath)
     {
-
-        $xpath = new DOMXpath($dom);
 
         $divs = $xpath->query('//div[@left-margin]');
         foreach ($divs as $div) {
@@ -608,10 +604,8 @@ class DOM
         }
     }
 
-    public static function remap(DOMDocument $dom)
+    public static function remap(DOMXPath $xpath)
     {
-
-        $xpath = new DOMXpath($dom);
 
         $divs = $xpath->query('//div[@remap]');
         /** @var DOMElement $div */
