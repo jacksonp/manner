@@ -96,11 +96,10 @@
     <p>The files will be added to the repository at the next commit. To undo an add before that, see <strong>hg forget</strong>.
     <p>If no names are given, add all files to the repository (except files matching <strong>.hgignore</strong>).
     <p>Examples:
-    <div class="indent-4">
-      <ul>
-        <li>
-          <p>New (unknown) files are added automatically by <strong>hg add</strong>:
-          <pre><code>$ ls
+    <ul class="indent-4">
+      <li>
+        <p>New (unknown) files are added automatically by <strong>hg add</strong>:
+        <pre><code>$ ls
 foo.c
 $ hg status
 ? foo.c
@@ -108,9 +107,9 @@ $ hg add
 adding foo.c
 $ hg status
 A foo.c</code></pre>
-        <li>
-          <p>Specific files to be added can be specified:
-          <pre><code>$ ls
+      <li>
+        <p>Specific files to be added can be specified:
+        <pre><code>$ ls
 bar.c  foo.c
 $ hg status
 ? bar.c
@@ -119,8 +118,7 @@ $ hg add bar.c
 $ hg status
 A bar.c
 ? foo.c</code></pre>
-      </ul>
-    </div>
+    </ul>
     <p>Returns 0 if all files are successfully added.
     <p>Options:
     <dl>
@@ -147,11 +145,10 @@ A bar.c
     <p>Unless names are given, new files are ignored if they match any of the patterns in <strong>.hgignore</strong>. As with add, these changes take effect at the next commit.
     <p>Use the -s/--similarity option to detect renamed files. This option takes a percentage between 0 (disabled) and 100 (files must be identical) as its parameter. With a parameter greater than 0, this compares every removed file with every added file and records those similar enough as renames. Detecting renamed files this way can be expensive. After using this option, <strong>hg status -C</strong> can be used to check which files were identified as moved or renamed. If not specified, -s/--similarity defaults to 100 and only renames of identical files are detected.
     <p>Examples:
-    <div class="indent-4">
-      <ul>
-        <li>
-          <p>A number of files (bar.c and foo.c) are new, while foobar.c has been removed (without using <strong>hg remove</strong>) from the repository:
-          <pre><code>$ ls
+    <ul class="indent-4">
+      <li>
+        <p>A number of files (bar.c and foo.c) are new, while foobar.c has been removed (without using <strong>hg remove</strong>) from the repository:
+        <pre><code>$ ls
 bar.c foo.c
 $ hg status
 ! foobar.c
@@ -165,9 +162,9 @@ $ hg status
 A bar.c
 A foo.c
 R foobar.c</code></pre>
-        <li>
-          <p>A file foobar.c was moved to foo.c without using <strong>hg rename</strong>. Afterwards, it was edited slightly:
-          <pre><code>$ ls
+      <li>
+        <p>A file foobar.c was moved to foo.c without using <strong>hg rename</strong>. Afterwards, it was edited slightly:
+        <pre><code>$ ls
 foo.c
 $ hg status
 ! foobar.c
@@ -180,8 +177,7 @@ $ hg status -C
 A foo.c
   foobar.c
 R foobar.c</code></pre>
-      </ul>
-    </div>
+    </ul>
     <p>Returns 0 if all files are successfully added.
     <p>Options:
     <dl>
@@ -3320,13 +3316,11 @@ syntax: regexp
   <h2>CONFIGURING HGWEB</h2>
   <p>Mercurial's internal web server, hgweb, can serve either a single repository, or a tree of repositories. In the second case, repository paths and global options can be defined using a dedicated configuration file common to <strong>hg serve</strong>, <strong>hgweb.wsgi</strong>, <strong>hgweb.cgi</strong> and <strong>hgweb.fcgi</strong>.
   <p>This file uses the same syntax as other Mercurial configuration files but recognizes only the following sections:
-  <div class="indent-4">
-    <ul>
-      <li>web
-      <li>paths
-      <li>collections
-    </ul>
-  </div>
+  <ul class="indent-4">
+    <li>web
+    <li>paths
+    <li>collections
+  </ul>
   <p>The <strong>web</strong> options are thoroughly described in <strong>hg help config</strong>.
   <p>The <strong>paths</strong> section maps URL paths to paths of repositories in the filesystem. hgweb will not expose the filesystem directly - only Mercurial repositories can be published and only according to the configuration.
   <p>The left hand side is the path in the URL. Note that hgweb reserves subpaths like <strong>rev</strong> or <strong>file</strong>, try using different names for nested repositories to avoid confusing effects.
@@ -3635,13 +3629,11 @@ subinclude:path/to/subignorefile reads patterns specifically for paths in the
     <h3>What are phases?</h3>
     <p>Phases are a system for tracking which changesets have been or should be shared. This helps prevent common mistakes when modifying history (for instance, with the mq or rebase extensions).
     <p>Each changeset in a repository is in one of the following phases:
-    <div class="indent-4">
-      <ul>
-        <li>public : changeset is visible on a public server
-        <li>draft : changeset is not yet published
-        <li>secret : changeset should not be pushed, pulled, or cloned
-      </ul>
-    </div>
+    <ul class="indent-4">
+      <li>public : changeset is visible on a public server
+      <li>draft : changeset is not yet published
+      <li>secret : changeset should not be pushed, pulled, or cloned
+    </ul>
     <p>These phases are ordered (public &lt; draft &lt; secret) and no changeset can be in a lower phase than its ancestors. For instance, if a changeset is public, all its ancestors are also public. Lastly, changeset phases should only be changed towards the public phase.
   </section>
   <section>
@@ -3682,25 +3674,23 @@ publish = False</code></pre>
   </section>
   <section>
     <h3>Examples</h3>
-    <div class="indent-4">
-      <ul>
-        <li>
-          <p>list changesets in draft or secret phase:
-          <pre><code>hg log -r "not public()"</code></pre>
-        <li>
-          <p>change all secret changesets to draft:
-          <pre><code>hg phase --draft "secret()"</code></pre>
-        <li>
-          <p>forcibly move the current changeset and descendants from public to draft:
-          <pre><code>hg phase --force --draft .</code></pre>
-        <li>
-          <p>show a list of changeset revision and phase:
-          <pre><code>hg log --template "{rev} {phase}\n"</code></pre>
-        <li>
-          <p>resynchronize draft changesets relative to a remote repository:
-          <pre><code>hg phase -fd "outgoing(URL)"</code></pre>
-      </ul>
-    </div>
+    <ul class="indent-4">
+      <li>
+        <p>list changesets in draft or secret phase:
+        <pre><code>hg log -r "not public()"</code></pre>
+      <li>
+        <p>change all secret changesets to draft:
+        <pre><code>hg phase --draft "secret()"</code></pre>
+      <li>
+        <p>forcibly move the current changeset and descendants from public to draft:
+        <pre><code>hg phase --force --draft .</code></pre>
+      <li>
+        <p>show a list of changeset revision and phase:
+        <pre><code>hg log --template "{rev} {phase}\n"</code></pre>
+      <li>
+        <p>resynchronize draft changesets relative to a remote repository:
+        <pre><code>hg phase -fd "outgoing(URL)"</code></pre>
+    </ul>
     <p>See <strong>hg help phase</strong> for more information on manually manipulating phases.
   </section>
 </section>
@@ -3989,16 +3979,14 @@ in this case. This matches against all of "issue 1234", "issue:1234",
       <dd>
         <p>Sort set by keys. The default sort order is ascending, specify a key as <strong>-key</strong> to sort in descending order.
         <p>The keys can be:
-        <div class="indent-5">
-          <ul>
-            <li><strong>rev</strong> for the revision number,
-            <li><strong>branch</strong> for the branch name,
-            <li><strong>desc</strong> for the commit message (description),
-            <li><strong>user</strong> for user name (<strong>author</strong> can be used as an alias),
-            <li><strong>date</strong> for the commit date
-            <li><strong>topo</strong> for a reverse topographical sort
-          </ul>
-        </div>
+        <ul class="indent-5">
+          <li><strong>rev</strong> for the revision number,
+          <li><strong>branch</strong> for the branch name,
+          <li><strong>desc</strong> for the commit message (description),
+          <li><strong>user</strong> for user name (<strong>author</strong> can be used as an alias),
+          <li><strong>date</strong> for the commit date
+          <li><strong>topo</strong> for a reverse topographical sort
+        </ul>
         <p>The <strong>topo</strong> sort order cannot be combined with other sort keys. This sort takes one optional argument, <strong>topo.firstbranch</strong>, which takes a revset that specifies what topographical branches to prioritize in the sort.
       <dt><strong>subrepo([pattern])</strong>
       <dd>
@@ -6143,35 +6131,33 @@ dropmissing = True</code></pre>
     <p>If you use --outgoing, this command will abort if there are ambiguous outgoing revisions. For example, if there are multiple branches containing outgoing revisions.
     <p>Use "min(outgoing() and ::.)" or similar revset specification instead of --outgoing to specify edit target revision exactly in such ambiguous situation. See <strong>hg help revsets</strong> for detail about selecting revisions.
     <p>Examples:
-    <div class="indent-4">
-      <ul>
-        <li>
-          <p>A number of changes have been made. Revision 3 is no longer needed.
-          <p>Start history editing from revision 3:
-          <pre><code>hg histedit -r 3</code></pre>
-          <p>An editor opens, containing the list of revisions, with specific actions specified:
-          <pre><code>pick 5339bf82f0ca 3 Zworgle the foobar
+    <ul class="indent-4">
+      <li>
+        <p>A number of changes have been made. Revision 3 is no longer needed.
+        <p>Start history editing from revision 3:
+        <pre><code>hg histedit -r 3</code></pre>
+        <p>An editor opens, containing the list of revisions, with specific actions specified:
+        <pre><code>pick 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 0a9639fcda9d 5 Morgify the cromulancy</code></pre>
-          <p>Additional information about the possible actions to take appears below the list of revisions.
-          <p>To remove revision 3 from the history, its action (at the beginning of the relevant line) is changed to 'drop':
-          <pre><code>drop 5339bf82f0ca 3 Zworgle the foobar
+        <p>Additional information about the possible actions to take appears below the list of revisions.
+        <p>To remove revision 3 from the history, its action (at the beginning of the relevant line) is changed to 'drop':
+        <pre><code>drop 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 0a9639fcda9d 5 Morgify the cromulancy</code></pre>
-        <li>
-          <p>A number of changes have been made. Revision 2 and 4 need to be swapped.
-          <p>Start history editing from revision 2:
-          <pre><code>hg histedit -r 2</code></pre>
-          <p>An editor opens, containing the list of revisions, with specific actions specified:
-          <pre><code>pick 252a1af424ad 2 Blorb a morgwazzle
+      <li>
+        <p>A number of changes have been made. Revision 2 and 4 need to be swapped.
+        <p>Start history editing from revision 2:
+        <pre><code>hg histedit -r 2</code></pre>
+        <p>An editor opens, containing the list of revisions, with specific actions specified:
+        <pre><code>pick 252a1af424ad 2 Blorb a morgwazzle
 pick 5339bf82f0ca 3 Zworgle the foobar
 pick 8ef592ce7cc4 4 Bedazzle the zerlog</code></pre>
-          <p>To swap revision 2 and 4, its lines are swapped in the editor:
-          <pre><code>pick 8ef592ce7cc4 4 Bedazzle the zerlog
+        <p>To swap revision 2 and 4, its lines are swapped in the editor:
+        <pre><code>pick 8ef592ce7cc4 4 Bedazzle the zerlog
 pick 5339bf82f0ca 3 Zworgle the foobar
 pick 252a1af424ad 2 Blorb a morgwazzle</code></pre>
-      </ul>
-    </div>
+    </ul>
     <p>Returns 0 on success, 1 if user intervention is required (not only for intentional "edit" command, but also for resolving unexpected conflicts).
     <p>Options:
     <dl>

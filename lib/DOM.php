@@ -557,7 +557,7 @@ class DOM
             if (!Indentation::get($el)) {
                 Node::remove($el);
             }
-            if (self::isTag($el->firstChild, 'pre')) {
+            if (self::isTag($el->firstChild, ['pre', 'ul'])) {
                 Indentation::addElIndent($el->firstChild, $el);
                 Node::remove($el);
             }
@@ -567,7 +567,7 @@ class DOM
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent]');
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
         foreach ($els as $el) {
             $indentVal = Indentation::get($el);
             if ($indentVal !== 0) {
