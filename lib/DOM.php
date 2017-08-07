@@ -550,20 +550,26 @@ class DOM
 
     static function tidy(DOMXPath $xpath): void
     {
+        /** @var DOMElement $el */
 
-        $unindentedDIVs = $xpath->query('//div[not(@indent)]');
-        foreach ($unindentedDIVs as $div) {
-            Node::remove($div);
+        $divs = $xpath->query('//div');
+        foreach ($divs as $el) {
+            if (!Indentation::get($el)) {
+                Node::remove($el);
+            }
+            if (self::isTag($el->firstChild, 'pre')) {
+                Indentation::addElIndent($el->firstChild, $el);
+                Node::remove($el);
+            }
         }
 
         Massage_DL::mergeAdjacent($xpath);
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
-        /** @var DOMElement $el */
         $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent]');
         foreach ($els as $el) {
-            $indentVal = (int)$el->getAttribute('indent');
+            $indentVal = Indentation::get($el);
             if ($indentVal !== 0) {
                 $el->setAttribute('class', 'indent-' . $indentVal);
             }

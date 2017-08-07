@@ -81,10 +81,8 @@
       <p>As a special case, the new name may be the keyword <strong><em>DELETE</em></strong> (with no quotes), and then the instance <em>oldname</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
       <p>If the instance names contain any embedded spaces then special care needs to be taken in respect of the PCP instance naming rule that treats the leading non-space part of the instance name as the unique portion of the name for the purposes of matching and ensuring uniqueness within an instance domain, refer to <strong>pmdaInstance</strong>(3) for a discussion of this issue.
       <p>As an illustration, consider the hypothetical instance domain for a metric which contains 2 instances with the following names:
-      <div class="indent-4">
-        <pre>red
+      <pre class="indent-4">red
 eek urk</pre>
-      </div>
       <p>Then some possible <strong><em>INAME</em></strong> clauses might be:
       <dl>
         <dt><code>"eek" -&gt; "yellow like a flower"</code>
@@ -159,15 +157,11 @@ eek urk</pre>
             </dl>
             <p>If the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then independent of any <em>pick</em> specifications, there is at most one value in each input result and so <strong><em>FIRST</em></strong>, <strong><em>LAST</em></strong>, <strong><em>MIN</em></strong>, <strong><em>MAX</em></strong>, <strong><em>SUM</em></strong> and <strong><em>AVG</em></strong> are all equivalent and the output instance identifier will be 0.
             <p>In general it is an error to specify a rewriting action for the same metadata or result values more than once, e.g. more than one <strong><em>INDOM</em></strong> clause for the same instance domain. &nbsp;The one exception is the possible interaction between the <strong><em>INDOM</em></strong> clauses in the <strong>indom</strong> and <strong>metric</strong> rules. For example the metric <em>sample.bin</em> is defined over the instance domain 29.2 in <em>inlog</em> and the following is acceptable (albeit redundant):
-            <div class="indent-26">
-              <pre>indom 29.* { indom -&gt; 109.* }
+            <pre class="indent-26">indom 29.* { indom -&gt; 109.* }
 metric sample.bin { indom -&gt; 109.2 }</pre>
-            </div>
             <p>However the following is an error, because the instance domain for <em>sample.bin</em> has two conflicting definitions:
-            <div class="indent-26">
-              <pre>indom 29.* { indom -&gt; 109.* }
+            <pre class="indent-26">indom 29.* { indom -&gt; 109.* }
 metric sample.bin { indom -&gt; 123.2 }</pre>
-            </div>
           <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>NULL</em></strong>[ <em>pick</em> ]
           <dd>
             <p>The metric (which must have been previously defined over an instance domain) is being modified to be a singular metric. &nbsp;This involves a metadata change and collapsing all results for this metric so that multiple values become one value.
@@ -204,24 +198,19 @@ metric sample.bin { indom -&gt; 123.2 }</pre>
 <section>
   <h2>EXAMPLES</h2>
   <p>To promote the values of the per-disk IOPS metrics to 64-bit to allow aggregation over a long time period for capacity planning, or because the PMDA has changed to export 64-bit counters and we want to convert old archives so they can be processed alongside new archives.
-  <div class="indent-4">
-    <pre>metric disk.dev.read { type -&gt; U64 }
+  <pre class="indent-4">metric disk.dev.read { type -&gt; U64 }
 metric disk.dev.write { type -&gt; U64 }
 metric disk.dev.total { type -&gt; U64 }</pre>
-  </div>
   <p>The instances associated with the load average metric <strong>kernel.all.load</strong> could be renamed and renumbered by the rules below.
-  <div class="indent-4">
-    <pre># for the Linux PMDA, the kernel.all.load metric is defined
+  <pre class="indent-4"># for the Linux PMDA, the kernel.all.load metric is defined
 # over instance domain 60.2
 indom 60.2 {
     inst 1 -&gt; 60 iname "1 minute" -&gt; "60 second"
     inst 5 -&gt; 300 iname "5 minute" -&gt; "300 second"
     inst 15 -&gt; 900 iname "15 minute" -&gt; "900 second"
 }</pre>
-  </div>
   <p>If we decide to split the ``proc'' metrics out of the Linux PMDA, this will involve changing the domain number for the PMID of these metrics and the associated instance domains. &nbsp;The rules below would rewrite an old archive to match the changes after the PMDA split.
-  <div class="indent-4">
-    <pre># all Linux proc metrics are in 7 clusters
+  <pre class="indent-4"># all Linux proc metrics are in 7 clusters
 metric 60.8.* { pmid -&gt; 123.*.* }
 metric 60.9.* { pmid -&gt; 123.*.* }
 metric 60.13.* { pmid -&gt; 123.*.* }
@@ -231,7 +220,6 @@ metric 60.32.* { pmid -&gt; 123.*.* }
 metric 60.51.* { pmid -&gt; 123.*.* }
 # only one instance domain for Linux proc metrics
 indom 60.9 { indom -&gt; 123.0 }</pre>
-  </div>
 </section>
 <section>
   <h2>FILES</h2>
