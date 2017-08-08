@@ -185,7 +185,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
              consprop   Constant propagation
              copyprop   Copy propagation
              fcmov      Fast x86 FP compares [arch-dependency]
-             float32      Perform 32-bit float arithmetic using 32-bit operations
+             float32    Perform 32-bit float arithmetic using 32-bit operations
              gshared    Enable generic code sharing.
              inline     Inline method calls
              intrins    Intrinsic method implementations
@@ -199,7 +199,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
              sse2       SSE2 instructions on x86 [arch-dependency]
              tailc      Tail recursion and tail calls</pre>
       <p>For example, to enable all the optimization but dead code elimination and inlining, you can use:
-      <pre>    -O=all,-deadce,-inline</pre>
+      <pre> -O=all,-deadce,-inline</pre>
       <p>The flags that are flagged with [arch-dependency] indicate that the given option if used in combination with Ahead of Time compilation (--aot flag) would produce pre-compiled code that will depend on the current CPU and might not be safely moved to another computer.
       <p>The following optimizations are supported
       <dl>
@@ -272,7 +272,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
     <dt><strong>--trace[=expression]</strong>
     <dd>
       <p>Shows method names as they are invoked. &nbsp;By default all methods are traced. The trace can be customized to include or exclude methods, classes or assemblies. &nbsp;A trace expression is a comma separated list of targets, each target can be prefixed with a minus sign to turn off a particular target. &nbsp;The words `program', `all' and `disabled' have special meaning. &nbsp;`program' refers to the main program being executed, and `all' means all the method calls. The `disabled' option is used to start up with tracing disabled. &nbsp;It can be enabled at a later point in time in the program by sending the SIGUSR2 signal to the runtime. Assemblies are specified by their name, for example, to trace all calls in the System assembly, use:
-      <pre>       mono --trace=System app.exe</pre>
+      <pre>   mono --trace=System app.exe</pre>
       <p>Classes are specified with the T: prefix. &nbsp;For example, to trace all calls to the System.String class, use:
       <pre>   mono --trace=T:System.String app.exe</pre>
       <p>And individual methods are referenced with the M: prefix, and the standard method notation:
@@ -349,7 +349,7 @@ mono_aot_register_module (mono_aot_module_hello_info);</pre>
 <section>
   <h2>PROFILING</h2>
   <p>The mono runtime includes a profiler that can be used to explore various performance related problems in your application. &nbsp;The profiler is activated by passing the --profile command line argument to the Mono runtime, the format is:
-  <pre> --profile[=profiler[:profiler_args]]</pre>
+  <pre>    --profile[=profiler[:profiler_args]]</pre>
   <p>Mono has a built-in profiler called 'default' (and is also the default if no arguments are specified), but developers can write custom profilers, see the section "CUSTOM PROFILERS" for more details.
   <p>If a <em>profiler</em> is not specified, the default profiler is used. The <em>profiler_args</em> is a profiler-specific string of options for the profiler itself. The default profiler accepts the following options 'alloc' to profile memory consumption by the application; 'time' to profile the time spent on each routine; 'jit' to collect time spent JIT-compiling methods and 'stat' to perform sample statistical profiling. If no options are provided the default is 'alloc,time,jit'.
   <p>By default the profile data is printed to stdout: to change this, use the 'file=filename' option to output the data to filename. For example:
