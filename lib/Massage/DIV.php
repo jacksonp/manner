@@ -61,8 +61,6 @@ class Massage_DIV
 
                 }
 
-                Massage_UL::removeLonePs($ul);
-
                 return $ul->nextSibling;
 
             } else {
@@ -89,8 +87,6 @@ class Massage_DIV
                     $div->parentNode->removeChild($div);
 
                     Massage_UL::pruneBulletChar($ul->firstChild);
-
-                    Massage_UL::removeLonePs($ul);
 
                     return $ul->nextSibling;
 
