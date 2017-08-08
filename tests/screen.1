@@ -1,0 +1,276 @@
+.TH SCREEN 1 "March 2016"
+.TS
+allbox tab(;);
+lb l l.
+C-a ';(select);T{
+Prompt for a window name or number to switch to.
+T}
+C-a \[dq];(windowlist -b);T{
+Present a list of all windows for selection.
+T}
+C-a \fIdigit\fP;(select 0-9);T{
+Switch to window number 0 \- 9
+T}
+C-a -;(select -);T{
+Switch to window number 0 \- 9, or to the blank window.
+T}
+C-a tab;(focus);T{
+Switch the input focus to the next region.
+See also \fIsplit, remove, only\fP.
+T}
+C-a C-a;(other);T{
+Toggle to the window displayed previously.
+Note that this binding defaults to the command character typed twice,
+unless overridden.  For instance, if you use the option \*Q\fB\-e]x\fP\*U,
+this command becomes \*Q]]\*U.
+T}
+C-a a  ;(meta);T{
+Send the command character (C-a) to window. See \fIescape\fP command.
+T}
+C-a A;(title);T{
+Allow the user to enter a name for the current window.
+T}
+T{
+C-a b,
+.br
+C-a C-b
+T};(break);T{
+Send a break to window.
+T}
+C-a B;(pow_break);T{
+Reopen the terminal line and send a break.
+T}
+T{
+C-a c,
+.br
+C-a C-c
+T};(screen);T{
+Create a new window with a shell and switch to that window.
+T}
+C-a C\fP;(clear);T{
+Clear the screen.
+T}
+T{
+C-a d,
+.br
+C-a C-d
+T};(detach);T{
+Detach
+.I screen
+from this terminal.
+T}
+C-a D D;(pow_detach);T{
+Detach and logout.
+T}
+T{
+C-a f,
+.br
+C-a C-f\fP
+T};(flow);T{
+Toggle flow \fIon\fP, \fIoff\fP or \fIauto\fP.
+T}
+C-a F;(fit);T{
+Resize the window to the current region size.
+T}
+C-a C-g;(vbell);T{
+Toggles
+.I screen's
+visual bell mode.
+T}
+C-a h;(hardcopy);T{
+Write a hardcopy of the current window to the file \*Qhardcopy.\fIn\fP\*U.
+T}
+C-a H;(log);T{
+Begins/ends logging of the current window to the file \*Qscreenlog.\fIn\fP\*U.
+T}
+T{
+C-a i,
+.br
+C-a C-i
+T};(info);T{
+Show info about this window.
+T}
+T{
+C-a k,
+.br
+C-a C-k
+T};(kill);T{
+Destroy current window.
+T}
+T{
+C-a l,
+.br
+C-a C-l
+T};(redisplay);T{
+Fully refresh current window.
+T}
+C-a L;(login);T{
+Toggle this windows login slot. Available only if
+.I screen
+is configured to update the utmp database.
+T{
+C-a m,
+.br
+C-a C-m
+T};(lastmsg);T{
+Repeat the last message displayed in the message line.
+T}
+C-a M;(monitor);T{
+Toggles monitoring of the current window.
+T}
+T{
+C-a space,
+.br
+C-a n,
+.br
+C-a C-n
+T};(next);T{
+Switch to the next window.
+T}
+C-a N;(number);T{
+Show the number (and title) of the current window.
+T}
+T{
+C-a backspace,
+.br
+C-a C-h,
+.br
+C-a p,
+.br
+C-a C-p
+T};(prev);T{
+Switch to the previous window (opposite of \fBC-a n\fP).
+T}
+T{
+C-a q,
+.br
+C-a C-q
+T};(xon);T{
+Send a control-q to the current window.
+T}
+C-a Q;(only);T{
+Delete all regions but the current one.
+See also \fIsplit, remove, focus\fP.
+T}
+T{
+C-a r,
+.br
+C-a C-r
+T};(wrap);T{
+Toggle the current window's line-wrap setting (turn the current window's
+automatic margins on and off).
+T}
+T{
+C-a s,
+.br
+C-a C-s;
+T};(xoff);T{
+Send a control-s to the current window.
+T}
+C-a S;(split);T{
+Split the current region horizontally into two new ones.
+See also \fIonly, remove, focus\fP.
+T}
+T{
+C-a t,
+.br
+C-a C-t
+T};(time);T{
+Show system information.
+T}
+C-a v;(version);T{
+Display the version and compilation date.
+T}
+C-a C-v;(digraph);T{
+Enter digraph.
+T}
+T{
+C-a w,
+.br
+C-a C-w
+T};(windows);T{
+Show a list of window.
+T}
+C-a W;(width);T{
+Toggle 80/132 columns.
+T}
+C-a x \fRor\fP C-a C-x;(lockscreen);T{
+Lock this terminal.
+T}
+C-a X\fP ;(remove);T{
+Kill the current region.
+See also \fIsplit, only, focus\fP.
+T}
+T{
+C-a z,
+.br
+C-a C-z
+T};(suspend);T{
+Suspend
+.IR screen .
+Your system must support BSD-style job-control.
+T}
+C-a Z;(reset);T{
+Reset the virtual terminal to its \*Qpower-on\*U values.
+T}
+C-a .;(dumptermcap);T{
+Write out a \*Q.termcap\*U file.
+T}
+C-a ?;(help);T{
+Show key bindings.
+T}
+C-a \e;(quit);T{
+Kill all windows and terminate
+.IR screen .
+T}
+C-a :;(colon);T{
+Enter command line mode.
+T}
+T{
+C-a [,
+.br
+C-a C-[\fP,
+.br
+C-a esc
+T};(copy);T{
+Enter copy/scrollback mode.
+T}
+T{
+C-a C-],
+.br
+C-a ]
+T};(paste .);T{
+Write the contents of the paste buffer to the stdin queue of the
+current window. 
+T}
+T{
+C-a {\fP,
+.br
+C-a }
+T};(history);T{
+Copy and paste a previous (command) line.
+T}
+C-a >;(writebuf);T{
+Write paste buffer to a file.
+T}
+C-a <;(readbuf);T{
+Reads the screen-exchange file into the paste buffer.
+T}
+C-a =;(removebuf);T{
+Removes the file used by \fBC-a <\fP and \fPC-a >\fP.
+T}
+C-a ,;(license);T{
+Shows where
+.I screen
+comes from, where it went to and why you can use it.
+T}
+C-a _;(silence);T{
+Start/stop monitoring the current window for inactivity.
+T}
+C-a |;(split -v);T{
+Split the current region vertically into two new ones.
+T}
+C-a *;(displays);T{
+Show a listing of all currently attached displays.
+T}
+.TE
