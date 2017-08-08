@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_TS implements Block_Template
 {
@@ -75,12 +75,12 @@ class Block_TS implements Block_Template
                     $format .= $charAfterF;
                 } elseif (preg_match('~[A-Z]~', $charAfterF)) {
                     $charAfterAfterF = self::getFormatChar($line, ++$i);
-                    $format .= $charAfterF . $charAfterAfterF;
+                    $format          .= $charAfterF . $charAfterAfterF;
                 } elseif ($charAfterF === '(') {
                     $format .= $charAfterF;
                     while ($i < $lineLength) {
                         $nextChar = self::getFormatChar($line, ++$i);
-                        $format .= $nextChar;
+                        $format   .= $nextChar;
                         if ($nextChar === ')') {
                             break;
                         }
@@ -306,7 +306,9 @@ class Block_TS implements Block_Template
                 continue;
             } elseif ($request['raw_line'] === '_') {
                 if ($tr) {
-                    $tr->setAttribute('class', 'border-bottom');
+                    Node::addClass($tr, 'border-bottom');
+                } else {
+                    Node::addClass($table, 'border-top');
                 }
             } elseif ($request['raw_line'] === '=') {
                 if ($tr) {
