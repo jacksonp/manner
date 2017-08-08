@@ -260,7 +260,7 @@ class Block_TS implements Block_Template
             }, $globalOptions);
             $globalOptions = preg_split('~[\\t ,]~', $globalOptions);
             foreach ($globalOptions as $globalOption) {
-                if (in_array($globalOption, ['box'])) {
+                if (in_array($globalOption, ['box', 'allbox', 'doublebox'])) {
                     $tableClasses[] = $globalOption;
                 } elseif ($globalOption === 'center') {
                     $tableClasses[] = 'center-table';
