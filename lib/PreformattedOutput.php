@@ -31,7 +31,7 @@ class PreformattedOutput
 
         if (!$parentNode->hasChildNodes() && count($lines) > 1 && Block_TabTable::lineContainsTab($line) && Block_TabTable::lineContainsTab($lines[1])) {
 
-            // TODO: add "preformatted" table class instead of code tags in cells?
+            // TODO: add "preformatted" table class instead of code tags in cells? (see also CSS for removing margin on <pre> in cells)
             // or don't use fixed width font at all? see https://www.mankier.com/3/SoIndexedShape.3iv#Description
             $table = $parentNode->appendChild($dom->createElement('table'));
             while (count($lines) && mb_strpos($lines[0], "\t") !== false) {

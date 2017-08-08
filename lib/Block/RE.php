@@ -52,11 +52,6 @@ class Block_RE implements Block_Template
             --$leftMarginLevel;
             $lastDIV = $lastDIV->ancestor('div');
             if (is_null($lastDIV)) {
-
-                // TODO: see about this comment we used to have
-                // Some pages use this get out of .IP, .TP:
-                // $lastIndentedBlock = $parentNode->ancestor('dl');
-
                 $man->left_margin_level = 1;
                 $man->resetIndentationToDefault();
                 return $parentNode->ancestor('section');

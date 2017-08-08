@@ -583,8 +583,6 @@ class DOM
     public static function calcIndents(DOMXPath $xpath)
     {
 
-        // TODO: merge into previous <p> even if not div[@left-margin="0"] ? see tests/warnquota.conf.5 - matching existing output for now.
-//        $divs = $xpath->query('//div[@left-margin="0"]/div[@left-margin="0"]');
         $divs = $xpath->query('//div[@left-margin="0"]');
         foreach ($divs as $div) {
             // See tests/warnquota.conf.5
