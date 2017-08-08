@@ -168,14 +168,6 @@ class DOM
 
             $firstChild = $element->firstChild;
 
-            // TODO: could also do <p>s here, but need to handle cases like amaddclient.8 where the option handling then gets messed up.
-            if ($myTag === 'div' && in_array($firstChild->tagName, ['dl'])) {
-                Indentation::addElIndent($firstChild, $element);
-                Node::remove($element);
-                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
-                return $firstChild->nextSibling;
-            }
-
             if ($myTag === 'div' && $firstChild->tagName === 'div') {
                 Indentation::addElIndent($element, $firstChild);
                 Node::remove($firstChild);
@@ -557,7 +549,7 @@ class DOM
             if (!Indentation::get($el)) {
                 Node::remove($el);
             }
-            if (self::isTag($el->firstChild, ['pre', 'ul'])) {
+            if ($el->childNodes->length === 1 && self::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
                 Indentation::addElIndent($el->firstChild, $el);
                 Node::remove($el);
             }
