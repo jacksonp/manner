@@ -37,11 +37,7 @@ class Block_RS implements Block_Template
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
 
-        if (count($request['arguments']) && $request['arguments'][0] === '0') {
-            $parentNode = $parentNode->ancestor('section');
-        } else {
-            $parentNode = Blocks::getBlockContainerParent($parentNode);
-        }
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
             $leftMargin = Roff_Unit::normalize($request['arguments'][0]);
@@ -56,9 +52,7 @@ class Block_RS implements Block_Template
         /* @var DomElement $div */
         $div = $dom->createElement('div');
 
-        if ($leftMargin !== '0') {
-            $div->setAttribute('left-margin', $leftMargin);
-        }
+        $div->setAttribute('left-margin', $leftMargin);
 
         $div = $parentNode->appendChild($div);
         return $div;
