@@ -513,11 +513,7 @@ class DOM
                     foreach ($child->childNodes as $dlChild) {
                         if ($dlChild->tagName === 'dd') {
                             $li = $ul->appendChild($doc->createElement('li'));
-                            if ($dlChild->childNodes->length === 1 && $dlChild->firstChild->tagName === 'p') {
-                                self::extractContents($li, $dlChild->firstChild);
-                            } else {
-                                self::extractContents($li, $dlChild);
-                            }
+                            self::extractContents($li, $dlChild);
                         }
                     }
                     $element->removeChild($child);
@@ -577,6 +573,11 @@ class DOM
             Massage_P::tidy($p);
         }
 
+        $els = $xpath->query('//ul');
+        foreach ($els as $el) {
+            Massage_UL::removeLonePs($el);
+        }
+
     }
 
     public static function calcIndents(DOMXPath $xpath)
@@ -605,22 +606,41 @@ class DOM
     public static function remap(DOMXPath $xpath)
     {
 
+        $blocks = ['p', 'pre', 'div', 'dl', 'ul', 'table'];
+
         $divs = $xpath->query('//div[@remap]');
         /** @var DOMElement $div */
+        /** @var DOMElement $p */
         foreach ($divs as $div) {
             if ($div->getAttribute('remap') === 'IP') {
-                $indentVal = (int)$div->getAttribute('indent');
-                if ($indentVal !== 0) {
-                    $child = $div->firstChild;
-                    while ($child) {
-                        Indentation::add($child, $indentVal);
-                        $child = $child->nextSibling;
-                    }
-                }
-            }
-            Node::remove($div);
-        }
+                $indentVal = Indentation::get($div);
 
+                $sibling = $div->firstChild;
+                if ($sibling) {
+                    do {
+                        if (self::isTag($sibling, $blocks)) {
+                            $next = $sibling->nextSibling;
+                            $indentVal && Indentation::add($sibling, $indentVal);
+                            $div->parentNode->insertBefore($sibling, $div);
+                        } else {
+                            $p = $div->ownerDocument->createElement('p');
+                            $p = $div->parentNode->insertBefore($p, $div);
+                            $indentVal && Indentation::add($p, $indentVal);
+                            while ($sibling && !self::isTag($sibling, $blocks)) {
+                                $next = $sibling->nextSibling;
+                                $p->appendChild($sibling);
+                                $sibling = $next;
+                            }
+                        }
+                    } while ($sibling = $next);
+                }
+
+                $div->parentNode->removeChild($div);
+
+            } else {
+                throw new Exception('Unexpected value for remap.');
+            }
+        }
 
     }
 
