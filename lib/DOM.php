@@ -236,35 +236,32 @@ class DOM
 
         }
 
-        if ($myTag === 'div' || $myTag === 'p') { // TODO: remove if?
+        if (
+            in_array($myTag, ['div', 'p', 'pre', 'ul']) &&
+            self::isTag($element->previousSibling, 'dl') &&
+            self::isTag($element->previousSibling->lastChild, 'dd')
+        ) {
 
-            if (
-                self::isTag($element->previousSibling, 'dl') &&
-                self::isTag($element->previousSibling->lastChild, 'dd')
-            ) {
+            $elIndent = Indentation::get($element);
+            $ddIndent = Indentation::get($element->previousSibling->lastChild);
 
-                $elIndent = Indentation::get($element);
-                $ddIndent = Indentation::get($element->previousSibling->lastChild);
-
-                if ($elIndent === $ddIndent) {
-                    $nextSibling = $element->nextSibling;
-                    if ($myTag === 'div') {
-                        self::extractContents($element->previousSibling->lastChild, $element);
-                        $element->parentNode->removeChild($element);
-                    } else {
-                        $element->removeAttribute('indent');
-                        $element->previousSibling->lastChild->appendChild($element);
-                    }
-                    return $nextSibling;
-                }
-
-                if ($elIndent > $ddIndent) {
-                    $nextSibling = $element->nextSibling;
-                    Indentation::set($element, $elIndent - $ddIndent);
+            if ($elIndent === $ddIndent) {
+                $nextSibling = $element->nextSibling;
+                if ($myTag === 'div') {
+                    self::extractContents($element->previousSibling->lastChild, $element);
+                    $element->parentNode->removeChild($element);
+                } else {
+                    $element->removeAttribute('indent');
                     $element->previousSibling->lastChild->appendChild($element);
-                    return $nextSibling;
                 }
+                return $nextSibling;
+            }
 
+            if ($elIndent > $ddIndent) {
+                $nextSibling = $element->nextSibling;
+                Indentation::set($element, $elIndent - $ddIndent);
+                $element->previousSibling->lastChild->appendChild($element);
+                return $nextSibling;
             }
         }
 
