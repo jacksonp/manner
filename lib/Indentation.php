@@ -8,6 +8,11 @@ class Indentation
     // (https://www.mankier.com/7/groff_man#Miscellaneous)
     const DEFAULT = '7';
 
+    public static function isSet(DOMElement $p)
+    {
+        return $p->hasAttribute('indent');
+    }
+
     static function get(DOMElement $el): int
     {
         return (int)$el->getAttribute('indent');

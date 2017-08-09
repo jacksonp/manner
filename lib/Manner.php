@@ -21,10 +21,10 @@ class Manner
         $xpath = new DOMXpath($dom);
         Massage_P::removeEmpty($xpath);
         Massage_DL::mergeAdjacent($xpath);
-        DOM::remap($xpath);
-        DOM::calcIndents($xpath);
+        Massage_Remap::doAll($xpath);
+        Massage_Indents::recalc($xpath);
         DOM::massage($manPageContainer);
-        DOM::tidy($xpath);
+        Massage_Tidy::doAll($xpath);
 
         return $dom;
     }

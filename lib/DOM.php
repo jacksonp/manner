@@ -42,93 +42,6 @@ class DOM
     }
     */
 
-    private static function isParagraphFollowedByIndentedDiv(?DomNode $p): int
-    {
-        if (!self::isTag($p, 'p') || $p->getAttribute('indent') !== '') {
-            return 0;
-        }
-
-        /** @var DOMElement $div , $p */
-
-        $pChild = $p->firstChild;
-        while ($pChild) {
-            if (
-                self::isTag($pChild, 'br') &&
-                $pChild->previousSibling && preg_match('~^[A-Z].*\.$~u', $pChild->previousSibling->textContent)
-            ) {
-                return 0;
-            }
-            $pChild = $pChild->nextSibling;
-        }
-
-        $div = $p->nextSibling;
-
-        if (
-            !self::isTag($div, 'div') ||
-            !$div->hasAttribute('indent') ||
-            !self::isTag($div->firstChild, ['p', 'div', 'ul'])
-        ) {
-            return 0;
-        }
-
-        $divIndent = $div->getAttribute('indent');
-
-        $pText = $p->textContent;
-
-        if ($divIndent !== '') {
-
-            // Exclude sentences in $p
-            if (
-                $pText === 'or' ||
-                preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
-                preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
-                preg_match('~(\s[a-z]+){3,}[:\.]$~u', $pText)
-            ) {
-                return 0;
-            }
-
-            if (preg_match('~^(--?|\+)~u', $pText)) {
-                return 100;
-            }
-
-            if (!preg_match('~^\s*[\(a-z]~ui', $div->textContent)) {
-                return 0;
-            }
-
-            if (preg_match('~^\S$~ui', $pText)) {
-                return 100;
-            }
-
-            if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $pText)) {
-                return 100;
-            }
-
-            if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $pText)) {
-                return 100;
-            }
-
-            if (mb_strlen($pText) < 9) {
-                return 100;
-            }
-
-//        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $pText)) {
-//            return 50;
-//        }
-
-            return 50;
-
-        } else {
-
-            if (preg_match('~^(--?|\+)~u', $pText)) {
-                return 100;
-            }
-
-            return 0;
-
-        }
-
-    }
-
     /**
      * @param DOMElement $element
      * @return DOMElement|DOMNode|null The element we should look at next.
@@ -428,7 +341,7 @@ class DOM
         $child = $element->firstChild;
         while ($child) {
 
-            $certainty = self::isParagraphFollowedByIndentedDiv($child);
+            $certainty = Massage_DL::isPotentialDTFollowedByDD($child);
 
             if ($certainty === 0) {
                 $go = false;
@@ -439,7 +352,7 @@ class DOM
                 $nextP     = $child->nextSibling->nextSibling;
                 $iteration = 0;
                 while ($nextP) {
-                    $followingCertainty = self::isParagraphFollowedByIndentedDiv($nextP);
+                    $followingCertainty = Massage_DL::isPotentialDTFollowedByDD($nextP);
                     if ($followingCertainty === 100) {
                         $go = true;
                         break;
@@ -460,7 +373,7 @@ class DOM
                 $dl = $child->ownerDocument->createElement('dl');
                 $child->parentNode->insertBefore($dl, $child);
                 $nextElementToCheck = $child;
-                while (self::isParagraphFollowedByIndentedDiv($nextElementToCheck)) {
+                while (Massage_DL::isPotentialDTFollowedByDD($nextElementToCheck)) {
                     $child = $nextElementToCheck;
                     $dt    = $child->ownerDocument->createElement('dt');
                     while ($child->firstChild) {
@@ -531,128 +444,6 @@ class DOM
         }
 
         return self::massageNode($element);
-    }
-
-    static function tidy(DOMXPath $xpath): void
-    {
-        /** @var DOMElement $el */
-
-        $divs = $xpath->query('//div');
-        foreach ($divs as $el) {
-            if (!Indentation::get($el)) {
-                Node::remove($el);
-            }
-            if ($el->childNodes->length === 1 && self::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
-                Indentation::addElIndent($el->firstChild, $el);
-                Node::remove($el);
-            }
-        }
-
-        Massage_DL::mergeAdjacent($xpath);
-
-        Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
-
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
-        foreach ($els as $el) {
-            $indentVal = Indentation::get($el);
-            if ($indentVal !== 0) {
-                $el->setAttribute('class', 'indent-' . $indentVal);
-            }
-            $el->removeAttribute('indent');
-            if ($indentVal === 0 && $el->tagName === 'div') {
-                Node::remove($el);
-            }
-        }
-
-        // Do this after changing @indent to @class
-        $ps = $xpath->query('//p');
-        foreach ($ps as $p) {
-            Massage_P::tidy($p);
-        }
-
-        $els = $xpath->query('//ul');
-        foreach ($els as $el) {
-            Massage_UL::removeLonePs($el);
-        }
-
-    }
-
-    public static function calcIndents(DOMXPath $xpath)
-    {
-
-        $divs = $xpath->query('//div[@left-margin="0"]');
-        foreach ($divs as $div) {
-            // See tests/warnquota.conf.5
-            if (self::isTag($div->previousSibling, 'p') && self::isTag($div->firstChild, 'p')) {
-                $div->previousSibling->appendChild($div->ownerDocument->createElement('br'));
-                self::extractContents($div->previousSibling, $div->firstChild);
-                Node::remove($div->firstChild);
-            }
-            Node::remove($div);
-
-        }
-
-        $divs = $xpath->query('//div[@left-margin]');
-        foreach ($divs as $div) {
-
-            $leftMargin = (int)$div->getAttribute('left-margin');
-
-            $parentNode = $div->parentNode;
-
-            while ($parentNode) {
-                if ($parentNode instanceof DOMDocument || $parentNode->tagName === 'div') {
-                    break;
-                }
-                if ($parentNode->hasAttribute('indent')) {
-                    $leftMargin -= (int)$parentNode->getAttribute('indent');
-                }
-                $parentNode = $parentNode->parentNode;
-            }
-            $div->setAttribute('indent', (string)$leftMargin);
-            $div->removeAttribute('left-margin');
-
-        }
-    }
-
-    public static function remap(DOMXPath $xpath)
-    {
-
-        $blocks = ['p', 'pre', 'div', 'dl', 'ul', 'table'];
-
-        $divs = $xpath->query('//div[@remap]');
-        /** @var DOMElement $div */
-        /** @var DOMElement $p */
-        foreach ($divs as $div) {
-            if ($div->getAttribute('remap') === 'IP') {
-                $indentVal = Indentation::get($div);
-
-                $sibling = $div->firstChild;
-                if ($sibling) {
-                    do {
-                        if (self::isTag($sibling, $blocks)) {
-                            $next = $sibling->nextSibling;
-                            $indentVal && Indentation::add($sibling, $indentVal);
-                            $div->parentNode->insertBefore($sibling, $div);
-                        } else {
-                            $p = $div->ownerDocument->createElement('p');
-                            $p = $div->parentNode->insertBefore($p, $div);
-                            $indentVal && Indentation::add($p, $indentVal);
-                            while ($sibling && !self::isTag($sibling, $blocks)) {
-                                $next = $sibling->nextSibling;
-                                $p->appendChild($sibling);
-                                $sibling = $next;
-                            }
-                        }
-                    } while ($sibling = $next);
-                }
-
-                $div->parentNode->removeChild($div);
-
-            } else {
-                throw new Exception('Unexpected value for remap.');
-            }
-        }
-
     }
 
 
