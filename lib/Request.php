@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Request
 {
@@ -8,6 +8,8 @@ class Request
     {
 
         $argString = ltrim($argString);
+        // Could also trim on paired backslashes here:
+        $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
 
         if ($argString === '') {
             return [];

@@ -19,10 +19,7 @@ class Block_IP implements Block_Template
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
-        // Check on empty string is because we get an argument at that position when we have trailing spaces
-        // See e.g. tests/glue-validator.1
-        // TODO: see if argument parsing should be changed to not return an argument at that position instead.
-        if (count($request['arguments']) > 1 && $request['arguments'][1] !== '') {
+        if (count($request['arguments']) > 1) {
             $indentVal        = Roff_Unit::normalize($request['arguments'][1]);
             $man->indentation = $indentVal;
         } else {
