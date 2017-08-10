@@ -20,7 +20,7 @@ class Block_ti implements Block_Template
 
         $indentVal = '0';
         if (count($request['arguments'])) {
-            $indentVal = Roff_Unit::normalize($request['arguments'][0]);
+            $indentVal = Roff_Unit::normalize($request['arguments'][0], 'm');
         }
 
         if ($parentNode->getAttribute('indent') === $indentVal) {
