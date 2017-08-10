@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Class Block_ti
@@ -18,19 +18,12 @@ class Block_ti implements Block_Template
 
         array_shift($lines);
 
-        $className = 'indent-ti';
-        $indentVal = null;
-        if (
-            count($request['arguments']) &&
-            $normalizedVal = Roff_Unit::normalize($request['arguments'][0]) // note this filters out 0s
-        ) {
-            $indentVal = $normalizedVal;
-            if ($indentVal) {
-                $className .= '-' . $indentVal;
-            }
+        $indentVal = '0';
+        if (count($request['arguments'])) {
+            $indentVal = Roff_Unit::normalize($request['arguments'][0]);
         }
 
-        if ($parentNode->tagName === 'p' && $parentNode->getAttribute('class') === $className) {
+        if ($parentNode->getAttribute('indent') === $indentVal) {
             if ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br') {
                 Inline_VerticalSpace::addBR($parentNode);
             }
@@ -39,9 +32,9 @@ class Block_ti implements Block_Template
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
         /* @var DomElement $p */
-        $p          = $parentNode->ownerDocument->createElement('p');
-        $p          = $parentNode->appendChild($p);
-        $p->setAttribute('class', $className);
+        $p = $parentNode->ownerDocument->createElement('p');
+        $p = $parentNode->appendChild($p);
+        $p->setAttribute('indent', $indentVal);
         return $p;
 
     }
