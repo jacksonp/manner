@@ -20,12 +20,17 @@ class Massage_P
         // Change two br tags in a row to a new paragraph.
 
         $class  = $p->getAttribute('class');
+        $indent = $p->getAttribute('indent');
         $pChild = $p->firstChild;
         while ($pChild) {
             if (DOM::isTag($pChild, 'br') && DOM::isTag($pChild->nextSibling, 'br')) {
                 $newP = $p->ownerDocument->createElement('p');
+                // TODO: this is for indent-ti... maybe remove?
                 if ($class !== '') {
                     $newP->setAttribute('class', $class);
+                }
+                if ($indent !== '') {
+                    $newP->setAttribute('indent', $indent);
                 }
                 while ($p->firstChild) {
                     if ($p->firstChild === $pChild) {

@@ -23,19 +23,6 @@ class Massage_Tidy
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
-        foreach ($els as $el) {
-            $indentVal = Indentation::get($el);
-            if ($indentVal !== 0) {
-                $el->setAttribute('class', 'indent-' . $indentVal);
-            }
-            $el->removeAttribute('indent');
-            if ($indentVal === 0 && $el->tagName === 'div') {
-                Node::remove($el);
-            }
-        }
-
-        // Do this after changing @indent to @class
         $ps = $xpath->query('//p');
         foreach ($ps as $p) {
             Massage_P::tidy($p);
@@ -47,4 +34,19 @@ class Massage_Tidy
         }
 
     }
+
+    static function indentAttributeToClass (DOMXPath $xpath) {
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
+        foreach ($els as $el) {
+            $indentVal = Indentation::get($el);
+            if ($indentVal !== 0) {
+                $el->setAttribute('class', 'indent-' . $indentVal);
+            }
+            $el->removeAttribute('indent');
+            if ($indentVal === 0 && $el->tagName === 'div') {
+                Node::remove($el);
+            }
+        }
+    }
+
 }

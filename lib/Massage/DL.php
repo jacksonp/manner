@@ -15,6 +15,40 @@ class Massage_DL
         }
     }
 
+    public static function checkPrecedingNodes(DOMXPath $xpath): void
+    {
+        $dls = $xpath->query('//dl');
+        foreach ($dls as $dl) {
+            if (!$dl->previousSibling || !$dl->previousSibling->previousSibling) {
+                continue;
+            }
+
+            $p   = $dl->previousSibling->previousSibling;
+            $div = $dl->previousSibling;
+
+            $certainty = self::isPotentialDTFollowedByDD($p);
+
+            if ($certainty === 100) {
+                $dt = $dl->ownerDocument->createElement('dt');
+                while ($p->firstChild) {
+                    $dt->appendChild($p->firstChild);
+                }
+
+                Massage_DT::postProcess($dt);
+                $dd = $dl->ownerDocument->createElement('dd');
+                while ($div->firstChild) {
+                    $dd->appendChild($div->firstChild);
+                }
+                $dl->insertBefore($dd, $dl->firstChild);
+                $dl->insertBefore($dt, $dl->firstChild);
+
+                $dl->parentNode->removeChild($p);
+                $dl->parentNode->removeChild($div);
+
+            }
+        }
+    }
+
     public static function isPotentialDTFollowedByDD(?DomNode $p): int
     {
         if (!DOM::isTag($p, 'p') || Indentation::isSet($p)) {

@@ -25,6 +25,8 @@ class Manner
         Massage_Indents::recalc($xpath);
         DOM::massage($manPageContainer);
         Massage_Tidy::doAll($xpath);
+        Massage_DL::checkPrecedingNodes($xpath);
+        Massage_Tidy::indentAttributeToClass($xpath);
 
         return $dom;
     }
