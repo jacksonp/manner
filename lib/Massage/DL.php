@@ -34,7 +34,6 @@ class Massage_DL
                     $dt->appendChild($p->firstChild);
                 }
 
-                Massage_DT::postProcess($dt);
                 $dd = $dl->ownerDocument->createElement('dd');
                 while ($div->firstChild) {
                     $dd->appendChild($div->firstChild);
@@ -45,6 +44,7 @@ class Massage_DL
                 $dl->parentNode->removeChild($p);
                 $dl->parentNode->removeChild($div);
 
+                Massage_DT::postProcess($dt); // Only do this after the $dt has been added to the DOM.
             }
         }
     }
