@@ -21,6 +21,7 @@ class Massage_P
 
         $indent = $p->getAttribute('indent');
         $pChild = $p->firstChild;
+
         while ($pChild) {
             if (DOM::isTag($pChild, 'br') && DOM::isTag($pChild->nextSibling, 'br')) {
                 $newP = $p->ownerDocument->createElement('p');
@@ -36,10 +37,20 @@ class Massage_P
                 $p->parentNode->insertBefore($newP, $p);
                 $p->removeChild($p->firstChild); // 1st <br>
                 $p->removeChild($p->firstChild); // 2nd <br>
-                $pChild = $p->firstChild;
-            } else {
-                $pChild = $pChild->nextSibling;
+                self::tidy($p);
+                self::tidy($newP);
+                return;
             }
+            $pChild = $pChild->nextSibling;
+        }
+
+        while ($p->lastChild && (Node::isTextAndEmpty($p->lastChild) || DOM::isTag($p->lastChild, 'br'))) {
+            $p->removeChild($p->lastChild);
+        }
+
+        if (trim($p->textContent) === '') {
+            $p->parentNode->removeChild($p);
+            return;
         }
 
     }

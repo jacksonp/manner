@@ -66,10 +66,7 @@ class Massage_UL
                 self::pruneBulletChar($li);
                 $child = $li->firstChild;
 
-            } elseif (
-                DOM::isTag($child, 'p') &&
-                self::startsWithBullet($child->textContent)
-            ) {
+            } elseif (DOM::isTag($child, 'p') && self::startsWithBullet($child->textContent)) {
 
                 $foundInnerLI = true;
 

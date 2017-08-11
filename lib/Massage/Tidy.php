@@ -10,10 +10,27 @@ class Massage_Tidy
 
         $divs = $xpath->query('//div');
         foreach ($divs as $el) {
-            if (!Indentation::get($el)) {
-                Node::remove($el);
-            }
-            if ($el->childNodes->length === 1 && DOM::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
+
+            $oneChild = $el->childNodes->length === 1;
+
+            if (Indentation::get($el) === 0) {
+                if (
+                    $oneChild &&
+                    $el->firstChild->tagName === 'p' &&
+                    !$el->firstChild->hasAttribute('indent') &&
+                    $el->firstChild->hasAttribute('implicit') &&
+                    DOM::isTag($el->previousSibling, 'p')
+                ) {
+                    if (!DOM::isTag($el->previousSibling->lastChild, 'br')) {
+                        $el->previousSibling->appendChild($el->ownerDocument->createElement('br'));
+                    }
+                    DOM::extractContents($el->previousSibling, $el->firstChild);
+                    $el->parentNode->removeChild($el);
+                    continue;
+                } else {
+                    Node::remove($el);
+                }
+            } elseif ($oneChild && DOM::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
                 Indentation::addElIndent($el->firstChild, $el);
                 Node::remove($el);
             }
@@ -33,9 +50,15 @@ class Massage_Tidy
             Massage_UL::removeLonePs($el);
         }
 
+        $els = $xpath->query('//li');
+        foreach ($els as $el) {
+            Massage_LI::tidy($el);
+        }
+
     }
 
-    static function indentAttributeToClass (DOMXPath $xpath) {
+    static function indentAttributeToClass(DOMXPath $xpath)
+    {
         $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
         foreach ($els as $el) {
             $indentVal = Indentation::get($el);
@@ -46,6 +69,10 @@ class Massage_Tidy
             if ($indentVal === 0 && $el->tagName === 'div') {
                 Node::remove($el);
             }
+        }
+        $els = $xpath->query('//p[@implicit]');
+        foreach ($els as $el) {
+            $el->removeAttribute('implicit');
         }
     }
 

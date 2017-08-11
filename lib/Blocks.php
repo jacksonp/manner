@@ -31,7 +31,9 @@ class Blocks
     static function getParentForText(DOMElement $parentNode): DOMElement
     {
         if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {
-            $parentNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('p'));
+            $p = $parentNode->ownerDocument->createElement('p');
+            $p->setAttribute('implicit', '1');
+            $parentNode = $parentNode->appendChild($p);
         }
         return $parentNode;
     }

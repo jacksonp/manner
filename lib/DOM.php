@@ -70,22 +70,8 @@ class DOM
 
         Massage_Block::removeAdjacentEmptyTextNodesAndBRs($element);
 
-        while (
-            $lastChild = $element->lastChild and
-            (Node::isTextAndEmpty($lastChild) || self::isTag($lastChild, 'br'))
-        ) {
+        while ($lastChild = $element->lastChild and (Node::isTextAndEmpty($lastChild))) {
             $element->removeChild($lastChild);
-        }
-
-        if ($element->childNodes->length === 1 && $element->firstChild->nodeType === XML_ELEMENT_NODE) {
-
-            $firstChild = $element->firstChild;
-
-            if ($myTag === 'div' && $firstChild->tagName === 'div') {
-                Indentation::addElIndent($element, $firstChild);
-                Node::remove($firstChild);
-            }
-
         }
 
         // This takes out rows with an <hr>, which we don't want.
@@ -104,6 +90,16 @@ class DOM
         if ($myTag === 'div') {
 
             $firstChild = $element->firstChild;
+
+            if ($element->childNodes->length === 1 && $element->firstChild->nodeType === XML_ELEMENT_NODE) {
+
+                if ($firstChild->tagName === 'div') {
+                    Indentation::addElIndent($element, $firstChild);
+                    Node::remove($firstChild);
+                    // NB: we carry on processing rather than returning here.
+                }
+
+            }
 
             if (!$firstChild) {
                 $previousSibling = $element->previousSibling;
