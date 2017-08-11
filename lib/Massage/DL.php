@@ -51,6 +51,7 @@ class Massage_DL
 
     public static function isPotentialDTFollowedByDD(?DomNode $p): int
     {
+
         if (!DOM::isTag($p, 'p') || Indentation::isSet($p)) {
             return 0;
         }
@@ -78,18 +79,22 @@ class Massage_DL
             return 0;
         }
 
-        $divIndent = $div->getAttribute('indent');
+        $divIndent = Indentation::get($div);
+
+        if ($divIndent <= 0) {
+            return 0;
+        }
 
         $pText = $p->textContent;
 
-        if ($divIndent !== '') {
+        if ($divIndent > 0) {
 
             // Exclude sentences in $p
             if (
                 $pText === 'or' ||
                 preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
                 preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
-                preg_match('~(\s[a-z]+){3,}[:\.]$~u', $pText)
+                preg_match('~(\s[a-z]+){3,}[:\.]$~ui', $pText)
             ) {
                 return 0;
             }
