@@ -55,6 +55,11 @@ class Massage_Tidy
             Massage_LI::tidy($el);
         }
 
+        $els = $xpath->query('//dt');
+        foreach ($els as $el) {
+            Massage_DT::tidy($el);
+        }
+
     }
 
     static function indentAttributeToClass(DOMXPath $xpath)

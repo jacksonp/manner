@@ -27,4 +27,17 @@ class Massage_DT
 
     }
 
+    static function tidy(DOMElement $dt)
+    {
+
+        while ($dt->lastChild && (Node::isTextAndEmpty($dt->lastChild) || DOM::isTag($dt->lastChild, 'br'))) {
+            $dt->removeChild($dt->lastChild);
+        }
+
+        if (trim($dt->textContent) === '') {
+            $dt->parentNode->removeChild($dt);
+        }
+
+    }
+
 }
