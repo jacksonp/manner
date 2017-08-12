@@ -8,22 +8,27 @@ class Massage_Tidy
     {
         /** @var DOMElement $el */
 
+        // NB: we do not want <dd>s here:
+        $els = $xpath->query('//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")]');
+        foreach ($els as $el) {
+            $parentIndent = Indentation::get($el->parentNode);
+            if (!$el->nextSibling && $parentIndent === -Indentation::get($el)) {
+                Indentation::subtract($el, $parentIndent);
+                if (DOM::isTag($el->parentNode, 'dd')) {
+                    $el->parentNode->parentNode->parentNode->insertBefore($el,
+                        $el->parentNode->parentNode->nextSibling);
+                } else {
+                    $el->parentNode->parentNode->insertBefore($el, $el->parentNode->nextSibling);
+                }
+            }
+        }
+
         $divs = $xpath->query('//div');
         foreach ($divs as $el) {
 
             $oneChild = $el->childNodes->length === 1;
 
             $indentation = Indentation::get($el);
-
-            if ($indentation < 0 && !$el->nextSibling && Indentation::get($el->parentNode) === -$indentation) {
-                if (DOM::isTag($el->parentNode, 'dd')) {
-                    $el->parentNode->parentNode->parentNode->insertBefore($el, $el->parentNode->parentNode->nextSibling);
-                } else {
-                    $el->parentNode->parentNode->insertBefore($el, $el->parentNode->nextSibling);
-                }
-                Node::remove($el);
-                continue;
-            }
 
             if ($indentation === 0) {
                 if (
