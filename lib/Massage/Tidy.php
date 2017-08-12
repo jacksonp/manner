@@ -11,16 +11,7 @@ class Massage_Tidy
         // NB: we do not want <dd>s here:
         $els = $xpath->query('//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")]');
         foreach ($els as $el) {
-            $parentIndent = Indentation::get($el->parentNode);
-            if (!$el->nextSibling && $parentIndent === -Indentation::get($el)) {
-                Indentation::subtract($el, $parentIndent);
-                if (DOM::isTag($el->parentNode, 'dd')) {
-                    $el->parentNode->parentNode->parentNode->insertBefore($el,
-                        $el->parentNode->parentNode->nextSibling);
-                } else {
-                    $el->parentNode->parentNode->insertBefore($el, $el->parentNode->nextSibling);
-                }
-            }
+            Indentation::popOut($el);
         }
 
         $divs = $xpath->query('//div');

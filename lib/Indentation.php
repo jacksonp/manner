@@ -48,4 +48,29 @@ class Indentation
         }
     }
 
+    public static function popOut(DOMElement $el): void
+    {
+
+        $elParent     = $el->parentNode;
+        $parentIndent = Indentation::get($elParent);
+        $inDD         = DOM::isTag($elParent, 'dd');
+
+        if (
+            $el !== $elParent->firstChild &&
+            (($inDD && !$elParent->nextSibling) || !$el->nextSibling) &&
+            $parentIndent !== 0 &&
+            $parentIndent <= -Indentation::get($el)
+        ) {
+
+            Indentation::add($el, $parentIndent);
+
+            if ($inDD) {
+                $el = $elParent->parentNode->parentNode->insertBefore($el, $elParent->parentNode->nextSibling);
+            } else {
+                $el = $elParent->parentNode->insertBefore($el, $elParent->nextSibling);
+            }
+            self::popOut($el);
+        }
+    }
+
 }
