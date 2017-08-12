@@ -13,7 +13,19 @@ class Massage_Tidy
 
             $oneChild = $el->childNodes->length === 1;
 
-            if (Indentation::get($el) === 0) {
+            $indentation = Indentation::get($el);
+
+            if ($indentation < 0 && !$el->nextSibling && Indentation::get($el->parentNode) === -$indentation) {
+                if (DOM::isTag($el->parentNode, 'dd')) {
+                    $el->parentNode->parentNode->parentNode->insertBefore($el, $el->parentNode->parentNode->nextSibling);
+                } else {
+                    $el->parentNode->parentNode->insertBefore($el, $el->parentNode->nextSibling);
+                }
+                Node::remove($el);
+                continue;
+            }
+
+            if ($indentation === 0) {
                 if (
                     $oneChild &&
                     $el->firstChild->tagName === 'p' &&
