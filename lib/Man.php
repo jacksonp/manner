@@ -290,7 +290,7 @@ class Man
 
         // \w’string’: The width of the glyph sequence string.
         // We approximate with 2.4 char on average per em. See: http://maxdesign.com.au/articles/ideal-line-length-in-ems
-        $line = Replace::pregCallback('~\\\\w\'(.*?)\'~u', function ($matches) {
+        $line = Replace::pregCallback('~(?<!\\\\)((?:\\\\\\\\)*)\\\\w\'(.*?)\'~u', function ($matches) {
             return number_format(mb_strlen(TextContent::interpretString($matches[0])) / 2.4, 1) . 'm';
         }, $line);
 
