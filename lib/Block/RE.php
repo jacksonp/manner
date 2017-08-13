@@ -48,7 +48,6 @@ class Block_RE implements Block_Template
         $lastDIV = $parentNode;
 
         while ($leftMarginLevel > $backToLevel) {
-
             --$leftMarginLevel;
             $lastDIV = $lastDIV->ancestor('div');
             if (is_null($lastDIV)) {
@@ -62,7 +61,7 @@ class Block_RE implements Block_Template
 
         // Restore prevailing indent (see macro definition above)
         if ($lastDIV->parentNode->hasAttribute('indent')) {
-            $man->indent = $lastDIV->parentNode->getAttribute('indent');
+            $man->indentation = (string)Indentation::get($lastDIV->parentNode);
         } else {
             $man->resetIndentationToDefault();
         }

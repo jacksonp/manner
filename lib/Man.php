@@ -56,6 +56,11 @@ class Man
             'control_char_2' => '\'',
             'eq_delim_left' => null,
             'eq_delim_right' => null,
+            'title' => null,
+            'section' => null,
+            'extra1' => null,
+            'extra2' => null,
+            'extra3' => null,
         ];
         $this->aliases  = [];
         $this->macros   = [];
@@ -181,6 +186,10 @@ class Man
 
     public function __set($name, $value)
     {
+        if (!array_key_exists($name, $this->data)) {
+            throw new Exception('Unexpected property in Man: ' . $name);
+        }
+
         $this->data[$name] = $value;
     }
 
