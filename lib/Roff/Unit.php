@@ -34,7 +34,8 @@ class Roff_Unit
     ];
 
     /**
-     * Get the intended indentation in (implicit) unit n (ens).
+     * Normalize all roff sizes in the given string to (implicit) unit n (ens).
+     * There may be several different units in string, e.g. in a comparison "2m+.3i>3n".
      *
      * @param string $string
      * @param string $defaultUnit
