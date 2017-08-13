@@ -45,7 +45,7 @@ class Roff_Unit
     {
 
         $string = Replace::pregCallback(
-            '~(\d+(?:\.\d+)?)([uicpPszfmnvM])?~u',
+            '~((?:\d*\.)?\d+)([uicpPszfmnvM])?~u',
             function ($matches) use ($defaultUnit) {
                 $unit       = @$matches[2] ?: $defaultUnit;
                 $basicUnits = self::unitMultipliers[$unit] * $matches[1];
