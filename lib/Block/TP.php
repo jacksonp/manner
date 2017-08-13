@@ -1,6 +1,29 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Class Block_TP
+ *
+ * .de1 TP
+ * .  sp \\n[PD]u
+ * .  if \\n[.$] .nr an-prevailing-indent (n;\\$1)
+ * .  it 1 an-trap
+ * .  in 0
+ * .  if !\\n[an-div?] \{\
+ * .    ll -\\n[an-margin]u
+ * .    di an-div
+ * .  \}
+ * .  nr an-div? 1
+ * ..
+ *
+ * .\" Continuation line for .TP header.
+ * .de TQ
+ * .  br
+ * .  ns
+ * .  TP \\$1\" no doublequotes around argument!
+ * ..
+ *
+ */
 class Block_TP implements Block_Template
 {
 
@@ -53,6 +76,10 @@ class Block_TP implements Block_Template
             $request = Request::getLine($lines);
             if ($request['request'] === 'TQ') {
                 array_shift($lines);
+                if (count($request['arguments'])) {
+                    $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
+                    $man->indentation = $indentVal;
+                }
                 $dt = $dom->createElement('dt');
                 $dl->appendChild($dt);
                 $gotContent = Roff::parse($dt, $lines, true);
@@ -66,7 +93,7 @@ class Block_TP implements Block_Template
 
         /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
-        $dd->setAttribute('indent', $indentVal);
+        Indentation::set($dd, (int)$indentVal);
         $dd = $dl->appendChild($dd);
 
         return $dd;
