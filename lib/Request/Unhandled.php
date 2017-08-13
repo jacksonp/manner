@@ -86,7 +86,6 @@ class Request_Unhandled implements Block_Template
         'sv',
         'sy',
         'tc',
-        'ti',
         'tkf',
         'tl',
         'trf',
