@@ -75,7 +75,7 @@ class Massage_Tidy
         $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
         foreach ($els as $el) {
             $indentVal = Indentation::get($el);
-            if ($indentVal !== 0) {
+            if ($indentVal) {
                 $el->setAttribute('class', 'indent-' . $indentVal);
             }
             Indentation::remove($el);
