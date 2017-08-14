@@ -21,11 +21,11 @@ class Massage_Tidy
 
             $indentation = Indentation::get($el);
 
-            if ($indentation === 0) {
+            if (!$indentation) {
                 if (
                     $oneChild &&
                     $el->firstChild->tagName === 'p' &&
-                    !$el->firstChild->hasAttribute('indent') &&
+                    !Indentation::isSet($el->firstChild) &&
                     $el->firstChild->hasAttribute('implicit') &&
                     DOM::isTag($el->previousSibling, 'p')
                 ) {
@@ -78,8 +78,8 @@ class Massage_Tidy
             if ($indentVal !== 0) {
                 $el->setAttribute('class', 'indent-' . $indentVal);
             }
-            $el->removeAttribute('indent');
-            if ($indentVal === 0 && $el->tagName === 'div') {
+            Indentation::remove($el);
+            if (!$indentVal && $el->tagName === 'div') {
                 Node::remove($el);
             }
         }

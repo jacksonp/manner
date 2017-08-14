@@ -174,7 +174,7 @@ class Roff_Condition implements Roff_Template
             return $man->issetRegister($matches[1]);
         }
 
-        $condition = Roff_Unit::normalize($condition);
+        $condition = Roff_Unit::normalize($condition, 'u', 'u');
 
         $condition = Replace::preg('~:~u', ' or ', $condition);
         $condition = Replace::preg('~&~u', ' and ', $condition);

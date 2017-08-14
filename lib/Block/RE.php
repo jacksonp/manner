@@ -60,7 +60,7 @@ class Block_RE implements Block_Template
         $man->left_margin_level = $leftMarginLevel;
 
         // Restore prevailing indent (see macro definition above)
-        if ($lastDIV->parentNode->hasAttribute('indent')) {
+        if (Indentation::isSet($lastDIV->parentNode)) {
             $man->indentation = (string)Indentation::get($lastDIV->parentNode);
         } else {
             $man->resetIndentationToDefault();

@@ -27,7 +27,7 @@ class Roff_Register implements Roff_Template
         $man           = Man::instance();
         $registerValue = $man->applyAllReplacements($matches['val']);
         // Normalize here: a unit value may be concatenated when the register is used.
-        $registerValue = Roff_Unit::normalize($registerValue);
+        $registerValue = Roff_Unit::normalize($registerValue, 'u', 'u');
         $man->setRegister($matches['name'], $registerValue);
 
         return [];

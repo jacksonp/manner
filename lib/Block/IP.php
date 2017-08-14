@@ -20,7 +20,7 @@ class Block_IP implements Block_Template
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments']) > 1) {
-            $indentVal        = Roff_Unit::normalize($request['arguments'][1]);
+            $indentVal        = Roff_Unit::normalize($request['arguments'][1], 'n', 'n');
             $man->indentation = $indentVal;
         } else {
             $indentVal = $man->indentation;
@@ -47,7 +47,7 @@ class Block_IP implements Block_Template
             TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
             $dl->appendChild($dt);
 
-            $dd->setAttribute('indent', $indentVal);
+            Indentation::set($dd, $indentVal);
             $dd = $dl->appendChild($dd);
 
             return $dd;
@@ -55,12 +55,12 @@ class Block_IP implements Block_Template
             /* @var DomElement $div */
             $div = $dom->createElement('div');
             $div->setAttribute('remap', 'IP');
-            if ($indentVal === '0') {
+            if (!$indentVal) {
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
             } else {
-                if ($parentNode->tagName !== 'dd' || $parentNode->getAttribute('indent') !== $indentVal) {
-                    $div->setAttribute('indent', $indentVal);
+                if ($parentNode->tagName !== 'dd' || Indentation::get($parentNode) !== (float)$indentVal) {
+                    Indentation::set($div, $indentVal);
                 }
             }
             $div = $parentNode->appendChild($div);

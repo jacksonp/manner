@@ -40,7 +40,7 @@ class Block_RS implements Block_Template
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
-            $leftMargin = Roff_Unit::normalize($request['arguments'][0]);
+            $leftMargin = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
         } else {
             $leftMargin = $man->indentation;
         }
@@ -52,7 +52,7 @@ class Block_RS implements Block_Template
         /* @var DomElement $div */
         $div = $dom->createElement('div');
 
-        $div->setAttribute('left-margin', $leftMargin);
+        $div->setAttribute('left-margin', (string)$leftMargin);
 
         $div = $parentNode->appendChild($div);
         return $div;

@@ -50,7 +50,7 @@ class Block_TP implements Block_Template
         $blockContainerParentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
-            $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
+            $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
             $man->indentation = $indentVal;
         } else {
             $indentVal = $man->indentation;
@@ -77,7 +77,7 @@ class Block_TP implements Block_Template
             if ($request['request'] === 'TQ') {
                 array_shift($lines);
                 if (count($request['arguments'])) {
-                    $indentVal        = Roff_Unit::normalize($request['arguments'][0]);
+                    $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
                     $man->indentation = $indentVal;
                 }
                 $dt = $dom->createElement('dt');
@@ -93,7 +93,7 @@ class Block_TP implements Block_Template
 
         /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
-        Indentation::set($dd, (int)$indentVal);
+        Indentation::set($dd, $indentVal);
         $dd = $dl->appendChild($dd);
 
         return $dd;

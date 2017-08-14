@@ -13,23 +13,37 @@ class Indentation
         return $p->hasAttribute('indent');
     }
 
-    static function get(DOMElement $el): int
+    static function get(DOMElement $el): float
     {
-        return (int)$el->getAttribute('indent');
+        return (float)$el->getAttribute('indent');
     }
 
-    static function set(DOMElement $el, int $indentVal): void
+    static function set(DOMElement $el, $indentVal): void
     {
+        if (!is_numeric($indentVal)) {
+            throw new Exception('Non-numeric indent: ' . $indentVal);
+        }
         $el->setAttribute('indent', (string)$indentVal);
     }
 
-    static function add(DOMElement $el, int $indentVal)
+    static function remove(DOMElement $el): void
     {
+        $el->removeAttribute('indent');
+    }
+
+    static function add(DOMElement $el, $indentVal)
+    {
+        if (!is_numeric($indentVal)) {
+            throw new Exception('Non-numeric indent: ' . $indentVal);
+        }
         self::set($el, self::get($el) + $indentVal);
     }
 
-    static function subtract(DOMElement $el, int $indentVal)
+    static function subtract(DOMElement $el, $indentVal)
     {
+        if (!is_numeric($indentVal)) {
+            throw new Exception('Non-numeric indent: ' . $indentVal);
+        }
         self::set($el, self::get($el) + $indentVal);
     }
 
@@ -51,7 +65,12 @@ class Indentation
     public static function popOut(DOMElement $el): void
     {
 
-        $elParent     = $el->parentNode;
+        $elParent = $el->parentNode;
+
+        if ($elParent->tagName === 'section') {
+            return;
+        }
+
         $parentIndent = Indentation::get($elParent);
         $inDD         = DOM::isTag($elParent, 'dd');
 

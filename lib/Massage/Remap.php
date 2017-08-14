@@ -21,6 +21,7 @@ class Massage_Remap
                     do {
                         if (DOM::isTag($sibling, $blocks)) {
                             $next = $sibling->nextSibling;
+                            $sibling->removeAttribute('implicit');
                             $indentVal && Indentation::add($sibling, $indentVal);
                             $div->parentNode->insertBefore($sibling, $div);
                         } else {

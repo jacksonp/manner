@@ -134,7 +134,7 @@ class DOM
                 return $nextSibling;
             }
 
-            if ($element->getAttribute('indent') === '') {
+            if (!Indentation::isSet($element)) {
                 if (in_array($element->parentNode->tagName, ['dd'])) {
                     $nextSibling = Massage_DIV::getNextNonBRNode($element);
                     Node::remove($element);
@@ -160,7 +160,7 @@ class DOM
                     self::extractContents($element->previousSibling->lastChild, $element);
                     $element->parentNode->removeChild($element);
                 } else {
-                    $element->removeAttribute('indent');
+                    Indentation::remove($element);
                     $element->previousSibling->lastChild->appendChild($element);
                 }
                 return $nextSibling;

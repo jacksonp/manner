@@ -29,12 +29,12 @@ class Massage_Indents
                 if ($parentNode instanceof DOMDocument || $parentNode->tagName === 'div') {
                     break;
                 }
-                if ($parentNode->hasAttribute('indent')) {
-                    $leftMargin -= (int)$parentNode->getAttribute('indent');
+                if (Indentation::isSet($parentNode)) {
+                    $leftMargin -= Indentation::get($parentNode);
                 }
                 $parentNode = $parentNode->parentNode;
             }
-            $div->setAttribute('indent', (string)$leftMargin);
+            Indentation::set($div, $leftMargin);
             $div->removeAttribute('left-margin');
 
         }

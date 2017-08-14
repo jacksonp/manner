@@ -11,6 +11,8 @@ class Roff_Unit
         'u' => 1,
         // inch
         'i' => self::basicUnitsPerInch,
+        'in' => self::basicUnitsPerInch,
+        // TODO: double check this (remove and see what breaks how).
         // One inch is equal to 2.54cm.
         'c' => self::basicUnitsPerInch / 2.54,
         // Points. This is a typesetter’s measurement used for measure type size. It is 72 points to an inch.
@@ -39,29 +41,50 @@ class Roff_Unit
      *
      * @param string $string
      * @param string $defaultUnit
+     * @param string $targetUnit
      * @return string
      */
-    static function normalize(string $string, string $defaultUnit = 'n'): string
+    static function normalize(string $string, string $defaultUnit, string $targetUnit): string
     {
 
         $string = Replace::pregCallback(
-            '~((?:\d*\.)?\d+)([uicpPszfmnvM])?~u',
-            function ($matches) use ($defaultUnit) {
+            '~((?:\d*\.)?\d+)(in|[uicpPszfmnvM])?~u',
+            function ($matches) use ($defaultUnit, $targetUnit) {
                 $unit       = @$matches[2] ?: $defaultUnit;
                 $basicUnits = self::unitMultipliers[$unit] * $matches[1];
-                return (string)round($basicUnits / self::unitMultipliers['n']);
+                return (string)round($basicUnits / self::unitMultipliers[$targetUnit]);
             }, $string);
 
-        if (preg_match('~^((\.\d)|[-\+\*/\d\(\)])+$~u', $string)) {
-            try {
-                $evalString = eval('return ' . $string . ';');
-            } catch (ParseError $e) {
-                return $string;
-            }
-            $string = (string)round($evalString);
-        }
+        return self::evaluate($string);
 
-        return $string;
+    }
+
+    /**
+     * Parentheses may be used as in any other language. However, in gtroff they are necessary to ensure order of
+     * evaluation. gtroff has no operator precedence; expressions are evaluated left to right. This means that
+     * gtroff evaluates ‘3+5*4’ as if it were parenthesized like ‘(3+5)*4’, not as ‘3+(5*4)’, as might be expected.
+     * */
+    private static function evaluate(string $string): string
+    {
+
+        // Remove parentheses around a lone number:
+        $evaluatedString = Replace::preg('~\(((?:\d*\.)?\d+)\)~u', '$1', $string);
+
+        // Evaluate first matched expression only, because gtroff has no operator precedence:
+        $evaluatedString = Replace::pregCallback('~(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u', function ($matches) {
+            $expression = $matches[0];
+            try {
+                return eval('return ' . $expression . ';');
+            } catch (ParseError $e) {
+                throw new Exception('Could not evaluate ' . $expression);
+            }
+        }, $evaluatedString, 1);
+
+        if ($evaluatedString === $string) {
+            return $evaluatedString;
+        } else {
+            return self::evaluate($evaluatedString);
+        }
 
     }
 

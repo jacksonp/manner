@@ -73,7 +73,7 @@ class Massage_DL
 
         if (
             !DOM::isTag($div, 'div') ||
-            !$div->hasAttribute('indent') ||
+            !Indentation::isSet($div) ||
             !DOM::isTag($div->firstChild, ['p', 'div', 'ul'])
         ) {
             return 0;
