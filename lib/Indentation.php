@@ -67,7 +67,8 @@ class Indentation
 
         $elParent = $el->parentNode;
 
-        if ($elParent->tagName === 'section') {
+        // li: see cpupower-monitor.1
+        if ($elParent->tagName === 'section' || $elParent->tagName === 'li') {
             return;
         }
 
