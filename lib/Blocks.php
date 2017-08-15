@@ -38,8 +38,11 @@ class Blocks
         return $parentNode;
     }
 
-    static function getBlockContainerParent(DOMElement $parentNode, bool $superOnly = false): DOMElement
-    {
+    static function getBlockContainerParent(
+        DOMElement $parentNode,
+        bool $superOnly = false,
+        bool $ipOK = false
+    ): DOMElement {
         $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
             $blockTags[] = 'dd';
@@ -47,8 +50,9 @@ class Blocks
             $blockTags[] = 'td';
         }
 
-        // We use <div>s to "remap" .IP temporarily so it can contain other <div>s, so treat remaps as non-blocks.
-        while (!in_array($parentNode->tagName, $blockTags) || $parentNode->hasAttribute('remap')) {
+        // We use <div>s to "remap" .IP temporarily so it can contain other <div>s, so treat remaps as non-blocks in
+        // some cases.
+        while (!in_array($parentNode->tagName, $blockTags) || (!$ipOK && $parentNode->hasAttribute('remap'))) {
             $parentNode = $parentNode->parentNode;
             if (!$parentNode) {
                 throw new Exception('No more parents.');

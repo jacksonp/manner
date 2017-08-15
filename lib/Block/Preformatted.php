@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_Preformatted implements Block_Template
 {
@@ -22,7 +22,7 @@ class Block_Preformatted implements Block_Template
             array_shift($lines);
             $parentNode = Blocks::getBlockContainerParent($parentNode, true);
         } else {
-            $parentNode = Blocks::getBlockContainerParent($parentNode);
+            $parentNode = Blocks::getBlockContainerParent($parentNode, false, true);
         }
 
         /* @var DomElement $pre */

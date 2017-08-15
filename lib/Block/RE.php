@@ -49,7 +49,13 @@ class Block_RE implements Block_Template
 
         while ($leftMarginLevel > $backToLevel) {
             --$leftMarginLevel;
-            $lastDIV = $lastDIV->ancestor('div');
+            while ($lastDIV = $lastDIV->ancestor('div')) {
+                if ($lastDIV->hasAttribute('remap')) {
+                    $lastDIV = $lastDIV->parentNode;
+                } else {
+                    break;
+                }
+            }
             if (is_null($lastDIV)) {
                 $man->left_margin_level = 1;
                 $man->resetIndentationToDefault();
