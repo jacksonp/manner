@@ -138,7 +138,6 @@ class DOM
                 if (in_array($element->parentNode->tagName, ['dd'])) {
                     $nextSibling = Massage_DIV::getNextNonBRNode($element);
                     Node::remove($element);
-                    Massage_Block::removeAdjacentEmptyTextNodesAndBRs($firstChild);
                     return $nextSibling;
                 }
             }
