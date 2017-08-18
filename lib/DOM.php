@@ -384,7 +384,6 @@ class DOM
                     $child->parentNode->removeChild($child->nextSibling);
                     $child->parentNode->removeChild($child);
                 }
-                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($dl);
                 $child = $dl->nextSibling;
             } else {
                 $child = $child->nextSibling;
