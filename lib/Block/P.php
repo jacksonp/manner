@@ -16,7 +16,7 @@ class Block_P implements Block_Template
 
         Man::instance()->resetIndentationToDefault();
 
-        if ($parentNode->tagName === 'p' && !$parentNode->hasContent()) {
+        if ($parentNode->tagName === 'p' && !Node::hasContent($parentNode)) {
             return null; // Use existing parent node for content that will follow.
         } else {
             $parentNode = Blocks::getBlockContainerParent($parentNode);

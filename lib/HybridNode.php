@@ -24,11 +24,6 @@ class HybridNode extends DOMElement
         return false;
     }
 
-    function hasContent()
-    {
-        return $this->childNodes->length > 1 || ($this->firstChild && $this->firstChild->nodeValue !== '');
-    }
-
     function ancestor(string $tagName): ?DOMElement
     {
         $node = $this;

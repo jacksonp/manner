@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_Text implements Block_Template
 {
@@ -10,8 +10,7 @@ class Block_Text implements Block_Template
     {
 
         if (
-            !$parentNode->isOrInTag('pre') &&
-            $parentNode->hasContent() &&
+            !$parentNode->isOrInTag('pre') && Node::hasContent($parentNode) &&
             (
                 $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
                 in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)

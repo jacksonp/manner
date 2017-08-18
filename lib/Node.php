@@ -4,6 +4,11 @@ declare(strict_types=1);
 class Node
 {
 
+    static function hasContent(DOMElement $el): bool
+    {
+        return $el->childNodes->length > 1 || ($el->firstChild && $el->firstChild->nodeValue !== '');
+    }
+
     static function addClass(DOMElement $node, string $className): void
     {
         if (!self::hasClass($node, $className)) {
