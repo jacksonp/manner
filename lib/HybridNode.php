@@ -9,21 +9,6 @@ class HybridNode extends DOMElement
         parent::__construct($name, $value);
     }
 
-    function isOrInTag($tagNames)
-    {
-        $tagNames   = (array)$tagNames;
-        $parentNode = $this;
-
-        while ($parentNode instanceof DOMElement) {
-            if (in_array($parentNode->tagName, $tagNames)) {
-                return true;
-            }
-            $parentNode = $parentNode->parentNode;
-        }
-
-        return false;
-    }
-
     function ancestor(string $tagName): ?DOMElement
     {
         $node = $this;

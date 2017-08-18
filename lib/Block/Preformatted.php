@@ -14,7 +14,7 @@ class Block_Preformatted implements Block_Template
 
         array_shift($lines);
 
-        if ($parentNode->isOrInTag('pre') || !count($lines)) {
+        if (Node::isOrInTag($parentNode,'pre') || !count($lines)) {
             return null;
         }
 

@@ -9,6 +9,20 @@ class Node
         return $el->childNodes->length > 1 || ($el->firstChild && $el->firstChild->nodeValue !== '');
     }
 
+    static function isOrInTag(DOMElement $el, $tagNames): bool
+    {
+        $tagNames = (array)$tagNames;
+
+        while ($el instanceof DOMElement) {
+            if (in_array($el->tagName, $tagNames)) {
+                return true;
+            }
+            $el = $el->parentNode;
+        }
+
+        return false;
+    }
+
     static function addClass(DOMElement $node, string $className): void
     {
         if (!self::hasClass($node, $className)) {

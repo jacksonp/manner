@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class PreformattedOutput
 {
@@ -16,7 +16,7 @@ class PreformattedOutput
     public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
     {
 
-        if (!$parentNode->isOrInTag('pre')) {
+        if (!Node::isOrInTag($parentNode, 'pre')) {
             return false;
         }
 

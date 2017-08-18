@@ -36,25 +36,25 @@ class Inline_FontOneInputLine implements Block_Template
             case 'R':
                 break;
             case 'I':
-                if (!$parentNode->isOrInTag('em')) {
+                if (!Node::isOrInTag($parentNode,'em')) {
                     $node = $parentNode->appendChild($dom->createElement('em'));
                 }
                 break;
             case 'B':
-                if (!$parentNode->isOrInTag('strong')) {
+                if (!Node::isOrInTag($parentNode,'strong')) {
                     $node = $parentNode->appendChild($dom->createElement('strong'));
                 }
                 break;
             case 'SB':
-                if (!$parentNode->isOrInTag('strong')) {
+                if (!Node::isOrInTag($parentNode,'strong')) {
                     $node = $parentNode->appendChild($dom->createElement('strong'));
                 }
-                if (!$parentNode->isOrInTag('small')) {
+                if (!Node::isOrInTag($parentNode,'small')) {
                     $node = $parentNode->appendChild($dom->createElement('small'));
                 }
                 break;
             case 'SM':
-                if (!$parentNode->isOrInTag('small')) {
+                if (!Node::isOrInTag($parentNode,'small')) {
                     $node = $parentNode->appendChild($dom->createElement('small'));
                 }
                 break;

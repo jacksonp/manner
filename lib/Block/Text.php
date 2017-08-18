@@ -10,7 +10,7 @@ class Block_Text implements Block_Template
     {
 
         if (
-            !$parentNode->isOrInTag('pre') && Node::hasContent($parentNode) &&
+            !Node::isOrInTag($parentNode,'pre') && Node::hasContent($parentNode) &&
             (
                 $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
                 in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)

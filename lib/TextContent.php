@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class TextContent
 {
@@ -84,7 +84,7 @@ class TextContent
 
         }
 
-        if (!$parentNode->isOrInTag('pre')) {
+        if (!Node::isOrInTag($parentNode, 'pre')) {
             // Preserve spaces used for indentation, e.g. autogsdoc.1 (2nd char in replacement is nbsp):
             $line = Replace::preg('~  ~', " \xC2\xA0", $line);
         }
@@ -167,7 +167,7 @@ class TextContent
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
                         $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if ($parentNode->isOrInTag('strong') || trim($textSegments[$i]) === '') {
+                        if (Node::isOrInTag($parentNode, 'strong') || trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
                             $strong = $parentNode->appendChild($dom->createElement('strong'));
@@ -182,7 +182,7 @@ class TextContent
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
                         $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if ($parentNode->isOrInTag('em') || trim($textSegments[$i]) === '') {
+                        if (Node::isOrInTag($parentNode, 'em') || trim($textSegments[$i]) === '') {
                             $parentNode->appendChild($domText);
                         } else {
                             $em = $parentNode->appendChild($dom->createElement('em'));

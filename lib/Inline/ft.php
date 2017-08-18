@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_ft implements Block_Template
 {
@@ -42,14 +42,14 @@ class Inline_ft implements Block_Template
             case 'I':
             case '2':
             case 'AI':
-                if ($parentNode->isOrInTag('em')) {
+                if (Node::isOrInTag($parentNode, 'em')) {
                     return null;
                 }
                 $node = $dom->createElement('em');
                 break;
             case 'B':
             case '3':
-                if ($parentNode->isOrInTag('strong')) {
+                if (Node::isOrInTag($parentNode, 'strong')) {
                     return null;
                 }
                 $node = $dom->createElement('strong');
@@ -61,7 +61,7 @@ class Inline_ft implements Block_Template
             case 'tt':
             case 'CB':
             case 'CS': // e.g. pmwebd.1
-                if ($parentNode->isOrInTag('code')) {
+                if (Node::isOrInTag($parentNode, 'code')) {
                     return null;
                 }
                 $node = $dom->createElement('code');
