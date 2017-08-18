@@ -144,9 +144,8 @@ class TextContent
                             $sup = $parentNode->appendChild($dom->createElement('sup'));
                             $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
                             ++$i;
-                        } else {
-                            // Do nothing - just drop the \u
                         }
+                        // else: Do nothing - just drop the \u
                     }
                     break;
                 case '\d':
@@ -155,9 +154,8 @@ class TextContent
                             $sub = $parentNode->appendChild($dom->createElement('sub'));
                             $sub->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
                             ++$i;
-                        } else {
-                            // Do nothing - just drop the \d
                         }
+                        // else: Do nothing - just drop the \d
                     }
                     break;
                 case '\fB':
