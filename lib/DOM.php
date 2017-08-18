@@ -121,7 +121,6 @@ class DOM
                 $pre = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
                 self::extractContents($pre, $firstChild);
                 $element->parentNode->removeChild($element);
-                Massage_Block::removeAdjacentEmptyTextNodesAndBRs($pre);
                 return $pre->nextSibling;
             }
 
