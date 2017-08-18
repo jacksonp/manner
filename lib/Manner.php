@@ -7,9 +7,8 @@ class Manner
     static function roffToDOM(array $fileLines, string $filePath): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
-        $dom->registerNodeClass('DOMElement', 'HybridNode');
 
-        /** @var HybridNode $manPageContainer */
+        /** @var DOMElement $manPageContainer */
         $manPageContainer = $dom->createElement('body');
         $manPageContainer = $dom->appendChild($manPageContainer);
 

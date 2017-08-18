@@ -103,7 +103,7 @@ class Request_Unhandled implements Block_Template
     ];
 
     static function checkAppend(
-        HybridNode $parentNode,
+        DOMElement $parentNode,
         array &$lines,
         array $request,
         $needOneLineOnly = false

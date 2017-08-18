@@ -28,7 +28,7 @@ class Block_TP implements Block_Template
 {
 
     static function checkAppend(
-        HybridNode $parentNode,
+        DOMElement $parentNode,
         array &$lines,
         array $request,
         $needOneLineOnly = false
