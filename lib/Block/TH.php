@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_TH implements Block_Template
 {
@@ -9,13 +9,14 @@ class Block_TH implements Block_Template
         array &$lines,
         array $request,
         $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?DOMElement
+    {
 
         array_shift($lines);
 
         $man = Man::instance();
 
-        $body = $parentNode->ancestor('body');
+        $body = Node::ancestor($parentNode, 'body');
 
         if (empty($man->title)) {
 

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_LinkEnd implements Block_Template
 {
@@ -13,7 +13,7 @@ class Inline_LinkEnd implements Block_Template
     {
 
         array_shift($lines);
-        $anchorNode = $parentNode->ancestor('a');
+        $anchorNode = Node::ancestor($parentNode, 'a');
         if (is_null($anchorNode)) {
             return null;
         }

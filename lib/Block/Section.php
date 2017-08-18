@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_Section implements Block_Template
 {
@@ -18,7 +18,7 @@ class Block_Section implements Block_Template
 
         Man::instance()->resetIndentationToDefault();
 
-        $body    = $parentNode->ancestor('body');
+        $body = Node::ancestor($parentNode, 'body');
         /* @var DomElement $section */
         $section = $dom->createElement('section');
         /* @var DomElement $headingNode */

@@ -9,6 +9,20 @@ class Node
         return $el->childNodes->length > 1 || ($el->firstChild && $el->firstChild->nodeValue !== '');
     }
 
+    static function ancestor(DOMElement $el, string $tagName): ?DOMElement
+    {
+        while ($el->tagName !== $tagName) {
+            if (!$el->parentNode) {
+                return null;
+            }
+            $el = $el->parentNode;
+            if ($el->nodeType === XML_DOCUMENT_NODE) {
+                return null;
+            }
+        }
+        return $el;
+    }
+
     static function isOrInTag(DOMElement $el, $tagNames): bool
     {
         $tagNames = (array)$tagNames;

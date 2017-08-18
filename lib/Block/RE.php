@@ -42,14 +42,14 @@ class Block_RE implements Block_Template
             // .RE 1 is back to base level (used e.g. in lsmcli.1).
             $man->left_margin_level = 1;
             $man->resetIndentationToDefault();
-            return $parentNode->ancestor('section');
+            return Node::ancestor($parentNode, 'section');
         }
 
         $lastDIV = $parentNode;
 
         while ($leftMarginLevel > $backToLevel) {
             --$leftMarginLevel;
-            while ($lastDIV = $lastDIV->ancestor('div')) {
+            while ($lastDIV = Node::ancestor($lastDIV, 'div')) {
                 if ($lastDIV->hasAttribute('remap')) {
                     $lastDIV = $lastDIV->parentNode;
                 } else {
@@ -59,7 +59,7 @@ class Block_RE implements Block_Template
             if (is_null($lastDIV)) {
                 $man->left_margin_level = 1;
                 $man->resetIndentationToDefault();
-                return $parentNode->ancestor('section');
+                return Node::ancestor($parentNode, 'section');
             }
         }
 
