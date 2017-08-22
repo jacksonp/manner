@@ -16,7 +16,9 @@ class PreformattedOutput
     public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
     {
 
-        if (!Node::isOrInTag($parentNode, 'pre')) {
+        $pre = Node::ancestor($parentNode, 'pre');
+
+        if (is_null($pre)) {
             return false;
         }
 
@@ -28,8 +30,6 @@ class PreformattedOutput
         }
 
         $line = $request['raw_line'];
-
-        $pre = Node::ancestor($parentNode, 'pre');
 
         if ($pre->textContent === '' && count($lines) > 1 && Block_TabTable::lineContainsTab($line) && Block_TabTable::lineContainsTab($lines[1])) {
 
@@ -123,6 +123,21 @@ class PreformattedOutput
             }
             $parentNode->appendChild(new DOMText('] '));
             array_shift($lines);
+            return true;
+        } elseif ($request['request'] === 'RS') {
+            array_shift($lines);
+            if (count($request['arguments'])) {
+                self::$addIndent = (int)round(Roff_Unit::normalize($request['arguments'][0], 'n', 'm'));
+            } else {
+                self::$addIndent = 4;
+            }
+            return true;
+        } elseif ($request['request'] === 'RE') {
+            if (self::$addIndent === 0) {
+                return false;
+            }
+            array_shift($lines);
+            self::reset();
             return true;
         }
 
