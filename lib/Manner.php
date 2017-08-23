@@ -48,6 +48,10 @@ class Manner
         $extra2 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra2);
         $extra3 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra3);
 
+        if (!$title) {
+            $title = 'UNTITLED';
+        }
+
         if ($test) {
             echo $html;
             return;
