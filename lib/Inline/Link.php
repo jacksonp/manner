@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_Link implements Block_Template
 {
@@ -13,13 +13,21 @@ class Inline_Link implements Block_Template
     {
 
         array_shift($lines);
-        $dom        = $parentNode->ownerDocument;
-        $parentNode = Blocks::getParentForText($parentNode);
+
+        $existingAnchor = Node::ancestor($parentNode, 'a');
+
+        $dom = $parentNode->ownerDocument;
+
+        if (is_null($existingAnchor)) {
+            $parentNode = Blocks::getParentForText($parentNode);
+        } else {
+            $parentNode = $existingAnchor->parentNode;
+        }
 
         $anchor = $dom->createElement('a');
 
         if (count($request['arguments'])) {
-            $url = $request['arguments'][0];
+            $url  = $request['arguments'][0];
             $href = self::getValidHREF($url);
             if ($href) {
                 $anchor->setAttribute('href', $href);
