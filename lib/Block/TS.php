@@ -270,7 +270,7 @@ class Block_TS implements Block_Template
 
         /* @var DomElement $table */
         $table = $dom->createElement('table');
-        $table->setAttribute('class', implode(' ', $tableClasses));
+        Node::addClass($table, $tableClasses);
 
         $skippableRows = self::addRowsFromFormats($table, $lines);
         if (is_null($skippableRows)) {
@@ -284,7 +284,18 @@ class Block_TS implements Block_Template
         $tr           = false;
         $nextRowBold  = false;
 
-        $table = $parentNode->appendChild($table);
+        $pre = Node::ancestor($parentNode, 'pre');
+        if (!is_null($pre)) {
+            Node::addClass($table, 'pre');
+            if ($pre->textContent === '') {
+                $pre->parentNode->insertBefore($table, $pre);
+            } else {
+                $parentNode = $pre->parentNode;
+                $table      = $parentNode->appendChild($table);
+            }
+        } else {
+            $table = $parentNode->appendChild($table);
+        }
 
         while ($request = Request::getLine($lines)) {
             array_shift($lines);

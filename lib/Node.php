@@ -37,10 +37,13 @@ class Node
         return false;
     }
 
-    static function addClass(DOMElement $node, string $className): void
+    static function addClass(DOMElement $node, $classes): void
     {
-        if (!self::hasClass($node, $className)) {
-            $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $className));
+        $classes = (array)$classes;
+        foreach ($classes as $class) {
+            if (!self::hasClass($node, $class)) {
+                $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $class));
+            }
         }
     }
 
