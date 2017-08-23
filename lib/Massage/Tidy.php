@@ -9,7 +9,7 @@ class Massage_Tidy
         /** @var DOMElement $el */
 
         // NB: we do not want <dd>s here:
-        $els = $xpath->query('//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")]');
+        $els = $xpath->query('//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")] | //table[starts-with(@indent, "-")]');
         foreach ($els as $el) {
             Indentation::popOut($el);
         }
@@ -72,7 +72,7 @@ class Massage_Tidy
 
     static function indentAttributeToClass(DOMXPath $xpath)
     {
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent]');
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]');
         foreach ($els as $el) {
             $indentVal = Indentation::get($el);
             if ($indentVal) {
