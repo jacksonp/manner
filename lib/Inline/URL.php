@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_URL implements Block_Template
 {
@@ -21,7 +21,8 @@ class Inline_URL implements Block_Template
             throw new Exception('Not enough arguments to .URL: ' . $request['raw_line']);
         }
         $anchor = $dom->createElement('a');
-        $anchor->setAttribute('href', $request['arguments'][0]);
+        $url    = TextContent::interpretString($request['arguments'][0]);
+        $anchor->setAttribute('href', $url);
         $parentNode->appendChild($anchor);
 
         if (count($request['arguments']) > 1) {
@@ -31,7 +32,7 @@ class Inline_URL implements Block_Template
         }
 
         if ($anchor->textContent === '') {
-            $anchor->appendChild(new DOMText($request['arguments'][0]));
+            $anchor->appendChild(new DOMText($url));
         }
 
         if (count($request['arguments']) === 3) {
