@@ -12,6 +12,11 @@ class Block_IP implements Block_Template
     ): ?DOMElement
     {
 
+        if ($needOneLineOnly) { // See e.g. links2.1
+            $lines[0] = $request['arguments'][0];
+            return null;
+        }
+
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
