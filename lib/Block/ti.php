@@ -30,12 +30,18 @@ class Block_ti implements Block_Template
             return $parentNode;
         }
 
-        $parentNode = Blocks::getBlockContainerParent($parentNode);
-        /* @var DomElement $p */
-        $p = $parentNode->ownerDocument->createElement('p');
-        $p = $parentNode->appendChild($p);
-        Indentation::set($p, $indentVal);
-        return $p;
+        $dt = Node::ancestor($parentNode, 'dt');
+        if (is_null($dt)) {
+            $parentNode = Blocks::getBlockContainerParent($parentNode);
+            /* @var DomElement $p */
+            $p = $parentNode->ownerDocument->createElement('p');
+            $p = $parentNode->appendChild($p);
+            Indentation::set($p, $indentVal);
+            return $p;
+        } else {
+            Indentation::set($dt, $indentVal);
+            return null;
+        }
 
     }
 

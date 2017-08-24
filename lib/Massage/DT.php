@@ -38,6 +38,13 @@ class Massage_DT
             $dt->parentNode->removeChild($dt);
         }
 
+        if (Dom::isTag($dt->firstChild, 'pre')) {
+            // <pre>s can't go inside <dt>s (tho we put them there for convenience now).
+            // TODO: remove this once we handle .nf and .EX by setting flag rather than creating <pre> element.
+            Node::remove($dt->firstChild);
+            self::tidy($dt);
+        }
+
     }
 
 }

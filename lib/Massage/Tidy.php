@@ -72,7 +72,7 @@ class Massage_Tidy
 
     static function indentAttributeToClass(DOMXPath $xpath)
     {
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]');
+        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]');
         foreach ($els as $el) {
             $indentVal = Indentation::get($el);
             if ($indentVal) {

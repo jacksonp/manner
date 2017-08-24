@@ -45,6 +45,7 @@ class Blocks
     ): DOMElement {
         $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
+            $blockTags[] = 'dt';
             $blockTags[] = 'dd';
             $blockTags[] = 'th';
             $blockTags[] = 'td';
