@@ -103,6 +103,13 @@ class Block_TS implements Block_Template
             if ($request['request'] === 'TE') {
                 return null; // Format is garbage, skip content.
             }
+            if (strpos($request['raw_line'], ',') !== false) {
+                $newLines = explode(',', $request['raw_line']);
+                for ($i = count($newLines) - 1; $i >= 0; --$i) {
+                    array_unshift($lines, trim($newLines[$i]));
+                }
+                continue;
+            }
             $line = $man->applyAllReplacements($request['raw_line']);
             if (mb_substr(trim($line), -1, 1) === '.') {
                 $line        = rtrim($line, '.');
