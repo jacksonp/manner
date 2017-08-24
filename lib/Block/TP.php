@@ -44,6 +44,15 @@ class Block_TP implements Block_Template
 
         array_shift($lines);
 
+        if (count($lines) && $lines[0] === '\\&') {
+            if (count($request['arguments'])) {
+                $lines[0] = '.IP "" ' . $request['arguments'][0];
+            } else {
+                $lines[0] = '.IP';
+            }
+            return null;
+        }
+
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
 
