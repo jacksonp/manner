@@ -48,7 +48,8 @@ class Inline_Link implements Block_Template
         if (filter_var($href, FILTER_VALIDATE_URL)) {
             return $href;
         } elseif (filter_var($href, FILTER_VALIDATE_EMAIL)) {
-            return 'mailto:' . $href;
+            list($user, $server) = explode('@', $href);
+            return 'mailto:' . rawurlencode($user) . '@' . rawurlencode($server);
         } else {
             return false;
         }
