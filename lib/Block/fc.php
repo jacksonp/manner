@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_fc implements Block_Template
 {
@@ -24,6 +24,8 @@ class Block_fc implements Block_Template
     {
 
         array_shift($lines);
+
+        $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         $delim = $request['arguments'][0];
         $pad   = @$request['arguments'][1] ?: ' ';
@@ -67,7 +69,7 @@ class Block_fc implements Block_Template
 
         $parentNode->appendChild($table);
 
-        return null;
+        return $parentNode;
 
     }
 
