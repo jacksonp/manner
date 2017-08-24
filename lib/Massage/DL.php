@@ -4,7 +4,7 @@ declare(strict_types=1);
 class Massage_DL
 {
 
-    static function mergeAdjacent(DOMXPath $xpath): void
+    static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
     {
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {
@@ -12,6 +12,15 @@ class Massage_DL
                 DOM::extractContents($dl, $dl->nextSibling);
                 $dl->parentNode->removeChild($dl->nextSibling);
             }
+
+            if ($dl->childNodes->length === 1 && $dl->firstChild->tagName === 'dd') {
+                $div = $dl->ownerDocument->createElement('div');
+                DOM::extractContents($div, $dl->firstChild);
+                Indentation::addElIndent($div, $dl->firstChild);
+                $dl->parentNode->insertBefore($div, $dl);
+                $dl->parentNode->removeChild($dl);
+            }
+
         }
     }
 

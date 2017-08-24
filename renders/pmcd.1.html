@@ -114,10 +114,9 @@
   <p>Each line of the agent configuration section of the configuration file must be either an agent specification, a comment, or a blank line. Lexical elements are separated by whitespace characters, however a single agent specification may not be broken across lines unless a <strong>\</strong> (backslash) is used to continue the line.
   <p>Each agent specification must start with a textual label (string) followed by an integer in the range 1 to 510. The label is a tag used to refer to the agent and the integer specifies the domain for which the agent supplies data. This domain identifier corresponds to the domain portion of the PMIDs handled by the agent. Each agent must have a unique label and domain identifier.
   <p>For DSO agents a line of the form:
-  <dl>
-    <dd>
-      <p><em>label</em> <em>domain-no</em> <strong>dso</strong> <em>entry-point</em> <em>path</em>
-  </dl>
+  <div class="indent-7">
+    <p><em>label</em> <em>domain-no</em> <strong>dso</strong> <em>entry-point</em> <em>path</em>
+  </div>
   <p>should appear. Where,
   <dl>
     <dt><em>label</em>
@@ -135,10 +134,9 @@
       <p>For a relative <em>path</em> the environment variable <strong>PMCD_PATH</strong> defines a colon (:) separated list of directories to search when trying to locate the agent DSO. &nbsp;The default search path is <strong>$PCP_SHARE_DIR/lib:/usr/pcp/lib</strong>.
   </dl>
   <p>For agents providing socket connections, a line of the form
-  <dl>
-    <dd>
-      <p><em>label</em> <em>domain-no</em> <strong>socket</strong> <em>addr-family</em> <em>address</em> [ <em>command</em> ]
-  </dl>
+  <div class="indent-7">
+    <p><em>label</em> <em>domain-no</em> <strong>socket</strong> <em>addr-family</em> <em>address</em> [ <em>command</em> ]
+  </div>
   <p>should appear. Where,
   <dl>
     <dt><em>label</em>
@@ -158,10 +156,9 @@
       <p>is an optional parameter used to specify a command line to start the agent when <strong>pmcd</strong> initializes. If <em>command</em> is not present, <strong>pmcd</strong> assumes that the specified agent has already been created. The <em>command</em> is considered to start from the first non-white character after the socket address and finish at the next newline that isn't preceded by a backslash. After a <strong>fork</strong>(2) the <em>command</em> is passed unmodified to <strong>execve</strong>(2) to instantiate the agent.
   </dl>
   <p>For agents interacting with the <strong>pmcd</strong> via stdin/stdout, a line of the form:
-  <dl>
-    <dd>
-      <p><em>label</em> <em>domain-no</em> <strong>pipe</strong> <em>protocol</em> <em>command</em>
-  </dl>
+  <div class="indent-7">
+    <p><em>label</em> <em>domain-no</em> <strong>pipe</strong> <em>protocol</em> <em>command</em>
+  </div>
   <p>should appear. Where,
   <dl>
     <dt><em>label</em>
@@ -255,10 +252,9 @@ disallow host 129.127.112.2 : all except fetch;</pre>
   <p>because the former contains a specific host name (equivalent to a fully specified IP address), whereas the latter has a wildcard. In turn, the latter would override
   <pre>disallow host * : all;</pre>
   <p>It is possible to limit the number of connections from a user, group or host to <strong>pmcd</strong>. This may be done by adding a clause of the form
-  <dl>
-    <dd>
-      <p><strong>maximum</strong> <em>n</em> <strong>connections</strong>
-  </dl>
+  <div class="indent-7">
+    <p><strong>maximum</strong> <em>n</em> <strong>connections</strong>
+  </div>
   <p>to the <em>operations</em> list of an <strong>allow</strong> statement. Such a clause may not be used in a <strong>disallow</strong> statement. Here, <em>n</em> is the maximum number of connections that will be accepted from the user, group or host matching the identifier(s) used in the statement.
   <p>An access control statement with a list of user, group or host identifiers is equivalent to a set of access control statements, with each specifying one of the identifiers in the list and all with the same access controls (both permissions and connection limits). A group should be used if you want users to contribute to a shared connection limit. A wildcard should be used if you want hosts to contribute to a shared connection limit.
   <p>When a new client requests a connection, and <strong>pmcd</strong> has determined that the client has permission to connect, it searches the matching list of access control statements for the most specific match containing a connection limit. For brevity, this will be called the limiting statement. If there is no limiting statement, the client is granted a connection. If there is a limiting statement and the number of <strong>pmcd</strong> clients with user ID, group ID, or IP addresses that match the identifier in the limiting statement is less than the connection limit in the statement, the connection is allowed. Otherwise the connection limit has been reached and the client is refused a connection.

@@ -19,7 +19,7 @@ class Manner
         Roff::parse($manPageContainer, $strippedLines);
         $xpath = new DOMXpath($dom);
         Massage_P::removeEmpty($xpath);
-        Massage_DL::mergeAdjacent($xpath);
+        Massage_DL::mergeAdjacentAndConvertLoneDD($xpath);
         Massage_Remap::doAll($xpath);
         Massage_Indents::recalc($xpath);
         DOM::massage($manPageContainer);

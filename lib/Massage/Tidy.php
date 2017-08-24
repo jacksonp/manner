@@ -44,7 +44,7 @@ class Massage_Tidy
             }
         }
 
-        Massage_DL::mergeAdjacent($xpath);
+        Massage_DL::mergeAdjacentAndConvertLoneDD($xpath);
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
