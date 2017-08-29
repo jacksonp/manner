@@ -13,7 +13,11 @@ class Block_IP implements Block_Template
     {
 
         if ($needOneLineOnly) { // See e.g. links2.1
-            $lines[0] = $request['arguments'][0];
+            if (count($request['arguments'])) {
+                $lines[0] = $request['arguments'][0];
+            } else {
+                array_shift($lines);
+            }
             return null;
         }
 
