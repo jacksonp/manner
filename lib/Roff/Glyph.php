@@ -124,7 +124,7 @@ class Roff_Glyph
       'r?'             => '¿',
       'em'             => '—',
       'en'             => '–',
-      'hy'             => '‐',
+      'hy'             => '-',
         // Brackets
       'lB'             => '[',
       'rB'             => ']',
