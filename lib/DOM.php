@@ -379,6 +379,7 @@ class DOM
                     while ($child->nextSibling->firstChild) {
                         $dd->appendChild($child->nextSibling->firstChild);
                     }
+                    Indentation::addElIndent($dd, $child->nextSibling);
                     $dl->appendChild($dd);
                     $nextElementToCheck = $child->nextSibling->nextSibling;
                     $child->parentNode->removeChild($child->nextSibling);
