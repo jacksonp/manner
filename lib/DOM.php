@@ -364,33 +364,33 @@ class DOM
             }
 
             if ($go) {
-                $dl = $child->ownerDocument->createElement('dl');
-                $child->parentNode->insertBefore($dl, $child);
-                $nextElementToCheck = $child;
-                while (Massage_DL::isPotentialDTFollowedByDD($nextElementToCheck)) {
-                    $child = $nextElementToCheck;
-                    $dt    = $child->ownerDocument->createElement('dt');
-                    while ($child->firstChild) {
-                        $dt->appendChild($child->firstChild);
-                    }
-                    $dl->appendChild($dt);
+                $dl = $element->ownerDocument->createElement('dl');
+                $element->insertBefore($dl, $child);
+                while (Massage_DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
+                    $dt = $element->ownerDocument->createElement('dt');
+                    DOM::extractContents($dt, $dl->nextSibling);
+                    $dt = $dl->appendChild($dt);
                     Massage_DT::postProcess($dt);
-                    $dd = $child->ownerDocument->createElement('dd');
-                    while ($child->nextSibling->firstChild) {
-                        $dd->appendChild($child->nextSibling->firstChild);
+                    $element->removeChild($dl->nextSibling);
+
+                    $dd = $element->ownerDocument->createElement('dd');
+                    Indentation::addElIndent($dd, $dl->nextSibling);
+                    if (self::isTag($dl->nextSibling, 'div')) {
+                        DOM::extractContents($dd, $dl->nextSibling);
+                        $element->removeChild($dl->nextSibling);
+                    } else {
+                        Indentation::remove($dl->nextSibling);
+                        $dd->appendChild($dl->nextSibling);
                     }
-                    Indentation::addElIndent($dd, $child->nextSibling);
                     $dl->appendChild($dd);
-                    $element->removeChild($child->nextSibling);
+
                     while (
-                        DOM::isTag($child->nextSibling, 'p') &&
-                        Indentation::get($child->nextSibling) === Indentation::get($dd)
+                        DOM::isTag($dl->nextSibling, 'p') &&
+                        Indentation::get($dl->nextSibling) === Indentation::get($dd)
                     ) {
-                        Indentation::remove($child->nextSibling);
-                        $dd->appendChild($child->nextSibling);
+                        Indentation::remove($dl->nextSibling);
+                        $dd->appendChild($dl->nextSibling);
                     }
-                    $nextElementToCheck = $child->nextSibling;
-                    $element->removeChild($child);
                 }
                 $child = $dl->nextSibling;
             } else {

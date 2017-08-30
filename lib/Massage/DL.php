@@ -80,11 +80,15 @@ class Massage_DL
 
         $div = $p->nextSibling;
 
-        if (
-            !DOM::isTag($div, 'div') ||
-            !Indentation::isSet($div) ||
-            !DOM::isTag($div->firstChild, ['p', 'div', 'ul'])
-        ) {
+        if (is_null($div) || !Indentation::isSet($div)) {
+            return 0;
+        }
+
+        if (DOM::isTag($div, 'p')) {
+            $okCertainty = 50;
+        } elseif (DOM::isTag($div, 'div') && DOM::isTag($div->firstChild, ['p', 'div', 'ul'])) {
+            $okCertainty = 100;
+        } else {
             return 0;
         }
 
@@ -109,7 +113,7 @@ class Massage_DL
             }
 
             if (preg_match('~^(--?|\+)~u', $pText)) {
-                return 100;
+                return $okCertainty;
             }
 
             if (!preg_match('~^\s*[\(a-z]~ui', $div->textContent)) {
@@ -117,19 +121,19 @@ class Massage_DL
             }
 
             if (preg_match('~^\S$~ui', $pText)) {
-                return 100;
+                return $okCertainty;
             }
 
             if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $pText)) {
-                return 100;
+                return $okCertainty;
             }
 
             if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $pText)) {
-                return 100;
+                return $okCertainty;
             }
 
             if (mb_strlen($pText) < 9) {
-                return 100;
+                return $okCertainty;
             }
 
 //        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $pText)) {
@@ -141,7 +145,7 @@ class Massage_DL
         } else {
 
             if (preg_match('~^(--?|\+)~u', $pText)) {
-                return 100;
+                return $okCertainty;
             }
 
             return 0;
