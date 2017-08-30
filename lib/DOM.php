@@ -381,9 +381,16 @@ class DOM
                     }
                     Indentation::addElIndent($dd, $child->nextSibling);
                     $dl->appendChild($dd);
-                    $nextElementToCheck = $child->nextSibling->nextSibling;
-                    $child->parentNode->removeChild($child->nextSibling);
-                    $child->parentNode->removeChild($child);
+                    $element->removeChild($child->nextSibling);
+                    while (
+                        DOM::isTag($child->nextSibling, 'p') &&
+                        Indentation::get($child->nextSibling) === Indentation::get($dd)
+                    ) {
+                        Indentation::remove($child->nextSibling);
+                        $dd->appendChild($child->nextSibling);
+                    }
+                    $nextElementToCheck = $child->nextSibling;
+                    $element->removeChild($child);
                 }
                 $child = $dl->nextSibling;
             } else {
