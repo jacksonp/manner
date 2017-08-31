@@ -60,10 +60,10 @@
     <p>records half an hour of stereo audio, and
     <pre>   <code>play -q take1.aiff & rec -M take1.aiff take1-dub.aiff</code></pre>
     <p>(with POSIX shell and where supported by hardware) records a new track in a multi-track recording. &nbsp;Finally,
-    <pre>   <code>rec -r 44100 -b 16 -e signed-integer -p \
-        silence 1 0.50 0.1% 1 10:00 0.1% | \
-        sox -p song.ogg silence 1 0.50 0.1% 1 2.0 0.1% : \
-        newfile : restart</code></pre>
+    <pre>   <code>rec -r 44100 -b 16 -e signed-integer -p \</code>
+        <code>silence 1 0.50 0.1% 1 10:00 0.1% | \</code>
+        <code>sox -p song.ogg silence 1 0.50 0.1% 1 2.0 0.1% : \</code>
+        <code>newfile : restart</code></pre>
     <p>records a stream of audio such as LP/cassette and splits in to multiple audio files at points with 2 seconds of silence. &nbsp;Also, it does not start recording until it detects audio is playing and stops after it sees 10 minutes of silence.
     <p>N.B. &nbsp;The above is just an overview of SoX's capabilities; detailed explanations of how to use <em>all</em> SoX parameters, file formats, and effects can be found below in this manual, in <strong>soxformat</strong>(7), and in <strong>soxi</strong>(1).
   </section>
@@ -137,16 +137,16 @@
         <td class="center">*
     </table>
     <p>Some systems provide more than one type of (SoX-compatible) audio driver, e.g. ALSA & OSS, or SUNAU & AO. Systems can also have more than one audio device (a.k.a. `sound card'). If more than one audio driver has been built-in to SoX, and the default selected by SoX when recording or playing is not the one that is wanted, then the <strong>AUDIODRIVER</strong> environment variable can be used to override the default. &nbsp;For example (on many systems):
-    <pre>   <code>set AUDIODRIVER=oss
-   play ...</code></pre>
+    <pre>   <code>set AUDIODRIVER=oss</code>
+   <code>play ...</code></pre>
     <p>The <strong>AUDIODEV</strong> environment variable can be used to override the default audio device, e.g.
-    <pre>   <code>set AUDIODEV=/dev/dsp2
-   play ...
-   sox ... -t oss</code></pre>
+    <pre>   <code>set AUDIODEV=/dev/dsp2</code>
+   <code>play ...</code>
+   <code>sox ... -t oss</code></pre>
     <p>or
-    <pre>   <code>set AUDIODEV=hw:soundwave,1,2
-   play ...
-   sox ... -t alsa</code></pre>
+    <pre>   <code>set AUDIODEV=hw:soundwave,1,2</code>
+   <code>play ...</code>
+   <code>sox ... -t alsa</code></pre>
     <p>Note that the way of setting environment variables varies from system to system - for some specific examples, see `SOX_OPTS' below.
     <p>When playing a file with a sample rate that is not supported by the audio output device, SoX will automatically invoke the <strong>rate</strong> effect to perform the necessary sample rate conversion. &nbsp;For compatibility with old hardware, the default <strong>rate</strong> quality level is set to `low'. This can be changed by explicitly specifying the <strong>rate</strong> effect with a different quality level, e.g.
     <pre>   <code>play ... rate -m</code></pre>
@@ -286,9 +286,9 @@
     <pre>   <code>SOX_OPTS="--buffer 20000 --play-rate-arg -hs --temp /mnt/temp"</code></pre>
     <p>Note that setting SOX_OPTS can potentially create unwanted changes in the behaviour of scripts or other programs that invoke SoX. &nbsp;SOX_OPTS might best be used for things (such as in the given example) that reflect the environment in which SoX is being run. &nbsp;Enabling options such as <strong>--no-clobber</strong> as default might be handled better using a shell alias since a shell alias will not affect operation in scripts etc.
     <p>One way to ensure that a script cannot be affected by SOX_OPTS is to clear SOX_OPTS at the start of the script, but this of course loses the benefit of SOX_OPTS carrying some system-wide default options. &nbsp;An alternative approach is to explicitly invoke SoX with default option values, e.g.
-    <pre>   <code>SOX_OPTS="-V --no-clobber"
-   ...
-   sox -V2 --clobber $input $output ...</code></pre>
+    <pre>   <code>SOX_OPTS="-V --no-clobber"</code>
+   <code>...</code>
+   <code>sox -V2 --clobber $input $output ...</code></pre>
     <p>Note that the way to set environment variables varies from system to system. Here are some examples:
     <p>Unix bash:
     <pre>   <code>export SOX_OPTS="-V --no-clobber"</code></pre>
@@ -367,8 +367,8 @@
       <dt><strong>--plot gnuplot</strong>|<strong>octave</strong>|<strong>off</strong>
       <dd>
         <p>If not set to <strong>off</strong> (the default if <strong>--plot</strong> is not given), run in a mode that can be used, in conjunction with the gnuplot program or the GNU Octave program, to assist with the selection and configuration of many of the transfer-function based effects. For the first given effect that supports the selected plotting program, SoX will output commands to plot the effect's transfer function, and then exit without actually processing any audio. &nbsp;E.g.
-        <pre>   <code>sox --plot octave input-file -n highpass 1320 &gt; highpass.plt
-   octave highpass.plt</code></pre>
+        <pre>   <code>sox --plot octave input-file -n highpass 1320 &gt; highpass.plt</code>
+   <code>octave highpass.plt</code></pre>
       <dt><strong>-q</strong>, <strong>--no-show-progress</strong>
       <dd>
         <p>Run in quiet mode when SoX wouldn't otherwise do so. This is the opposite of the <strong>-S</strong> option.
@@ -493,8 +493,8 @@
         <pre>   <code>play -c 1 music.wav</code></pre>
         <p>interprets the file data as belonging to a single channel regardless of what is indicated in the file header. &nbsp;Note that if the file does in fact have two channels, this will result in the file playing at half speed.
         <p>For an output file, this option provides a shorthand for specifying that the <strong>channels</strong> effect should be invoked in order to change (if necessary) the number of channels in the audio signal to the number given. &nbsp;For example, the following two commands are equivalent:
-        <pre>   <code>sox input.wav -c 1 output.wav bass -b 24
-   sox input.wav      output.wav bass -b 24 channels 1</code></pre>
+        <pre>   <code>sox input.wav -c 1 output.wav bass -b 24</code>
+   <code>sox input.wav      output.wav bass -b 24 channels 1</code></pre>
         <p>though the second form is more flexible as it allows the effects to be ordered arbitrarily.
       <dt><strong>-e</strong> <em>ENCODING</em>, <strong>--encoding</strong> <em>ENCODING</em>
       <dd>
@@ -533,9 +533,9 @@
         <p>Encoding names can be abbreviated where this would not be ambiguous; e.g. `unsigned-integer' can be given as `un', but not `u' (ambiguous with `u-law').
         <p>For an input file, the most common use for this option is to inform SoX of the encoding of a `raw' (`headerless') audio file (see the examples in <strong>-b</strong> and <strong>-c</strong> above).
         <p>For an output file, this option can be used (perhaps along with <strong>-b</strong>) to set the output encoding type &nbsp;For example
-        <pre>   <code>sox input.cdda -e float output1.wav
+        <pre>   <code>sox input.cdda -e float output1.wav</code>
 
-   sox input.cdda -b 64 -e float output2.wav</code></pre>
+   <code>sox input.cdda -b 64 -e float output2.wav</code></pre>
         <p>convert raw CD digital audio (16-bit, signed-integer) to floating-point `WAV' files (single & double precision respectively).
         <p>By default (i.e. if this option is not given), the output encoding type will (providing it is supported by the output file type) be set to the input encoding type.
       <dt><strong>--no-glob</strong>
@@ -550,15 +550,15 @@
         <pre>   <code>sox -r 48720 input.wav output.wav</code></pre>
         <p>effectively corrects the speed by changing only the file header (but see also the <strong>speed</strong> effect for the more usual solution to this problem).
         <p>For an output file, this option provides a shorthand for specifying that the <strong>rate</strong> effect should be invoked in order to change (if necessary) the sample rate of the audio signal to the given value. &nbsp;For example, the following two commands are equivalent:
-        <pre>   <code>sox input.wav -r 48k output.wav bass -b 24
-   sox input.wav        output.wav bass -b 24 rate 48k</code></pre>
+        <pre>   <code>sox input.wav -r 48k output.wav bass -b 24</code>
+   <code>sox input.wav        output.wav bass -b 24 rate 48k</code></pre>
         <p>though the second form is more flexible as it allows <strong>rate</strong> options to be given, and allows the effects to be ordered arbitrarily.
       <dt><strong>-t</strong>, <strong>--type</strong> <em>FILE-TYPE</em>
       <dd>
         <p>Gives the type of the audio file. &nbsp;For both input and output files, this option is commonly used to inform SoX of the type a `headerless' audio file (e.g. raw, mp3) where the actual/desired type cannot be determined from a given filename extension. &nbsp;For example:
-        <pre>   <code>another-command | sox -t mp3 - output.wav
+        <pre>   <code>another-command | sox -t mp3 - output.wav</code>
 
-   sox input.wav -t raw output.bin</code></pre>
+   <code>sox input.wav -t raw output.bin</code></pre>
         <p>It can also be used to override the type implied by an input filename extension, but if overriding with a type that has a header, SoX will exit with an appropriate error message if such a header is not actually present.
         <p>See <strong>soxformat</strong>(7) for a list of supported file types.
     </dl>
@@ -712,8 +712,8 @@
         <p>Changes pitch by specified amounts at specified times. Each given triple: <em>start-position</em><strong>,</strong><em>cents</em><strong>,</strong><em>end-position</em> specifies one bend. <em>cents</em> is the number of cents (100 cents = 1 semitone) by which to bend the pitch. The other values specify the points in time at which to start and end bending the pitch, respectively.
         <p>The pitch-bending algorithm utilises the Discrete Fourier Transform (DFT) at a particular frame rate and over-sampling rate. The <strong>-f</strong> and <strong>-o</strong> parameters may be used to adjust these parameters and thus control the smoothness of the changes in pitch.
         <p>For example, an initial tone is generated, then bent three times, yielding four different notes in total:
-        <pre>   <code>play -n synth 2.5 sin 667 gain 1 \
-        bend .35,180,.25  .15,740,.53  0,-520,.3</code></pre>
+        <pre>   <code>play -n synth 2.5 sin 667 gain 1 \</code>
+        <code>bend .35,180,.25  .15,740,.53  0,-520,.3</code></pre>
         <p>Here, the first bend runs from 0.35 to 0.6, and the second one from 0.75 to 1.28 seconds. Note that the clipping that is produced in this example is deliberate; to remove it, use <strong>gain&nbsp;-5</strong> in place of <strong>gain&nbsp;1</strong>.
         <p>See also <strong>pitch</strong>.
       <dt><strong>biquad</strong> <em>b0 b1 b2 a0 a1 a2</em>
@@ -725,8 +725,8 @@
       <dd>
         <p>Invoke a simple algorithm to change the number of channels in the audio signal to the given number <em>CHANNELS</em>: mixing if decreasing the number of channels or duplicating if increasing the number of channels.
         <p>The <strong>channels</strong> effect is invoked automatically if SoX's <strong>-c</strong> option specifies a number of channels that is different to that of the input file(s). Alternatively, if this effect is given explicitly, then SoX's <strong>-c</strong> option need not be given. &nbsp;For example, the following two commands are equivalent:
-        <pre>   <code>sox input.wav -c 1 output.wav bass -b 24
-   sox input.wav      output.wav bass -b 24 channels 1</code></pre>
+        <pre>   <code>sox input.wav -c 1 output.wav bass -b 24</code>
+   <code>sox input.wav      output.wav bass -b 24 channels 1</code></pre>
         <p>though the second form is more flexible as it allows the effects to be ordered arbitrarily.
         <p>See also <strong>remix</strong> for an effect that allows channels to be mixed/selected arbitrarily.
       <dt><strong>chorus</strong> <em>gain-in gain-out</em> &lt;<em>delay decay speed depth</em> <strong>-s</strong>|<strong>-t</strong>&gt;
@@ -737,11 +737,11 @@
         <p>A typical delay is around 40ms to 60ms; the modulation speed is best near 0.25Hz and the modulation depth around 2ms. For example, a single delay:
         <pre>   <code>play guitar1.wav chorus 0.7 0.9 55 0.4 0.25 2 -t</code></pre>
         <p>Two delays of the original samples:
-        <pre>   <code>play guitar1.wav chorus 0.6 0.9 50 0.4 0.25 2 -t \
-         60 0.32 0.4 1.3 -s</code></pre>
+        <pre>   <code>play guitar1.wav chorus 0.6 0.9 50 0.4 0.25 2 -t \</code>
+         <code>60 0.32 0.4 1.3 -s</code></pre>
         <p>A fuller sounding chorus (with three additional delays):
-        <pre>   <code>play guitar1.wav chorus 0.5 0.9 50 0.4 0.25 2 -t \
-         60 0.32 0.4 2.3 -t 40 0.3 0.3 1.3 -s</code></pre>
+        <pre>   <code>play guitar1.wav chorus 0.5 0.9 50 0.4 0.25 2 -t \</code>
+         <code>60 0.32 0.4 2.3 -t 40 0.3 0.3 1.3 -s</code></pre>
       <dt><strong>compand</strong> <em>attack1</em><strong>,</strong><em>decay1</em>{<strong>,</strong><em>attack2</em><strong>,</strong><em>decay2</em>}
       <dd>
         <p>[<em>soft-knee-dB</em><strong>:</strong>]<em>in-dB1</em>[<strong>,</strong><em>out-dB1</em>]{<strong>,</strong><em>in-dB2</em><strong>,</strong><em>out-dB2</em>}<br>
@@ -783,8 +783,8 @@
             <td class="center">*
         </table>
         <p>An alternative approach to removing a DC offset (albeit with a short delay) is to use the <strong>highpass</strong> filter effect at a frequency of say 10Hz, as illustrated in the following example:
-        <pre>   <code>sox -n dc.wav synth 5 sin %0 50
-   sox dc.wav fixed.wav highpass 10</code></pre>
+        <pre>   <code>sox -n dc.wav synth 5 sin %0 50</code>
+   <code>sox dc.wav fixed.wav highpass 10</code></pre>
       <dt><strong>deemph</strong>
       <dd>
         <p>Apply Compact Disc (IEC 60908) de-emphasis (a treble attenuation shelving filter).
@@ -801,12 +801,12 @@
       <dt><strong>delay</strong> {<em>position(=)</em>}
       <dd>
         <p>Delay one or more audio channels such that they start at the given <em>position</em>. For example, <strong>delay 1.5 +1 3000s</strong> delays the first channel by 1.5 seconds, the second channel by 2.5 seconds (one second more than the previous channel), the third channel by 3000 samples, and leaves any other channels that may be present un-delayed. The following (one long) command plays a chime sound:
-        <pre>   <code>play -n synth -j 3 sin %3 sin %-2 sin %-5 sin %-9 \
-        sin %-14 sin %-21 fade h .01 2 1.5 delay \
-        1.3 1 .76 .54 .27 remix - fade h 0 2.7 2.5 norm -1</code></pre>
+        <pre>   <code>play -n synth -j 3 sin %3 sin %-2 sin %-5 sin %-9 \</code>
+        <code>sin %-14 sin %-21 fade h .01 2 1.5 delay \</code>
+        <code>1.3 1 .76 .54 .27 remix - fade h 0 2.7 2.5 norm -1</code></pre>
         <p>and this plays a guitar chord:
-        <pre>   <code>play -n synth pl G2 pl B2 pl D3 pl G3 pl D4 pl G4 \
-        delay 0 .05 .1 .15 .2 .25 remix - fade 0 4 .1 norm -1</code></pre>
+        <pre>   <code>play -n synth pl G2 pl B2 pl D3 pl G3 pl D4 pl G4 \</code>
+        <code>delay 0 .05 .1 .15 .2 .25 remix - fade 0 4 .1 norm -1</code></pre>
       <dt><strong>dither</strong> [<strong>-S</strong>|<strong>-s</strong>|<strong>-f</strong> <em>filter</em>] [<strong>-a</strong>] [<strong>-p</strong> <em>precision</em>]
       <dd>
         <p>Apply dithering to the audio. Dithering deliberately adds a small amount of noise to the signal in order to mask audible quantization effects that can occur if the output sample size is less than 24 bits. &nbsp;With no options, this effect will add triangular (TPDF) white noise. &nbsp;Noise-shaping (only for certain sample rates) can be selected with <strong>-s</strong>. With the <strong>-f</strong> option, it is possible to select a particular noise-shaping filter from the following list: lipshitz, f-weighted, modified-e-weighted, improved-e-weighted, gesemann, shibata, low-shibata, high-shibata. &nbsp;Note that most filter types are available only with 44100Hz sample rate. &nbsp;The filter types are distinguished by the following properties: audibility of noise, level of (inaudible, but in some circumstances, otherwise problematic) shaped high frequency noise, and processing speed.<br>
@@ -868,13 +868,13 @@
         <pre>   <code>sox infile outfile fir 0.0195 -0.082 0.234 0.891 -0.145 0.043</code></pre>
         <pre>   <code>sox infile outfile fir coefs.txt</code></pre>
         <p>with coefs.txt containing
-        <pre>   <code># HP filter
-   # freq=10000
-     1.2311233052619888e-01
-    -4.4777096106211783e-01
-     5.1031563346705155e-01
-    -6.6502926320995331e-02
-   ...</code></pre>
+        <pre>   <code># HP filter</code>
+   <code># freq=10000</code>
+     <code>1.2311233052619888e-01</code>
+    <code>-4.4777096106211783e-01</code>
+     <code>5.1031563346705155e-01</code>
+    <code>-6.6502926320995331e-02</code>
+   <code>...</code></pre>
         <p>This effect supports the <strong>--plot</strong> global option.
       <dt><strong>flanger</strong> [<em>delay depth regen width speed shape phase interp</em>]
       <dd>
@@ -982,14 +982,14 @@
         [<em>gain</em> [<em>initial-volume-dB</em> [<em>delay</em>]]]" {<em>crossover-freq</em>[<strong>k</strong>] "attack1,..."}
         <p>The multi-band compander is similar to the single-band compander but the audio is first divided into bands using Linkwitz-Riley cross-over filters and a separately specifiable compander run on each band. &nbsp;See the <strong>compand</strong> effect for the definition of its parameters. &nbsp;Compand parameters are specified between double quotes and the crossover frequency for that band is given by <em>crossover-freq</em>; these can be repeated to create multiple bands.
         <p>For example, the following (one long) command shows how multi-band companding is typically used in FM radio:
-        <pre>   <code>play track1.wav gain -3 sinc 8000- 29 100 mcompand \
-        "0.005,0.1 -47,-40,-34,-34,-17,-33" 100 \
-        "0.003,0.05 -47,-40,-34,-34,-17,-33" 400 \
-        "0.000625,0.0125 -47,-40,-34,-34,-15,-33" 1600 \
-        "0.0001,0.025 -47,-40,-34,-34,-31,-31,-0,-30" 6400 \
-        "0,0.025 -38,-31,-28,-28,-0,-25" \
-        gain 15 highpass 22 highpass 22 sinc -n 255 -b 16 -17500 \
-        gain 9 lowpass -1 17801</code></pre>
+        <pre>   <code>play track1.wav gain -3 sinc 8000- 29 100 mcompand \</code>
+        <code>"0.005,0.1 -47,-40,-34,-34,-17,-33" 100 \</code>
+        <code>"0.003,0.05 -47,-40,-34,-34,-17,-33" 400 \</code>
+        <code>"0.000625,0.0125 -47,-40,-34,-34,-15,-33" 1600 \</code>
+        <code>"0.0001,0.025 -47,-40,-34,-34,-31,-31,-0,-30" 6400 \</code>
+        <code>"0,0.025 -38,-31,-28,-28,-0,-25" \</code>
+        <code>gain 15 highpass 22 highpass 22 sinc -n 255 -b 16 -17500 \</code>
+        <code>gain 9 lowpass -1 17801</code></pre>
         <p>The audio file is played with a simulated FM radio sound (or broadcast signal condition if the lowpass filter at the end is skipped). Note that the pipeline is set up with US-style 75us pre-emphasis.
         <p>See also <strong>compand</strong> for a single-band companding effect.
       <dt><strong>noiseprof</strong> [<em>profile-file</em>]
@@ -1078,8 +1078,8 @@
         <p>where <em>Band-width</em> is the percentage of the audio frequency band that is preserved and <em>Rej dB</em> is the level of noise rejection. &nbsp;Increasing levels of resampling quality come at the expense of increasing amounts of time to process the audio. &nbsp;If no quality option is given, the quality level used is `high' (but see `Playing & Recording Audio' above regarding playback).
         <p>The `quick' algorithm uses cubic interpolation; all others use band-limited interpolation. &nbsp;By default, all algorithms have a `linear' phase response; for `medium', `high' and `very high', the phase response is configurable (see below).
         <p>The <strong>rate</strong> effect is invoked automatically if SoX's <strong>-r</strong> option specifies a rate that is different to that of the input file(s). &nbsp;Alternatively, if this effect is given explicitly, then SoX's <strong>-r</strong> option need not be given. &nbsp;For example, the following two commands are equivalent:
-        <pre>   <code>sox input.wav -r 48k output.wav bass -b 24
-   sox input.wav        output.wav bass -b 24 rate 48k</code></pre>
+        <pre>   <code>sox input.wav -r 48k output.wav bass -b 24</code>
+   <code>sox input.wav        output.wav bass -b 24 rate 48k</code></pre>
         <p>though the second command is more flexible as it allows <strong>rate</strong> options to be given, and allows the effects to be ordered arbitrarily.
         <table class="tbl center-table">
           <tr>
@@ -1186,14 +1186,14 @@
             <td class="center">*
         </table>
         <p>One use of the <strong>remix</strong> effect is to split an audio file into a set of files, each containing one of the constituent channels (in order to perform subsequent processing on individual audio channels). &nbsp;Where more than a few channels are involved, a script such as the following (Bourne shell script) is useful:
-        <pre><code>#!/bin/sh
-chans=`soxi -c "$1"`
-while [ $chans -ge 1 ]; do
-   chans0=`printf %02i $chans`   # 2 digits hence up to 99 chans
-   out=`echo "$1"|sed "s/\(.*\)\.\(.*\)/\1-$chans0.\2/"`
-   sox "$1" "$out" remix $chans
-   chans=`expr $chans - 1`
-done</code></pre>
+        <pre><code>#!/bin/sh</code>
+<code>chans=`soxi -c "$1"`</code>
+<code>while [ $chans -ge 1 ]; do</code>
+   <code>chans0=`printf %02i $chans`   # 2 digits hence up to 99 chans</code>
+   <code>out=`echo "$1"|sed "s/\(.*\)\.\(.*\)/\1-$chans0.\2/"`</code>
+   <code>sox "$1" "$out" remix $chans</code>
+   <code>chans=`expr $chans - 1`</code>
+<code>done</code></pre>
         <p>If a file <em>input.wav</em> containing six audio channels were given, the script would produce six output files: <em>input-01.wav</em>, <em>input-02.wav</em>, ..., <em>input-06.wav</em>.
         <p>See also the <strong>swap</strong> effect.
       <dt><strong>repeat</strong> [<em>count</em>(1)|<strong>-</strong>]
@@ -1231,14 +1231,14 @@ done</code></pre>
         <p><em>duration</em> is a time specification with the peculiarity that a bare number is interpreted as a sample count, not as a number of seconds. For specifying seconds, either use the <strong>t</strong> suffix (as in `2t') or specify minutes, too (as in `0:02').
         <p><em>threshold</em> numbers may be suffixed with <strong>d</strong> to indicate the value is in decibels, or <strong>%</strong> to indicate a percentage of maximum value of the sample value (<strong>0%</strong> specifies pure digital silence).
         <p>The following example shows how this effect can be used to start a recording that does not contain the delay at the start which usually occurs between `pressing the record button' and the start of the performance:
-        <pre>   <code>rec <em>parameters filename other-effects</em> silence 1 5 2%</code></pre>
+        <pre>   <code>rec</code> <em>parameters filename other-effects</em> silence 1 5 2%</pre>
       <dt><strong>sinc</strong> [<strong>-a</strong> <em>att</em>|<strong>-b</strong> <em>beta</em>] [<strong>-p</strong> <em>phase</em>|<strong>-M</strong>|<strong>-I</strong>|<strong>-L</strong>] [<strong>-t</strong> <em>tbw</em>|<strong>-n</strong> <em>taps</em>] [<em>freqHP</em>][<strong>-</strong><em>freqLP</em> [<strong>-t</strong> tbw|<strong>-n</strong> taps]]
       <dd>
         <p>Apply a sinc kaiser-windowed low-pass, high-pass, band-pass, or band-reject filter to the signal. The <em>freqHP</em> and <em>freqLP</em> parameters give the frequencies of the 6dB points of a high-pass and low-pass filter that may be invoked individually, or together. &nbsp;If both are given, then <em>freqHP</em> less than <em>freqLP</em> creates a band-pass filter, <em>freqHP</em> greater than <em>freqLP</em> creates a band-reject filter. For example, the invocations
-        <pre>   <code>sinc 3k
-   sinc -4k
-   sinc 3k-4k
-   sinc 4k-3k</code></pre>
+        <pre>   <code>sinc 3k</code>
+   <code>sinc -4k</code>
+   <code>sinc 3k-4k</code>
+   <code>sinc 4k-3k</code></pre>
         <p>create a high-pass, low-pass, band-pass, and band-reject filter respectively.
         <p>The default stop-band attenuation of 120dB can be overridden with <strong>-a</strong>; alternatively, the kaiser-window `beta' parameter can be given directly with <strong>-b</strong>.
         <p>The default transition band-width of 5% of the total band can be overridden with <strong>-t</strong> (and <em>tbw</em> in Hertz); alternatively, the number of filter taps can be given directly with <strong>-n</strong>.
@@ -1381,20 +1381,19 @@ done</code></pre>
         </table>
         <p>To perform a splice, first use the <strong>trim</strong> effect to select the audio sections to be joined together. &nbsp;As when performing a tape splice, the end of the section to be spliced onto should be trimmed with a small <em>excess</em> (default 0.005 seconds) of audio after the ideal joining point. &nbsp;The beginning of the audio section to splice on should be trimmed with the same <em>excess</em> (before the ideal joining point), plus an additional <em>leeway</em> (default 0.005 seconds). &nbsp;Any time specification may be used for these parameters. &nbsp;SoX should then be invoked with the two audio sections as input files and the <strong>splice</strong> effect given with the position at which to perform the splice - this is length of the first audio section (including the excess).
         <p>The following diagram uses the tape analogy to illustrate the splice operation. &nbsp;The effect simulates the diagonal cuts and joins the two pieces:
-        <pre>      <code>length1   excess
-    -----------&gt;&lt;---&gt;
-    _________   :   :  _________________
-             \  :   : :\     `         
-              \ :   : : \     `        
-               \:   : :  \     `       
-                *   : :   * - - *      
-                 \  : :   :\     `     
-                  \ : :   : \     `    
-    _______________\: :   :  \_____`____
-                      :   :   :     :
-                      &lt;---&gt;   &lt;-----&gt;
-                      excess  leeway
-</code></pre>
+        <pre>      <code>length1   excess</code>
+    <code>-----------&gt;&lt;---&gt;</code>
+    <code>_________   :   :  _________________</code>
+             <code>\  :   : :\     `</code>         
+              <code>\ :   : : \     `</code>        
+               <code>\:   : :  \     `</code>       
+                <code>*   : :   * - - *</code>      
+                 <code>\  : :   :\     `</code>     
+                  <code>\ : :   : \     `</code>    
+    <code>_______________\: :   :  \_____`____</code>
+                      <code>:   :   :     :</code>
+                      <code>&lt;---&gt;   &lt;-----&gt;</code>
+                      <code>excess  leeway</code></pre>
         <p>where * indicates the joining points.
         <p>For example, a long song begins with two verses which start (as determined e.g. by using the <strong>play</strong> command with the <strong>trim</strong> (<em>start</em>) effect) at times 0:30.125 and 1:03.432. The following commands cut out the first verse:
         <pre>   <code>sox too-long.wav part1.wav trim 0 30.130</code></pre>
@@ -1406,18 +1405,18 @@ done</code></pre>
         <pre>   <code>play "|sox -n -p synth 1 sin %1" "|sox -n -p synth 1 sin %3"</code></pre>
         <p>generates and plays two notes, but there is a nasty click at the transition; the click can be removed by splicing instead of concatenating the audio, i.e. by appending <strong>splice 1</strong> to the command. (Clicks at the beginning and end of the audio can be removed by <em>preceding</em> the splice effect with <strong>fade q .01 2 .01</strong>).
         <p>Provided your arithmetic is good enough, multiple splices can be performed with a single <strong>splice</strong> invocation. &nbsp;For example:
-        <pre><code>#!/bin/sh
-# Audio Copy and Paste Over
-# acpo infile copy-start copy-stop paste-over-start outfile
-# No chained time specifications allowed for the parameters
-# (i.e. such that contain +/-).
-e=0.005                      # Using default excess
-l=$e                         # and leeway.
-sox "$1" piece.wav trim $2-$e-$l =$3+$e
-sox "$1" part1.wav trim 0 $4+$e
-sox "$1" part2.wav trim $4+$3-$2-$e-$l
-sox part1.wav piece.wav part2.wav "$5" \
-   splice $4+$e +$3-$2+$e+$l+$e</code></pre>
+        <pre><code>#!/bin/sh</code>
+<code># Audio Copy and Paste Over</code>
+<code># acpo infile copy-start copy-stop paste-over-start outfile</code>
+<code># No chained time specifications allowed for the parameters</code>
+<code># (i.e. such that contain +/-).</code>
+<code>e=0.005                      # Using default excess</code>
+<code>l=$e                         # and leeway.</code>
+<code>sox "$1" piece.wav trim $2-$e-$l =$3+$e</code>
+<code>sox "$1" part1.wav trim 0 $4+$e</code>
+<code>sox "$1" part2.wav trim $4+$3-$2-$e-$l</code>
+<code>sox part1.wav piece.wav part2.wav "$5" \</code>
+   <code>splice $4+$e +$3-$2+$e+$l+$e</code></pre>
         <p>In the above Bourne shell script, two splices are used to `copy and paste' audio.
         <table class="tbl center-table">
           <tr>
@@ -1431,7 +1430,7 @@ sox part1.wav piece.wav part2.wav "$5" \
       <dt><strong>stat</strong> [<strong>-s</strong> <em>scale</em>] [<strong>-rms</strong>] [<strong>-freq</strong>] [<strong>-v</strong>] [<strong>-d</strong>]
       <dd>
         <p>Display time and frequency domain statistical information about the audio. Audio is passed unmodified through the SoX processing chain.
-        <p>The information is output to the `standard error' (stderr) stream and is calculated, where <em>n</em> is the duration of the audio in samples, <em>c</em> is the number of audio channels, <em>r</em> is the audio sample rate, and <em>x<sub>k</sub></em> represents the PCM value (in the range -1 to +1 by default) of each successive sample in the audio, as follows:
+        <p>The information is output to the `standard error' (stderr) stream and is calculated, where <em>n</em> is the duration of the audio in samples, <em>c</em> is the number of audio channels, <em>r</em> is the audio sample rate, and <em>x</em><sub><em>k</em></sub>represents the PCM value (in the range -1 to +1 by default) of each successive sample in the audio, as follows:
         <table class="tbl center-table">
           <tr>
             <td class="italic">Samples read
@@ -1447,43 +1446,43 @@ sox part1.wav piece.wav part2.wav "$5" \
             <td>See -s below.
           <tr>
             <td class="italic">Maximum amplitude
-            <td>max(<em>x</em><sub>k</sub>)
+            <td>max(<em>x</em><sub><em>k</em></sub>)
             <td>The maximum sample value in the audio; usually this will be a positive number.
           <tr>
             <td class="italic">Minimum amplitude
-            <td>min(<em>x</em><sub>k</sub>)
+            <td>min(<em>x</em><sub><em>k</em></sub>)
             <td>The minimum sample value in the audio; usually this will be a negative number.
           <tr>
             <td class="italic">Midline amplitude
-            <td>½min(<em>x</em><sub>k</sub>)+½max(<em>x</em><sub>k</sub>)
+            <td>½min(<em>x</em><sub><em>k</em></sub>)+½max(<em>x</em><sub><em>k</em></sub>)
             <td>
           <tr>
             <td class="italic">Mean norm
-            <td>¹/nΣ│<em>x</em><sub>k</sub>│
+            <td>¹/nΣ│<em>x</em><sub><em>k</em></sub>│
             <td>The average of the absolute value of each sample in the audio.
           <tr>
             <td class="italic">Mean amplitude
-            <td>¹/nΣ<em>x</em><sub>k</sub>
+            <td>¹/nΣ<em>x</em><sub><em>k</em></sub>
             <td>The average of each sample in the audio. &nbsp;If this figure is non-zero, then it indicates the presence of a D.C. offset (which could be removed using the <strong>dcshift</strong> effect).
           <tr>
             <td class="italic">RMS amplitude
-            <td>√(¹/nΣ<em>x</em><sub>k</sub>²)
+            <td>√(¹/nΣ<em>x</em><sub><em>k</em></sub>²)
             <td>The level of a D.C. signal that would have the same power as the audio's average power.
           <tr>
             <td class="italic">Maximum delta
-            <td>max(│<em>x</em><sub>k</sub>-<em>x</em><sub>k-1</sub>│)
+            <td>max(│<em>x</em><sub><em>k</em></sub>-<em>x</em><sub><em>k-1</em></sub>│)
             <td>
           <tr>
             <td class="italic">Minimum delta
-            <td>min(│<em>x</em><sub>k</sub>-<em>x</em><sub>k-1</sub>│)
+            <td>min(│<em>x</em><sub><em>k</em></sub>-<em>x</em><sub><em>k-1</em></sub>│)
             <td>
           <tr>
             <td class="italic">Mean delta
-            <td>¹/n-1Σ│<em>x</em><sub>k</sub>-<em>x</em><sub>k-1</sub>│
+            <td>¹/n-1Σ│<em>x</em><sub><em>k</em></sub>-<em>x</em><sub><em>k-1</em></sub>│
             <td>
           <tr>
             <td class="italic">RMS delta
-            <td>√(¹/n-1Σ(<em>x</em><sub>k</sub>-<em>x</em><sub>k-1</sub>)²)
+            <td>√(¹/n-1Σ(<em>x</em><sub><em>k</em></sub>-<em>x</em><sub><em>k-1</em></sub>)²)
             <td>
           <tr>
             <td class="italic">Rough frequency
@@ -1571,8 +1570,8 @@ sox part1.wav piece.wav part2.wav "$5" \
         <p>Frequencies can also be given in `scientific' note notation, or, by prefixing a `%' character, as a number of semitones relative to `middle A' (440&nbsp;Hz). &nbsp;For example, the following could be used to help tune a guitar's low `E' string:
         <pre>   <code>play -n synth 4 pluck %-29</code></pre>
         <p>or with a (Bourne shell) loop, the whole guitar:
-        <pre>   <code>for n in E2 A2 D3 G3 B3 E4; do
-        play -n synth 4 pluck $n repeat 2; done</code></pre>
+        <pre>   <code>for n in E2 A2 D3 G3 B3 E4; do</code>
+        <code>play -n synth 4 pluck $n repeat 2; done</code></pre>
         <p>See the <strong>delay</strong> effect (above) and the reference to `SoX scripting examples' (below) for more <strong>synth</strong> examples.
         <p><strong>N.B.</strong> This effect generates audio at maximum volume (0dBFS), which means that there is a high chance of clipping when using the audio subsequently, so in many cases, you will want to follow this effect with the <strong>gain</strong> effect to prevent this from happening. (See also <strong>Clipping</strong> above.) Note that, by default, the <strong>synth</strong> effect incorporates the functionality of <strong>gain -h</strong> (see the <strong>gain</strong> effect for details); <strong>synth</strong>'s <strong>-n</strong> option may be given to disable this behaviour.
         <p>A detailed description of each <strong>synth</strong> parameter follows:

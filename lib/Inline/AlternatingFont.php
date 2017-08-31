@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_AlternatingFont implements Block_Template
 {
@@ -13,9 +13,8 @@ class Inline_AlternatingFont implements Block_Template
     {
 
         array_shift($lines);
-
         $parentNode = Blocks::getParentForText($parentNode);
-
+        $man = Man::instance();
         Block_Text::addSpace($parentNode);
 
         foreach ($request['arguments'] as $bi => $bit) {
@@ -23,23 +22,10 @@ class Inline_AlternatingFont implements Block_Template
             if (!isset($request['request'][$requestCharIndex])) {
                 throw new Exception($lines[0] . ' command ' . $request['request'] . ' has nothing at index ' . $requestCharIndex);
             }
-            switch ($request['request'][$requestCharIndex]) {
-                case 'R':
-                    TextContent::interpretAndAppendText($parentNode, $bit);
-                    break;
-                case 'B':
-                    /* @var DomElement $strongNode */
-                    $strongNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('strong'));
-                    TextContent::interpretAndAppendText($strongNode, $bit);
-                    break;
-                case 'I':
-                    /* @var DomElement $emNode */
-                    $emNode = $parentNode->appendChild($parentNode->ownerDocument->createElement('em'));
-                    TextContent::interpretAndAppendText($emNode, $bit);
-                    break;
-                default:
-                    throw new Exception($lines[0] . ' command ' . $request['request'] . ' unexpected character at index ' . $requestCharIndex);
-            }
+            $numFonts = $man->pushFont($request['request'][$requestCharIndex]);
+            TextContent::interpretAndAppendText($parentNode, $bit);
+//            $man->popFont($numFonts - 1);
+            $man->resetFonts();
         }
 
         return $parentNode;

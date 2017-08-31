@@ -21,11 +21,17 @@ class Inline_ft implements Block_Template
     {
 
         array_shift($lines);
+        $man = Man::instance();
 
         // Return to previous font. Same as \f[] or \fP.
-        if (count($request['arguments']) === 0) {
-            return self::getNonFontParent($parentNode);
+        if (count($request['arguments']) === 0 || $request['arguments'][0] === 'P') {
+            $man->popFont();
+        } else {
+            $man->pushFont($request['arguments'][0]);
         }
+
+        return null;
+        /*
 
         $fontAbbreviation = $request['arguments'][0];
 
@@ -71,10 +77,11 @@ class Inline_ft implements Block_Template
                 $node->setAttribute('class', 'font-' . $fontAbbreviation);
         }
 
-        /* @var DomElement $node */
         $node = $parentNode->appendChild($node);
 
         return $node;
+
+        */
 
     }
 

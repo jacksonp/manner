@@ -21,18 +21,18 @@
   <p>Errors (typically a return value of -1) have the errno symbol and error string appended.
   <pre><code>open("/foo/bar", O_RDONLY) = -1 ENOENT (No such file or directory)</code></pre>
   <p>Signals are printed as signal symbol and decoded siginfo structure. An excerpt from stracing and interrupting the command "sleep 666" is:
-  <pre><code>sigsuspend([] &lt;unfinished ...&gt;
---- SIGINT {si_signo=SIGINT, si_code=SI_USER, si_pid=...} ---
-+++ killed by SIGINT +++</code></pre>
+  <pre><code>sigsuspend([] &lt;unfinished ...&gt;</code>
+<code>--- SIGINT {si_signo=SIGINT, si_code=SI_USER, si_pid=...} ---</code>
+<code>+++ killed by SIGINT +++</code></pre>
   <p>If a system call is being executed and meanwhile another one is being called from a different thread/process then <strong>strace</strong> will try to preserve the order of those events and mark the ongoing call as being <em>unfinished</em>. When the call returns it will be marked as <em>resumed</em>.
-  <pre><code>[pid 28772] select(4, [3], NULL, NULL, NULL &lt;unfinished ...&gt;
-[pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0
-[pid 28772] &lt;... select resumed&gt; )      = 1 (in [3])</code></pre>
+  <pre><code>[pid 28772] select(4, [3], NULL, NULL, NULL &lt;unfinished ...&gt;</code>
+<code>[pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0</code>
+<code>[pid 28772] &lt;... select resumed&gt; )      = 1 (in [3])</code></pre>
   <p>Interruption of a (restartable) system call by a signal delivery is processed differently as kernel terminates the system call and also arranges its immediate reexecution after the signal handler completes.
-  <pre><code>read(0, 0x7ffff72cf5cf, 1)              = ? ERESTARTSYS (To be restarted)
---- SIGALRM ... ---
-rt_sigreturn(0xe)                       = 0
-read(0, "", 1)                          = 0</code></pre>
+  <pre><code>read(0, 0x7ffff72cf5cf, 1)              = ? ERESTARTSYS (To be restarted)</code>
+<code>--- SIGALRM ... ---</code>
+<code>rt_sigreturn(0xe)                       = 0</code>
+<code>read(0, "", 1)                          = 0</code></pre>
   <p>Arguments are printed in symbolic form with a passion. This example shows the shell performing "&gt;&gt;xyzzy" output redirection:
   <pre><code>open("xyzzy", O_WRONLY|O_APPEND|O_CREAT, 0666) = 3</code></pre>
   <p>Here the third argument of open is decoded by breaking down the flag argument into its three bitwise-OR constituents and printing the mode value in octal by tradition. &nbsp;Where traditional or native usage differs from ANSI or POSIX, the latter forms are preferred. In some cases, <strong>strace</strong> output has proven to be more readable than the source.

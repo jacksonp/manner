@@ -114,32 +114,32 @@
   <h2>EXAMPLES</h2>
   <p>For each PCP utility, there is a sample <strong>pmlogger</strong> configuration file that could be used to create an archive log suitable for replaying with that tool (i.e. includes all of the performance metrics used by the tool). For a tool named <em>foo</em> this configuration file is located in <em>$PCP_VAR_DIR/config/pmlogger/config.foo</em>.
   <p>The following is a simple default configuration file for a primary <strong>pmlogger</strong> instance, and demonstrates most of the capabilities of the configuration specification language.
-  <pre><code>log mandatory on once { hinv.ncpu hinv.ndisk }
-log mandatory on every 10 minutes {
-    disk.all.write
-    disk.all.read
-    network.interface.in.packets [ "et0" ]
-    network.interface.out.packets [ "et0" ]
-    nfs.server.reqs [ "lookup" "getattr" "read" "write" ]
-}
+  <pre><code>log mandatory on once { hinv.ncpu hinv.ndisk }</code>
+<code>log mandatory on every 10 minutes {</code>
+    <code>disk.all.write</code>
+    <code>disk.all.read</code>
+    <code>network.interface.in.packets [ "et0" ]</code>
+    <code>network.interface.out.packets [ "et0" ]</code>
+    <code>nfs.server.reqs [ "lookup" "getattr" "read" "write" ]</code>
+<code>}</code>
 
-log advisory on every 30 minutes {
-    environ.temp
-    pmcd.pdu_in.total
-    pmcd.pdu_out.total
-}
+<code>log advisory on every 30 minutes {</code>
+    <code>environ.temp</code>
+    <code>pmcd.pdu_in.total</code>
+    <code>pmcd.pdu_out.total</code>
+<code>}</code>
 
-%include "macros.default"
+<code>%include "macros.default"</code>
 
-%ifdef %disk_detail
-log mandatory on %disk_detail_freq {
-    disk.dev
-}
-%endif
+<code>%ifdef %disk_detail</code>
+<code>log mandatory on %disk_detail_freq {</code>
+    <code>disk.dev</code>
+<code>}</code>
+<code>%endif</code>
 
-[access]
-disallow * : all except enquire;
-allow localhost : mandatory, advisory;</code></pre>
+<code>[access]</code>
+<code>disallow * : all except enquire;</code>
+<code>allow localhost : mandatory, advisory;</code></pre>
 </section>
 <section>
   <h2>FILES</h2>
@@ -170,7 +170,7 @@ allow localhost : mandatory, advisory;</code></pre>
       <p>additional environment variables that will be set when the primary <strong>pmlogger</strong> instance executes. Only settings of the form "PMLOGGER_VARIABLE=value" will be honoured.
     <dt><em>./pmlogger.log</em>
     <dd>
-      <p>(or <strong>$PCP_LOG_DIR/pmlogger/<em>hostname</em>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
+      <p>(or <strong>$PCP_LOG_DIR/pmlogger/</strong><em>hostname</em><strong>/pmlogger.log</strong> when started automatically by either <strong>$PCP_RC_DIR/pmlogger</strong> or one of the <strong>pmlogger</strong>(1) monitoring scripts such as <strong>pmlogger_check</strong>(1))<br>
       all messages and diagnostics are directed here
   </dl>
 </section>

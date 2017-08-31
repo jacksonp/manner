@@ -86,8 +86,8 @@
     <dt><strong>--load</strong> <em>lib</em>
     <dd>
       <p>Load a shared library <em>lib</em>. This searches for the library using the <strong>AWKLIBPATH</strong> environment variable. &nbsp;If the initial search fails, another attempt will be made after appending the default shared library suffix for the platform. The library initialization routine is expected to be named <strong>dl_load()</strong>.
-    <dt><strong>-L</strong> [<strong><em>value</em></strong>]
-    <dt><strong>--lint</strong>[<strong>=<em>value</em></strong>]
+    <dt><strong>-L</strong> [<em>value</em>]
+    <dt><strong>--lint</strong>[<strong>=</strong><em>value</em>]
     <dd>
       <p>Provide warnings about constructs that are dubious or non-portable to other AWK implementations. With an optional argument of <strong>fatal</strong>, lint warnings become fatal errors. This may be drastic, but its use will certainly encourage the development of cleaner AWK programs. With an optional argument of <strong>invalid</strong>, only warnings about things that are actually invalid are issued. (This is not fully implemented yet.)
     <dt><strong>-M</strong>
@@ -191,8 +191,8 @@
     <p>Similarly, if the <strong>FPAT</strong> variable is set to a string representing a regular expression, each field is made up of text that matches that regular expression. In this case, the regular expression describes the fields themselves, instead of the text that separates the fields. Assigning a new value to <strong>FS</strong> or <strong>FIELDWIDTHS</strong> overrides the use of <strong>FPAT</strong>.
     <p>Each field in the input record may be referenced by its position: <strong>$1</strong>, <strong>$2</strong>, and so on. <strong>$0</strong> is the whole record. Fields need not be referenced by constants:
     <div class="indent-7">
-      <p><strong>n = 5<br>
-      print $n</strong>
+      <p><strong>n = 5</strong><br>
+      <strong>print $n</strong>
     </div>
     <p>prints the fifth field in the input record.
     <p>The variable <strong>NF</strong> is set to the total number of fields in the input record.
@@ -397,9 +397,9 @@
       <dt><strong>SYMTAB</strong>
       <dd>
         <p>An array whose indices are the names of all currently defined global variables and arrays in the program. &nbsp;The array may be used for indirect access to read or write the value of a variable:
-        <pre>foo = 5
-SYMTAB["foo"] = 4
-print foo    # prints 4</pre>
+        <pre><strong>foo = 5</strong>
+<strong>SYMTAB["foo"] = 4</strong>
+<strong>print foo    # prints 4</strong></pre>
         <p>The <strong>isarray()</strong> function may be used to test if an element in <strong>SYMTAB</strong> is an array. You may not use the <strong>delete</strong> statement with the <strong>SYMTAB</strong> array.
       <dt><strong>TEXTDOMAIN</strong>
       <dd>
@@ -410,20 +410,20 @@ print foo    # prints 4</pre>
     <h3>Arrays</h3>
     <p>Arrays are subscripted with an expression between square brackets (<strong>[</strong> and <strong>]</strong>). If the expression is an expression list (<em>expr</em>, <em>expr</em> ...) then the array subscript is a string consisting of the concatenation of the (string) value of each expression, separated by the value of the <strong>SUBSEP</strong> variable. This facility is used to simulate multiply dimensioned arrays. &nbsp;For example:
     <div class="indent-7">
-      <p><strong>i = "A"; j = "B"; k = "C"<br>
-      x[i, j, k] = "hello, world\n"</strong>
+      <p><strong>i = "A"; j = "B"; k = "C"</strong><br>
+      <strong>x[i, j, k] = "hello, world\n"</strong>
     </div>
     <p>assigns the string <strong>"hello, world\n"</strong> to the element of the array <strong>x</strong> which is indexed by the string <strong>"A\034B\034C"</strong>. &nbsp;All arrays in AWK are associative, i.e., indexed by string values.
     <p>The special operator <strong>in</strong> may be used to test if an array has an index consisting of a particular value:
-    <pre class="indent-7">if (val in array)
-        print array[val]</pre>
+    <pre class="indent-7"><strong>if (val in array)</strong>
+        <strong>print array[val]</strong></pre>
     <p>If the array has multiple subscripts, use <strong>(i, j) in array</strong>.
     <p>The <strong>in</strong> construct may also be used in a <strong>for</strong> loop to iterate over all the elements of an array. However, the <strong>(i, j) in array</strong> construct only works in tests, not in <strong>for</strong> loops.
     <p>An element may be deleted from an array using the <strong>delete</strong> statement. The <strong>delete</strong> statement may also be used to delete the entire contents of an array, just by specifying the array name without a subscript.
     <p><em>gawk</em> supports true multidimensional arrays. It does not require that such arrays be ``rectangular'' as in C or C++. For example:
-    <pre class="indent-7">a[1] = 5
-a[2][1] = 6
-a[2][2] = 7</pre>
+    <pre class="indent-7"><strong>a[1] = 5</strong>
+<strong>a[2][1] = 6</strong>
+<strong>a[2][2] = 7</strong></pre>
     <p><strong>NOTE</strong>: You may need to tell <em>gawk</em> that an array element is really a subarray in order to use it where <em>gawk</em> expects an array (such as in the second argument to <strong>split()</strong>). You can do this by creating an element in the subarray and then deleting it with the <strong>delete</strong> statement.
   </section>
   <section>
@@ -432,9 +432,9 @@ a[2][2] = 7</pre>
     <p>To force a variable to be treated as a number, add 0 to it; to force it to be treated as a string, concatenate it with the null string.
     <p>Uninitialized variables have the numeric value 0 and the string value "" (the null, or empty, string).
     <p>When a string must be converted to a number, the conversion is accomplished using <em>strtod</em>(3). A number is converted to a string by using the value of <strong>CONVFMT</strong> as a format string for <em>sprintf</em>(3), with the numeric value of the variable as the argument. However, even though all numbers in AWK are floating-point, integral values are <em>always</em> converted as integers. &nbsp;Thus, given
-    <pre class="indent-7">CONVFMT = "%2.2f"
-a = 12
-b = a ""</pre>
+    <pre class="indent-7"><strong>CONVFMT = "%2.2f"</strong>
+<strong>a = 12</strong>
+<strong>b = a ""</strong></pre>
     <p>the variable <strong>b</strong> has a string value of <strong>"12"</strong> and not <strong>"12.00"</strong>.
     <p><strong>NOTE</strong>: When operating in POSIX mode (such as with the <strong>--posix</strong> option), beware that locale settings may interfere with the way decimal numbers are treated: the decimal separator of the numbers you are feeding to <em>gawk</em> must conform to what your locale would expect, be it a comma (,) or a period (.).
     <p><em>Gawk</em> performs comparisons as follows: If two variables are numeric, they are compared numerically. If one value is numeric and the other has a string value that is a “numeric string,” then comparisons are also done numerically. Otherwise, the numeric value is converted to a string and a string comparison is performed. Two strings are compared, of course, as strings.
@@ -740,7 +740,7 @@ b = a ""</pre>
 <strong>{</strong> <em>statements</em> <strong>}</strong>
 <strong>switch (</strong><em>expression</em><strong>) {</strong>
 <strong>case</strong> <em>value</em><strong>|</strong><em>regex</em> <strong>:</strong> <em>statement</em>
-...
+<em>...</em>
 [ <strong>default:</strong> <em>statement</em> ]
 <strong>}</strong></pre>
   </section>
@@ -809,7 +809,7 @@ b = a ""</pre>
       <dd>
         <p>Sends data to a co-process or socket. (See also the subsection <strong>Special File Names</strong>, below.)
     </dl>
-    <p>The <strong>getline</strong> command returns 1 on success, 0 on end of file, and -1 on an error. If the <em>errno</em>(3) value indicates that the I/O operation may be retried, and <strong>PROCINFO["</strong><em>input</em>", "RETRY"] is set, then -2 will be returned instead of -1, and further calls to <strong>getline</strong> may be attempted. Upon an error, <strong>ERRNO</strong> is set to a string describing the problem.
+    <p>The <strong>getline</strong> command returns 1 on success, 0 on end of file, and -1 on an error. If the <em>errno</em>(3) value indicates that the I/O operation may be retried, and <strong>PROCINFO["</strong><em>input</em><strong>", "RETRY"]</strong> is set, then -2 will be returned instead of -1, and further calls to <strong>getline</strong> may be attempted. Upon an error, <strong>ERRNO</strong> is set to a string describing the problem.
     <p><strong>NOTE</strong>: Failure in opening a two-way socket results in a non-fatal error being returned to the calling function. If using a pipe, co-process, or socket to <strong>getline</strong>, or from <strong>print</strong> or <strong>printf</strong> within a loop, you <em>must</em> use <strong>close()</strong> to create new instances of the command or socket. AWK does not automatically close pipes, sockets, or co-processes when they return EOF.
   </section>
   <section>
@@ -969,7 +969,7 @@ b = a ""</pre>
         <p>Return the number of elements in the source array <em>s</em>. The behavior is the same as that of <strong>asort()</strong>, except that the array <em>indices</em> are used for sorting, not the array values. When done, the array is indexed numerically, and the values are those of the original indices. The original values are lost; thus provide a second array if you wish to preserve the original. The purpose of the optional string <em>how</em> is the same as described in <strong>asort()</strong> above.
       <dt><strong>gensub(</strong><em>r</em><strong>,</strong> <em>s</em><strong>,</strong> <em>h</em> [<strong>,</strong> <em>t</em>]<strong>)</strong>
       <dd>
-        <p>Search the target string <em>t</em> for matches of the regular expression <em>r</em>. If <em>h</em> is a string beginning with <strong>g</strong> or <strong>G</strong>, then replace all matches of <em>r</em> with <em>s</em>. Otherwise, <em>h</em> is a number indicating which match of <em>r</em> to replace. If <em>t</em> is not supplied, use <strong>$0</strong> instead. Within the replacement text <em>s</em>, the sequence <strong>\</strong><em>n,</em> where <em>n</em> is a digit from 1 to 9, may be used to indicate just the text that matched the <em>n</em>'th parenthesized subexpression. &nbsp;The sequence <strong>\0</strong> represents the entire matched text, as does the character <strong>&</strong>. Unlike <strong>sub()</strong> and <strong>gsub()</strong>, the modified string is returned as the result of the function, and the original target string is <em>not</em> changed.
+        <p>Search the target string <em>t</em> for matches of the regular expression <em>r</em>. If <em>h</em> is a string beginning with <strong>g</strong> or <strong>G</strong>, then replace all matches of <em>r</em> with <em>s</em>. Otherwise, <em>h</em> is a number indicating which match of <em>r</em> to replace. If <em>t</em> is not supplied, use <strong>$0</strong> instead. Within the replacement text <em>s</em>, the sequence <strong>\</strong><em>n</em>, where <em>n</em> is a digit from 1 to 9, may be used to indicate just the text that matched the <em>n</em>'th parenthesized subexpression. &nbsp;The sequence <strong>\0</strong> represents the entire matched text, as does the character <strong>&</strong>. Unlike <strong>sub()</strong> and <strong>gsub()</strong>, the modified string is returned as the result of the function, and the original target string is <em>not</em> changed.
       <dt><strong>gsub(</strong><em>r</em><strong>,</strong> <em>s</em> [<strong>,</strong> <em>t</em>]<strong>)</strong>
       <dd>
         <p>For each substring matching the regular expression <em>r</em> in the string <em>t</em>, substitute the string <em>s</em>, and return the number of substitutions. If <em>t</em> is not supplied, use <strong>$0</strong>. An <strong>&</strong> in the replacement text is replaced with the text that was actually matched. Use <strong>\&</strong> to get a literal <strong>&</strong>. (This must be typed as <strong>"\\&amp;"</strong>; see <em>GAWK: Effective AWK Programming</em> for a fuller discussion of the rules for <strong>&</strong>'s and backslashes in the replacement text of <strong>sub()</strong>, <strong>gsub()</strong>, and <strong>gensub()</strong>.)
@@ -984,10 +984,10 @@ b = a ""</pre>
         <p>Return the position in <em>s</em> where the regular expression <em>r</em> occurs, or 0 if <em>r</em> is not present, and set the values of <strong>RSTART</strong> and <strong>RLENGTH</strong>. Note that the argument order is the same as for the <strong>~</strong> operator: <em>str</em> <strong>~</strong> <em>re</em>. If array <em>a</em> is provided, <em>a</em> is cleared and then elements 1 through <em>n</em> are filled with the portions of <em>s</em> that match the corresponding parenthesized subexpression in <em>r</em>. The 0'th element of <em>a</em> contains the portion of <em>s</em> matched by the entire regular expression <em>r</em>. Subscripts <strong>a[</strong><em>n</em><strong>, "start"]</strong>, and <strong>a[</strong><em>n</em><strong>, "length"]</strong> provide the starting index in the string and length respectively, of each matching substring.
       <dt><strong>patsplit(</strong><em>s</em><strong>,</strong> <em>a</em> [<strong>,</strong> <em>r</em> [<strong>,</strong> <em>seps</em>] ]<strong>)</strong>
       <dd>
-        <p>Split the string <em>s</em> into the array <em>a</em> and the separators array <em>seps</em> on the regular expression <em>r</em>, and return the number of fields. Element values are the portions of <em>s</em> that matched <em>r</em>. The value of <strong>seps[</strong><em>i</em><strong>]</strong> is the separator that appeared in front of <strong>a[</strong><em>i</em><strong>+1].</strong> If <em>r</em> is omitted, <strong>FPAT</strong> is used instead. The arrays <em>a</em> and <em>seps</em> are cleared first. Splitting behaves identically to field splitting with <strong>FPAT</strong>, described above.
+        <p>Split the string <em>s</em> into the array <em>a</em> and the separators array <em>seps</em> on the regular expression <em>r</em>, and return the number of fields. Element values are the portions of <em>s</em> that matched <em>r</em>. The value of <strong>seps[</strong><em>i</em><strong>]</strong> is the separator that appeared in front of <strong>a[</strong><em>i</em><strong>+1]</strong>. If <em>r</em> is omitted, <strong>FPAT</strong> is used instead. The arrays <em>a</em> and <em>seps</em> are cleared first. Splitting behaves identically to field splitting with <strong>FPAT</strong>, described above.
       <dt><strong>split(</strong><em>s</em><strong>,</strong> <em>a</em> [<strong>,</strong> <em>r</em> [<strong>,</strong> <em>seps</em>] ]<strong>)</strong>
       <dd>
-        <p>Split the string <em>s</em> into the array <em>a</em> and the separators array <em>seps</em> on the regular expression <em>r</em>, and return the number of fields. &nbsp;If <em>r</em> is omitted, <strong>FS</strong> is used instead. The arrays <em>a</em> and <em>seps</em> are cleared first. <strong>seps[</strong><em>i</em><strong>]</strong> is the field separator matched by <em>r</em> between <strong>a[</strong><em>i</em><strong>]</strong> and <strong>a[</strong><em>i</em><strong>+1].</strong> If <em>r</em> is a single space, then leading whitespace in <em>s</em> goes into the extra array element <strong>seps[0]</strong> and trailing whitespace goes into the extra array element <strong>seps[</strong><em>n</em><strong>],</strong> where <em>n</em> is the return value of <strong>split(</strong><em>s</em><strong>,</strong> <em>a</em><strong>,</strong> <em>r</em><strong>,</strong> <em>seps</em><strong>).</strong> Splitting behaves identically to field splitting, described above.
+        <p>Split the string <em>s</em> into the array <em>a</em> and the separators array <em>seps</em> on the regular expression <em>r</em>, and return the number of fields. &nbsp;If <em>r</em> is omitted, <strong>FS</strong> is used instead. The arrays <em>a</em> and <em>seps</em> are cleared first. <strong>seps[</strong><em>i</em><strong>]</strong> is the field separator matched by <em>r</em> between <strong>a[</strong><em>i</em><strong>]</strong> and <strong>a[</strong><em>i</em><strong>+1]</strong>. If <em>r</em> is a single space, then leading whitespace in <em>s</em> goes into the extra array element <strong>seps[0]</strong> and trailing whitespace goes into the extra array element <strong>seps[</strong><em>n</em><strong>]</strong>, where <em>n</em> is the return value of <strong>split(</strong><em>s</em><strong>,</strong> <em>a</em><strong>,</strong> <em>r</em><strong>,</strong> <em>seps</em><strong>)</strong>. Splitting behaves identically to field splitting, described above.
       <dt><strong>sprintf(</strong><em>fmt</em><strong>,</strong> <em>expr-list</em><strong>)</strong>
       <dd>
         <p>Print <em>expr-list</em> according to <em>fmt</em>, and return the resulting string.
@@ -1092,27 +1092,27 @@ b = a ""</pre>
   </div>
   <p>Functions are executed when they are called from within expressions in either patterns or actions. &nbsp;Actual parameters supplied in the function call are used to instantiate the formal parameters declared in the function. Arrays are passed by reference, other variables are passed by value.
   <p>Since functions were not originally part of the AWK language, the provision for local variables is rather clumsy: They are declared as extra parameters in the parameter list. &nbsp;The convention is to separate local variables from real parameters by extra spaces in the parameter list. &nbsp;For example:
-  <pre class="indent-7">function  f(p, q,     a, b)     # a and b are local
-{
-        ...
-}
+  <pre class="indent-7"><strong>function  f(p, q,     a, b)    # a and b are local</strong>
+<strong>{</strong>
+        <strong>...</strong>
+<strong>}</strong>
 
-/abc/   { ... ; f(1, 2) ; ... }</pre>
+<strong>/abc/   { ... ; f(1, 2) ; ... }</strong></pre>
   <p>The left parenthesis in a function call is required to immediately follow the function name, without any intervening whitespace. This avoids a syntactic ambiguity with the concatenation operator. This restriction does not apply to the built-in functions listed above.
   <p>Functions may call each other and may be recursive. Function parameters used as local variables are initialized to the null string and the number zero upon function invocation.
   <p>Use <strong>return</strong> <em>expr</em> to return a value from a function. &nbsp;The return value is undefined if no value is provided, or if the function returns by “falling off” the end.
   <p>As a <em>gawk</em> extension, functions may be called indirectly. To do this, assign the name of the function to be called, as a string, to a variable. Then use the variable as if it were the name of a function, prefixed with an <strong>@</strong> sign, like so:
-  <pre class="indent-7">function myfunc()
-{
-        print "myfunc called"
-        ...
-}
+  <pre class="indent-7"><strong>function myfunc()</strong>
+<strong>{</strong>
+        <strong>print "myfunc called"</strong>
+        <strong>...</strong>
+<strong>}</strong>
 
-{       ...
-        the_func = "myfunc"
-        @the_func()     # call through the_func to myfunc
-        ...
-}</pre>
+<strong>{       ...</strong>
+        <strong>the_func = "myfunc"</strong>
+        <strong>@the_func()     # call through the_func to myfunc</strong>
+        <strong>...</strong>
+<strong>}</strong></pre>
   <p>As of version 4.1.2, this works with user-defined functions, built-in functions, and extension functions.
   <p>If <strong>--lint</strong> has been provided, <em>gawk</em> warns about calls to undefined functions at parse time, instead of at run time. Calling an undefined function at run time is a fatal error.
   <p>The word <strong>func</strong> may be used in place of <strong>function</strong>, although this is deprecated.
@@ -1174,8 +1174,8 @@ b = a ""</pre>
   </div>
   <p>is the same as either of
   <div class="indent-7">
-    <p><strong>a = length()<br>
-    a = length($0)</strong>
+    <p><strong>a = length()</strong><br>
+    <strong>a = length($0)</strong>
   </div>
   <p>Using this feature is poor practice, and <em>gawk</em> issues a warning about its use if <strong>--lint</strong> is specified on the command line.
 </section>
@@ -1258,26 +1258,26 @@ b = a ""</pre>
   <h2>EXAMPLES</h2>
   <pre>Print and sort the login names of all users:
 
-        <strong>BEGIN   { FS = ":" }
-                { print $1 | "sort" }
-</strong>
+        <strong>BEGIN   { FS = ":" }</strong>
+                <strong>{ print $1 | "sort" }</strong>
+
 Count lines in a file:
 
-                <strong>{ nlines++ }
-        END     { print nlines }
-</strong>
+                <strong>{ nlines++ }</strong>
+        <strong>END     { print nlines }</strong>
+
 Precede each line by its number in the file:
 
-        <strong>{ print FNR, $0 }
-</strong>
+        <strong>{ print FNR, $0 }</strong>
+
 Concatenate and line number (a variation on a theme):
 
-        <strong>{ print NR, $0 }
-</strong>
+        <strong>{ print NR, $0 }</strong>
+
 Run an external command for particular lines of data:
 
-        <strong>tail -f access_log |
-        awk '/myhome.html/ { system("nmap " $1 "&gt;&gt; logdir/myhome.html") }'</strong></pre>
+        <strong>tail -f access_log |</strong>
+        <strong>awk '/myhome.html/ { system("nmap " $1 "&gt;&gt; logdir/myhome.html") }'</strong></pre>
 </section>
 <section>
   <h2>ACKNOWLEDGEMENTS</h2>

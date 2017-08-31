@@ -192,28 +192,28 @@
   <p>Wildcards may also be specified by ending the host identifier with the single wildcard character ``*'' as the last-given component of an address. The wildcard ``".*"'' refers to all inet (IPv4) addresses. The wildcard ``":*"'' refers to all IPv6 addresses. If an IPv6 wildcard contains a ``::'' component, then the final ``*'' refers to the final 16 bits of the address only, otherwise it refers to the remaining unspecified bits of the address.
   <p>The wildcard ``*'' refers to all users, groups or host addresses, including ``"unix:"''. Names of users, groups or hosts may not be wildcarded.
   <p>The following are all valid host identifiers:
-  <pre>boing
-localhost
-giggle.melbourne.sgi.com
-129.127.112.2
-129.127.114.*
-129.*
-.*
-fe80::223:14ff:feaf:b62c
-fe80::223:14ff:feaf:*
-fe80:*
-:*
-"unix:"
-"local:"
-*</pre>
+  <pre><code>boing</code>
+<code>localhost</code>
+<code>giggle.melbourne.sgi.com</code>
+<code>129.127.112.2</code>
+<code>129.127.114.*</code>
+<code>129.*</code>
+<code>.*</code>
+<code>fe80::223:14ff:feaf:b62c</code>
+<code>fe80::223:14ff:feaf:*</code>
+<code>fe80:*</code>
+<code>:*</code>
+<code>"unix:"</code>
+<code>"local:"</code>
+<code>*</code></pre>
   <p>The following are not valid host identifiers:
-  <pre>*.melbourne
-129.127.*.*
-129.*.114.9
-129.127*
-fe80::223:14ff:*:*
-fe80::223:14ff:*:b62c
-fe80*</pre>
+  <pre><code>*.melbourne</code>
+<code>129.127.*.*</code>
+<code>129.*.114.9</code>
+<code>129.127*</code>
+<code>fe80::223:14ff:*:*</code>
+<code>fe80::223:14ff:*:b62c</code>
+<code>fe80*</code></pre>
   <p>The first example is not allowed because only (numeric) IP addresses may contain a wildcard. The second and fifth examples are not valid because there is more than one wildcard character. The third and sixth contain an embedded wildcard, the fourth and seventh have a wildcard character that is not the last component of the address (the last components are <code>127*</code> and <code>fe80*</code> respectively).
   <p>The name <strong>localhost</strong> is given special treatment to make the behavior of host wildcarding consistent. Rather than being 127.0.0.1 and ::1, it is mapped to the primary inet and IPv6 addresses associated with the name of the host on which <strong>pmcd</strong> is running. Beware of this when running <strong>pmcd</strong> on multi-homed hosts.
   <p>Access for users, groups or hosts are allowed or disallowed by specifying statements of the form:
@@ -235,15 +235,15 @@ fe80*</pre>
   <p>Where no specific <strong>allow</strong> or <strong>disallow</strong> statement applies to an operation, the default is to allow the operation from all users, groups and hosts. In the trivial case when there is no access control section in the configuration file, all operations from all users, groups, and hosts are permitted.
   <p>If a new connection to <strong>pmcd</strong> is attempted by a user, group or host that is not permitted to perform any operations, the connection will be closed immediately after an error response <strong>PM_ERR_PERMISSION</strong> has been sent to the client attempting the connection.
   <p>Statements with the same level of wildcarding specifying identical hosts may not contradict each other. For example if a host named <strong>clank</strong> had an IP address of 129.127.112.2, specifying the following two rules would be erroneous:
-  <pre>allow host clank : fetch, store;
-disallow host 129.127.112.2 : all except fetch;</pre>
+  <pre><code>allow host clank : fetch, store;</code>
+<code>disallow host 129.127.112.2 : all except fetch;</code></pre>
   <p>because they both refer to the same host, but disagree as to whether the <strong>fetch</strong> operation is permitted from that host.
   <p>Statements containing more specific host specifications override less specific ones according to the level of wildcarding. For example a rule of the form
-  <pre>allow host clank : all;</pre>
+  <pre><code>allow host clank : all;</code></pre>
   <p>overrides
-  <pre>disallow host 129.127.112.* : all except fetch;</pre>
+  <pre><code>disallow host 129.127.112.* : all except fetch;</code></pre>
   <p>because the former contains a specific host name (equivalent to a fully specified IP address), whereas the latter has a wildcard. In turn, the latter would override
-  <pre>disallow host * : all;</pre>
+  <pre><code>disallow host * : all;</code></pre>
   <p>It is possible to limit the number of connections from a user, group or host to <strong>pmcd</strong>. This may be done by adding a clause of the form
   <p class="indent-7"><strong>maximum</strong> <em>n</em> <strong>connections</strong>
   <p>to the <em>operations</em> list of an <strong>allow</strong> statement. Such a clause may not be used in a <strong>disallow</strong> statement. Here, <em>n</em> is the maximum number of connections that will be accepted from the user, group or host matching the identifier(s) used in the statement.
@@ -262,7 +262,7 @@ disallow host 129.127.112.2 : all except fetch;</pre>
 <section>
   <h2>RECONFIGURING PMCD</h2>
   <p>If the configuration file has been changed or if an agent is not responding because it has terminated or the PMNS has been changed, <strong>pmcd</strong> may be reconfigured by sending it a SIGHUP, as in
-  <pre># pmsignal -a -s HUP pmcd</pre>
+  <pre><code># pmsignal -a -s HUP pmcd</code></pre>
   <p>When <strong>pmcd</strong> receives a SIGHUP, it checks the configuration file for changes. If the file has been modified, it is reparsed and the contents become the new configuration. If there are errors in the configuration file, the existing configuration is retained and the contents of the file are ignored. Errors are reported in the <strong>pmcd</strong> log file.
   <p>It also checks the PMNS file for changes. If the PMNS file has been modified, then it is reloaded. Use of <strong>tail</strong>(1) on the log file is recommended while reconfiguring <strong>pmcd</strong>.
   <p>If the configuration for an agent has changed (any parameter except the agent's label is different), the agent is restarted. Agents whose configurations do not change are not restarted. Any existing agents not present in the new configuration are terminated. Any deceased agents are that are still listed are restarted.
@@ -271,9 +271,9 @@ disallow host 129.127.112.2 : all except fetch;</pre>
 <section>
   <h2>STARTING AND STOPPING PMCD</h2>
   <p>Normally, <strong>pmcd</strong> is started automatically at boot time and stopped when the system is being brought down. Under certain circumstances it is necessary to start or stop <strong>pmcd</strong> manually. To do this one must become superuser and type
-  <pre># $PCP_RC_DIR/pmcd start</pre>
+  <pre><code># $PCP_RC_DIR/pmcd start</code></pre>
   <p>to start <strong>pmcd</strong>, or
-  <pre># $PCP_RC_DIR/pmcd stop</pre>
+  <pre><code># $PCP_RC_DIR/pmcd stop</code></pre>
   <p>to stop <strong>pmcd</strong>. Starting <strong>pmcd</strong> when it is already running is the same as stopping it and then starting it again.
   <p>Sometimes it may be necessary to restart <strong>pmcd</strong> during another phase of the boot process. Time-consuming parts of the boot process are often put into the background to allow the system to become available sooner (e.g. mounting huge databases). If an agent run by <strong>pmcd</strong> requires such a task to complete before it can run properly, it is necessary to restart or reconfigure <strong>pmcd</strong> after the task completes. Consider, for example, the case of mounting a database in the background while booting. If the PMDA which provides the metrics about the database cannot function until the database is mounted and available but <strong>pmcd</strong> is started before the database is ready, the PMDA will fail (however <strong>pmcd</strong> will still service requests for metrics from other domains). If the database is initialized by running a shell script, adding a line to the end of the script to reconfigure <strong>pmcd</strong> (by sending it a SIGHUP) will restart the PMDA (if it exited because it couldn't connect to the database). If the PMDA didn't exit in such a situation it would be necessary to restart <strong>pmcd</strong> because if the PMDA was still running <strong>pmcd</strong> would not restart it.
   <p>Normally <strong>pmcd</strong> listens for client connections on TCP/IP port number 44321 (registered at <em>http://www.iana.org/</em>). Either the environment variable <strong>PMCD_PORT</strong> or the <strong>-p</strong> command line option may be used to specify alternative port number(s) when <strong>pmcd</strong> is started; in each case, the specification is a comma-separated list of one or more numerical port numbers. &nbsp;Should both methods be used or multiple <strong>-p</strong> options appear on the command line, <strong>pmcd</strong> will listen on the union of the set of ports specified via all <strong>-p</strong> options and the <strong>PMCD_PORT</strong> environment variable. If non-default ports are used with <strong>pmcd</strong> care should be taken to ensure that <strong>PMCD_PORT</strong> is also set in the environment of any client application that will connect to <strong>pmcd</strong>, or that the extended host specification syntax is used (see <strong>PCPIntro</strong>(1) for details).

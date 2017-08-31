@@ -8,6 +8,7 @@ class Man
 {
 
     private $data;
+    private $fontStack;
     private $aliases;
     private $macros;
     private $entities;
@@ -48,7 +49,7 @@ class Man
 
     public function reset()
     {
-        $this->data     = [
+        $this->data = [
             'indentation' => Indentation::DEFAULT,
             'left_margin_level' => 1, // The first level (i.e., no call to .RS yet) has number 1.
             'escape_char' => '\\',
@@ -62,6 +63,7 @@ class Man
             'extra2' => null,
             'extra3' => null,
         ];
+        $this->resetFonts();
         $this->aliases  = [];
         $this->macros   = [];
         $this->entities = [];
@@ -205,6 +207,49 @@ class Man
     public function __isset($name)
     {
         return isset($this->data[$name]);
+    }
+
+    public function pushFont(string $name): int
+    {
+        return array_push($this->fontStack, $name);
+    }
+
+    public function currentFont():?string
+    {
+        return count($this->fontStack) ? end($this->fontStack) : null;
+    }
+
+    public function popFont(?int $newCount = null):?string
+    {
+        if (is_null($newCount) || $newCount < 0) {
+            return array_pop($this->fontStack);
+        } else {
+            $font = array_pop($this->fontStack);
+            while (count($this->fontStack) > $newCount) {
+                $font = array_pop($this->fontStack);
+            }
+            return $font;
+        }
+    }
+
+    public function resetFonts(): void
+    {
+        $this->fontStack = [];
+    }
+
+    public function isFontSmall(): bool
+    {
+        foreach ($this->fontStack as $font) {
+            if (in_array($font, ['SM', 'SB'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getFonts(): array
+    {
+        return $this->fontStack;
     }
 
     public function addAlias(string $original, string $alias)

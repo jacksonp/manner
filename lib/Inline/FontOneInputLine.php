@@ -14,6 +14,8 @@ class Inline_FontOneInputLine implements Block_Template
 
         array_shift($lines);
 
+        $man = Man::instance();
+
         if (
             count($request['arguments']) === 0 &&
             count($lines) &&
@@ -27,55 +29,20 @@ class Inline_FontOneInputLine implements Block_Template
         }
 
         $parentNode = Blocks::getParentForText($parentNode);
-        Block_Text::addSpace($parentNode);
-        $dom = $parentNode->ownerDocument;
 
-        $node = $parentNode;
-
-        switch ($request['request']) {
-            case 'R':
-                break;
-            case 'I':
-                if (!Node::isOrInTag($parentNode, 'em')) {
-                    $node = $parentNode->appendChild($dom->createElement('em'));
-                }
-                break;
-            case 'B':
-                if (!Node::isOrInTag($parentNode, 'strong')) {
-                    $node = $parentNode->appendChild($dom->createElement('strong'));
-                }
-                break;
-            case 'SB':
-                if (!Node::isOrInTag($parentNode, 'strong')) {
-                    $node = $parentNode->appendChild($dom->createElement('strong'));
-                }
-                if (!Node::isOrInTag($parentNode, 'small')) {
-                    $node = $parentNode->appendChild($dom->createElement('small'));
-                }
-                break;
-            case 'SM':
-                if (!Node::isOrInTag($parentNode, 'small')) {
-                    $node = $parentNode->appendChild($dom->createElement('small'));
-                }
-                break;
-            default:
-                throw new Exception('switch is exhaustive.');
-        }
+        $man->pushFont($request['request']);
 
         if (count($request['arguments']) === 0) {
-            $gotContent = Roff::parse($node, $lines, true);
-            if (!$gotContent) {
-                if ($node->tagName !== $parentNode->tagName) {
-                    $parentNode->removeChild($node);
-                }
-                return null;
-            }
+            Roff::parse($parentNode, $lines, true);
         } else {
-            TextContent::interpretAndAppendText($node, implode(' ', $request['arguments']));
+            Block_Text::addSpace($parentNode);
+            TextContent::interpretAndAppendText($parentNode, implode(' ', $request['arguments']));
             if ($pre = Node::ancestor($parentNode, 'pre')) {
                 PreformattedOutput::endInputLine($pre);
             }
         }
+
+        $man->resetFonts();
 
         return $parentNode;
 

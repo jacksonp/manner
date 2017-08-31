@@ -100,6 +100,8 @@ class Block_TP implements Block_Template
             }
         }
 
+        $man->resetFonts();
+
         /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
         Indentation::set($dd, $indentVal);

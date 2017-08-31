@@ -12,19 +12,21 @@ class Block_IP implements Block_Template
     ): ?DOMElement
     {
 
+        $man = Man::instance();
+
         if ($needOneLineOnly) { // See e.g. links2.1
             if (count($request['arguments'])) {
                 $lines[0] = $request['arguments'][0];
             } else {
                 array_shift($lines);
             }
+            $man->resetFonts();
             return null;
         }
 
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
-        $man = Man::instance();
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
@@ -56,11 +58,15 @@ class Block_IP implements Block_Template
             TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
             $dl->appendChild($dt);
 
+            $man->resetFonts();
+
             Indentation::set($dd, $indentVal);
             $dd = $dl->appendChild($dd);
 
             return $dd;
         } else {
+            $man->resetFonts();
+
             /* @var DomElement $div */
             $div = $dom->createElement('div');
             $div->setAttribute('remap', 'IP');

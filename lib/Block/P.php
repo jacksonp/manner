@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Block_P implements Block_Template
 {
@@ -14,7 +14,9 @@ class Block_P implements Block_Template
 
         array_shift($lines);
 
-        Man::instance()->resetIndentationToDefault();
+        $man = Man::instance();
+        $man->resetIndentationToDefault();
+        $man->resetFonts();
 
         if ($parentNode->tagName === 'p' && !Node::hasContent($parentNode)) {
             return null; // Use existing parent node for content that will follow.

@@ -129,127 +129,118 @@ class TextContent
                 continue;
             }
 
-            if (
-                $i < $numTextSegments - 1 &&
-                in_array(mb_substr($textSegments[$i], 0, 2), ['\f', '\F']) &&
-                in_array(mb_substr($textSegments[$i + 1], 0, 2), ['\f', '\F', '\d', '\u'])
-            ) {
+            if ($textSegments[$i] === '\u') {
+                if ($i < $numTextSegments - 1) {
+                    if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\d') {
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['sup']);
+                        ++$i;
+                    }
+                    // else: Do nothing - just drop the \u
+                }
                 continue;
             }
 
-            switch ($textSegments[$i]) {
-                case '\u':
-                    if ($i < $numTextSegments - 1) {
-                        if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\d') {
-                            self::appendTextChild($parentNode, $textSegments[++$i], ['sup']);
-                            ++$i;
-                        }
-                        // else: Do nothing - just drop the \u
+            if ($textSegments[$i] === '\d') {
+                if ($i < $numTextSegments - 1) {
+                    if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\u') {
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['sub']);
+                        ++$i;
                     }
-                    break;
-                case '\d':
-                    if ($i < $numTextSegments - 1) {
-                        if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\u') {
-                            self::appendTextChild($parentNode, $textSegments[++$i], ['sub']);
-                            ++$i;
-                        }
-                        // else: Do nothing - just drop the \d
-                    }
-                    break;
-                case '\fB':
-                case '\FB':
-                case '\fb':
-                case '\f[B]':
-                case '\f3':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['strong']);
-                    }
-                    break;
-                case '\fI':
-                case '\FI':
-                case '\fi':
-                case '\f[I]':
-                case '\f2':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['em']);
-                    }
-                    break;
-                case '\f4':
-                case '\f(BI':
-                case '\f[BI]':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['strong', 'em']);
-                    }
-                    break;
-                case '\f':
-                case '\fP':
-                case '\FP':
-                case '\fp':
-                    // \fP: "Switch back to previous font." - groff(7)
-                    // Assume back to normal text for now, so do nothing so next line passes thru to default.
-                case '\fR':
-                case '\fr':
-                case '\f[]':
-                case '\F[]':
-                case '\FR':
-                case '\F[R]':
-                case '\f1':
-                    break;
-                case '\fC':
-                case '\FC':
-                case '\fc':
-                case '\fV':
-                case '\fv':
-                case '\f5':
-                case '\f(CR':
-                case '\f(CW':
-                case '\f(CO':
-                case '\f[C]':
-                case '\f[CR]':
-                case '\f[CW]':
-                case '\f[CO]':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['code']);
-                    }
-                    break;
-                case '\f(CWI':
-                case '\f[CI]':
-                case '\f(CI':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'em']);
-                    }
-                    break;
-                case '\f(CWB':
-                case '\f[CB]':
-                case '\f(CB':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'strong']);
-                    }
-                    break;
-                case '\f[CBI]':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'strong', 'em']);
-                    }
-                    break;
-                case '\f[SM]':
-                case '\f(SM':
-                    if ($i < $numTextSegments - 1) {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['small']);
-                    }
-                    break;
-                default:
-                    if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
-                        self::appendTextChild($parentNode, $textSegments[$i]);
-                    }
+                    // else: Do nothing - just drop the \u
+                }
+                continue;
+            }
+
+            if (
+            preg_match('~(?J)^\\\\(?:f\[(?<font>[^\]\s]*)\]|f\((?<font>[^\s]{2})|f(?<font>[^\s]))$~ui',
+                $textSegments[$i], $matches)
+            ) {
+
+                $font = strtoupper($matches['font']);
+                switch ($font) {
+                    case '':
+                    case 'P':
+                        // \fP, \f[], \F[] : Switch back to previous font (or font family).
+                        $man->popFont();
+                        break;
+                    default:
+                        $man->pushFont($font);
+                }
+
+                continue;
+
+            }
+
+            if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
+                self::appendTextChild($parentNode, $textSegments[$i]);
             }
 
         }
 
     }
 
-    private static function appendTextChild(DOMElement $parentNode, string $textContent, array $tags = [])
+    private static function appendTextChild(DOMElement $parentNode, string $textContent)
     {
-        if (trim($textContent) !== '') {
+
+        if (!in_array(trim($textContent), ['', '\\&'])) {
+            $man  = Man::instance();
+            $font = $man->currentFont();
+            $tags = [];
+            switch ($font) {
+                case 'AR':
+                case 'R':
+                case '0':
+                case '1':
+                    // Do nothing
+                    break;
+                case 'I':
+                case 'AI':
+                case '2':
+                    $tags = ['em'];
+                    break;
+                case 'B':
+                case '3':
+                    $tags = ['strong'];
+                    break;
+                case 'BI':
+                case '4':
+                    $tags = ['strong', 'em'];
+                    break;
+                case 'C':
+                case 'CR':
+                case 'CW':
+                case 'CO':
+                case 'CS':
+                case 'V':
+                case 'tt':
+                case '5':
+                    $tags = ['code'];
+                    break;
+                case 'CI':
+                case 'CWI':
+                    $tags = ['code', 'em'];
+                    break;
+                case 'CB':
+                case 'CWB':
+                    $tags = ['code', 'strong'];
+                    break;
+                case 'CBI':
+                    $tags = ['code', 'strong', 'em'];
+                    break;
+                case 'SM':
+                    $tags = ['small'];
+                    break;
+                case 'SB':
+                    $tags = ['strong', 'small'];
+                    break;
+                default:
+                    // Do nothing
+            }
+
+            if ($man->isFontSmall()) {
+                array_unshift($tags, 'small');
+            }
+
             foreach ($tags as $tag) {
                 if (is_null(Node::ancestor($parentNode, $tag))) {
                     $parentNode = $parentNode->appendChild($parentNode->ownerDocument->createElement($tag));

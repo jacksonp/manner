@@ -6,11 +6,13 @@ class PreformattedOutput
 
     private static $addIndent = 0;
     private static $nextIndent = 0;
+    private static $resetFontsAfterNext = false;
 
     public static function reset()
     {
-        self::$addIndent  = 0;
-        self::$nextIndent = 0;
+        self::$addIndent           = 0;
+        self::$nextIndent          = 0;
+        self::$resetFontsAfterNext = false;
     }
 
     public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
@@ -21,6 +23,8 @@ class PreformattedOutput
         if (is_null($pre)) {
             return false;
         }
+
+        $man = Man::instance();
 
         $dom = $parentNode->ownerDocument;
 
@@ -57,7 +61,7 @@ class PreformattedOutput
                     if (is_null($request['request'])) {
                         TextContent::interpretAndAppendText($codeNode, $tdLine);
                     } else {
-                        $blockLines = [Man::instance()->control_char . $request['request'] . ' ' . $tdLine];
+                        $blockLines = [$man->control_char . $request['request'] . ' ' . $tdLine];
                         Roff::parse($codeNode, $blockLines);
                     }
                     $tr->appendChild($cell);
@@ -82,6 +86,9 @@ class PreformattedOutput
                 $parentNode->appendChild(new DOMText("\n"));
                 self::$addIndent = 0;
             }
+            if (in_array($request['class'], ['Block_P'])) {
+                $man->resetFonts();
+            }
             return true;
         } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Request_Skippable'])) {
             $request['class']::checkAppend($parentNode, $lines, $request);
@@ -93,14 +100,17 @@ class PreformattedOutput
             self::$nextIndent = 4;
             if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
                 array_shift($lines);
+                $man->resetFonts();
                 return true;
             } else {
-                $line               = $request['arguments'][0];
-                $request['request'] = null;
+                self::$resetFontsAfterNext = true;
+                $line                      = $request['arguments'][0];
+                $request['request']        = null;
             }
         } elseif ($request['request'] === 'TP') {
-            self::$addIndent  = 0;
-            self::$nextIndent = 4;
+            self::$addIndent           = 0;
+            self::$nextIndent          = 4;
+            self::$resetFontsAfterNext = true;
             array_shift($lines);
             return true;
         } elseif ($request['request'] === 'ti') {
@@ -155,6 +165,12 @@ class PreformattedOutput
         self::endInputLine($parentNode);
 
         array_shift($lines);
+
+        if (self::$resetFontsAfterNext) {
+            $man->resetFonts();
+            self::$resetFontsAfterNext = false;
+        }
+
         return true;
 
     }

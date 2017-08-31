@@ -285,19 +285,15 @@
   <p>You can create a file by sending out a diff that compares <strong>/dev/null</strong> or an empty file dated the Epoch (1970-01-01 00:00:00 UTC) to the file you want to create. This only works if the file you want to create doesn't exist already in the target directory. Conversely, you can remove a file by sending out a context diff that compares the file to be deleted with an empty file dated the Epoch. The file will be removed unless <strong>patch</strong> is conforming to POSIX and the <strong>-E</strong> or <strong>--remove-empty-files</strong> option is not given. An easy way to generate patches that create and remove files is to use GNU <strong>diff</strong>'s <strong>-N</strong> or <strong>--new-file</strong> option.
   <p>If the recipient is supposed to use the <strong>-p</strong><em>N</em> option, do not send output that looks like this:
   <div class="indent-7">
-    <p><code><br>
-    <br>
-    diff -Naur v2.0.29/prog/README prog/README<br>
-    --- v2.0.29/prog/README &nbsp; Mon Mar 10 15:13:12 1997<br>
-    +++ prog/README &nbsp; Mon Mar 17 14:58:22 1997</code>
+    <p><code>diff -Naur v2.0.29/prog/README prog/README</code><br>
+    <code>--- v2.0.29/prog/README &nbsp; Mon Mar 10 15:13:12 1997</code><br>
+    <code>+++ prog/README &nbsp; Mon Mar 17 14:58:22 1997</code>
   </div>
   <p>because the two file names have different numbers of slashes, and different versions of <strong>patch</strong> interpret the file names differently. To avoid confusion, send output that looks like this instead:
   <div class="indent-7">
-    <p><code><br>
-    <br>
-    diff -Naur v2.0.29/prog/README v2.0.30/prog/README<br>
-    --- v2.0.29/prog/README &nbsp; Mon Mar 10 15:13:12 1997<br>
-    +++ v2.0.30/prog/README &nbsp; Mon Mar 17 14:58:22 1997</code>
+    <p><code>diff -Naur v2.0.29/prog/README v2.0.30/prog/README</code><br>
+    <code>--- v2.0.29/prog/README &nbsp; Mon Mar 10 15:13:12 1997</code><br>
+    <code>+++ v2.0.30/prog/README &nbsp; Mon Mar 17 14:58:22 1997</code>
   </div>
   <p>Avoid sending patches that compare backup file names like <strong>README.orig</strong>, since this might confuse <strong>patch</strong> into patching a backup file instead of the real file. Instead, send patches that compare the same base file names in different directories, e.g. <strong>old/README</strong> and <strong>new/README</strong>.
   <p>Take care not to send out reversed patches, since it makes people wonder whether they already applied the patch.

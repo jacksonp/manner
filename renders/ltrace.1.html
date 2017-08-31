@@ -114,27 +114,27 @@
   <p><em>-e</em> is ´show me what calls these symbols (inter-library calls only)´
   <p><em>-l</em> is ´show me what calls into this library´
   <p>Suppose I have a library defined with this header <strong>tstlib.h</strong>:
-  <pre> void func_f_lib(void);
- void func_g_lib(void);</pre>
+  <pre><code> void func_f_lib(void);</code>
+<code> void func_g_lib(void);</code></pre>
   <p>and this implementation <strong>tstlib.c</strong>:
-  <pre> #include "tstlib.h"
- void func_f_lib(void)
- {
-     func_g_lib();
- }
- void func_g_lib(void)
- {
- }</pre>
+  <pre><code> #include "tstlib.h"</code>
+<code> void func_f_lib(void)</code>
+<code> {</code>
+<code>     func_g_lib();</code>
+<code> }</code>
+<code> void func_g_lib(void)</code>
+<code> {</code>
+<code> }</code></pre>
   <p>Suppose I have an executable that uses this library defined like this <strong>tst.c</strong>:
-  <pre> #include "tstlib.h"
- void func_f_main(void)
- {
- }
- void main(void)
- {
-     func_f_main();
-     func_f_lib();
- }</pre>
+  <pre><code> #include "tstlib.h"</code>
+<code> void func_f_main(void)</code>
+<code> {</code>
+<code> }</code>
+<code> void main(void)</code>
+<code> {</code>
+<code>     func_f_main();</code>
+<code>     func_f_lib();</code>
+<code> }</code></pre>
   <p>If linking without <strong>-Bsymbolic</strong>, the internal <strong>func_g_lib()</strong> call uses the PLT like external calls, and thus ltrace says:
   <pre> <strong>$ ltrace -x 'func*' -L ./tst</strong>
  func_f_main()                             = &lt;void&gt;

@@ -50,10 +50,10 @@
   <section>
     <h3>Matching Control</h3>
     <dl>
-      <dt><strong>-e</strong> <em>PATTERN</em><strong>, --regexp=</strong><em>PATTERN</em>
+      <dt><strong>-e</strong> <em>PATTERN</em>, <strong>--regexp=</strong><em>PATTERN</em>
       <dd>
         <p>Use <em>PATTERN</em> as the pattern. If this option is used multiple times or is combined with the <strong>-f</strong> (<strong>--file</strong>) option, search for all patterns given. This option can be used to protect a pattern beginning with “-”.
-      <dt><strong>-f</strong> <em>FILE</em><strong>, --file=</strong><em>FILE</em>
+      <dt><strong>-f</strong> <em>FILE</em>, <strong>--file=</strong><em>FILE</em>
       <dd>
         <p>Obtain patterns from <em>FILE</em>, one per line. If this option is used multiple times or is combined with the <strong>-e</strong> (<strong>--regexp</strong>) option, search for all patterns given. The empty file contains zero patterns, and therefore matches nothing.
       <dt><strong>-i</strong>, <strong>--ignore-case</strong>
@@ -79,7 +79,7 @@
       <dt><strong>-c</strong>, <strong>--count</strong>
       <dd>
         <p>Suppress normal output; instead print a count of matching lines for each input file. With the <strong>-v</strong>, <strong>--invert-match</strong> option (see below), count non-matching lines.
-      <dt><strong>--color</strong>[<strong>=<em>WHEN</em></strong>], <strong>--colour</strong>[<strong>=<em>WHEN</em></strong>]
+      <dt><strong>--color</strong>[<strong>=</strong><em>WHEN</em>], <strong>--colour</strong>[<strong>=</strong><em>WHEN</em>]
       <dd>
         <p>Surround the matched (non-empty) strings, matching lines, context lines, file names, line numbers, byte offsets, and separators (for fields and groups of context lines) with escape sequences to display them in color on the terminal. The colors are defined by the environment variable <strong>GREP_COLORS</strong>. The deprecated environment variable <strong>GREP_COLOR</strong> is still supported, but its setting does not have priority. <em>WHEN</em> is <strong>never</strong>, <strong>always</strong>, or <strong>auto</strong>.
       <dt><strong>-L</strong>, <strong>--files-without-match</strong>
@@ -88,7 +88,7 @@
       <dt><strong>-l</strong>, <strong>--files-with-matches</strong>
       <dd>
         <p>Suppress normal output; instead print the name of each input file from which output would normally have been printed. The scanning will stop on the first match.
-      <dt><strong>-m</strong> <em>NUM</em><strong>, --max-count=</strong><em>NUM</em>
+      <dt><strong>-m</strong> <em>NUM</em>, <strong>--max-count=</strong><em>NUM</em>
       <dd>
         <p>Stop reading a file after <em>NUM</em> matching lines. If the input is standard input from a regular file, and <em>NUM</em> matching lines are output, <strong>grep</strong> ensures that the standard input is positioned to just after the last matching line before exiting, regardless of the presence of trailing context lines. This enables a calling process to resume a search. When <strong>grep</strong> stops after <em>NUM</em> matching lines, it outputs any trailing context lines. When the <strong>-c</strong> or <strong>--count</strong> option is also used, <strong>grep</strong> does not output a count greater than <em>NUM</em>. When the <strong>-v</strong> or <strong>--invert-match</strong> option is also used, <strong>grep</strong> stops after outputting <em>NUM</em> non-matching lines.
       <dt><strong>-o</strong>, <strong>--only-matching</strong>
@@ -134,13 +134,13 @@
   <section>
     <h3>Context Line Control</h3>
     <dl>
-      <dt><strong>-A</strong> <em>NUM</em><strong>, --after-context=</strong><em>NUM</em>
+      <dt><strong>-A</strong> <em>NUM</em>, <strong>--after-context=</strong><em>NUM</em>
       <dd>
         <p>Print <em>NUM</em> lines of trailing context after matching lines. Places a line containing a group separator (<strong>--</strong>) between contiguous groups of matches. With the <strong>-o</strong> or <strong>--only-matching</strong> option, this has no effect and a warning is given.
-      <dt><strong>-B</strong> <em>NUM</em><strong>, --before-context=</strong><em>NUM</em>
+      <dt><strong>-B</strong> <em>NUM</em>, <strong>--before-context=</strong><em>NUM</em>
       <dd>
         <p>Print <em>NUM</em> lines of leading context before matching lines. Places a line containing a group separator (<strong>--</strong>) between contiguous groups of matches. With the <strong>-o</strong> or <strong>--only-matching</strong> option, this has no effect and a warning is given.
-      <dt><strong>-C</strong> <em>NUM</em><strong>, -</strong><em>NUM</em><strong>, --context=</strong><em>NUM</em>
+      <dt><strong>-C</strong> <em>NUM</em>, <strong>-</strong><em>NUM</em>, <strong>--context=</strong><em>NUM</em>
       <dd>
         <p>Print <em>NUM</em> lines of output context. Places a line containing a group separator (<strong>--</strong>) between contiguous groups of matches. With the <strong>-o</strong> or <strong>--only-matching</strong> option, this has no effect and a warning is given.
     </dl>
@@ -159,10 +159,10 @@
         <p>If <em>TYPE</em> is <strong>text</strong>, <strong>grep</strong> processes a binary file as if it were text; this is equivalent to the <strong>-a</strong> option.
         <p>When <em>type</em> is <strong>binary</strong>, <strong>grep</strong> may treat non-text bytes as line terminators even without the <strong>-z</strong> option. &nbsp;This means choosing <strong>binary</strong> versus <strong>text</strong> can affect whether a pattern matches a file. &nbsp;For example, when <em>type</em> is <strong>binary</strong> the pattern <strong>q$ might</strong> match <strong>q</strong> immediately followed by a null byte, even though this is not matched when <em>type</em> is <strong>text</strong>. Conversely, when <em>type</em> is <strong>binary</strong> the pattern <strong>.</strong> (period) might not match a null byte.
         <p><em>Warning:</em> The <strong>-a</strong> option might output binary garbage, which can have nasty side effects if the output is a terminal and if the terminal driver interprets some of it as commands. On the other hand, when reading files whose text encodings are unknown, it can be helpful to use <strong>-a</strong> or to set <strong>LC_ALL='C'</strong> in the environment, in order to find more matches even if the matches are unsafe for direct display.
-      <dt><strong>-D</strong> <em>ACTION</em><strong>, --devices=</strong><em>ACTION</em>
+      <dt><strong>-D</strong> <em>ACTION</em>, <strong>--devices=</strong><em>ACTION</em>
       <dd>
         <p>If an input file is a device, FIFO or socket, use <em>ACTION</em> to process it. By default, <em>ACTION</em> is <strong>read</strong>, which means that devices are read just as if they were ordinary files. If <em>ACTION</em> is <strong>skip</strong>, devices are silently skipped.
-      <dt><strong>-d</strong> <em>ACTION</em><strong>, --directories=</strong><em>ACTION</em>
+      <dt><strong>-d</strong> <em>ACTION</em>, <strong>--directories=</strong><em>ACTION</em>
       <dd>
         <p>If an input file is a directory, use <em>ACTION</em> to process it. By default, <em>ACTION</em> is <strong>read</strong>, i.e., read directories just as if they were ordinary files. If <em>ACTION</em> is <strong>skip</strong>, silently skip directories. If <em>ACTION</em> is <strong>recurse</strong>, read all files under each directory, recursively, following symbolic links only if they are on the command line. This is equivalent to the <strong>-r</strong> option.
       <dt><strong>--exclude=</strong><em>GLOB</em>
@@ -274,7 +274,7 @@
 <section>
   <h2>ENVIRONMENT VARIABLES</h2>
   <p>The behavior of <strong>grep</strong> is affected by the following environment variables.
-  <p>The locale for category <strong>LC_</strong><em>foo</em> is specified by examining the three environment variables <strong>LC_ALL</strong>, <strong>LC_<em>foo</em></strong>, <strong>LANG</strong>, in that order. The first of these variables that is set specifies the locale. For example, if <strong>LC_ALL</strong> is not set, but <strong>LC_MESSAGES</strong> is set to <strong>pt_BR</strong>, then the Brazilian Portuguese locale is used for the <strong>LC_MESSAGES</strong> category. The C locale is used if none of these environment variables are set, if the locale catalog is not installed, or if <strong>grep</strong> was not compiled with national language support (NLS). The shell command <strong>locale -a</strong> lists locales that are currently available.
+  <p>The locale for category <strong>LC_</strong><em>foo</em> is specified by examining the three environment variables <strong>LC_ALL</strong>, <strong>LC_</strong><em>foo</em>, <strong>LANG</strong>, in that order. The first of these variables that is set specifies the locale. For example, if <strong>LC_ALL</strong> is not set, but <strong>LC_MESSAGES</strong> is set to <strong>pt_BR</strong>, then the Brazilian Portuguese locale is used for the <strong>LC_MESSAGES</strong> category. The C locale is used if none of these environment variables are set, if the locale catalog is not installed, or if <strong>grep</strong> was not compiled with national language support (NLS). The shell command <strong>locale -a</strong> lists locales that are currently available.
   <dl>
     <dt><strong>GREP_OPTIONS</strong>
     <dd>

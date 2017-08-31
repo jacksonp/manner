@@ -130,7 +130,7 @@
   <section>
     <h3>General options</h3>
     <dl>
-      <dt><strong>-C</strong>&nbsp;<em>file</em><strong>,&nbsp;--config-file=</strong><em>file</em>
+      <dt><strong>-C</strong>&nbsp;<em>file</em>,&nbsp;<strong>--config-file=</strong><em>file</em>
       <dd>
         <p>Use this user configuration file rather than the default of <em>~/.manpath</em>.
       <dt><strong>-d</strong>, <strong>--debug</strong>
@@ -168,7 +168,7 @@
       <dt><strong>-c</strong>, <strong>--catman</strong>
       <dd>
         <p>This option is not for general use and should only be used by the <strong>catman</strong> program.
-      <dt><strong>-R</strong>&nbsp;<em>encoding,</em>&nbsp;<strong>--recode=<em>encoding</em></strong>
+      <dt><strong>-R</strong>&nbsp;<em>encoding</em>,&nbsp;<strong>--recode</strong>=<em>encoding</em>
       <dd>
         <p>Instead of formatting the manual page in the usual way, output its source converted to the specified <em>encoding</em>. If you already know the encoding of the source file, you can also use <strong>manconv</strong>(1) directly. However, this option allows you to convert several manual pages to a single encoding without having to explicitly state the encoding of each, provided that they were already installed in a structure similar to a manual page hierarchy.
     </dl>
@@ -176,21 +176,21 @@
   <section>
     <h3>Finding manual pages</h3>
     <dl>
-      <dt><strong>-L</strong>&nbsp;<em>locale</em><strong>,&nbsp;--locale=</strong><em>locale</em>
+      <dt><strong>-L</strong>&nbsp;<em>locale</em>,&nbsp;<strong>--locale=</strong><em>locale</em>
       <dd>
         <p><strong>man</strong> will normally determine your current locale by a call to the C function <strong>setlocale</strong>(3) which interrogates various environment variables, possibly including $<strong>LC_MESSAGES</strong> and $<strong>LANG</strong>. To temporarily override the determined value, use this option to supply a <em>locale</em> string directly to <strong>man</strong>. Note that it will not take effect until the search for pages actually begins. Output such as the help message will always be displayed in the initially determined locale.
       <dt><strong>-m</strong> <em>system</em>[,...], <strong>--systems=</strong><em>system</em>[,...]
       <dd>
         <p>If this system has access to other operating system's manual pages, they can be accessed using this option. To search for a manual page from NewOS's manual page collection, use the option <strong>-m</strong> <strong>NewOS</strong>.
         <p>The <em>system</em> specified can be a combination of comma delimited operating system names. To include a search of the native operating system's manual pages, include the system name <strong>man</strong> in the argument string. This option will override the $<strong>SYSTEM</strong> environment variable.
-      <dt><strong>-M</strong>&nbsp;<em>path</em><strong>,&nbsp;--manpath=</strong><em>path</em>
+      <dt><strong>-M</strong>&nbsp;<em>path</em>,&nbsp;<strong>--manpath=</strong><em>path</em>
       <dd>
         <p>Specify an alternate manpath to use. By default, <strong>man</strong> uses <strong>manpath</strong> derived code to determine the path to search. This option overrides the $<strong>MANPATH</strong> environment variable and causes option <strong>-m</strong> to be ignored.
         <p>A path specified as a manpath must be the root of a manual page hierarchy structured into sections as described in the man-db manual (under "The manual page system"). To view manual pages outside such hierarchies, see the <strong>-l</strong> option.
-      <dt><strong>-S</strong>&nbsp;<em>list</em><strong>,&nbsp;-s</strong>&nbsp;<em>list</em><strong>,&nbsp;--sections=</strong><em>list</em>
+      <dt><strong>-S</strong>&nbsp;<em>list</em>,&nbsp;<strong>-s</strong>&nbsp;<em>list</em>,&nbsp;<strong>--sections=</strong><em>list</em>
       <dd>
         <p>List is a colon- or comma-separated list of `order specific' manual sections to search. This option overrides the $<strong>MANSECT</strong> environment variable. (The <strong>-s</strong> spelling is for compatibility with System V.)
-      <dt><strong>-e</strong>&nbsp;<em>sub-extension</em><strong>,&nbsp;--extension=</strong><em>sub-extension</em>
+      <dt><strong>-e</strong>&nbsp;<em>sub-extension</em>,&nbsp;<strong>--extension=</strong><em>sub-extension</em>
       <dd>
         <p>Some systems incorporate large packages of manual pages, such as those that accompany the <strong>Tcl</strong> package, into the main manual page hierarchy. To get around the problem of having two manual pages with the same name such as <strong>exit</strong>(3), the <strong>Tcl</strong> pages were usually all assigned to section <strong>l</strong>. As this is unfortunate, it is now possible to put the pages in the correct section, and to assign a specific `extension' to them, in this case, <strong>exit</strong>(3tcl). Under normal operation, <strong>man</strong> will display <strong>exit</strong>(3) in preference to <strong>exit</strong>(3tcl). To negotiate this situation and to avoid having to know which section the page you require resides in, it is now possible to give <strong>man</strong> a <em>sub-extension</em> string indicating which package the page must belong to. Using the above example, supplying the option <strong>-e&nbsp;tcl</strong> to <strong>man</strong> will restrict the search to pages having an extension of <strong>*tcl</strong>.
       <dt><strong>-i</strong>, <strong>--ignore-case</strong>
@@ -229,11 +229,11 @@
   <section>
     <h3>Controlling formatted output</h3>
     <dl>
-      <dt><strong>-P</strong>&nbsp;<em>pager</em><strong>,&nbsp;--pager=</strong><em>pager</em>
+      <dt><strong>-P</strong>&nbsp;<em>pager</em>,&nbsp;<strong>--pager=</strong><em>pager</em>
       <dd>
         <p>Specify which output pager to use. By default, <strong>man</strong> uses <strong>less -s</strong>. This option overrides the $<strong>MANPAGER</strong> environment variable, which in turn overrides the $<strong>PAGER</strong> environment variable. It is not used in conjunction with <strong>-f</strong> or <strong>-k</strong>.
         <p>The value may be a simple command name or a command with arguments, and may use shell quoting (backslashes, single quotes, or double quotes). It may not use pipes to connect multiple commands; if you need that, use a wrapper script, which may take the file to display either as an argument or on standard input.
-      <dt><strong>-r</strong>&nbsp;<em>prompt</em><strong>,&nbsp;--prompt=</strong><em>prompt</em>
+      <dt><strong>-r</strong>&nbsp;<em>prompt</em>,&nbsp;<strong>--prompt=</strong><em>prompt</em>
       <dd>
         <p>If a recent version of <strong>less</strong> is used as the pager, <strong>man</strong> will attempt to set its prompt and some sensible options. The default prompt looks like
         <p>&nbsp;<strong>Manual page</strong>&nbsp;<em>name</em><strong>(</strong><em>sec</em><strong>)</strong>&nbsp;<strong>line</strong>&nbsp;<em>x</em>
@@ -276,7 +276,7 @@
         </table>
         <p>If the <em>latin1</em> column displays correctly, your terminal may be set up for <em>latin1</em> characters and this option is not necessary. If the <em>latin1</em> and <em>ascii</em> columns are identical, you are reading this page using this option or <strong>man</strong> did not format this page using the <em>latin1</em> device description. If the <em>latin1</em> column is missing or corrupt, you may need to view manual pages with this option.
         <p>This option is ignored when using options <strong>-t</strong>, <strong>-H</strong>, <strong>-T</strong>, or <strong>-Z</strong> and may be useless for <strong>nroff</strong> other than <strong>GNU's</strong>.
-      <dt><strong>-E</strong>&nbsp;<em>encoding,</em>&nbsp;<strong>--encoding=<em>encoding</em></strong>
+      <dt><strong>-E</strong>&nbsp;<em>encoding</em>,&nbsp;<strong>--encoding</strong>=<em>encoding</em>
       <dd>
         <p>Generate output for a character encoding other than the default. For backward compatibility, <em>encoding</em> may be an <strong>nroff</strong> device such as <strong>ascii</strong>, <strong>latin1</strong>, or <strong>utf8</strong> as well as a true character encoding such as <strong>UTF-8</strong>.
       <dt><strong>--no-hyphenation</strong>, <strong>--nh</strong>
@@ -287,7 +287,7 @@
       <dd>
         <p>Normally, <strong>nroff</strong> will automatically justify text to both margins. This option disables full justification, leaving justified only to the left margin, sometimes called "ragged-right" text.
         <p>If you are writing a manual page and simply want to prevent <strong>nroff</strong> from justifying certain paragraphs, do not use this option, but consult the <strong>nroff</strong> documentation instead; for instance, you can use the ".na", ".nf", ".fi", and ".ad" requests to temporarily disable adjusting and filling.
-      <dt><strong>-p</strong>&nbsp;<em>string</em><strong>,&nbsp;--preprocessor=</strong><em>string</em>
+      <dt><strong>-p</strong>&nbsp;<em>string</em>,&nbsp;<strong>--preprocessor=</strong><em>string</em>
       <dd>
         <p>Specify the sequence of preprocessors to run before <strong>nroff</strong> or <strong>troff</strong>/<strong>groff</strong>. Not all installations will have a full set of preprocessors. Some of the preprocessors and the letters used to designate them are: <strong>eqn</strong> (<strong>e</strong>), <strong>grap</strong> (<strong>g</strong>), <strong>pic</strong> (<strong>p</strong>), <strong>tbl</strong> (<strong>t</strong>), <strong>vgrind</strong> (<strong>v</strong>), <strong>refer</strong> (<strong>r</strong>). This option overrides the $<strong>MANROFFSEQ</strong> environment variable. <strong>zsoelim</strong> is always run as the very first preprocessor.
       <dt><strong>-t</strong>, <strong>--troff</strong>

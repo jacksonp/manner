@@ -48,10 +48,10 @@
     <dt><strong>-l</strong>[<em>max-lines</em>], <strong>--max-lines</strong>[=<em>max-lines</em>]
     <dd>
       <p>Synonym for the <strong>-L</strong> option. &nbsp;Unlike <strong>-L</strong>, the <em>max-lines</em> argument is optional. &nbsp;If <em>max-lines</em> is not specified, it defaults to one. &nbsp;The <strong>-l</strong> option is deprecated since the POSIX standard specifies <strong>-L</strong> instead.
-    <dt><strong>-n</strong> <em>max-args<strong>,</strong></em> <strong>--max-args</strong><em>=max-args</em>
+    <dt><strong>-n</strong> <em>max-args</em><strong>,</strong> <strong>--max-args</strong>=<em>max-args</em>
     <dd>
       <p>Use at most <em>max-args</em> arguments per command line. &nbsp;Fewer than <em>max-args</em> arguments will be used if the size (see the <strong>-s</strong> option) is exceeded, unless the <strong>-x</strong> option is given, in which case <strong>xargs will exit.</strong>
-    <dt><strong>-P</strong> <em>max-procs,</em> <strong>--max-procs</strong><em>=max-procs</em>
+    <dt><strong>-P</strong> <em>max-procs</em>, <strong>--max-procs</strong>=<em>max-procs</em>
     <dd>
       <p>Run up to <em>max-procs</em> processes at a time; the default is 1. &nbsp;If <em>max-procs</em> is 0, <strong>xargs</strong> will run as many processes as possible at a time. &nbsp;Use the <strong>-n</strong> option or the <strong>-L</strong> option with <strong>-P</strong>; otherwise chances are that only one exec will be done. While <strong>xargs</strong> is running, you can send its process a SIGUSR1 signal to increase the number of commands to run simultaneously, or a SIGUSR2 to decrease the number. &nbsp;You cannot increase it above an implementation-defined limit (which is shown with --show-limits). &nbsp;You cannot decrease it below 1. <strong>xargs</strong> never terminates its commands; when asked to decrease, it merely waits for more than one existing command to terminate before starting another.
       <p><strong>Please note</strong> that it is up to the called processes to properly manage parallel access to shared resources. &nbsp;For example, if more than one of them tries to print to stdout, the output will be produced in an indeterminate order (and very likely mixed up) unless the processes collaborate in some way to prevent this. &nbsp;Using some kind of locking scheme is one way to prevent such problems. &nbsp;In general, using a locking scheme will help ensure correct output but reduce performance. If you don't want to tolerate the performance difference, simply arrange for each process to produce a separate output file (or otherwise use separate resources).
@@ -64,7 +64,7 @@
     <dt><strong>-r, --no-run-if-empty</strong>
     <dd>
       <p>If the standard input does not contain any nonblanks, do not run the command. &nbsp;Normally, the command is run once even if there is no input. This option is a GNU extension.
-    <dt><strong>-s</strong> <em>max-chars,</em> <strong>--max-chars</strong><em>=max-chars</em>
+    <dt><strong>-s</strong> <em>max-chars</em>, <strong>--max-chars</strong><em>=</em><em>max-chars</em>
     <dd>
       <p>Use at most <em>max-chars</em> characters per command line, including the command and initial-arguments and the terminating nulls at the ends of the argument strings. &nbsp;The largest allowed value is system-dependent, and is calculated as the argument length limit for exec, less the size of your environment, less 2048 bytes of headroom. &nbsp;If this value is more than 128KiB, 128Kib is used as the default value; otherwise, the default value is the maximum. &nbsp;1KiB is 1024 bytes. <strong>xargs</strong> automatically adapts to tighter constraints.
     <dt><strong>--show-limits</strong>

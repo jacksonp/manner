@@ -180,7 +180,7 @@
   <p class="indent-12"><em>host</em><strong>:</strong><em>metric</em><strong>[</strong><em>instance1</em><strong>,</strong><em>instance2</em><strong>,</strong>...<strong>]</strong>
   <p>If the source of performance metrics is a set of PCP archive logs then the accepted syntax is
   <p class="indent-12"><em>archive</em><strong>/</strong><em>metric</em><strong>[</strong><em>instance1</em><strong>,</strong><em>instance2</em><strong>,</strong>...<strong>]</strong>
-  <p>The <em>host</em><strong>:,</strong> <em>archive</em><strong>/</strong> and <strong>[</strong><em>instance1</em><strong>,</strong><em>instance2</em><strong>,</strong>...<strong>]</strong> components are all optional.
+  <p>The <em>host</em><strong>:</strong>, <em>archive</em><strong>/</strong> and <strong>[</strong><em>instance1</em><strong>,</strong><em>instance2</em><strong>,</strong>...<strong>]</strong> components are all optional.
   <p>The <strong>,</strong> delimiter in the list of instance names may be replaced by white space.
   <p>Special characters in <em>instance</em> names may be escaped by surrounding the name in double quotes or preceding the character with a backslash.
   <p>White space is ignored everywhere except within a quoted <em>instance</em> name.
@@ -199,21 +199,21 @@
   <p>Names of remote hosts running the <strong>pmcd</strong>(1) daemon can of course also be provided to request a remote host be used. The most basic form of <strong>pmcd</strong> host specification is a simple host name, possibly including the domain name if necessary. However, this can be extended in a number of ways to further refine attributes of the connection made to <strong>pmcd</strong>.
   <p>The <strong>pmcd</strong> port number and also optional <strong>pmproxy</strong>(1) hostname and its port number, can be given as part of the host specification, since PCP version 3.0. These supersede (and override) the old-style PMCD_PORT, PMPROXY_HOST and PMPROXY_PORT environment variables.
   <p>The following are valid hostname specifications that specify connections to <strong>pmcd</strong> on host <em>nas1.servers.com</em> with/without a list of ports, with/without a <strong>pmproxy</strong>(1) connection through a firewall, and with IPv6 and IPv4 addresses as shown.
-  <pre><code>$ pcp -h nas1.servers.com:44321,4321@firewall.servers.com:44322
-$ pcp -h nas1.servers.com:44321@firewall.servers.com:44322
-$ pcp -h nas1.servers.com:44321@firewall.servers.com
-$ pcp -h nas1.servers.com@firewall.servers.com
-$ pcp -h nas1.servers.com:44321
-$ pcp -h [fe80::2ad2:44ff:fe88:e4f1%p2p1]
-$ pcp -h 192.168.0.103</code></pre>
+  <pre><code>$ pcp -h nas1.servers.com:44321,4321@firewall.servers.com:44322</code>
+<code>$ pcp -h nas1.servers.com:44321@firewall.servers.com:44322</code>
+<code>$ pcp -h nas1.servers.com:44321@firewall.servers.com</code>
+<code>$ pcp -h nas1.servers.com@firewall.servers.com</code>
+<code>$ pcp -h nas1.servers.com:44321</code>
+<code>$ pcp -h [fe80::2ad2:44ff:fe88:e4f1%p2p1]</code>
+<code>$ pcp -h 192.168.0.103</code></pre>
   <p>In addition, ``connection attributes'' can also be specified. These include username, password (can be given interactively and may depend on the authentication mechanism employed), whether to target a specific running container, whether to use secure (encrypted) or native (naked) protocol, and so on. The previous examples all default to native protocol, and use no authentication. This can be altered, as in the following examples.
-  <pre><code>$ pcp -h pcps://app2.servers.com?container=cae8e6edc0d5
-$ pcp -h pcps://nas1.servers.com:44321?username=tanya&amp;method=gssapi
-$ pcp -h pcps://nas2.servers.com@firewalls.r.us?method=plain
-$ pcp -h pcp://nas3.servers.com
-$ pcp -h 192.168.0.103?container=cae8e6edc0d5,method=digest-md5
-$ pcp -h unix:
-$ pcp -h local:</code></pre>
+  <pre><code>$ pcp -h pcps://app2.servers.com?container=cae8e6edc0d5</code>
+<code>$ pcp -h pcps://nas1.servers.com:44321?username=tanya&amp;method=gssapi</code>
+<code>$ pcp -h pcps://nas2.servers.com@firewalls.r.us?method=plain</code>
+<code>$ pcp -h pcp://nas3.servers.com</code>
+<code>$ pcp -h 192.168.0.103?container=cae8e6edc0d5,method=digest-md5</code>
+<code>$ pcp -h unix:</code>
+<code>$ pcp -h local:</code></pre>
   <p>The choice of authentication method, and other resulting parameters like username, optionally password, etc, depends on the SASL2 configuration used by each (remote) <strong>pmcd</strong>. Tutorials are available specifying various aspects of configuring the authentication module(s) used, these fine details are outside the scope of this document.
   <p>In all situations, host names can be used interchangeably with IPv4 or IPv6 addressing (directly), as shown above. &nbsp;In the case of an IPv6 address, the full address must be enclosed by square brackets and the scope (interface) must also be specified.
   <p>The final <em>local:</em> example above is now the default for most tools. This connection is an automatically authenticated local host connection on all platforms that support Unix domain sockets. &nbsp;No password is required and authentication is automatic. &nbsp;This is also the most efficient (lowest overhead) communication channel available.

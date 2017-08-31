@@ -83,8 +83,8 @@
       <p>As a special case, the new name may be the keyword <strong><em>DELETE</em></strong> (with no quotes), and then the instance <em>oldname</em> will be expunged from <em>outlog</em> which removes it from the instance domain metadata and removes all values of this instance for all the associated metrics.
       <p>If the instance names contain any embedded spaces then special care needs to be taken in respect of the PCP instance naming rule that treats the leading non-space part of the instance name as the unique portion of the name for the purposes of matching and ensuring uniqueness within an instance domain, refer to <strong>pmdaInstance</strong>(3) for a discussion of this issue.
       <p>As an illustration, consider the hypothetical instance domain for a metric which contains 2 instances with the following names:
-      <pre class="indent-4">red
-eek urk</pre>
+      <pre class="indent-4"><code>red</code>
+<code>eek urk</code></pre>
       <p>Then some possible <strong><em>INAME</em></strong> clauses might be:
       <dl>
         <dt><code>"eek" -&gt; "yellow like a flower"</code>
@@ -108,8 +108,8 @@ eek urk</pre>
     <dd>
       <p>A special case of the previous <strong><em>INDOM</em></strong> clause where the instance domain is a duplicate copy of the <em>domain</em><strong><em>.</em></strong><em>serial</em> instance domain from the <em>indom</em> rewriting rule, and then any mapping rules are applied to the copied <em>newdomain</em><strong><em>.</em></strong><em>newserial</em> instance domain. &nbsp;This is useful when a PMDA is split and the same instance domain needs to be replicated for domain <em>domain</em> and domain <em>newdomain</em>. So for example if the metrics <em>foo.one</em> and <em>foo.two</em> are both defined over instance domain 12.34, and <em>foo.two</em> is moved to another PMDA using domain 27, then the following rewriting rules could be used:
       <div class="indent-4">
-        <p><code>indom 12.34 { indom -&gt; duplicate 27.34 }<br>
-        metric foo.two { indom -&gt; 27.34 pmid -&gt; 27.*.* &nbsp;}</code>
+        <p><code>indom 12.34 { indom -&gt; duplicate 27.34 }</code><br>
+        <code>metric foo.two { indom -&gt; 27.34 pmid -&gt; 27.*.* &nbsp;}</code>
       </div>
     <dt><strong><em>INST</em></strong> <em>oldid</em> <strong><em>-&gt;</em></strong> <em>newid</em>
     <dd>
@@ -160,11 +160,11 @@ eek urk</pre>
         </dl>
         <p>If the input instance domain is singular (indom <strong>PM_INDOM_NULL</strong>) then independent of any <em>pick</em> specifications, there is at most one value in each input result and so <strong><em>FIRST</em></strong>, <strong><em>LAST</em></strong>, <strong><em>MIN</em></strong>, <strong><em>MAX</em></strong>, <strong><em>SUM</em></strong> and <strong><em>AVG</em></strong> are all equivalent and the output instance identifier will be 0.
         <p>In general it is an error to specify a rewriting action for the same metadata or result values more than once, e.g. more than one <strong><em>INDOM</em></strong> clause for the same instance domain. &nbsp;The one exception is the possible interaction between the <strong><em>INDOM</em></strong> clauses in the <strong>indom</strong> and <strong>metric</strong> rules. For example the metric <em>sample.bin</em> is defined over the instance domain 29.2 in <em>inlog</em> and the following is acceptable (albeit redundant):
-        <pre class="indent-4">indom 29.* { indom -&gt; 109.* }
-metric sample.bin { indom -&gt; 109.2 }</pre>
+        <pre class="indent-4"><code>indom 29.* { indom -&gt; 109.* }</code>
+<code>metric sample.bin { indom -&gt; 109.2 }</code></pre>
         <p>However the following is an error, because the instance domain for <em>sample.bin</em> has two conflicting definitions:
-        <pre class="indent-4">indom 29.* { indom -&gt; 109.* }
-metric sample.bin { indom -&gt; 123.2 }</pre>
+        <pre class="indent-4"><code>indom 29.* { indom -&gt; 109.* }</code>
+<code>metric sample.bin { indom -&gt; 123.2 }</code></pre>
       <dt><strong><em>INDOM</em></strong> <strong><em>-&gt;</em></strong> <strong><em>NULL</em></strong>[ <em>pick</em> ]
       <dd>
         <p>The metric (which must have been previously defined over an instance domain) is being modified to be a singular metric. &nbsp;This involves a metadata change and collapsing all results for this metric so that multiple values become one value.
@@ -200,28 +200,28 @@ metric sample.bin { indom -&gt; 123.2 }</pre>
 <section>
   <h2>EXAMPLES</h2>
   <p>To promote the values of the per-disk IOPS metrics to 64-bit to allow aggregation over a long time period for capacity planning, or because the PMDA has changed to export 64-bit counters and we want to convert old archives so they can be processed alongside new archives.
-  <pre class="indent-4">metric disk.dev.read { type -&gt; U64 }
-metric disk.dev.write { type -&gt; U64 }
-metric disk.dev.total { type -&gt; U64 }</pre>
+  <pre class="indent-4"><code>metric disk.dev.read { type -&gt; U64 }</code>
+<code>metric disk.dev.write { type -&gt; U64 }</code>
+<code>metric disk.dev.total { type -&gt; U64 }</code></pre>
   <p>The instances associated with the load average metric <strong>kernel.all.load</strong> could be renamed and renumbered by the rules below.
-  <pre class="indent-4"># for the Linux PMDA, the kernel.all.load metric is defined
-# over instance domain 60.2
-indom 60.2 {
-    inst 1 -&gt; 60 iname "1 minute" -&gt; "60 second"
-    inst 5 -&gt; 300 iname "5 minute" -&gt; "300 second"
-    inst 15 -&gt; 900 iname "15 minute" -&gt; "900 second"
-}</pre>
+  <pre class="indent-4"><code># for the Linux PMDA, the kernel.all.load metric is defined</code>
+<code># over instance domain 60.2</code>
+<code>indom 60.2 {</code>
+    <code>inst 1 -&gt; 60 iname "1 minute" -&gt; "60 second"</code>
+    <code>inst 5 -&gt; 300 iname "5 minute" -&gt; "300 second"</code>
+    <code>inst 15 -&gt; 900 iname "15 minute" -&gt; "900 second"</code>
+<code>}</code></pre>
   <p>If we decide to split the ``proc'' metrics out of the Linux PMDA, this will involve changing the domain number for the PMID of these metrics and the associated instance domains. &nbsp;The rules below would rewrite an old archive to match the changes after the PMDA split.
-  <pre class="indent-4"># all Linux proc metrics are in 7 clusters
-metric 60.8.* { pmid -&gt; 123.*.* }
-metric 60.9.* { pmid -&gt; 123.*.* }
-metric 60.13.* { pmid -&gt; 123.*.* }
-metric 60.24.* { pmid -&gt; 123.*.* }
-metric 60.31.* { pmid -&gt; 123.*.* }
-metric 60.32.* { pmid -&gt; 123.*.* }
-metric 60.51.* { pmid -&gt; 123.*.* }
-# only one instance domain for Linux proc metrics
-indom 60.9 { indom -&gt; 123.0 }</pre>
+  <pre class="indent-4"><code># all Linux proc metrics are in 7 clusters</code>
+<code>metric 60.8.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.9.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.13.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.24.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.31.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.32.* { pmid -&gt; 123.*.* }</code>
+<code>metric 60.51.* { pmid -&gt; 123.*.* }</code>
+<code># only one instance domain for Linux proc metrics</code>
+<code>indom 60.9 { indom -&gt; 123.0 }</code></pre>
 </section>
 <section>
   <h2>FILES</h2>
