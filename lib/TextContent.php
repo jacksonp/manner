@@ -141,8 +141,7 @@ class TextContent
                 case '\u':
                     if ($i < $numTextSegments - 1) {
                         if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\d') {
-                            $sup = $parentNode->appendChild($dom->createElement('sup'));
-                            $sup->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                            self::appendTextChild($parentNode, $textSegments[++$i], ['sup']);
                             ++$i;
                         }
                         // else: Do nothing - just drop the \u
@@ -151,8 +150,7 @@ class TextContent
                 case '\d':
                     if ($i < $numTextSegments - 1) {
                         if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\u') {
-                            $sub = $parentNode->appendChild($dom->createElement('sub'));
-                            $sub->appendChild(new DOMText(self::interpretString($textSegments[++$i], false)));
+                            self::appendTextChild($parentNode, $textSegments[++$i], ['sub']);
                             ++$i;
                         }
                         // else: Do nothing - just drop the \d
@@ -164,13 +162,7 @@ class TextContent
                 case '\f[B]':
                 case '\f3':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if (Node::isOrInTag($parentNode, 'strong') || trim($textSegments[$i]) === '') {
-                            $parentNode->appendChild($domText);
-                        } else {
-                            $strong = $parentNode->appendChild($dom->createElement('strong'));
-                            $strong->appendChild($domText);
-                        }
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['strong']);
                     }
                     break;
                 case '\fI':
@@ -179,22 +171,14 @@ class TextContent
                 case '\f[I]':
                 case '\f2':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if (Node::isOrInTag($parentNode, 'em') || trim($textSegments[$i]) === '') {
-                            $parentNode->appendChild($domText);
-                        } else {
-                            $em = $parentNode->appendChild($dom->createElement('em'));
-                            $em->appendChild($domText);
-                        }
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['em']);
                     }
                     break;
                 case '\f4':
                 case '\f(BI':
                 case '\f[BI]':
                     if ($i < $numTextSegments - 1) {
-                        $strong = $parentNode->appendChild($dom->createElement('strong'));
-                        $em     = $strong->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['strong', 'em']);
                     }
                     break;
                 case '\f':
@@ -225,57 +209,54 @@ class TextContent
                 case '\f[CW]':
                 case '\f[CO]':
                     if ($i < $numTextSegments - 1) {
-                        $domText = new DOMText(self::interpretString($textSegments[++$i]));
-                        if ($parentNode->tagName === 'code' || trim($textSegments[$i]) === '') {
-                            $parentNode->appendChild($domText);
-                        } else {
-                            $code = $dom->createElement('code');
-                            $code->appendChild($domText);
-                            $parentNode->appendChild($code);
-                        }
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['code']);
                     }
                     break;
                 case '\f(CWI':
                 case '\f[CI]':
                 case '\f(CI':
                     if ($i < $numTextSegments - 1) {
-                        $code = $parentNode->appendChild($dom->createElement('code'));
-                        $em   = $code->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'em']);
                     }
                     break;
                 case '\f(CWB':
                 case '\f[CB]':
                 case '\f(CB':
                     if ($i < $numTextSegments - 1) {
-                        $code   = $parentNode->appendChild($dom->createElement('code'));
-                        $strong = $code->appendChild($dom->createElement('strong'));
-                        $strong->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'strong']);
                     }
                     break;
                 case '\f[CBI]':
                     if ($i < $numTextSegments - 1) {
-                        $code   = $parentNode->appendChild($dom->createElement('code'));
-                        $strong = $code->appendChild($dom->createElement('strong'));
-                        $em     = $strong->appendChild($dom->createElement('em'));
-                        $em->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['code', 'strong', 'em']);
                     }
                     break;
                 case '\f[SM]':
                 case '\f(SM':
                     if ($i < $numTextSegments - 1) {
-                        $small = $parentNode->appendChild($dom->createElement('small'));
-                        $small->appendChild(new DOMText(self::interpretString($textSegments[++$i])));
+                        self::appendTextChild($parentNode, $textSegments[++$i], ['small']);
                     }
                     break;
                 default:
                     if (mb_substr($textSegments[$i], 0, 2) !== '\\f') {
-                        $parentNode->appendChild(new DOMText(self::interpretString($textSegments[$i])));
+                        self::appendTextChild($parentNode, $textSegments[$i]);
                     }
             }
 
         }
 
+    }
+
+    private static function appendTextChild(DOMElement $parentNode, string $textContent, array $tags = [])
+    {
+        if (trim($textContent) !== '') {
+            foreach ($tags as $tag) {
+                if (is_null(Node::ancestor($parentNode, $tag))) {
+                    $parentNode = $parentNode->appendChild($parentNode->ownerDocument->createElement($tag));
+                }
+            }
+        }
+        $parentNode->appendChild(new DOMText(self::interpretString($textContent)));
     }
 
     static function interpretString(string $string, bool $applyCharTranslations = true): string
