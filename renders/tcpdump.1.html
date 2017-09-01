@@ -462,22 +462,22 @@
 
 
 <code>sushi.1023 &gt; wrl.nfs: NFS request xid 26377</code>
-        <code>112 readlink fh 21,24/10.73165</code>
+<code>  112 readlink fh 21,24/10.73165</code>
 <code>wrl.nfs &gt; sushi.1023: NFS reply xid 26377</code>
-        <code>reply ok 40 readlink "../var"</code>
+<code>  reply ok 40 readlink "../var"</code>
 <code>sushi.1022 &gt; wrl.nfs: NFS request xid 8219</code>
-        <code>144 lookup fh 9,74/4096.6878 "xcolors"</code>
+<code>  144 lookup fh 9,74/4096.6878 "xcolors"</code>
 <code>wrl.nfs &gt; sushi.1022: NFS reply xid 8219</code>
-        <code>reply ok 128 lookup fh 9,74/4134.3150</code></pre>
+<code>  reply ok 128 lookup fh 9,74/4134.3150</code></pre>
   <p>In the first line, host <em>sushi</em> sends a transaction with id <em>26377</em> to <em>wrl</em>. The request was 112 bytes, excluding the UDP and IP headers. The operation was a <em>readlink</em> (read symbolic link) on file handle (<em>fh</em>) 21,24/10.731657119. (If one is lucky, as in this case, the file handle can be interpreted as a major,minor device number pair, followed by the inode number and generation number.) In the second line, <em>wrl</em> replies `ok' with the same transaction id and the contents of the link.
   <p>In the third line, <em>sushi</em> asks (using a new transaction id) <em>wrl</em> to lookup the name `<em>xcolors</em>' in directory file 9,74/4096.6878. In the fourth line, <em>wrl</em> sends a reply with the respective transaction id.
   <p>Note that the data printed depends on the operation type. The format is intended to be self explanatory if read in conjunction with an NFS protocol spec. Also note that older versions of tcpdump printed NFS packets in a slightly different format: the transaction id (xid) would be printed instead of the non-NFS port number of the packet.
   <p>If the -v (verbose) flag is given, additional information is printed. For example:
   <pre class="indent-7">
 <code>sushi.1023 &gt; wrl.nfs: NFS request xid 79658</code>
-        <code>148 read fh 21,11/12.195 8192 bytes @ 24576</code>
+<code>  148 read fh 21,11/12.195 8192 bytes @ 24576</code>
 <code>wrl.nfs &gt; sushi.1023: NFS reply xid 79658</code>
-        <code>reply ok 1472 read REG 100664 ids 417/0 sz 29388</code></pre>
+<code>  reply ok 1472 read REG 100664 ids 417/0 sz 29388</code></pre>
   <p>(-v also prints the IP header TTL, ID, length, and fragmentation fields, which have been omitted from this example.) &nbsp;In the first line, <em>sushi</em> asks <em>wrl</em> to read 8192 bytes from file 21,11/12.195, at byte offset 24576. <em>Wrl</em> replies `ok'; the packet shown on the second line is the first fragment of the reply, and hence is only 1472 bytes long (the other bytes will follow in subsequent fragments, but these fragments do not have NFS or even UDP headers and so might not be printed, depending on the filter expression used). Because the -v flag is given, some of the file attributes (which are returned in addition to the file data) are printed: the file type (``REG'', for regular file), the file mode (in octal), the uid and gid, and the file size.
   <p>If the -v flag is given more than once, even more details are printed.
   <p>Note that NFS requests are very large and much of the detail won't be printed unless <em>snaplen</em> is increased. Try using `<strong>-s 192</strong>' to watch NFS traffic.
@@ -490,8 +490,8 @@
 
 
 <code>elvis.7001 &gt; pike.afsfs:</code>
-        <code>rx data fs call rename old fid 536876964/1/1 ".newsrc.new"</code>
-        <code>new fid 536876964/1/1 ".newsrc"</code>
+<code>  rx data fs call rename old fid 536876964/1/1 ".newsrc.new"</code>
+<code>  new fid 536876964/1/1 ".newsrc"</code>
 <code>pike.afsfs &gt; elvis.7001: rx data fs reply rename</code></pre>
   <p>In the first line, host elvis sends a RX packet to pike. This was a RX data packet to the fs (fileserver) service, and is the start of an RPC call. The RPC call was a rename, with the old directory file id of 536876964/1/1 and an old filename of `.newsrc.new', and a new directory file id of 536876964/1/1 and a new filename of `.newsrc'. The host pike responds with a RPC reply to the rename call (which was successful, because it was a data packet and not an abort packet).
   <p>In general, all AFS RPCs are decoded at least by RPC call name. Most AFS RPCs have at least some of the arguments decoded (generally only the `interesting' arguments, for some definition of interesting).

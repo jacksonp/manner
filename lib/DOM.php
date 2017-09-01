@@ -281,6 +281,7 @@ class DOM
             if (self::isInlineElement($child)) {
 
                 if (
+                    $child->tagName !== 'code' &&
                     $child->firstChild &&
                     $child->firstChild->nodeType == XML_TEXT_NODE &&
                     preg_match('~^(\s+)(.*?)$~u', $child->firstChild->textContent, $matches)

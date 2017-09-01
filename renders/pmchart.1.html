@@ -113,7 +113,7 @@
     <dt>3.
     <dd>
       <p>The next line should be
-      <pre><code><strong>version</strong></code> <code>&lt;n&gt; &lt;host-clause&gt;</code></pre>
+      <pre><code><strong>version</strong></code><code> &lt;n&gt; &lt;host-clause&gt;</code></pre>
       <p>where <code>&lt;n&gt;</code> depends on the configuration file type, and is <code><strong>1</strong></code> for <code><strong>pmchart</strong></code> else <code><strong>1.1</strong></code>, <code><strong>1.2</strong></code> or <code><strong>2.0</strong></code> for <code><strong>pmchart</strong></code>.
       <p>The <code>&lt;host-clause&gt;</code> part is optional (and ignored) for <strong>pmchart</strong> configuration files, but required for the <strong>pmchart</strong> configuration files, and is of the form
       <pre><code><strong>host</strong></code> <code><strong>literal</strong></code></pre>
@@ -122,11 +122,11 @@
     <dt>4.
     <dd>
       <p>A configuration contains one or more charts defined as follows:
-      <pre><code><strong>chart</strong></code> <code>[</code><code><strong>title</strong></code> <code>&lt;title&gt;]</code> <code><strong>style</strong></code> <code>&lt;style&gt; &lt;options&gt;</code></pre>
+      <pre><code><strong>chart</strong></code><code> [</code><code><strong>title</strong></code><code> &lt;title&gt;]</code> <code><strong>style</strong></code><code> &lt;style&gt; &lt;options&gt;</code></pre>
       <p>If specified, the title will appear centred and above the graph area of the chart. The <code>&lt;title&gt;</code> is usually enclosed in quotes (") and if it contains the sequence "%h" this will be replaced by the short form of the hostname for the default source of metrics at the time this chart was loaded. &nbsp;Alternatively, "%H" can be used to insert the full host name. &nbsp;If the hostname appears to be an inet or IPv6 address, no shortening will be attempted; it will be used as-is in both replacement cases. After the view is loaded, the title visibility and setting can be manipulated using the <em>Chart Title</em> text box in the <em>Edit→Chart</em> dialog.
       <p>The <code>&lt;style&gt;</code> controls the initial plotting style of the chart, and should be one of the keywords <code><strong>plot</strong></code> (line graph), <code><strong>bar</strong></code>, <code><strong>stacking</strong></code> (stacked bar), <code><strong>area</strong></code> or <code><strong>utilization</strong></code>. After the view is loaded, the plotting style can be changed using the <em>Edit→Chart</em> Style dropdown list.
       <p>The <code>&lt;options&gt;</code> are zero or more of the optional elements:
-      <pre><code>[</code><code><strong>scale</strong></code> <code>[from] &lt;ymin&gt; [to] &lt;ymax&gt;] [</code><code><strong>legend</strong></code> <code>&lt;onoff&gt;]</code></pre>
+      <pre><code>[</code><code><strong>scale</strong></code><code> [from] &lt;ymin&gt; [to] &lt;ymax&gt;] [</code><code><strong>legend</strong></code><code> &lt;onoff&gt;]</code></pre>
       <p>If <code><strong>scale</strong></code> is specified, the vertical scaling is set for all plots in the chart to a y-range defined by <code>&lt;ymin&gt;</code> and <code>&lt;ymax&gt;</code>. Otherwise the vertical axis will be autoscaled based on the values currently being plotted.
       <p><code>&lt;onoff&gt;</code> is one of the keywords <code><strong>on</strong></code> or <code><strong>off</strong></code> and the <code><strong>legend</strong></code> clause controls the presence or absence of the plot legend below the graph area. &nbsp;The default is for the legend to be shown. After the view is loaded, the legend visibility can be toggled using the <em>Show Legend</em> button in the <em>Edit→Chart</em> dialog.
     <dt>5.
@@ -136,9 +136,9 @@
     <dd>
       <p>Each <code><strong>chart</strong></code> has one or more plots associated with it, as defined by one of the following specifications:
       <pre><code><strong>plot</strong></code>
-    <code>[</code><code><strong>legend</strong></code> <code>&lt;title&gt;] [</code><code><strong>color</strong></code> <code>&lt;colorspec&gt;] [</code><code><strong>host</strong></code> <code>&lt;hostspec&gt;]</code>
-    <code><strong>metric</strong></code> <code>&lt;metricname&gt;</code>
-    <code>[</code> <code><strong>instance</strong></code> <code>&lt;inst&gt; |</code> <code><strong>matching</strong></code> <code>&lt;pat&gt; |</code> <code><strong>not-matching</strong></code> <code>&lt;pat&gt; ]</code></pre>
+<code>    [</code><code><strong>legend</strong></code><code> &lt;title&gt;] [</code><code><strong>color</strong></code><code> &lt;colorspec&gt;] [</code><code><strong>host</strong></code><code> &lt;hostspec&gt;]</code>
+    <code><strong>metric</strong></code><code> &lt;metricname&gt;</code>
+<code>    [</code> <code><strong>instance</strong></code><code> &lt;inst&gt; |</code> <code><strong>matching</strong></code><code> &lt;pat&gt; |</code> <code><strong>not-matching</strong></code><code> &lt;pat&gt; ]</code></pre>
       <p>The keyword <code><strong>plot</strong></code> may be replaced with the keyword <code><strong>optional-plot</strong></code>, in which case if the source of performance data does not include the specified performance metric and/or instance, then this plot is silently dropped from the chart.
       <p>If specified, the title will appear in the chart legend. The <code>&lt;title&gt;</code> is usually enclosed in quotes (") and it may contain one or more wildcard characters which will be expanded using metric name, instance name, and host name for the plot. The wildcards are "%i" (short unique instance name, up to the first whitespace), "%I" (full instance name), "%h" (short host name, up to the first dot), %H (full host name), "%m" (metric name shortened to the final two PMNS components), and "%M" (full metric name).
       <p>For older <strong>pmchart</strong> configuration files, the keyword <code><strong>title</strong></code> must be used instead of <code><strong>legend</strong></code>. Nowadays <strong>pmchart</strong> supports either keyword.
@@ -172,7 +172,7 @@
     <dt>7.
     <dd>
       <p>The optional <code><strong>tab</strong></code> directive can be used to create views with multiple charts which span multiple Tabs. &nbsp;The syntax is as follows:
-      <pre><code><strong>tab</strong></code> <code>&lt;label&gt; [</code><code><strong>host</strong></code> <code>&lt;host&gt;] [</code><code><strong>points</strong></code> <code>&lt;points&gt; [</code><code><strong>samples</strong></code> <code>&lt;samples&gt;]]</code></pre>
+      <pre><code><strong>tab</strong></code><code> &lt;label&gt; [</code><code><strong>host</strong></code><code> &lt;host&gt;] [</code><code><strong>points</strong></code><code> &lt;points&gt; [</code><code><strong>samples</strong></code><code> &lt;samples&gt;]]</code></pre>
       <pre>All chart specifications following this keyword will be created
 on the new Tab, until the end of the configuration file or until
 another <code><strong>tab</strong></code> keyword is encountered.</pre>
