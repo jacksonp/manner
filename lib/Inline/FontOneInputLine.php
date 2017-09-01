@@ -19,13 +19,9 @@ class Inline_FontOneInputLine implements Block_Template
         if (
             count($request['arguments']) === 0 &&
             count($lines) &&
-            (Blocks::lineEndsBlock(Request::getLine($lines), $lines))
+            Blocks::lineEndsBlock(Request::getLine($lines), $lines)
         ) {
             return null; // Skip
-        }
-
-        if (count($request['arguments']) === 1 && $request['arguments'][0] === '') {
-            return null; // bug in man page, see e.g. basic_ldap_auth.8: .B "\"uid\=%s\""
         }
 
         $parentNode = Blocks::getParentForText($parentNode);
