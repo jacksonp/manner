@@ -15,8 +15,7 @@ class Roff
             if ($stopOnContent) {
 
                 // \c: Interrupt text processing (groff.7)
-                // \fB\fP see KRATool.1
-                if (in_array($request['raw_line'], ['\\c', '\\fB\\fP'])) {
+                if (in_array($request['raw_line'], ['\\c'])) {
                     array_shift($lines);
                     return true;
                 }
