@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff
 {
@@ -17,6 +17,7 @@ class Roff
                 // \c: Interrupt text processing (groff.7)
                 if (in_array($request['raw_line'], ['\\c'])) {
                     array_shift($lines);
+//                    Man::instance()->runPostOutputCallbacks();
                     return true;
                 }
 
@@ -42,8 +43,16 @@ class Roff
                 }
             }
 
-            if ($stopOnContent && ($request['class'] === 'Block_Text' || $parentNode->textContent !== '')) {
-                return true;
+            if ($request['class'] === 'Block_Text' || $parentNode->textContent !== '') {
+                if ($stopOnContent) {
+                    return true;
+                }
+                if ($request['class'] !== 'Inline_FontOneInputLine') { // TODO: hack? fix?
+                    $newParent = Man::instance()->runPostOutputCallbacks();
+                    if (!is_null($newParent)) {
+                        $parentNode = $newParent;
+                    }
+                }
             }
 
         }

@@ -14,7 +14,7 @@ class Block_IP implements Block_Template
 
         $man = Man::instance();
 
-        if ($needOneLineOnly) { // See e.g. links2.1
+        if ($needOneLineOnly && $parentNode->tagName === 'dt') { // See e.g. links2.1
             if (count($request['arguments'])) {
                 $lines[0] = $request['arguments'][0];
             } else {

@@ -31,6 +31,10 @@ class Block_Text implements Block_Template
 
         $parentNode = Blocks::getParentForText($parentNode);
 
+        if (Man::instance()->hasPostOutputCallbacks()) {
+            $needOneLineOnly = true;
+        }
+
         // Reset
         self::$interruptTextProcessing = false;
 

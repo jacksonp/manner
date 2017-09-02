@@ -8,6 +8,7 @@ class Man
 {
 
     private $data;
+    private $postOutputCallbacks;
     private $fontStack;
     private $aliases;
     private $macros;
@@ -49,7 +50,7 @@ class Man
 
     public function reset()
     {
-        $this->data = [
+        $this->data                = [
             'indentation' => Indentation::DEFAULT,
             'left_margin_level' => 1, // The first level (i.e., no call to .RS yet) has number 1.
             'escape_char' => '\\',
@@ -63,6 +64,7 @@ class Man
             'extra2' => null,
             'extra3' => null,
         ];
+        $this->postOutputCallbacks = [];
         $this->resetFonts();
         $this->aliases  = [];
         $this->macros   = [];
@@ -207,6 +209,25 @@ class Man
     public function __isset($name)
     {
         return isset($this->data[$name]);
+    }
+
+    public function addPostOutputCallback(Closure $string)
+    {
+        $this->postOutputCallbacks[] = $string;
+    }
+
+    public function runPostOutputCallbacks():?DOMElement
+    {
+        $return = null;
+        while ($cb = array_pop($this->postOutputCallbacks)) {
+            $return = $cb();
+        }
+        return $return;
+    }
+
+    public function hasPostOutputCallbacks(): bool
+    {
+        return count($this->postOutputCallbacks) > 0;
     }
 
     public function pushFont(string $name): int

@@ -16,31 +16,24 @@ class Inline_FontOneInputLine implements Block_Template
 
         $man = Man::instance();
 
-        if (
-            count($request['arguments']) === 0 &&
-            count($lines) &&
-            Blocks::lineEndsBlock(Request::getLine($lines), $lines)
-        ) {
-            return null; // Skip
-        }
-
-        $parentNode = Blocks::getParentForText($parentNode);
-
         $man->pushFont($request['request']);
 
         if (count($request['arguments']) === 0) {
-            Roff::parse($parentNode, $lines, true);
+            $man->addPostOutputCallback(function () use ($parentNode) {
+                Man::instance()->resetFonts();
+                return null;
+            });
+            return null;
         } else {
+            $parentNode = Blocks::getParentForText($parentNode);
             Block_Text::addSpace($parentNode);
             TextContent::interpretAndAppendText($parentNode, implode(' ', $request['arguments']));
             if ($pre = Node::ancestor($parentNode, 'pre')) {
                 PreformattedOutput::endInputLine($pre);
             }
+            $man->resetFonts();
+            return $parentNode;
         }
-
-        $man->resetFonts();
-
-        return $parentNode;
 
     }
 
