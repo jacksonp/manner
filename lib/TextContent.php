@@ -179,65 +179,72 @@ class TextContent
 
     }
 
+    private static function getTagsForFont(?string $font): array
+    {
+        $tags = [];
+        switch ($font) {
+            case 'AR':
+            case 'R':
+            case '0':
+            case '1':
+                // Do nothing
+                break;
+            case 'I':
+            case 'AI':
+            case '2':
+                $tags = ['em'];
+                break;
+            case 'B':
+            case '3':
+                $tags = ['strong'];
+                break;
+            case 'BI':
+            case '4':
+                $tags = ['strong', 'em'];
+                break;
+            case 'C':
+            case 'CR':
+            case 'CW':
+            case 'CO':
+            case 'CS':
+            case 'V':
+            case 'tt':
+            case '5':
+                $tags = ['code'];
+                break;
+            case 'CI':
+            case 'CWI':
+                $tags = ['code', 'em'];
+                break;
+            case 'CB':
+            case 'CWB':
+                $tags = ['code', 'strong'];
+                break;
+            case 'CBI':
+                $tags = ['code', 'strong', 'em'];
+                break;
+            case 'SM':
+                $tags = ['small'];
+                break;
+            case 'SB':
+                $tags = ['strong', 'small'];
+                break;
+            default:
+                // Do nothing
+        }
+        return $tags;
+    }
+
     private static function appendTextChild(DOMElement $parentNode, string $textContent)
     {
 
         if (!in_array(trim($textContent), ['', '\\&'])) {
-            $man  = Man::instance();
-            $font = $man->currentFont();
-            $tags = [];
-            switch ($font) {
-                case 'AR':
-                case 'R':
-                case '0':
-                case '1':
-                    // Do nothing
-                    break;
-                case 'I':
-                case 'AI':
-                case '2':
-                    $tags = ['em'];
-                    break;
-                case 'B':
-                case '3':
-                    $tags = ['strong'];
-                    break;
-                case 'BI':
-                case '4':
-                    $tags = ['strong', 'em'];
-                    break;
-                case 'C':
-                case 'CR':
-                case 'CW':
-                case 'CO':
-                case 'CS':
-                case 'V':
-                case 'tt':
-                case '5':
-                    $tags = ['code'];
-                    break;
-                case 'CI':
-                case 'CWI':
-                    $tags = ['code', 'em'];
-                    break;
-                case 'CB':
-                case 'CWB':
-                    $tags = ['code', 'strong'];
-                    break;
-                case 'CBI':
-                    $tags = ['code', 'strong', 'em'];
-                    break;
-                case 'SM':
-                    $tags = ['small'];
-                    break;
-                case 'SB':
-                    $tags = ['strong', 'small'];
-                    break;
-                default:
-                    // Do nothing
-            }
-
-            if ($man->isFontSmall()) {
+            $man   = Man::instance();
+            $fonts = $man->getFonts();
+            $tags  = self::getTagsForFont(array_pop($fonts));
+            if (count($tags) === 1 && current($tags) === 'small') {
+                $tags = array_merge($tags, self::getTagsForFont(array_pop($fonts)));
+            } elseif ($man->isFontSmall()) {
                 array_unshift($tags, 'small');
             }
 
