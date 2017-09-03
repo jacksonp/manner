@@ -14,6 +14,9 @@ class Roff_Condition implements Roff_Template
 
         array_shift($lines);
 
+        $man       = Man::instance();
+        $condition = $man->applyAllReplacements($request['raw_arg_string']);
+
         if ($request['request'] === 'if') {
 
             if (mb_strlen($request['raw_arg_string']) === 0) {
@@ -22,7 +25,7 @@ class Roff_Condition implements Roff_Template
 
             if (preg_match(
                 '~^' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
-                $request['raw_arg_string'], $matches)
+                $condition, $matches)
             ) {
                 $newLines = self::ifBlock($lines, $matches[3],
                     self::test($matches[1], $macroArguments) && self::test($matches[2], $macroArguments));
@@ -30,13 +33,13 @@ class Roff_Condition implements Roff_Template
                 return [];
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $condition, $matches)) {
                 $newLines = self::ifBlock($lines, $matches[2], self::test($matches[1], $macroArguments));
                 array_splice($lines, 0, 0, $newLines);
                 return [];
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $request['raw_arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $condition, $matches)) {
                 if (self::test($matches[1], $macroArguments)) {
                     array_unshift($lines, $matches[2]); // i.e. just remove .if <condition> prefix and go again.
                     return [];
@@ -47,7 +50,7 @@ class Roff_Condition implements Roff_Template
 
         } elseif ($request['request'] === 'ie') {
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $request['raw_arg_string'], $matches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $condition, $matches)) {
                 $useIf     = self::test($matches[1], $macroArguments);
                 $ifLines   = self::ifBlock($lines, $matches[2], $useIf);
                 $elseLines = self::handleElse($lines, $useIf);
@@ -59,7 +62,7 @@ class Roff_Condition implements Roff_Template
                 return [];
             }
 
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $request['raw_arg_string'], $ifMatches)) {
+            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $condition, $ifMatches)) {
                 $useIf     = self::test($ifMatches[1], $macroArguments);
                 $elseLines = self::handleElse($lines, $useIf);
                 if ($useIf) {
