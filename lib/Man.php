@@ -293,7 +293,7 @@ class Man
         return $this->macros;
     }
 
-    public function setRegister(string $name, string $value)
+    public function setRegister(string $name, string $value): void
     {
         $this->registers[$name] = $value;
     }

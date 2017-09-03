@@ -67,6 +67,8 @@ class Roff_Unit
     private static function evaluate(string $string): string
     {
 
+        $string = trim($string);
+
         // Remove parentheses around a lone number:
         $evaluatedString = Replace::preg('~\(((?:\d*\.)?\d+)\)~u', '$1', $string);
 
