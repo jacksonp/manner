@@ -4,11 +4,59 @@ declare(strict_types=1);
 class Request
 {
 
-    private static function parseArguments(string $argString): array
+    public static function getArgChars(string $argString): array
+    {
+        $argString = ltrim($argString);
+        return preg_split('//u', $argString, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    public static function getNextArgument(array &$chars, bool $ignoreQuotes): ?string
+    {
+
+        // TODO: Could also trim on paired backslashes here:
+//        $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
+
+        if (count($chars) === 0) {
+            return null;
+        }
+
+        $thisArg  = '';
+        $inQuotes = false;
+        $lastChar = null;
+        while (count($chars)) {
+            $char = array_shift($chars);
+            if ($char === '\\') {
+                // Take this char and the next
+                $thisArg .= $char . array_shift($chars);
+            } elseif ($char === ' ' && !$inQuotes) {
+                return $thisArg;
+            } elseif ($char === '"' && !$ignoreQuotes) {
+                if ($inQuotes && $chars[0] === '"') {
+                    // When in quotes, "" produces a quote.
+                    $thisArg .= '"';
+                    array_shift($chars);
+                } elseif ((is_null($lastChar) || $lastChar === ' ') && !$inQuotes) {
+                    $inQuotes = true;
+                } elseif ($inQuotes) {
+                    return $thisArg;
+                } else {
+                    $thisArg .= '"';
+                }
+            } else {
+                $thisArg .= $char;
+            }
+            $lastChar = $char;
+        }
+
+        return $thisArg;
+
+    }
+
+    private static function parseArguments(string $argString, bool $ignoreQuotes): array
     {
 
         $argString = ltrim($argString);
-        // Could also trim on paired backslashes here:
+        // TODO: Could also trim on paired backslashes here:
         $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
 
         if ($argString === '') {
@@ -33,7 +81,7 @@ class Request
                 // New arg
                 $args[]  = $thisArg;
                 $thisArg = '';
-            } elseif ($char === '"') {
+            } elseif ($char === '"' && !$ignoreQuotes) {
                 $foundQuote = true;
                 if ($inQuotes && $i < $stringLength - 1 && mb_substr($argString, $i + 1, 1) === '"') {
                     // When in quotes, "" produces a quote.
@@ -153,7 +201,8 @@ class Request
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
-                $return['arguments']      = Request::parseArguments($return['arg_string']);
+                $return['arguments']      = Request::parseArguments($return['arg_string'],
+                    in_array($return['request'], ['if', 'ie']));
             }
 
             if (Roff_Skipped::skip($return['request'])) {

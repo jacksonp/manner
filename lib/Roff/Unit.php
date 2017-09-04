@@ -11,8 +11,6 @@ class Roff_Unit
         'u' => 1,
         // inch
         'i' => self::basicUnitsPerInch,
-        'in' => self::basicUnitsPerInch,
-        // TODO: double check this (remove and see what breaks how).
         // One inch is equal to 2.54cm.
         'c' => self::basicUnitsPerInch / 2.54,
         // Points. This is a typesetter’s measurement used for measure type size. It is 72 points to an inch.
@@ -48,12 +46,14 @@ class Roff_Unit
     {
 
         $string = Replace::pregCallback(
-            '~((?:\d*\.)?\d+)(in|[uicpPszfmnvM])?~u',
+            '~((?:\d*\.)?\d+)([uicpPszfmnvM])?~u',
             function ($matches) use ($defaultUnit, $targetUnit) {
                 $unit       = @$matches[2] ?: $defaultUnit;
                 $basicUnits = self::unitMultipliers[$unit] * $matches[1];
                 return (string)round($basicUnits / self::unitMultipliers[$targetUnit]);
             }, $string);
+
+        $string = preg_replace('~[^\d\.\(\)\+\*\-><= ]~', '', $string);
 
         return self::evaluate($string);
 
@@ -63,7 +63,9 @@ class Roff_Unit
      * Parentheses may be used as in any other language. However, in gtroff they are necessary to ensure order of
      * evaluation. gtroff has no operator precedence; expressions are evaluated left to right. This means that
      * gtroff evaluates ‘3+5*4’ as if it were parenthesized like ‘(3+5)*4’, not as ‘3+(5*4)’, as might be expected.
-     * */
+     * @param string $string
+     * @return string
+     */
     private static function evaluate(string $string): string
     {
 

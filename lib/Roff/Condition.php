@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_Condition implements Roff_Template
 {
@@ -9,13 +9,151 @@ class Roff_Condition implements Roff_Template
     // For the last quotes bit, see http://stackoverflow.com/a/366532
     const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
 
+    private static function isBalancedCondition(string $string): bool
+    {
+
+        $len   = mb_strlen($string);
+        $stack = [];
+        for ($i = 0; $i < $len; $i++) {
+            switch ($string[$i]) {
+                case '\\':
+                    ++$i; // skip next char, it's escaped
+                    break;
+                case '(':
+                    array_push($stack, 0);
+                    break;
+                case ')':
+                    if (array_pop($stack) !== 0) {
+                        return false;
+                    }
+                    break;
+//                case '[':
+//                    array_push($stack, 1);
+//                    break;
+//                case ']':
+//                    if (array_pop($stack) !== 1) {
+//                        return false;
+//                    }
+//                    break;
+                default:
+                    break;
+            }
+        }
+        return (empty($stack));
+    }
+
+    private static function getNextCondition(array &$argChars): string
+    {
+        $condition = Request::getNextArgument($argChars, true);
+        if (in_array($condition, ['c', 'd', 'm', 'r', 'F', 'S', '!c', '!d', '!m', '!r', '!F', '!S'])) {
+            $condition .= Request::getNextArgument($argChars, true);
+        }
+        while (!self::isBalancedCondition($condition)) {
+            if (count($argChars)) {
+                $condition .= Request::getNextArgument($argChars, true);
+            } else {
+                return '0';
+            }
+        }
+        return $condition;
+    }
+
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
         array_shift($lines);
 
-        $man       = Man::instance();
-        $condition = $man->applyAllReplacements($request['raw_arg_string']);
+        $argChars = Request::getArgChars($request['arg_string']);
+
+        if (!count($argChars)) {
+            return []; // Just skip
+        }
+
+        $condition = self::getNextCondition($argChars);
+
+        if ($condition === '\{') { // See e.g. whatsup.1
+            $newLines = self::ifBlock($lines, '', true);
+            array_splice($lines, 0, 0, $newLines);
+            return [];
+        }
+
+//        echo 'ARGUMENTS', PHP_EOL;
+//        var_dump($arguments);
+//        echo 'MACRO ARGUMENTS', PHP_EOL;
+//        var_dump($macroArguments);
+//        echo 'CONDITION STRING IS: ', $condition, PHP_EOL;
+
+        if (is_null($condition)) {
+            return []; // Just skip
+        }
+
+        $conditionTrue = self::test($condition, $macroArguments);
+
+        if (!count($argChars)) {
+            if (!$conditionTrue) {
+                array_shift($lines);
+
+            }
+            return []; // Just skip
+        }
+
+
+//        echo 'CONDITION IS ' , ($conditionTrue ? 'TRUE' : 'FALSE'), PHP_EOL;
+
+        $nextArg = Request::getNextArgument($argChars, true);
+
+        if ($nextArg === '.if' || $nextArg === '\'if') {
+            $condition2    = self::getNextCondition($argChars);
+            $conditionTrue = $conditionTrue && self::test($condition2, $macroArguments);
+            $nextArg       = Request::getNextArgument($argChars, true);
+        }
+
+        $postConditionString = $nextArg;
+        if (count($argChars)) {
+            $postConditionString .= ' ' . implode('', $argChars);
+        }
+
+
+        $postConditionBlock = strpos($postConditionString, '\\{') === 0;
+        if ($postConditionBlock) {
+            $postConditionString = ltrim(substr($postConditionString, 2));
+        }
+
+        if ($request['request'] === 'if') {
+
+            if ($postConditionBlock) {
+                $newLines = self::ifBlock($lines, $postConditionString, $conditionTrue);
+                array_splice($lines, 0, 0, $newLines);
+                return [];
+            } else {
+                if ($conditionTrue) {
+                    array_unshift($lines, $postConditionString); // just remove .if <condition> prefix and go again.
+                    return [];
+                } else {
+                    return [];
+                }
+            }
+
+        } elseif ($request['request'] === 'ie') {
+
+            if ($postConditionBlock) {
+                $ifLines   = self::ifBlock($lines, $postConditionString, $conditionTrue);
+                $elseLines = self::handleElse($lines, $conditionTrue);
+                array_splice($lines, 0, 0, $conditionTrue ? $ifLines : $elseLines);
+                return [];
+            } else {
+                $elseLines = self::handleElse($lines, $conditionTrue);
+                if ($conditionTrue) {
+                    array_unshift($lines, $postConditionString);
+                } else {
+                    array_splice($lines, 0, 0, $elseLines);
+                }
+                return [];
+            }
+        }
+
+        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $request['raw_line']);
+
 
         if ($request['request'] === 'if') {
 
@@ -129,7 +267,7 @@ class Roff_Condition implements Roff_Template
             't', // "Formatter is troff."
             'v', // vroff
             'require_index',
-            'c \[shc]', // see man.1
+            'c\[shc]', // see man.1
             '\'po4a.hide\'',
         ];
 
@@ -177,10 +315,17 @@ class Roff_Condition implements Roff_Template
             return $man->issetRegister($matches[1]);
         }
 
-        $condition = Roff_Unit::normalize($condition, 'u', 'u');
+        if (preg_match('~^(.+?)([:&])(.+)$~u', $condition, $matches)) {
+            if ($matches[2] === '&') {
+                return self::testRecursive($matches[1], $macroArguments) &&
+                    self::testRecursive($matches[3], $macroArguments);
+            } else {
+                return self::testRecursive($matches[1], $macroArguments) ||
+                    self::testRecursive($matches[3], $macroArguments);
+            }
+        }
 
-        $condition = Replace::preg('~:~u', ' or ', $condition);
-        $condition = Replace::preg('~&~u', ' and ', $condition);
+        $condition = Roff_Unit::normalize($condition, 'u', 'u');
 
         if (preg_match('~^([-\+\*/\d\(\)><=\.\s]| or | and )+$~u', $condition)) {
             $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
