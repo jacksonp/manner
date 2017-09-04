@@ -13,9 +13,6 @@ class Request
     public static function getNextArgument(array &$chars, bool $ignoreQuotes): ?string
     {
 
-        // TODO: Could also trim on paired backslashes here:
-//        $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
-
         if (count($chars) === 0) {
             return null;
         }

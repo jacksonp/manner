@@ -77,12 +77,6 @@ class Roff_Condition implements Roff_Template
             return [];
         }
 
-//        echo 'ARGUMENTS', PHP_EOL;
-//        var_dump($arguments);
-//        echo 'MACRO ARGUMENTS', PHP_EOL;
-//        var_dump($macroArguments);
-//        echo 'CONDITION STRING IS: ', $condition, PHP_EOL;
-
         if (is_null($condition)) {
             return []; // Just skip
         }
@@ -96,9 +90,6 @@ class Roff_Condition implements Roff_Template
             }
             return []; // Just skip
         }
-
-
-//        echo 'CONDITION IS ' , ($conditionTrue ? 'TRUE' : 'FALSE'), PHP_EOL;
 
         $nextArg = Request::getNextArgument($argChars, true);
 
@@ -145,66 +136,6 @@ class Roff_Condition implements Roff_Template
                 $elseLines = self::handleElse($lines, $conditionTrue);
                 if ($conditionTrue) {
                     array_unshift($lines, $postConditionString);
-                } else {
-                    array_splice($lines, 0, 0, $elseLines);
-                }
-                return [];
-            }
-        }
-
-        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $request['raw_line']);
-
-
-        if ($request['request'] === 'if') {
-
-            if (mb_strlen($request['raw_arg_string']) === 0) {
-                return []; // Just skip
-            }
-
-            if (preg_match(
-                '~^' . self::CONDITION_REGEX . ' [\.\']if\s+' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
-                $condition, $matches)
-            ) {
-                $newLines = self::ifBlock($lines, $matches[3],
-                    self::test($matches[1], $macroArguments) && self::test($matches[2], $macroArguments));
-                array_splice($lines, 0, 0, $newLines);
-                return [];
-            }
-
-            if (preg_match('~^' . self::CONDITION_REGEX . ' \\\\{\s*(.*)$~u', $condition, $matches)) {
-                $newLines = self::ifBlock($lines, $matches[2], self::test($matches[1], $macroArguments));
-                array_splice($lines, 0, 0, $newLines);
-                return [];
-            }
-
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*?)$~u', $condition, $matches)) {
-                if (self::test($matches[1], $macroArguments)) {
-                    array_unshift($lines, $matches[2]); // i.e. just remove .if <condition> prefix and go again.
-                    return [];
-                } else {
-                    return [];
-                }
-            }
-
-        } elseif ($request['request'] === 'ie') {
-
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?\\\\{\s*(.*)$~u', $condition, $matches)) {
-                $useIf     = self::test($matches[1], $macroArguments);
-                $ifLines   = self::ifBlock($lines, $matches[2], $useIf);
-                $elseLines = self::handleElse($lines, $useIf);
-                if ($useIf) {
-                    array_splice($lines, 0, 0, $ifLines);
-                } else {
-                    array_splice($lines, 0, 0, $elseLines);
-                }
-                return [];
-            }
-
-            if (preg_match('~^' . self::CONDITION_REGEX . '\s?(.*)$~u', $condition, $ifMatches)) {
-                $useIf     = self::test($ifMatches[1], $macroArguments);
-                $elseLines = self::handleElse($lines, $useIf);
-                if ($useIf) {
-                    array_unshift($lines, $ifMatches[2]);
                 } else {
                     array_splice($lines, 0, 0, $elseLines);
                 }
