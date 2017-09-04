@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * .do: "Interpret .name with compatibility mode disabled."  (e.g. .do if ... )
@@ -11,7 +11,7 @@ class Roff_do implements Roff_Template
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
-        $lines[0] = '.' . $request['arg_string'];
+        $lines[0] = '.' . $request['raw_arg_string'];
         return [];
 
     }

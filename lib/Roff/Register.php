@@ -12,7 +12,9 @@ class Roff_Register implements Roff_Template
 
         // Remove register
         if ($request['request'] === 'rr') {
-            $man->unsetRegister($request['arg_string']);
+            if (count($request['arguments']) === 1) {
+                $man->unsetRegister($request['arguments'][0]);
+            }
             return [];
         }
 
