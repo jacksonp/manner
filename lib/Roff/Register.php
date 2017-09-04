@@ -7,28 +7,27 @@ class Roff_Register implements Roff_Template
     static function evaluate(array $request, array &$lines, ?array $macroArguments)
     {
 
+        $man = Man::instance();
+        array_shift($lines);
+
         // Remove register
         if ($request['request'] === 'rr') {
-            Man::instance()->unsetRegister($request['arg_string']);
-            array_shift($lines);
+            $man->unsetRegister($request['arg_string']);
             return [];
         }
 
         // .nr register ±N [M]
         // Define or modify register using ±N with auto-increment M
-        if (
-          $request['request'] !== 'nr' ||
-          !preg_match('~^(?<name>\S+) (?<val>.+)$~u', $request['arg_string'], $matches)
-        ) {
+
+        if (count($request['arguments']) < 2) {
             return false;
         }
 
-        array_shift($lines);
-        $man           = Man::instance();
-        $registerValue = $man->applyAllReplacements($matches['val']);
+        // Step might be in $request['arguments'][2] - but we just assume step is 1 for now.
+
         // Normalize here: a unit value may be concatenated when the register is used.
-        $registerValue = Roff_Unit::normalize($registerValue, 'u', 'u');
-        $man->setRegister($matches['name'], $registerValue);
+        $registerValue = Roff_Unit::normalize($request['arguments'][1], 'u', 'u');
+        $man->setRegister($request['arguments'][0], $registerValue);
 
         return [];
 
