@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_Char implements Roff_Template
 {
@@ -8,10 +8,9 @@ class Roff_Char implements Roff_Template
     {
 
         array_shift($lines);
-        if (!preg_match('~^(.+)\s+(.+)$~u', $request['arg_string'], $matches)) {
-            throw new Exception('Unexpected arguments received in Roff_Char:' . $request['arg_string']);
+        if (count($request['arguments']) === 2) {
+            Man::instance()->setEntity($request['arguments'][0], $request['arguments'][1]);
         }
-        Man::instance()->setEntity($matches[1], $matches[2]);
         return [];
 
     }
