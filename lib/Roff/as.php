@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_as implements Roff_Template
 {
@@ -9,21 +9,14 @@ class Roff_as implements Roff_Template
 
         array_shift($lines);
 
-        if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {
-            // Just skip if no match
-            return [];
+        if (count($request['arguments']) === 2) {
+            $man        = Man::instance();
+            $stringName = $request['arguments'][0];
+            $appendVal  = $man->applyAllReplacements($request['arguments'][1]);
+            $appendVal  = Roff_Macro::applyReplacements($appendVal, $macroArguments);
+            $string     = $man->getString($stringName);
+            $man->addString($stringName, $string . $appendVal);
         }
-
-        $man = Man::instance();
-
-        $stringName = $matches[1];
-        $appendVal  = $matches[2];
-        $appendVal  = $man->applyAllReplacements($appendVal);
-        $appendVal  = Roff_Macro::applyReplacements($appendVal, $macroArguments);
-
-        $string = $man->getString($stringName);
-
-        $man->addString($stringName, $string . $appendVal);
 
         return [];
 
