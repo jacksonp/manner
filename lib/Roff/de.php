@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_de implements Roff_Template
 {
@@ -21,7 +21,7 @@ class Roff_de implements Roff_Template
         // We don't want to handle the lines at this stage (e.g. a conditional in the macro), so don't iterate with
         // Request::getLine()
         while (count($lines)) {
-            $line = array_shift($lines);
+            $line    = array_shift($lines);
             $request = Request::peepAt($line);
             if (
                 $request['name'] === '.' ||

@@ -86,7 +86,6 @@ class Roff_Condition implements Roff_Template
         if (!count($argChars)) {
             if (!$conditionTrue) {
                 array_shift($lines);
-
             }
             return []; // Just skip
         }
