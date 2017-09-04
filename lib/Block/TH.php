@@ -27,7 +27,6 @@ class Block_TH implements Block_Template
             foreach ($request['arguments'] as $k => $v) {
                 // See amor.6 for \FB \FR nonsense.
                 $value = Replace::preg('~\\\\F[BR]~', '', $v);
-                $value = $man->applyAllReplacements($value);
                 $value = TextContent::interpretString($value);
                 // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
                 $value                    = trim($value);
