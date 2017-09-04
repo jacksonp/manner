@@ -330,7 +330,7 @@ class TextContent
             ];
 
             $string = Replace::pregCallback(
-                '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
+                '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|C\'(?<glyph>[^\']+)\'|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
                 function ($matches) use (&$singleCharacterEscapes, &$roffStrings) {
                     // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
                     $prefix = str_repeat('\\', mb_strlen($matches['bspairs']) / 2);
