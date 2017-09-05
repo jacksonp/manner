@@ -256,14 +256,12 @@ class Request
 
         $line = $request['raw_line'];
 
-        $man = Man::instance();
-
         if ($line === '' && !Block_Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
             $return['class'] = 'Inline_VerticalSpace';
         } elseif (!is_null($request['request'])) {
-            $class = $man->getRequestClass($request['request']);
+            $class = Man::instance()->getRequestClass($request['request']);
             if ($class !== false) {
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
@@ -273,10 +271,8 @@ class Request
             }
         } elseif (Block_TabTable::isStart($lines)) {
             $return['class'] = 'Block_TabTable';
-        } elseif (!preg_match('~^' . preg_quote($man->control_char, '~') . '~u', $line)) {
-            $return['class'] = 'Block_Text';
         } else {
-            $return['class'] = 'Request_Skippable';
+            $return['class'] = 'Block_Text';
         }
 
         return $return;
