@@ -46,6 +46,9 @@ class Block_Text implements Block_Template
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
         while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
+            if (!is_null(Request::peepAt($lines[0])['name'])) {
+                break;
+            }
             $nextRequest = Request::getLine($lines); // process line...
             if (is_null($nextRequest)) {
                 break;
