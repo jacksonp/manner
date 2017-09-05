@@ -4,7 +4,7 @@ declare(strict_types=1);
 class Roff_de implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
         // shift .de
@@ -44,8 +44,6 @@ class Roff_de implements Roff_Template
         } else {
             Man::instance()->addMacro($newMacro, $macroLines);
         }
-
-        return [];
 
     }
 

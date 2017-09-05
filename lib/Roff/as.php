@@ -4,7 +4,7 @@ declare(strict_types=1);
 class Roff_as implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
         array_shift($lines);
@@ -17,8 +17,6 @@ class Roff_as implements Roff_Template
             $string     = $man->getString($stringName);
             $man->addString($stringName, $string . $appendVal);
         }
-
-        return [];
 
     }
 

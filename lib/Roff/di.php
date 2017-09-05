@@ -1,10 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_di implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
         array_shift($lines);
 
@@ -12,7 +12,7 @@ class Roff_di implements Roff_Template
         // with Request::getLine()
         while ($line = array_shift($lines)) {
             if (Request::peepAt($line)['name'] === 'di') {
-                return [];
+                return;
             }
         }
         throw new Exception('.di with no end .di');

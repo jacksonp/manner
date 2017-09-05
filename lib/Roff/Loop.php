@@ -1,16 +1,16 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_Loop implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
         array_shift($lines);
 
         if (mb_strlen($request['raw_arg_string']) === 0) {
-            return []; // Just skip
+            return; // Just skip
         }
 
         if (preg_match('~^' . Roff_Condition::CONDITION_REGEX . ' \\\\{\s*(.*)$~u',
@@ -27,8 +27,6 @@ class Roff_Loop implements Roff_Template
             }
 
         }
-
-        return [];
 
     }
 

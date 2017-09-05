@@ -58,7 +58,7 @@ class Roff_Condition implements Roff_Template
         return $condition;
     }
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
         array_shift($lines);
@@ -66,7 +66,7 @@ class Roff_Condition implements Roff_Template
         $argChars = Request::getArgChars($request['arg_string']);
 
         if (!count($argChars)) {
-            return []; // Just skip
+            return; // Just skip
         }
 
         $condition = self::getNextCondition($argChars);
@@ -74,11 +74,11 @@ class Roff_Condition implements Roff_Template
         if ($condition === '\{') { // See e.g. whatsup.1
             $newLines = self::ifBlock($lines, '', true);
             array_splice($lines, 0, 0, $newLines);
-            return [];
+            return;
         }
 
         if (is_null($condition)) {
-            return []; // Just skip
+            return; // Just skip
         }
 
         $conditionTrue = self::test($condition, $macroArguments);
@@ -87,7 +87,7 @@ class Roff_Condition implements Roff_Template
             if (!$conditionTrue) {
                 array_shift($lines);
             }
-            return []; // Just skip
+            return; // Just skip
         }
 
         $nextArg = Request::getNextArgument($argChars, true);
@@ -114,13 +114,13 @@ class Roff_Condition implements Roff_Template
             if ($postConditionBlock) {
                 $newLines = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 array_splice($lines, 0, 0, $newLines);
-                return [];
+                return;
             } else {
                 if ($conditionTrue) {
                     array_unshift($lines, $postConditionString); // just remove .if <condition> prefix and go again.
-                    return [];
+                    return;
                 } else {
-                    return [];
+                    return;
                 }
             }
 
@@ -130,7 +130,7 @@ class Roff_Condition implements Roff_Template
                 $ifLines   = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 $elseLines = self::handleElse($lines, $conditionTrue);
                 array_splice($lines, 0, 0, $conditionTrue ? $ifLines : $elseLines);
-                return [];
+                return;
             } else {
                 $elseLines = self::handleElse($lines, $conditionTrue);
                 if ($conditionTrue) {
@@ -138,7 +138,7 @@ class Roff_Condition implements Roff_Template
                 } else {
                     array_splice($lines, 0, 0, $elseLines);
                 }
-                return [];
+                return;
             }
         }
 

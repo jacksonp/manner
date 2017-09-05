@@ -1,10 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Roff_String implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
         array_shift($lines);
@@ -44,12 +44,12 @@ ROFF;
 
         if ($key = array_search($request['raw_arg_string'], $known)) {
             $man->addString($request['arguments'][0], $key);
-            return [];
+            return;
         }
 
         if (!preg_match('~^(.+?)\s+(.+)$~u', $request['arg_string'], $matches)) {
             // May have just one argument, e.g. gnugo.6 - skip for now.
-            return [];
+            return;
         }
 
         $newRequest = $matches[1];
@@ -78,8 +78,6 @@ ROFF;
         $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
 
         $man->addString($newRequest, $requestVal);
-
-        return [];
 
     }
 

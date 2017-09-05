@@ -233,10 +233,9 @@ class Request
 
             $className = $man->getRoffRequestClass($return['request']);
             if ($className) {
-                $result = $className::evaluate($return, $lines, $callerArguments);
-                if ($result !== false) {
-                    return self::getLine($lines, $callerArguments);
-                }
+                /** @var Roff_Template $className */
+                $className::evaluate($return, $lines, $callerArguments);
+                return self::getLine($lines, $callerArguments);
             }
 
         }

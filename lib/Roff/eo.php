@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Class Roff_eo
@@ -9,10 +9,10 @@ declare(strict_types = 1);
 class Roff_eo implements Roff_Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments)
+    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-        array_shift($lines);
 
+        array_shift($lines);
         Man::instance()->escape_char = null;
 
     }
