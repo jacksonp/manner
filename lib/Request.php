@@ -241,9 +241,7 @@ class Request
         }
 
         // For text, and above call: Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
-        if ($return['raw_line']) {
-            $return['raw_line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
-        }
+        $return['raw_line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
 
         return $return;
     }
