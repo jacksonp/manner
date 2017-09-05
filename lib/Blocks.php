@@ -25,7 +25,9 @@ class Blocks
         'strong',
         'small',
         'code',
-        'span'
+        'span',
+        'sub',
+        'sup'
     ];
 
     static function getParentForText(DOMElement $parentNode): DOMElement
