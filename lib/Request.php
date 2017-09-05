@@ -269,13 +269,6 @@ class Request
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $line);
-            } elseif (preg_match('~^(' . preg_quote($man->control_char_2, '~') . '.*\w|\\\\\..)~u', $line)) {
-                // Lenient with things starting with:
-                // \. if there's anything after it, and
-                // '  if there's a "word" char after it.
-                // TODO: eventually just skip requests we don't know, whether they start with . or '
-                $return['request'] = null;
-                $return['class']   = 'Block_Text';
             } else {
                 $return['class'] = 'Request_Skippable';
             }
