@@ -36,9 +36,12 @@ class Roff_Register implements Roff_Template
     static function substitute(string $string, array &$replacements): string
     {
         return Replace::pregCallback(
-            '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
+            '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
             function ($matches) use (&$replacements) {
                 if (isset($replacements[$matches['reg']])) {
+                    if ($matches['op'] === '+') {
+                        $replacements[$matches['reg']] = (int)$replacements[$matches['reg']] + 1;
+                    }
                     return $matches['bspairs'] . $replacements[$matches['reg']];
                 } else {
                     // Match groff's behaviour: unset registers are 0
