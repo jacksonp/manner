@@ -220,7 +220,7 @@ class Request
                 $evaluatedMacroLines  = [];
 
                 while (count($macroLines)) {
-                    $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
+                    $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments)['line'];
                     if (!is_null($evaluatedMacroLine)) {
                         $evaluatedMacroLines[] = $evaluatedMacroLine;
                     }
@@ -240,8 +240,7 @@ class Request
 
         }
 
-        // For text, and above call: Request::getLine($macroLines, $macroCallerArguments)['raw_line'];
-        $return['raw_line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
+        $return['line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
 
         return $return;
     }
