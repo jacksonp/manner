@@ -245,11 +245,10 @@ class Request
         return $return;
     }
 
-    public static function setClass(array $request, array &$lines): ?array
+    public static function setClass(array $request, array &$lines): array
     {
 
         $return             = $request;
-        $return['raw_line'] = $lines[0];
 
         $line = $request['raw_line'];
 
