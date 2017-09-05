@@ -248,23 +248,11 @@ class Request
         return $return;
     }
 
-    public static function getNextClass(array &$lines): ?array
+    public static function setClass(array $request, array &$lines): ?array
     {
 
-        $request = self::getLine($lines);
-
-        if (!$request) {
-            return null;
-        }
-
-        $return = [
-            'class' => null,
-            'request' => null,
-            'raw_line' => $lines[0],
-            'arguments' => [],
-            'arg_string' => '',
-            'raw_arg_string' => ''
-        ];
+        $return             = $request;
+        $return['raw_line'] = $lines[0];
 
         $line = $request['raw_line'];
 
@@ -278,7 +266,6 @@ class Request
         } elseif (!is_null($request['request'])) {
             $class = $man->getRequestClass($request['request']);
             if ($class !== false) {
-                $return          = $request;
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
                 throw new exception('Unhandled request ' . $line);

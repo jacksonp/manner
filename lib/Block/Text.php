@@ -46,9 +46,12 @@ class Block_Text implements Block_Template
         $implicitBreak = mb_substr($line, 0, 1) === ' ';
 
         while (count($lines) && !self::$interruptTextProcessing && !$needOneLineOnly) {
-            $nextRequest = Request::getNextClass($lines); // process line...
+            $nextRequest = Request::getLine($lines); // process line...
+            if (is_null($nextRequest)) {
+                break;
+            }
+            $nextRequest = Request::setClass($nextRequest, $lines);
             if (
-                is_null($nextRequest) ||
                 $nextRequest['class'] !== 'Block_Text' ||
                 mb_substr($nextRequest['raw_line'], 0, 1) === ' ' // Stop on implicit line break.
             ) {
