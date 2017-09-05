@@ -76,11 +76,7 @@ class PreformattedOutput
             array_shift($lines);
             self::$addIndent = 0;
             return true;
-        } elseif (
-            $request['raw_line'] === '' ||
-            in_array($request['request'], ['sp', 'ne']) ||
-            in_array($request['class'], ['Block_P'])
-        ) {
+        } elseif ($request['raw_line'] === '' || in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
             array_shift($lines);
             if ($parentNode->hasChildNodes()) {
                 $parentNode->appendChild(new DOMText("\n"));

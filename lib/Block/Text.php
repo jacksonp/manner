@@ -10,7 +10,7 @@ class Block_Text implements Block_Template
     {
 
         if (
-            !Node::isOrInTag($parentNode,'pre') && Node::hasContent($parentNode) &&
+            !Node::isOrInTag($parentNode, 'pre') && Node::hasContent($parentNode) &&
             (
                 $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
                 in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
@@ -51,11 +51,8 @@ class Block_Text implements Block_Template
                 break;
             }
             $nextRequest = Request::setClass($nextRequest, $lines);
-            if (
-                $nextRequest['class'] !== 'Block_Text' ||
-                mb_substr($nextRequest['raw_line'], 0, 1) === ' ' // Stop on implicit line break.
-            ) {
-                break;
+            if ($nextRequest['class'] !== 'Block_Text' || mb_substr($lines[0], 0, 1) === ' ') {
+                break; // Stop on non-text or implicit line break.
             }
             array_shift($lines);
             $line .= ' ' . self::removeTextProcessingInterrupt($nextRequest['raw_line']);

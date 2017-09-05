@@ -261,14 +261,13 @@ class Request
         if ($line === '' && !Block_Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
-            $return['request'] = 'sp';
-            $return['class']   = 'Inline_VerticalSpace';
+            $return['class'] = 'Inline_VerticalSpace';
         } elseif (!is_null($request['request'])) {
             $class = $man->getRequestClass($request['request']);
             if ($class !== false) {
                 $return['class'] = $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
-                throw new exception('Unhandled request ' . $line);
+                throw new Exception('Unhandled request ' . $line);
             } else {
                 $return['class'] = 'Request_Skippable';
             }

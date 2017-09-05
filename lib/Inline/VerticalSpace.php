@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Inline_VerticalSpace implements Block_Template
 {
@@ -41,13 +41,13 @@ class Inline_VerticalSpace implements Block_Template
                 $parentNode->removeChild($parentNode->lastChild);
             }
         } else*/
-            if (
+        if (
             !($parentNode->lastChild instanceof DOMElement) ||
             $parentNode->lastChild->tagName !== 'pre'
         ) {
 
             self::addBR($parentNode);
-            if (in_array($request['request'], ['sp', 'ne'])) {
+            if ($request['request'] !== 'br') {
                 self::addBR($parentNode);
             }
 
