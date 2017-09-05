@@ -50,8 +50,8 @@ class Block_Text implements Block_Template
             if (is_null($nextRequest)) {
                 break;
             }
-            $nextRequest = Request::setClass($nextRequest, $lines);
-            if ($nextRequest['class'] !== 'Block_Text' || mb_substr($lines[0], 0, 1) === ' ') {
+            $nextRequestClass = Request::getClass($nextRequest, $lines);
+            if ($nextRequestClass !== 'Block_Text' || mb_substr($lines[0], 0, 1) === ' ') {
                 break; // Stop on non-text or implicit line break.
             }
             array_shift($lines);

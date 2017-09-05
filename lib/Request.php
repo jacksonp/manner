@@ -245,33 +245,27 @@ class Request
         return $return;
     }
 
-    public static function setClass(array $request, array &$lines): array
+    public static function getClass(array $request, array &$lines): string
     {
 
-        $return             = $request;
-
-        $line = $request['raw_line'];
-
-        if ($line === '' && !Block_Text::$interruptTextProcessing) {
+        if ($request['raw_line'] === '' && !Block_Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
-            $return['class'] = 'Inline_VerticalSpace';
+            return 'Inline_VerticalSpace';
         } elseif (!is_null($request['request'])) {
             $class = Man::instance()->getRequestClass($request['request']);
-            if ($class !== false) {
-                $return['class'] = $class;
+            if (!is_null($class)) {
+                return $class;
             } elseif (in_array($request['request'], Request_Unhandled::requests)) {
-                throw new Exception('Unhandled request ' . $line);
+                throw new Exception('Unhandled request ' . $request['raw_line']);
             } else {
-                $return['class'] = 'Request_Skippable';
+                return 'Request_Skippable';
             }
         } elseif (Block_TabTable::isStart($lines)) {
-            $return['class'] = 'Block_TabTable';
+            return 'Block_TabTable';
         } else {
-            $return['class'] = 'Block_Text';
+            return 'Block_Text';
         }
-
-        return $return;
 
     }
 

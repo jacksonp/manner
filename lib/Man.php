@@ -387,14 +387,14 @@ class Man
         return array_key_exists($requestName, $this->blockClasses);
     }
 
-    public function getRequestClass(string $requestName)
+    public function getRequestClass(string $requestName):?string
     {
         if ($this->requestStartsBlock($requestName)) {
             return $this->blockClasses[$requestName];
         } elseif (array_key_exists($requestName, $this->inlineClasses)) {
             return $this->inlineClasses[$requestName];
         } else {
-            return false;
+            return null;
         }
     }
 

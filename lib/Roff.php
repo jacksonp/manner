@@ -32,7 +32,7 @@ class Roff
 
             }
 
-            $request = Request::setClass($request, $lines);
+            $request['class'] = Request::getClass($request, $lines);
 
             if (PreformattedOutput::handle($parentNode, $lines, $request)) {
                 // Do nothing, but don't continue; as need $stopOnContent check below.
