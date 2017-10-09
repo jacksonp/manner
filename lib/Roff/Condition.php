@@ -205,6 +205,8 @@ class Roff_Condition implements Roff_Template
             return false;
         }
 
+        $condition = Replace::preg('~^\(((?:[^()]|\((?1)\))*+)\)$~u', '$1', $condition);
+
         if (
             preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) ||
             preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
@@ -245,6 +247,7 @@ class Roff_Condition implements Roff_Template
             return $man->issetRegister($matches[1]);
         }
 
+        // Handle : (logical or) and & (logical and), see http://dev.mankier.com/7/groff#Numerical_Expressions
         if (preg_match('~^(.+?)([:&])(.+)$~u', $condition, $matches)) {
             if ($matches[2] === '&') {
                 return self::testRecursive($matches[1], $macroArguments) &&
