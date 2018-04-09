@@ -106,8 +106,9 @@ class Roff_Condition implements Roff_Template
 
         $postConditionBlock = strpos($postConditionString, '\\{') === 0;
         if ($postConditionBlock) {
-            $postConditionString = ltrim(substr($postConditionString, 2));
+            $postConditionString = substr($postConditionString, 2);
         }
+        $postConditionString = ltrim($postConditionString);
 
         if ($request['request'] === 'if') {
 
