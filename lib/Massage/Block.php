@@ -21,7 +21,7 @@ class Massage_Block
             $previousSibling = $blockElement->previousSibling and
             (
                 Node::isTextAndEmpty($previousSibling) ||
-                (DOM::isTag($previousSibling, 'br'))
+                DOM::isTag($previousSibling, 'br')
             )
         ) {
             $blockElement->parentNode->removeChild($previousSibling);
@@ -40,7 +40,7 @@ class Massage_Block
             $nextSibling = $blockElement->nextSibling and
             (
                 Node::isTextAndEmpty($nextSibling) ||
-                (DOM::isTag($nextSibling, 'br'))
+                DOM::isTag($nextSibling, 'br')
             )
         ) {
             $blockElement->parentNode->removeChild($nextSibling);
