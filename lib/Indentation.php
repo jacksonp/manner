@@ -18,6 +18,11 @@ class Indentation
         return (float)$el->getAttribute('indent');
     }
 
+    /**
+     * @param DOMElement $el
+     * @param $indentVal
+     * @throws Exception
+     */
     static function set(DOMElement $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
@@ -31,6 +36,11 @@ class Indentation
         $el->removeAttribute('indent');
     }
 
+    /**
+     * @param DOMElement $el
+     * @param $indentVal
+     * @throws Exception
+     */
     static function add(DOMElement $el, $indentVal)
     {
         if (!is_numeric($indentVal)) {
@@ -39,6 +49,11 @@ class Indentation
         self::set($el, self::get($el) + $indentVal);
     }
 
+    /**
+     * @param DOMElement $el
+     * @param $indentVal
+     * @throws Exception
+     */
     static function subtract(DOMElement $el, $indentVal)
     {
         if (!is_numeric($indentVal)) {
@@ -47,6 +62,11 @@ class Indentation
         self::set($el, self::get($el) + $indentVal);
     }
 
+    /**
+     * @param DOMElement $remainingNode
+     * @param DOMElement $leavingNode
+     * @throws Exception
+     */
     public static function addElIndent(DOMElement $remainingNode, DOMElement $leavingNode): void
     {
         $remainingNodeIndent = self::get($remainingNode);
@@ -62,6 +82,10 @@ class Indentation
         }
     }
 
+    /**
+     * @param DOMElement $el
+     * @throws Exception
+     */
     public static function popOut(DOMElement $el): void
     {
 

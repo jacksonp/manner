@@ -41,6 +41,7 @@ class Roff_Unit
      * @param string $defaultUnit
      * @param string $targetUnit
      * @return string
+     * @throws Exception
      */
     static function normalize(string $string, string $defaultUnit, string $targetUnit): string
     {
@@ -65,6 +66,7 @@ class Roff_Unit
      * gtroff evaluates ‘3+5*4’ as if it were parenthesized like ‘(3+5)*4’, not as ‘3+(5*4)’, as might be expected.
      * @param string $string
      * @return string
+     * @throws Exception
      */
     private static function evaluate(string $string): string
     {
