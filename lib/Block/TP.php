@@ -60,7 +60,11 @@ class Block_TP implements Block_Template
 
         if (count($request['arguments'])) {
             $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
-            $man->indentation = $indentVal;
+            if (is_numeric($indentVal)) {
+                $man->indentation = $indentVal;
+            } else {
+                $indentVal = $man->indentation;
+            }
         } else {
             $indentVal = $man->indentation;
         }

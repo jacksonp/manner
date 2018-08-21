@@ -32,7 +32,11 @@ class Block_IP implements Block_Template
 
         if (count($request['arguments']) > 1) {
             $indentVal        = Roff_Unit::normalize($request['arguments'][1], 'n', 'n');
-            $man->indentation = $indentVal;
+            if (is_numeric($indentVal)) {
+                $man->indentation = $indentVal;
+            } else {
+                $indentVal = $man->indentation;
+            }
         } else {
             $indentVal = $man->indentation;
         }
