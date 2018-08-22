@@ -39,6 +39,7 @@ class Roff_Condition implements Roff_Template
                     break;
             }
         }
+
         return (empty($stack));
     }
 
@@ -55,6 +56,7 @@ class Roff_Condition implements Roff_Template
                 return '0';
             }
         }
+
         return $condition;
     }
 
@@ -74,6 +76,7 @@ class Roff_Condition implements Roff_Template
         if ($condition === '\{') { // See e.g. whatsup.1
             $newLines = self::ifBlock($lines, '', true);
             array_splice($lines, 0, 0, $newLines);
+
             return;
         }
 
@@ -87,6 +90,7 @@ class Roff_Condition implements Roff_Template
             if (!$conditionTrue) {
                 array_shift($lines);
             }
+
             return; // Just skip
         }
 
@@ -115,10 +119,12 @@ class Roff_Condition implements Roff_Template
             if ($postConditionBlock) {
                 $newLines = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 array_splice($lines, 0, 0, $newLines);
+
                 return;
             } else {
                 if ($conditionTrue) {
                     array_unshift($lines, $postConditionString); // just remove .if <condition> prefix and go again.
+
                     return;
                 } else {
                     return;
@@ -131,6 +137,7 @@ class Roff_Condition implements Roff_Template
                 $ifLines   = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 $elseLines = self::handleElse($lines, $conditionTrue);
                 array_splice($lines, 0, 0, $conditionTrue ? $ifLines : $elseLines);
+
                 return;
             } else {
                 $elseLines = self::handleElse($lines, $conditionTrue);
@@ -139,6 +146,7 @@ class Roff_Condition implements Roff_Template
                 } else {
                     array_splice($lines, 0, 0, $elseLines);
                 }
+
                 return;
             }
         }
@@ -175,6 +183,7 @@ class Roff_Condition implements Roff_Template
     {
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
+
         return self::testRecursive($condition, $macroArguments);
     }
 
@@ -186,7 +195,7 @@ class Roff_Condition implements Roff_Template
         }
 
         $alwaysTrue = [
-            'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
+          'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
         ];
 
         if (in_array($condition, $alwaysTrue, true)) {
@@ -194,12 +203,13 @@ class Roff_Condition implements Roff_Template
         }
 
         $alwaysFalse = [
-            '\n()P',
-            't', // "Formatter is troff."
-            'v', // vroff
-            'require_index',
-            'c\[shc]', // see man.1
-            '\'po4a.hide\'',
+          '\\(.g',
+          '\n()P',
+          't', // "Formatter is troff."
+          'v', // vroff
+          'require_index',
+          'c\[shc]', // see man.1
+          '\'po4a.hide\'',
         ];
 
         if (in_array($condition, $alwaysFalse, true)) {
@@ -209,11 +219,11 @@ class Roff_Condition implements Roff_Template
         $condition = Replace::preg('~^\(((?:[^()]|\((?1)\))*+)\)$~u', '$1', $condition);
 
         if (
-            preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) ||
-            preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
+          preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) ||
+          preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
         ) {
             return Roff_Macro::applyReplacements($matches[1], $macroArguments) ===
-                Roff_Macro::applyReplacements($matches[2], $macroArguments);
+              Roff_Macro::applyReplacements($matches[2], $macroArguments);
         }
 
         // Don't do this earlier to not add " into $condition which could break string comparison check above.
@@ -252,10 +262,10 @@ class Roff_Condition implements Roff_Template
         if (preg_match('~^(.+?)([:&])(.+)$~u', $condition, $matches)) {
             if ($matches[2] === '&') {
                 return self::testRecursive($matches[1], $macroArguments) &&
-                    self::testRecursive($matches[3], $macroArguments);
+                  self::testRecursive($matches[3], $macroArguments);
             } else {
                 return self::testRecursive($matches[1], $macroArguments) ||
-                    self::testRecursive($matches[3], $macroArguments);
+                  self::testRecursive($matches[3], $macroArguments);
             }
         }
 
