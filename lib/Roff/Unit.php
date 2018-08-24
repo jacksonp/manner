@@ -54,8 +54,7 @@ class Roff_Unit
               return (string)round($basicUnits / self::unitMultipliers[$targetUnit]);
           }, $string);
 
-        $string = preg_replace('~[^\d\.\(\)\+\*/\-><= ]~', '', $string);
-//        $string = preg_replace('~[^\d\.\(\)\+\*/\-><= ?]~', '', $string);
+        $string = preg_replace('~[^\d\.\(\)\+\*/\-><= ?]~', '', $string);
 
         return self::evaluate($string);
 
@@ -77,15 +76,15 @@ class Roff_Unit
         // Remove parentheses around a lone number:
         $evaluatedString = Replace::preg('~\(((?:\d*\.)?\d+)\)~u', '$1', $string);
 
-//        if (preg_match('~^(?<left>.*)(?<op>[><]\?)(?<right>.*)$~u', $evaluatedString, $matches)) {
-//            $left  = self::evaluate($matches['left']);
-//            $right = self::evaluate($matches['right']);
-//            if ($matches['op'] === '>?') {
-//                return max($left, $right);
-//            } elseif ($matches['op'] === '<?') {
-//                return min($left, $right);
-//            }
-//        }
+        if (preg_match('~^(?<left>.*)(?<op>[><]\?)(?<right>.*)$~u', $evaluatedString, $matches)) {
+            $left  = self::evaluate($matches['left']);
+            $right = self::evaluate($matches['right']);
+            if ($matches['op'] === '>?') {
+                return max($left, $right);
+            } elseif ($matches['op'] === '<?') {
+                return min($left, $right);
+            }
+        }
 
         // Evaluate first matched expression only, because gtroff has no operator precedence:
         $evaluatedString = Replace::pregCallback('~[-\+]?(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u', function ($matches) {
