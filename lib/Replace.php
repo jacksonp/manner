@@ -30,6 +30,11 @@ class Replace
 
     }
 
+    /**
+     * See https://stackoverflow.com/a/3742879
+     * @param string $string
+     * @return string
+     */
     private static function ignoreBadChars(string $string)
     {
         return iconv('UTF-8', 'UTF-8//IGNORE', $string);

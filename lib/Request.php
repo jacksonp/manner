@@ -143,6 +143,7 @@ class Request
      * @param array $lines
      * @param array $callerArguments
      * @return array|null
+     * @throws Exception
      */
     public static function getLine(array &$lines, array &$callerArguments = []): ?array
     {
