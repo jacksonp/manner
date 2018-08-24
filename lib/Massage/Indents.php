@@ -4,6 +4,10 @@ declare(strict_types=1);
 class Massage_Indents
 {
 
+    /**
+     * @param DOMXPath $xpath
+     * @throws Exception
+     */
     public static function recalc(DOMXPath $xpath)
     {
 

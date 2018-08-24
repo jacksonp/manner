@@ -14,6 +14,10 @@ class Massage_P
         }
     }
 
+    /**
+     * @param DOMElement $p
+     * @throws Exception
+     */
     static function tidy(DOMElement $p)
     {
 

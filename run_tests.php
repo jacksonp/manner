@@ -6,6 +6,10 @@ spl_autoload_register(function ($class) {
     require_once 'lib/' . str_replace('_', '/', $class) . '.php';
 });
 
+/**
+ * @param $filePath
+ * @throws Exception
+ */
 function runTest($filePath)
 {
     if (!is_file($filePath)) {

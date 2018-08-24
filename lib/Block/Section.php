@@ -4,6 +4,14 @@ declare(strict_types=1);
 class Block_Section implements Block_Template
 {
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @param bool $needOneLineOnly
+     * @return DOMElement|null
+     * @throws Exception
+     */
     static function checkAppend(
         DOMElement $parentNode,
         array &$lines,

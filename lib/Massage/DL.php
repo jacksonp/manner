@@ -4,6 +4,10 @@ declare(strict_types=1);
 class Massage_DL
 {
 
+    /**
+     * @param DOMXPath $xpath
+     * @throws Exception
+     */
     static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
     {
         $dls = $xpath->query('//dl');

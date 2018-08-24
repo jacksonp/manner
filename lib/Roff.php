@@ -4,6 +4,13 @@ declare(strict_types=1);
 class Roff
 {
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param bool $stopOnContent
+     * @return bool
+     * @throws Exception
+     */
     static function parse(
         DOMElement $parentNode,
         array &$lines,

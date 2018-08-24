@@ -4,6 +4,12 @@ declare(strict_types=1);
 class Roff_Loop implements Roff_Template
 {
 
+    /**
+     * @param array $request
+     * @param array $lines
+     * @param array|null $macroArguments
+     * @throws Exception
+     */
     static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 

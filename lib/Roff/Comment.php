@@ -4,6 +4,11 @@ declare(strict_types = 1);
 class Roff_Comment
 {
 
+    /**
+     * @param array $lines
+     * @return bool
+     * @throws Exception
+     */
     static function checkLine(array &$lines): bool
     {
 

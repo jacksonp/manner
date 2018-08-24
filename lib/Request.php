@@ -246,6 +246,12 @@ class Request
         return $return;
     }
 
+    /**
+     * @param array $request
+     * @param array $lines
+     * @return string
+     * @throws Exception
+     */
     public static function getClass(array $request, array &$lines): string
     {
 

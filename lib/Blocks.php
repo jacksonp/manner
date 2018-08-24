@@ -40,6 +40,13 @@ class Blocks
         return $parentNode;
     }
 
+    /**
+     * @param DOMElement $parentNode
+     * @param bool $superOnly
+     * @param bool $ipOK
+     * @return DOMElement
+     * @throws Exception
+     */
     static function getBlockContainerParent(
         DOMElement $parentNode,
         bool $superOnly = false,

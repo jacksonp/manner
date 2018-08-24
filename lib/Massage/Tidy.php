@@ -4,6 +4,10 @@ declare(strict_types=1);
 class Massage_Tidy
 {
 
+    /**
+     * @param DOMXPath $xpath
+     * @throws Exception
+     */
     public static function doAll(DOMXPath $xpath): void
     {
         /** @var DOMElement $el */

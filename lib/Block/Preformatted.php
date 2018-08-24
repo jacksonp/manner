@@ -27,6 +27,14 @@ The task id range
 class Block_Preformatted implements Block_Template
 {
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @param bool $needOneLineOnly
+     * @return DOMElement|null
+     * @throws Exception
+     */
     static function checkAppend(
         DOMElement $parentNode,
         array &$lines,

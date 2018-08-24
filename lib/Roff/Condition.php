@@ -60,6 +60,12 @@ class Roff_Condition implements Roff_Template
         return $condition;
     }
 
+    /**
+     * @param array $request
+     * @param array $lines
+     * @param array|null $macroArguments
+     * @throws Exception
+     */
     static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
 
@@ -155,6 +161,12 @@ class Roff_Condition implements Roff_Template
 
     }
 
+    /**
+     * @param array $lines
+     * @param bool $useIf
+     * @return array
+     * @throws Exception
+     */
     private static function handleElse(array &$lines, bool $useIf): array
     {
 
@@ -179,6 +191,12 @@ class Roff_Condition implements Roff_Template
 
     }
 
+    /**
+     * @param string $condition
+     * @param $macroArguments
+     * @return bool
+     * @throws Exception
+     */
     static function test(string $condition, $macroArguments): bool
     {
         $man       = Man::instance();
@@ -187,6 +205,12 @@ class Roff_Condition implements Roff_Template
         return self::testRecursive($condition, $macroArguments);
     }
 
+    /**
+     * @param string $condition
+     * @param $macroArguments
+     * @return bool
+     * @throws Exception
+     */
     private static function testRecursive(string $condition, $macroArguments): bool
     {
 
@@ -286,6 +310,13 @@ class Roff_Condition implements Roff_Template
 
     }
 
+    /**
+     * @param array $lines
+     * @param string $firstLine
+     * @param bool $processContents
+     * @return array
+     * @throws Exception
+     */
     static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
     {
 

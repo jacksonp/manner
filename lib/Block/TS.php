@@ -92,6 +92,11 @@ class Block_TS implements Block_Template
         return $formats;
     }
 
+    /**
+     * @param array $lines
+     * @return array|null
+     * @throws Exception
+     */
     private static function parseRowFormats(array &$lines): ?array
     {
         $rowFormats  = [];
@@ -123,6 +128,12 @@ class Block_TS implements Block_Template
         return $rowFormats;
     }
 
+    /**
+     * @param DOMElement $table
+     * @param array $lines
+     * @return array|null
+     * @throws Exception
+     */
     private static function addRowsFromFormats(DOMElement $table, array &$lines)
     {
         $rowFormats = self::parseRowFormats($lines);
@@ -239,6 +250,14 @@ class Block_TS implements Block_Template
 
     }
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @param bool $needOneLineOnly
+     * @return DOMElement|null
+     * @throws Exception
+     */
     static function checkAppend(
         DOMElement $parentNode,
         array &$lines,

@@ -4,6 +4,12 @@ declare(strict_types=1);
 class Manner
 {
 
+    /**
+     * @param array $fileLines
+     * @param string $filePath
+     * @return DOMDocument
+     * @throws Exception
+     */
     static function roffToDOM(array $fileLines, string $filePath): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -31,6 +37,13 @@ class Manner
     }
 
 
+    /**
+     * @param array $fileLines
+     * @param string $filePath
+     * @param string|null $outputFile
+     * @param bool $test
+     * @throws Exception
+     */
     static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
     {
 

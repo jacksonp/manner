@@ -4,6 +4,10 @@ declare(strict_types=1);
 class Massage_Remap
 {
 
+    /**
+     * @param DOMXPath $xpath
+     * @throws Exception
+     */
     public static function doAll(DOMXPath $xpath)
     {
 

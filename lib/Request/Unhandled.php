@@ -102,6 +102,14 @@ class Request_Unhandled implements Block_Template
         'writem',
     ];
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @param bool $needOneLineOnly
+     * @return DOMElement|null
+     * @throws exception
+     */
     static function checkAppend(
         DOMElement $parentNode,
         array &$lines,

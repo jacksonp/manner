@@ -15,6 +15,13 @@ class PreformattedOutput
         self::$resetFontsAfterNext = false;
     }
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @return bool
+     * @throws Exception
+     */
     public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
     {
 

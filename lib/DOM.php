@@ -45,6 +45,7 @@ class DOM
     /**
      * @param DOMElement $element
      * @return DOMElement|DOMNode|null The element we should look at next.
+     * @throws Exception
      */
     private static function massageNode(DOMElement $element): ?DOMNode
     {
@@ -245,6 +246,11 @@ class DOM
 
     }
 
+    /**
+     * @param DOMElement $element
+     * @return DOMNode|null
+     * @throws Exception
+     */
     static function massage(DOMElement $element): ?DOMNode
     {
 

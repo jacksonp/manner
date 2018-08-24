@@ -15,6 +15,14 @@ class Block_fc implements Block_Template
         $table->appendChild($tr);
     }
 
+    /**
+     * @param DOMElement $parentNode
+     * @param array $lines
+     * @param array $request
+     * @param bool $needOneLineOnly
+     * @return DOMElement|null
+     * @throws Exception
+     */
     static function checkAppend(
         DOMElement $parentNode,
         array &$lines,
