@@ -275,7 +275,7 @@ class Roff_Condition implements Roff_Template
         if (preg_match('~^d\s*(\w+)$~u', $condition, $matches)) {
             // dname: True if there is a string, macro, diversion, or request called name.
             // Hack (all other checks are against "d pdfmarks", hopefully that's should be false.
-            return in_array($matches[1], ['TE', 'TS', 'URL']);
+            return in_array($matches[1], ['TE', 'TS', 'URL', 'MTO']);
         }
 
         if (preg_match('~^r\s*([-\w]+)$~u', $condition, $matches)) {

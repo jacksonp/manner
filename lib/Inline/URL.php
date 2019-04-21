@@ -13,12 +13,11 @@ class Inline_URL implements Block_Template
      * @throws Exception
      */
     static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
 
         array_shift($lines);
         $dom        = $parentNode->ownerDocument;
@@ -28,9 +27,18 @@ class Inline_URL implements Block_Template
         if (count($request['arguments']) === 0) {
             throw new Exception('Not enough arguments to .URL: ' . $request['raw_line']);
         }
-        $anchor = $dom->createElement('a');
-        $url    = TextContent::interpretString($request['arguments'][0]);
-        $anchor->setAttribute('href', $url);
+
+        $url  = TextContent::interpretString($request['arguments'][0]);
+        $href = Inline_Link::getValidHREF($url);
+        if ($href) {
+            $anchor = $dom->createElement('a');
+            $anchor->setAttribute('href', $href);
+            $parentNode->appendChild($anchor);
+        } else {
+            $anchor = $dom->createElement('span');
+            $parentNode->appendChild($anchor);
+        }
+
         $parentNode->appendChild($anchor);
 
         if (count($request['arguments']) > 1) {
