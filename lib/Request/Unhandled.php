@@ -8,7 +8,6 @@ class Request_Unhandled implements Block_Template
     const requests = [
         'ab',
         'aln',
-        'am',
         'am1',
         'ami',
         'ami1',

@@ -51,18 +51,18 @@ class Man
     public function reset()
     {
         $this->data                = [
-            'indentation' => Indentation::DEFAULT,
-            'left_margin_level' => 1, // The first level (i.e., no call to .RS yet) has number 1.
-            'escape_char' => '\\',
-            'control_char' => '.',
-            'control_char_2' => '\'',
-            'eq_delim_left' => null,
-            'eq_delim_right' => null,
-            'title' => null,
-            'section' => null,
-            'extra1' => null,
-            'extra2' => null,
-            'extra3' => null,
+          'indentation'       => Indentation::DEFAULT,
+          'left_margin_level' => 1, // The first level (i.e., no call to .RS yet) has number 1.
+          'escape_char'       => '\\',
+          'control_char'      => '.',
+          'control_char_2'    => '\'',
+          'eq_delim_left'     => null,
+          'eq_delim_right'    => null,
+          'title'             => null,
+          'section'           => null,
+          'extra1'            => null,
+          'extra2'            => null,
+          'extra3'            => null,
         ];
         $this->postOutputCallbacks = [];
         $this->resetFonts();
@@ -71,119 +71,120 @@ class Man
         $this->entities = [];
         // See https://www.mankier.com/7/groff#Registers
         $this->registers             = [
-            '.g' => '1',
+          '.g'   => '1',
             //The current font family (string-valued).
-            '.fam' => 'R',
+          '.fam' => 'R',
             // Used by openpbs to specify -ms formatting (could remove and use 0 as fallback for undefined registers maybe):
-            'Pb' => '0',
-            'BD' => '0',
+          'Pb'   => '0',
+          'BD'   => '0',
             // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
-            'F' => '0',
+          'F'    => '0',
             // Current indentation.
-            '.i' => '0',
+          '.i'   => '0',
             // current line length
-            '.l' => '70',
-            '.v' => '1',
-            '.H' => '1500',
-            '.V' => '1500',
-            'x' => '0',
+          '.l'   => '70',
+          '.v'   => '1',
+          '.H'   => '1500',
+          '.V'   => '1500',
+          'x'    => '0',
             // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
-            'year' => date('Y'),
-            'yr' => date('Y') - 1900,
+          'year' => date('Y'),
+          'yr'   => date('Y') - 1900,
         ];
         $this->strings               = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
-            '.T' => 'ps',
+          '.T' => 'ps',
             // https://www.mankier.com/7/groff_man#Miscellaneous
             // The ‘registered’ sign.
-            'R' => '®',
+          'R'  => '®',
             // Switch back to the default font size.
-            'S' => '',
+          'S'  => '',
             // Left and right quote. This is equal to ‘\(lq’ and ‘\(rq\[cq], respectively.
-            'lq' => '“',
-            'rq' => '”',
+          'lq' => '“',
+          'rq' => '”',
             // The typeface used to print headings and subheadings. The default is ‘B’.
-            'HF' => 'B',
+          'HF' => 'B',
             // The ‘trademark’ sign.
-            'Tm' => '™',
+          'Tm' => '™',
         ];
         $this->characterTranslations = [];
 
         $this->roffClasses = [
-            'cc' => 'Roff_cc',
-            'ec' => 'Roff_ec',
-            'eo' => 'Roff_eo',
-            'do' => 'Roff_do',
-            'nop' => 'Roff_nop',
-            'char' => 'Roff_Char',
-            'if' => 'Roff_Condition',
-            'ie' => 'Roff_Condition',
-            'while' => 'Roff_Loop',
-            'de' => 'Roff_de',
-            'de1' => 'Roff_de',
-            'di' => 'Roff_di',
-            'rr' => 'Roff_Register',
-            'nr' => 'Roff_Register',
-            'ds' => 'Roff_String',
-            'ds1' => 'Roff_String',
-            'as' => 'Roff_as',
-            'as1' => 'Roff_as',
-            'als' => 'Roff_Alias',
-            'tr' => 'Roff_Translation',
-            'rn' => 'Roff_Rename',
-            'return' => 'Roff_return',
+          'am'     => 'Roff_am',
+          'cc'     => 'Roff_cc',
+          'ec'     => 'Roff_ec',
+          'eo'     => 'Roff_eo',
+          'do'     => 'Roff_do',
+          'nop'    => 'Roff_nop',
+          'char'   => 'Roff_Char',
+          'if'     => 'Roff_Condition',
+          'ie'     => 'Roff_Condition',
+          'while'  => 'Roff_Loop',
+          'de'     => 'Roff_de',
+          'de1'    => 'Roff_de',
+          'di'     => 'Roff_di',
+          'rr'     => 'Roff_Register',
+          'nr'     => 'Roff_Register',
+          'ds'     => 'Roff_String',
+          'ds1'    => 'Roff_String',
+          'as'     => 'Roff_as',
+          'as1'    => 'Roff_as',
+          'als'    => 'Roff_Alias',
+          'tr'     => 'Roff_Translation',
+          'rn'     => 'Roff_Rename',
+          'return' => 'Roff_return',
         ];
 
         $this->blockClasses = [
-            'SH' => 'Block_Section',
-            'SS' => 'Block_Section',
-            'P' => 'Block_P',
-            'LP' => 'Block_P',
-            'PP' => 'Block_P',
-            'HP' => 'Block_P',
-            'IP' => 'Block_IP',
-            'TP' => 'Block_TP',
-            'TQ' => 'Block_TP',
-            'ti' => 'Block_ti',
-            'RS' => 'Block_RS',
-            'RE' => 'Block_RE',
-            'fc' => 'Block_fc',
-            'ce' => 'Block_ce',
-            'EX' => 'Block_Preformatted',
-            'EE' => 'Block_EndPreformatted',
-            'Vb' => 'Block_Preformatted',
-            'Ve' => 'Block_EndPreformatted',
-            'nf' => 'Block_Preformatted',
-            'fi' => 'Block_EndPreformatted',
-            'SY' => 'Block_SY',
-            'YS' => 'Block_EndPreformatted',
-            'ad' => 'Block_ad', // like Block_EndPreformatted
-            'TS' => 'Block_TS',
-            'TH' => 'Block_TH',
+          'SH' => 'Block_Section',
+          'SS' => 'Block_Section',
+          'P'  => 'Block_P',
+          'LP' => 'Block_P',
+          'PP' => 'Block_P',
+          'HP' => 'Block_P',
+          'IP' => 'Block_IP',
+          'TP' => 'Block_TP',
+          'TQ' => 'Block_TP',
+          'ti' => 'Block_ti',
+          'RS' => 'Block_RS',
+          'RE' => 'Block_RE',
+          'fc' => 'Block_fc',
+          'ce' => 'Block_ce',
+          'EX' => 'Block_Preformatted',
+          'EE' => 'Block_EndPreformatted',
+          'Vb' => 'Block_Preformatted',
+          'Ve' => 'Block_EndPreformatted',
+          'nf' => 'Block_Preformatted',
+          'fi' => 'Block_EndPreformatted',
+          'SY' => 'Block_SY',
+          'YS' => 'Block_EndPreformatted',
+          'ad' => 'Block_ad', // like Block_EndPreformatted
+          'TS' => 'Block_TS',
+          'TH' => 'Block_TH',
         ];
 
         $this->inlineClasses = [
-            'URL' => 'Inline_URL',
-            'UR' => 'Inline_Link',
-            'UE' => 'Inline_LinkEnd',
-            'MT' => 'Inline_Link',
-            'ME' => 'Inline_LinkEnd',
-            'R' => 'Inline_FontOneInputLine',
-            'I' => 'Inline_FontOneInputLine',
-            'B' => 'Inline_FontOneInputLine',
-            'SB' => 'Inline_FontOneInputLine',
-            'SM' => 'Inline_FontOneInputLine',
-            'BI' => 'Inline_AlternatingFont',
-            'BR' => 'Inline_AlternatingFont',
-            'IB' => 'Inline_AlternatingFont',
-            'IR' => 'Inline_AlternatingFont',
-            'RB' => 'Inline_AlternatingFont',
-            'RI' => 'Inline_AlternatingFont',
-            'ft' => 'Inline_ft',
-            'br' => 'Inline_VerticalSpace',
-            'sp' => 'Inline_VerticalSpace',
-            'ne' => 'Inline_VerticalSpace',
-            'EQ' => 'Inline_EQ',
+          'URL' => 'Inline_URL',
+          'UR'  => 'Inline_Link',
+          'UE'  => 'Inline_LinkEnd',
+          'MT'  => 'Inline_Link',
+          'ME'  => 'Inline_LinkEnd',
+          'R'   => 'Inline_FontOneInputLine',
+          'I'   => 'Inline_FontOneInputLine',
+          'B'   => 'Inline_FontOneInputLine',
+          'SB'  => 'Inline_FontOneInputLine',
+          'SM'  => 'Inline_FontOneInputLine',
+          'BI'  => 'Inline_AlternatingFont',
+          'BR'  => 'Inline_AlternatingFont',
+          'IB'  => 'Inline_AlternatingFont',
+          'IR'  => 'Inline_AlternatingFont',
+          'RB'  => 'Inline_AlternatingFont',
+          'RI'  => 'Inline_AlternatingFont',
+          'ft'  => 'Inline_ft',
+          'br'  => 'Inline_VerticalSpace',
+          'sp'  => 'Inline_VerticalSpace',
+          'ne'  => 'Inline_VerticalSpace',
+          'EQ'  => 'Inline_EQ',
         ];
 
     }
@@ -221,12 +222,13 @@ class Man
         $this->postOutputCallbacks[] = $string;
     }
 
-    public function runPostOutputCallbacks():?DOMElement
+    public function runPostOutputCallbacks(): ?DOMElement
     {
         $return = null;
         while ($cb = array_pop($this->postOutputCallbacks)) {
             $return = $cb();
         }
+
         return $return;
     }
 
@@ -240,12 +242,12 @@ class Man
         return array_push($this->fontStack, $name);
     }
 
-    public function currentFont():?string
+    public function currentFont(): ?string
     {
         return count($this->fontStack) ? end($this->fontStack) : null;
     }
 
-    public function popFont(?int $newCount = null):?string
+    public function popFont(?int $newCount = null): ?string
     {
         if (is_null($newCount) || $newCount < 0) {
             return array_pop($this->fontStack);
@@ -254,6 +256,7 @@ class Man
             while (count($this->fontStack) > $newCount) {
                 $font = array_pop($this->fontStack);
             }
+
             return $font;
         }
     }
@@ -270,6 +273,7 @@ class Man
                 return true;
             }
         }
+
         return false;
     }
 
@@ -373,6 +377,7 @@ class Man
         $line = Replace::pregCallback('~(?<!\\\\)(?:\\\\\\\\)*\\\\w\'(.*?)\'~u', function ($matches) {
             $string    = Roff_Glyph::substitute($matches[1]);
             $approxEms = mb_strlen(TextContent::interpretString($string)) / 2.4;
+
             return Roff_Unit::normalize((string)$approxEms, 'm', 'u');
         }, $line);
 
@@ -392,7 +397,7 @@ class Man
         return array_key_exists($requestName, $this->blockClasses);
     }
 
-    public function getRequestClass(string $requestName):?string
+    public function getRequestClass(string $requestName): ?string
     {
         if ($this->requestStartsBlock($requestName)) {
             return $this->blockClasses[$requestName];
