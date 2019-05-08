@@ -274,7 +274,7 @@ class Block_TS implements Block_Template
 
         $columnSeparator = "\t";
 
-        $tableClasses = ['tbl'];
+        $tableClasses = [];
 
         if (mb_substr(trim($lines[0]), -1, 1) === ';') {
             $globalOptions = rtrim($lines[0], ';');
