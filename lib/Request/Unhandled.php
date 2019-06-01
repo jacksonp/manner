@@ -52,7 +52,6 @@ class Request_Unhandled implements Block_Template
         'lsm',
         'ls',
         'ne',
-        'nf',
         'nm',
         'nn',
         'nroff',

@@ -93,9 +93,9 @@ class PreformattedOutput
                 $man->resetFonts();
             }
             return true;
-        } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Request_Skippable'])) {
+        } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable'])) {
             $request['class']::checkAppend($parentNode, $lines, $request);
-            if ($request['class'] !== 'Request_Skippable') {
+            if ($request['class'] === 'Inline_AlternatingFont') {
                 self::endInputLine($parentNode);
             }
             return true;
@@ -120,7 +120,7 @@ class PreformattedOutput
             self::$nextIndent = 4;
             array_shift($lines);
             return true;
-        } elseif (in_array($request['request'], ['ce'])) {
+        } elseif (in_array($request['request'], ['ce', 'nf'])) {
             array_shift($lines);
             return true;
         } elseif ($request['request'] === 'OP') {
