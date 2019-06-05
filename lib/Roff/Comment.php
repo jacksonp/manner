@@ -18,7 +18,8 @@ class Roff_Comment
         // See e.g. flow-import.1 for comment starting with .\\"
         // See e.g. card.1 for comment starting with ."
         // See e.g. node.1 for comment starting with .\
-        if (preg_match('~^([\'\.]?\\\\?\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[0], $matches)) {
+        // See e.g. units.1 for comment in a .de starting with .    \"
+        if (preg_match('~^([\'\.]?\\\\?\\\\"|\.?\s*\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[0], $matches)) {
             array_shift($lines);
             return true;
         }

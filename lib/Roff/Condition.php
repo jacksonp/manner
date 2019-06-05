@@ -171,6 +171,13 @@ class Roff_Condition implements Roff_Template
     {
 
         $request = Request::getLine($lines);
+
+        // Do comments first
+        if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
+            // We want another look at the same line:
+            return self::handleElse($lines, $useIf);
+        }
+
         array_shift($lines);
 
         if ($request['request'] === 'el') {
@@ -178,7 +185,7 @@ class Roff_Condition implements Roff_Template
                 return self::ifBlock($lines, $matches[1], !$useIf);
             }
         } else {
-            //throw new Exception('.ie condition - not followed by expected pattern on line ' . $i . ' (got "' . $lines[$i] . '").');
+            // throw new Exception('.ie condition - not followed by expected pattern (got "' . $lines[0] . '").');
             // Just skip the ie and el lines:
             return [];
         }
