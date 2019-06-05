@@ -31,7 +31,7 @@ class Block_ti implements Block_Template
             $indentVal = Roff_Unit::normalize($request['arguments'][0], 'm', 'n');
         }
 
-        if (Indentation::get($parentNode) === (float)$indentVal) {
+        if (Indentation::get($parentNode) === (float)$indentVal && $parentNode->lastChild) {
             if ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br') {
                 Inline_VerticalSpace::addBR($parentNode);
             }
