@@ -42,8 +42,37 @@ ROFF;
 Th \o'LP'
 ROFF;
 
-        if ($key = array_search($request['raw_arg_string'], $known)) {
+        $key = array_search($request['raw_arg_string'], $known);
+        if ($key !== false) {
             $man->addString($request['arguments'][0], $key);
+
+            return;
+        }
+
+        // Skippable ones: see e.g. a2ping.1
+        $skippable = [];
+        // TODO: for the following accents, we could conceivably look at the preceding character and replace it with the
+        //       accented version
+        $skippable[] = <<<'ROFF'
+' \k: \'\h"|0u"
+ROFF;
+        $skippable[] = <<<'ROFF'
+` \\k:\h'-(\\n(.wu*8/10-((1u-(0u%2u))*.13m))'\`\h'|\\n:u'
+ROFF;
+        $skippable[] = <<<'ROFF'
+^ \\k:\h'-(\\n(.wu*10/11-((1u-(0u%2u))*.13m))'^\h'|\\n:u'
+ROFF;
+        $skippable[] = <<<'ROFF'
+, \\k:\h'-(\\n(.wu*8/10)',\h'|\\n:u'
+ROFF;
+        $skippable[] = <<<'ROFF'
+~ \\k:\h'-(\\n(.wu-((1u-(0u%2u))*.13m)-.1m)'~\h'|\\n:u'
+ROFF;
+        $skippable[] = <<<'ROFF'
+/ \\k:\h'-(\\n(.wu*8/10-((1u-(0u%2u))*.13m))'\(sl\h'|\\n:u'
+ROFF;
+
+        if (array_search($request['raw_arg_string'], $skippable) !== false) {
             return;
         }
 
@@ -88,15 +117,15 @@ ROFF;
 
         // Want to match any of: \*. \*(.. \*[....]
         return Replace::pregCallback(
-            '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
-            function ($matches) use (&$replacements) {
-                if (isset($replacements[$matches['str']])) {
-                    return $matches['bspairs'] . $replacements[$matches['str']];
-                } else {
-                    return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
-                }
-            },
-            $string);
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
+          function ($matches) use (&$replacements) {
+              if (isset($replacements[$matches['str']])) {
+                  return $matches['bspairs'] . $replacements[$matches['str']];
+              } else {
+                  return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
+              }
+          },
+          $string);
 
     }
 
