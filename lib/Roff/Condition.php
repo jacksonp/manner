@@ -226,7 +226,7 @@ class Roff_Condition implements Roff_Template
         }
 
         $alwaysTrue = [
-          'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
+          't', // "Formatter is troff."
         ];
 
         if (in_array($condition, $alwaysTrue, true)) {
@@ -236,7 +236,7 @@ class Roff_Condition implements Roff_Template
         $alwaysFalse = [
           '\\(.g',
           '\n()P',
-          't', // "Formatter is troff."
+          'n',     // "Formatter is nroff." ("for TTY output" - try changing to 't' sometime?)
           'v', // vroff
           'require_index',
           'c\[shc]', // see man.1
