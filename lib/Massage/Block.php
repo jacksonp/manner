@@ -18,11 +18,11 @@ class Massage_Block
         }
 
         while (
-            $previousSibling = $blockElement->previousSibling and
-            (
-                Node::isTextAndEmpty($previousSibling) ||
-                DOM::isTag($previousSibling, 'br')
-            )
+          $previousSibling = $blockElement->previousSibling and
+          (
+            Node::isTextAndEmpty($previousSibling) ||
+            DOM::isTag($previousSibling, 'br')
+          )
         ) {
             $blockElement->parentNode->removeChild($previousSibling);
         }
@@ -37,11 +37,11 @@ class Massage_Block
         }
 
         while (
-            $nextSibling = $blockElement->nextSibling and
-            (
-                Node::isTextAndEmpty($nextSibling) ||
-                DOM::isTag($nextSibling, 'br')
-            )
+          $nextSibling = $blockElement->nextSibling and
+          (
+            Node::isTextAndEmpty($nextSibling) ||
+            DOM::isTag($nextSibling, 'br')
+          )
         ) {
             $blockElement->parentNode->removeChild($nextSibling);
         }
@@ -56,16 +56,16 @@ class Massage_Block
         while ($child) {
 
             if (
-                DOM::isTag($child, 'div') &&
-                $child->nextSibling &&
-                DOM::isTag($child->nextSibling, 'div') &&
-                $child->getAttribute('class') === $child->nextSibling->getAttribute('class') &&
-                $child->nextSibling->childNodes->length === 1
+              DOM::isTag($child, 'div') &&
+              $child->nextSibling &&
+              DOM::isTag($child->nextSibling, 'div') &&
+              $child->getAttribute('class') === $child->nextSibling->getAttribute('class') &&
+              $child->nextSibling->childNodes->length === 1
             ) {
 
                 if ($child->childNodes->length === 1 &&
-                    DOM::isTag($child->firstChild, 'p') &&
-                    DOM::isTag($child->nextSibling->firstChild, 'p')
+                  DOM::isTag($child->firstChild, 'p') &&
+                  DOM::isTag($child->nextSibling->firstChild, 'p')
                 ) {
 
                     $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
@@ -83,6 +83,36 @@ class Massage_Block
             }
 
             $child = $child->nextSibling;
+
+        }
+
+    }
+
+    static function coalesceAdjacentChildren(DOMXPath $xpath)
+    {
+
+        $tagsToMerge = ['ul'];
+
+        $ulParents = $xpath->query('//section | //dd | //li | //td');
+
+        foreach ($ulParents as $ulParent) {
+
+            $child = $ulParent->firstChild;
+
+            while ($child) {
+
+                if (
+                  DOM::isTag($child, $tagsToMerge) &&
+                  $child->nextSibling &&
+                  DOM::isTag($child->nextSibling, $child->tagName) &&
+                  $child->getAttribute('class') === $child->nextSibling->getAttribute('class')
+                ) {
+                    Dom::extractContents($child, $child->nextSibling);
+                    Node::remove($child->nextSibling);
+                } else {
+                    $child = $child->nextSibling;
+                }
+            }
 
         }
 

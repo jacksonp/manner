@@ -32,6 +32,7 @@ class Manner
         Massage_Tidy::doAll($xpath);
         Massage_DL::checkPrecedingNodes($xpath);
         Massage_Tidy::indentAttributeToClass($xpath);
+        Massage_Block::coalesceAdjacentChildren($xpath);
 
         return $dom;
     }
