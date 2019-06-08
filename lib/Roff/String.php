@@ -41,6 +41,10 @@ ROFF;
         $known['þ'] = <<<'ROFF'
 Th \o'LP'
 ROFF;
+        // TODO: could render this the same way wikipedia does: https://en.wikipedia.org/wiki/TeX
+        $known['TeX'] = <<<'ROFF'
+TX \fRT  E  X\fP
+ROFF;
 
         $key = array_search($request['raw_arg_string'], $known);
         if ($key !== false) {
