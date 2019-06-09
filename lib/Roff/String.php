@@ -12,9 +12,12 @@ class Roff_String implements Roff_Template
         $man = Man::instance();
 
         $known        = [];
-        $known['C++'] = <<<'ROFF'
+
+        $known[<<<'ROFF'
 C+ C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
-ROFF;
+ROFF
+] = 'C++';
+
         /*
         $known['ð'] = <<<'ROFF'
 d- \h'0'\(pd\h'-\w'~'u'\v'-.25m'\f2\(hy\fP\v'.25m'\h'-0'
@@ -29,26 +32,50 @@ ROFF;
 Th \f1I\h'-\w'I'u*3/5'\v'-.3m'o\v'.3m'\fP
 ROFF;
         */
-        $known['ð'] = <<<'ROFF'
+        $known[<<<'ROFF'
 d- d\h'-1'\(ga
-ROFF;
-        $known['Ð'] = <<<'ROFF'
+ROFF
+] = 'ð';
+        $known[<<<'ROFF'
 D- D\h'-1'\(hy
-ROFF;
-        $known['Þ'] = <<<'ROFF'
+ROFF
+] = 'Ð';
+        $known[<<<'ROFF'
 th \o'bp'
-ROFF;
-        $known['þ'] = <<<'ROFF'
+ROFF
+] = 'Þ';
+        $known[<<<'ROFF'
 Th \o'LP'
-ROFF;
+ROFF
+] = 'þ';
         // TODO: could render this the same way wikipedia does: https://en.wikipedia.org/wiki/TeX
-        $known['TeX'] = <<<'ROFF'
+        $known[<<<'ROFF'
 TX \fRT  E  X\fP
-ROFF;
+ROFF
+] = 'TeX';
+        $known[<<<'ROFF'
+OX \fIT E X\fP
+ROFF
+] = 'TeX';
+        $known[<<<'ROFF'
+BX \fRBIB\fPTeX
+ROFF
+] = 'BibTeX';
+        $known[<<<'ROFF'
+LX \fRL  A  \fPTeX
+ROFF
+] = 'LaTeX';
+        $known[<<<'ROFF'
+AX \fRA  M  S\fPTeX
+ROFF
+] = 'AmSTeX';
+        $known[<<<'ROFF'
+AY \fRA  M  S\fP\fRL  A  \fPTeX
+ROFF
+] = 'AmSLaTeX';
 
-        $key = array_search($request['raw_arg_string'], $known);
-        if ($key !== false) {
-            $man->addString($request['arguments'][0], $key);
+        if (array_key_exists($request['raw_arg_string'], $known)) {
+            $man->addString($request['arguments'][0], $known[$request['raw_arg_string']]);
 
             return;
         }
