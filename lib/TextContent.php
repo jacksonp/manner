@@ -192,10 +192,12 @@ class TextContent
             case 'I':
             case 'AI':
             case '2':
+            case '7':
                 $tags = ['em'];
                 break;
             case 'B':
             case '3':
+            case '8':
                 $tags = ['strong'];
                 break;
             case 'BI':
