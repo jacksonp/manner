@@ -57,12 +57,52 @@ ROFF
 OX \fIT E X\fP
 ROFF
 ] = 'TeX';
+        // eplain.1
+        $known[<<<'ROFF'
+OX \fIT E X\fP for troff
+ROFF
+] = 'TeX';
+        // dt2dv.1
+        $known[<<<'ROFF'
+Te T  E  X
+ROFF
+] = 'TeX';
+        // grodvi.1
+        $known[<<<'ROFF'
+tx T  E  X
+ROFF
+] = 'TeX';
+        // makeindex.1
+        $known[<<<'ROFF'
+TX T  E  X
+ROFF
+] = 'TeX';
         $known[<<<'ROFF'
 BX \fRBIB\fPTeX
 ROFF
 ] = 'BibTeX';
         $known[<<<'ROFF'
 LX \fRL  A  \fPTeX
+ROFF
+] = 'LaTeX';
+        // bibtex.1
+        $known[<<<'ROFF'
+LX \fRL  \s-2A\s0  \fPTeX
+ROFF
+] = 'LaTeX';
+        // pic.1
+        $known[<<<'ROFF'
+lx L\h'-0.36m'\v'-0.22v'A\h'-0.15m'\v'0.22v'TeX
+ROFF
+] = 'LaTeX';
+        // makeindex.1
+        $known[<<<'ROFF'
+LX L  \s-2A\s+2  T  E  X
+ROFF
+] = 'LaTeX';
+        // ttf2tfm.1
+        $known[<<<'ROFF'
+LX L  A  TeX
 ROFF
 ] = 'LaTeX';
         $known[<<<'ROFF'
@@ -73,6 +113,16 @@ ROFF
 AY \fRA  M  S\fP\fRL  A  \fPTeX
 ROFF
 ] = 'AmSLaTeX';
+        // bg5conv.1
+        $known[<<<'ROFF'
+LE LaTeX 2 \(*e 
+ROFF
+] = 'LaTeX2e';
+        //dv2dt.1
+        $known[<<<'ROFF'
+Xe X  E  T
+ROFF
+] = 'XeT';
 
         if (array_key_exists($request['raw_arg_string'], $known)) {
             $man->addString($request['arguments'][0], $known[$request['raw_arg_string']]);
