@@ -74,8 +74,8 @@ class Massage_DL
         $pChild = $p->firstChild;
         while ($pChild) {
             if (
-                DOM::isTag($pChild, 'br') &&
-                $pChild->previousSibling && preg_match('~^[A-Z].*\.$~u', $pChild->previousSibling->textContent)
+              DOM::isTag($pChild, 'br') &&
+              $pChild->previousSibling && preg_match('~^[A-Z].*\.$~u', $pChild->previousSibling->textContent)
             ) {
                 return 0;
             }
@@ -108,10 +108,10 @@ class Massage_DL
 
             // Exclude sentences in $p
             if (
-                $pText === 'or' ||
-                preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
-                preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
-                preg_match('~(\s[a-z]+){3,}[:\.]$~ui', $pText)
+              $pText === 'or' ||
+              preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
+              preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
+              preg_match('~(\s[a-z]+){3,}[:\.]$~ui', $pText)
             ) {
                 return 0;
             }
@@ -154,6 +154,42 @@ class Massage_DL
 
             return 0;
 
+        }
+
+    }
+
+    public static function CreateOLs(DOMXpath $xpath)
+    {
+
+        $dls = $xpath->query('//dl');
+        foreach ($dls as $dl) {
+            $i  = 1;
+            $dt = $dl->firstChild;
+            while (Dom::isTag($dt, 'dt')) {
+                $dtStr = trim($dt->textContent, " \t\n\r\0\x0B." . html_entity_decode('&nbsp;'));
+                // !is_numeric($dtStr) check needed because: "1 foo" == 1
+                if (!is_numeric($dtStr) || $dtStr != $i) {
+                    continue 2;
+                }
+                $dt = $dt->nextSibling;
+                if ($dt) {
+                    $dt = $dt->nextSibling;
+                }
+                ++$i;
+            }
+            if ($i > 2) {
+                // If we get here, <dl> should be an <ol>
+                $ol = $dl->ownerDocument->createElement('ol');
+                $dl->parentNode->insertBefore($ol, $dl);
+                $dds = $xpath->query('./dd', $dl);
+                foreach ($dds as $dd) {
+                    $li = $dd->ownerDocument->createElement('li');
+                    $ol->appendChild($li);
+                    Dom::extractContents($li, $dd);
+                }
+                $dl->parentNode->removeChild($dl);
+                Massage_List::removeLonePs($ol);
+            }
         }
 
     }

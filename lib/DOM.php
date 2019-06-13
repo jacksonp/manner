@@ -425,7 +425,7 @@ class DOM
                         }
                     }
                 }
-                if ($shouldBeList && in_array($dtChar, Massage_UL::CHAR_PREFIXES)) {
+                if ($shouldBeList && in_array($dtChar, Massage_List::CHAR_PREFIXES)) {
                     $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
                     foreach ($child->childNodes as $dlChild) {

@@ -57,9 +57,9 @@ class Massage_Tidy
             Massage_P::tidy($p);
         }
 
-        $els = $xpath->query('//ul');
+        $els = $xpath->query('//ul | //ol');
         foreach ($els as $el) {
-            Massage_UL::removeLonePs($el);
+            Massage_List::removeLonePs($el);
         }
 
         $els = $xpath->query('//li');

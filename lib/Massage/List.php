@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-class Massage_UL
+class Massage_List
 {
 
     const CHAR_PREFIXES = ['*', 'o', '·', '+', '-'];
 
     private static function getBulletRegex(): string
     {
-        return '~^\s*[' . preg_quote(implode('', Massage_UL::CHAR_PREFIXES), '~') . ']\s~u';
+        return '~^\s*[' . preg_quote(implode('', Massage_List::CHAR_PREFIXES), '~') . ']\s~u';
     }
 
     static function startsWithBullet(string $text)
@@ -24,9 +24,9 @@ class Massage_UL
         }
     }
 
-    static function removeLonePs(DOMElement $ul)
+    static function removeLonePs(DOMElement $list)
     {
-        $child = $ul->firstChild;
+        $child = $list->firstChild;
         while ($child) {
             if ($child->childNodes->length === 1 && DOM::isTag($child->firstChild, 'p')) {
                 DOM::extractContents($child, $child->firstChild);

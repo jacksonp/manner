@@ -21,7 +21,7 @@ class Massage_DIV
         return
             DOM::isTag($div, 'div') &&
             !DOM::isTag($div->firstChild, 'pre') &&
-            Massage_UL::startsWithBullet($div->textContent);
+            Massage_List::startsWithBullet($div->textContent);
     }
 
     static function postProcess(DOMElement $div): ?DOMNode
@@ -38,7 +38,7 @@ class Massage_DIV
             if (
                 (is_null($nextNonBR) || !DOM::isTag($nextNonBR, 'div') || !self::isPotentialLI($nextNonBR)) &&
                 Dom::isTag($div->firstChild, 'p') &&
-                Massage_UL::checkElementForLIs($div->firstChild)
+                Massage_List::checkElementForLIs($div->firstChild)
             ) {
 
                 /* @var DOMElement $ul */
@@ -56,7 +56,7 @@ class Massage_DIV
 
                 $div->parentNode->removeChild($div);
 
-                Massage_UL::pruneBulletChar($ul->firstChild);
+                Massage_List::pruneBulletChar($ul->firstChild);
 
                 return $ul->nextSibling;
 
@@ -79,9 +79,9 @@ class Massage_DIV
                             DOM::extractContents($li, $div);
                         }
 
-                        Massage_UL::pruneBulletChar($li);
+                        Massage_List::pruneBulletChar($li);
 
-                        Massage_UL::checkElementForLIs($li);
+                        Massage_List::checkElementForLIs($li);
 
                         $div->parentNode->removeChild($div);
                         $div = self::getNextNonBRNode($ul, true);
