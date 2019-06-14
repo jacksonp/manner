@@ -183,6 +183,11 @@ ROFF;
             $requestVal = '”';
         }
 
+        // Special case for ellipsis with \fS font:
+        if ($newRequest === 'EL' && $requestVal === '\fS\N\'188\'\fP') {
+            $requestVal = '…';
+        }
+
         // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
         $requestVal = $man->applyAllReplacements($requestVal);
         $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
