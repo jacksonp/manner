@@ -55,31 +55,41 @@ class Massage_Block
 
         while ($child) {
 
-            if (
-              DOM::isTag($child, 'div') &&
-              $child->nextSibling &&
-              DOM::isTag($child->nextSibling, 'div') &&
-              $child->getAttribute('class') === $child->nextSibling->getAttribute('class') &&
-              $child->nextSibling->childNodes->length === 1
-            ) {
+            if (DOM::isTag($child, 'div')) {
 
-                if ($child->childNodes->length === 1 &&
-                  DOM::isTag($child->firstChild, 'p') &&
-                  DOM::isTag($child->nextSibling->firstChild, 'p')
-                ) {
+                $nextSibling = $child->nextSibling;
+                $brsToRemove = [];
 
-                    $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
-                    while ($child->nextSibling->firstChild->firstChild) {
-                        $child->firstChild->appendChild($child->nextSibling->firstChild->firstChild);
-                    }
-                    $blockElement->removeChild($child->nextSibling);
-                    continue;
-                } else {
-                    $child->appendChild($child->nextSibling->firstChild);
-                    $blockElement->removeChild($child->nextSibling);
-                    continue;
+                while ($nextSibling && DOM::isTag($nextSibling, 'br')) {
+                    $brsToRemove[] = $nextSibling;
+                    $nextSibling = $nextSibling->nextSibling;
                 }
 
+                if (
+                  DOM::isTag($nextSibling, 'div') &&
+                  $child->getAttribute('class') === $nextSibling->getAttribute('class') &&
+                  $nextSibling->childNodes->length === 1
+                ) {
+                    foreach ($brsToRemove as $brToRemove) {
+                        $brToRemove->parentNode->removeChild($brToRemove);
+                    }
+                    if ($child->childNodes->length === 1 &&
+                      DOM::isTag($child->firstChild, 'p') &&
+                      DOM::isTag($nextSibling->firstChild, 'p')
+                    ) {
+                        $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
+                        while ($nextSibling->firstChild->firstChild) {
+                            $child->firstChild->appendChild($nextSibling->firstChild->firstChild);
+                        }
+                        $blockElement->removeChild($nextSibling);
+                        continue;
+                    } else {
+                        $child->appendChild($nextSibling->firstChild);
+                        $blockElement->removeChild($nextSibling);
+                        continue;
+                    }
+
+                }
             }
 
             $child = $child->nextSibling;
