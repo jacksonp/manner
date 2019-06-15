@@ -58,32 +58,37 @@ class Massage_Block
             if (DOM::isTag($child, 'div')) {
 
                 $nextSibling = $child->nextSibling;
-                $brsToRemove = [];
+                $brsInBetween = [];
 
                 while ($nextSibling && DOM::isTag($nextSibling, 'br')) {
-                    $brsToRemove[] = $nextSibling;
+                    $brsInBetween[] = $nextSibling;
                     $nextSibling = $nextSibling->nextSibling;
                 }
 
                 if (
                   DOM::isTag($nextSibling, 'div') &&
-                  $child->getAttribute('class') === $nextSibling->getAttribute('class') &&
+                  $child->getAttribute('indent') === $nextSibling->getAttribute('indent') &&
                   $nextSibling->childNodes->length === 1
                 ) {
-                    foreach ($brsToRemove as $brToRemove) {
-                        $brToRemove->parentNode->removeChild($brToRemove);
-                    }
                     if ($child->childNodes->length === 1 &&
                       DOM::isTag($child->firstChild, 'p') &&
                       DOM::isTag($nextSibling->firstChild, 'p')
                     ) {
-                        $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
+                        if (count($brsInBetween) < 2) {
+                            $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
+                        }
+                        foreach ($brsInBetween as $brInBetween) {
+                            $child->firstChild->appendChild($brInBetween);
+                        }
                         while ($nextSibling->firstChild->firstChild) {
                             $child->firstChild->appendChild($nextSibling->firstChild->firstChild);
                         }
                         $blockElement->removeChild($nextSibling);
                         continue;
                     } else {
+                        foreach ($brsInBetween as $brInBetween) {
+                            $child->appendChild($brInBetween);
+                        }
                         $child->appendChild($nextSibling->firstChild);
                         $blockElement->removeChild($nextSibling);
                         continue;
