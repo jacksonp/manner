@@ -20,7 +20,7 @@ class Massage_DIV
     {
         return
             DOM::isTag($div, 'div') &&
-            !DOM::isTag($div->firstChild, 'pre') &&
+            !DOM::isTag($div->firstChild, ['pre', 'ul']) &&
             Massage_List::startsWithBullet($div->textContent);
     }
 
