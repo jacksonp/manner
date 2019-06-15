@@ -119,10 +119,9 @@ LE LaTeX 2 \(*e
 ROFF
 ] = 'LaTeX2e';
         //dv2dt.1
-        $known[<<<'ROFF'
-Xe X  E  T
-ROFF
-] = 'XeT';
+        $known['Xe X  E  T'] = 'XeT';
+        $known['o   . .  o'] = 'ö';
+        $known['u   . .  u'] = 'ü';
 
         if (array_key_exists($request['raw_arg_string'], $known)) {
             $man->addString($request['arguments'][0], $known[$request['raw_arg_string']]);
