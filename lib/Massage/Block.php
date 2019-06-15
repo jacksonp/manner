@@ -108,7 +108,7 @@ class Massage_Block
 
         $tagsToMerge = ['ul'];
 
-        $ulParents = $xpath->query('//section | //dd | //li | //td');
+        $ulParents = $xpath->query('//section | //dd | //li | //td | //div');
 
         foreach ($ulParents as $ulParent) {
 
