@@ -113,7 +113,7 @@ class Roff_Condition implements Roff_Template
             $postConditionString .= ' ' . implode('', $argChars);
         }
 
-
+        $postConditionString = ltrim($postConditionString); // cougar.1alc has extra leading space
         $postConditionBlock = strpos($postConditionString, '\\{') === 0;
         if ($postConditionBlock) {
             $postConditionString = substr($postConditionString, 2);
