@@ -78,13 +78,18 @@ class Massage_Tidy
     {
         $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]');
         foreach ($els as $el) {
-            $indentVal = Indentation::get($el);
-            if ($indentVal) {
-                $el->setAttribute('class', 'indent-' . $indentVal);
-            }
-            Indentation::remove($el);
-            if (!$indentVal && $el->tagName === 'div') {
-                Node::remove($el);
+            if ($el->tagName === 'ul') {
+                // Remove indent on <ul>s as they get indented by default in html anyway
+                $el->removeAttribute('indent');
+            } else {
+                $indentVal = Indentation::get($el);
+                if ($indentVal) {
+                    $el->setAttribute('class', 'indent-' . $indentVal);
+                }
+                Indentation::remove($el);
+                if (!$indentVal && $el->tagName === 'div') {
+                    Node::remove($el);
+                }
             }
         }
         $els = $xpath->query('//p[@implicit]');
