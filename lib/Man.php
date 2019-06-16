@@ -387,7 +387,10 @@ class Man
         // \v, \h: "Local vertical/horizontal motion"
         // \l: Horizontal line drawing function (optionally using character c).
         // \L: Vertical line drawing function (optionally using character c).
-        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', ' ', $line);
+        // \D: The \D escape provides a variety of drawing function
+        // \Z: Print anything, then restore the horizontal and vertical position.
+        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\Z@.*?@~u', ' ', $line);
+        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLlD]\'.*?\'~u', ' ', $line);
 
         // $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
 

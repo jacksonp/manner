@@ -125,7 +125,6 @@ ROFF
 
         if (array_key_exists($request['raw_arg_string'], $known)) {
             $man->addString($request['arguments'][0], $known[$request['raw_arg_string']]);
-
             return;
         }
 
@@ -133,6 +132,7 @@ ROFF
         $skippable = [];
         // TODO: for the following accents, we could conceivably look at the preceding character and replace it with the
         //       accented version
+        // perl5120delta.1 this would add and acute accent on preceding char
         $skippable[] = <<<'ROFF'
 ' \k: \'\h"|0u"
 ROFF;
@@ -145,6 +145,7 @@ ROFF;
         $skippable[] = <<<'ROFF'
 , \\k:\h'-(\\n(.wu*8/10)',\h'|\\n:u'
 ROFF;
+        // perl5100delta.1 this would add the tilde on an existing n to create an ñ
         $skippable[] = <<<'ROFF'
 ~ \\k:\h'-(\\n(.wu-((1u-(0u%2u))*.13m)-.1m)'~\h'|\\n:u'
 ROFF;
