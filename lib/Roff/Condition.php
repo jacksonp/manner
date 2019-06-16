@@ -193,7 +193,7 @@ class Roff_Condition implements Roff_Template
         if ($useIf) {
             return [];
         } else {
-            return [$request['arg_string']];
+            return [ltrim($request['arg_string'])];
         }
 
     }
