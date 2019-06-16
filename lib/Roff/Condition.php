@@ -182,7 +182,7 @@ class Roff_Condition implements Roff_Template
 
         if ($request['request'] === 'el') {
             if (preg_match('~^\\\\{(.*)$~u', $request['raw_arg_string'], $matches)) {
-                return self::ifBlock($lines, $matches[1], !$useIf);
+                return self::ifBlock($lines, ltrim($matches[1]), !$useIf);
             }
         } else {
             // throw new Exception('.ie condition - not followed by expected pattern (got "' . $lines[0] . '").');
