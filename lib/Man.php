@@ -187,6 +187,7 @@ class Man
           'ne'  => 'Inline_VerticalSpace',
           'EQ'  => 'Inline_EQ',
           'PS'  => 'Inline_PS',
+          'OP'  => 'Inline_OP',
         ];
 
     }

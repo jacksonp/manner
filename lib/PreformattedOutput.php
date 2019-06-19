@@ -123,20 +123,6 @@ class PreformattedOutput
         } elseif (in_array($request['request'], ['ce', 'nf'])) {
             array_shift($lines);
             return true;
-        } elseif ($request['request'] === 'OP') {
-            $parentNode->appendChild(new DOMText('['));
-            /* @var DomElement $strong */
-            $strong = $parentNode->appendChild($dom->createElement('strong'));
-            TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
-            if (count($request['arguments']) > 1) {
-                $parentNode->appendChild(new DOMText(' '));
-                /* @var DomElement $em */
-                $em = $parentNode->appendChild($dom->createElement('em'));
-                TextContent::interpretAndAppendText($em, $request['arguments'][1]);
-            }
-            $parentNode->appendChild(new DOMText('] '));
-            array_shift($lines);
-            return true;
         } elseif ($request['request'] === 'RS') {
             array_shift($lines);
             if (count($request['arguments'])) {
