@@ -26,17 +26,21 @@ class Inline_OP implements Block_Template
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getParentForText($parentNode);
 
-        $parentNode->appendChild(new DOMText('['));
+        // Used to prevent line-breaks inside options:
+        $optSpan = $parentNode->appendChild($dom->createElement('span'));
+        $optSpan->setAttribute('class', 'opt');
+
+        $optSpan->appendChild(new DOMText('['));
         /* @var DomElement $strong */
-        $strong = $parentNode->appendChild($dom->createElement('strong'));
+        $strong = $optSpan->appendChild($dom->createElement('strong'));
         TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
         if (count($request['arguments']) > 1) {
-            $parentNode->appendChild(new DOMText(' '));
+            $optSpan->appendChild(new DOMText(' '));
             /* @var DomElement $em */
-            $em = $parentNode->appendChild($dom->createElement('em'));
+            $em = $optSpan->appendChild($dom->createElement('em'));
             TextContent::interpretAndAppendText($em, $request['arguments'][1]);
         }
-        $parentNode->appendChild(new DOMText('] '));
+        $optSpan->appendChild(new DOMText('] '));
 
         return $parentNode;
     }
