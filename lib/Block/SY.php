@@ -27,15 +27,21 @@ class Block_SY implements Block_Template
         $syRows          = [];
         $syLines         = [];
         $lastCommandName = '';
-        $firstLine = true;
+        $firstLine       = true;
         while ($request = Request::getLine($lines)) {
+            if (in_array($request['request'], ['SH', 'SS'])) {
+                $foundEnd = true;
+                // no array_shift(): we need this line for later
+                $syRows[] = ['cmd_name' => $lastCommandName, 'sy_lines' => $syLines];
+                break;
+            }
             array_shift($lines);
             if ($request['request'] === 'SY') {
                 $lastCommandName = count($request['arguments']) ? $request['arguments'][0] : '';
                 if (!$firstLine) { // Don't do this on first .SY
                     $syRows[] = ['cmd_name' => $lastCommandName, 'sy_lines' => $syLines];
                 }
-                $syLines         = [];
+                $syLines = [];
             } elseif ($request['request'] === 'YS') {
                 $syRows[] = ['cmd_name' => $lastCommandName, 'sy_lines' => $syLines];
                 $foundEnd = true;
@@ -47,7 +53,7 @@ class Block_SY implements Block_Template
         }
 
         if (!$foundEnd) {
-            throw new Exception('SY without YS.');
+            throw new Exception('SY not followed by YS, SH, or SS.');
         }
 
         $table = $dom->createElement('table');
