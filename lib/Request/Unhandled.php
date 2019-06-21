@@ -93,7 +93,6 @@ class Request_Unhandled implements Block_Template
         'unformat',
         'vpt',
         'warnscale',
-        'wh',
         'write',
         'writec',
         'writem',

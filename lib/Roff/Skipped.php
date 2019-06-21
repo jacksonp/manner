@@ -62,6 +62,7 @@ class Roff_Skipped
       'ul', // "Underline (italicize in troff) N input lines." TODO: Could revisit this and implement.
       'vs', // Change to previous vertical base line spacing.
       'warn', // Set warnings code to n.
+      'wh', // Set/Remove location trap
     ];
 
     const nonStandardRequests = [
