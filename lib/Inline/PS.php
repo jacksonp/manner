@@ -25,7 +25,17 @@ class Inline_PS implements Block_Template
 
         $picLines = [];
         while ($request = Request::getLine($lines)) {
+            if ($request['request'] === 'TP') {
+                // Pretend the .PS never happened, e.g. pear.1:
+                for ($i = count($picLines) - 1; $i >= 0; --$i) {
+                    array_unshift($lines, $picLines[$i]);
+                }
+
+                return $parentNode;
+            }
+
             array_shift($lines);
+
             if ($request['request'] === 'PE') {
                 $foundEnd = true;
                 break;
@@ -35,7 +45,7 @@ class Inline_PS implements Block_Template
         }
 
         if (!$foundEnd) {
-            throw new Exception('PS without PE.');
+            throw new Exception('PS without PE or TS.');
         }
 
         if (count($picLines) > 0) {
