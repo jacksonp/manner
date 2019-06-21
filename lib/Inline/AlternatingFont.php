@@ -30,9 +30,12 @@ class Inline_AlternatingFont implements Block_Template
             if (!isset($request['request'][$requestCharIndex])) {
                 throw new Exception($lines[0] . ' command ' . $request['request'] . ' has nothing at index ' . $requestCharIndex);
             }
-            $numFonts = $man->pushFont($request['request'][$requestCharIndex]);
+            // Re-massage the line:
+            // in a man page the AlternatingFont macro argument would become the macro argument to a .ft call and have
+            // double backslashes transformed twice (I think)
+            $bit = Request::massageLine($bit);
+            $man->pushFont($request['request'][$requestCharIndex]);
             TextContent::interpretAndAppendText($parentNode, $bit);
-//            $man->popFont($numFonts - 1);
             $man->resetFonts();
         }
 

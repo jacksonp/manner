@@ -7,6 +7,7 @@ class Request
     public static function getArgChars(string $argString): array
     {
         $argString = ltrim($argString);
+
         return preg_split('//u', $argString, -1, PREG_SPLIT_NO_EMPTY);
     }
 
@@ -112,7 +113,8 @@ class Request
 
     public static function massageLine(string $macroLine): string
     {
-        return str_replace('\\\\', '\\', $macroLine);
+        // Replace 2 backslashes with 1 backslash, do not use str_replace as replacements can themselves be replaced: e.g. \\\
+        return Replace::preg('~(\\\\){2}~u', '\\', $macroLine);
     }
 
     public static function peepAt(?string $line): array
@@ -125,14 +127,15 @@ class Request
         $man          = Man::instance();
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
-            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
-            $line, $matches)
+          '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
+          $line, $matches)
         ) {
             $return['name'] = $matches[1];
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
             }
         }
+
         return $return;
     }
 
@@ -155,6 +158,7 @@ class Request
         if (is_null($lines[0])) {
             // We hit an end of macro marker.
             array_shift($lines);
+
             return self::getLine($lines, $callerArguments);
         }
 
@@ -163,9 +167,9 @@ class Request
         if (!is_null($man->escape_char)) {
             // Continuations
             while (
-                count($lines) > 1 &&
-                mb_substr($lines[0], -1, 1) === '\\' &&
-                ($lines[0] === '\\' || mb_substr($lines[0], -2, 1) !== '\\')) {
+              count($lines) > 1 &&
+              mb_substr($lines[0], -1, 1) === '\\' &&
+              ($lines[0] === '\\' || mb_substr($lines[0], -2, 1) !== '\\')) {
                 $lineWithContinuationsExpanded = mb_substr($lines[0], 0, -1) . $lines[1];
                 array_shift($lines);
                 array_shift($lines);
@@ -184,27 +188,28 @@ class Request
         $lines[0] = Roff_String::substitute($lines[0]);
 
         $return = [
-            'request' => null,
-            'raw_line' => $lines[0],
-            'arguments' => [],
-            'arg_string' => '',
-            'raw_arg_string' => ''
+          'request'        => null,
+          'raw_line'       => $lines[0],
+          'arguments'      => [],
+          'arg_string'     => '',
+          'raw_arg_string' => '',
         ];
 
         if (preg_match(
-            '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
-            $return['raw_line'], $matches)
+          '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
+          $return['raw_line'], $matches)
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
                 $return['arguments']      = Request::parseArguments($return['arg_string'],
-                    in_array($return['request'], ['if', 'ie']));
+                  in_array($return['request'], ['if', 'ie']));
             }
 
             if (Roff_Skipped::skip($return['request'])) {
                 array_shift($lines);
+
                 return self::getLine($lines, $callerArguments);
             }
 
@@ -229,6 +234,7 @@ class Request
                 }
                 $evaluatedMacroLines[] = null; // Marker for end of macro
                 array_splice($lines, 0, 1, $evaluatedMacroLines);
+
                 return self::getLine($lines, $callerArguments);
             }
 
@@ -236,6 +242,7 @@ class Request
             if ($className) {
                 /** @var Roff_Template $className */
                 $className::evaluate($return, $lines, $callerArguments);
+
                 return self::getLine($lines, $callerArguments);
             }
 
