@@ -52,7 +52,7 @@ class Inline_URL implements Block_Template
         }
 
         if (count($request['arguments']) === 3) {
-            $parentNode->appendChild(new DOMText($request['arguments'][2]));
+            TextContent::interpretAndAppendText($parentNode, $request['arguments'][2]);
         }
 
         return $parentNode;
