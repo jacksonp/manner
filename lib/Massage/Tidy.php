@@ -39,7 +39,7 @@ class Massage_Tidy
                     DOM::extractContents($el->previousSibling, $el->firstChild);
                     $el->parentNode->removeChild($el);
                     continue;
-                } else {
+                } elseif (!$el->getAttribute('class')) {
                     Node::remove($el);
                 }
             } elseif ($oneChild && DOM::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {

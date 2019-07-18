@@ -48,12 +48,15 @@ class Inline_PS implements Block_Template
             throw new Exception('PS without PE or TS.');
         }
 
+        if ($parentNode->tagName === 'p') {
+            $parentNode = $parentNode->parentNode;
+        }
+
         if (count($picLines) > 0) {
-            Block_Text::addSpace($parentNode);
             self::appendPic($parentNode, $picLines);
         }
 
-        return null;
+        return $parentNode;
 
     }
 
@@ -102,7 +105,12 @@ class Inline_PS implements Block_Template
             $textNode->removeAttribute('font-size');
         }
 
-        $parentNode->appendChild($svgNode);
+        /* @var DomElement $div */
+        $div = $parentNode->ownerDocument->createElement('div');
+        Node::addClass($div, 'svg-container');
+        $div = $parentNode->appendChild($div);
+
+        $div->appendChild($svgNode);
 
         return;
     }
