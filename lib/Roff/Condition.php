@@ -359,7 +359,8 @@ class Roff_Condition implements Roff_Template
         }
 
         if (!$foundEnd) {
-            throw new Exception('.if condition \\{ - not followed by expected pattern.');
+            // Pretend .if never happened:
+            return $replacementLines;
         }
 
         if (!$processContents) {
