@@ -92,6 +92,11 @@ class Inline_EQ implements Block_Template
         $mathNode = $mathDoc->getElementsByTagName('math')->item(0);
 //        $mathNode->setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
 //        $mathNode->setAttribute('display', 'inline');
+        $xpath    = new DOMXpath($mathDoc);
+        $mErrors = $xpath->query('//merror');
+        foreach ($mErrors as $mError) {
+            Node::remove($mError, false);
+        }
 
         $mathNode = $parentNode->ownerDocument->importNode($mathNode, true);
         $parentNode->appendChild($mathNode);
