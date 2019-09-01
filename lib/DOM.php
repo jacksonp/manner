@@ -119,6 +119,7 @@ class DOM
                 self::isTag($firstChild, 'p') &&
                 preg_match('~^\t~', $element->textContent)
             ) {
+                /* @var DomElement $pre */
                 $pre = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
                 self::extractContents($pre, $firstChild);
                 $element->parentNode->removeChild($element);
@@ -374,6 +375,7 @@ class DOM
                 $dl = $element->ownerDocument->createElement('dl');
                 $element->insertBefore($dl, $child);
                 while (Massage_DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
+                    /* @var DomElement $dt */
                     $dt = $element->ownerDocument->createElement('dt');
                     DOM::extractContents($dt, $dl->nextSibling);
                     $dt = $dl->appendChild($dt);
@@ -430,6 +432,7 @@ class DOM
                     $ul = $element->insertBefore($ul, $child);
                     foreach ($child->childNodes as $dlChild) {
                         if ($dlChild->tagName === 'dd') {
+                            /* @var DomElement $li */
                             $li = $ul->appendChild($doc->createElement('li'));
                             self::extractContents($li, $dlChild);
                         }

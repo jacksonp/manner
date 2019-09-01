@@ -113,6 +113,7 @@ class Indentation
             } else {
                 $el = $elParent->parentNode->insertBefore($el, $elParent->nextSibling);
             }
+            /* @var DomElement $el */
             self::popOut($el);
         }
     }

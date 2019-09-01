@@ -35,7 +35,7 @@ class TextContent
             }
         }
 
-        if (preg_match_all('~(?<!\\\\)(?:\\\\\\\\)*\\\\(d|u)~u', $line, $matches, PREG_OFFSET_CAPTURE)) {
+        if (preg_match_all('~(?<!\\\\)(?:\\\\\\\\)*\\\\([du])~u', $line, $matches, PREG_OFFSET_CAPTURE)) {
 
             if (count($matches[1]) === 1) {
                 // just a stray... catch it later.
@@ -94,7 +94,7 @@ class TextContent
         self::$interruptTextProcessing = $replacements > 0;
 
         $textSegmentsS = preg_split(
-            '~(?<!\\\\)((?:\\\\\\\\)*)(\\\\[fF](?:[^\(\[]|\(..|\[.*?\])?|\\\\[ud]|\\\\k(?:[^\(\[]|\(..|\[.*?\]))~u',
+            '~(?<!\\\\)((?:\\\\\\\\)*)(\\\\[fF](?:[^(\[]|\(..|\[.*?])?|\\\\[ud]|\\\\k(?:[^(\[]|\(..|\[.*?]))~u',
             $line,
             -1,
             PREG_SPLIT_DELIM_CAPTURE
@@ -152,7 +152,7 @@ class TextContent
             }
 
             if (
-            preg_match('~(?J)^\\\\(?:f\[(?<font>[^\]\s]*)\]|f\((?<font>[^\s]{2})|f(?<font>[^\s]))$~ui',
+            preg_match('~(?J)^\\\\(?:f\[(?<font>[^]\s]*)]|f\((?<font>[^\s]{2})|f(?<font>[^\s]))$~ui',
                 $textSegments[$i], $matches)
             ) {
 

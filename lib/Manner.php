@@ -6,11 +6,10 @@ class Manner
 
     /**
      * @param array $fileLines
-     * @param string $filePath
      * @return DOMDocument
      * @throws Exception
      */
-    static function roffToDOM(array $fileLines, string $filePath): DOMDocument
+    static function roffToDOM(array $fileLines): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
 
