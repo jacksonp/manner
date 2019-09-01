@@ -129,25 +129,8 @@ class TextContent
                 continue;
             }
 
-            if ($textSegments[$i] === '\u') {
-                if ($i < $numTextSegments - 1) {
-                    if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\d') {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['sup']);
-                        ++$i;
-                    }
-                    // else: Do nothing - just drop the \u
-                }
-                continue;
-            }
-
-            if ($textSegments[$i] === '\d') {
-                if ($i < $numTextSegments - 1) {
-                    if ($i === $numTextSegments - 2 || $textSegments[$i + 2] === '\u') {
-                        self::appendTextChild($parentNode, $textSegments[++$i], ['sub']);
-                        ++$i;
-                    }
-                    // else: Do nothing - just drop the \u
-                }
+            if ($textSegments[$i] === '\u' || $textSegments[$i] === '\d') {
+                // Do nothing - just drop the stray \u or \d - case where they're sensibly combined is handled earlier.
                 continue;
             }
 
