@@ -15,8 +15,7 @@ class Roff_String implements Roff_Template
 
         $known[<<<'ROFF'
 C+ C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
-ROFF
-] = 'C++';
+ROFF] = 'C++';
 
         /*
         $known['ð'] = <<<'ROFF'
@@ -34,90 +33,64 @@ ROFF;
         */
         $known[<<<'ROFF'
 d- d\h'-1'\(ga
-ROFF
-] = 'ð';
+ROFF] = 'ð';
         $known[<<<'ROFF'
 D- D\h'-1'\(hy
-ROFF
-] = 'Ð';
+ROFF] = 'Ð';
         $known[<<<'ROFF'
 th \o'bp'
-ROFF
-] = 'Þ';
+ROFF] = 'Þ';
         $known[<<<'ROFF'
 Th \o'LP'
-ROFF
-] = 'þ';
+ROFF] = 'þ';
         // TODO: could render this the same way wikipedia does: https://en.wikipedia.org/wiki/TeX
         $known[<<<'ROFF'
 TX \fRT  E  X\fP
-ROFF
-] = 'TeX';
+ROFF] = 'TeX';
         $known[<<<'ROFF'
 OX \fIT E X\fP
-ROFF
-] = 'TeX';
+ROFF] = 'TeX';
         // eplain.1
         $known[<<<'ROFF'
 OX \fIT E X\fP for troff
-ROFF
-] = 'TeX';
+ROFF] = 'TeX';
         // dt2dv.1
-        $known[<<<'ROFF'
-Te T  E  X
-ROFF
-] = 'TeX';
+        $known['Te T  E  X'] = 'TeX';
         // grodvi.1
-        $known[<<<'ROFF'
-tx T  E  X
-ROFF
-] = 'TeX';
+        $known['tx T  E  X'] = 'TeX';
         // makeindex.1
-        $known[<<<'ROFF'
-TX T  E  X
-ROFF
-] = 'TeX';
+        $known['TX T  E  X'] = 'TeX';
         $known[<<<'ROFF'
 BX \fRBIB\fPTeX
-ROFF
-] = 'BibTeX';
+ROFF] = 'BibTeX';
         $known[<<<'ROFF'
 LX \fRL  A  \fPTeX
-ROFF
-] = 'LaTeX';
+ROFF] = 'LaTeX';
         // bibtex.1
         $known[<<<'ROFF'
 LX \fRL  \s-2A\s0  \fPTeX
-ROFF
-] = 'LaTeX';
+ROFF] = 'LaTeX';
         // pic.1
         $known[<<<'ROFF'
 lx L\h'-0.36m'\v'-0.22v'A\h'-0.15m'\v'0.22v'TeX
-ROFF
-] = 'LaTeX';
+ROFF] = 'LaTeX';
         // makeindex.1
         $known[<<<'ROFF'
 LX L  \s-2A\s+2  T  E  X
-ROFF
-] = 'LaTeX';
+ROFF] = 'LaTeX';
         // ttf2tfm.1
-        $known[<<<'ROFF'
-LX L  A  TeX
-ROFF
-] = 'LaTeX';
+        $known['LX L  A  TeX'] = 'LaTeX';
         $known[<<<'ROFF'
 AX \fRA  M  S\fPTeX
-ROFF
-] = 'AmSTeX';
+ROFF] = 'AmSTeX';
         $known[<<<'ROFF'
 AY \fRA  M  S\fP\fRL  A  \fPTeX
-ROFF
-] = 'AmSLaTeX';
+ROFF] = 'AmSLaTeX';
         // bg5conv.1
         $known[<<<'ROFF'
 LE LaTeX 2 \(*e 
-ROFF
-] = 'LaTeX2e';
+ROFF] = 'LaTeX2e';
+
         //dv2dt.1
         $known['Xe X  E  T'] = 'XeT';
         $known['o   . .  o'] = 'ö';
