@@ -23,6 +23,7 @@ class Manner
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
         $xpath = new DOMXpath($dom);
+        Massage_Body::trimNodesBeforeH1($xpath);
         Massage_P::removeEmpty($xpath);
         Massage_DL::mergeAdjacentAndConvertLoneDD($xpath);
         Massage_Remap::doAll($xpath);
@@ -50,7 +51,7 @@ class Manner
 
 //        set_time_limit(3);
 
-        $dom  = self::roffToDOM($fileLines, $filePath);
+        $dom  = self::roffToDOM($fileLines);
         $html = $dom->saveHTML();
 
         $man = Man::instance();
