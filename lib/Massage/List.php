@@ -31,7 +31,7 @@ class Massage_List
             if ($child->childNodes->length === 1 && DOM::isTag($child->firstChild, 'p')) {
                 DOM::extractContents($child, $child->firstChild);
                 $child->removeChild($child->firstChild);
-                Node::addClass($child, 'para');
+                Node::addClass($child, 'p');
             }
             $child = $child->nextSibling;
         }

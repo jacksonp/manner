@@ -57,6 +57,7 @@ class Massage_Tidy
             Massage_P::tidy($p);
         }
 
+        // NB: can't really do the same for <dd>s they need the inner <p> to have some sanity in how they are rendered.
         $els = $xpath->query('//ul | //ol');
         foreach ($els as $el) {
             Massage_List::removeLonePs($el);
