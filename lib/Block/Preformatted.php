@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 // TODO: handle this differently? Use a flag for preformat?
@@ -36,12 +37,12 @@ class Block_Preformatted implements Block_Template
      * @throws Exception
      */
     static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
+        $man = Man::instance();
 
         array_shift($lines);
 
@@ -49,7 +50,9 @@ class Block_Preformatted implements Block_Template
             return null;
         }
 
-        if (Request::peepAt($lines[0])['name'] === 'PP') {
+        $firstInternalLine = Request::peepAt($lines[0]);
+
+        if ($firstInternalLine['name'] === 'PP') {
             array_shift($lines);
             $parentNode = Blocks::getBlockContainerParent($parentNode, true);
         } else {
@@ -59,10 +62,15 @@ class Block_Preformatted implements Block_Template
         /* @var DomElement $pre */
         $pre = $parentNode->ownerDocument->createElement('pre');
 
+
+        if ($firstInternalLine['name'] === 'IP' && $firstInternalLine['raw_arg_string'] === '') {
+            array_shift($lines);
+            Indentation::set($pre, $man->indentation);
+        }
+
         $pre = $parentNode->appendChild($pre);
 
         return $pre;
-
     }
 
 }
