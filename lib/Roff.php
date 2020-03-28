@@ -41,8 +41,11 @@ class Roff
 
             $request['class'] = Request::getClass($request, $lines);
 
-            if (PreformattedOutput::handle($parentNode, $lines, $request)) {
-                // Do nothing, but don't continue; as need $stopOnContent check below.
+            if ($newParent = PreformattedOutput::handle($parentNode, $lines, $request)) {
+                // NB: still need $stopOnContent check below (so no continue)
+                if ($newParent instanceof DOMElement) {
+                    $parentNode = $newParent;
+                }
             } else {
                 $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
                 if (!is_null($newParent)) {

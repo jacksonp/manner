@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 class PreformattedOutput
 {
 
-    private static $addIndent = 0;
-    private static $nextIndent = 0;
+    private static $addIndent           = 0;
+    private static $nextIndent          = 0;
     private static $resetFontsAfterNext = false;
 
     public static function reset()
@@ -19,12 +20,11 @@ class PreformattedOutput
      * @param DOMElement $parentNode
      * @param array $lines
      * @param array $request
-     * @return bool
+     * @return bool | DomElement
      * @throws Exception
      */
-    public static function handle(DOMElement $parentNode, array &$lines, array $request): bool
+    public static function handle(DOMElement $parentNode, array &$lines, array $request)
     {
-
         $pre = Node::ancestor($parentNode, 'pre');
 
         if (is_null($pre)) {
@@ -42,8 +42,11 @@ class PreformattedOutput
 
         $line = $request['raw_line'];
 
-        if ($pre->textContent === '' && count($lines) > 1 && Block_TabTable::lineContainsTab($line) && Block_TabTable::lineContainsTab($lines[1])) {
-
+        if (
+          $pre->textContent === '' && count($lines) > 1 &&
+          Block_TabTable::lineContainsTab($line) &&
+          Block_TabTable::lineContainsTab($lines[1])
+        ) {
             // TODO: add "preformatted" table class instead of code tags in cells? (see also CSS for removing margin on <pre> in cells)
             // or don't use fixed width font at all? see https://www.mankier.com/3/SoIndexedShape.3iv#Description
             $table = $parentNode->appendChild($dom->createElement('table'));
@@ -76,12 +79,14 @@ class PreformattedOutput
             }
 
             $pre->parentNode->insertBefore($table, $pre);
+
             return true;
         }
 
         if ($request['class'] === 'Empty_Request' || $request['request'] === 'br') {
             array_shift($lines);
             self::$addIndent = 0;
+
             return true;
         } elseif ($request['raw_line'] === '' || in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
             array_shift($lines);
@@ -91,19 +96,29 @@ class PreformattedOutput
             }
             if (in_array($request['class'], ['Block_P'])) {
                 $man->resetFonts();
+                if (Indentation::isSet($pre)) {
+                    // Return new parent element without indentation for following requests
+                    /* @var DomElement $newPre */
+                    $newPre = $pre->parentNode->appendChild($dom->createElement('pre'));
+
+                    return $newPre;
+                }
             }
+
             return true;
         } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable'])) {
             $request['class']::checkAppend($parentNode, $lines, $request);
             if ($request['class'] === 'Inline_AlternatingFont') {
                 self::endInputLine($parentNode);
             }
+
             return true;
         } elseif ($request['request'] === 'IP') {
             self::$nextIndent = 4;
             if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
                 array_shift($lines);
                 $man->resetFonts();
+
                 return true;
             } else {
                 self::$resetFontsAfterNext = true;
@@ -115,13 +130,16 @@ class PreformattedOutput
             self::$nextIndent          = 4;
             self::$resetFontsAfterNext = true;
             array_shift($lines);
+
             return true;
         } elseif ($request['request'] === 'ti') {
             self::$nextIndent = 4;
             array_shift($lines);
+
             return true;
         } elseif (in_array($request['request'], ['ce', 'nf'])) {
             array_shift($lines);
+
             return true;
         } elseif ($request['request'] === 'RS') {
             array_shift($lines);
@@ -130,6 +148,7 @@ class PreformattedOutput
             } else {
                 self::$addIndent = 4;
             }
+
             return true;
         } elseif ($request['request'] === 'RE') {
             if (self::$addIndent === 0) {
@@ -137,6 +156,7 @@ class PreformattedOutput
             }
             array_shift($lines);
             self::reset();
+
             return true;
         }
 
@@ -161,7 +181,6 @@ class PreformattedOutput
         }
 
         return true;
-
     }
 
     static function endInputLine(DOMElement $parentNode)
