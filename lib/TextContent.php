@@ -283,7 +283,7 @@ class TextContent
                 // This represents a zero width space, which means it does not affect the output."
                 // (also remove tho if not at start of line.)
                 // This also is used in practice after a .TP to have indented text without a visible term in front.
-                '&' => Char::ZERO_WIDTH_SPACE_UTF8,
+                '&' => Text::ZERO_WIDTH_SPACE_UTF8,
                 // variation on \&
                 ')' => '',
                 '\\' => '\\',

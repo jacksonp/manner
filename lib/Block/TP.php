@@ -95,7 +95,7 @@ class Block_TP implements Block_Template
 
         while (count($lines)) {
             $request = Request::getLine($lines);
-            if ($request['request'] === 'TQ') {
+            if (!is_null($request) && $request['request'] === 'TQ') {
                 array_shift($lines);
                 if (count($request['arguments'])) {
                     $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');

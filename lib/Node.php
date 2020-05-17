@@ -85,7 +85,7 @@ class Node
     {
         return
             $node->nodeType === XML_TEXT_NODE &&
-            in_array(trim($node->textContent), ['', Char::ZERO_WIDTH_SPACE_UTF8]);
+            in_array(trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
     }
 
     static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement

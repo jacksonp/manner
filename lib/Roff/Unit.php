@@ -54,7 +54,7 @@ class Roff_Unit
               return (string)round($basicUnits / self::unitMultipliers[$targetUnit]);
           }, $string);
 
-        $string = preg_replace('~[^\d\.\(\)\+\*/\-><= ?]~', '', $string);
+        $string = preg_replace('~[^\d.()+*/\-><= ?]~', '', $string);
 
         return self::evaluate($string);
 

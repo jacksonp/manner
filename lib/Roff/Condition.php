@@ -302,7 +302,7 @@ class Roff_Condition implements Roff_Template
 
         $condition = Roff_Unit::normalize($condition, 'u', 'u');
 
-        if (preg_match('~^([-\+\*/\d\(\)><=\.\s]| or | and )+$~u', $condition)) {
+        if (preg_match('~^([-+*/\d()><=.\s]| or | and )+$~u', $condition)) {
             $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
             try {
                 return eval('return ' . $condition . ';') > 0;

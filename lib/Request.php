@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 class Request
@@ -13,7 +14,6 @@ class Request
 
     public static function getNextArgument(array &$chars, bool $ignoreQuotes): ?string
     {
-
         if (count($chars) === 0) {
             return null;
         }
@@ -47,12 +47,10 @@ class Request
         }
 
         return $thisArg;
-
     }
 
     private static function parseArguments(string $argString, bool $ignoreQuotes): array
     {
-
         $argString = ltrim($argString);
         // TODO: Could also trim on paired backslashes here:
         $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
@@ -108,7 +106,6 @@ class Request
         }
 
         return $args;
-
     }
 
     public static function massageLine(string $macroLine): string
@@ -128,7 +125,9 @@ class Request
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
         if (preg_match(
           '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
-          $line, $matches)
+          $line,
+          $matches
+        )
         ) {
             $return['name'] = $matches[1];
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
@@ -150,7 +149,6 @@ class Request
      */
     public static function getLine(array &$lines, array &$callerArguments = []): ?array
     {
-
         if (!count($lines)) {
             return null;
         }
@@ -197,14 +195,18 @@ class Request
 
         if (preg_match(
           '~^(?:\\\\?' . $controlChars . ')\s*([^\s\\\\]*)((?:\s+|\\\\).*)?$~ui',
-          $return['raw_line'], $matches)
+          $return['raw_line'],
+          $matches
+        )
         ) {
             $return['request'] = Roff_Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
-                $return['arguments']      = Request::parseArguments($return['arg_string'],
-                  in_array($return['request'], ['if', 'ie']));
+                $return['arguments']      = Request::parseArguments(
+                  $return['arg_string'],
+                  in_array($return['request'], ['if', 'ie'])
+                );
             }
 
             if (Roff_Skipped::skip($return['request'])) {
@@ -226,9 +228,9 @@ class Request
                 $evaluatedMacroLines  = [];
 
                 while (count($macroLines)) {
-                    $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments)['line'];
-                    if (!is_null($evaluatedMacroLine)) {
-                        $evaluatedMacroLines[] = $evaluatedMacroLine;
+                    $evaluatedMacroLine = Request::getLine($macroLines, $macroCallerArguments);
+                    if (!is_null($evaluatedMacroLine) && !is_null($evaluatedMacroLine['line'])) {
+                        $evaluatedMacroLines[] = $evaluatedMacroLine['line'];
                     }
                     array_shift($macroLines);
                 }
@@ -245,7 +247,6 @@ class Request
 
                 return self::getLine($lines, $callerArguments);
             }
-
         }
 
         $return['line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
@@ -261,7 +262,6 @@ class Request
      */
     public static function getClass(array $request, array &$lines): string
     {
-
         if ($request['raw_line'] === '' && !Block_Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
             // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
@@ -280,7 +280,6 @@ class Request
         } else {
             return 'Block_Text';
         }
-
     }
 
 }

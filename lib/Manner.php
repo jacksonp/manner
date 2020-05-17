@@ -57,11 +57,11 @@ class Manner
         $man = Man::instance();
 
         // Remove \& chars aka zero width space.
-        $html   = str_replace(Char::ZERO_WIDTH_SPACE_HTML, '', $html);
-        $title  = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->title);
-        $extra1 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra1);
-        $extra2 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra2);
-        $extra3 = str_replace(Char::ZERO_WIDTH_SPACE_UTF8, '', $man->extra3);
+        $html   = str_replace(Text::ZERO_WIDTH_SPACE_HTML, '', $html);
+        $title  = Text::trimAndRemoveZWSUTF8($man->title);
+        $extra1 = Text::trimAndRemoveZWSUTF8($man->extra1);
+        $extra2 = Text::trimAndRemoveZWSUTF8($man->extra2);
+        $extra3 = Text::trimAndRemoveZWSUTF8($man->extra3);
 
         if (!$title) {
             $title = 'UNTITLED';
