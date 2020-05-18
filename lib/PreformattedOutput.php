@@ -5,9 +5,9 @@ declare(strict_types=1);
 class PreformattedOutput
 {
 
-    private static $addIndent           = 0;
-    private static $nextIndent          = 0;
-    private static $resetFontsAfterNext = false;
+    private static int  $addIndent           = 0;
+    private static int  $nextIndent          = 0;
+    private static bool $resetFontsAfterNext = false;
 
     public static function reset()
     {

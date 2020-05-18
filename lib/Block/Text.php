@@ -4,7 +4,7 @@ declare(strict_types=1);
 class Block_Text implements Block_Template
 {
 
-    public static $interruptTextProcessing = false;
+    public static bool $interruptTextProcessing = false;
 
     static function addSpace(DOMElement $parentNode)
     {

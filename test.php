@@ -4,7 +4,7 @@ declare(strict_types=1);
 class myDOMElement extends DOMElement
 {
 
-    public $myProp = 'Some default';
+    public string $myProp = 'Some default';
 }
 
 $doc = new DOMDocument();

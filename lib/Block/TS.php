@@ -1,27 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 class Block_TS implements Block_Template
 {
 
-    private static $rowFormatKeyCharacters = [
-        'A',
-        'C',
-        'L',
-        'N',
-        'R',
-        'S',
-        '^',
-        '_',
-        '-',
-        '=',
-        '|'
+    private static array $rowFormatKeyCharacters = [
+      'A',
+      'C',
+      'L',
+      'N',
+      'R',
+      'S',
+      '^',
+      '_',
+      '-',
+      '=',
+      '|',
     ];
 
     private static function getFormatChar(string $line, int $i): string
     {
         $char      = mb_substr($line, $i, 1);
         $upperChar = mb_strtoupper($char);
+
         return in_array($upperChar, self::$rowFormatKeyCharacters) ? $upperChar : $char;
     }
 
@@ -89,6 +91,7 @@ class Block_TS implements Block_Template
             }
         }
         $formats[] = trim($format);
+
         return $formats;
     }
 
@@ -125,6 +128,7 @@ class Block_TS implements Block_Template
                 break;
             }
         }
+
         return $rowFormats;
     }
 
@@ -143,7 +147,6 @@ class Block_TS implements Block_Template
         $dom           = $table->ownerDocument;
         $skippableRows = [];
         foreach ($rowFormats as $i => $rowFormat) {
-
             if (preg_match('~^[-|_\s]+$~u', implode('', $rowFormat))) {
                 if ($table->lastChild) {
                     Node::addClass($table->lastChild, 'border-bottom');
@@ -164,7 +167,6 @@ class Block_TS implements Block_Template
             }
 
             for ($i = 0; $i < count($rowFormat); ++$i) {
-
                 $tdFormat = $rowFormat[$i];
 
                 if (preg_match('~^\|~', $tdFormat)) {
@@ -199,20 +201,25 @@ class Block_TS implements Block_Template
                 // * setting the font to Regular
                 $tdFormat = str_replace(['e', 'E', 'f(R)'], '', $tdFormat);
 
-                $tdFormat = Replace::pregCallback('~^([LCRN])~', function ($matches) use ($td) {
-                    switch ($matches[1]) {
-                        case 'C':
-                            Node::addClass($td, 'center');
-                            break;
-                        case 'R':
-                        case 'N':
-                            Node::addClass($td, 'right-align');
-                            break;
-                        default:
-                            break;
-                    }
-                    return '';
-                }, $tdFormat);
+                $tdFormat = Replace::pregCallback(
+                  '~^([LCRN])~',
+                  function ($matches) use ($td) {
+                      switch ($matches[1]) {
+                          case 'C':
+                              Node::addClass($td, 'center');
+                              break;
+                          case 'R':
+                          case 'N':
+                              Node::addClass($td, 'right-align');
+                              break;
+                          default:
+                              break;
+                      }
+
+                      return '';
+                  },
+                  $tdFormat
+                );
 
                 // A number suffix on a key character is interpreted as a column separation in en units (multiplied in
                 // proportion if the expand option is on – in case of overfull tables this might be zero). Default
@@ -242,12 +249,10 @@ class Block_TS implements Block_Template
                 if (in_array($tdFormat, ['-', '_'])) {
                     Node::addClass($td, 'border-bottom');
                 }
-
             }
         }
 
         return $skippableRows;
-
     }
 
     /**
@@ -259,13 +264,11 @@ class Block_TS implements Block_Template
      * @throws Exception
      */
     static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
@@ -280,10 +283,15 @@ class Block_TS implements Block_Template
             $globalOptions = rtrim($lines[0], ';');
             array_shift($lines);
             // Treat this separately as a space after "tab" is accepted:
-            Replace::pregCallback('~tab\s?\((.)\)~u', function ($matches) use (&$columnSeparator) {
-                $columnSeparator = $matches[1];
-                return '';
-            }, $globalOptions);
+            Replace::pregCallback(
+              '~tab\s?\((.)\)~u',
+              function ($matches) use (&$columnSeparator) {
+                  $columnSeparator = $matches[1];
+
+                  return '';
+              },
+              $globalOptions
+            );
             $globalOptions = preg_split('~[\\t ,]~', $globalOptions);
             foreach ($globalOptions as $globalOption) {
                 if (in_array($globalOption, ['box', 'allbox', 'doublebox'])) { // See about 'expand'?
@@ -358,7 +366,6 @@ class Block_TS implements Block_Template
             } elseif (!is_null($request['request']) && $request['request'] !== '') {
                 continue;
             } else {
-
                 $tr = $table->childNodes->item($tableRowNum);
                 if (!$tr) {
                     $tr = $trailingTRPrototype->cloneNode(true);
@@ -405,7 +412,6 @@ class Block_TS implements Block_Template
                                 $tBlockLines[] = $tBlockLine;
                             }
                         }
-
                     } else {
                         // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
                         //Roff::parse($cell, [$tdContents]);
@@ -419,11 +425,9 @@ class Block_TS implements Block_Template
                 ++$formatRowNum;
                 $nextRowBold = false;
             }
-
         }
 
         return $parentNode;
-
     }
 
 

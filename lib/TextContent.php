@@ -4,7 +4,7 @@ declare(strict_types=1);
 class TextContent
 {
 
-    static $interruptTextProcessing = false;
+    public static bool $interruptTextProcessing = false;
 
     static function interpretAndAppendText(DOMElement $parentNode, string $line)
     {
@@ -133,6 +133,7 @@ class TextContent
                 // Do nothing - just drop the stray \u or \d - case where they're sensibly combined is handled earlier.
                 continue;
             }
+
 
             if (
             preg_match('~(?J)^\\\\(?:f\[(?<font>[^]\s]*)]|f\((?<font>[^\s]{2})|f(?<font>[^\s]))$~ui',

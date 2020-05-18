@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -7,24 +8,24 @@ declare(strict_types=1);
 class Man
 {
 
-    private $data;
-    private $postOutputCallbacks;
-    private $fontStack;
-    private $aliases;
-    private $macros;
-    private $entities;
-    private $registers;
-    private $strings;
-    private $characterTranslations; // .tr
+    private array $data;
+    private array $postOutputCallbacks;
+    private array $fontStack;
+    private array $aliases;
+    private array $macros;
+    private array $entities;
+    private array $registers;
+    private array $strings;
+    private array $characterTranslations; // .tr
 
-    private $roffClasses;
-    private $blockClasses;
-    private $inlineClasses;
+    private array $roffClasses;
+    private array $blockClasses;
+    private array $inlineClasses;
 
     /**
      * @var Man The reference to *Singleton* instance of this class
      */
-    private static $instance;
+    private static ?Man $instance = null;
 
     /**
      * Returns the *Singleton* instance of this class.
@@ -189,7 +190,6 @@ class Man
           'PS'  => 'Inline_PS',
           'OP'  => 'Inline_OP',
         ];
-
     }
 
     /**
@@ -358,9 +358,16 @@ class Man
     public function applyCharTranslations($line)
     {
         if (count($this->characterTranslations) > 0) {
-            $line = Replace::preg(array_map(function ($c) {
-                return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
-            }, array_keys($this->characterTranslations)), $this->characterTranslations, $line);
+            $line = Replace::preg(
+              array_map(
+                function ($c) {
+                    return '~(?<!\\\\)' . preg_quote($c, '~') . '~u';
+                },
+                array_keys($this->characterTranslations)
+              ),
+              $this->characterTranslations,
+              $line
+            );
         }
 
         return $line;
@@ -368,7 +375,6 @@ class Man
 
     public function applyAllReplacements(string $line): string
     {
-
         $line = Roff_Register::substitute($line, $this->registers);
 
         if (count($this->entities)) {
@@ -377,12 +383,16 @@ class Man
 
         // \w’string’: The width of the glyph sequence string.
         // We approximate with 2.4 char on average per em. See: http://maxdesign.com.au/articles/ideal-line-length-in-ems
-        $line = Replace::pregCallback('~(?<!\\\\)(?:\\\\\\\\)*\\\\w\'(.*?)\'~u', function ($matches) {
-            $string    = Roff_Glyph::substitute($matches[1]);
-            $approxEms = mb_strlen(TextContent::interpretString($string)) / 2.4;
+        $line = Replace::pregCallback(
+          '~(?<!\\\\)(?:\\\\\\\\)*\\\\w\'(.*?)\'~u',
+          function ($matches) {
+              $string    = Roff_Glyph::substitute($matches[1]);
+              $approxEms = mb_strlen(TextContent::interpretString($string)) / 2.4;
 
-            return Roff_Unit::normalize((string)$approxEms, 'm', 'u');
-        }, $line);
+              return Roff_Unit::normalize((string)$approxEms, 'm', 'u');
+          },
+          $line
+        );
 
         // Don't worry about this:
         // \v, \h: "Local vertical/horizontal motion"
