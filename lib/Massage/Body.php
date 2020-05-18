@@ -5,6 +5,10 @@ declare(strict_types=1);
 class Massage_Body
 {
 
+    /**
+     * @param DOMXPath $xpath
+     * @throws Exception
+     */
     static function trimNodesBeforeH1(DOMXPath $xpath)
     {
         $bodies = $xpath->query('//body');
