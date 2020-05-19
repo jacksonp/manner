@@ -179,6 +179,7 @@ ROFF;
         $replacements = Man::instance()->getStrings();
 
         // Want to match any of: \*. \*(.. \*[....]
+        /** @noinspection HtmlUnknownTag */
         return Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
           function ($matches) use (&$replacements) {

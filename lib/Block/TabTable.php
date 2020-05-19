@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Manner\Block;
 
@@ -37,7 +38,7 @@ class TabTable implements Template
         return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
     }
 
-    public static function isStart(array &$lines): bool
+    public static function isStart(array $lines): bool
     {
         return
           count($lines) > 2 &&

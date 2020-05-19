@@ -7,7 +7,6 @@ namespace Manner\Massage;
 use DOMElement;
 use DOMText;
 use Manner\Node;
-use Manner\Node;
 
 class PRE
 {

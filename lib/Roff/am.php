@@ -19,11 +19,10 @@ class am implements Template
     {
         array_shift($lines);
 
-        if (count(
-            $request['arguments']
-          ) && ($request['arguments'][0] === 'URL' || $request['arguments'][0] === 'MTO')) {
-            // do nothing
-        } else {
+        if (
+          !count($request['arguments'])
+          || ($request['arguments'][0] !== 'URL' && $request['arguments'][0] !== 'MTO')
+        ) {
             throw new Exception('Unexpected .am arguments: ' . print_r($request['arguments'], true));
         }
     }

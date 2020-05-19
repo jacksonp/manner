@@ -6,26 +6,9 @@ namespace Manner;
 
 use DOMElement;
 use Exception;
-use Manner\Block\TabTable;
-use Manner\Man;
 
 class Blocks
 {
-
-    public const TEXT_CONTAINERS = [
-      'p',
-      'dt',
-      'strong',
-      'em',
-      'small',
-      'code',
-      'td',
-      'th',
-      'pre',
-      'a',
-      'h2',
-      'h3',
-    ];
 
     public const INLINE_ELEMENTS = [
       'a',
@@ -79,24 +62,6 @@ class Blocks
         }
 
         return $parentNode;
-    }
-
-    public static function getNonInlineParent(DOMElement $parentNode): DOMElement
-    {
-        while (in_array($parentNode->tagName, self::INLINE_ELEMENTS)) {
-            $parentNode = $parentNode->parentNode;
-        }
-
-        return $parentNode;
-    }
-
-    public static function lineEndsBlock(array $request, array &$lines)
-    {
-        if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
-            return true;
-        }
-
-        return TabTable::isStart($lines);
     }
 
 }

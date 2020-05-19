@@ -47,6 +47,7 @@ class Register implements Template
 
     public static function substitute(string $string, array &$replacements): string
     {
+        /** @noinspection HtmlUnknownTag */
         return Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
           function ($matches) use (&$replacements) {

@@ -170,7 +170,6 @@ class TS implements Template
                 continue;
             }
 
-            /* @var DomElement $tr */
             $tr = $dom->createElement('tr');
             $tr = $table->appendChild($tr);
 
@@ -204,8 +203,6 @@ class TS implements Template
                     continue;
                 }
 
-
-                /* @var DomElement $td */
                 $td = $dom->createElement('td');
                 $td = $tr->appendChild($td);
 
@@ -316,7 +313,6 @@ class TS implements Template
         }
 
         /* @var DomElement|false $tr */
-        /* @var DomElement $table */
         $table = $dom->createElement('table');
         Node::addClass($table, $tableClasses);
 
@@ -373,7 +369,11 @@ class TS implements Template
                 if ($tr) {
                     $tr->setAttribute('class', 'border-bottom-double');
                 }
-            } elseif (in_array($request['raw_line'], ['.ft CW', '.ft R', '.P', '.PP'])) {
+            } /** @noinspection PhpStatementHasEmptyBodyInspection */
+            elseif (in_array(
+              $request['raw_line'],
+              ['.ft CW', '.ft R', '.P', '.PP']
+            )) {
                 // Do nothing for now - see sox.1
             } elseif (in_array($request['raw_line'], ['.B'])) {
                 $nextRowBold = true;

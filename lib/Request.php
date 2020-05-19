@@ -272,7 +272,7 @@ class Request
      * @return string
      * @throws Exception
      */
-    public static function getClass(array $request, array &$lines): string
+    public static function getClass(array $request, array $lines): string
     {
         if ($request['raw_line'] === '' && !\Manner\Block\Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Manner;
@@ -45,10 +46,10 @@ class TextContent
         }
 
         if (preg_match_all('~(?<!\\\\)(?:\\\\\\\\)*\\\\([du])~u', $line, $matches, PREG_OFFSET_CAPTURE)) {
-            if (count($matches[1]) === 1) {
-                // just a stray... catch it later.
-            } else {
+            // If count is 1: just a stray... catch it later.
+            if (count($matches[1]) !== 1) {
                 $lastLetterPosition = 0;
+                $nextLetterPosition = 0;
                 for ($i = 0; $i < count($matches[1]); $i += 2) {
                     $letter = $matches[1][$i][0];
                     // http://stackoverflow.com/a/1725329 for the next line:
@@ -129,11 +130,12 @@ class TextContent
         for ($i = 0; $i < $numTextSegments; ++$i) {
             if (mb_substr($textSegments[$i], 0, 2) === '\\k') {
                 $registerName = mb_substr($textSegments[$i], 2);
-                if (mb_strlen($registerName) === 1) {
-                } elseif (mb_substr($registerName, 0, 1) === '(') {
-                    $registerName = mb_substr($registerName, 1);
-                } else {
-                    $registerName = trim($registerName, '[]');
+                if (mb_strlen($registerName) !== 1) {
+                    if (mb_substr($registerName, 0, 1) === '(') {
+                        $registerName = mb_substr($registerName, 1);
+                    } else {
+                        $registerName = trim($registerName, '[]');
+                    }
                 }
                 $man->setRegister($registerName, (string)$horizontalPosition);
                 continue;
@@ -257,6 +259,7 @@ class TextContent
         $man = Man::instance();
 
         if (!is_null($man->escape_char)) {
+            /** @noinspection HtmlUnknownTag */
             $string = Replace::pregCallback(
               '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\N\'(?<charnum>\d+)\'~u',
               function ($matches) {
@@ -333,6 +336,7 @@ class TextContent
 
             ];
 
+            /** @noinspection HtmlUnknownTag */
             $string = Replace::pregCallback(
               '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|C\'(?<glyph>[^\']+)\'|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
               function ($matches) use (&$singleCharacterEscapes, &$roffStrings) {

@@ -7,6 +7,7 @@ namespace Manner\Massage;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
+use Exception;
 use Manner\DOM;
 use Manner\Indentation;
 
@@ -15,6 +16,7 @@ class DL
 
     /**
      * @param DOMXPath $xpath
+     * @throws Exception
      */
     public static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
     {
@@ -71,11 +73,15 @@ class DL
 
     public static function isPotentialDTFollowedByDD(?DomNode $p): int
     {
-        if (!DOM::isTag($p, 'p') || Indentation::isSet($p)) {
+        if (!DOM::isTag($p, 'p')) {
             return 0;
         }
 
-        /** @var DOMElement $div , $p */
+        /** @var DOMElement $p */
+
+        if (Indentation::isSet($p)) {
+            return 0;
+        }
 
         $pChild = $p->firstChild;
         while ($pChild) {

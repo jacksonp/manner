@@ -94,8 +94,8 @@ class TP implements Template
             $dl = $blockContainerParentNode->appendChild($dl);
         }
 
-        /* @var DomElement $dt */
         $dt         = $dom->createElement('dt');
+        /* @var DomElement $dt */
         $dt         = $dl->appendChild($dt);
         $gotContent = Roff::parse($dt, $lines, true);
         if (!$gotContent) {

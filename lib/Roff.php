@@ -49,7 +49,9 @@ class Roff
                     $parentNode = $newParent;
                 }
             } else {
-                $newParent = $request['class']::checkAppend($parentNode, $lines, $request, $stopOnContent);
+                /** @var Block\Template $class */
+                $class = $request['class'];
+                $newParent = $class::checkAppend($parentNode, $lines, $request, $stopOnContent);
                 if (!is_null($newParent)) {
                     $parentNode = $newParent;
                 }

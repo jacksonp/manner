@@ -47,15 +47,12 @@ class Manner
 
     /**
      * @param array $fileLines
-     * @param string $filePath
      * @param string|null $outputFile
      * @param bool $test
      * @throws Exception
      */
-    public static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
+    public static function roffToHTML(array $fileLines, string $outputFile = null, $test = false)
     {
-//        set_time_limit(3);
-
         $dom  = self::roffToDOM($fileLines);
         $html = $dom->saveHTML();
 

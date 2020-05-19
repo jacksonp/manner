@@ -7,7 +7,7 @@ namespace Manner;
 class Preprocessor
 {
 
-    public static function strip(array &$lines): array
+    public static function strip(array $lines): array
     {
         $linesNoComments = [];
         $linePrefix      = '';

@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Manner\Roff;
 
+use Exception;
 use Manner\Replace;
 use ParseError;
 
@@ -95,9 +97,9 @@ class Unit
         $evaluatedString = Replace::pregCallback(
           '~[-\+]?(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u',
           function ($matches) {
-              $expression = $matches[0];
+              $expression = 'return ' . $matches[0] . ';';
               try {
-                  return eval('return ' . $expression . ';');
+                  return eval($expression);
               } catch (ParseError $e) {
                   throw new Exception('Could not evaluate ' . $expression);
               }

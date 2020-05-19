@@ -25,14 +25,18 @@ class DOM
 
     public static function isInlineElement(?DOMNode $node): bool
     {
-        return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
+        return self::isTag($node, Blocks::INLINE_ELEMENTS);
     }
 
     public static function isTag(?DOMNode $node, $tag): bool
     {
         $tag = (array)$tag;
+        if (!$node || $node->nodeType !== XML_ELEMENT_NODE) {
+            return false;
+        }
 
-        return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, $tag);
+        /* @var DomElement $node */
+        return in_array($node->tagName, $tag);
     }
 
     /*
@@ -212,9 +216,8 @@ class DOM
 
         if ($myTag === 'dl') {
             $everyChildIsDT = true;
-            for ($j = 0; $j < $element->childNodes->length; ++$j) {
-                $elementChild = $element->childNodes->item($j);
-                if ($elementChild->tagName !== 'dt') {
+            foreach ($element->childNodes as $elementChild) {
+                if (!self::isTag($elementChild, 'dt')) {
                     $everyChildIsDT = false;
                     break;
                 }

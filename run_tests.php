@@ -25,7 +25,7 @@ function runTest($filePath)
     $fileLines = file($filePath, FILE_IGNORE_NEW_LINES);
 
     ob_start();
-    Manner::roffToHTML($fileLines, $filePath, null, true);
+    Manner::roffToHTML($fileLines, null, true);
     $actualOutput = ob_get_contents();
     ob_end_clean();
 

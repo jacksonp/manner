@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Manner\Roff;
@@ -48,12 +49,13 @@ class de implements Template
             throw new Exception('Macro definition for "' . $matches[1] . '" does not follow expected pattern.');
         }
 
-        if (in_array($newMacro, ['SS', 'MTO', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE', 'BB', 'EB'])) {
-            // Do nothing: don't override these macros.
-            // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
-            // .URL: we can do a better job with the semantic info.
-            // .BB & .EB: see criu.8: does something tricky with .di across macros.
-        } else {
+        // Don't override these macros.
+        // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
+        // .URL: we can do a better job with the semantic info.
+        // .BB & .EB: see criu.8: does something tricky with .di across macros.
+        $protectedMacros = ['SS', 'MTO', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE', 'BB', 'EB'];
+
+        if (!in_array($newMacro, $protectedMacros)) {
             Man::instance()->addMacro($newMacro, $macroLines);
         }
     }

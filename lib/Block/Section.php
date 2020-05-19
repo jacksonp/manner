@@ -37,7 +37,6 @@ class Section implements Template
         $man->resetFonts();
 
         $body = Node::ancestor($parentNode, 'body');
-        /* @var DomElement $section */
         $section = $dom->createElement('section');
         /* @var DomElement $headingNode */
         if ($request['request'] === 'SH') {

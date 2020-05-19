@@ -254,11 +254,6 @@ class Man
         return array_push($this->fontStack, $name);
     }
 
-    public function currentFont(): ?string
-    {
-        return count($this->fontStack) ? end($this->fontStack) : null;
-    }
-
     public function popFont(?int $newCount = null): ?string
     {
         if (is_null($newCount) || $newCount < 0) {
@@ -324,11 +319,6 @@ class Man
         unset($this->registers[$name]);
     }
 
-    public function getRegisters(): array
-    {
-        return $this->registers;
-    }
-
     public function issetRegister(string $name): bool
     {
         return array_key_exists($name, $this->registers);
@@ -357,11 +347,6 @@ class Man
     public function setCharTranslation(string $from, string $to)
     {
         $this->characterTranslations[$from] = $to;
-    }
-
-    public function getCharTranslations()
-    {
-        return $this->characterTranslations;
     }
 
     public function applyCharTranslations($line)

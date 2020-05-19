@@ -30,6 +30,7 @@ class Remap
 
                 $sibling = $div->firstChild;
                 if ($sibling) {
+                    $next = false;
                     do {
                         if (DOM::isTag($sibling, $blocks)) {
                             $next = $sibling->nextSibling;
