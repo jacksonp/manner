@@ -1,17 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_String implements Roff_Template
+namespace Manner\Roff;
+
+use Manner\Man;
+use Manner\Replace;
+
+class StringRequest implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         array_shift($lines);
 
         $man = Man::instance();
 
-        $known        = [];
+        $known = [];
 
         $known[<<<'ROFF'
 C+ C\v'-.1v'\h'-1p'+\h'-1p'+\v'.1v'\h'-1p'
@@ -33,20 +38,20 @@ ROFF;
         */
         $known[<<<'ROFF'
 d- d\h'-1'\(ga
-ROFF] = 'ð';
+ROFF]                              = 'ð';
         $known[<<<'ROFF'
 D- D\h'-1'\(hy
 ROFF] = 'Ð';
         $known[<<<'ROFF'
 th \o'bp'
-ROFF] = 'Þ';
+ROFF]      = 'Þ';
         $known[<<<'ROFF'
 Th \o'LP'
-ROFF] = 'þ';
+ROFF]      = 'þ';
         // TODO: could render this the same way wikipedia does: https://en.wikipedia.org/wiki/TeX
         $known[<<<'ROFF'
 TX \fRT  E  X\fP
-ROFF] = 'TeX';
+ROFF]                              = 'TeX';
         $known[<<<'ROFF'
 OX \fIT E X\fP
 ROFF] = 'TeX';
@@ -59,10 +64,10 @@ ROFF] = 'TeX';
         // grodvi.1
         $known['tx T  E  X'] = 'TeX';
         // makeindex.1
-        $known['TX T  E  X'] = 'TeX';
+        $known['TX T  E  X']           = 'TeX';
         $known[<<<'ROFF'
 BX \fRBIB\fPTeX
-ROFF] = 'BibTeX';
+ROFF]    = 'BibTeX';
         $known[<<<'ROFF'
 LX \fRL  A  \fPTeX
 ROFF] = 'LaTeX';
@@ -79,10 +84,10 @@ ROFF] = 'LaTeX';
 LX L  \s-2A\s+2  T  E  X
 ROFF] = 'LaTeX';
         // ttf2tfm.1
-        $known['LX L  A  TeX'] = 'LaTeX';
+        $known['LX L  A  TeX']                      = 'LaTeX';
         $known[<<<'ROFF'
 AX \fRA  M  S\fPTeX
-ROFF] = 'AmSTeX';
+ROFF]             = 'AmSTeX';
         $known[<<<'ROFF'
 AY \fRA  M  S\fP\fRL  A  \fPTeX
 ROFF] = 'AmSLaTeX';
@@ -98,6 +103,7 @@ ROFF] = 'LaTeX2e';
 
         if (array_key_exists($request['raw_arg_string'], $known)) {
             $man->addString($request['arguments'][0], $known[$request['raw_arg_string']]);
+
             return;
         }
 
@@ -163,15 +169,13 @@ ROFF;
 
         // See e.g. rcsfreeze.1 for a replacement including another previously defined replacement.
         $requestVal = $man->applyAllReplacements($requestVal);
-        $requestVal = Roff_Macro::applyReplacements($requestVal, $macroArguments);
+        $requestVal = Macro::applyReplacements($requestVal, $macroArguments);
 
         $man->addString($newRequest, $requestVal);
-
     }
 
-    static function substitute(string $string): string
+    public static function substitute(string $string): string
     {
-
         $replacements = Man::instance()->getStrings();
 
         // Want to match any of: \*. \*(.. \*[....]
@@ -184,8 +188,8 @@ ROFF;
                   return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
               }
           },
-          $string);
-
+          $string
+        );
     }
 
 }

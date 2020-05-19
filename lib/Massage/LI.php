@@ -1,12 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_LI
+namespace Manner\Massage;
+
+use DOMElement;
+use Manner\DOM;
+use Manner\Node;
+
+class LI
 {
 
-    static function tidy(DOMElement $li)
+    public static function tidy(DOMElement $li)
     {
-
         while ($li->lastChild && (Node::isTextAndEmpty($li->lastChild) || DOM::isTag($li->lastChild, 'br'))) {
             $li->removeChild($li->lastChild);
         }
@@ -14,7 +20,6 @@ class Massage_LI
         if (trim($li->textContent) === '') {
             $li->parentNode->removeChild($li);
         }
-
     }
 
 }

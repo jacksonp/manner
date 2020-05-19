@@ -1,7 +1,13 @@
 <?php
-declare(strict_types = 1);
 
-class Roff_Comment
+declare(strict_types=1);
+
+namespace Manner\Roff;
+
+use Exception;
+use Manner\Replace;
+
+class Comment
 {
 
     /**
@@ -9,9 +15,8 @@ class Roff_Comment
      * @return bool
      * @throws Exception
      */
-    static function checkLine(array &$lines): bool
+    public static function checkLine(array &$lines): bool
     {
-
         // Skip full-line comments
         // See mscore.1 for full-line comments starting with '."
         // See cal3d_converter.1 for full-line comments starting with '''
@@ -19,8 +24,9 @@ class Roff_Comment
         // See e.g. card.1 for comment starting with ."
         // See e.g. node.1 for comment starting with .\
         // See e.g. units.1 for comment in a .de starting with .    \"
-        if (preg_match('~^([\'\.]?\\\\?\\\\"|\.?\s*\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[0], $matches)) {
+        if (preg_match('~^([\'.]?\\\\?\\\\"|\.?\s*\\\\"|\'\."\'|\'\'\'|\."|\.\\\\\s+)~u', $lines[0], $matches)) {
             array_shift($lines);
+
             return true;
         }
 
@@ -30,11 +36,12 @@ class Roff_Comment
         $lines[0] = Replace::preg('~(^|.*?[^\\\\])\\\\".*$~u', '$1', $lines[0], -1, $replacements);
         if ($replacements > 0) {
             $lines[0] = rtrim($lines[0], "\t");
+
             // Look at this same line again:
             return true;
         }
 
-        if (preg_match('~^[\'\.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[0], $matches)) {
+        if (preg_match('~^[\'.]\s*ig(?:\s+(?<delimiter>.*)|$)~u', $lines[0], $matches)) {
             array_shift($lines);
             $delimiter = empty($matches['delimiter']) ? '..' : ('.' . $matches['delimiter']);
             while (count($lines)) {
@@ -47,7 +54,6 @@ class Roff_Comment
         }
 
         return false;
-
     }
 
 }

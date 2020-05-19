@@ -1,7 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_Indents
+namespace Manner\Massage;
+
+use DOMDocument;
+use DOMXPath;
+use Exception;
+use Manner\DOM;
+use Manner\Indentation;
+use Manner\Node;
+
+class Indents
 {
 
     /**
@@ -10,7 +20,6 @@ class Massage_Indents
      */
     public static function recalc(DOMXPath $xpath)
     {
-
         $divs = $xpath->query('//div[@left-margin="0"]');
         foreach ($divs as $div) {
             // See tests/warnquota.conf.5
@@ -24,7 +33,6 @@ class Massage_Indents
 
         $divs = $xpath->query('//div[@left-margin]');
         foreach ($divs as $div) {
-
             $leftMargin = (int)$div->getAttribute('left-margin');
 
             $parentNode = $div->parentNode;
@@ -40,7 +48,6 @@ class Massage_Indents
             }
             Indentation::set($div, $leftMargin);
             $div->removeAttribute('left-margin');
-
         }
     }
 }

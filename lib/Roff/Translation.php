@@ -1,10 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_Translation implements Roff_Template
+namespace Manner\Roff;
+
+use Manner\Man;
+use Manner\TextContent;
+
+class Translation implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
         array_shift($lines);
 
@@ -21,7 +27,6 @@ class Roff_Translation implements Roff_Template
                 $man->setCharTranslation($chrArray[$j], $j === count($chrArray) - 1 ? ' ' : $chrArray[$j + 1]);
             }
         }
-
     }
 
 }

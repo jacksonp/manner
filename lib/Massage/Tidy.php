@@ -1,7 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_Tidy
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMXPath;
+use Exception;
+use Manner\DOM;
+use Manner\Indentation;
+use Manner\Node;
+
+class Tidy
 {
 
     /**
@@ -13,25 +23,26 @@ class Massage_Tidy
         /** @var DOMElement $el */
 
         // NB: we do not want <dd>s here:
-        $els = $xpath->query('//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")] | //table[starts-with(@indent, "-")]');
+        $els = $xpath->query(
+          '//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")] | //table[starts-with(@indent, "-")]'
+        );
         foreach ($els as $el) {
             Indentation::popOut($el);
         }
 
         $divs = $xpath->query('//div');
         foreach ($divs as $el) {
-
             $oneChild = $el->childNodes->length === 1;
 
             $indentation = Indentation::get($el);
 
             if (!$indentation) {
                 if (
-                    $oneChild &&
-                    $el->firstChild->tagName === 'p' &&
-                    !Indentation::isSet($el->firstChild) &&
-                    $el->firstChild->hasAttribute('implicit') &&
-                    DOM::isTag($el->previousSibling, 'p')
+                  $oneChild &&
+                  $el->firstChild->tagName === 'p' &&
+                  !Indentation::isSet($el->firstChild) &&
+                  $el->firstChild->hasAttribute('implicit') &&
+                  DOM::isTag($el->previousSibling, 'p')
                 ) {
                     if (!DOM::isTag($el->previousSibling->lastChild, 'br')) {
                         $el->previousSibling->appendChild($el->ownerDocument->createElement('br'));
@@ -48,36 +59,37 @@ class Massage_Tidy
             }
         }
 
-        Massage_DL::mergeAdjacentAndConvertLoneDD($xpath);
+        DL::mergeAdjacentAndConvertLoneDD($xpath);
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
 
         $ps = $xpath->query('//p');
         foreach ($ps as $p) {
-            Massage_P::tidy($p);
+            P::tidy($p);
         }
 
         // NB: can't really do the same for <dd>s they need the inner <p> to have some sanity in how they are rendered.
         $els = $xpath->query('//ul | //ol');
         foreach ($els as $el) {
-            Massage_List::removeLonePs($el);
+            HTMLList::removeLonePs($el);
         }
 
         $els = $xpath->query('//li');
         foreach ($els as $el) {
-            Massage_LI::tidy($el);
+            LI::tidy($el);
         }
 
         $els = $xpath->query('//dt');
         foreach ($els as $el) {
-            Massage_DT::tidy($el);
+            DT::tidy($el);
         }
-
     }
 
-    static function indentAttributeToClass(DOMXPath $xpath)
+    public static function indentAttributeToClass(DOMXPath $xpath)
     {
-        $els = $xpath->query('//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]');
+        $els = $xpath->query(
+          '//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]'
+        );
         foreach ($els as $el) {
             if ($el->tagName === 'ul') {
                 // Remove indent on <ul>s as they get indented by default in html anyway

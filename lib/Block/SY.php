@@ -1,7 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_SY implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Blocks;
+use Manner\Request;
+use Manner\Roff;
+use Manner\TextContent;
+
+class SY implements Template
 {
 
     /**
@@ -12,13 +23,12 @@ class Block_SY implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
       $needOneLineOnly = false
     ): ?DOMElement {
-
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
@@ -77,7 +87,6 @@ class Block_SY implements Block_Template
         $parentNode->appendChild($table);
 
         return $parentNode;
-
     }
 
 }

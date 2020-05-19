@@ -1,15 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner;
+
+use DOMElement;
+use DOMNode;
 
 class Node
 {
 
-    static function hasContent(DOMElement $el): bool
+    public static function hasContent(DOMElement $el): bool
     {
         return $el->childNodes->length > 1 || ($el->firstChild && $el->firstChild->nodeValue !== '');
     }
 
-    static function ancestor(DOMElement $el, string $tagName): ?DOMElement
+    public static function ancestor(DOMElement $el, string $tagName): ?DOMElement
     {
         while ($el->tagName !== $tagName) {
             if (!$el->parentNode) {
@@ -20,10 +26,11 @@ class Node
                 return null;
             }
         }
+
         return $el;
     }
 
-    static function isOrInTag(DOMElement $el, $tagNames): bool
+    public static function isOrInTag(DOMElement $el, $tagNames): bool
     {
         $tagNames = (array)$tagNames;
 
@@ -37,7 +44,7 @@ class Node
         return false;
     }
 
-    static function addClass(DOMElement $node, $classes): void
+    public static function addClass(DOMElement $node, $classes): void
     {
         $classes = (array)$classes;
         foreach ($classes as $class) {
@@ -47,13 +54,14 @@ class Node
         }
     }
 
-    static function hasClass(DOMElement $node, string $className): bool
+    public static function hasClass(DOMElement $node, string $className): bool
     {
         $existingClassString = $node->getAttribute('class');
+
         return in_array($className, explode(' ', $existingClassString));
     }
 
-    static function removeClass(DOMElement $node, string $className): void
+    public static function removeClass(DOMElement $node, string $className): void
     {
         $existingClassString = $node->getAttribute('class');
         $existingClasses     = explode(' ', $existingClassString);
@@ -84,13 +92,12 @@ class Node
     public static function isTextAndEmpty(DOMNode $node): bool
     {
         return
-            $node->nodeType === XML_TEXT_NODE &&
-            in_array(trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
+          $node->nodeType === XML_TEXT_NODE &&
+          in_array(trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
     }
 
-    static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement
+    public static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement
     {
-
         $renamed = $node->ownerDocument->createElement($name);
 
         if ($preserveAttributes) {
@@ -106,12 +113,10 @@ class Node
         $node->parentNode->replaceChild($renamed, $node);
 
         return $renamed;
-
     }
 
     public static function removeAttributeAll($nodes, $attributes)
     {
-
         /** @var DOMElement $node */
         $attributes = (array)$attributes;
         foreach ($nodes as $node) {
@@ -119,7 +124,6 @@ class Node
                 $node->removeAttribute($attribute);
             }
         }
-
     }
 
 }

@@ -1,12 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner;
+
+use DOMElement;
+use DOMNode;
+use DOMText;
+use Exception;
 
 class DOM
 {
 
-    static function extractContents(DOMElement $target, DOMNode $source): void
+    public static function extractContents(DOMElement $target, DOMNode $source): void
     {
-
         if ($source instanceof DOMText) {
             $target->appendChild($source);
         } else {
@@ -14,17 +21,17 @@ class DOM
                 $target->appendChild($child);
             }
         }
-
     }
 
-    static function isInlineElement(?DOMNode $node): bool
+    public static function isInlineElement(?DOMNode $node): bool
     {
         return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, Blocks::INLINE_ELEMENTS);
     }
 
-    static function isTag(?DOMNode $node, $tag): bool
+    public static function isTag(?DOMNode $node, $tag): bool
     {
         $tag = (array)$tag;
+
         return $node && $node->nodeType === XML_ELEMENT_NODE && in_array($node->tagName, $tag);
     }
 
@@ -49,7 +56,6 @@ class DOM
      */
     private static function massageNode(DOMElement $element): ?DOMNode
     {
-
         $myTag = $element->tagName;
         $doc   = $element->ownerDocument;
 
@@ -63,13 +69,13 @@ class DOM
         }
 
         while (
-            $firstChild = $element->firstChild and
-            ($myTag !== 'pre' && Node::isTextAndEmpty($firstChild)) || self::isTag($firstChild, 'br')
+          $firstChild = $element->firstChild and
+          ($myTag !== 'pre' && Node::isTextAndEmpty($firstChild)) || self::isTag($firstChild, 'br')
         ) {
             $element->removeChild($firstChild);
         }
 
-        Massage_Block::removeAdjacentEmptyTextNodesAndBRs($element);
+        Massage\Block::removeAdjacentEmptyTextNodesAndBRs($element);
 
         while ($lastChild = $element->lastChild and (Node::isTextAndEmpty($lastChild))) {
             $element->removeChild($lastChild);
@@ -85,21 +91,19 @@ class DOM
         if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
             $nextSibling = $element->nextSibling;
             Node::remove($element);
+
             return $nextSibling;
         }
 
         if ($myTag === 'div') {
-
             $firstChild = $element->firstChild;
 
             if ($element->childNodes->length === 1 && $element->firstChild->nodeType === XML_ELEMENT_NODE) {
-
                 if ($firstChild->tagName === 'div') {
                     Indentation::addElIndent($element, $firstChild);
                     Node::remove($firstChild);
                     // NB: we carry on processing rather than returning here.
                 }
-
             }
 
             if (!$firstChild) {
@@ -107,7 +111,8 @@ class DOM
                 $nextSibling     = $element->nextSibling;
                 $element->parentNode->removeChild($element);
                 if ($previousSibling) {
-                    Massage_Block::removeFollowingEmptyTextNodesAndBRs($previousSibling);
+                    Massage\Block::removeFollowingEmptyTextNodesAndBRs($previousSibling);
+
                     return $previousSibling->nextSibling;
                 } else {
                     return $nextSibling;
@@ -115,14 +120,15 @@ class DOM
             }
 
             if (
-                $element->childNodes->length === 1 &&
-                self::isTag($firstChild, 'p') &&
-                preg_match('~^\t~', $element->textContent)
+              $element->childNodes->length === 1 &&
+              self::isTag($firstChild, 'p') &&
+              preg_match('~^\t~', $element->textContent)
             ) {
                 /* @var DomElement $pre */
                 $pre = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
                 self::extractContents($pre, $firstChild);
                 $element->parentNode->removeChild($element);
+
                 return $pre->nextSibling;
             }
 
@@ -132,25 +138,25 @@ class DOM
                 }
                 $nextSibling = $element->nextSibling;
                 Node::remove($element);
+
                 return $nextSibling;
             }
 
             if (!Indentation::isSet($element)) {
                 if (in_array($element->parentNode->tagName, ['dd'])) {
-                    $nextSibling = Massage_DIV::getNextNonBRNode($element);
+                    $nextSibling = Massage\DIV::getNextNonBRNode($element);
                     Node::remove($element);
+
                     return $nextSibling;
                 }
             }
-
         }
 
         if (
-            in_array($myTag, ['div', 'p', 'pre', 'ul', 'table']) &&
-            self::isTag($element->previousSibling, 'dl') &&
-            self::isTag($element->previousSibling->lastChild, 'dd')
+          in_array($myTag, ['div', 'p', 'pre', 'ul', 'table']) &&
+          self::isTag($element->previousSibling, 'dl') &&
+          self::isTag($element->previousSibling->lastChild, 'dd')
         ) {
-
             $elIndent = Indentation::get($element);
             $ddIndent = Indentation::get($element->previousSibling->lastChild);
 
@@ -163,6 +169,7 @@ class DOM
                     Indentation::remove($element);
                     $element->previousSibling->lastChild->appendChild($element);
                 }
+
                 return $nextSibling;
             }
 
@@ -170,6 +177,7 @@ class DOM
                 $nextSibling = $element->nextSibling;
                 Indentation::set($element, $elIndent - $ddIndent);
                 $element->previousSibling->lastChild->appendChild($element);
+
                 return $nextSibling;
             }
         }
@@ -177,6 +185,7 @@ class DOM
         if (!in_array($myTag, ['th', 'td']) && !$element->hasChildNodes()) {
             $nextSibling = $element->nextSibling;
             $element->parentNode->removeChild($element);
+
             return $nextSibling;
         }
 
@@ -202,7 +211,6 @@ class DOM
         }
 
         if ($myTag === 'dl') {
-
             $everyChildIsDT = true;
             for ($j = 0; $j < $element->childNodes->length; ++$j) {
                 $elementChild = $element->childNodes->item($j);
@@ -220,10 +228,10 @@ class DOM
                         $p->appendChild($strayDT->firstChild);
                     }
                     $element->parentNode->insertBefore($p, $element);
-
                 }
                 $nextSibling = $element->nextSibling;
                 $element->parentNode->removeChild($element);
+
                 return $nextSibling;
             }
 
@@ -236,15 +244,13 @@ class DOM
                 $element->removeChild($strayDT);
                 $element->parentNode->insertBefore($p, $element->nextSibling);
             }
-
         }
 
         if ($myTag === 'dt') {
-            Massage_DT::postProcess($element);
+            Massage\DT::postProcess($element);
         }
 
         return $element->nextSibling;
-
     }
 
     /**
@@ -252,19 +258,16 @@ class DOM
      * @return DOMNode|null
      * @throws Exception
      */
-    static function massage(DOMElement $element): ?DOMNode
+    public static function massage(DOMElement $element): ?DOMNode
     {
-
         $doc   = $element->ownerDocument;
         $child = $element->firstChild;
         while ($child) {
-
             if ($child->nodeType === XML_ELEMENT_NODE) {
-
                 $myTag = $child->tagName;
 
                 if (in_array($myTag, ['section', 'dd', 'div', 'td'])) {
-                    Massage_Block::coalesceAdjacentChildDIVs($child);
+                    Massage\Block::coalesceAdjacentChildDIVs($child);
                 }
 
                 if (in_array($myTag, ['section', 'p', 'dl', 'dt', 'dd', 'div', 'pre', 'table', 'tr', 'th', 'td'])) {
@@ -274,38 +277,36 @@ class DOM
 
                 if (in_array($myTag, ['h2', 'h3'])) {
                     while (
-                        $nextSibling = $child->nextSibling and
-                        (Node::isTextAndEmpty($nextSibling) || self::isTag($nextSibling, 'br'))
+                      $nextSibling = $child->nextSibling and
+                      (Node::isTextAndEmpty($nextSibling) || self::isTag($nextSibling, 'br'))
                     ) {
                         $element->removeChild($nextSibling);
                     }
                 }
-
             }
 
             // NB: we don't want to remove the space in the <em> in cases e.g.:
             // <strong>e</strong><em> </em><strong>f</strong>
             if (self::isInlineElement($child)) {
-
                 if (
-                    $child->tagName !== 'code' &&
-                    $child->firstChild &&
-                    $child->firstChild->nodeType == XML_TEXT_NODE &&
-                    preg_match('~^(\s+)(.*?)$~u', $child->firstChild->textContent, $matches)
+                  $child->tagName !== 'code' &&
+                  $child->firstChild &&
+                  $child->firstChild->nodeType == XML_TEXT_NODE &&
+                  preg_match('~^(\s+)(.*?)$~u', $child->firstChild->textContent, $matches)
                 ) {
                     $child->replaceChild($child->ownerDocument->createTextNode($matches[2]), $child->firstChild);
                     $child->parentNode->insertBefore($child->ownerDocument->createTextNode($matches[1]), $child);
                 }
 
                 if (
-                    $child->lastChild &&
-                    $child->lastChild->nodeType == XML_TEXT_NODE &&
-                    preg_match('~^(.*?)(\s+)$~u', $child->lastChild->textContent, $matches)
+                  $child->lastChild &&
+                  $child->lastChild->nodeType == XML_TEXT_NODE &&
+                  preg_match('~^(.*?)(\s+)$~u', $child->lastChild->textContent, $matches)
                 ) {
                     $child->replaceChild($child->ownerDocument->createTextNode($matches[1]), $child->lastChild);
                     $child->parentNode->insertBefore(
-                        $child->ownerDocument->createTextNode($matches[2]),
-                        $child->nextSibling
+                      $child->ownerDocument->createTextNode($matches[2]),
+                      $child->nextSibling
                     );
                 }
 
@@ -319,12 +320,12 @@ class DOM
                 // Hack for cases like this: <dt><strong>-</strong><strong>-eps-file</strong>=&lt;<em>file</em>&gt;</dt>
                 if ($child->textContent === '-') {
                     if (
-                        $child->firstChild instanceof DOMText &&
-                        $child->nextSibling &&
-                        $child->nextSibling instanceof DOMElement &&
-                        $child->nextSibling->childNodes->length === 1 &&
-                        $child->nextSibling->firstChild instanceof DOMText &&
-                        $child->tagName === $child->nextSibling->tagName
+                      $child->firstChild instanceof DOMText &&
+                      $child->nextSibling &&
+                      $child->nextSibling instanceof DOMElement &&
+                      $child->nextSibling->childNodes->length === 1 &&
+                      $child->nextSibling->firstChild instanceof DOMText &&
+                      $child->tagName === $child->nextSibling->tagName
                     ) {
                         $child->nextSibling->firstChild->textContent = '-' . $child->nextSibling->firstChild->textContent;
                         $nextSibling                                 = $child->nextSibling;
@@ -333,17 +334,14 @@ class DOM
                         continue;
                     }
                 }
-
             }
 
             $child = $child->nextSibling;
-
         }
 
         $child = $element->firstChild;
         while ($child) {
-
-            $certainty = Massage_DL::isPotentialDTFollowedByDD($child);
+            $certainty = Massage\DL::isPotentialDTFollowedByDD($child);
 
             if ($certainty === 0) {
                 $go = false;
@@ -354,7 +352,7 @@ class DOM
                 $nextP     = $child->nextSibling->nextSibling;
                 $iteration = 0;
                 while ($nextP) {
-                    $followingCertainty = Massage_DL::isPotentialDTFollowedByDD($nextP);
+                    $followingCertainty = Massage\DL::isPotentialDTFollowedByDD($nextP);
                     if ($followingCertainty === 100) {
                         $go = true;
                         break;
@@ -374,12 +372,11 @@ class DOM
             if ($go) {
                 $dl = $element->ownerDocument->createElement('dl');
                 $element->insertBefore($dl, $child);
-                while (Massage_DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
-                    /* @var DomElement $dt */
+                while (Massage\DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
                     $dt = $element->ownerDocument->createElement('dt');
                     DOM::extractContents($dt, $dl->nextSibling);
                     $dt = $dl->appendChild($dt);
-                    Massage_DT::postProcess($dt);
+                    Massage\DT::postProcess($dt);
                     $element->removeChild($dl->nextSibling);
 
                     $dd = $element->ownerDocument->createElement('dd');
@@ -394,8 +391,8 @@ class DOM
                     $dl->appendChild($dd);
 
                     while (
-                        DOM::isTag($dl->nextSibling, 'p') &&
-                        Indentation::get($dl->nextSibling) === Indentation::get($dd)
+                      DOM::isTag($dl->nextSibling, 'p') &&
+                      Indentation::get($dl->nextSibling) === Indentation::get($dd)
                     ) {
                         Indentation::remove($dl->nextSibling);
                         $dd->appendChild($dl->nextSibling);
@@ -405,7 +402,6 @@ class DOM
             } else {
                 $child = $child->nextSibling;
             }
-
         }
 
         $child = $element->firstChild;
@@ -427,7 +423,7 @@ class DOM
                         }
                     }
                 }
-                if ($shouldBeList && in_array($dtChar, Massage_List::CHAR_PREFIXES)) {
+                if ($shouldBeList && in_array($dtChar, Massage\HTMLList::CHAR_PREFIXES)) {
                     $ul = $doc->createElement('ul');
                     $ul = $element->insertBefore($ul, $child);
                     foreach ($child->childNodes as $dlChild) {
@@ -448,7 +444,7 @@ class DOM
         $child = $element->firstChild;
         while ($child) {
             if (self::isTag($child, 'div')) {
-                $child = Massage_DIV::postProcess($child);
+                $child = Massage\DIV::postProcess($child);
             } else {
                 $child = $child->nextSibling;
             }

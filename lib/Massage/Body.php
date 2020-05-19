@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-class Massage_Body
+namespace Manner\Massage;
+
+use DOMXPath;
+use Exception;
+use Manner\DOM;
+
+class Body
 {
 
     /**
      * @param DOMXPath $xpath
      * @throws Exception
      */
-    static function trimNodesBeforeH1(DOMXPath $xpath)
+    public static function trimNodesBeforeH1(DOMXPath $xpath)
     {
         $bodies = $xpath->query('//body');
         if ($bodies->length !== 1) {

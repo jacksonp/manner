@@ -1,23 +1,26 @@
 <?php
 declare(strict_types=1);
 
-class Roff_as implements Roff_Template
+namespace Manner\Roff;
+
+use Manner\Man;
+
+// Can't just be called "as"
+class asRequest implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         array_shift($lines);
 
         if (count($request['arguments']) === 2) {
             $man        = Man::instance();
             $stringName = $request['arguments'][0];
             $appendVal  = $man->applyAllReplacements($request['arguments'][1]);
-            $appendVal  = Roff_Macro::applyReplacements($appendVal, $macroArguments);
+            $appendVal  = Macro::applyReplacements($appendVal, $macroArguments);
             $string     = $man->getString($stringName);
             $man->addString($stringName, $string . $appendVal);
         }
-
     }
 
 }

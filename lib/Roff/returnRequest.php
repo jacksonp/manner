@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-class Roff_return implements Roff_Template
+namespace Manner\Roff;
+
+class returnRequest implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         array_shift($lines);
 
         while (count($lines) && !is_null($lines[0])) {
@@ -15,7 +16,6 @@ class Roff_return implements Roff_Template
 
         // shift the null
         array_shift($lines);
-
     }
 
 }

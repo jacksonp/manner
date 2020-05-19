@@ -1,45 +1,54 @@
 <?php
 declare(strict_types = 1);
 
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Request;
+use Manner\TextContent;
+
 /**
  * Make tables out of tab-separated lines
  */
-class Block_TabTable implements Block_Template
+class TabTable implements Template
 {
 
-    const skippableLines = ['.br', ''];
+    public const skippableLines = ['.br', ''];
 
     // \&... see pmlogextract.1
-    const specialAcceptableLines = ['\\&...'];
+    public const specialAcceptableLines = ['\\&...'];
 
     private static function isTabTableLine($line)
     {
         $line = trim($line);
+
         return
-            mb_strpos($line, "\t") !== false ||
-            in_array($line, self::skippableLines) ||
-            in_array($line, self::specialAcceptableLines);
+          mb_strpos($line, "\t") !== false ||
+          in_array($line, self::skippableLines) ||
+          in_array($line, self::specialAcceptableLines);
     }
 
-    static function lineContainsTab(string $line): bool
+    public static function lineContainsTab(string $line): bool
     {
         $line = ltrim($line, '\\&');
+
         // first char is NOT a tab + non-white-space before tab avoid indented stuff + exclude escaped tabs
         return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
     }
 
-    static function isStart(array &$lines): bool
+    public static function isStart(array &$lines): bool
     {
         return
-            count($lines) > 2 &&
-            !is_null($lines[0]) && !is_null($lines[1]) &&
-            !in_array(mb_substr($lines[0], 0, 1), ['.', '\'']) &&
-            self::lineContainsTab($lines[0]) &&
-            (
-                self::lineContainsTab($lines[1]) ||
-                in_array(trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
-            ) &&
-            self::lineContainsTab($lines[2]);
+          count($lines) > 2 &&
+          !is_null($lines[0]) && !is_null($lines[1]) &&
+          !in_array(mb_substr($lines[0], 0, 1), ['.', '\'']) &&
+          self::lineContainsTab($lines[0]) &&
+          (
+            self::lineContainsTab($lines[1]) ||
+            in_array(trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
+          ) &&
+          self::lineContainsTab($lines[2]);
     }
 
     /**
@@ -50,14 +59,12 @@ class Block_TabTable implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         $dom = $parentNode->ownerDocument;
 
         if ($parentNode->tagName === 'p') {
@@ -68,7 +75,6 @@ class Block_TabTable implements Block_Template
         $parentNode->appendChild($table);
 
         while ($nextRequest = Request::getLine($lines)) {
-
             if (!self::isTabTableLine($nextRequest['raw_line'])) {
                 break;
             }
@@ -86,11 +92,9 @@ class Block_TabTable implements Block_Template
                 TextContent::interpretAndAppendText($cell, $tdLine);
                 $tr->appendChild($cell);
             }
-
         }
 
         return $parentNode;
-
     }
 
 

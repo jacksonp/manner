@@ -1,7 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_URL implements Block_Template
+namespace Manner\Inline;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Block\Template;
+use Manner\Block\Text;
+use Manner\Blocks;
+use Manner\Roff;
+use Manner\TextContent;
+
+class URL implements Template
 {
 
     /**
@@ -12,24 +24,23 @@ class Inline_URL implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
       $needOneLineOnly = false
     ): ?DOMElement {
-
         array_shift($lines);
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getParentForText($parentNode);
 
-        Block_Text::addSpace($parentNode);
+        Text::addSpace($parentNode);
         if (count($request['arguments']) === 0) {
             throw new Exception('Not enough arguments to .URL: ' . $request['raw_line']);
         }
 
         $url  = TextContent::interpretString($request['arguments'][0]);
-        $href = Inline_Link::getValidHREF($url);
+        $href = Link::getValidHREF($url);
         if ($href) {
             $anchor = $dom->createElement('a');
             $anchor->setAttribute('href', $href);

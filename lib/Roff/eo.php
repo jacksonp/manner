@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
+namespace Manner\Roff;
+
+use Manner\Man;
+
 /**
- * Class Roff_eo
- *
  * Turn off escape character mechanism.
  */
-class Roff_eo implements Roff_Template
+class eo implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         array_shift($lines);
         Man::instance()->escape_char = null;
-
     }
 
 }

@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+namespace Manner;
+
+use Exception;
+use Manner\Block\TabTable;
+use Manner\Request\Unhandled;
+use Manner\Roff\Alias;
+use Manner\Roff\Comment;
+use Manner\Roff\Macro;
+use Manner\Roff\Skipped;
+use Manner\Roff\StringRequest;
+use Manner\Roff\Template;
+
 class Request
 {
 
@@ -176,14 +188,14 @@ class Request
         }
 
         // Do comments first
-        if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
+        if (Comment::checkLine($lines)) { // Comment::checkLine() can alter $lines
             // We want another look at the same line:
             return self::getLine($lines, $callerArguments);
         }
 
         $controlChars = preg_quote($man->control_char, '~') . '|' . preg_quote($man->control_char_2, '~');
 
-        $lines[0] = Roff_String::substitute($lines[0]);
+        $lines[0] = StringRequest::substitute($lines[0]);
 
         $return = [
           'request'        => null,
@@ -199,7 +211,7 @@ class Request
           $matches
         )
         ) {
-            $return['request'] = Roff_Alias::check($matches[1]);
+            $return['request'] = Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
                 $return['raw_arg_string'] = ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
@@ -209,7 +221,7 @@ class Request
                 );
             }
 
-            if (Roff_Skipped::skip($return['request'])) {
+            if (Skipped::skip($return['request'])) {
                 array_shift($lines);
 
                 return self::getLine($lines, $callerArguments);
@@ -219,7 +231,7 @@ class Request
             if (isset($macros[$return['request']])) {
                 $man->setRegister('.$', (string)count($return['arguments']));
                 foreach ($return['arguments'] as $k => $arg) {
-                    $return['arguments'][$k] = Roff_Macro::applyReplacements($arg, $callerArguments);
+                    $return['arguments'][$k] = Macro::applyReplacements($arg, $callerArguments);
                 }
 
                 // Make copies of arrays:
@@ -242,14 +254,14 @@ class Request
 
             $className = $man->getRoffRequestClass($return['request']);
             if ($className) {
-                /** @var Roff_Template $className */
+                /** @var Template $className */
                 $className::evaluate($return, $lines, $callerArguments);
 
                 return self::getLine($lines, $callerArguments);
             }
         }
 
-        $return['line'] = Roff_Macro::applyReplacements($return['raw_line'], $callerArguments, true);
+        $return['line'] = Macro::applyReplacements($return['raw_line'], $callerArguments, true);
 
         return $return;
     }
@@ -262,23 +274,23 @@ class Request
      */
     public static function getClass(array $request, array &$lines): string
     {
-        if ($request['raw_line'] === '' && !Block_Text::$interruptTextProcessing) {
+        if ($request['raw_line'] === '' && !\Manner\Block\Text::$interruptTextProcessing) {
             // See https://www.gnu.org/software/groff/manual/html_node/Implicit-Line-Breaks.html
-            // Exception if text processing has been interrupted, in which case we let Block_Text handle it.
-            return 'Inline_VerticalSpace';
+            // Exception if text processing has been interrupted, in which case we let \Manner\Block\Text handle it.
+            return '\Manner\Inline\VerticalSpace';
         } elseif (!is_null($request['request'])) {
             $class = Man::instance()->getRequestClass($request['request']);
             if (!is_null($class)) {
                 return $class;
-            } elseif (in_array($request['request'], Request_Unhandled::requests)) {
+            } elseif (in_array($request['request'], Unhandled::requests)) {
                 throw new Exception('Unhandled request ' . $request['raw_line']);
             } else {
-                return 'Request_Skippable';
+                return '\Manner\Request\Skippable';
             }
-        } elseif (Block_TabTable::isStart($lines)) {
-            return 'Block_TabTable';
+        } elseif (TabTable::isStart($lines)) {
+            return '\Manner\Block\TabTable';
         } else {
-            return 'Block_Text';
+            return '\Manner\Block\Text';
         }
     }
 

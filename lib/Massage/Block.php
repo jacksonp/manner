@@ -1,18 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_Block
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMNode;
+use DOMXPath;
+use Manner\DOM;
+use Manner\Node;
+
+class Block
 {
 
-    static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
         self::removePreviousEmptyTextNodesAndBRs($blockElement);
         self::removeFollowingEmptyTextNodesAndBRs($blockElement);
     }
 
-    static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
-
         if (is_null($blockElement)) {
             return;
         }
@@ -26,12 +34,10 @@ class Massage_Block
         ) {
             $blockElement->parentNode->removeChild($previousSibling);
         }
-
     }
 
-    static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement)
     {
-
         if (is_null($blockElement)) {
             return;
         }
@@ -45,24 +51,20 @@ class Massage_Block
         ) {
             $blockElement->parentNode->removeChild($nextSibling);
         }
-
     }
 
-    static function coalesceAdjacentChildDIVs(DOMElement $blockElement)
+    public static function coalesceAdjacentChildDIVs(DOMElement $blockElement)
     {
-
         $child = $blockElement->firstChild;
 
         while ($child) {
-
             if (DOM::isTag($child, 'div')) {
-
-                $nextSibling = $child->nextSibling;
+                $nextSibling  = $child->nextSibling;
                 $brsInBetween = [];
 
                 while ($nextSibling && DOM::isTag($nextSibling, 'br')) {
                     $brsInBetween[] = $nextSibling;
-                    $nextSibling = $nextSibling->nextSibling;
+                    $nextSibling    = $nextSibling->nextSibling;
                 }
 
                 if (
@@ -93,29 +95,23 @@ class Massage_Block
                         $blockElement->removeChild($nextSibling);
                         continue;
                     }
-
                 }
             }
 
             $child = $child->nextSibling;
-
         }
-
     }
 
-    static function coalesceAdjacentChildren(DOMXPath $xpath)
+    public static function coalesceAdjacentChildren(DOMXPath $xpath)
     {
-
         $tagsToMerge = ['ul'];
 
         $ulParents = $xpath->query('//section | //dd | //li | //td | //div');
 
         foreach ($ulParents as $ulParent) {
-
             $child = $ulParent->firstChild;
 
             while ($child) {
-
                 if (
                   DOM::isTag($child, $tagsToMerge) &&
                   $child->nextSibling &&
@@ -128,9 +124,7 @@ class Massage_Block
                     $child = $child->nextSibling;
                 }
             }
-
         }
-
     }
 
 }

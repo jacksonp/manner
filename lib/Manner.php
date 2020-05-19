@@ -1,5 +1,12 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner;
+
+use DOMDocument;
+use DOMXPath;
+use Exception;
 
 class Manner
 {
@@ -9,11 +16,10 @@ class Manner
      * @return DOMDocument
      * @throws Exception
      */
-    static function roffToDOM(array $fileLines): DOMDocument
+    public static function roffToDOM(array $fileLines): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
 
-        /** @var DOMElement $manPageContainer */
         $manPageContainer = $dom->createElement('body');
         $manPageContainer = $dom->appendChild($manPageContainer);
 
@@ -23,17 +29,17 @@ class Manner
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
         $xpath = new DOMXpath($dom);
-        Massage_Body::trimNodesBeforeH1($xpath);
-        Massage_P::removeEmpty($xpath);
-        Massage_DL::mergeAdjacentAndConvertLoneDD($xpath);
-        Massage_Remap::doAll($xpath);
-        Massage_Indents::recalc($xpath);
+        Massage\Body::trimNodesBeforeH1($xpath);
+        Massage\P::removeEmpty($xpath);
+        Massage\DL::mergeAdjacentAndConvertLoneDD($xpath);
+        Massage\Remap::doAll($xpath);
+        Massage\Indents::recalc($xpath);
         DOM::massage($manPageContainer);
-        Massage_Tidy::doAll($xpath);
-        Massage_DL::checkPrecedingNodes($xpath);
-        Massage_Tidy::indentAttributeToClass($xpath);
-        Massage_Block::coalesceAdjacentChildren($xpath);
-        Massage_DL::CreateOLs($xpath);
+        Massage\Tidy::doAll($xpath);
+        Massage\DL::checkPrecedingNodes($xpath);
+        Massage\Tidy::indentAttributeToClass($xpath);
+        Massage\Block::coalesceAdjacentChildren($xpath);
+        Massage\DL::CreateOLs($xpath);
 
         return $dom;
     }
@@ -46,9 +52,8 @@ class Manner
      * @param bool $test
      * @throws Exception
      */
-    static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
+    public static function roffToHTML(array $fileLines, string $filePath, string $outputFile = null, $test = false)
     {
-
 //        set_time_limit(3);
 
         $dom  = self::roffToDOM($fileLines);
@@ -69,10 +74,13 @@ class Manner
 
         if ($test) {
             echo $html;
+
             return;
         }
 
-        $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars($extra1) . '" data-extra2="' . htmlspecialchars($extra2) . '" data-extra3="' . htmlspecialchars($extra3) . '">';
+        $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars(
+            $extra1
+          ) . '" data-extra2="' . htmlspecialchars($extra2) . '" data-extra3="' . htmlspecialchars($extra3) . '">';
 
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',

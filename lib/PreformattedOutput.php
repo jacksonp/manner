@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+namespace Manner;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Block\TabTable;
+use Manner\Roff\Unit;
+
 class PreformattedOutput
 {
 
@@ -44,8 +52,8 @@ class PreformattedOutput
 
         if (
           $pre->textContent === '' && count($lines) > 1 &&
-          Block_TabTable::lineContainsTab($line) &&
-          Block_TabTable::lineContainsTab($lines[1])
+          TabTable::lineContainsTab($line) &&
+          TabTable::lineContainsTab($lines[1])
         ) {
             // TODO: add "preformatted" table class instead of code tags in cells? (see also CSS for removing margin on <pre> in cells)
             // or don't use fixed width font at all? see https://www.mankier.com/3/SoIndexedShape.3iv#Description
@@ -88,13 +96,13 @@ class PreformattedOutput
             self::$addIndent = 0;
 
             return true;
-        } elseif ($request['raw_line'] === '' || in_array($request['class'], ['Block_P', 'Inline_VerticalSpace'])) {
+        } elseif ($request['raw_line'] === '' || in_array($request['class'], ['\Manner\Block\P', '\Manner\Inline\VerticalSpace'])) {
             array_shift($lines);
             if ($parentNode->hasChildNodes()) {
                 $parentNode->appendChild(new DOMText("\n"));
                 self::$addIndent = 0;
             }
-            if (in_array($request['class'], ['Block_P'])) {
+            if (in_array($request['class'], ['\Manner\Block\P'])) {
                 $man->resetFonts();
                 if (Indentation::isSet($pre)) {
                     // Return new parent element without indentation for following requests
@@ -106,9 +114,9 @@ class PreformattedOutput
             }
 
             return true;
-        } elseif (in_array($request['class'], ['Inline_AlternatingFont', 'Inline_ft', 'Request_Skippable'])) {
+        } elseif (in_array($request['class'], ['\Manner\Inline\AlternatingFont', '\Manner\Inline\ft', '\Manner\Request\Skippable'])) {
             $request['class']::checkAppend($parentNode, $lines, $request);
-            if ($request['class'] === 'Inline_AlternatingFont') {
+            if ($request['class'] === '\Manner\Inline\AlternatingFont') {
                 self::endInputLine($parentNode);
             }
 
@@ -144,7 +152,7 @@ class PreformattedOutput
         } elseif ($request['request'] === 'RS') {
             array_shift($lines);
             if (count($request['arguments'])) {
-                self::$addIndent = (int)round(Roff_Unit::normalize($request['arguments'][0], 'n', 'm'));
+                self::$addIndent = (int)round(Unit::normalize($request['arguments'][0], 'n', 'm'));
             } else {
                 self::$addIndent = 4;
             }
@@ -183,7 +191,7 @@ class PreformattedOutput
         return true;
     }
 
-    static function endInputLine(DOMElement $parentNode)
+    public static function endInputLine(DOMElement $parentNode)
     {
         if (TextContent::$interruptTextProcessing || $parentNode->getAttribute('class') === 'synopsis') {
             $parentNode->appendChild(new DOMText(' '));

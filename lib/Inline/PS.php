@@ -1,7 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_PS implements Block_Template
+namespace Manner\Inline;
+
+use DOMDocument;
+use DOMElement;
+use Exception;
+use Manner\Block\Template;
+use Manner\Node;
+use Manner\Request;
+
+class PS implements Template
 {
 
     /**
@@ -12,13 +22,12 @@ class Inline_PS implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
       $needOneLineOnly = false
     ): ?DOMElement {
-
         array_shift($lines);
 
         $foundEnd = false;
@@ -57,10 +66,9 @@ class Inline_PS implements Block_Template
         }
 
         return $parentNode;
-
     }
 
-    static function appendPic(DOMElement $parentNode, array $lines)
+    public static function appendPic(DOMElement $parentNode, array $lines)
     {
         $picString = implode(PHP_EOL, $lines);
 
@@ -77,7 +85,7 @@ class Inline_PS implements Block_Template
             return;
         }
 
-        $svgDoc = new DOMDocument;
+        $svgDoc = new DOMDocument();
         @$svgDoc->loadXML($svgDocString);
 
         $svg = $svgDoc->getElementsByTagName('svg')->item(0);
@@ -95,7 +103,7 @@ class Inline_PS implements Block_Template
         }
 
         $svgNode = $parentNode->ownerDocument->importNode($svg, true);
-
+        /* @var DomElement $svgNode */
         $svgNode->setAttribute('font-size', '7.5pt');
         $svgNode->removeAttribute('xmlns');
         $svgNode->removeAttribute('xmlns:xlink');
@@ -105,7 +113,6 @@ class Inline_PS implements Block_Template
             $textNode->removeAttribute('font-size');
         }
 
-        /* @var DomElement $div */
         $div = $parentNode->ownerDocument->createElement('div');
         Node::addClass($div, 'svg-container');
         $div = $parentNode->appendChild($div);

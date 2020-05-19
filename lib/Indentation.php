@@ -1,19 +1,24 @@
 <?php
 declare(strict_types=1);
 
+namespace Manner;
+
+use DOMElement;
+use Exception;
+
 class Indentation
 {
 
     // The default indentation is 7.2n in troff mode and 7n in nroff mode except for grohtml, which ignores indentation.
     // (https://www.mankier.com/7/groff_man#Miscellaneous)
-    const DEFAULT = '7';
+    public const DEFAULT = '7';
 
     public static function isSet(DOMElement $p)
     {
         return $p->hasAttribute('indent');
     }
 
-    static function get(DOMElement $el): float
+    public static function get(DOMElement $el): float
     {
         return (float)$el->getAttribute('indent');
     }
@@ -23,7 +28,7 @@ class Indentation
      * @param $indentVal
      * @throws Exception
      */
-    static function set(DOMElement $el, $indentVal): void
+    public static function set(DOMElement $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -31,7 +36,7 @@ class Indentation
         $el->setAttribute('indent', (string)$indentVal);
     }
 
-    static function remove(DOMElement $el): void
+    public static function remove(DOMElement $el): void
     {
         $el->removeAttribute('indent');
     }
@@ -41,7 +46,7 @@ class Indentation
      * @param $indentVal
      * @throws Exception
      */
-    static function add(DOMElement $el, $indentVal)
+    public static function add(DOMElement $el, $indentVal)
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -54,7 +59,7 @@ class Indentation
      * @param $indentVal
      * @throws Exception
      */
-    static function subtract(DOMElement $el, $indentVal)
+    public static function subtract(DOMElement $el, $indentVal)
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -88,7 +93,6 @@ class Indentation
      */
     public static function popOut(DOMElement $el): void
     {
-
         $elParent = $el->parentNode;
 
         // li: see cpupower-monitor.1
@@ -100,12 +104,11 @@ class Indentation
         $inDD         = DOM::isTag($elParent, 'dd');
 
         if (
-            $el !== $elParent->firstChild &&
-            (($inDD && !$elParent->nextSibling) || !$el->nextSibling) &&
-            $parentIndent !== 0 &&
-            $parentIndent <= -Indentation::get($el)
+          $el !== $elParent->firstChild &&
+          (($inDD && !$elParent->nextSibling) || !$el->nextSibling) &&
+          $parentIndent !== 0 &&
+          $parentIndent <= -Indentation::get($el)
         ) {
-
             Indentation::add($el, $parentIndent);
 
             if ($inDD) {

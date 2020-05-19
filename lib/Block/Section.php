@@ -1,7 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_Section implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Man;
+use Manner\Node;
+use Manner\Roff;
+use Manner\TextContent;
+
+class Section implements Template
 {
 
     /**
@@ -12,14 +22,12 @@ class Block_Section implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
@@ -52,6 +60,7 @@ class Block_Section implements Block_Template
             $gotContent = Roff::parse($headingNode, $lines, true);
             if (!$gotContent) {
                 $section->parentNode->removeChild($section);
+
                 return null;
             }
         } else {
@@ -60,19 +69,19 @@ class Block_Section implements Block_Template
             if ($headingNode->lastChild) {
                 // We don't want empty sections with &nbsp; as heading. See e.g. ntptime.8
                 $headingNode->lastChild->textContent = rtrim(
-                    $headingNode->lastChild->textContent,
-                    " \t\n\r\0\x0B" . html_entity_decode('&nbsp;')
+                  $headingNode->lastChild->textContent,
+                  " \t\n\r\0\x0B" . html_entity_decode('&nbsp;')
                 );
             }
             // Skip sections with empty headings
             if (trim($headingNode->textContent) === '') {
                 $section->parentNode->removeChild($section);
+
                 return null;
             }
         }
 
         return $section;
-
     }
 
 }

@@ -1,12 +1,17 @@
 <?php
-declare(strict_types = 1);
 
-class Roff_Macro
+declare(strict_types=1);
+
+namespace Manner\Roff;
+
+use Manner\Man;
+use Manner\Request;
+
+class Macro
 {
 
-    static function applyReplacements(string $string, array &$arguments, bool $fullLine = false): string
+    public static function applyReplacements(string $string, array &$arguments, bool $fullLine = false): string
     {
-
         if ($fullLine) {
             $request = Request::peepAt($string);
             if ($request['name'] === 'shift') {
@@ -18,6 +23,7 @@ class Roff_Macro
                     array_shift($arguments);
                 }
                 Man::instance()->setRegister('.$', (string)count($arguments));
+
                 return '.';
             }
         }

@@ -1,17 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_Condition implements Roff_Template
+namespace Manner\Roff;
+
+use Exception;
+use Manner\Man;
+use Manner\Replace;
+use Manner\Request;
+use ParseError;
+
+class Condition implements Template
 {
 
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
     // For the nested parens bit, see http://stackoverflow.com/a/3851098
     // For the last quotes bit, see http://stackoverflow.com/a/366532
-    const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
+    public const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
 
     private static function isBalancedCondition(string $string): bool
     {
-
         $len   = mb_strlen($string);
         $stack = [];
         for ($i = 0; $i < $len; $i++) {
@@ -66,9 +74,8 @@ class Roff_Condition implements Roff_Template
      * @param array|null $macroArguments
      * @throws Exception
      */
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         array_shift($lines);
 
         $argChars = Request::getArgChars($request['arg_string']);
@@ -114,14 +121,13 @@ class Roff_Condition implements Roff_Template
         }
 
         $postConditionString = ltrim($postConditionString); // cougar.1alc has extra leading space
-        $postConditionBlock = strpos($postConditionString, '\\{') === 0;
+        $postConditionBlock  = strpos($postConditionString, '\\{') === 0;
         if ($postConditionBlock) {
             $postConditionString = substr($postConditionString, 2);
         }
         $postConditionString = ltrim($postConditionString);
 
         if ($request['request'] === 'if') {
-
             if ($postConditionBlock) {
                 $newLines = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 array_splice($lines, 0, 0, $newLines);
@@ -136,9 +142,7 @@ class Roff_Condition implements Roff_Template
                     return;
                 }
             }
-
         } elseif ($request['request'] === 'ie') {
-
             if ($postConditionBlock) {
                 $ifLines   = self::ifBlock($lines, $postConditionString, $conditionTrue);
                 $elseLines = self::handleElse($lines, $conditionTrue);
@@ -157,8 +161,9 @@ class Roff_Condition implements Roff_Template
             }
         }
 
-        throw new Exception('Unexpected request "' . $request['request'] . '" in Roff_Condition:' . $request['raw_line']);
-
+        throw new Exception(
+          'Unexpected request "' . $request['request'] . '" in Condition:' . $request['raw_line']
+        );
     }
 
     /**
@@ -169,11 +174,10 @@ class Roff_Condition implements Roff_Template
      */
     private static function handleElse(array &$lines, bool $useIf): array
     {
-
         $request = Request::getLine($lines);
 
         // Do comments first
-        if (Roff_Comment::checkLine($lines)) { // Roff_Comment::checkLine() can alter $lines
+        if (Comment::checkLine($lines)) { // Comment::checkLine() can alter $lines
             // We want another look at the same line:
             return self::handleElse($lines, $useIf);
         }
@@ -195,7 +199,6 @@ class Roff_Condition implements Roff_Template
         } else {
             return [ltrim($request['arg_string'])];
         }
-
     }
 
     /**
@@ -204,7 +207,7 @@ class Roff_Condition implements Roff_Template
      * @return bool
      * @throws Exception
      */
-    static function test(string $condition, $macroArguments): bool
+    public static function test(string $condition, $macroArguments): bool
     {
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
@@ -220,7 +223,6 @@ class Roff_Condition implements Roff_Template
      */
     private static function testRecursive(string $condition, $macroArguments): bool
     {
-
         if (mb_strpos($condition, '!') === 0) {
             return !self::testRecursive(mb_substr($condition, 1), $macroArguments);
         }
@@ -253,12 +255,12 @@ class Roff_Condition implements Roff_Template
           preg_match('~^\'([^\']*)\'([^\']*)\'$~u', $condition, $matches) ||
           preg_match('~^"([^"]*)"([^"]*)"$~u', $condition, $matches)
         ) {
-            return Roff_Macro::applyReplacements($matches[1], $macroArguments) ===
-              Roff_Macro::applyReplacements($matches[2], $macroArguments);
+            return Macro::applyReplacements($matches[1], $macroArguments) ===
+              Macro::applyReplacements($matches[2], $macroArguments);
         }
 
         // Don't do this earlier to not add " into $condition which could break string comparison check above.
-        $condition = Roff_Macro::applyReplacements($condition, $macroArguments);
+        $condition = Macro::applyReplacements($condition, $macroArguments);
         // Do this again for the swapped-in strings:
         $man       = Man::instance();
         $condition = $man->applyAllReplacements($condition);
@@ -300,7 +302,7 @@ class Roff_Condition implements Roff_Template
             }
         }
 
-        $condition = Roff_Unit::normalize($condition, 'u', 'u');
+        $condition = Unit::normalize($condition, 'u', 'u');
 
         if (preg_match('~^([-+*/\d()><=.\s]| or | and )+$~u', $condition)) {
             $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
@@ -314,7 +316,6 @@ class Roff_Condition implements Roff_Template
         // If we can't figure it out, assume false. We could also do this: throw new Exception('Unhandled condition: "' . $condition . '".');
 
         return false;
-
     }
 
     /**
@@ -324,16 +325,14 @@ class Roff_Condition implements Roff_Template
      * @return array
      * @throws Exception
      */
-    static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
+    public static function ifBlock(array &$lines, string $firstLine, bool $processContents): array
     {
-
         $foundEnd         = false;
         $replacementLines = [];
         $line             = $firstLine;
         $openBraces       = 1;
 
         while (true) {
-
             $openBraces += substr_count($line, '\\{');
             $openBraces -= substr_count($line, '\\}');
 
@@ -355,7 +354,6 @@ class Roff_Condition implements Roff_Template
             }
 
             $line = array_shift($lines);
-
         }
 
         if (!$foundEnd) {
@@ -377,7 +375,6 @@ class Roff_Condition implements Roff_Template
         }
 
         return $replacementLines;
-
     }
 
 }

@@ -1,11 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Indentation;
+use Manner\Inline\VerticalSpace;
+use Manner\Node;
+use Manner\Roff\Unit;
+
 /**
- * Class Block_ti
  * .ti ±N: Temporary indent next line (default scaling indicator m).
  */
-class Block_ti implements Block_Template
+class ti implements Template
 {
 
     /**
@@ -16,41 +26,41 @@ class Block_ti implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $indentVal = 0.0;
         if (count($request['arguments'])) {
-            $indentVal = Roff_Unit::normalize($request['arguments'][0], 'm', 'n');
+            $indentVal = Unit::normalize($request['arguments'][0], 'm', 'n');
         }
 
         if (Indentation::get($parentNode) === (float)$indentVal && $parentNode->lastChild) {
             if ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br') {
-                Inline_VerticalSpace::addBR($parentNode);
+                VerticalSpace::addBR($parentNode);
             }
+
             return $parentNode;
         }
 
         $dt = Node::ancestor($parentNode, 'dt');
         if (is_null($dt)) {
             $parentNode = Blocks::getBlockContainerParent($parentNode);
+            $p          = $parentNode->ownerDocument->createElement('p');
             /* @var DomElement $p */
-            $p = $parentNode->ownerDocument->createElement('p');
             $p = $parentNode->appendChild($p);
             Indentation::set($p, $indentVal);
+
             return $p;
         } else {
             Indentation::set($dt, $indentVal);
+
             return null;
         }
-
     }
 
 }

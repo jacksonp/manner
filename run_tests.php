@@ -2,9 +2,9 @@
 <?php
 declare(strict_types=1);
 
-spl_autoload_register(function ($class) {
-    require_once 'lib/' . str_replace('_', '/', $class) . '.php';
-});
+use Manner\Manner;
+
+require_once 'autoload.php';
 
 /**
  * @param $filePath
@@ -40,7 +40,6 @@ function runTest($filePath)
         echo 'Got:', PHP_EOL;
         echo $actualOutput, PHP_EOL;
     }
-
 }
 
 $dir = new DirectoryIterator(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tests');

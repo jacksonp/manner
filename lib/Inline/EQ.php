@@ -1,7 +1,20 @@
 <?php
-declare(strict_types = 1);
 
-class Inline_EQ implements Block_Template
+declare(strict_types=1);
+
+namespace Manner\Inline;
+
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+use Exception;
+use Manner\Block\Template;
+use Manner\Block\Text;
+use Manner\Man;
+use Manner\Node;
+use Manner\Request;
+
+class EQ implements Template
 {
 
     /**
@@ -12,13 +25,12 @@ class Inline_EQ implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
     ): ?DOMElement {
-
         array_shift($lines);
 
         $foundEnd = false;
@@ -44,6 +56,7 @@ class Inline_EQ implements Block_Template
             if (preg_match('~^delim (.)(.)$~ui', $eqLines[0], $matches)) {
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
+
                 return null;
             }
         }
@@ -57,21 +70,19 @@ class Inline_EQ implements Block_Template
         }
 
         if (count($eqLines) > 0) {
-            Block_Text::addSpace($parentNode);
+            Text::addSpace($parentNode);
             self::appendMath($parentNode, $eqLines);
         }
 
         return null;
-
     }
 
-    static function appendMath(DOMElement $parentNode, array $lines)
+    public static function appendMath(DOMElement $parentNode, array $lines)
     {
-
         $eqnString = '.EQ' . PHP_EOL;
         foreach ($lines as $line) {
             // Hack for mm2gv:
-            $line = str_replace(['\\fI', '\\fP'], '', $line);
+            $line      = str_replace(['\\fI', '\\fP'], '', $line);
             $eqnString .= $line . PHP_EOL;
         }
         $eqnString .= '.EN' . PHP_EOL;
@@ -87,12 +98,12 @@ class Inline_EQ implements Block_Template
         # Hacks:
         $mathString = str_replace(['&ThinSpace;', '&equals;', '&plus;'], [' ', '=', '+'], $mathString);
 
-        $mathDoc = new DOMDocument;
+        $mathDoc = new DOMDocument();
         @$mathDoc->loadHTML($mathString);
         $mathNode = $mathDoc->getElementsByTagName('math')->item(0);
 //        $mathNode->setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
 //        $mathNode->setAttribute('display', 'inline');
-        $xpath    = new DOMXpath($mathDoc);
+        $xpath   = new DOMXpath($mathDoc);
         $mErrors = $xpath->query('//merror');
         foreach ($mErrors as $mError) {
             Node::remove($mError, false);

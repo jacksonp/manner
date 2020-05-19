@@ -1,9 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Indentation;
+use Manner\Man;
+use Manner\Request;
+use Manner\Roff;
+use Manner\Roff\Unit;
+
 /**
- * Class Block_TP
- *
  * .de1 TP
  * .  sp \\n[PD]u
  * .  if \\n[.$] .nr an-prevailing-indent (n;\\$1)
@@ -24,7 +34,7 @@ declare(strict_types=1);
  * ..
  *
  */
-class Block_TP implements Block_Template
+class TP implements Template
 {
 
     /**
@@ -35,18 +45,17 @@ class Block_TP implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
             $lines[1] = $lines[0];
             $lines[0] = '.nf';
+
             return null;
         }
 
@@ -58,6 +67,7 @@ class Block_TP implements Block_Template
             } else {
                 $lines[0] = '.IP';
             }
+
             return null;
         }
 
@@ -67,7 +77,7 @@ class Block_TP implements Block_Template
         $blockContainerParentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
-            $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
+            $indentVal = Unit::normalize($request['arguments'][0], 'n', 'n');
             if (is_numeric($indentVal)) {
                 $man->indentation = $indentVal;
             } else {
@@ -77,7 +87,7 @@ class Block_TP implements Block_Template
             $indentVal = $man->indentation;
         }
 
-        $dl = Block_DefinitionList::getParentDL($blockContainerParentNode);
+        $dl = DefinitionList::getParentDL($blockContainerParentNode);
 
         if (is_null($dl)) {
             $dl = $dom->createElement('dl');
@@ -90,6 +100,7 @@ class Block_TP implements Block_Template
         $gotContent = Roff::parse($dt, $lines, true);
         if (!$gotContent) {
             $dl->removeChild($dt);
+
             return null;
         }
 
@@ -98,7 +109,7 @@ class Block_TP implements Block_Template
             if (!is_null($request) && $request['request'] === 'TQ') {
                 array_shift($lines);
                 if (count($request['arguments'])) {
-                    $indentVal        = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
+                    $indentVal        = Unit::normalize($request['arguments'][0], 'n', 'n');
                     $man->indentation = $indentVal;
                 }
                 $dt = $dom->createElement('dt');
@@ -114,13 +125,12 @@ class Block_TP implements Block_Template
 
         $man->resetFonts();
 
-        /* @var DomElement $dd */
         $dd = $dom->createElement('dd');
         Indentation::set($dd, $indentVal);
+        /* @var DomElement $dd */
         $dd = $dl->appendChild($dd);
 
         return $dd;
-
     }
 
 }

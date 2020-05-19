@@ -1,17 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_Link implements Block_Template
+namespace Manner\Inline;
+
+use DOMElement;
+use Manner\Block\Template;
+use Manner\Block\Text;
+use Manner\Blocks;
+use Manner\Node;
+use Manner\Replace;
+use Manner\TextContent;
+
+class Link implements Template
 {
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $existingAnchor = Node::ancestor($parentNode, 'a');
@@ -34,14 +43,13 @@ class Inline_Link implements Block_Template
             }
         }
 
-        Block_Text::addSpace($parentNode);
+        Text::addSpace($parentNode);
         $parentNode->appendChild($anchor);
 
         return $anchor;
-
     }
 
-    static function getValidHREF(string $url)
+    public static function getValidHREF(string $url)
     {
         $url  = Replace::preg('~^<(.*)>$~u', '$1', $url);
         $href = TextContent::interpretString($url);
@@ -49,6 +57,7 @@ class Inline_Link implements Block_Template
             return $href;
         } elseif (filter_var($href, FILTER_VALIDATE_EMAIL)) {
             list($user, $server) = explode('@', $href);
+
             return 'mailto:' . rawurlencode($user) . '@' . rawurlencode($server);
         } else {
             return false;

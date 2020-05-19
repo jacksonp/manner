@@ -1,10 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_P
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMXPath;
+use Exception;
+use Manner\DOM;
+use Manner\Indentation;
+use Manner\Node;
+
+class P
 {
 
-    static function removeEmpty(DOMXPath $xpath)
+    public static function removeEmpty(DOMXPath $xpath)
     {
         $ps = $xpath->query('//p');
         foreach ($ps as $p) {
@@ -18,9 +28,8 @@ class Massage_P
      * @param DOMElement $p
      * @throws Exception
      */
-    static function tidy(DOMElement $p)
+    public static function tidy(DOMElement $p)
     {
-
         // Change two br tags in a row to a new paragraph.
 
         $indent = Indentation::get($p);
@@ -43,6 +52,7 @@ class Massage_P
                 $p->removeChild($p->firstChild); // 2nd <br>
                 self::tidy($p);
                 self::tidy($newP);
+
                 return;
             }
             $pChild = $pChild->nextSibling;
@@ -54,9 +64,9 @@ class Massage_P
 
         if (trim($p->textContent) === '') {
             $p->parentNode->removeChild($p);
+
             return;
         }
-
     }
 
 }

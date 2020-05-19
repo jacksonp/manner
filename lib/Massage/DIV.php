@@ -1,10 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_DIV
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMNode;
+use Manner\DOM;
+
+class DIV
 {
 
-    static function getNextNonBRNode(DOMNode $element, bool $removeBRs = false): ?DOMNode
+    public static function getNextNonBRNode(DOMNode $element, bool $removeBRs = false): ?DOMNode
     {
         $nextSibling = $element->nextSibling;
         while (DOM::isTag($nextSibling, 'br')) {
@@ -13,35 +20,32 @@ class Massage_DIV
                 $element->parentNode->removeChild($element->nextSibling);
             }
         }
+
         return $nextSibling;
     }
 
     private static function isPotentialLI(?DOMElement $div)
     {
         return
-            DOM::isTag($div, 'div') &&
-            !DOM::isTag($div->firstChild, ['pre', 'ul']) &&
-            Massage_List::startsWithBullet($div->textContent);
+          DOM::isTag($div, 'div') &&
+          !DOM::isTag($div->firstChild, ['pre', 'ul']) &&
+          HTMLList::startsWithBullet($div->textContent);
     }
 
-    static function postProcess(DOMElement $div): ?DOMNode
+    public static function postProcess(DOMElement $div): ?DOMNode
     {
-
         $doc = $div->ownerDocument;
 
         /* @var DOMElement $nextNonBR */
 
         if (self::isPotentialLI($div)) {
-
             $nextNonBR = self::getNextNonBRNode($div);
 
             if (
-                (is_null($nextNonBR) || !DOM::isTag($nextNonBR, 'div') || !self::isPotentialLI($nextNonBR)) &&
-                Dom::isTag($div->firstChild, 'p') &&
-                Massage_List::checkElementForLIs($div->firstChild)
+              (is_null($nextNonBR) || !DOM::isTag($nextNonBR, 'div') || !self::isPotentialLI($nextNonBR)) &&
+              Dom::isTag($div->firstChild, 'p') &&
+              HTMLList::checkElementForLIs($div->firstChild)
             ) {
-
-                /* @var DOMElement $ul */
                 $ul = $doc->createElement('ul');
                 $ul = $div->parentNode->insertBefore($ul, $div);
 
@@ -49,6 +53,7 @@ class Massage_DIV
                     $ul->appendChild($div->firstChild);
                 }
 
+                /* @var DOMElement $ul */
                 /* @var DOMElement $li */
                 $li = $ul->appendChild($doc->createElement('li'));
 
@@ -56,20 +61,16 @@ class Massage_DIV
 
                 $div->parentNode->removeChild($div);
 
-                Massage_List::pruneBulletChar($ul->firstChild);
+                HTMLList::pruneBulletChar($ul->firstChild);
 
                 return $ul->nextSibling;
-
             } else {
-
                 if (is_null($nextNonBR) || (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR))) {
-
                     /* @var DOMElement $ul */
                     $ul = $doc->createElement('ul');
                     $ul = $div->parentNode->insertBefore($ul, $div);
 
                     while (self::isPotentialLI($div)) {
-
                         /* @var DOMElement $li */
                         $li = $ul->appendChild($doc->createElement('li'));
 
@@ -79,24 +80,20 @@ class Massage_DIV
                             DOM::extractContents($li, $div);
                         }
 
-                        Massage_List::pruneBulletChar($li);
+                        HTMLList::pruneBulletChar($li);
 
-                        Massage_List::checkElementForLIs($li);
+                        HTMLList::checkElementForLIs($li);
 
                         $div->parentNode->removeChild($div);
                         $div = self::getNextNonBRNode($ul, true);
-
                     }
 
                     return $ul->nextSibling;
-
                 }
-
             }
         }
 
         return $div->nextSibling;
-
     }
 
 }

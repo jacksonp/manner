@@ -1,7 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_IP implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Indentation;
+use Manner\Man;
+use Manner\Roff;
+use Manner\TextContent;
+
+class IP implements Template
 {
 
     /**
@@ -12,14 +23,12 @@ class Block_IP implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         $man = Man::instance();
 
         if ($needOneLineOnly && $parentNode->tagName === 'dt') { // See e.g. links2.1
@@ -29,6 +38,7 @@ class Block_IP implements Block_Template
                 array_shift($lines);
             }
             $man->resetFonts();
+
             return null;
         }
 
@@ -39,7 +49,7 @@ class Block_IP implements Block_Template
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments']) > 1) {
-            $indentVal        = Roff_Unit::normalize($request['arguments'][1], 'n', 'n');
+            $indentVal = Roff\Unit::normalize($request['arguments'][1], 'n', 'n');
             if (is_numeric($indentVal)) {
                 $man->indentation = $indentVal;
             } else {
@@ -51,8 +61,7 @@ class Block_IP implements Block_Template
 
         // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
         if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
-
-            $dl = Block_DefinitionList::getParentDL($parentNode);
+            $dl = DefinitionList::getParentDL($parentNode);
 
             /* @var DomElement $dd */
             $dt = $dom->createElement('dt');
@@ -79,21 +88,20 @@ class Block_IP implements Block_Template
         } else {
             $man->resetFonts();
 
-            /* @var DomElement $div */
+
             $div = $dom->createElement('div');
             $div->setAttribute('remap', 'IP');
             if (!$indentVal) {
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
-            } else {
-                if ($parentNode->tagName !== 'dd' || Indentation::get($parentNode) !== (float)$indentVal) {
-                    Indentation::set($div, $indentVal);
-                }
+            } elseif ($parentNode->tagName !== 'dd' || Indentation::get($parentNode) !== (float)$indentVal) {
+                Indentation::set($div, $indentVal);
             }
+            /* @var DomElement $div */
             $div = $parentNode->appendChild($div);
+
             return $div;
         }
-
     }
 
 }

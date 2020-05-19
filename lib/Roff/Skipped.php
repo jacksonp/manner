@@ -1,10 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_Skipped
+namespace Manner\Roff;
+
+class Skipped
 {
 
-    const requests = [
+    public const requests = [
       'af', // ".af register c: Assign format c to register (c=l,i,I,a,A)."
       'bd', // "Embolden font by N-1 units."
       'bp', // "Eject current page and begin new page."
@@ -65,7 +68,7 @@ class Roff_Skipped
       'wh', // Set/Remove location trap
     ];
 
-    const nonStandardRequests = [
+    public const nonStandardRequests = [
         // index information: "Inserts index information (for a search system or printed index list). Index information is not normally displayed in the page itself."
       'iX',
       'IX',
@@ -99,7 +102,7 @@ class Roff_Skipped
       'LO',
     ];
 
-    static function skip(string $requestName): bool
+    public static function skip(string $requestName): bool
     {
         return in_array($requestName, self::requests) || in_array($requestName, self::nonStandardRequests);
     }

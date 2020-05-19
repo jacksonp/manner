@@ -1,21 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_Text implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Blocks;
+use Manner\Man;
+use Manner\Node;
+use Manner\Replace;
+use Manner\Request;
+use Manner\TextContent;
+
+class Text implements Template
 {
 
     public static bool $interruptTextProcessing = false;
 
-    static function addSpace(DOMElement $parentNode)
+    public static function addSpace(DOMElement $parentNode)
     {
-
         if (
-            !Node::isOrInTag($parentNode, 'pre') && Node::hasContent($parentNode) &&
-            (
-                $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
-                in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
-            ) &&
-            !TextContent::$interruptTextProcessing
+          !Node::isOrInTag($parentNode, 'pre') && Node::hasContent($parentNode) &&
+          (
+            $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
+            in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
+          ) &&
+          !TextContent::$interruptTextProcessing
         ) {
             $parentNode->appendChild(new DOMText(' '));
         }
@@ -29,14 +41,12 @@ class Block_Text implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         $parentNode = Blocks::getParentForText($parentNode);
 
         if (Man::instance()->hasPostOutputCallbacks()) {
@@ -62,7 +72,7 @@ class Block_Text implements Block_Template
                 break;
             }
             $nextRequestClass = Request::getClass($nextRequest, $lines);
-            if ($nextRequestClass !== 'Block_Text' || mb_substr($lines[0], 0, 1) === ' ') {
+            if ($nextRequestClass !== '\Manner\Block\Text' || mb_substr($lines[0], 0, 1) === ' ') {
                 break; // Stop on non-text or implicit line break.
             }
             array_shift($lines);
@@ -77,19 +87,18 @@ class Block_Text implements Block_Template
         self::addLine($parentNode, $line, $implicitBreak);
 
         return $parentNode;
-
     }
 
-    static private function removeTextProcessingInterrupt(string $line): string
+    private static function removeTextProcessingInterrupt(string $line): string
     {
         $line                          = Replace::preg('~\\\\c\s*$~', '', $line, -1, $replacements);
         self::$interruptTextProcessing = $replacements > 0;
+
         return $line;
     }
 
-    static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
+    public static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
     {
-
         if ($prefixBR) {
             self::addImplicitBreak($parentNode);
         }
@@ -97,14 +106,13 @@ class Block_Text implements Block_Template
         self::addSpace($parentNode);
 
         TextContent::interpretAndAppendText($parentNode, $line);
-
     }
 
     private static function addImplicitBreak(DOMElement $parentNode)
     {
         if (
-            $parentNode->hasChildNodes() &&
-            ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
+          $parentNode->hasChildNodes() &&
+          ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
         ) {
             $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
         }

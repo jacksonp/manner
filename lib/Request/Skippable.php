@@ -1,16 +1,23 @@
 <?php
-declare(strict_types = 1);
 
-class Request_Skippable implements Block_Template
+declare(strict_types=1);
+
+namespace Manner\Request;
+
+use DOMElement;
+use Manner\Block\Template;
+
+class Skippable implements Template
 {
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
     ): ?DOMElement {
         array_shift($lines);
+
         return null;
     }
 

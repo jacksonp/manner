@@ -1,14 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_DL
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMNode;
+use DOMXPath;
+use Manner\DOM;
+use Manner\Indentation;
+
+class DL
 {
 
     /**
      * @param DOMXPath $xpath
-     * @throws Exception
      */
-    static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
+    public static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
     {
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {
@@ -24,7 +32,6 @@ class Massage_DL
                 $dl->parentNode->insertBefore($div, $dl);
                 $dl->parentNode->removeChild($dl);
             }
-
         }
     }
 
@@ -57,14 +64,13 @@ class Massage_DL
                 $dl->parentNode->removeChild($p);
                 $dl->parentNode->removeChild($div);
 
-                Massage_DT::postProcess($dt); // Only do this after the $dt has been added to the DOM.
+                DT::postProcess($dt); // Only do this after the $dt has been added to the DOM.
             }
         }
     }
 
     public static function isPotentialDTFollowedByDD(?DomNode $p): int
     {
-
         if (!DOM::isTag($p, 'p') || Indentation::isSet($p)) {
             return 0;
         }
@@ -105,13 +111,12 @@ class Massage_DL
         $pText = $p->textContent;
 
         if ($divIndent > 0) {
-
             // Exclude sentences in $p
             if (
               $pText === 'or' ||
               preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
               preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
-              preg_match('~(\s[a-z]+){3,}[:\.]$~ui', $pText)
+              preg_match('~(\s[a-z]+){3,}[:.]$~ui', $pText)
             ) {
                 return 0;
             }
@@ -120,7 +125,7 @@ class Massage_DL
                 return $okCertainty;
             }
 
-            if (!preg_match('~^\s*[\(a-z]~ui', $div->textContent)) {
+            if (!preg_match('~^\s*[(a-z]~ui', $div->textContent)) {
                 return 0;
             }
 
@@ -132,7 +137,7 @@ class Massage_DL
                 return $okCertainty;
             }
 
-            if (preg_match('~^[A-Z_]{2,}[\s\(\[]~u', $pText)) {
+            if (preg_match('~^[A-Z_]{2,}[\s(\[]~u', $pText)) {
                 return $okCertainty;
             }
 
@@ -145,22 +150,17 @@ class Massage_DL
 //        }
 
             return 50;
-
         } else {
-
             if (preg_match('~^(--?|\+)~u', $pText)) {
                 return $okCertainty;
             }
 
             return 0;
-
         }
-
     }
 
     public static function CreateOLs(DOMXpath $xpath)
     {
-
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {
             $i  = 1;
@@ -188,10 +188,9 @@ class Massage_DL
                     Dom::extractContents($li, $dd);
                 }
                 $dl->parentNode->removeChild($dl);
-                Massage_List::removeLonePs($ol);
+                HTMLList::removeLonePs($ol);
             }
         }
-
     }
 
 }

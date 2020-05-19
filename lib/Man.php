@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+namespace Manner;
+
+use Closure;
+use DOMElement;
+use Exception;
+use Manner\Roff\Glyph;
+use Manner\Roff\Register;
+use Manner\Roff\Unit;
+
 /**
  * Class Man - Singleton
  */
@@ -111,84 +120,84 @@ class Man
         $this->characterTranslations = [];
 
         $this->roffClasses = [
-          'am'     => 'Roff_am',
-          'cc'     => 'Roff_cc',
-          'ec'     => 'Roff_ec',
-          'eo'     => 'Roff_eo',
-          'do'     => 'Roff_do',
-          'nop'    => 'Roff_nop',
-          'char'   => 'Roff_Char',
-          'if'     => 'Roff_Condition',
-          'ie'     => 'Roff_Condition',
-          'while'  => 'Roff_Loop',
-          'de'     => 'Roff_de',
-          'de1'    => 'Roff_de',
-          'di'     => 'Roff_di',
-          'rr'     => 'Roff_Register',
-          'nr'     => 'Roff_Register',
-          'ds'     => 'Roff_String',
-          'ds1'    => 'Roff_String',
-          'as'     => 'Roff_as',
-          'as1'    => 'Roff_as',
-          'als'    => 'Roff_Alias',
-          'tr'     => 'Roff_Translation',
-          'rn'     => 'Roff_Rename',
-          'return' => 'Roff_return',
+          'am'     => '\Manner\Roff\am',
+          'cc'     => '\Manner\Roff\cc',
+          'ec'     => '\Manner\Roff\ec',
+          'eo'     => '\Manner\Roff\eo',
+          'do'     => '\Manner\Roff\doRequest',
+          'nop'    => '\Manner\Roff\nop',
+          'char'   => '\Manner\Roff\Char',
+          'if'     => '\Manner\Roff\Condition',
+          'ie'     => '\Manner\Roff\Condition',
+          'while'  => '\Manner\Roff\Loop',
+          'de'     => '\Manner\Roff\de',
+          'de1'    => '\Manner\Roff\de',
+          'di'     => '\Manner\Roff\di',
+          'rr'     => '\Manner\Roff\Register',
+          'nr'     => '\Manner\Roff\Register',
+          'ds'     => '\Manner\Roff\StringRequest',
+          'ds1'    => '\Manner\Roff\StringRequest',
+          'as'     => '\Manner\Roff\asRequest',
+          'as1'    => '\Manner\Roff\asRequest',
+          'als'    => '\Manner\Roff\Alias',
+          'tr'     => '\Manner\Roff\Translation',
+          'rn'     => '\Manner\Roff\Rename',
+          'return' => '\Manner\Roff\returnRequest',
         ];
 
         $this->blockClasses = [
-          'SH' => 'Block_Section',
-          'SS' => 'Block_Section',
-          'P'  => 'Block_P',
-          'LP' => 'Block_P',
-          'PP' => 'Block_P',
-          'HP' => 'Block_P',
-          'IP' => 'Block_IP',
-          'TP' => 'Block_TP',
-          'TQ' => 'Block_TP',
-          'ti' => 'Block_ti',
-          'RS' => 'Block_RS',
-          'RE' => 'Block_RE',
-          'fc' => 'Block_fc',
-          'ce' => 'Block_ce',
-          'EX' => 'Block_Preformatted',
-          'EE' => 'Block_EndPreformatted',
-          'Vb' => 'Block_Preformatted',
-          'Ve' => 'Block_EndPreformatted',
-          'nf' => 'Block_Preformatted',
-          'fi' => 'Block_EndPreformatted',
-          'SY' => 'Block_SY',
-          'YS' => 'Block_EndPreformatted',
-          'ad' => 'Block_ad', // like Block_EndPreformatted
-          'TS' => 'Block_TS',
-          'TH' => 'Block_TH',
+          'SH' => '\Manner\Block\Section',
+          'SS' => '\Manner\Block\Section',
+          'P'  => '\Manner\Block\P',
+          'LP' => '\Manner\Block\P',
+          'PP' => '\Manner\Block\P',
+          'HP' => '\Manner\Block\P',
+          'IP' => '\Manner\Block\IP',
+          'TP' => '\Manner\Block\TP',
+          'TQ' => '\Manner\Block\TP',
+          'ti' => '\Manner\Block\ti',
+          'RS' => '\Manner\Block\RS',
+          'RE' => '\Manner\Block\RE',
+          'fc' => '\Manner\Block\fc',
+          'ce' => '\Manner\Block\ce',
+          'EX' => '\Manner\Block\Preformatted',
+          'EE' => '\Manner\Block\EndPreformatted',
+          'Vb' => '\Manner\Block\Preformatted',
+          'Ve' => '\Manner\Block\EndPreformatted',
+          'nf' => '\Manner\Block\Preformatted',
+          'fi' => '\Manner\Block\EndPreformatted',
+          'SY' => '\Manner\Block\SY',
+          'YS' => '\Manner\Block\EndPreformatted',
+          'ad' => '\Manner\Block\ad', // like \Manner\Block\EndPreformatted
+          'TS' => '\Manner\Block\TS',
+          'TH' => '\Manner\Block\TH',
         ];
 
         $this->inlineClasses = [
-          'URL' => 'Inline_URL',
-          'MTO' => 'Inline_URL',
-          'UR'  => 'Inline_Link',
-          'UE'  => 'Inline_LinkEnd',
-          'MT'  => 'Inline_Link',
-          'ME'  => 'Inline_LinkEnd',
-          'R'   => 'Inline_FontOneInputLine',
-          'I'   => 'Inline_FontOneInputLine',
-          'B'   => 'Inline_FontOneInputLine',
-          'SB'  => 'Inline_FontOneInputLine',
-          'SM'  => 'Inline_FontOneInputLine',
-          'BI'  => 'Inline_AlternatingFont',
-          'BR'  => 'Inline_AlternatingFont',
-          'IB'  => 'Inline_AlternatingFont',
-          'IR'  => 'Inline_AlternatingFont',
-          'RB'  => 'Inline_AlternatingFont',
-          'RI'  => 'Inline_AlternatingFont',
-          'ft'  => 'Inline_ft',
-          'br'  => 'Inline_VerticalSpace',
-          'sp'  => 'Inline_VerticalSpace',
-          'ne'  => 'Inline_VerticalSpace',
-          'EQ'  => 'Inline_EQ',
-          'PS'  => 'Inline_PS',
-          'OP'  => 'Inline_OP',
+          'URL' => '\Manner\Inline\URL',
+          'MTO' => '\Manner\Inline\URL',
+          'UR'  => '\Manner\Inline\Link',
+          'UE'  => '\Manner\Inline\LinkEnd',
+          'MT'  => '\Manner\Inline\Link',
+          'ME'  => '\Manner\Inline\LinkEnd',
+          'R'   => '\Manner\Inline\FontOneInputLine',
+          'I'   => '\Manner\Inline\FontOneInputLine',
+          'B'   => '\Manner\Inline\FontOneInputLine',
+          'SB'  => '\Manner\Inline\FontOneInputLine',
+          'SM'  => '\Manner\Inline\FontOneInputLine',
+          'BI'  => '\Manner\Inline\AlternatingFont',
+          'BR'  => '\Manner\Inline\AlternatingFont',
+          'IB'  => '\Manner\Inline\AlternatingFont',
+          'IR'  => '\Manner\Inline\AlternatingFont',
+          'RB'  => '\Manner\Inline\AlternatingFont',
+          'RI'  => '\Manner\Inline\AlternatingFont',
+          'ft'  => '\Manner\Inline\ft',
+          'br'  => '\Manner\Inline\VerticalSpace',
+          'sp'  => '\Manner\Inline\VerticalSpace',
+          'ne'  => '\Manner\Inline\VerticalSpace',
+          'EQ'  => '\Manner\Inline\EQ',
+          'PS'  => '\Manner\Inline\PS',
+          'OP'  => '\Manner\Inline\OP',
         ];
     }
 
@@ -375,7 +384,7 @@ class Man
 
     public function applyAllReplacements(string $line): string
     {
-        $line = Roff_Register::substitute($line, $this->registers);
+        $line = Register::substitute($line, $this->registers);
 
         if (count($this->entities)) {
             $line = strtr($line, $this->entities);
@@ -386,10 +395,10 @@ class Man
         $line = Replace::pregCallback(
           '~(?<!\\\\)(?:\\\\\\\\)*\\\\w\'(.*?)\'~u',
           function ($matches) {
-              $string    = Roff_Glyph::substitute($matches[1]);
+              $string    = Glyph::substitute($matches[1]);
               $approxEms = mb_strlen(TextContent::interpretString($string)) / 2.4;
 
-              return Roff_Unit::normalize((string)$approxEms, 'm', 'u');
+              return Unit::normalize((string)$approxEms, 'm', 'u');
           },
           $line
         );

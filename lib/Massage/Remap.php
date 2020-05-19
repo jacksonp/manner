@@ -1,7 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_Remap
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMXPath;
+use Exception;
+use Manner\DOM;
+use Manner\Indentation;
+
+class Remap
 {
 
     /**
@@ -10,7 +19,6 @@ class Massage_Remap
      */
     public static function doAll(DOMXPath $xpath)
     {
-
         $blocks = ['p', 'pre', 'div', 'dl', 'ul', 'table'];
 
         $divs = $xpath->query('//div[@remap]');
@@ -42,11 +50,9 @@ class Massage_Remap
                 }
 
                 $div->parentNode->removeChild($div);
-
             } else {
                 throw new Exception('Unexpected value for remap.');
             }
         }
-
     }
 }

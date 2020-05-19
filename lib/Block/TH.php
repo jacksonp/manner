@@ -1,7 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_TH implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Man;
+use Manner\Node;
+use Manner\Replace;
+use Manner\TextContent;
+
+class TH implements Template
 {
 
     /**
@@ -12,14 +23,12 @@ class Block_TH implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $man = Man::instance();
@@ -27,7 +36,6 @@ class Block_TH implements Block_Template
         $body = Node::ancestor($parentNode, 'body');
 
         if (empty($man->title)) {
-
             if (count($request['arguments']) < 1) {
                 throw new Exception($request['raw_line'] . ' - missing title info');
             }
@@ -52,7 +60,6 @@ class Block_TH implements Block_Template
             $h1 = $body->ownerDocument->createElement('h1');
             $h1->appendChild(new DOMText($man->title));
             $body->appendChild($h1);
-
         } elseif (count($request['arguments'])) {
             // Some pages  have multiple .THs for different commands in one page, just had a horizontal line when we hit
             // .THs with content after the first
@@ -61,7 +68,6 @@ class Block_TH implements Block_Template
         }
 
         return $body;
-
     }
 
 }

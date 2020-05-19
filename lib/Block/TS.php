@@ -2,7 +2,20 @@
 
 declare(strict_types=1);
 
-class Block_TS implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Inline\VerticalSpace;
+use Manner\Man;
+use Manner\Node;
+use Manner\Replace;
+use Manner\Request;
+use Manner\Roff;
+use Manner\TextContent;
+
+class TS implements Template
 {
 
     private static array $rowFormatKeyCharacters = [
@@ -263,7 +276,7 @@ class Block_TS implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
@@ -302,6 +315,7 @@ class Block_TS implements Block_Template
             }
         }
 
+        /* @var DomElement|false $tr */
         /* @var DomElement $table */
         $table = $dom->createElement('table');
         Node::addClass($table, $tableClasses);
@@ -415,7 +429,7 @@ class Block_TS implements Block_Template
                     } else {
                         // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
                         //Roff::parse($cell, [$tdContents]);
-                        if (Inline_VerticalSpace::check($tdContents) === false) {
+                        if (VerticalSpace::check($tdContents) === false) {
                             TextContent::interpretAndAppendText($cell, $tdContents);
                         }
                     }

@@ -1,10 +1,15 @@
 <?php
-declare(strict_types = 1);
 
-class Roff_Glyph
+declare(strict_types=1);
+
+namespace Manner\Roff;
+
+use Manner\Replace;
+
+class Glyph
 {
 
-    const ALL_GLYPHS = [
+    public const ALL_GLYPHS = [
         // Nordic
       '-D'             => 'Ð',
       'Sd'             => 'ð',
@@ -366,9 +371,8 @@ class Roff_Glyph
       'u2662'          => '♢',
     ];
 
-    static function substitute(string $string) :string
+    public static function substitute(string $string): string
     {
-
         // Want to match \[xy] or \(xy
         return Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\[(?<str>[^\]\s]+)\]|\((?<str>[^\s]{2}))~u',
@@ -379,9 +383,8 @@ class Roff_Glyph
                   return $matches['bspairs']; // Follow what groff does, if string isn't set use empty string.
               }
           },
-          $string);
-
-
+          $string
+        );
     }
 
 }

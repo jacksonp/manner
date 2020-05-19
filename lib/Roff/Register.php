@@ -1,7 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_Register implements Roff_Template
+namespace Manner\Roff;
+
+use Exception;
+use Manner\Man;
+use Manner\Replace;
+
+class Register implements Template
 {
 
     /**
@@ -10,9 +17,8 @@ class Roff_Register implements Roff_Template
      * @param array|null $macroArguments
      * @throws Exception
      */
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         $man = Man::instance();
         array_shift($lines);
 
@@ -21,6 +27,7 @@ class Roff_Register implements Roff_Template
             if (count($request['arguments']) === 1) {
                 $man->unsetRegister($request['arguments'][0]);
             }
+
             return;
         }
 
@@ -34,28 +41,28 @@ class Roff_Register implements Roff_Template
         // Step might be in $request['arguments'][2] - but we just assume step is 1 for now.
 
         // Normalize here: a unit value may be concatenated when the register is used.
-        $registerValue = Roff_Unit::normalize($request['arguments'][1], 'u', 'u');
+        $registerValue = Unit::normalize($request['arguments'][1], 'u', 'u');
         $man->setRegister($request['arguments'][0], $registerValue);
-
     }
 
-    static function substitute(string $string, array &$replacements): string
+    public static function substitute(string $string, array &$replacements): string
     {
         return Replace::pregCallback(
-            '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
-            function ($matches) use (&$replacements) {
-                if (isset($replacements[$matches['reg']])) {
-                    if ($matches['op'] === '+') {
-                        $replacements[$matches['reg']] = (int)$replacements[$matches['reg']] + 1;
-                    }
-                    return $matches['bspairs'] . $replacements[$matches['reg']];
-                } else {
-                    // Match groff's behaviour: unset registers are 0
-                    return $matches['bspairs'] . '0';
-                }
-            },
-            $string);
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
+          function ($matches) use (&$replacements) {
+              if (isset($replacements[$matches['reg']])) {
+                  if ($matches['op'] === '+') {
+                      $replacements[$matches['reg']] = (int)$replacements[$matches['reg']] + 1;
+                  }
 
+                  return $matches['bspairs'] . $replacements[$matches['reg']];
+              } else {
+                  // Match groff's behaviour: unset registers are 0
+                  return $matches['bspairs'] . '0';
+              }
+          },
+          $string
+        );
     }
 
 }

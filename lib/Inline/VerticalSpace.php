@@ -1,10 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_VerticalSpace implements Block_Template
+namespace Manner\Inline;
+
+use DOMElement;
+use Manner\Block\Template;
+use Manner\Request;
+
+class VerticalSpace implements Template
 {
 
-    static function addBR(DOMElement $parentNode)
+    public static function addBR(DOMElement $parentNode)
     {
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;
@@ -21,19 +28,17 @@ class Inline_VerticalSpace implements Block_Template
         }
     }
 
-    static function check(string $string)
+    public static function check(string $string)
     {
         return in_array(Request::peepAt($string)['name'], ['br', 'sp', 'ne']);
     }
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         /*if (count($request['arguments']) && $request['arguments'][0] === '-1') {
@@ -42,19 +47,16 @@ class Inline_VerticalSpace implements Block_Template
             }
         } else*/
         if (
-            !($parentNode->lastChild instanceof DOMElement) ||
-            $parentNode->lastChild->tagName !== 'pre'
+          !($parentNode->lastChild instanceof DOMElement) ||
+          $parentNode->lastChild->tagName !== 'pre'
         ) {
-
             self::addBR($parentNode);
             if ($request['request'] !== 'br') {
                 self::addBR($parentNode);
             }
-
         }
 
         return null;
-
     }
 
 }

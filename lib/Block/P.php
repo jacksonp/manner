@@ -1,7 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_P implements Block_Template
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Man;
+use Manner\Node;
+
+class P implements Template
 {
 
     /**
@@ -12,14 +21,12 @@ class Block_P implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $man = Man::instance();
@@ -33,12 +40,13 @@ class Block_P implements Block_Template
             if ($parentNode->tagName === 'dd') {
                 $parentNode = $parentNode->parentNode->parentNode;
             }
-            /* @var DomElement $p */
+
             $p = $parentNode->ownerDocument->createElement('p');
+            /* @var DomElement $p */
             $p = $parentNode->appendChild($p);
+
             return $p;
         }
-
     }
 
 }

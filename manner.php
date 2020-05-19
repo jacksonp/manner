@@ -2,9 +2,9 @@
 <?php
 declare(strict_types=1);
 
-spl_autoload_register(function ($class) {
-    require_once 'lib/' . str_replace('_', '/', $class) . '.php';
-});
+use Manner\Manner;
+
+require_once 'autoload.php';
 
 if (empty($argv[1])) {
     exit('no file.');

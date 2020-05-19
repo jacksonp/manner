@@ -1,17 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_LinkEnd implements Block_Template
+namespace Manner\Inline;
+
+use DOMElement;
+use DOMText;
+use Manner\Block\Template;
+use Manner\Node;
+
+class LinkEnd implements Template
 {
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
         $anchorNode = Node::ancestor($parentNode, 'a');
         if (is_null($anchorNode)) {
@@ -23,7 +29,7 @@ class Inline_LinkEnd implements Block_Template
         $removed = false;
 
         if ($anchorNode->getAttribute('href') === '') {
-            $href = Inline_Link::getValidHREF($anchorNode->textContent);
+            $href = Link::getValidHREF($anchorNode->textContent);
             if ($href) {
                 $anchorNode->setAttribute('href', $href);
             } else {
@@ -45,7 +51,6 @@ class Inline_LinkEnd implements Block_Template
         }
 
         return $parentNode;
-
     }
 
 }

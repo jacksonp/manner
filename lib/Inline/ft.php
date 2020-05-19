@@ -1,17 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
-class Inline_ft implements Block_Template
+namespace Manner\Inline;
+
+use DOMElement;
+use Manner\Block\Template;
+use Manner\Man;
+
+class ft implements Template
 {
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
         $man = Man::instance();
 
@@ -23,7 +28,6 @@ class Inline_ft implements Block_Template
         }
 
         return null;
-
     }
 
 }

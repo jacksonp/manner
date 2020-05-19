@@ -1,5 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner\Block;
+
+use DOMElement;
+use Manner\Indentation;
+use Manner\Man;
+use Manner\Node;
 
 /**
  * .RE [nnn]
@@ -17,17 +25,15 @@ declare(strict_types=1);
  * ..
  *
  */
-class Block_RE implements Block_Template
+class RE implements Template
 {
 
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $man             = Man::instance();
@@ -42,6 +48,7 @@ class Block_RE implements Block_Template
             // .RE 1 is back to base level (used e.g. in lsmcli.1).
             $man->left_margin_level = 1;
             $man->resetIndentationToDefault();
+
             return Node::ancestor($parentNode, 'section');
         }
 
@@ -59,6 +66,7 @@ class Block_RE implements Block_Template
             if (is_null($lastDIV)) {
                 $man->left_margin_level = 1;
                 $man->resetIndentationToDefault();
+
                 return Node::ancestor($parentNode, 'section');
             }
         }
@@ -73,7 +81,6 @@ class Block_RE implements Block_Template
         }
 
         return $lastDIV->parentNode;
-
     }
 
 }

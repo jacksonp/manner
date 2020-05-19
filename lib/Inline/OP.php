@@ -1,10 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner\Inline;
+
+use DOMElement;
+use DOMText;
+use Exception;
+use Manner\Block\Template;
+use Manner\Blocks;
+use Manner\TextContent;
 
 /**
  * See https://www.mankier.com/7/groff_man#Macros_to_Describe_Command_Synopses
  */
-class Inline_OP implements Block_Template
+class OP implements Template
 {
 
     /**
@@ -15,13 +25,12 @@ class Inline_OP implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
       $needOneLineOnly = false
     ): ?DOMElement {
-
         array_shift($lines);
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getParentForText($parentNode);

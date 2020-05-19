@@ -1,17 +1,18 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
+namespace Manner;
 
 class Preprocessor
 {
 
-    static function strip(array &$lines): array
+    public static function strip(array &$lines): array
     {
-
         $linesNoComments = [];
         $linePrefix      = '';
 
         for ($i = 0; $i < count($lines); ++$i) {
-
             $line       = $linePrefix . $lines[$i];
             $linePrefix = '';
 
@@ -35,11 +36,9 @@ class Preprocessor
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\z~u', '$1', $line);
 
             $linesNoComments[] = $line;
-
         }
 
         return $linesNoComments;
-
     }
 
 }

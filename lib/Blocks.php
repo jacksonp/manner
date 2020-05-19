@@ -1,42 +1,51 @@
 <?php
+
 declare(strict_types=1);
+
+namespace Manner;
+
+use DOMElement;
+use Exception;
+use Manner\Block\TabTable;
+use Manner\Man;
 
 class Blocks
 {
 
-    const TEXT_CONTAINERS = [
-        'p',
-        'dt',
-        'strong',
-        'em',
-        'small',
-        'code',
-        'td',
-        'th',
-        'pre',
-        'a',
-        'h2',
-        'h3',
+    public const TEXT_CONTAINERS = [
+      'p',
+      'dt',
+      'strong',
+      'em',
+      'small',
+      'code',
+      'td',
+      'th',
+      'pre',
+      'a',
+      'h2',
+      'h3',
     ];
 
-    const INLINE_ELEMENTS = [
-        'a',
-        'em',
-        'strong',
-        'small',
-        'code',
-        'span',
-        'sub',
-        'sup'
+    public const INLINE_ELEMENTS = [
+      'a',
+      'em',
+      'strong',
+      'small',
+      'code',
+      'span',
+      'sub',
+      'sup',
     ];
 
-    static function getParentForText(DOMElement $parentNode): DOMElement
+    public static function getParentForText(DOMElement $parentNode): DOMElement
     {
         if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {
             $p = $parentNode->ownerDocument->createElement('p');
             $p->setAttribute('implicit', '1');
             $parentNode = $parentNode->appendChild($p);
         }
+
         return $parentNode;
     }
 
@@ -47,10 +56,10 @@ class Blocks
      * @return DOMElement
      * @throws Exception
      */
-    static function getBlockContainerParent(
-        DOMElement $parentNode,
-        bool $superOnly = false,
-        bool $ipOK = false
+    public static function getBlockContainerParent(
+      DOMElement $parentNode,
+      bool $superOnly = false,
+      bool $ipOK = false
     ): DOMElement {
         $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
@@ -68,23 +77,26 @@ class Blocks
                 throw new Exception('No more parents.');
             }
         }
+
         return $parentNode;
     }
 
-    static function getNonInlineParent(DOMElement $parentNode): DOMElement
+    public static function getNonInlineParent(DOMElement $parentNode): DOMElement
     {
         while (in_array($parentNode->tagName, self::INLINE_ELEMENTS)) {
             $parentNode = $parentNode->parentNode;
         }
+
         return $parentNode;
     }
 
-    static function lineEndsBlock(array $request, array &$lines)
+    public static function lineEndsBlock(array $request, array &$lines)
     {
         if ($request['request'] && Man::instance()->requestStartsBlock($request['request'])) {
             return true;
         }
-        return Block_TabTable::isStart($lines);
+
+        return TabTable::isStart($lines);
     }
 
 }

@@ -1,7 +1,16 @@
 <?php
-declare(strict_types = 1);
 
-class Block_ce implements Block_Template
+declare(strict_types=1);
+
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Request;
+use Manner\Roff;
+
+class ce implements Template
 {
 
     /**
@@ -12,18 +21,16 @@ class Block_ce implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
         $parentNode = Blocks::getBlockContainerParent($parentNode);
-        $dom   = $parentNode->ownerDocument;
-        $block = $dom->createElement('p');
+        $dom        = $parentNode->ownerDocument;
+        $block      = $dom->createElement('p');
         $block->setAttribute('class', 'center');
         $parentNode->appendChild($block);
 
@@ -38,7 +45,6 @@ class Block_ce implements Block_Template
         }
 
         return $parentNode;
-
     }
 
 }

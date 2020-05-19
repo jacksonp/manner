@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+namespace Manner;
+
+use DOMElement;
+use Exception;
+
 class Roff
 {
 
@@ -11,19 +16,17 @@ class Roff
      * @return bool
      * @throws Exception
      */
-    static function parse(
-        DOMElement $parentNode,
-        array &$lines,
-        $stopOnContent = false
+    public static function parse(
+      DOMElement $parentNode,
+      array &$lines,
+      $stopOnContent = false
     ): bool {
-
         while ($request = Request::getLine($lines)) {
-
             if ($stopOnContent) {
-
                 // \c: Interrupt text processing (groff.7)
                 if (in_array($request['raw_line'], ['\\c'])) {
                     array_shift($lines);
+
 //                    Man::instance()->runPostOutputCallbacks();
                     return true;
                 }
@@ -36,7 +39,6 @@ class Roff
                     array_shift($lines);
                     continue;
                 }
-
             }
 
             $request['class'] = Request::getClass($request, $lines);
@@ -53,22 +55,20 @@ class Roff
                 }
             }
 
-            if ($request['class'] === 'Block_Text' || $parentNode->textContent !== '') {
+            if ($request['class'] === '\Manner\Block\Text' || $parentNode->textContent !== '') {
                 if ($stopOnContent) {
                     return true;
                 }
-                if ($request['class'] !== 'Inline_FontOneInputLine') { // TODO: hack? fix?
+                if ($request['class'] !== '\Manner\Inline\FontOneInputLine') { // TODO: hack? fix?
                     $newParent = Man::instance()->runPostOutputCallbacks();
                     if (!is_null($newParent)) {
                         $parentNode = $newParent;
                     }
                 }
             }
-
         }
 
         return !$stopOnContent;
-
     }
 
 }

@@ -1,10 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_DefinitionList
+namespace Manner\Block;
+
+use DOMElement;
+
+class DefinitionList
 {
 
-    static function getParentDL(DOMElement $parentNode): ?DOMElement
+    public static function getParentDL(DOMElement $parentNode): ?DOMElement
     {
         do {
             $tag = $parentNode->tagName;
@@ -15,6 +20,7 @@ class Block_DefinitionList
                 return null;
             }
         } while ($parentNode = $parentNode->parentNode);
+
         return null;
     }
 

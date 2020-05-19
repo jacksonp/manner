@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-class Roff_nop implements Roff_Template
+namespace Manner\Roff;
+
+class nop implements Template
 {
 
-    static function evaluate(array $request, array &$lines, ?array $macroArguments): void
+    public static function evaluate(array $request, array &$lines, ?array $macroArguments): void
     {
-
         $lines[0] = $request['raw_arg_string'];
-
     }
 
 }

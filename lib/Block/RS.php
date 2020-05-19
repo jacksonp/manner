@@ -1,9 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
+namespace Manner\Block;
+
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Man;
+use Manner\Roff\Unit;
+
 /**
- * Class Block_RS
- *
  * This macro moves the left margin to the right by the value nnn if specified (default unit is ‘n’); otherwise it is
  * set to the previous indentation value specified with .TP, .IP, or .HP (or to the default value if none of them have
  * been used yet). The indentation value is then set to the default.
@@ -21,7 +28,7 @@ declare(strict_types=1);
  * ..
  *
  */
-class Block_RS implements Block_Template
+class RS implements Template
 {
 
     /**
@@ -32,14 +39,12 @@ class Block_RS implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
@@ -48,7 +53,7 @@ class Block_RS implements Block_Template
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
-            $leftMargin = Roff_Unit::normalize($request['arguments'][0], 'n', 'n');
+            $leftMargin = Unit::normalize($request['arguments'][0], 'n', 'n');
         } else {
             $leftMargin = $man->indentation;
         }
@@ -57,14 +62,12 @@ class Block_RS implements Block_Template
 
         $man->resetIndentationToDefault();
 
-        /* @var DomElement $div */
         $div = $dom->createElement('div');
-
         $div->setAttribute('left-margin', (string)$leftMargin);
-
+        /* @var DomElement $div */
         $div = $parentNode->appendChild($div);
-        return $div;
 
+        return $div;
     }
 
 }

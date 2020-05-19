@@ -1,7 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-class Block_fc implements Block_Template
+namespace Manner\Block;
+
+use DOMDocument;
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Request;
+use Manner\TextContent;
+
+class fc implements Template
 {
 
     private static function addRow(DOMDocument $dom, DOMElement $table, array $cells)
@@ -23,14 +33,12 @@ class Block_fc implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
-        DOMElement $parentNode,
-        array &$lines,
-        array $request,
-        $needOneLineOnly = false
-    ): ?DOMElement
-    {
-
+    public static function checkAppend(
+      DOMElement $parentNode,
+      array &$lines,
+      array $request,
+      $needOneLineOnly = false
+    ): ?DOMElement {
         array_shift($lines);
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
@@ -42,16 +50,15 @@ class Block_fc implements Block_Template
 
         $table = $dom->createElement('table');
 
-        // We don't want to handle the lines at this stage as a fresh call to .fc call a new Roff_fc, so don't iterate
+        // We don't want to handle the lines at this stage as a fresh call to .fc call a new \Roff\fc, so don't iterate
         // with Request::getLine()
         while (count($lines)) {
-
             // Don't process next line yet, could be new .fc
             $requestDetails = Request::peepAt($lines[0]);
 
             if (
-                $requestDetails['name'] === 'fi' ||
-                ($requestDetails['name'] === 'fc' && $requestDetails['raw_arg_string'] === '')
+              $requestDetails['name'] === 'fi' ||
+              ($requestDetails['name'] === 'fc' && $requestDetails['raw_arg_string'] === '')
             ) {
                 array_shift($lines);
                 break; // Finished
@@ -65,9 +72,12 @@ class Block_fc implements Block_Template
             } elseif (mb_strpos($nextRequest['raw_line'], $delim) === 0) {
                 $cells = preg_split('~' . preg_quote($delim, '~') . '~u', $nextRequest['raw_line']);
                 array_shift($cells);
-                $cells = array_map(function ($contents) use ($pad) {
-                    return trim($contents, $pad);
-                }, $cells);
+                $cells = array_map(
+                  function ($contents) use ($pad) {
+                      return trim($contents, $pad);
+                  },
+                  $cells
+                );
                 self::addRow($dom, $table, $cells);
             } else {
                 $cells = preg_split("~\t~u", $nextRequest['raw_line']);
@@ -78,7 +88,6 @@ class Block_fc implements Block_Template
         $parentNode->appendChild($table);
 
         return $parentNode;
-
     }
 
 }

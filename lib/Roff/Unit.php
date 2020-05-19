@@ -1,7 +1,12 @@
 <?php
 declare(strict_types=1);
 
-class Roff_Unit
+namespace Manner\Roff;
+
+use Manner\Replace;
+use ParseError;
+
+class Unit
 {
 
     private const basicUnitsPerInch = 240;
@@ -43,7 +48,7 @@ class Roff_Unit
      * @return string
      * @throws Exception
      */
-    static function normalize(string $string, string $defaultUnit, string $targetUnit): string
+    public static function normalize(string $string, string $defaultUnit, string $targetUnit): string
     {
         $string = Replace::pregCallback(
           '~((?:\d*\.)?\d+)([uicpPszfmnvM])?~u',
@@ -52,12 +57,13 @@ class Roff_Unit
               $basicUnits = self::unitMultipliers[$unit] * $matches[1];
 
               return (string)round($basicUnits / self::unitMultipliers[$targetUnit]);
-          }, $string);
+          },
+          $string
+        );
 
         $string = preg_replace('~[^\d.()+*/\-><= ?]~', '', $string);
 
         return self::evaluate($string);
-
     }
 
     /**
@@ -70,7 +76,6 @@ class Roff_Unit
      */
     private static function evaluate(string $string): string
     {
-
         $string = trim($string);
 
         // Remove parentheses around a lone number:
@@ -87,21 +92,25 @@ class Roff_Unit
         }
 
         // Evaluate first matched expression only, because gtroff has no operator precedence:
-        $evaluatedString = Replace::pregCallback('~[-\+]?(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u', function ($matches) {
-            $expression = $matches[0];
-            try {
-                return eval('return ' . $expression . ';');
-            } catch (ParseError $e) {
-                throw new Exception('Could not evaluate ' . $expression);
-            }
-        }, $evaluatedString, 1);
+        $evaluatedString = Replace::pregCallback(
+          '~[-\+]?(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u',
+          function ($matches) {
+              $expression = $matches[0];
+              try {
+                  return eval('return ' . $expression . ';');
+              } catch (ParseError $e) {
+                  throw new Exception('Could not evaluate ' . $expression);
+              }
+          },
+          $evaluatedString,
+          1
+        );
 
         if ($evaluatedString === $string) {
             return $evaluatedString;
         } else {
             return self::evaluate($evaluatedString);
         }
-
     }
 
 }

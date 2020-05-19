@@ -1,12 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_PRE
+namespace Manner\Massage;
+
+use DOMElement;
+use DOMText;
+use Manner\Node;
+use Manner\Node;
+
+class PRE
 {
 
-    static function tidy(DOMElement $el)
+    public static function tidy(DOMElement $el)
     {
-
         while ($el->lastChild && Node::isTextAndEmpty($el->lastChild)) {
             $el->removeChild($el->lastChild);
         }
@@ -14,7 +21,6 @@ class Massage_PRE
         if ($el->lastChild->nodeType === XML_TEXT_NODE) {
             $el->replaceChild(new DOMText(rtrim($el->lastChild->textContent)), $el->lastChild);
         }
-
     }
 
 }

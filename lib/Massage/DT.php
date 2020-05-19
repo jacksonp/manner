@@ -1,12 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-class Massage_DT
+namespace Manner\Massage;
+
+use DOMElement;
+use Manner\DOM;
+use Manner\Node;
+
+class DT
 {
 
     public static function postProcess(DOMElement $dt): void
     {
-
         $child = $dt->lastChild;
         while ($child) {
             if (DOM::isTag($child, 'br')) {
@@ -24,12 +30,10 @@ class Massage_DT
             }
             $child = $child->previousSibling;
         }
-
     }
 
-    static function tidy(DOMElement $dt)
+    public static function tidy(DOMElement $dt)
     {
-
         while ($dt->lastChild && (Node::isTextAndEmpty($dt->lastChild) || DOM::isTag($dt->lastChild, 'br'))) {
             $dt->removeChild($dt->lastChild);
         }
@@ -44,7 +48,6 @@ class Massage_DT
             Node::remove($dt->firstChild);
             self::tidy($dt);
         }
-
     }
 
 }

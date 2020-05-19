@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Manner\Block;
+
 // TODO: handle this differently? Use a flag for preformat?
 // See esp. submit.1:
 /*
@@ -25,7 +27,15 @@ The task id range
  *
  */
 
-class Block_Preformatted implements Block_Template
+use DOMElement;
+use Exception;
+use Manner\Blocks;
+use Manner\Indentation;
+use Manner\Man;
+use Manner\Node;
+use Manner\Request;
+
+class Preformatted implements Template
 {
 
     /**
@@ -36,7 +46,7 @@ class Block_Preformatted implements Block_Template
      * @return DOMElement|null
      * @throws Exception
      */
-    static function checkAppend(
+    public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
       array $request,
