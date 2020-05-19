@@ -350,14 +350,12 @@ class TextContent
                       } else {
                           return $prefix; // Follow what groff does, if string isn't set use empty string.
                       }
+                  } elseif (isset($singleCharacterEscapes[$matches['char']])) {
+                      return $prefix . $singleCharacterEscapes[$matches['char']];
                   } else {
-                      if (isset($singleCharacterEscapes[$matches['char']])) {
-                          return $prefix . $singleCharacterEscapes[$matches['char']];
-                      } else {
-                          // If a backslash is followed by a character that does not constitute a defined escape sequence,
-                          // the backslash is silently ignored and the character maps to itself.
-                          return $prefix . $matches['char'];
-                      }
+                      // If a backslash is followed by a character that does not constitute a defined escape sequence,
+                      // the backslash is silently ignored and the character maps to itself.
+                      return $prefix . $matches['char'];
                   }
               },
               $string

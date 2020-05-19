@@ -133,14 +133,12 @@ class Condition implements Template
                 array_splice($lines, 0, 0, $newLines);
 
                 return;
-            } else {
-                if ($conditionTrue) {
-                    array_unshift($lines, $postConditionString); // just remove .if <condition> prefix and go again.
+            } elseif ($conditionTrue) {
+                array_unshift($lines, $postConditionString); // just remove .if <condition> prefix and go again.
 
-                    return;
-                } else {
-                    return;
-                }
+                return;
+            } else {
+                return;
             }
         } elseif ($request['request'] === 'ie') {
             if ($postConditionBlock) {

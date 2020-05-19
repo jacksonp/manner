@@ -426,12 +426,10 @@ class TS implements Template
                                 $tBlockLines[] = $tBlockLine;
                             }
                         }
-                    } else {
+                    } elseif (VerticalSpace::check($tdContents) === false) {
                         // This fails e.g. in ed.1p on ";!. ; $" where ! is $columnSeparator
                         //Roff::parse($cell, [$tdContents]);
-                        if (VerticalSpace::check($tdContents) === false) {
-                            TextContent::interpretAndAppendText($cell, $tdContents);
-                        }
+                        TextContent::interpretAndAppendText($cell, $tdContents);
                     }
                 }
 

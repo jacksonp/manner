@@ -64,32 +64,29 @@ class DIV
                 HTMLList::pruneBulletChar($ul->firstChild);
 
                 return $ul->nextSibling;
-            } else {
-                if (is_null($nextNonBR) || (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR))) {
-                    /* @var DOMElement $ul */
-                    $ul = $doc->createElement('ul');
-                    $ul = $div->parentNode->insertBefore($ul, $div);
+            } elseif (is_null($nextNonBR) || (DOM::isTag($nextNonBR, 'div') && self::isPotentialLI($nextNonBR))) {
+                $ul = $doc->createElement('ul');
+                $ul = $div->parentNode->insertBefore($ul, $div);
 
-                    while (self::isPotentialLI($div)) {
-                        /* @var DOMElement $li */
-                        $li = $ul->appendChild($doc->createElement('li'));
+                while (self::isPotentialLI($div)) {
+                    /* @var DOMElement $li */
+                    $li = $ul->appendChild($doc->createElement('li'));
 
-                        if ($div->childNodes->length === 1 && $div->firstChild->tagName === 'p') {
-                            DOM::extractContents($li, $div->firstChild);
-                        } else {
-                            DOM::extractContents($li, $div);
-                        }
-
-                        HTMLList::pruneBulletChar($li);
-
-                        HTMLList::checkElementForLIs($li);
-
-                        $div->parentNode->removeChild($div);
-                        $div = self::getNextNonBRNode($ul, true);
+                    if ($div->childNodes->length === 1 && $div->firstChild->tagName === 'p') {
+                        DOM::extractContents($li, $div->firstChild);
+                    } else {
+                        DOM::extractContents($li, $div);
                     }
 
-                    return $ul->nextSibling;
+                    HTMLList::pruneBulletChar($li);
+
+                    HTMLList::checkElementForLIs($li);
+
+                    $div->parentNode->removeChild($div);
+                    $div = self::getNextNonBRNode($ul, true);
                 }
+
+                return $ul->nextSibling;
             }
         }
 
