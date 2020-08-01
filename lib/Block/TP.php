@@ -12,6 +12,7 @@ use Manner\Man;
 use Manner\Request;
 use Manner\Roff;
 use Manner\Roff\Unit;
+use Manner\TextContent;
 
 /**
  * .de1 TP
@@ -102,6 +103,9 @@ class TP implements Template
             $dl->removeChild($dt);
 
             return null;
+        }
+        while (TextContent::$interruptTextProcessing) {
+            Roff::parse($dt, $lines, true);
         }
 
         while (count($lines)) {
