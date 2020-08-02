@@ -393,14 +393,16 @@ class DOM
                     }
                     $dl->appendChild($dd);
 
+                    $ddIndent = Indentation::get($dl) + Indentation::get($dd);
+
                     while (
-                      DOM::isTag($dl->nextSibling, 'p') &&
-                      Indentation::get($dl->nextSibling) >= Indentation::get($dd)
+                      DOM::isTag($dl->nextSibling, ['p', 'pre']) &&
+                      Indentation::get($dl->nextSibling) >= $ddIndent
                     ) {
-                        if (Indentation::get($dl->nextSibling) === Indentation::get($dd)) {
+                        if (Indentation::get($dl->nextSibling) === $ddIndent) {
                             Indentation::remove($dl->nextSibling);
                         } else {
-                            Indentation::substract($dl->nextSibling, Indentation::get($dd));
+                            Indentation::substract($dl->nextSibling, $ddIndent);
                         }
                         $dd->appendChild($dl->nextSibling);
                     }
