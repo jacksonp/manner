@@ -395,9 +395,13 @@ class DOM
 
                     while (
                       DOM::isTag($dl->nextSibling, 'p') &&
-                      Indentation::get($dl->nextSibling) === Indentation::get($dd)
+                      Indentation::get($dl->nextSibling) >= Indentation::get($dd)
                     ) {
-                        Indentation::remove($dl->nextSibling);
+                        if (Indentation::get($dl->nextSibling) === Indentation::get($dd)) {
+                            Indentation::remove($dl->nextSibling);
+                        } else {
+                            Indentation::substract($dl->nextSibling, Indentation::get($dd));
+                        }
                         $dd->appendChild($dl->nextSibling);
                     }
                 }

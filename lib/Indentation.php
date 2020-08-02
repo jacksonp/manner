@@ -55,6 +55,19 @@ class Indentation
     }
 
     /**
+     * @param DOMElement $el
+     * @param $indentVal
+     * @throws Exception
+     */
+    public static function substract(DOMElement $el, $indentVal)
+    {
+        if (!is_numeric($indentVal)) {
+            throw new Exception('Non-numeric indent: ' . $indentVal);
+        }
+        self::set($el, self::get($el) - $indentVal);
+    }
+
+    /**
      * @param DOMElement $remainingNode
      * @param DOMElement $leavingNode
      * @throws Exception
