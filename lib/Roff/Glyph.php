@@ -374,7 +374,6 @@ class Glyph
     public static function substitute(string $string): string
     {
         // Want to match \[xy] or \(xy
-        /** @noinspection HtmlUnknownTag */
         return Replace::pregCallback(
           '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\[(?<str>[^\]\s]+)\]|\((?<str>[^\s]{2}))~u',
           function ($matches) {

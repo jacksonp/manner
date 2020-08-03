@@ -263,7 +263,6 @@ class TextContent
         $man = Man::instance();
 
         if (!is_null($man->escape_char)) {
-            /** @noinspection HtmlUnknownTag */
             $string = Replace::pregCallback(
               '~(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\N\'(?<charnum>\d+)\'~u',
               function ($matches) {
@@ -340,7 +339,6 @@ class TextContent
 
             ];
 
-            /** @noinspection HtmlUnknownTag */
             $string = Replace::pregCallback(
               '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|C\'(?<glyph>[^\']+)\'|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
               function ($matches) use (&$singleCharacterEscapes, &$roffStrings) {
