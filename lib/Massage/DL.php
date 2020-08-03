@@ -165,6 +165,8 @@ class DL
         }
     }
 
+    // Could also identify lists starting with 0 and use start="0" attribute...
+    // but maybe <ol> is not semantically correct for e.g. return status codes.
     public static function CreateOLs(DOMXpath $xpath)
     {
         $dls = $xpath->query('//dl');
