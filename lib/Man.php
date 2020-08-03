@@ -81,25 +81,25 @@ class Man
         $this->entities = [];
         // See https://www.mankier.com/7/groff#Registers
         $this->registers             = [
-          '.g'   => '1',
+          '.g'        => '1',
             //The current font family (string-valued).
-          '.fam' => 'R',
+          '.fam'      => 'R',
             // Used by openpbs to specify -ms formatting (could remove and use 0 as fallback for undefined registers maybe):
-          'Pb'   => '0',
-          'BD'   => '0',
+          'Pb'        => '0',
+          'BD'        => '0',
             // F register != 0 used to signal we should generate index entries. See e.g. frogatto.6
-          'F'    => '0',
+          'F'         => '0',
             // Current indentation.
-          '.i'   => '0',
+          '.i'        => '0',
             // current line length
-          '.l'   => '70',
-          '.v'   => '1',
-          '.H'   => '1500',
-          '.V'   => '1500',
-          'x'    => '0',
+          '.l'        => '70',
+          '.v'        => '1',
+          '.H'        => '1500',
+          '.V'        => '1500',
+          'x'         => '0',
             // initial value, may get set once we have all actions in one loop, see e.g. nslcd.8
-          'year' => date('Y'),
-          'yr'   => date('Y') - 1900,
+          'year'      => date('Y'),
+          'yr'        => date('Y') - 1900
         ];
         $this->strings               = [
             // "The name of the current output device as specified by the -T command line option" (ps is default)
