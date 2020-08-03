@@ -167,6 +167,45 @@ class DL
 
     // Could also identify lists starting with 0 and use start="0" attribute...
     // but maybe <ol> is not semantically correct for e.g. return status codes.
+    public static function MaybeChangeToUL(DOMElement $dl): ?DomElement {
+        $dtChar = null;
+        foreach ($dl->childNodes as $dlChild) {
+            if ($dlChild->tagName === 'dt') {
+                if (mb_strlen($dlChild->textContent) !== 1) {
+                    return null;
+                }
+                if (is_null($dtChar)) {
+                    $dtChar = $dlChild->textContent;
+                    if (!in_array($dtChar, HTMLList::CHAR_PREFIXES)) {
+                        return null;
+                    }
+                } elseif ($dtChar !== $dlChild->textContent) {
+                    return null;
+                }
+            }
+        }
+        /* @var DomElement $li */
+        $ul = $dl->ownerDocument->createElement('ul');
+        $ul = $dl->parentNode->insertBefore($ul, $dl);
+        foreach ($dl->childNodes as $dlChild) {
+            if ($dlChild->tagName === 'dd') {
+                $li = $ul->appendChild($dl->ownerDocument->createElement('li'));
+                Dom::extractContents($li, $dlChild);
+            }
+        }
+        $dl->parentNode->removeChild($dl);
+        /* @var DomElement $ul */
+        return $ul;
+    }
+
+    public static function CreateULs(DOMXpath $xpath)
+    {
+        $dls = $xpath->query('//dl');
+        foreach ($dls as $dl) {
+            self::MaybeChangeToUL($dl);
+        }
+    }
+
     public static function CreateOLs(DOMXpath $xpath)
     {
         $dls = $xpath->query('//dl');

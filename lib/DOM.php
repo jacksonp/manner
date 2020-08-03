@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNode;
 use DOMText;
 use Exception;
+use Manner\Massage\DL;
 
 class DOM
 {
@@ -416,33 +417,8 @@ class DOM
         $child = $element->firstChild;
         while ($child) {
             if (self::isTag($child, 'dl')) {
-                $dtChar       = null;
-                $shouldBeList = true;
-                foreach ($child->childNodes as $dlChild) {
-                    if ($dlChild->tagName === 'dt') {
-                        if (mb_strlen($dlChild->textContent) !== 1) {
-                            $shouldBeList = false;
-                            break;
-                        }
-                        if (is_null($dtChar)) {
-                            $dtChar = $dlChild->textContent;
-                        } elseif ($dtChar !== $dlChild->textContent) {
-                            $shouldBeList = false;
-                            break;
-                        }
-                    }
-                }
-                if ($shouldBeList && in_array($dtChar, Massage\HTMLList::CHAR_PREFIXES)) {
-                    $ul = $doc->createElement('ul');
-                    $ul = $element->insertBefore($ul, $child);
-                    foreach ($child->childNodes as $dlChild) {
-                        if ($dlChild->tagName === 'dd') {
-                            /* @var DomElement $li */
-                            $li = $ul->appendChild($doc->createElement('li'));
-                            self::extractContents($li, $dlChild);
-                        }
-                    }
-                    $element->removeChild($child);
+                $ul = DL::MaybeChangeToUL($child);
+                if ($ul) {
                     $child = $ul->nextSibling;
                     continue;
                 }
