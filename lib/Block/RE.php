@@ -36,17 +36,17 @@ class RE implements Template
     ): ?DOMElement {
         array_shift($lines);
 
-        $man             = Man::instance();
-        $leftMarginLevel = $man->left_margin_level;
+        $man     = Man::instance();
+        $anLevel = (int)$man->getRegister('an-level');
 
-        $backToLevel = $leftMarginLevel - 1; // Back to one before last by default.
+        $backToLevel = $anLevel - 1; // Back to one before last by default.
         if (count($request['arguments'])) {
             $backToLevel = (int)$request['arguments'][0];
         }
 
         if ($backToLevel < 2) {
             // .RE 1 is back to base level (used e.g. in lsmcli.1).
-            $man->left_margin_level = 1;
+            $man->setRegister('an-level', '1');
             $man->resetIndentationToDefault();
 
             return Node::ancestor($parentNode, 'section');
@@ -54,8 +54,8 @@ class RE implements Template
 
         $lastDIV = $parentNode;
 
-        while ($leftMarginLevel > $backToLevel) {
-            --$leftMarginLevel;
+        while ($anLevel > $backToLevel) {
+            --$anLevel;
             while ($lastDIV = Node::ancestor($lastDIV, 'div')) {
                 if ($lastDIV->hasAttribute('remap')) {
                     $lastDIV = $lastDIV->parentNode;
@@ -64,14 +64,14 @@ class RE implements Template
                 }
             }
             if (is_null($lastDIV)) {
-                $man->left_margin_level = 1;
+                $man->setRegister('an-level', '1');
                 $man->resetIndentationToDefault();
 
                 return Node::ancestor($parentNode, 'section');
             }
         }
 
-        $man->left_margin_level = $leftMarginLevel;
+        $man->setRegister('an-level', (string)$anLevel);
 
         // Restore prevailing indent (see macro definition above)
         if (Indentation::isSet($lastDIV->parentNode)) {

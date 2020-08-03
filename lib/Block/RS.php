@@ -58,7 +58,8 @@ class RS implements Template
             $leftMargin = $man->indentation;
         }
 
-        $man->left_margin_level = $man->left_margin_level + 1;
+        $newAnLevel = (int)$man->getRegister('an-level') + 1;
+        $man->setRegister('an-level', (string)$newAnLevel);
 
         $man->resetIndentationToDefault();
 
