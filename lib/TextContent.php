@@ -254,8 +254,12 @@ class TextContent
         $parentNode->appendChild(new DOMText(self::interpretString($textContent)));
     }
 
-    public static function interpretString(string $string, bool $applyCharTranslations = true): string
+    public static function interpretString(?string $string, bool $applyCharTranslations = true): string
     {
+        if (is_null($string)) {
+            return '';
+        }
+
         $man = Man::instance();
 
         if (!is_null($man->escape_char)) {

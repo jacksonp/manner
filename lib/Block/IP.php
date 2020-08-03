@@ -59,8 +59,12 @@ class IP implements Template
             $indentVal = $man->indentation;
         }
 
-        // 2nd bit: If there's a "designator" - otherwise preg_match hit empty double quotes.
-        if (count($request['arguments']) > 0 && trim($request['arguments'][0]) !== '') {
+        // Could have hit double quotes, null, \& (zero-width space)
+        $rawDesignator = array_shift($request['arguments']);
+        $designator = TextContent::interpretString($rawDesignator);
+        $designator = \Manner\Text::trimAndRemoveZWSUTF8($designator);
+
+        if ($designator !== '') {
             $dl = DefinitionList::getParentDL($parentNode);
 
             /* @var DomElement $dd */
@@ -76,7 +80,7 @@ class IP implements Template
                 $dl = $parentNode->appendChild($dl);
             }
 
-            TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
+            TextContent::interpretAndAppendText($dt, $rawDesignator);
             $dl->appendChild($dt);
 
             $man->resetFonts();
