@@ -59,16 +59,15 @@ class IP implements Template
             $indentVal = $man->indentation;
         }
 
-        // Could have hit double quotes, null, \& (zero-width space)
-        $rawDesignator = array_shift($request['arguments']);
-        $designator = TextContent::interpretString($rawDesignator);
-        $designator = \Manner\Text::trimAndRemoveZWSUTF8($designator);
+        if (count($request['arguments']) > 0) {
+            $dt = $dom->createElement('dt');
+            TextContent::interpretAndAppendText($dt, $request['arguments'][0]);
+        }
 
-        if ($designator !== '') {
+        // Could have hit double quotes, null, \& (zero-width space), just font settings...
+        if (isset($dt) && \Manner\Text::trimAndRemoveZWSUTF8($dt->textContent) !== '') {
             $dl = DefinitionList::getParentDL($parentNode);
 
-            /* @var DomElement $dd */
-            $dt = $dom->createElement('dt');
             $dd = $dom->createElement('dd');
 
             // TODO: See about adding a check like $dl->lastChild->getAttribute('indent') <= $indentVal
@@ -80,7 +79,6 @@ class IP implements Template
                 $dl = $parentNode->appendChild($dl);
             }
 
-            TextContent::interpretAndAppendText($dt, $rawDesignator);
             $dl->appendChild($dt);
 
             $man->resetFonts();
@@ -88,6 +86,7 @@ class IP implements Template
             Indentation::set($dd, $indentVal);
             $dd = $dl->appendChild($dd);
 
+            /* @var DomElement $dd */
             return $dd;
         } else {
             $man->resetFonts();
