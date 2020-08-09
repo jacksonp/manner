@@ -29,15 +29,19 @@ class DOM
         return self::isTag($node, Blocks::INLINE_ELEMENTS);
     }
 
+    public static function isElementNode(?DOMNode $node): bool
+    {
+        return $node && $node->nodeType === XML_ELEMENT_NODE;
+    }
+
     public static function isTag(?DOMNode $node, $tag): bool
     {
-        $tag = (array)$tag;
-        if (!$node || $node->nodeType !== XML_ELEMENT_NODE) {
+        if (!self::isElementNode($node)) {
             return false;
         }
 
         /* @var DomElement $node */
-        return in_array($node->tagName, $tag);
+        return in_array($node->tagName, (array)$tag);
     }
 
     /*
@@ -396,7 +400,7 @@ class DOM
                     $ddIndent = Indentation::get($dl) + Indentation::get($dd);
 
                     while (
-                      DOM::isTag($dl->nextSibling, ['p', 'pre', 'div']) &&
+                      Dom::isElementNode($dl->nextSibling) &&
                       Indentation::get($dl->nextSibling) >= $ddIndent
                     ) {
                         if (Indentation::get($dl->nextSibling) === $ddIndent) {
