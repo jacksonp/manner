@@ -7,6 +7,7 @@ namespace Manner\Massage;
 use DOMElement;
 use DOMXPath;
 use Exception;
+use Manner\Blocks;
 use Manner\DOM;
 use Manner\Indentation;
 
@@ -19,8 +20,6 @@ class Remap
      */
     public static function doAll(DOMXPath $xpath)
     {
-        $blocks = ['p', 'pre', 'div', 'dl', 'ul', 'table'];
-
         $divs = $xpath->query('//div[@remap]');
         /** @var DOMElement $div */
         /** @var DOMElement $p */
@@ -28,26 +27,26 @@ class Remap
             if ($div->getAttribute('remap') === 'IP') {
                 $indentVal = Indentation::get($div);
 
-                $sibling = $div->firstChild;
-                if ($sibling) {
+                $remapChild = $div->firstChild;
+                if ($remapChild) {
                     $next = false;
                     do {
-                        if (DOM::isTag($sibling, $blocks)) {
-                            $next = $sibling->nextSibling;
-                            $sibling->removeAttribute('implicit');
-                            $indentVal && Indentation::add($sibling, $indentVal);
-                            $div->parentNode->insertBefore($sibling, $div);
+                        if (DOM::isTag($remapChild, BLOCKS::BLOCK_ELEMENTS)) {
+                            $next = $remapChild->nextSibling;
+                            $remapChild->removeAttribute('implicit');
+                            $indentVal && Indentation::add($remapChild, $indentVal);
+                            $div->parentNode->insertBefore($remapChild, $div);
                         } else {
                             $p = $div->ownerDocument->createElement('p');
                             $p = $div->parentNode->insertBefore($p, $div);
                             $indentVal && Indentation::add($p, $indentVal);
-                            while ($sibling && !DOM::isTag($sibling, $blocks)) {
-                                $next = $sibling->nextSibling;
-                                $p->appendChild($sibling);
-                                $sibling = $next;
+                            while ($remapChild && !DOM::isTag($remapChild, BLOCKS::BLOCK_ELEMENTS)) {
+                                $next = $remapChild->nextSibling;
+                                $p->appendChild($remapChild);
+                                $remapChild = $next;
                             }
                         }
-                    } while ($sibling = $next);
+                    } while ($remapChild = $next);
                 }
 
                 $div->parentNode->removeChild($div);

@@ -34,6 +34,7 @@ class Manner
         Massage\DL::mergeAdjacentAndConvertLoneDD($xpath);
         Massage\Remap::doAll($xpath);
         Massage\Indents::recalc($xpath);
+        Massage\DIV::removeDIVsWithSingleChild($xpath);
         DOM::massage($manPageContainer);
         Massage\Tidy::doAll($xpath);
 //        Massage\DL::CreateULs($xpath);

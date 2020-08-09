@@ -6,10 +6,26 @@ namespace Manner\Massage;
 
 use DOMElement;
 use DOMNode;
+use DOMXPath;
 use Manner\DOM;
+use Manner\Indentation;
+use Manner\Node;
 
 class DIV
 {
+
+    public static function removeDIVsWithSingleChild(DOMXPath $xpath)
+    {
+        $divs = $xpath->query('//div');
+        foreach ($divs as $div) {
+            // TODO add other blocks below? see Dom handling line 106 or so.
+            if ($div->childNodes->length === 1 && Dom::isTag($div->firstChild, 'pre')) {
+                Indentation::addElIndent($div->firstChild, $div);
+                Node::remove($div);
+            }
+        }
+    }
+
 
     public static function getNextNonBRNode(DOMNode $element, bool $removeBRs = false): ?DOMNode
     {

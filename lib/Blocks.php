@@ -10,6 +10,15 @@ use Exception;
 class Blocks
 {
 
+    public const BLOCK_ELEMENTS = [
+      'p',
+      'pre',
+      'div',
+      'dl',
+      'ul',
+      'table',
+    ];
+
     public const INLINE_ELEMENTS = [
       'a',
       'em',
