@@ -83,6 +83,11 @@ class Tidy
         foreach ($els as $el) {
             DT::tidy($el);
         }
+
+        $els = $xpath->query('//pre');
+        foreach ($els as $el) {
+            PRE::tidy($el);
+        }
     }
 
     public static function indentAttributeToClass(DOMXPath $xpath)
