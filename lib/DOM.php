@@ -264,7 +264,6 @@ class DOM
      */
     public static function massage(DOMElement $element): ?DOMNode
     {
-        $doc   = $element->ownerDocument;
         $child = $element->firstChild;
         while ($child) {
             if ($child->nodeType === XML_ELEMENT_NODE) {
@@ -397,7 +396,7 @@ class DOM
                     $ddIndent = Indentation::get($dl) + Indentation::get($dd);
 
                     while (
-                      DOM::isTag($dl->nextSibling, ['p', 'pre']) &&
+                      DOM::isTag($dl->nextSibling, ['p', 'pre', 'div']) &&
                       Indentation::get($dl->nextSibling) >= $ddIndent
                     ) {
                         if (Indentation::get($dl->nextSibling) === $ddIndent) {
