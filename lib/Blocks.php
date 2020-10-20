@@ -15,6 +15,7 @@ class Blocks
       'pre',
       'div',
       'dl',
+      'ol',
       'ul',
       'table',
     ];

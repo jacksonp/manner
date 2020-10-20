@@ -53,7 +53,7 @@ class Tidy
                 } elseif (!$el->getAttribute('class')) {
                     Node::remove($el);
                 }
-            } elseif ($oneChild && DOM::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
+            } elseif ($oneChild && DOM::isTag($el->firstChild, ['pre', 'ul', 'ol', 'dl'])) {
                 DIV::removeDIVWithSingleChild($el);
             }
         }
@@ -92,11 +92,11 @@ class Tidy
     public static function indentAttributeToClass(DOMXPath $xpath)
     {
         $els = $xpath->query(
-          '//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //table[@indent]'
+          '//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //ol[@indent] | //table[@indent]'
         );
         foreach ($els as $el) {
-            if ($el->tagName === 'ul') {
-                // Remove indent on <ul>s as they get indented by default in html anyway
+            if (DOM::isTag($el, ['ul', 'ol'])) {
+                // Remove indent on lists as they get indented by default in html anyway
                 $el->removeAttribute('indent');
             } else {
                 $indentVal = Indentation::get($el);
