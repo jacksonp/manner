@@ -162,7 +162,6 @@ class DOM
         }
 
         if (
-          in_array($myTag, ['div', 'p', 'pre', 'ul', 'table']) &&
           self::isTag($element->previousSibling, 'dl') &&
           self::isTag($element->previousSibling->lastChild, 'dd')
         ) {

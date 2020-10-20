@@ -53,9 +53,9 @@ class Block
         }
     }
 
-    public static function coalesceAdjacentChildDIVs(DOMElement $blockElement)
+    public static function coalesceAdjacentChildDIVs(DOMElement $divsContainer)
     {
-        $child = $blockElement->firstChild;
+        $child = $divsContainer->firstChild;
 
         while ($child) {
             if (DOM::isTag($child, 'div')) {
@@ -77,7 +77,7 @@ class Block
                       DOM::isTag($nextSibling->firstChild, 'p')
                     ) {
                         if (count($brsInBetween) < 2) {
-                            $child->firstChild->appendChild($blockElement->ownerDocument->createElement('br'));
+                            $child->firstChild->appendChild($divsContainer->ownerDocument->createElement('br'));
                         }
                         foreach ($brsInBetween as $brInBetween) {
                             $child->firstChild->appendChild($brInBetween);
@@ -85,14 +85,14 @@ class Block
                         while ($nextSibling->firstChild->firstChild) {
                             $child->firstChild->appendChild($nextSibling->firstChild->firstChild);
                         }
-                        $blockElement->removeChild($nextSibling);
+                        $divsContainer->removeChild($nextSibling);
                         continue;
                     } else {
                         foreach ($brsInBetween as $brInBetween) {
                             $child->appendChild($brInBetween);
                         }
                         $child->appendChild($nextSibling->firstChild);
-                        $blockElement->removeChild($nextSibling);
+                        $divsContainer->removeChild($nextSibling);
                         continue;
                     }
                 }

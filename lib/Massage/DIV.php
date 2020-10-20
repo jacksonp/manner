@@ -19,13 +19,19 @@ class DIV
         $divs = $xpath->query('//div');
         foreach ($divs as $div) {
             // TODO add other blocks below? see Dom handling line 106 or so.
-            if ($div->childNodes->length === 1 && Dom::isTag($div->firstChild, 'pre')) {
-                Indentation::addElIndent($div->firstChild, $div);
-                Node::remove($div);
+            if (Dom::isTag($div->firstChild, 'pre')) {
+                self::removeDIVWithSingleChild($div);
             }
         }
     }
 
+    public static function removeDIVWithSingleChild(DOMElement $div)
+    {
+        if ($div->childNodes->length === 1) {
+            Indentation::addElIndent($div->firstChild, $div);
+            Node::remove($div);
+        }
+    }
 
     public static function getNextNonBRNode(DOMNode $element, bool $removeBRs = false): ?DOMNode
     {

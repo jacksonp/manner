@@ -54,8 +54,7 @@ class Tidy
                     Node::remove($el);
                 }
             } elseif ($oneChild && DOM::isTag($el->firstChild, ['pre', 'ul', 'dl'])) {
-                Indentation::addElIndent($el->firstChild, $el);
-                Node::remove($el);
+                DIV::removeDIVWithSingleChild($el);
             }
         }
 
