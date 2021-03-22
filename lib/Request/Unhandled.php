@@ -30,7 +30,6 @@ class Unhandled implements Template
       'ch',
       'chop',
       'class',
-      'color',
       'composite',
       'continue',
       'da',

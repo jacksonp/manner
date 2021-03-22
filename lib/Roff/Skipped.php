@@ -12,6 +12,7 @@ class Skipped
       'bd', // "Embolden font by N-1 units."
       'bp', // "Eject current page and begin new page."
       'cflags', //  .cflags mode c1 c2 ... Treat characters c1, c2, ... according to mode number.
+      'color', // .color N: If N is zero disable colors, otherwise enable them.
       'cp', // Enable or disable compatibility mode.
       'cs', // font N M: Set constant character width mode for font to N/36 ems with em M.
       'cu', // Continuous underline in nroff, like .ul in troff.
