@@ -7,6 +7,8 @@ namespace Manner;
 use DOMElement;
 use DOMNode;
 
+use function Manner\Inline\removeIds;
+
 class Node
 {
 
@@ -123,6 +125,18 @@ class Node
             foreach ($attributes as $attribute) {
                 $node->removeAttribute($attribute);
             }
+        }
+    }
+
+    public static function removeIds(DOMNode $domNode)
+    {
+        if (!DOM::isElementNode($domNode)) {
+            return;
+        }
+        /* @var DomElement $domNode */
+        $domNode->removeAttribute("id");
+        foreach ($domNode->childNodes as $node) {
+            self::removeIds($node);
         }
     }
 

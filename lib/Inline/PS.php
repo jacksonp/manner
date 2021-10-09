@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use Manner\Block\Template;
+use Manner\DOM;
 use Manner\Node;
 use Manner\Request;
 
@@ -68,22 +69,44 @@ class PS implements Template
         return $parentNode;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function appendPic(DOMElement $parentNode, array $lines)
     {
         $picString = implode(PHP_EOL, $lines);
 
-        file_put_contents('/tmp/pic', '.PS' . PHP_EOL . $picString . PHP_EOL . '.PE' . PHP_EOL);
-        exec('dpic -z -v /tmp/pic 2>/dev/null', $output);
+        $tmpFileName    = tempnam('/tmp', 'pic-');
+        $tmpSVGFileName = $tmpFileName . '.svg';
 
-        $svgDocString = implode(PHP_EOL, $output);
+        file_put_contents($tmpFileName, '.PS' . PHP_EOL . $picString . PHP_EOL . '.PE' . PHP_EOL);
 
-        if (count($output) === 0) {
-            $pre = $parentNode->ownerDocument->createElement('pre');
-            $pre->appendChild($parentNode->ownerDocument->createTextNode($picString));
-            $parentNode->appendChild($pre);
-
-            return;
+        exec('pic2plot --font-size 0.0125 --bg-color none -T svg ' . $tmpFileName . ' > ' . $tmpSVGFileName, $output, $returnVar);
+        if ($returnVar !== 0) {
+            throw new Exception('Failed to render .PS content');
         }
+
+
+        exec(
+          'inkscape --vacuum-defs --export-id=content --export-id-only --export-plain-svg --export-overwrite ' . $tmpSVGFileName,
+          $output,
+          $returnVar
+        );
+        if ($returnVar !== 0) {
+            throw new Exception('Failed to render .PS content');
+        }
+
+//        $svgDocString = implode(PHP_EOL, $output);
+
+        $svgDocString = file_get_contents($tmpSVGFileName);
+
+//        if (count($output) === 0) {
+//            $pre = $parentNode->ownerDocument->createElement('pre');
+//            $pre->appendChild($parentNode->ownerDocument->createTextNode($picString));
+//            $parentNode->appendChild($pre);
+//
+//            return;
+//        }
 
         $svgDoc = new DOMDocument();
         @$svgDoc->loadXML($svgDocString);
@@ -102,15 +125,24 @@ class PS implements Template
             return;
         }
 
-        $svgNode = $parentNode->ownerDocument->importNode($svg, true);
         /* @var DomElement $svgNode */
-        $svgNode->setAttribute('font-size', '7.5pt');
+        $svgNode = $parentNode->ownerDocument->importNode($svg, true);
+
+        while (
+          $svgNode->firstChild &&
+          (!DOM::isElementNode($svgNode->firstChild) || $svgNode->firstChild->getAttribute("id") !== "content")
+        ) {
+            $svgNode->removeChild($svgNode->firstChild);
+        }
+
+        Node::removeIds($svgNode);
+
         $svgNode->removeAttribute('xmlns');
-        $svgNode->removeAttribute('xmlns:xlink');
-        $svgNode->removeAttribute('xml:space');
+        $svgNode->removeAttribute('xmlns:svg');
+
         $textNodes = $svgNode->getElementsByTagName('text');
         foreach ($textNodes as $textNode) {
-            $textNode->removeAttribute('font-size');
+            $textNode->removeAttribute('font-family');
         }
 
         $div = $parentNode->ownerDocument->createElement('div');
@@ -118,8 +150,6 @@ class PS implements Template
         $div = $parentNode->appendChild($div);
 
         $div->appendChild($svgNode);
-
-        return;
     }
 
 }
