@@ -11,6 +11,7 @@ use Manner\Block\Template;
 use Manner\DOM;
 use Manner\Node;
 use Manner\Request;
+use Manner\Roff;
 
 class PS implements Template
 {
@@ -81,11 +82,22 @@ class PS implements Template
 
         file_put_contents($tmpFileName, '.PS' . PHP_EOL . $picString . PHP_EOL . '.PE' . PHP_EOL);
 
-        exec('pic2plot --font-size 0.0125 --bg-color none -T svg ' . $tmpFileName . ' > ' . $tmpSVGFileName, $output, $returnVar);
-        if ($returnVar !== 0) {
-            throw new Exception('Failed to render .PS content');
-        }
+        exec(
+          'pic2plot --font-size 0.0125 --bg-color none -T svg ' . $tmpFileName . ' > ' . $tmpSVGFileName,
+          $output,
+          $returnVar
+        );
 
+        if ($returnVar !== 0) {
+            // See e.g. pt_astree.n
+            $newLines = array_map(function (string $s): string {
+                return str_replace('\\&', '', $s);
+            }, $lines);
+
+            Roff::parse($parentNode, $newLines);
+
+            return;
+        }
 
         exec(
           'inkscape --vacuum-defs --export-id=content --export-id-only --export-plain-svg --export-overwrite ' . $tmpSVGFileName,
@@ -93,20 +105,14 @@ class PS implements Template
           $returnVar
         );
         if ($returnVar !== 0) {
-            throw new Exception('Failed to render .PS content');
+            $pre = $parentNode->ownerDocument->createElement('pre');
+            $pre->appendChild($parentNode->ownerDocument->createTextNode('[.PS MKERR2 - failed to render]'));
+            $parentNode->appendChild($pre);
+
+            return;
         }
 
-//        $svgDocString = implode(PHP_EOL, $output);
-
         $svgDocString = file_get_contents($tmpSVGFileName);
-
-//        if (count($output) === 0) {
-//            $pre = $parentNode->ownerDocument->createElement('pre');
-//            $pre->appendChild($parentNode->ownerDocument->createTextNode($picString));
-//            $parentNode->appendChild($pre);
-//
-//            return;
-//        }
 
         $svgDoc = new DOMDocument();
         @$svgDoc->loadXML($svgDocString);
@@ -114,14 +120,10 @@ class PS implements Template
         $svg = $svgDoc->getElementsByTagName('svg')->item(0);
 
         if (is_null($svg)) {
-            // svg output could be invalid,
-            // e.g. <text font-size="18.181818pt" stroke-width="0.266667" fill="black" x="668.266667" y="57.066667">\[>=]0x600</text>
-            // in ovs-fields.7
-            return;
-        }
+            $pre = $parentNode->ownerDocument->createElement('pre');
+            $pre->appendChild($parentNode->ownerDocument->createTextNode('[.PS MKERR3 - failed to render]'));
+            $parentNode->appendChild($pre);
 
-        // Hack for rcsfile.5
-        if (preg_match('~\\\\h\'3\.812i\'~u', $svg->textContent)) {
             return;
         }
 
