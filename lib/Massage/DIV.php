@@ -19,7 +19,7 @@ class DIV
         $divs = $xpath->query('//div');
         foreach ($divs as $div) {
             // TODO add other blocks below? see Dom handling line 106 or so.
-            if (Dom::isTag($div->firstChild, 'pre')) {
+            if (Dom::isTag($div->firstChild, ['pre'])) { // 'dl',
                 self::removeDIVWithSingleChild($div);
             }
         }
