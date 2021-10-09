@@ -86,8 +86,12 @@ class EQ implements Template
             $eqnString .= $line . PHP_EOL;
         }
         $eqnString .= '.EN' . PHP_EOL;
-        file_put_contents('/tmp/eqn', $eqnString);
-        exec('eqn -T MathML /tmp/eqn', $output);
+        $tmpFileName = tempnam('/tmp', 'eqn');
+        file_put_contents($tmpFileName, $eqnString);
+        exec('eqn -T MathML ' . $tmpFileName, $output, $returnVar);
+        if ($returnVar !== 0) {
+            throw new Exception('Failed to render .EQ content');
+        }
         // Now get rid of .EQ:
         array_shift($output);
         // ... and .EN:
