@@ -50,6 +50,8 @@ class RS implements Template
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
 
+        // See: https://www.mankier.com/1/zip
+        // $parentNode = Blocks::getBlockContainerParent($parentNode, true);
         $parentNode = Blocks::getBlockContainerParent($parentNode);
 
         if (count($request['arguments'])) {
