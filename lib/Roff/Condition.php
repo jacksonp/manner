@@ -97,7 +97,11 @@ class Condition implements Template
             return; // Just skip
         }
 
-        $conditionTrue = self::test($condition, $macroArguments);
+        if ($condition === '.if') {
+            $conditionTrue = false; // Hack for units.1
+        } else {
+            $conditionTrue = self::test($condition, $macroArguments);
+        }
 
         if (!count($argChars)) {
             if (!$conditionTrue) {
