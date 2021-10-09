@@ -75,6 +75,9 @@ class Block
                     if ($child->childNodes->length === 1 &&
                       DOM::isTag($child->firstChild, 'p') &&
                       DOM::isTag($nextSibling->firstChild, 'p')
+//                      &&
+//                      $child->firstChild->hasAttribute('implicit') &&
+//                      $nextSibling->firstChild->hasAttribute('implicit')
                     ) {
                         if (count($brsInBetween) < 2) {
                             $child->firstChild->appendChild($divsContainer->ownerDocument->createElement('br'));
