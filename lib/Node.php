@@ -7,6 +7,8 @@ namespace Manner;
 use DOMElement;
 use DOMNode;
 
+use Manner\Roff\Glyph;
+
 use function Manner\Inline\removeIds;
 
 class Node
@@ -137,6 +139,18 @@ class Node
         $domNode->removeAttribute("id");
         foreach ($domNode->childNodes as $node) {
             self::removeIds($node);
+        }
+    }
+
+    public static function replaceGlyphs(DOMNode $domNode)
+    {
+        if (Dom::isTextNode($domNode)) {
+            $domNode->textContent = Glyph::substitute(htmlspecialchars_decode($domNode->textContent));
+        }
+        if (DOM::isElementNode($domNode)) {
+            foreach ($domNode->childNodes as $node) {
+                self::replaceGlyphs($node);
+            }
         }
     }
 

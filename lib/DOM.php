@@ -29,6 +29,11 @@ class DOM
         return self::isTag($node, Blocks::INLINE_ELEMENTS);
     }
 
+    public static function isTextNode(?DOMNode $node): bool
+    {
+        return $node && $node->nodeType === XML_TEXT_NODE;
+    }
+
     public static function isElementNode(?DOMNode $node): bool
     {
         return $node && $node->nodeType === XML_ELEMENT_NODE;

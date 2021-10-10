@@ -12,6 +12,7 @@ use Manner\DOM;
 use Manner\Node;
 use Manner\Request;
 use Manner\Roff;
+use Manner\Roff\Glyph;
 
 class PS implements Template
 {
@@ -90,9 +91,7 @@ class PS implements Template
 
         if ($returnVar !== 0) {
             // See e.g. pt_astree.n
-            $newLines = array_map(function (string $s): string {
-                return str_replace('\\&', '', $s);
-            }, $lines);
+            $newLines = array_map(fn (string $s): string => str_replace('\\&', '', $s), $lines);
 
             Roff::parse($parentNode, $newLines);
 
@@ -138,6 +137,7 @@ class PS implements Template
         }
 
         Node::removeIds($svgNode);
+        Node::replaceGlyphs($svgNode);
 
         $svgNode->removeAttribute('xmlns');
         $svgNode->removeAttribute('xmlns:svg');
