@@ -152,7 +152,7 @@ class PreformattedOutput
         } elseif ($request['request'] === 'RS') {
             array_shift($lines);
             if (count($request['arguments'])) {
-                self::$addIndent = (int)round(Unit::normalize($request['arguments'][0], 'n', 'm'));
+                self::$addIndent = (int)round((float)Unit::normalize($request['arguments'][0], 'n', 'm'));
             } else {
                 self::$addIndent = 4;
             }

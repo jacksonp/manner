@@ -13,16 +13,16 @@ use Manner\Node;
 class HTMLList
 {
 
-    public const CHAR_PREFIXES = ['*', 'o', '·', '+', '-'];
+    public const CHAR_PREFIXES = ['*', 'o', '·', '+', '-', '○'];
 
     private static function getBulletRegex(): string
     {
         return '~^\s*[' . preg_quote(implode('', HTMLList::CHAR_PREFIXES), '~') . ']\s~u';
     }
 
-    public static function startsWithBullet(string $text)
+    public static function startsWithBullet(string $text): bool
     {
-        return preg_match(self::getBulletRegex(), $text);
+        return (bool)preg_match(self::getBulletRegex(), $text);
     }
 
     public static function pruneBulletChar(DOMElement $li)

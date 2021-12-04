@@ -17,6 +17,9 @@ class Text
 
     public static function trimAndRemoveZWSUTF8(?string $str): string
     {
+        if (is_null($str)) {
+            return "";
+        }
         return Text::trim(str_replace(Text::ZERO_WIDTH_SPACE_UTF8, '', $str));
     }
 

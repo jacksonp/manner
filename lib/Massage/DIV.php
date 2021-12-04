@@ -46,7 +46,7 @@ class DIV
         return $nextSibling;
     }
 
-    private static function isPotentialLI(?DOMElement $div)
+    private static function isPotentialLI(?DOMElement $div): bool
     {
         return
           DOM::isTag($div, 'div') &&
