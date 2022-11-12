@@ -95,7 +95,7 @@ class Unit
 
         // Evaluate first matched expression only, because gtroff has no operator precedence:
         $evaluatedString = Replace::pregCallback(
-          '~[-\+]?(?:\d*\.)?\d+[-\+\*/](?:\d*\.)?\d+~u',
+          '~[-+]?(?:\d*\.)?\d+[-+*/](?:\d*\.)?\d+~u',
           function ($matches) {
               $expression = 'return ' . $matches[0] . ';';
               try {

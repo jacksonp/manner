@@ -139,7 +139,7 @@ class DL
                 return $okCertainty;
             }
 
-            if (preg_match('~^[^\s]+(?:, [^\s]+)*?$~u', $pText)) {
+            if (preg_match('~^\S+(?:, \S+)*?$~u', $pText)) {
                 return $okCertainty;
             }
 

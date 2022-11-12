@@ -25,7 +25,7 @@ class HTMLList
         return (bool)preg_match(self::getBulletRegex(), $text);
     }
 
-    public static function pruneBulletChar(DOMElement $li)
+    public static function pruneBulletChar(DOMElement $li): void
     {
         $firstTextNode = self::getFirstNonEmptyTextNode($li);
         if ($firstTextNode) {

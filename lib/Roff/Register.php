@@ -48,7 +48,7 @@ class Register implements Template
     public static function substitute(string $string, array &$replacements): string
     {
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^\]]+)\]|\((?<reg>..)|(?<reg>.))~u',
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\n(?<op>\+)?(?:\[(?<reg>[^]]+)]|\((?<reg>..)|(?<reg>.))~u',
           function ($matches) use (&$replacements) {
               if (isset($replacements[$matches['reg']])) {
                   if ($matches['op'] === '+') {

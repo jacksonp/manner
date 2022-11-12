@@ -97,7 +97,7 @@ class TextContent
 
         if (!Node::isOrInTag($parentNode, 'pre')) {
             // Preserve spaces used for indentation, e.g. autogsdoc.1 (2nd char in replacement is nbsp):
-            $line = Replace::preg('~  ~', " \xC2\xA0", $line);
+            $line = Replace::preg('~ {2}~', " \xC2\xA0", $line);
         }
 
         // See e.g. imgtool.1
@@ -149,7 +149,7 @@ class TextContent
 
             if (
             preg_match(
-              '~(?J)^\\\\(?:f\[(?<font>[^]\s]*)]|f\((?<font>[^\s]{2})|f(?<font>[^\s]))$~ui',
+              '~(?J)^\\\\(?:f\[(?<font>[^]\s]*)]|f\((?<font>\S{2})|f(?<font>\S))$~ui',
               $textSegments[$i],
               $matches
             )
@@ -274,7 +274,7 @@ class TextContent
             $roffStrings = $man->getStrings();
 
             $string = Replace::pregCallback(
-              '~\\\\\[u([\dA-F]{4})\]~u',
+              '~\\\\\[u([\dA-F]{4})]~u',
               function ($matches) {
                   return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
               },
@@ -282,7 +282,7 @@ class TextContent
             );
 
             $string = Replace::pregCallback(
-              '~\\\\\[char(\d+)\]~u',
+              '~\\\\\[char(\d+)]~u',
               function ($matches) {
                   return mb_convert_encoding('&#' . intval($matches[1]) . ';', 'UTF-8', 'HTML-ENTITIES');
               },
@@ -340,7 +340,7 @@ class TextContent
             ];
 
             $string = Replace::pregCallback(
-              '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^\]\s]+)\]|\((?<glyph>[^\s]{2})|C\'(?<glyph>[^\']+)\'|\*\[(?<string>[^\]\s]+)\]|\*\((?<string>[^\s]{2})|\*(?<string>[^\s])|(?<char>.))~u',
+              '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(\[(?<glyph>[^]\s]+)]|\((?<glyph>\S{2})|C\'(?<glyph>[^\']+)\'|\*\[(?<string>[^]\s]+)]|\*\((?<string>\S{2})|\*(?<string>\S)|(?<char>.))~u',
               function ($matches) use (&$singleCharacterEscapes, &$roffStrings) {
                   // \\ "reduces to a single backslash" - Do this first as strtr() doesn't search replaced text for further replacements.
                   $prefix = str_repeat('\\', mb_strlen($matches['bspairs']) / 2);

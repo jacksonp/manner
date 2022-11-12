@@ -375,7 +375,7 @@ class Glyph
     {
         // Want to match \[xy] or \(xy
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\[(?<str>[^\]\s]+)\]|\((?<str>[^\s]{2}))~u',
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\[(?<str>[^]\s]+)]|\((?<str>\S{2}))~u',
           function ($matches) {
               if (array_key_exists($matches['str'], self::ALL_GLYPHS)) {
                   return $matches['bspairs'] . self::ALL_GLYPHS[$matches['str']];

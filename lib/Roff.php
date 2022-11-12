@@ -19,7 +19,7 @@ class Roff
     public static function parse(
       DOMElement $parentNode,
       array &$lines,
-      $stopOnContent = false
+      bool $stopOnContent = false
     ): bool {
         while ($request = Request::getLine($lines)) {
             if ($stopOnContent) {

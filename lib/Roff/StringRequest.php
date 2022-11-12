@@ -132,7 +132,7 @@ ROFF;
 / \\k:\h'-(\\n(.wu*8/10-((1u-(0u%2u))*.13m))'\(sl\h'|\\n:u'
 ROFF;
 
-        if (array_search($request['raw_arg_string'], $skippable) !== false) {
+        if (in_array($request['raw_arg_string'], $skippable)) {
             return;
         }
 
@@ -180,7 +180,7 @@ ROFF;
 
         // Want to match any of: \*. \*(.. \*[....]
         return Replace::pregCallback(
-          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^\]\s]+)\]|\*\((?<str>[^\s]{2})|\*(?<str>[^\s]))~u',
+          '~(?J)(?<!\\\\)(?<bspairs>(?:\\\\\\\\)*)\\\\(?:\*\[(?<str>[^]\s]+)]|\*\((?<str>\S{2})|\*(?<str>\S))~u',
           function ($matches) use (&$replacements) {
               if (isset($replacements[$matches['str']])) {
                   return $matches['bspairs'] . $replacements[$matches['str']];

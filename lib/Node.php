@@ -9,8 +9,6 @@ use DOMNode;
 
 use Manner\Roff\Glyph;
 
-use function Manner\Inline\removeIds;
-
 class Node
 {
 

@@ -27,7 +27,7 @@ class IP implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         $man = Man::instance();
 

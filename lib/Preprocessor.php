@@ -29,7 +29,7 @@ class Preprocessor
             $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\s[-+\d]?\d~u', '$1', $line);
 
             // Don't worry about colour changes:
-            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?\])~u', '$1', $line);
+            $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\m(\(..|\[.*?])~u', '$1', $line);
 
             // Don't worry about:  \zc - Print c with zero width (without spacing).
             // TODO: see if we can use this for underlining when \z_, e.g. in groff.7

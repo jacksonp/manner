@@ -37,7 +37,7 @@ class VerticalSpace implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         array_shift($lines);
 

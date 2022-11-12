@@ -116,7 +116,7 @@ class Unhandled implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         throw new Exception('Unhandled request ' . $request['raw_line']);
     }

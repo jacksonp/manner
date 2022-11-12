@@ -45,7 +45,7 @@ class Text implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         $parentNode = Blocks::getParentForText($parentNode);
 

@@ -54,7 +54,7 @@ class Manner
      * @param bool $test
      * @throws Exception
      */
-    public static function roffToHTML(array $fileLines, string $outputFile = null, $test = false)
+    public static function roffToHTML(array $fileLines, string $outputFile = null, bool $test = false): void
     {
         $dom  = self::roffToDOM($fileLines);
         $html = $dom->saveHTML();

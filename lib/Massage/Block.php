@@ -13,13 +13,13 @@ use Manner\Node;
 class Block
 {
 
-    public static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement): void
     {
         self::removePreviousEmptyTextNodesAndBRs($blockElement);
         self::removeFollowingEmptyTextNodesAndBRs($blockElement);
     }
 
-    public static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement): void
     {
         if (is_null($blockElement)) {
             return;
@@ -36,7 +36,7 @@ class Block
         }
     }
 
-    public static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement)
+    public static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement): void
     {
         if (is_null($blockElement)) {
             return;
@@ -53,7 +53,7 @@ class Block
         }
     }
 
-    public static function coalesceAdjacentChildDIVs(DOMElement $divsContainer)
+    public static function coalesceAdjacentChildDIVs(DOMElement $divsContainer): void
     {
         $child = $divsContainer->firstChild;
 
@@ -105,7 +105,7 @@ class Block
         }
     }
 
-    public static function coalesceAdjacentChildren(DOMXPath $xpath)
+    public static function coalesceAdjacentChildren(DOMXPath $xpath): void
     {
         $tagsToMerge = ['ul'];
 

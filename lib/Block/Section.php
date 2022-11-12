@@ -26,7 +26,7 @@ class Section implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         array_shift($lines);
 
@@ -53,6 +53,7 @@ class Section implements Template
             $headingNode = $dom->createElement('h3');
         }
 
+        /** @var DOMElement $headingNode */
         $headingNode = $section->appendChild($headingNode);
 
         if (count($request['arguments']) === 0) {

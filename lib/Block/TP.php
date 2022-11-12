@@ -50,7 +50,7 @@ class TP implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1

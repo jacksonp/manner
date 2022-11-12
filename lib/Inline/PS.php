@@ -9,6 +9,7 @@ use DOMElement;
 use Exception;
 use Manner\Block\Template;
 use Manner\DOM;
+use Manner\Man;
 use Manner\Node;
 use Manner\Request;
 use Manner\Roff;
@@ -29,7 +30,7 @@ class PS implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         array_shift($lines);
 
@@ -76,6 +77,16 @@ class PS implements Template
      */
     public static function appendPic(DOMElement $parentNode, array $lines)
     {
+        // Aborted attempt to fix rcsfile.5 diagram
+//        if (count($lines) > 0 && $lines[0] === '.nf') {
+//            array_shift($lines);
+//        }
+//
+//        $man = Man::instance();
+//        for ($i = 0; $i < count($lines); ++$i) {
+//            $lines[$i] = $man->applyAllReplacements($lines[$i]);
+//        }
+
         $picString = implode(PHP_EOL, $lines);
 
         $tmpFileName    = tempnam('/tmp', 'pic-');
@@ -91,7 +102,7 @@ class PS implements Template
 
         if ($returnVar !== 0) {
             // See e.g. pt_astree.n
-            $newLines = array_map(fn (string $s): string => str_replace('\\&', '', $s), $lines);
+            $newLines = array_map(fn(string $s): string => str_replace('\\&', '', $s), $lines);
 
             Roff::parse($parentNode, $newLines);
 

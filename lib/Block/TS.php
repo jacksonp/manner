@@ -203,6 +203,7 @@ class TS implements Template
                     continue;
                 }
 
+                /** @var DOMElement $td */
                 $td = $dom->createElement('td');
                 $td = $tr->appendChild($td);
 
@@ -277,7 +278,7 @@ class TS implements Template
       DOMElement $parentNode,
       array &$lines,
       array $request,
-      $needOneLineOnly = false
+      bool $needOneLineOnly = false
     ): ?DOMElement {
         array_shift($lines);
 

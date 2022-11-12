@@ -386,6 +386,7 @@ class DOM
                 while (Massage\DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
                     $dt = $element->ownerDocument->createElement('dt');
                     DOM::extractContents($dt, $dl->nextSibling);
+                    /** @var DOMElement $dt */
                     $dt = $dl->appendChild($dt);
                     Massage\DT::postProcess($dt);
                     $element->removeChild($dl->nextSibling);
