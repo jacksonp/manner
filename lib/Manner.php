@@ -33,7 +33,7 @@ class Manner
         Massage\P::removeEmpty($xpath);
         Massage\DL::mergeAdjacentAndConvertLoneDD($xpath);
         Massage\Remap::doAll($xpath);
-        Massage\Indents::recalc($xpath);
+        Massage\Indents::recalculate($xpath);
         //TODO: add this, then figure out the issues
 //        Massage\DL::CreateULs($xpath);
         Massage\DIV::removeDIVsWithSingleChild($xpath);

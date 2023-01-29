@@ -14,7 +14,7 @@ use Manner\Node;
 class DIV
 {
 
-    public static function removeDIVsWithSingleChild(DOMXPath $xpath)
+    public static function removeDIVsWithSingleChild(DOMXPath $xpath): void
     {
         $divs = $xpath->query('//div');
         foreach ($divs as $div) {
@@ -25,7 +25,7 @@ class DIV
         }
     }
 
-    public static function removeDIVWithSingleChild(DOMElement $div)
+    public static function removeDIVWithSingleChild(DOMElement $div): void
     {
         if ($div->childNodes->length === 1) {
             Indentation::addElIndent($div->firstChild, $div);

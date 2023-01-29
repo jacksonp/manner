@@ -18,7 +18,7 @@ class Indents
      * @param DOMXPath $xpath
      * @throws Exception
      */
-    public static function recalc(DOMXPath $xpath)
+    public static function recalculate(DOMXPath $xpath): void
     {
         $divs = $xpath->query('//div[@left-margin="0"]');
         foreach ($divs as $div) {

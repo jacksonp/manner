@@ -13,7 +13,7 @@ class Indentation
     // (https://www.mankier.com/7/groff_man#Miscellaneous)
     public const DEFAULT = '7';
 
-    public static function isSet(DOMElement $p)
+    public static function isSet(DOMElement $p): bool
     {
         return $p->hasAttribute('indent');
     }
@@ -46,7 +46,7 @@ class Indentation
      * @param $indentVal
      * @throws Exception
      */
-    public static function add(DOMElement $el, $indentVal)
+    public static function add(DOMElement $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -59,7 +59,7 @@ class Indentation
      * @param $indentVal
      * @throws Exception
      */
-    public static function substract(DOMElement $el, $indentVal)
+    public static function subtract(DOMElement $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -105,7 +105,7 @@ class Indentation
         if (
           $el !== $elParent->firstChild &&
           (($inDD && !$elParent->nextSibling) || !$el->nextSibling) &&
-          $parentIndent !== 0 &&
+          $parentIndent !== .0 &&
           $parentIndent <= -Indentation::get($el)
         ) {
             Indentation::add($el, $parentIndent);

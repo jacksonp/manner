@@ -411,7 +411,7 @@ class DOM
                         if (Indentation::get($dl->nextSibling) === $ddIndent) {
                             Indentation::remove($dl->nextSibling);
                         } else {
-                            Indentation::substract($dl->nextSibling, $ddIndent);
+                            Indentation::subtract($dl->nextSibling, $ddIndent);
                         }
                         $dd->appendChild($dl->nextSibling);
                     }

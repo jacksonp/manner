@@ -49,7 +49,6 @@ class Tidy
                     }
                     DOM::extractContents($el->previousSibling, $el->firstChild);
                     $el->parentNode->removeChild($el);
-                    continue;
                 } elseif (!$el->getAttribute('class')) {
                     Node::remove($el);
                 }
@@ -89,7 +88,7 @@ class Tidy
         }
     }
 
-    public static function indentAttributeToClass(DOMXPath $xpath)
+    public static function indentAttributeToClass(DOMXPath $xpath): void
     {
         $els = $xpath->query(
           '//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //ol[@indent] | //table[@indent]'
