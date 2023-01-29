@@ -192,7 +192,7 @@ class DL
         return $ul;
     }
 
-    public static function CreateULs(DOMXpath $xpath)
+    public static function CreateULs(DOMXpath $xpath): void
     {
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {
@@ -200,7 +200,7 @@ class DL
         }
     }
 
-    public static function CreateOLs(DOMXpath $xpath)
+    public static function CreateOLs(DOMXpath $xpath): void
     {
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {

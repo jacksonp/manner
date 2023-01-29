@@ -57,6 +57,7 @@ class Tidy
             }
         }
 
+
         DL::mergeAdjacentAndConvertLoneDD($xpath);
 
         Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
