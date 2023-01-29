@@ -23,6 +23,11 @@ class Indentation
         return (float)$el->getAttribute('indent');
     }
 
+    public static function isSame(DOMElement $elA, DOMElement $elB): bool
+    {
+        return self::get($elA) === self::get($elB);
+    }
+
     /**
      * @param DOMElement $el
      * @param $indentVal

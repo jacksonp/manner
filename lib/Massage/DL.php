@@ -22,7 +22,7 @@ class DL
     {
         $dls = $xpath->query('//dl');
         foreach ($dls as $dl) {
-            while (DOM::isTag($dl->nextSibling, 'dl')) {
+            while (DOM::isTag($dl->nextSibling, 'dl') && Indentation::isSame($dl, $dl->nextSibling)) {
                 DOM::extractContents($dl, $dl->nextSibling);
                 $dl->parentNode->removeChild($dl->nextSibling);
             }
@@ -116,58 +116,51 @@ class DL
 
         $pText = $p->textContent;
 
-        if ($divIndent > 0) {
-            // Exclude sentences in $p
-            if (
-              $pText === 'or' ||
-              preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
-              preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
-              preg_match('~(\s[a-z]+){3,}[:.]$~ui', $pText)
-            ) {
-                return 0;
-            }
+        // Exclude sentences in $p
+        if (
+          $pText === 'or' ||
+          preg_match('~(^|\.\s)[A-Z][a-z]*(\s[a-z]+){3,}~u', $pText) ||
+          preg_match('~(\s[a-z]{2,}){5,}~u', $pText) ||
+          preg_match('~(\s[a-z]+){3,}[:.]$~ui', $pText)
+        ) {
+            return 0;
+        }
 
-            if (preg_match('~^(--?|\+)~u', $pText)) {
-                return $okCertainty;
-            }
+        if (preg_match('~^(--?|\+)~u', $pText)) {
+            return $okCertainty;
+        }
 
-            if (!preg_match('~^\s*[(a-z]~ui', $div->textContent)) {
-                return 0;
-            }
+        if (!preg_match('~^\s*[(a-z]~ui', $div->textContent)) {
+            return 0;
+        }
 
-            if (preg_match('~^\S$~ui', $pText)) {
-                return $okCertainty;
-            }
+        if (preg_match('~^\S$~ui', $pText)) {
+            return $okCertainty;
+        }
 
-            if (preg_match('~^\S+(?:, \S+)*?$~u', $pText)) {
-                return $okCertainty;
-            }
+        if (preg_match('~^\S+(?:, \S+)*?$~u', $pText)) {
+            return $okCertainty;
+        }
 
-            if (preg_match('~^[A-Z_]{2,}[\s(\[]~u', $pText)) {
-                return $okCertainty;
-            }
+        if (preg_match('~^[A-Z_]{2,}[\s(\[]~u', $pText)) {
+            return $okCertainty;
+        }
 
-            if (mb_strlen($pText) < 9) {
-                return $okCertainty;
-            }
+        if (mb_strlen($pText) < 9) {
+            return $okCertainty;
+        }
 
 //        if (preg_match('~^[A-Z][a-z]* ["A-Za-z][a-z]+~u', $pText)) {
 //            return 50;
 //        }
 
-            return 50;
-        } else {
-            if (preg_match('~^(--?|\+)~u', $pText)) {
-                return $okCertainty;
-            }
-
-            return 0;
-        }
+        return 50;
     }
 
     // Could also identify lists starting with 0 and use start="0" attribute...
     // but maybe <ol> is not semantically correct for e.g. return status codes.
-    public static function MaybeChangeToUL(DOMElement $dl): ?DomElement {
+    public static function MaybeChangeToUL(DOMElement $dl): ?DomElement
+    {
         $dtChar = null;
         foreach ($dl->childNodes as $dlChild) {
             if ($dlChild->tagName === 'dt') {
@@ -194,6 +187,7 @@ class DL
             }
         }
         $dl->parentNode->removeChild($dl);
+
         /* @var DomElement $ul */
         return $ul;
     }
