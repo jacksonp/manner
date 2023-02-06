@@ -12,6 +12,25 @@ use Manner\Man;
 use Manner\Roff;
 use Manner\TextContent;
 
+/*
+ * .de1 IP
+ * .  ie !\\n[.$] \{\
+ * .    ps \\n[PS]u
+ * .    vs \\n[VS]u
+ * .    ft R
+ * .    sp \\n[PD]u
+ * .    ne (1v + 1u)
+ * .    in (\\n[an-margin]u + \\n[an-prevailing-indent]u)
+ * .    ns
+ * .  \}
+ * .  el \{\
+ * .    ie (\\n[.$] - 1) .TP "\\$2"
+ * .    el               .TP
+ * \&\\$1
+ * .  \}
+ * ..
+ *
+ */
 class IP implements Template
 {
 
