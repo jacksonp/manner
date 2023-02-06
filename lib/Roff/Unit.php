@@ -100,7 +100,7 @@ class Unit
               $expression = 'return ' . $matches[0] . ';';
               try {
                   return eval($expression);
-              } catch (ParseError $e) {
+              } catch (ParseError) {
                   throw new Exception('Could not evaluate ' . $expression);
               }
           },
