@@ -42,14 +42,13 @@ class RE implements Template
         $backToLevel = $anLevel - 1; // Back to one before last by default.
         if (count($request['arguments'])) {
             $backToLevel = (int)$request['arguments'][0];
-        }
+            if ($backToLevel < 2) {
+                // .RE 1 is back to base level (used e.g. in lsmcli.1).
+                $man->setRegister('an-level', '1');
+                $man->resetIndentationToDefault();
 
-        if ($backToLevel < 2) {
-            // .RE 1 is back to base level (used e.g. in lsmcli.1).
-            $man->setRegister('an-level', '1');
-            $man->resetIndentationToDefault();
-
-            return Node::ancestor($parentNode, 'section');
+                return Node::ancestor($parentNode, 'section');
+            }
         }
 
         $lastDIV = $parentNode;
