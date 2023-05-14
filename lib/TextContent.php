@@ -53,10 +53,10 @@ class TextContent
                 for ($i = 0; $i < count($matches[1]); $i += 2) {
                     $letter = $matches[1][$i][0];
                     // http://stackoverflow.com/a/1725329 for the next line:
-                    $letterPosition = mb_strlen(substr($line, 0, $matches[1][$i][1]));
+                    $letterPosition = mb_strlen(substr($line, 0, (int)$matches[1][$i][1]));
 
                     $nextLetter         = $matches[1][$i + 1][0];
-                    $nextLetterPosition = mb_strlen(substr($line, 0, $matches[1][$i + 1][1]));
+                    $nextLetterPosition = mb_strlen(substr($line, 0, (int)$matches[1][$i + 1][1]));
 
                     if ($letter === $nextLetter) {
                         // Stick first letter into substring, recurse to carry on processing next letter
