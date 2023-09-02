@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Block;
 
 use DOMElement;
+use Exception;
 use Manner\Indentation;
 use Manner\Man;
 use Manner\Node;
@@ -28,6 +29,9 @@ use Manner\Node;
 class RE implements Template
 {
 
+    /**
+     * @throws Exception
+     */
     public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 
 use Manner\Roff\Glyph;
@@ -98,6 +99,9 @@ class Node
           in_array(trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement
     {
         $renamed = $node->ownerDocument->createElement($name);
@@ -117,7 +121,7 @@ class Node
         return $renamed;
     }
 
-    public static function removeAttributeAll($nodes, $attributes)
+    public static function removeAttributeAll($nodes, $attributes): void
     {
         /** @var DOMElement $node */
         $attributes = (array)$attributes;
@@ -128,7 +132,7 @@ class Node
         }
     }
 
-    public static function removeIds(DOMNode $domNode)
+    public static function removeIds(DOMNode $domNode): void
     {
         if (!DOM::isElementNode($domNode)) {
             return;
@@ -140,7 +144,7 @@ class Node
         }
     }
 
-    public static function replaceGlyphs(DOMNode $domNode)
+    public static function replaceGlyphs(DOMNode $domNode): void
     {
         if (Dom::isTextNode($domNode)) {
             $domNode->textContent = Glyph::substitute(htmlspecialchars_decode($domNode->textContent));

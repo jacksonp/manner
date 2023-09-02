@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Manner\Inline;
 
 use DOMElement;
+use DOMException;
 use Manner\Block\Template;
 use Manner\Request;
 
 class VerticalSpace implements Template
 {
 
-    public static function addBR(DOMElement $parentNode)
+    /**
+     * @throws DOMException
+     */
+    public static function addBR(DOMElement $parentNode): void
     {
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;
@@ -28,11 +32,14 @@ class VerticalSpace implements Template
         }
     }
 
-    public static function check(string $string)
+    public static function check(string $string): bool
     {
         return in_array(Request::peepAt($string)['name'], ['br', 'sp', 'ne']);
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,

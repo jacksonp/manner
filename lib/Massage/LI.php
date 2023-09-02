@@ -11,7 +11,7 @@ use Manner\Node;
 class LI
 {
 
-    public static function tidy(DOMElement $li)
+    public static function tidy(DOMElement $li): void
     {
         while ($li->lastChild && (Node::isTextAndEmpty($li->lastChild) || DOM::isTag($li->lastChild, 'br'))) {
             $li->removeChild($li->lastChild);

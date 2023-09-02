@@ -18,7 +18,7 @@ class Remap
      * @param DOMXPath $xpath
      * @throws Exception
      */
-    public static function doAll(DOMXPath $xpath)
+    public static function doAll(DOMXPath $xpath): void
     {
         $divs = $xpath->query('//div[@remap]');
         /** @var DOMElement $div */

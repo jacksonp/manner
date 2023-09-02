@@ -17,7 +17,7 @@ class PreformattedOutput
     private static int  $nextIndent          = 0;
     private static bool $resetFontsAfterNext = false;
 
-    public static function reset()
+    public static function reset(): void
     {
         self::$addIndent           = 0;
         self::$nextIndent          = 0;
@@ -31,7 +31,7 @@ class PreformattedOutput
      * @return bool | DomElement
      * @throws Exception
      */
-    public static function handle(DOMElement $parentNode, array &$lines, array $request)
+    public static function handle(DOMElement $parentNode, array &$lines, array $request): bool|DOMElement
     {
         $pre = Node::ancestor($parentNode, 'pre');
 
@@ -191,7 +191,7 @@ class PreformattedOutput
         return true;
     }
 
-    public static function endInputLine(DOMElement $parentNode)
+    public static function endInputLine(DOMElement $parentNode): void
     {
         if (TextContent::$interruptTextProcessing || $parentNode->getAttribute('class') === 'synopsis') {
             $parentNode->appendChild(new DOMText(' '));

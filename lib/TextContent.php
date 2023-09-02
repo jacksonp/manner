@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Manner;
 
 use DOMElement;
+use DOMException;
 use DOMText;
+use Exception;
 use Manner\Inline\EQ;
 use Manner\Roff\Glyph;
 
@@ -14,7 +16,11 @@ class TextContent
 
     public static bool $interruptTextProcessing = false;
 
-    public static function interpretAndAppendText(DOMElement $parentNode, string $line)
+    /**
+     * @throws DOMException
+     * @throws Exception
+     */
+    public static function interpretAndAppendText(DOMElement $parentNode, string $line): void
     {
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
@@ -233,7 +239,10 @@ class TextContent
         return $tags;
     }
 
-    private static function appendTextChild(DOMElement $parentNode, string $textContent)
+    /**
+     * @throws DOMException
+     */
+    private static function appendTextChild(DOMElement $parentNode, string $textContent): void
     {
         if (!in_array(trim($textContent), ['', '\\&'])) {
             $man   = Man::instance();

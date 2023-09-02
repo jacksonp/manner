@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner;
 
 use DOMElement;
+use DOMException;
 use Exception;
 
 class Blocks
@@ -31,6 +32,9 @@ class Blocks
       'sup',
     ];
 
+    /**
+     * @throws DOMException
+     */
     public static function getParentForText(DOMElement $parentNode): DOMElement
     {
         if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {

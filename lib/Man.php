@@ -32,7 +32,7 @@ class Man
     private array $inlineClasses;
 
     /**
-     * @var Man The reference to *Singleton* instance of this class
+     * @var Man|null The reference to *Singleton* instance of this class
      */
     private static ?Man $instance = null;
 
@@ -41,7 +41,7 @@ class Man
      *
      * @return Man The *Singleton* instance.
      */
-    public static function instance()
+    public static function instance(): Man
     {
         if (null === static::$instance) {
             static::$instance = new static();
@@ -58,7 +58,7 @@ class Man
     {
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->data                = [
           'indentation'    => Indentation::DEFAULT,
@@ -230,7 +230,7 @@ class Man
         return isset($this->data[$name]);
     }
 
-    public function addPostOutputCallback(Closure $string)
+    public function addPostOutputCallback(Closure $string): void
     {
         $this->postOutputCallbacks[] = $string;
     }
@@ -290,7 +290,7 @@ class Man
         return $this->fontStack;
     }
 
-    public function addAlias(string $original, string $alias)
+    public function addAlias(string $original, string $alias): void
     {
         $this->aliases[$original] = $alias;
     }
@@ -300,7 +300,7 @@ class Man
         return $this->aliases;
     }
 
-    public function addMacro(string $name, array $lines)
+    public function addMacro(string $name, array $lines): void
     {
         $this->macros[$name] = $lines;
     }
@@ -310,6 +310,9 @@ class Man
         return $this->macros;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getRegister(string $name): string
     {
         if (!$this->issetRegister($name)) {
@@ -323,7 +326,7 @@ class Man
         $this->registers[$name] = $value;
     }
 
-    public function unsetRegister(string $name)
+    public function unsetRegister(string $name): void
     {
         unset($this->registers[$name]);
     }
@@ -333,7 +336,7 @@ class Man
         return array_key_exists($name, $this->registers);
     }
 
-    public function addString(string $string, string $value)
+    public function addString(string $string, string $value): void
     {
         $this->strings[$string] = $value;
     }
@@ -348,12 +351,12 @@ class Man
         return $this->strings;
     }
 
-    public function setEntity(string $from, string $to)
+    public function setEntity(string $from, string $to): void
     {
         $this->entities[$from] = $to;
     }
 
-    public function setCharTranslation(string $from, string $to)
+    public function setCharTranslation(string $from, string $to): void
     {
         $this->characterTranslations[$from] = $to;
     }
@@ -404,14 +407,13 @@ class Man
         // \D: The \D escape provides a variety of drawing function
         // \Z: Print anything, then restore the horizontal and vertical position.
         $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\Z@.*?@~u', ' ', $line);
-        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLlD]\'.*?\'~u', ' ', $line);
 
         // $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
 
-        return $line;
+        return Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLlD]\'.*?\'~u', ' ', $line);
     }
 
-    public function requestStartsBlock(string $requestName)
+    public function requestStartsBlock(string $requestName): bool
     {
         return array_key_exists($requestName, $this->blockClasses);
     }
@@ -436,7 +438,7 @@ class Man
         }
     }
 
-    public function resetIndentationToDefault()
+    public function resetIndentationToDefault(): void
     {
         $this->data['indentation'] = Indentation::DEFAULT;
     }

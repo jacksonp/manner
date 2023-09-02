@@ -9,11 +9,9 @@ use DOMElement;
 use Exception;
 use Manner\Block\Template;
 use Manner\DOM;
-use Manner\Man;
 use Manner\Node;
 use Manner\Request;
 use Manner\Roff;
-use Manner\Roff\Glyph;
 
 class PS implements Template
 {
@@ -75,7 +73,7 @@ class PS implements Template
     /**
      * @throws Exception
      */
-    public static function appendPic(DOMElement $parentNode, array $lines)
+    public static function appendPic(DOMElement $parentNode, array $lines): void
     {
         // Aborted attempt to fix rcsfile.5 diagram
 //        if (count($lines) > 0 && $lines[0] === '.nf') {

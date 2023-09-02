@@ -14,7 +14,7 @@ use Manner\Node;
 class P
 {
 
-    public static function removeEmpty(DOMXPath $xpath)
+    public static function removeEmpty(DOMXPath $xpath): void
     {
         $ps = $xpath->query('//p');
         foreach ($ps as $p) {
@@ -28,7 +28,7 @@ class P
      * @param DOMElement $p
      * @throws Exception
      */
-    public static function tidy(DOMElement $p)
+    public static function tidy(DOMElement $p): void
     {
         // Change two br tags in a row to a new paragraph.
 
@@ -64,8 +64,6 @@ class P
 
         if (trim($p->textContent) === '') {
             $p->parentNode->removeChild($p);
-
-            return;
         }
     }
 

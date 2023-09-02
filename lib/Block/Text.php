@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Block;
 
 use DOMElement;
+use DOMException;
 use DOMText;
 use Exception;
 use Manner\Blocks;
@@ -19,7 +20,7 @@ class Text implements Template
 
     public static bool $interruptTextProcessing = false;
 
-    public static function addSpace(DOMElement $parentNode)
+    public static function addSpace(DOMElement $parentNode): void
     {
         if (
           !Node::isOrInTag($parentNode, 'pre') && Node::hasContent($parentNode) &&
@@ -97,7 +98,10 @@ class Text implements Template
         return $line;
     }
 
-    public static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false)
+    /**
+     * @throws DOMException
+     */
+    public static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false): void
     {
         if ($prefixBR) {
             self::addImplicitBreak($parentNode);
@@ -108,7 +112,10 @@ class Text implements Template
         TextContent::interpretAndAppendText($parentNode, $line);
     }
 
-    private static function addImplicitBreak(DOMElement $parentNode)
+    /**
+     * @throws DOMException
+     */
+    private static function addImplicitBreak(DOMElement $parentNode): void
     {
         if (
           $parentNode->hasChildNodes() &&

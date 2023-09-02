@@ -20,7 +20,7 @@ class TabTable implements Template
     // \&... see pmlogextract.1
     public const specialAcceptableLines = ['\\&...'];
 
-    private static function isTabTableLine($line)
+    private static function isTabTableLine($line): bool
     {
         $line = trim($line);
 

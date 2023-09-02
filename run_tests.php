@@ -10,7 +10,7 @@ require_once 'autoload.php';
  * @param $filePath
  * @throws Exception
  */
-function runTest($filePath)
+function runTest($filePath): void
 {
     if (!is_file($filePath)) {
         exit($filePath . ' is not a file.');

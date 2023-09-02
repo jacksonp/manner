@@ -7,7 +7,7 @@ namespace Manner;
 class Replace
 {
 
-    public static function preg($pattern, $replacement, string $subject, $limit = -1, &$count = null)
+    public static function preg($pattern, $replacement, string $subject, $limit = -1, &$count = null): array|string
     {
         $newStr = preg_replace($pattern, $replacement, $subject, $limit, $count);
 
@@ -34,7 +34,7 @@ class Replace
      * @param string $string
      * @return string
      */
-    private static function ignoreBadChars(string $string)
+    private static function ignoreBadChars(string $string): string
     {
         return iconv('UTF-8', 'UTF-8//IGNORE', $string);
     }

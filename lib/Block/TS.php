@@ -124,7 +124,7 @@ class TS implements Template
             if ($request['request'] === 'TE') {
                 return null; // Format is garbage, skip content.
             }
-            if (strpos($request['raw_line'], ',') !== false) {
+            if (str_contains($request['raw_line'], ',')) {
                 $newLines = explode(',', $request['raw_line']);
                 for ($i = count($newLines) - 1; $i >= 0; --$i) {
                     array_unshift($lines, trim($newLines[$i]));
@@ -151,7 +151,7 @@ class TS implements Template
      * @return array|null
      * @throws Exception
      */
-    private static function addRowsFromFormats(DOMElement $table, array &$lines)
+    private static function addRowsFromFormats(DOMElement $table, array &$lines): ?array
     {
         $rowFormats = self::parseRowFormats($lines);
         if (is_null($rowFormats)) {
@@ -190,7 +190,7 @@ class TS implements Template
                     continue;
                 }
 
-                if (preg_match('~^S~', $tdFormat)) {
+                if (str_starts_with($tdFormat, 'S')) {
                     if ($tr->lastChild) {
                         $prevColspan = $tr->lastChild->getAttribute('colspan');
                         if ($prevColspan !== '') {
@@ -359,7 +359,6 @@ class TS implements Template
                 }
                 $trailingTRPrototype = $table->lastChild->cloneNode(true);
                 $formatRowNum        = 0;
-                continue;
             } elseif ($request['raw_line'] === '_') {
                 if ($tr) {
                     Node::addClass($tr, 'border-bottom');

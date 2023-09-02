@@ -12,7 +12,7 @@ use Manner\Text;
 class PRE
 {
 
-    public static function tidy(DOMElement $el)
+    public static function tidy(DOMElement $el): void
     {
         while ($el->lastChild && Node::isTextAndEmpty($el->lastChild)) {
             $el->removeChild($el->lastChild);

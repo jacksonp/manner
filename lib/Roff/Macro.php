@@ -37,9 +37,7 @@ class Macro
         $string = str_replace('\\$*', implode(' ', $arguments), $string);
 
         // \$@ : In a macro or string, the concatenation of all the arguments with each surrounded by double quotes, and separated by spaces.
-        $string = str_replace('\\$@', '"' . implode('" "', $arguments) . '"', $string);
-
-        return $string;
+        return str_replace('\\$@', '"' . implode('" "', $arguments) . '"', $string);
     }
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Massage;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 use DOMText;
 use Manner\DOM;
@@ -33,7 +34,7 @@ class HTMLList
         }
     }
 
-    public static function removeLonePs(DOMElement $list)
+    public static function removeLonePs(DOMElement $list): void
     {
         $child = $list->firstChild;
         while ($child) {
@@ -46,6 +47,9 @@ class HTMLList
         }
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function checkElementForLIs(DOMElement $li): bool
     {
         $foundInnerLI = false;

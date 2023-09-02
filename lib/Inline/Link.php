@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Inline;
 
 use DOMElement;
+use DOMException;
 use Manner\Block\Template;
 use Manner\Block\Text;
 use Manner\Blocks;
@@ -15,6 +16,9 @@ use Manner\TextContent;
 class Link implements Template
 {
 
+    /**
+     * @throws DOMException
+     */
     public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,
@@ -49,7 +53,7 @@ class Link implements Template
         return $anchor;
     }
 
-    public static function getValidHREF(string $url)
+    public static function getValidHREF(string $url): false|string
     {
         $url  = Replace::preg('~^<(.*)>$~u', '$1', $url);
         $href = TextContent::interpretString($url);

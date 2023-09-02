@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Manner\Block;
 
 use DOMElement;
-use Manner;
 use Manner\PreformattedOutput;
 
 class ad implements Template

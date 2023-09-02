@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Manner\Massage;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 use DOMXPath;
+use Exception;
 use Manner\DOM;
 use Manner\Indentation;
 use Manner\Node;
@@ -14,6 +16,9 @@ use Manner\Node;
 class DIV
 {
 
+    /**
+     * @throws Exception
+     */
     public static function removeDIVsWithSingleChild(DOMXPath $xpath): void
     {
         $divs = $xpath->query('//div');
@@ -25,6 +30,9 @@ class DIV
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static function removeDIVWithSingleChild(DOMElement $div): void
     {
         if ($div->childNodes->length === 1) {
@@ -54,6 +62,9 @@ class DIV
           HTMLList::startsWithBullet($div->textContent);
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function postProcess(DOMElement $div): ?DOMNode
     {
         $doc = $div->ownerDocument;

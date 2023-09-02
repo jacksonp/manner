@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Massage;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 use DOMXPath;
 use Manner\DOM;
@@ -53,6 +54,9 @@ class Block
         }
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function coalesceAdjacentChildDIVs(DOMElement $divsContainer): void
     {
         $child = $divsContainer->firstChild;

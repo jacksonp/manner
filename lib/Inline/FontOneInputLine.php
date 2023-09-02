@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Inline;
 
 use DOMElement;
+use DOMException;
 use Manner\Block\Template;
 use Manner\Block\Text;
 use Manner\Blocks;
@@ -16,6 +17,9 @@ use Manner\TextContent;
 class FontOneInputLine implements Template
 {
 
+    /**
+     * @throws DOMException
+     */
     public static function checkAppend(
       DOMElement $parentNode,
       array &$lines,

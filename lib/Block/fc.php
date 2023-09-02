@@ -6,6 +6,7 @@ namespace Manner\Block;
 
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use Exception;
 use Manner\Blocks;
 use Manner\Request;
@@ -14,7 +15,10 @@ use Manner\TextContent;
 class fc implements Template
 {
 
-    private static function addRow(DOMDocument $dom, DOMElement $table, array $cells)
+    /**
+     * @throws DOMException
+     */
+    private static function addRow(DOMDocument $dom, DOMElement $table, array $cells): void
     {
         $tr = $dom->createElement('tr');
         foreach ($cells as $contents) {

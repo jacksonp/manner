@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner\Massage;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 use DOMXPath;
 use Exception;
@@ -37,6 +38,9 @@ class DL
         }
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function checkPrecedingNodes(DOMXPath $xpath): void
     {
         $dls = $xpath->query('//dl');
@@ -159,6 +163,9 @@ class DL
 
     // Could also identify lists starting with 0 and use start="0" attribute...
     // but maybe <ol> is not semantically correct for e.g. return status codes.
+    /**
+     * @throws DOMException
+     */
     public static function MaybeChangeToUL(DOMElement $dl): ?DomElement
     {
         $dtChar = null;
@@ -192,6 +199,9 @@ class DL
         return $ul;
     }
 
+    /**
+     * @throws DOMException
+     */
     public static function CreateULs(DOMXpath $xpath): void
     {
         $dls = $xpath->query('//dl');

@@ -93,10 +93,6 @@ class Condition implements Template
             return;
         }
 
-        if (is_null($condition)) {
-            return; // Just skip
-        }
-
         if ($condition === '.if') {
             $conditionTrue = false; // Hack for units.1
         } else {
@@ -125,7 +121,7 @@ class Condition implements Template
         }
 
         $postConditionString = ltrim($postConditionString); // cougar.1alc has extra leading space
-        $postConditionBlock  = strpos($postConditionString, '\\{') === 0;
+        $postConditionBlock  = str_starts_with($postConditionString, '\\{');
         if ($postConditionBlock) {
             $postConditionString = substr($postConditionString, 2);
         }

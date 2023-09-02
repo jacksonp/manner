@@ -77,7 +77,10 @@ class EQ implements Template
         return null;
     }
 
-    public static function appendMath(DOMElement $parentNode, array $lines)
+    /**
+     * @throws Exception
+     */
+    public static function appendMath(DOMElement $parentNode, array $lines): void
     {
         $eqnString = '.EQ' . PHP_EOL;
         foreach ($lines as $line) {
@@ -85,7 +88,7 @@ class EQ implements Template
             $line      = str_replace(['\\fI', '\\fP'], '', $line);
             $eqnString .= $line . PHP_EOL;
         }
-        $eqnString .= '.EN' . PHP_EOL;
+        $eqnString   .= '.EN' . PHP_EOL;
         $tmpFileName = tempnam('/tmp', 'eqn');
         file_put_contents($tmpFileName, $eqnString);
         exec('eqn -T MathML ' . $tmpFileName, $output, $returnVar);
@@ -115,8 +118,6 @@ class EQ implements Template
 
         $mathNode = $parentNode->ownerDocument->importNode($mathNode, true);
         $parentNode->appendChild($mathNode);
-
-        return;
     }
 
 }

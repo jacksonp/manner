@@ -15,7 +15,7 @@ class Body
      * @param DOMXPath $xpath
      * @throws Exception
      */
-    public static function trimNodesBeforeH1(DOMXPath $xpath)
+    public static function trimNodesBeforeH1(DOMXPath $xpath): void
     {
         $bodies = $xpath->query('//body');
         if ($bodies->length !== 1) {

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Manner\Massage;
 
 use DOMElement;
+use DOMException;
 use Manner\DOM;
 use Manner\Node;
 
 class DT
 {
 
+    /**
+     * @throws DOMException
+     */
     public static function postProcess(DOMElement $dt): void
     {
         $child = $dt->lastChild;
@@ -32,7 +36,7 @@ class DT
         }
     }
 
-    public static function tidy(DOMElement $dt)
+    public static function tidy(DOMElement $dt): void
     {
         while ($dt->lastChild && (Node::isTextAndEmpty($dt->lastChild) || DOM::isTag($dt->lastChild, 'br'))) {
             $dt->removeChild($dt->lastChild);

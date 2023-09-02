@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manner;
 
 use DOMElement;
+use DOMException;
 use DOMNode;
 use DOMText;
 use Exception;
@@ -65,7 +66,8 @@ class DOM
 
     /**
      * @param DOMElement $element
-     * @return DOMElement|DOMNode|null The element we should look at next.
+     * @return DOMNode|null The element we should look at next.
+     * @throws DOMException
      * @throws Exception
      */
     private static function massageNode(DOMElement $element): ?DOMNode
@@ -77,7 +79,7 @@ class DOM
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
                 $codeNode = $element->lastChild;
                 if ($codeNode->lastChild && $codeNode->lastChild->nodeType === XML_TEXT_NODE) {
-                    $codeNode->lastChild->textContent = preg_replace('~\n+$~', '', $codeNode->lastChild->textContent);
+                    $codeNode->lastChild->textContent = rtrim($codeNode->lastChild->textContent, "\n");
                 }
             }
         }
@@ -332,7 +334,6 @@ class DOM
                 if ($child->textContent === '-') {
                     if (
                       $child->firstChild instanceof DOMText &&
-                      $child->nextSibling &&
                       $child->nextSibling instanceof DOMElement &&
                       $child->nextSibling->childNodes->length === 1 &&
                       $child->nextSibling->firstChild instanceof DOMText &&
