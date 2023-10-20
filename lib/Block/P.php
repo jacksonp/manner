@@ -27,6 +27,22 @@ class P implements Template
       array $request,
       bool $needOneLineOnly = false
     ): ?DOMElement {
+
+        // This could improve slightly the output of readlink.1 but not worth it as doesn't change any other files,
+        // and .HP has been deprecated.
+//        if (
+//          $request['request'] === 'HP'
+//          && count($request['arguments']) === 0
+//          && count($lines) > 2
+//          && $lines[2] === '.TP'
+//        ) {
+//            $lines[0] = '.TP';
+//            array_splice($lines, 2, 0, '[empty]');
+//
+//            return null;
+//        }
+
+
         array_shift($lines);
 
         $man = Man::instance();
