@@ -53,7 +53,7 @@ class de implements Template
         // djvm e.g. does something dodgy when overriding .SS, just use normal .SS handling for it.
         // .URL: we can do a better job with the semantic info.
         // .BB & .EB: see criu.8: does something tricky with .di across macros.
-        $protectedMacros = ['SS', 'MTO', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE', 'BB', 'EB'];
+        $protectedMacros = ['SS', 'MTO', 'URL', 'SY', 'YS', 'SH', 'TP', 'RS', 'RE', 'BB', 'EB', 'MR'];
 
         if (!in_array($newMacro, $protectedMacros)) {
             Man::instance()->addMacro($newMacro, $macroLines);

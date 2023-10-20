@@ -177,6 +177,7 @@ class Man
         $this->inlineClasses = [
           'URL' => '\Manner\Inline\URL',
           'MTO' => '\Manner\Inline\URL',
+          'MR'  => '\Manner\Inline\MR',
           'UR'  => '\Manner\Inline\Link',
           'UE'  => '\Manner\Inline\LinkEnd',
           'MT'  => '\Manner\Inline\Link',
