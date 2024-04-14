@@ -411,7 +411,10 @@ class Man
 
         // $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLl]\'.*?\'~u', '$1 ', $line);
 
-        return Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[vhLlD]\'.*?\'~u', ' ', $line);
+        // See ksh93.1 for case where \v uses @ instead of ' and should not be replaced by a space.
+        $line = Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\v[@\'].*?[@\']~u', '', $line);
+
+        return Replace::preg('~(?<!\\\\)((?:\\\\\\\\)*)\\\\[hLlD]\'.*?\'~u', ' ', $line);
     }
 
     public function requestStartsBlock(string $requestName): bool
