@@ -68,10 +68,10 @@ class Manner
     /**
      * @param array $fileLines
      * @param string|null $outputFile
-     * @param bool $test
+     * @param bool $bodyOnly
      * @throws Exception
      */
-    public static function roffToHTML(array $fileLines, string $outputFile = null, bool $test = false): void
+    public static function roffToHTML(array $fileLines, string $outputFile = null, bool $bodyOnly = false): void
     {
         $dom  = self::roffToDOM($fileLines);
         $html = $dom->saveHTML();
@@ -89,7 +89,7 @@ class Manner
             $title = 'UNTITLED';
         }
 
-        if ($test) {
+        if ($bodyOnly) {
             echo $html;
 
             return;
