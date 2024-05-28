@@ -95,9 +95,11 @@ class Manner
             return;
         }
 
-        $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars(
-            $extra1
-          ) . '" data-extra2="' . htmlspecialchars($extra2) . '" data-extra3="' . htmlspecialchars($extra3) . '">';
+        $manPageInfo = '<meta name="man-page-info" data-extra1="' . htmlspecialchars($extra1)
+          . '" data-extra2="' . htmlspecialchars($extra2)
+          . '" data-extra3="' . htmlspecialchars($extra3)
+          . '">'
+          . '<!-- Created with manner: https://www.mankier.com/manner -->';
 
         if (is_null($outputFile)) {
             echo '<!DOCTYPE html>',
