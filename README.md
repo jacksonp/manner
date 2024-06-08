@@ -66,3 +66,8 @@ After running:
 </body>
 ```
 
+## Requirements
+
+- PHP >= 8.2
+- A few man pages contain `.EQ` macros, for these the `eqn` command is required.
+- A few man pages contain `.PS` macros, for these the `pic2plot` and `inkscape` commands are required.
