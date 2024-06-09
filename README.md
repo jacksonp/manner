@@ -10,11 +10,14 @@ See in the `examples` folder:
 
 ```
 .TH EXAMPLE "1" "June 2024" "manner" "Example Man Page"
+
 .SH NAME
 example \- sample man page
+
 .SH SYNOPSIS
 .B example
 [\fI\,OPTION\/\fR]...
+
 .SH DESCRIPTION
 .\" This is a comment
 .PP
@@ -25,6 +28,46 @@ a sample option
 .TP
 \fB\-b\fR, \fB\-\-ball\fR
 another sample option
+.PP
+
+.TS
+tab(@);
+l l.
+T{
+Column 1
+T}@T{
+Column 2
+T}
+_
+T{
+row1
+T}@T{
+This is some tabular date
+T}
+T{
+this is the second row
+T}@T{
+translated to an HTML <table>
+T}
+.TE
+
+
+.SH SEE ALSO
+.IP \(bu
+First thing to see:
+.URL "https://example.com/something" "Some Project" "."
+.IP \(bu
+Second thing to see.
+
+.SH AUTHORS
+This was written by
+.MT "author1@example.com"
+Author 1
+.ME
+and
+.MT "author2@example.com" "."
+Author 2
+.ME
 ```
 
 After running:
@@ -62,6 +105,37 @@ After running:
       <dt><strong>-b</strong>, <strong>--ball</strong></dt>
       <dd><p>another sample option</p></dd>
     </dl>
+    <table>
+      <tr class="border-bottom">
+        <td>Column 1</td>
+        <td>Column 2</td>
+      </tr>
+      <tr>
+        <td>row1</td>
+        <td>This is some tabular date</td>
+      </tr>
+      <tr>
+        <td>this is the second row</td>
+        <td>translated to an HTML &lt;table&gt;</td>
+      </tr>
+    </table>
+  </section>
+  <section>
+    <h2>SEE ALSO</h2>
+    <ul>
+      <li class="p">
+        First thing to see:
+        <a href="https://example.com/something">Some Project</a>.
+      </li>
+      <li class="p">Second thing to see.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>AUTHORS</h2>
+    <p>
+      This was written by <a href="mailto:author1@example.com">Author 1</a> and
+      <a href="mailto:author2@example.com">Author 2</a>
+    </p>
   </section>
 </body>
 ```
