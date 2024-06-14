@@ -4,6 +4,17 @@ Convert troff man pages to semantic HTML.
 
 This is used for rendering pages on [ManKier](https://www.mankier.com/).
 
+Macro conversion:
+
+- `.TH` → `<title>, <h1>`: [title heading macros](https://www.mankier.com/7/groff_man#Description-Document_structure_macros) become HTML [title](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title) elements and the highest level of HTML [section heading](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements).
+- `.SH, .SS` → `<section>, <h2>, <h3>`: [section heading macros](https://www.mankier.com/7/groff_man#Description-Document_structure_macros) become HTML [section](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/section) elements with HTML section headings.
+- `.PP` → `<p>`: paragraph macros become HTML paragraphs.
+- `.TP, .TQ` → `<dl>, <dt>, <dd>`: sequences of [tagged paragraph macros](https://www.mankier.com/7/groff_man#Description-Paragraphing_macros) become HTML [definition lists](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl).
+- `.IP \(bu` → `<ul>`: indented paragraph macros used for lists become HTML [unordered lists](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul)
+- `.TS, .TE` → `<table>`: tables handled by the [tbl](https://www.mankier.com/1/tbl) preprocessor for troff become HTML [tables](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table).
+- `.UR, .UE` → `<a href="">`: [hyperlink URI macros](https://www.mankier.com/7/groff_man#Description-Hyperlink_macros) become HTML URL [anchors](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a).
+- `.MT, .ME` → `<a href="">`: hyperlink email macros become HTML URL anchors with a `mailto:` scheme
+
 ## Example
 
 See in the `examples` folder:
@@ -55,19 +66,21 @@ T}
 .SH SEE ALSO
 .IP \(bu
 First thing to see:
-.URL "https://example.com/something" "Some Project" "."
+.UR https://example.com/something
+Some Project
+.UE .
 .IP \(bu
 Second thing to see.
 
 .SH AUTHORS
 This was written by
-.MT "author1@example.com"
+.MT author1@example.com
 Author 1
 .ME
 and
-.MT "author2@example.com" "."
+.MT author2@example.com
 Author 2
-.ME
+.ME .
 ```
 
 After running:
@@ -134,7 +147,7 @@ After running:
     <h2>AUTHORS</h2>
     <p>
       This was written by <a href="mailto:author1@example.com">Author 1</a> and
-      <a href="mailto:author2@example.com">Author 2</a>
+      <a href="mailto:author2@example.com">Author 2</a>.
     </p>
   </section>
 </body>
