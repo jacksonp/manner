@@ -138,6 +138,10 @@ class TP implements Template
                 $gotContent = Roff::parse($dt, $lines, true);
                 if (!$gotContent) {
                     $dl->removeChild($dt);
+                } else {
+                    while (TextContent::$interruptTextProcessing) {
+                        Roff::parse($dt, $lines, true);
+                    }
                 }
             } else {
                 break;
