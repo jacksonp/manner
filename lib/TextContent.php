@@ -68,6 +68,23 @@ class TextContent
             }
         }
 
+        if (preg_match('~^(.*?)\\\\X\'tty: link (.*?)\'(.*?)\\\\X\'tty: link\'(.*)$~', $line, $matches)) {
+            if (mb_strlen($matches[1]) > 0) {
+                self::interpretAndAppendText($parentNode, $matches[1]);
+            }
+
+            $anchor = $dom->createElement('a');
+            $parentNode->appendChild($anchor);
+            $anchor->setAttribute('href', $matches[2]);
+            self::interpretAndAppendText($anchor, $matches[3]);
+
+            if (mb_strlen($matches[4]) > 0) {
+                self::interpretAndAppendText($parentNode, $matches[4]);
+            }
+
+            return;
+        }
+
         if (preg_match_all('~(?<!\\\\)(?:\\\\\\\\)*\\\\([du])~u', $line, $matches, PREG_OFFSET_CAPTURE)) {
             // If count is 1: just a stray... catch it later.
             if (count($matches[1]) !== 1) {
