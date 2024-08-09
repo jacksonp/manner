@@ -320,12 +320,14 @@ class Condition implements Template
         $condition = Unit::normalize($condition, 'u', 'u');
 
         if (preg_match('~^([-+*/\d()><=.\s]| or | and )+$~u', $condition)) {
-            $condition  = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
+            $condition = Replace::preg('~(?<=[\d\s])=(?=[\d\s])~', '==', $condition);
+
             $expression = 'return ' . $condition . ';';
             try {
                 return eval($expression) > 0;
             } catch (ParseError $e) {
-                throw new Exception($e->getMessage());
+                return false;
+//                throw new Exception($e->getMessage());
             }
         }
 
