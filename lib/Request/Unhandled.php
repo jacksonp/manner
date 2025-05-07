@@ -29,7 +29,7 @@ class Unhandled implements Template
 {
 
     // Unhandled:
-    public const requests = [
+    public const array requests = [
       'ab',
       'aln',
       'am1',
@@ -97,7 +97,6 @@ class Unhandled implements Template
       'rn',
       'rnn',
       'rr',
-      'shc',
       'sizes',
       'special',
       'spreadwarn',
