@@ -33,7 +33,7 @@ class DefinitionList
             if ($tag === 'dl') {
                 return $parentNode;
             }
-            if (in_array($tag, ['body']) || ($tag === 'div' && !$parentNode->hasAttribute('remap'))) {
+            if ($tag === 'body' || ($tag === 'div' && !$parentNode->hasAttribute('remap'))) {
                 return null;
             }
         } while ($parentNode = $parentNode->parentNode);

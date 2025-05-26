@@ -29,7 +29,7 @@ class Indentation
 
     // The default indentation is 7.2n in troff mode and 7n in nroff mode except for grohtml, which ignores indentation.
     // (https://www.mankier.com/7/groff_man#Miscellaneous)
-    public const DEFAULT = '7';
+    public const string DEFAULT = '7';
 
     public static function isSet(DOMElement $p): bool
     {

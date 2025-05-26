@@ -32,10 +32,10 @@ use Manner\TextContent;
 class TabTable implements Template
 {
 
-    public const skippableLines = ['.br', ''];
+    public const array skippableLines = ['.br', ''];
 
     // \&... see pmlogextract.1
-    public const specialAcceptableLines = ['\\&...'];
+    public const array specialAcceptableLines = ['\\&...'];
 
     private static function isTabTableLine($line): bool
     {

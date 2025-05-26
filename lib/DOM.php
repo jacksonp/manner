@@ -121,7 +121,7 @@ class DOM
 //            return $nextSibling;
 //        }
 
-        if ($myTag === 'pre' && in_array($element->parentNode->tagName, ['pre'])) {
+        if ($myTag === 'pre' && $element->parentNode->tagName === 'pre') {
             $nextSibling = $element->nextSibling;
             Node::remove($element);
 
@@ -176,7 +176,7 @@ class DOM
             }
 
             if (!Indentation::isSet($element)) {
-                if (in_array($element->parentNode->tagName, ['dd'])) {
+                if ($element->parentNode->tagName === 'dd') {
                     $nextSibling = Massage\DIV::getNextNonBRNode($element);
                     Node::remove($element);
 

@@ -71,7 +71,7 @@ class Manner
      * @param bool $bodyOnly
      * @throws Exception
      */
-    public static function roffToHTML(array $fileLines, string $outputFile = null, bool $bodyOnly = false): void
+    public static function roffToHTML(array $fileLines, ?string $outputFile = null, bool $bodyOnly = false): void
     {
         $dom  = self::roffToDOM($fileLines);
         $html = $dom->saveHTML();

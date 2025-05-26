@@ -28,9 +28,9 @@ use ParseError;
 class Unit
 {
 
-    private const basicUnitsPerInch = 240;
+    private const int basicUnitsPerInch = 240;
 
-    private const unitMultipliers = [
+    private const array unitMultipliers = [
         // device dependent measurement, quite small, ranging from 1/75th to 1/72000th of an inch
       'u' => 1,
         // inch

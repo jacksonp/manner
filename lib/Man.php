@@ -294,13 +294,7 @@ class Man
 
     public function isFontSmall(): bool
     {
-        foreach ($this->fontStack as $font) {
-            if (in_array($font, ['SM', 'SB'])) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->fontStack, fn($font) => in_array($font, ['SM', 'SB']));
     }
 
     public function getFonts(): array

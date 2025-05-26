@@ -26,7 +26,7 @@ use Manner\Replace;
 class Glyph
 {
 
-    public const ALL_GLYPHS = [
+    public const array ALL_GLYPHS = [
         // Nordic
       '-D'             => 'Ð',
       'Sd'             => 'ð',

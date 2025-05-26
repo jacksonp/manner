@@ -28,7 +28,7 @@ use Exception;
 class Blocks
 {
 
-    public const BLOCK_ELEMENTS = [
+    public const array BLOCK_ELEMENTS = [
       'p',
       'pre',
       'div',
@@ -38,7 +38,7 @@ class Blocks
       'table',
     ];
 
-    public const INLINE_ELEMENTS = [
+    public const array INLINE_ELEMENTS = [
       'a',
       'em',
       'strong',

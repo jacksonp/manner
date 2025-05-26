@@ -33,7 +33,7 @@ class Condition implements Template
     // Tcl_RegisterObjType.3 condition: ""with whitespace"
     // For the nested parens bit, see http://stackoverflow.com/a/3851098
     // For the last quotes bit, see http://stackoverflow.com/a/366532
-    public const CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
+    public const string CONDITION_REGEX = '(!?[ntv]|!?[cdmrFS]\s?[^\s]+|!?"[^"]*"[^"]*"|!?\'[^\']*\'[^\']*\'|\((?>[^()]+|(?1))*\)|(?:[^\s"\']|"[^"]*"|\'[^\']*\')+)';
 
     private static function isBalancedCondition(string $string): bool
     {
@@ -45,7 +45,7 @@ class Condition implements Template
                     ++$i; // skip next char, it's escaped
                     break;
                 case '(':
-                    array_push($stack, 0);
+                    $stack[] = 0;
                     break;
                 case ')':
                     if (array_pop($stack) !== 0) {
@@ -325,7 +325,7 @@ class Condition implements Template
             $expression = 'return ' . $condition . ';';
             try {
                 return eval($expression) > 0;
-            } catch (ParseError $e) {
+            } catch (ParseError) {
                 return false;
 //                throw new Exception($e->getMessage());
             }
@@ -389,7 +389,7 @@ class Condition implements Template
             if (mb_substr($lastLine, -1, 1) === '\\') {
                 $lastLine = mb_substr($lastLine, 0, -1);
             }
-            array_push($replacementLines, $lastLine);
+            $replacementLines[] = $lastLine;
         }
 
         return $replacementLines;

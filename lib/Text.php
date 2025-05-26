@@ -24,8 +24,8 @@ namespace Manner;
 class Text
 {
 
-    public const ZERO_WIDTH_SPACE_UTF8 = "\xE2\x80\x8B";
-    public const ZERO_WIDTH_SPACE_HTML = '&#8203;';
+    public const string ZERO_WIDTH_SPACE_UTF8 = "\xE2\x80\x8B";
+    public const string ZERO_WIDTH_SPACE_HTML = '&#8203;';
 
     public static function trim(string $str): string
     {

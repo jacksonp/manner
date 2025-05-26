@@ -31,7 +31,7 @@ use Manner\Node;
 class HTMLList
 {
 
-    public const CHAR_PREFIXES = ['*', 'o', '·', '+', '-', '○'];
+    public const array CHAR_PREFIXES = ['*', 'o', '·', '+', '-', '○'];
 
     private static function getBulletRegex(): string
     {
