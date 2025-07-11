@@ -356,7 +356,7 @@ class Man
 
     public function getString(string $name): string
     {
-        return $this->strings[$name] ?: '';
+        return $this->strings[$name] ?? '';
     }
 
     public function getStrings(): array
