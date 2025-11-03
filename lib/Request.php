@@ -36,7 +36,7 @@ class Request
 
     public static function getArgChars(string $argString): array
     {
-        $argString = ltrim($argString);
+        $argString = mb_ltrim($argString);
 
         return preg_split('//u', $argString, -1, PREG_SPLIT_NO_EMPTY);
     }
@@ -80,7 +80,7 @@ class Request
 
     private static function parseArguments(string $argString, bool $ignoreQuotes): array
     {
-        $argString = ltrim($argString);
+        $argString = mb_ltrim($argString);
         // TODO: Could also trim on paired backslashes here:
         $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
 
@@ -160,7 +160,7 @@ class Request
         ) {
             $return['name'] = $matches[1];
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
-                $return['raw_arg_string'] = ltrim($matches[2]);
+                $return['raw_arg_string'] = mb_ltrim($matches[2]);
             }
         }
 
@@ -230,7 +230,7 @@ class Request
         ) {
             $return['request'] = Alias::check($matches[1]);
             if (array_key_exists(2, $matches) && !is_null($matches[2])) {
-                $return['raw_arg_string'] = ltrim($matches[2]);
+                $return['raw_arg_string'] = mb_ltrim($matches[2]);
                 $return['arg_string']     = $man->applyAllReplacements(Request::massageLine($return['raw_arg_string']));
                 $return['arguments']      = Request::parseArguments(
                   $return['arg_string'],

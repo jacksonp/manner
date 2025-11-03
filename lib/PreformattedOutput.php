@@ -146,7 +146,7 @@ class PreformattedOutput
             return true;
         } elseif ($request['request'] === 'IP') {
             self::$nextIndent = 4;
-            if (count($request['arguments']) === 0 || trim($request['arguments'][0]) === '') {
+            if (count($request['arguments']) === 0 || mb_trim($request['arguments'][0]) === '') {
                 array_shift($lines);
                 $man->resetFonts();
 

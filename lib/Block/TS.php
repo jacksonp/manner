@@ -59,14 +59,14 @@ class TS implements Template
 
     private static function parseRowFormat(string $line): array
     {
-        $line       = ltrim($line);
+        $line       = mb_ltrim($line);
         $formats    = [];
         $format     = self::getFormatChar($line, 0);
         $lineLength = mb_strlen($line);
         for ($i = 1; $i < $lineLength; ++$i) {
             $char = self::getFormatChar($line, $i);
             if (in_array($char, self::$rowFormatKeyCharacters)) {
-                $formats[] = trim($format);
+                $formats[] = mb_trim($format);
                 $format    = '';
             }
 
@@ -120,7 +120,7 @@ class TS implements Template
                 }
             }
         }
-        $formats[] = trim($format);
+        $formats[] = mb_trim($format);
 
         return $formats;
     }
@@ -144,13 +144,13 @@ class TS implements Template
             if (str_contains($request['raw_line'], ',')) {
                 $newLines = explode(',', $request['raw_line']);
                 for ($i = count($newLines) - 1; $i >= 0; --$i) {
-                    array_unshift($lines, trim($newLines[$i]));
+                    array_unshift($lines, mb_trim($newLines[$i]));
                 }
                 continue;
             }
             $line = $man->applyAllReplacements($request['raw_line']);
-            if (mb_substr(trim($line), -1, 1) === '.') {
-                $line        = rtrim($line, '.');
+            if (mb_substr(mb_trim($line), -1, 1) === '.') {
+                $line        = mb_rtrim($line, '.');
                 $formatsDone = true;
             }
             $rowFormats[] = self::parseRowFormat($line);
@@ -307,8 +307,8 @@ class TS implements Template
 
         $tableClasses = [];
 
-        if (mb_substr(trim($lines[0]), -1, 1) === ';') {
-            $globalOptions = rtrim($lines[0], ';');
+        if (mb_substr(mb_trim($lines[0]), -1, 1) === ';') {
+            $globalOptions = mb_rtrim($lines[0], ';');
             array_shift($lines);
             // Treat this separately as a space after "tab" is accepted:
             Replace::pregCallback(

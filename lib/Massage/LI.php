@@ -34,7 +34,7 @@ class LI
             $li->removeChild($li->lastChild);
         }
 
-        if (trim($li->textContent) === '') {
+        if (mb_trim($li->textContent) === '') {
             $li->parentNode->removeChild($li);
         }
     }

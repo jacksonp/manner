@@ -95,7 +95,7 @@ class fc implements Template
                 array_shift($cells);
                 $cells = array_map(
                   function ($contents) use ($pad) {
-                      return trim($contents, $pad);
+                      return mb_trim($contents, $pad);
                   },
                   $cells
                 );

@@ -234,7 +234,7 @@ class DL
             $i  = 1;
             $dt = $dl->firstChild;
             while (Dom::isTag($dt, 'dt')) {
-                $dtStr = trim($dt->textContent, " \t\n\r\0\x0B." . html_entity_decode('&nbsp;'));
+                $dtStr = mb_trim($dt->textContent, " \t\n\r\0\x0B." . html_entity_decode('&nbsp;'));
                 // !is_numeric($dtStr) check needed because: "1 foo" == 1
                 if (!is_numeric($dtStr) || $dtStr != $i) {
                     continue 2;

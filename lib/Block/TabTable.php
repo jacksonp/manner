@@ -39,7 +39,7 @@ class TabTable implements Template
 
     private static function isTabTableLine($line): bool
     {
-        $line = trim($line);
+        $line = mb_trim($line);
 
         return
           mb_strpos($line, "\t") !== false ||
@@ -49,7 +49,7 @@ class TabTable implements Template
 
     public static function lineContainsTab(string $line): bool
     {
-        $line = ltrim($line, '\\&');
+        $line = mb_ltrim($line, '\\&');
 
         // first char is NOT a tab + non-white-space before tab avoid indented stuff + exclude escaped tabs
         return mb_strpos($line, "\t") > 0 && preg_match('~[^\\\\\s]\t~u', $line);
@@ -64,7 +64,7 @@ class TabTable implements Template
           self::lineContainsTab($lines[0]) &&
           (
             self::lineContainsTab($lines[1]) ||
-            in_array(trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
+            in_array(mb_trim($lines[1]), self::skippableLines + self::specialAcceptableLines)
           ) &&
           self::lineContainsTab($lines[2]);
     }
@@ -99,7 +99,7 @@ class TabTable implements Template
 
             array_shift($lines);
 
-            if (in_array(trim($nextRequest['raw_line']), self::skippableLines)) {
+            if (in_array(mb_trim($nextRequest['raw_line']), self::skippableLines)) {
                 continue;
             }
 

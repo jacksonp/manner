@@ -35,7 +35,7 @@ class P
     {
         $ps = $xpath->query('//p');
         foreach ($ps as $p) {
-            if (!$p->firstChild || trim($p->textContent) === '') {
+            if (!$p->firstChild || mb_trim($p->textContent) === '') {
                 $p->parentNode->removeChild($p);
             }
         }
@@ -79,7 +79,7 @@ class P
             $p->removeChild($p->lastChild);
         }
 
-        if (trim($p->textContent) === '') {
+        if (mb_trim($p->textContent) === '') {
             $p->parentNode->removeChild($p);
         }
     }

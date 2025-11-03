@@ -62,7 +62,7 @@ class TH implements Template
                 $value = Replace::preg('~\\\\F[BR]~', '', $v);
                 $value = TextContent::interpretString($value);
                 // Fix vnu's "Saw U+0000 in stream" e.g. in lvmsadc.8:
-                $value                    = trim($value);
+                $value                    = mb_trim($value);
                 $request['arguments'][$k] = $value;
             }
 

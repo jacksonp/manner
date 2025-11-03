@@ -118,7 +118,7 @@ class HTMLList
     private static function getFirstNonEmptyTextNode(?DOMNode $domNode): ?DOMText
     {
         if ($domNode instanceof DOMText) {
-            if (trim($domNode->textContent) === '') {
+            if (mb_trim($domNode->textContent) === '') {
                 $domNode->parentNode->removeChild($domNode);
 
                 return null;

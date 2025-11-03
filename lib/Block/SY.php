@@ -91,7 +91,7 @@ class SY implements Template
             $tdCommandName = $tr->appendChild($dom->createElement('td'));
 
             if ($syRow['cmd_name'] !== '') {
-                $syRow['cmd_name'] = trim(TextContent::interpretString($syRow['cmd_name']));
+                $syRow['cmd_name'] = mb_trim(TextContent::interpretString($syRow['cmd_name']));
                 $tdCommandName->appendChild(new DOMText($syRow['cmd_name']));
             }
 

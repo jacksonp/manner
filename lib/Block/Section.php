@@ -85,13 +85,13 @@ class Section implements Template
             TextContent::interpretAndAppendText($headingNode, $sectionHeading);
             if ($headingNode->lastChild) {
                 // We don't want empty sections with &nbsp; as heading. See e.g. ntptime.8
-                $headingNode->lastChild->textContent = rtrim(
+                $headingNode->lastChild->textContent = mb_rtrim(
                   $headingNode->lastChild->textContent,
                   " \t\n\r\0\x0B" . html_entity_decode('&nbsp;')
                 );
             }
             // Skip sections with empty headings
-            if (trim($headingNode->textContent) === '') {
+            if (mb_trim($headingNode->textContent) === '') {
                 $section->parentNode->removeChild($section);
 
                 return null;

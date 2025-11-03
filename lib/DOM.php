@@ -96,7 +96,7 @@ class DOM
             if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
                 $codeNode = $element->lastChild;
                 if ($codeNode->lastChild && $codeNode->lastChild->nodeType === XML_TEXT_NODE) {
-                    $codeNode->lastChild->textContent = rtrim($codeNode->lastChild->textContent, "\n");
+                    $codeNode->lastChild->textContent = mb_rtrim($codeNode->lastChild->textContent, "\n");
                 }
             }
         }

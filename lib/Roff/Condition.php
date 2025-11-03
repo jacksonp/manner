@@ -137,12 +137,12 @@ class Condition implements Template
             $postConditionString .= ' ' . implode('', $argChars);
         }
 
-        $postConditionString = ltrim($postConditionString); // cougar.1alc has extra leading space
+        $postConditionString = mb_ltrim($postConditionString); // cougar.1alc has extra leading space
         $postConditionBlock  = str_starts_with($postConditionString, '\\{');
         if ($postConditionBlock) {
-            $postConditionString = substr($postConditionString, 2);
+            $postConditionString = mb_substr($postConditionString, 2);
         }
-        $postConditionString = ltrim($postConditionString);
+        $postConditionString = mb_ltrim($postConditionString);
 
         if ($request['request'] === 'if') {
             if ($postConditionBlock) {
@@ -201,7 +201,7 @@ class Condition implements Template
 
         if ($request['request'] === 'el') {
             if (preg_match('~^\\\\{(.*)$~u', $request['raw_arg_string'], $matches)) {
-                return self::ifBlock($lines, ltrim($matches[1]), !$useIf);
+                return self::ifBlock($lines, mb_ltrim($matches[1]), !$useIf);
             }
         } else {
             // throw new Exception('.ie condition - not followed by expected pattern (got "' . $lines[0] . '").');
@@ -212,7 +212,7 @@ class Condition implements Template
         if ($useIf) {
             return [];
         } else {
-            return [ltrim($request['arg_string'])];
+            return [mb_ltrim($request['arg_string'])];
         }
     }
 
@@ -351,8 +351,8 @@ class Condition implements Template
         $openBraces       = 1;
 
         while (true) {
-            $openBraces += substr_count($line, '\\{');
-            $openBraces -= substr_count($line, '\\}');
+            $openBraces += mb_substr_count($line, '\\{');
+            $openBraces -= mb_substr_count($line, '\\}');
 
             if (preg_match('~^(.*)\\\\}(.*)$~u', $line, $matches) && $openBraces === 0) {
                 $foundEnd = true;

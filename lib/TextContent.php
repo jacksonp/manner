@@ -93,10 +93,10 @@ class TextContent
                 for ($i = 0; $i < count($matches[1]); $i += 2) {
                     $letter = $matches[1][$i][0];
                     // http://stackoverflow.com/a/1725329 for the next line:
-                    $letterPosition = mb_strlen(substr($line, 0, (int)$matches[1][$i][1]));
+                    $letterPosition = mb_strlen(mb_substr($line, 0, (int)$matches[1][$i][1]));
 
                     $nextLetter         = $matches[1][$i + 1][0];
-                    $nextLetterPosition = mb_strlen(substr($line, 0, (int)$matches[1][$i + 1][1]));
+                    $nextLetterPosition = mb_strlen(mb_substr($line, 0, (int)$matches[1][$i + 1][1]));
 
                     if ($letter === $nextLetter) {
                         // Stick first letter into substring, recurse to carry on processing next letter
@@ -174,7 +174,7 @@ class TextContent
                     if (mb_substr($registerName, 0, 1) === '(') {
                         $registerName = mb_substr($registerName, 1);
                     } else {
-                        $registerName = trim($registerName, '[]');
+                        $registerName = mb_trim($registerName, '[]');
                     }
                 }
                 $man->setRegister($registerName, (string)$horizontalPosition);
@@ -278,7 +278,7 @@ class TextContent
      */
     private static function appendTextChild(DOMElement $parentNode, string $textContent): void
     {
-        if (!in_array(trim($textContent), ['', '\\&'])) {
+        if (!in_array(mb_trim($textContent), ['', '\\&'])) {
             $man   = Man::instance();
             $fonts = $man->getFonts();
             $tags  = self::getTagsForFont(array_pop($fonts));

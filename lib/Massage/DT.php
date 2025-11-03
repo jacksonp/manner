@@ -59,7 +59,7 @@ class DT
             $dt->removeChild($dt->lastChild);
         }
 
-        if (trim($dt->textContent) === '') {
+        if (mb_trim($dt->textContent) === '') {
             $dt->parentNode->removeChild($dt);
         }
 

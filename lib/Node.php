@@ -69,7 +69,7 @@ class Node
         $classes = (array)$classes;
         foreach ($classes as $class) {
             if (!self::hasClass($node, $class)) {
-                $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $class));
+                $node->setAttribute('class', mb_trim($node->getAttribute('class') . ' ' . $class));
             }
         }
     }
@@ -113,7 +113,7 @@ class Node
     {
         return
           $node->nodeType === XML_TEXT_NODE &&
-          in_array(trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
+          in_array(mb_trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
     }
 
     /**

@@ -41,7 +41,7 @@ class LinkEnd implements Template
             return null;
         }
         $parentNode  = $anchorNode->parentNode;
-        $punctuation = trim($request['arg_string']);
+        $punctuation = mb_trim($request['arg_string']);
 
         $removed = false;
 

@@ -42,7 +42,7 @@ class PRE
         }
 
         if ($el->lastChild->nodeType === XML_TEXT_NODE) {
-            $el->replaceChild(new DOMText(rtrim($el->lastChild->textContent)), $el->lastChild);
+            $el->replaceChild(new DOMText(mb_rtrim($el->lastChild->textContent)), $el->lastChild);
         }
 
         if (Text::trimAndRemoveZWSUTF8($el->textContent) === '') {
