@@ -21,15 +21,14 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Manner\Node;
 use Manner\Text;
 
 class PRE
 {
 
-    public static function tidy(DOMElement $el): void
+    public static function tidy(Element $el): void
     {
         while ($el->lastChild && Node::isTextAndEmpty($el->lastChild)) {
             $el->removeChild($el->lastChild);
@@ -41,8 +40,8 @@ class PRE
             return;
         }
 
-        if ($el->lastChild->nodeType === XML_TEXT_NODE) {
-            $el->replaceChild(new DOMText(mb_rtrim($el->lastChild->textContent)), $el->lastChild);
+        if ($el->lastChild instanceof \Dom\Text) {
+            $el->replaceChild($el->ownerDocument->createTextNode(mb_rtrim($el->lastChild->textContent)), $el->lastChild);
         }
 
         if (Text::trimAndRemoveZWSUTF8($el->textContent) === '') {

@@ -44,7 +44,7 @@ The task id range
  *
  */
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Indentation;
@@ -56,19 +56,19 @@ class Preformatted implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         $man = Man::instance();
 
         array_shift($lines);
@@ -93,7 +93,7 @@ class Preformatted implements Template
             Indentation::set($pre, $man->indentation);
         }
 
-        /* @var DomElement $pre */
+        /* @var Element $pre */
         $pre = $parentNode->appendChild($pre);
 
         return $pre;

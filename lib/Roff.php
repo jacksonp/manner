@@ -21,21 +21,21 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 
 class Roff
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param bool $stopOnContent
      * @return bool
      * @throws Exception
      */
     public static function parse(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       bool $stopOnContent = false
     ): bool {
@@ -63,7 +63,7 @@ class Roff
 
             if ($newParent = PreformattedOutput::handle($parentNode, $lines, $request)) {
                 // NB: still need $stopOnContent check below (so no continue)
-                if ($newParent instanceof DOMElement) {
+                if ($newParent instanceof Element) {
                     $parentNode = $newParent;
                 }
             } else {

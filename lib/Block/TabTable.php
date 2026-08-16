@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Request;
 use Manner\TextContent;
@@ -70,22 +70,22 @@ class TabTable implements Template
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         $dom = $parentNode->ownerDocument;
 
-        if ($parentNode->tagName === 'p') {
+        if ($parentNode->localName === 'p') {
             $parentNode = $parentNode->parentNode;
         }
 

@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Exception;
 use Manner\Block\Template;
 use Manner\Block\Text;
@@ -34,19 +33,19 @@ class URL implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getParentForText($parentNode);
@@ -76,7 +75,7 @@ class URL implements Template
         }
 
         if ($anchor->textContent === '') {
-            $anchor->appendChild(new DOMText($url));
+            $anchor->appendChild($parentNode->ownerDocument->createTextNode($url));
         }
 
         if (count($request['arguments']) === 3) {

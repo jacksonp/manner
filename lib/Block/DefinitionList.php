@@ -21,15 +21,15 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 
 class DefinitionList
 {
 
-    public static function getParentDL(DOMElement $parentNode): ?DOMElement
+    public static function getParentDL(Element $parentNode): ?Element
     {
         do {
-            $tag = $parentNode->tagName;
+            $tag = $parentNode->localName;
             if ($tag === 'dl') {
                 return $parentNode;
             }

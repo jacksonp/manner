@@ -21,14 +21,14 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
+use Dom\Element;
 use Manner\DOM;
 use Manner\Node;
 
 class LI
 {
 
-    public static function tidy(DOMElement $li): void
+    public static function tidy(Element $li): void
     {
         while ($li->lastChild && (Node::isTextAndEmpty($li->lastChild) || DOM::isTag($li->lastChild, 'br'))) {
             $li->removeChild($li->lastChild);

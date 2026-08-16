@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Request;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Block\Template;
 
@@ -121,19 +121,19 @@ class Unhandled implements Template
     ];
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         throw new Exception('Unhandled request ' . $request['raw_line']);
     }
 

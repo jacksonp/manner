@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMDocument;
-use DOMElement;
+use Dom\XMLDocument;
+use Dom\Element;
 use Exception;
 use Manner\Block\Template;
 use Manner\DOM;
@@ -34,19 +34,19 @@ class PS implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $foundEnd = false;
@@ -76,7 +76,7 @@ class PS implements Template
             throw new Exception('PS without PE or TS.');
         }
 
-        if ($parentNode->tagName === 'p') {
+        if ($parentNode->localName === 'p') {
             $parentNode = $parentNode->parentNode;
         }
 
@@ -90,7 +90,7 @@ class PS implements Template
     /**
      * @throws Exception
      */
-    public static function appendPic(DOMElement $parentNode, array $lines): void
+    public static function appendPic(Element $parentNode, array $lines): void
     {
         // Aborted attempt to fix rcsfile.5 diagram
 //        if (count($lines) > 0 && $lines[0] === '.nf') {
@@ -139,8 +139,7 @@ class PS implements Template
 
         $svgDocString = file_get_contents($tmpSVGFileName);
 
-        $svgDoc = new DOMDocument();
-        @$svgDoc->loadXML($svgDocString);
+        $svgDoc = XMLDocument::createFromString($svgDocString);
 
         $svg = $svgDoc->getElementsByTagName('svg')->item(0);
 
@@ -152,7 +151,7 @@ class PS implements Template
             return;
         }
 
-        /* @var DomElement $svgNode */
+        /* @var Element $svgNode */
         $svgNode = $parentNode->ownerDocument->importNode($svg, true);
 
         while (

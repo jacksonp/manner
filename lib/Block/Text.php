@@ -21,9 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
-use DOMException;
-use DOMText;
+use Dom\Element;
+use Throwable;
 use Exception;
 use Manner\Blocks;
 use Manner\Man;
@@ -37,34 +36,34 @@ class Text implements Template
 
     public static bool $interruptTextProcessing = false;
 
-    public static function addSpace(DOMElement $parentNode): void
+    public static function addSpace(Element $parentNode): void
     {
         if (
           !Node::isOrInTag($parentNode, 'pre') && Node::hasContent($parentNode) &&
           (
-            $parentNode->lastChild->nodeType !== XML_ELEMENT_NODE ||
-            in_array($parentNode->lastChild->tagName, Blocks::INLINE_ELEMENTS)
+          !($parentNode->lastChild instanceof Element) ||
+            in_array($parentNode->lastChild->localName, Blocks::INLINE_ELEMENTS)
           ) &&
           !TextContent::$interruptTextProcessing
         ) {
-            $parentNode->appendChild(new DOMText(' '));
+            $parentNode->appendChild($parentNode->ownerDocument->createTextNode(' '));
         }
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
-     * @throws Exception
+     * @return Element|null
+     * @throws Exception|Throwable
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         $parentNode = Blocks::getParentForText($parentNode);
 
         if (Man::instance()->hasPostOutputCallbacks()) {
@@ -116,9 +115,9 @@ class Text implements Template
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function addLine(DOMElement $parentNode, string $line, bool $prefixBR = false): void
+    public static function addLine(Element $parentNode, string $line, bool $prefixBR = false): void
     {
         if ($prefixBR) {
             self::addImplicitBreak($parentNode);
@@ -130,13 +129,13 @@ class Text implements Template
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    private static function addImplicitBreak(DOMElement $parentNode): void
+    private static function addImplicitBreak(Element $parentNode): void
     {
         if (
           $parentNode->hasChildNodes() &&
-          ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br')
+          (!($parentNode->lastChild instanceof Element) || $parentNode->lastChild->localName !== 'br')
         ) {
             $parentNode->appendChild($parentNode->ownerDocument->createElement('br'));
         }

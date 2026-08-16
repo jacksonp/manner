@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 
 class Indentation
@@ -31,27 +31,27 @@ class Indentation
     // (https://www.mankier.com/7/groff_man#Miscellaneous)
     public const string DEFAULT = '7';
 
-    public static function isSet(DOMElement $p): bool
+    public static function isSet(Element $p): bool
     {
         return $p->hasAttribute('indent');
     }
 
-    public static function get(DOMElement $el): float
+    public static function get(Element $el): float
     {
         return (float)$el->getAttribute('indent');
     }
 
-    public static function isSame(DOMElement $elA, DOMElement $elB): bool
+    public static function isSame(Element $elA, Element $elB): bool
     {
         return self::get($elA) === self::get($elB);
     }
 
     /**
-     * @param DOMElement $el
+     * @param Element $el
      * @param $indentVal
      * @throws Exception
      */
-    public static function set(DOMElement $el, $indentVal): void
+    public static function set(Element $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -59,17 +59,17 @@ class Indentation
         $el->setAttribute('indent', (string)$indentVal);
     }
 
-    public static function remove(DOMElement $el): void
+    public static function remove(Element $el): void
     {
         $el->removeAttribute('indent');
     }
 
     /**
-     * @param DOMElement $el
+     * @param Element $el
      * @param $indentVal
      * @throws Exception
      */
-    public static function add(DOMElement $el, $indentVal): void
+    public static function add(Element $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -78,11 +78,11 @@ class Indentation
     }
 
     /**
-     * @param DOMElement $el
+     * @param Element $el
      * @param $indentVal
      * @throws Exception
      */
-    public static function subtract(DOMElement $el, $indentVal): void
+    public static function subtract(Element $el, $indentVal): void
     {
         if (!is_numeric($indentVal)) {
             throw new Exception('Non-numeric indent: ' . $indentVal);
@@ -91,11 +91,11 @@ class Indentation
     }
 
     /**
-     * @param DOMElement $remainingNode
-     * @param DOMElement $leavingNode
+     * @param Element $remainingNode
+     * @param Element $leavingNode
      * @throws Exception
      */
-    public static function addElIndent(DOMElement $remainingNode, DOMElement $leavingNode): void
+    public static function addElIndent(Element $remainingNode, Element $leavingNode): void
     {
         $remainingNodeIndent = self::get($remainingNode);
         $leavingNodeIndent   = self::get($leavingNode);
@@ -110,15 +110,15 @@ class Indentation
     }
 
     /**
-     * @param DOMElement $el
+     * @param Element $el
      * @throws Exception
      */
-    public static function popOut(DOMElement $el): void
+    public static function popOut(Element $el): void
     {
         $elParent = $el->parentNode;
 
         // li: see cpupower-monitor.1
-        if ($elParent->tagName === 'section' || $elParent->tagName === 'li') {
+        if ($elParent->localName === 'section' || $elParent->localName === 'li') {
             return;
         }
 
@@ -138,7 +138,7 @@ class Indentation
             } else {
                 $el = $elParent->parentNode->insertBefore($el, $elParent->nextSibling);
             }
-            /* @var DomElement $el */
+            /* @var Element $el */
             self::popOut($el);
         }
     }

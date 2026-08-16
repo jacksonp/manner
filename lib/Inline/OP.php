@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Exception;
 use Manner\Block\Template;
 use Manner\Blocks;
@@ -35,19 +34,19 @@ class OP implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getParentForText($parentNode);
@@ -56,17 +55,17 @@ class OP implements Template
         $optSpan = $parentNode->appendChild($dom->createElement('span'));
         $optSpan->setAttribute('class', 'opt');
 
-        $optSpan->appendChild(new DOMText('['));
-        /* @var DomElement $strong */
+        $optSpan->appendChild($parentNode->ownerDocument->createTextNode('['));
+        /* @var Element $strong */
         $strong = $optSpan->appendChild($dom->createElement('strong'));
         TextContent::interpretAndAppendText($strong, $request['arguments'][0]);
         if (count($request['arguments']) > 1) {
-            $optSpan->appendChild(new DOMText(' '));
-            /* @var DomElement $em */
+            $optSpan->appendChild($parentNode->ownerDocument->createTextNode(' '));
+            /* @var Element $em */
             $em = $optSpan->appendChild($dom->createElement('em'));
             TextContent::interpretAndAppendText($em, $request['arguments'][1]);
         }
-        $optSpan->appendChild(new DOMText('] '));
+        $optSpan->appendChild($parentNode->ownerDocument->createTextNode('] '));
 
         return $parentNode;
     }

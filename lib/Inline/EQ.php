@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
+use Dom\HTMLDocument;
+use Dom\Element;
+use Dom\XPath;
 use Exception;
 use Manner\Block\Template;
 use Manner\Block\Text;
@@ -35,19 +35,19 @@ class EQ implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $foundEnd = false;
@@ -97,7 +97,7 @@ class EQ implements Template
     /**
      * @throws Exception
      */
-    public static function appendMath(DOMElement $parentNode, array $lines): void
+    public static function appendMath(Element $parentNode, array $lines): void
     {
         $eqnString = '.EQ' . PHP_EOL;
         foreach ($lines as $line) {
@@ -122,13 +122,13 @@ class EQ implements Template
         # Hacks:
         $mathString = str_replace(['&ThinSpace;', '&equals;', '&plus;'], [' ', '=', '+'], $mathString);
 
-        $mathDoc = new DOMDocument();
-        @$mathDoc->loadHTML($mathString);
+        $mathDoc = HTMLDocument::createFromString($mathString);
         $mathNode = $mathDoc->getElementsByTagName('math')->item(0);
 //        $mathNode->setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
 //        $mathNode->setAttribute('display', 'inline');
-        $xpath   = new DOMXpath($mathDoc);
-        $mErrors = $xpath->query('//merror');
+        $xpath   = new XPath($mathDoc);
+        $xpath->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
+        $mErrors = $xpath->query('//h:merror');
         foreach ($mErrors as $mError) {
             Node::remove($mError, false);
         }

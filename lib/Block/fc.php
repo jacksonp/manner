@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMDocument;
-use DOMElement;
-use DOMException;
+use Dom\Document;
+use Dom\Element;
+use Throwable;
 use Exception;
 use Manner\Blocks;
 use Manner\Request;
@@ -33,9 +33,9 @@ class fc implements Template
 {
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    private static function addRow(DOMDocument $dom, DOMElement $table, array $cells): void
+    private static function addRow(Document $dom, Element $table, array $cells): void
     {
         $tr = $dom->createElement('tr');
         foreach ($cells as $contents) {
@@ -47,19 +47,19 @@ class fc implements Template
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);

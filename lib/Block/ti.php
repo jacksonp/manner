@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Indentation;
@@ -36,19 +36,19 @@ class ti implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $indentVal = 0.0;
@@ -57,7 +57,7 @@ class ti implements Template
         }
 
         if (Indentation::get($parentNode) === (float)$indentVal && $parentNode->lastChild) {
-            if ($parentNode->lastChild->nodeType !== XML_ELEMENT_NODE || $parentNode->lastChild->tagName !== 'br') {
+            if (!($parentNode->lastChild instanceof Element) || $parentNode->lastChild->localName !== 'br') {
                 VerticalSpace::addBR($parentNode);
             }
 
@@ -68,7 +68,7 @@ class ti implements Template
         if (is_null($dt)) {
             $parentNode = Blocks::getBlockContainerParent($parentNode);
             $p          = $parentNode->ownerDocument->createElement('p');
-            /* @var DomElement $p */
+            /* @var Element $p */
             $p = $parentNode->appendChild($p);
             Indentation::set($p, $indentVal);
 

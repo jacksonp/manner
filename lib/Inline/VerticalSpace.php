@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMException;
+use Dom\Element;
+use Throwable;
 use Manner\Block\Template;
 use Manner\Request;
 
@@ -30,14 +30,14 @@ class VerticalSpace implements Template
 {
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function addBR(DOMElement $parentNode): void
+    public static function addBR(Element $parentNode): void
     {
         $prevBRs   = 0;
         $nodeCheck = $parentNode->lastChild;
         while ($nodeCheck) {
-            if ($nodeCheck instanceof DOMElement && $nodeCheck->tagName === 'br') {
+            if ($nodeCheck instanceof Element && $nodeCheck->localName === 'br') {
                 ++$prevBRs;
             } else {
                 break;
@@ -55,24 +55,24 @@ class VerticalSpace implements Template
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         /*if (count($request['arguments']) && $request['arguments'][0] === '-1') {
-            if ($parentNode->lastChild instanceof DOMElement && $parentNode->lastChild->tagName === 'br') {
+            if ($parentNode->lastChild instanceof Element && $parentNode->lastChild->localName === 'br') {
                 $parentNode->removeChild($parentNode->lastChild);
             }
         } else*/
         if (
-          !($parentNode->lastChild instanceof DOMElement) ||
-          $parentNode->lastChild->tagName !== 'pre'
+          !($parentNode->lastChild instanceof Element) ||
+          $parentNode->lastChild->localName !== 'pre'
         ) {
             self::addBR($parentNode);
             if ($request['request'] !== 'br') {

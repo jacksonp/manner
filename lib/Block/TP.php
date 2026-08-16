@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Indentation;
@@ -56,19 +56,19 @@ class TP implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         if (count($lines) > 1 && $lines[1] === '.nf') {
             // Switch .TP and .nf around, and try again. See e.g. elasticdump.1
             $lines[1] = $lines[0];
@@ -113,7 +113,7 @@ class TP implements Template
         }
 
         $dt = $dom->createElement('dt');
-        /* @var DomElement $dt */
+        /* @var Element $dt */
         $dt         = $dl->appendChild($dt);
         $gotContent = Roff::parse($dt, $lines, true);
         if (!$gotContent) {
@@ -152,7 +152,7 @@ class TP implements Template
 
         $dd = $dom->createElement('dd');
         Indentation::set($dd, $indentVal);
-        /* @var DomElement $dd */
+        /* @var Element $dd */
         $dd = $dl->appendChild($dd);
 
         return $dd;

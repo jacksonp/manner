@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Request;
@@ -33,19 +32,19 @@ class SY implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         $dom        = $parentNode->ownerDocument;
         $parentNode = Blocks::getBlockContainerParent($parentNode, true);
 
@@ -92,10 +91,10 @@ class SY implements Template
 
             if ($syRow['cmd_name'] !== '') {
                 $syRow['cmd_name'] = mb_trim(TextContent::interpretString($syRow['cmd_name']));
-                $tdCommandName->appendChild(new DOMText($syRow['cmd_name']));
+                $tdCommandName->appendChild($tdCommandName->ownerDocument->createTextNode($syRow['cmd_name']));
             }
 
-            /* @var DomElement $tdOptions */
+            /* @var Element $tdOptions */
             $tdOptions = $tr->appendChild($dom->createElement('td'));
 
             Roff::parse($tdOptions, $syRow['sy_lines']);

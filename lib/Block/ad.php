@@ -21,23 +21,23 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Manner\PreformattedOutput;
 
 class ad implements Template
 {
 
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
-        if (in_array($request['arg_string'], ['', 'n', 'b']) && $parentNode->tagName === 'pre') {
+        if (in_array($request['arg_string'], ['', 'n', 'b']) && $parentNode->localName === 'pre') {
             PreformattedOutput::reset();
-
+            /** @var Element */
             return $parentNode->parentNode;
         } else {
             return null;

@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMException;
+use Dom\Element;
+use Throwable;
 use Manner\Block\Template;
 use Manner\Block\Text;
 use Manner\Blocks;
@@ -35,14 +35,14 @@ class FontOneInputLine implements Template
 {
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $man = Man::instance();

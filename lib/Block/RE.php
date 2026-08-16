@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Indentation;
 use Manner\Man;
@@ -50,11 +50,11 @@ class RE implements Template
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $man     = Man::instance();
@@ -100,6 +100,7 @@ class RE implements Template
             $man->resetIndentationToDefault();
         }
 
+        /** @var Element */
         return $lastDIV->parentNode;
     }
 

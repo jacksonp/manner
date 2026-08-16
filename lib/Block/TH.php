@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Exception;
 use Manner\Man;
 use Manner\Node;
@@ -33,19 +32,19 @@ class TH implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $man = Man::instance();
@@ -75,7 +74,7 @@ class TH implements Template
             }
 
             $h1 = $body->ownerDocument->createElement('h1');
-            $h1->appendChild(new DOMText($man->title));
+            $h1->appendChild($h1->ownerDocument->createTextNode($man->title));
             $body->appendChild($h1);
         } elseif (count($request['arguments'])) {
             // Some pages  have multiple .THs for different commands in one page, just had a horizontal line when we hit

@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Man;
 use Manner\Node;
@@ -32,19 +32,19 @@ class Section implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
@@ -55,22 +55,22 @@ class Section implements Template
 
         $body    = Node::ancestor($parentNode, 'body');
         $section = $dom->createElement('section');
-        /* @var DomElement $headingNode */
+        /* @var Element $headingNode */
         if ($request['request'] === 'SH') {
             $section     = $body->appendChild($section);
             $headingNode = $dom->createElement('h2');
         } else {
-            if ($body->lastChild && $body->lastChild->tagName === 'section') {
+            if ($body->lastChild && $body->lastChild->localName === 'section') {
                 $superSection = $body->lastChild;
             } else {
-                // Make a new h2 level container section:
+                // Make a new h2-level container section:
                 $superSection = $body->appendChild($dom->createElement('section'));
             }
             $section     = $superSection->appendChild($section);
             $headingNode = $dom->createElement('h3');
         }
 
-        /** @var DOMElement $headingNode */
+        /** @var Element $headingNode */
         $headingNode = $section->appendChild($headingNode);
 
         if (count($request['arguments']) === 0) {
@@ -98,6 +98,7 @@ class Section implements Template
             }
         }
 
+        /** @var Element */
         return $section;
     }
 

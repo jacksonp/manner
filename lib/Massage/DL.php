@@ -21,10 +21,9 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
-use DOMXPath;
+use Dom\Element;
+use Throwable;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 use Manner\Indentation;
@@ -33,19 +32,19 @@ class DL
 {
 
     /**
-     * @param DOMXPath $xpath
+     * @param XPath $xpath
      * @throws Exception
      */
-    public static function mergeAdjacentAndConvertLoneDD(DOMXPath $xpath): void
+    public static function mergeAdjacentAndConvertLoneDD(XPath $xpath): void
     {
-        $dls = $xpath->query('//dl');
+        $dls = $xpath->query('//h:dl');
         foreach ($dls as $dl) {
             while (DOM::isTag($dl->nextSibling, 'dl') && Indentation::isSame($dl, $dl->nextSibling)) {
                 DOM::extractContents($dl, $dl->nextSibling);
                 $dl->parentNode->removeChild($dl->nextSibling);
             }
 
-            if ($dl->childNodes->length === 1 && $dl->firstChild->tagName === 'dd') {
+            if ($dl->childNodes->length === 1 && $dl->firstChild->localName === 'dd') {
                 $div = $dl->ownerDocument->createElement('div');
                 DOM::extractContents($div, $dl->firstChild);
                 Indentation::addElIndent($div, $dl->firstChild);
@@ -56,11 +55,11 @@ class DL
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function checkPrecedingNodes(DOMXPath $xpath): void
+    public static function checkPrecedingNodes(XPath $xpath): void
     {
-        $dls = $xpath->query('//dl');
+        $dls = $xpath->query('//h:dl');
         foreach ($dls as $dl) {
             if (!$dl->previousSibling || !$dl->previousSibling->previousSibling) {
                 continue;
@@ -92,13 +91,13 @@ class DL
         }
     }
 
-    public static function isPotentialDTFollowedByDD(?DomNode $p): int
+    public static function isPotentialDTFollowedByDD(?\Dom\Node $p): int
     {
         if (!DOM::isTag($p, 'p')) {
             return 0;
         }
 
-        /** @var DOMElement $p */
+        /** @var Element $p */
 
         if (Indentation::isSet($p)) {
             return 0;
@@ -181,13 +180,13 @@ class DL
     // Could also identify lists starting with 0 and use start="0" attribute...
     // but maybe <ol> is not semantically correct for e.g. return status codes.
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function MaybeChangeToUL(DOMElement $dl): ?DomElement
+    public static function MaybeChangeToUL(Element $dl): ?Element
     {
         $dtChar = null;
         foreach ($dl->childNodes as $dlChild) {
-            if ($dlChild->tagName === 'dt') {
+            if ($dlChild->localName === 'dt') {
                 if (mb_strlen($dlChild->textContent) !== 1) {
                     return null;
                 }
@@ -201,39 +200,39 @@ class DL
                 }
             }
         }
-        /* @var DomElement $li */
+        /* @var Element $li */
         $ul = $dl->ownerDocument->createElement('ul');
         $ul = $dl->parentNode->insertBefore($ul, $dl);
         foreach ($dl->childNodes as $dlChild) {
-            if ($dlChild->tagName === 'dd') {
+            if ($dlChild->localName === 'dd') {
                 $li = $ul->appendChild($dl->ownerDocument->createElement('li'));
-                Dom::extractContents($li, $dlChild);
+                DOM::extractContents($li, $dlChild);
             }
         }
         $dl->parentNode->removeChild($dl);
 
-        /* @var DomElement $ul */
+        /* @var Element $ul */
         return $ul;
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function CreateULs(DOMXpath $xpath): void
+    public static function CreateULs(XPath $xpath): void
     {
-        $dls = $xpath->query('//dl');
+        $dls = $xpath->query('//h:dl');
         foreach ($dls as $dl) {
             self::MaybeChangeToUL($dl);
         }
     }
 
-    public static function CreateOLs(DOMXpath $xpath): void
+    public static function CreateOLs(XPath $xpath): void
     {
-        $dls = $xpath->query('//dl');
+        $dls = $xpath->query('//h:dl');
         foreach ($dls as $dl) {
             $i  = 1;
             $dt = $dl->firstChild;
-            while (Dom::isTag($dt, 'dt')) {
+            while (DOM::isTag($dt, 'dt')) {
                 $dtStr = mb_trim($dt->textContent, " \t\n\r\0\x0B." . html_entity_decode('&nbsp;'));
                 // !is_numeric($dtStr) check needed because: "1 foo" == 1
                 if (!is_numeric($dtStr) || $dtStr != $i) {
@@ -249,11 +248,11 @@ class DL
                 // If we get here, <dl> should be an <ol>
                 $ol = $dl->ownerDocument->createElement('ol');
                 $dl->parentNode->insertBefore($ol, $dl);
-                $dds = $xpath->query('./dd', $dl);
+                $dds = $xpath->query('./h:dd', $dl);
                 foreach ($dds as $dd) {
                     $li = $dd->ownerDocument->createElement('li');
                     $ol->appendChild($li);
-                    Dom::extractContents($li, $dd);
+                    DOM::extractContents($li, $dd);
                 }
                 $dl->parentNode->removeChild($dl);
                 HTMLList::removeLonePs($ol);

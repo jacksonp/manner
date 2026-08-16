@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMDocument;
-use DOMXPath;
+use Dom\HTMLDocument;
+use Dom\XPath;
 use Exception;
 
 class Manner
@@ -30,22 +30,22 @@ class Manner
 
     /**
      * @param array $fileLines
-     * @return DOMDocument
+     * @return HTMLDocument
      * @throws Exception
      */
-    public static function roffToDOM(array $fileLines): DOMDocument
+    public static function roffToDOM(array $fileLines): HTMLDocument
     {
-        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom = HTMLDocument::createFromString('<!DOCTYPE html><html><head></head><body></body></html>');
 
-        $manPageContainer = $dom->createElement('body');
-        $manPageContainer = $dom->appendChild($manPageContainer);
+        $manPageContainer = $dom->body;
 
         $man = Man::instance();
         $man->reset();
 
         $strippedLines = Preprocessor::strip($fileLines);
         Roff::parse($manPageContainer, $strippedLines);
-        $xpath = new DOMXpath($dom);
+        $xpath = new XPath($dom);
+        $xpath->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
         Massage\Body::trimNodesBeforeH1($xpath);
         Massage\P::removeEmpty($xpath);
         Massage\DL::mergeAdjacentAndConvertLoneDD($xpath);
@@ -74,12 +74,25 @@ class Manner
     public static function roffToHTML(array $fileLines, ?string $outputFile = null, bool $bodyOnly = false): void
     {
         $dom  = self::roffToDOM($fileLines);
-        $html = $dom->saveHTML();
+        $html = $dom->saveHtml($dom->body) . PHP_EOL;
 
         $man = Man::instance();
 
         // Remove \& chars aka zero width space.
-        $html   = str_replace(Text::ZERO_WIDTH_SPACE_HTML, '', $html);
+        $html   = str_replace(
+          [
+              Text::ZERO_WIDTH_SPACE_HTML,
+              Text::ZERO_WIDTH_SPACE_UTF8,
+              '→', '‘', '’', 'ð', 'Ð', 'Þ', 'þ', 'ô',
+              '“', '”', '—', '–', '≤', 'π', '©',
+          ],
+          [
+              '', '',
+              '&rarr;', '&lsquo;', '&rsquo;', '&eth;', '&ETH;', '&THORN;', '&thorn;', '&ocirc;',
+              '&ldquo;', '&rdquo;', '&mdash;', '&ndash;', '&le;', '&pi;', '&copy;',
+          ],
+          $html
+        );
         $title  = Text::trimAndRemoveZWSUTF8($man->title);
         $extra1 = Text::trimAndRemoveZWSUTF8($man->extra1);
         $extra2 = Text::trimAndRemoveZWSUTF8($man->extra2);

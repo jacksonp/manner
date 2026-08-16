@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Inline\VerticalSpace;
@@ -163,12 +163,12 @@ class TS implements Template
     }
 
     /**
-     * @param DOMElement $table
+     * @param Element $table
      * @param array $lines
      * @return array|null
      * @throws Exception
      */
-    private static function addRowsFromFormats(DOMElement $table, array &$lines): ?array
+    private static function addRowsFromFormats(Element $table, array &$lines): ?array
     {
         $rowFormats = self::parseRowFormats($lines);
         if (is_null($rowFormats)) {
@@ -209,7 +209,7 @@ class TS implements Template
 
                 if (str_starts_with($tdFormat, 'S')) {
                     if ($tr->lastChild) {
-                        $prevColspan = $tr->lastChild->getAttribute('colspan');
+                        $prevColspan = $tr->lastChild->getAttribute('colspan') ?? '';
                         if ($prevColspan !== '') {
                             $colspan = (int)$prevColspan + 1;
                         } else {
@@ -220,7 +220,7 @@ class TS implements Template
                     continue;
                 }
 
-                /** @var DOMElement $td */
+                /** @var Element $td */
                 $td = $dom->createElement('td');
                 $td = $tr->appendChild($td);
 
@@ -284,19 +284,19 @@ class TS implements Template
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $parentNode = Blocks::getBlockContainerParent($parentNode);
@@ -330,7 +330,7 @@ class TS implements Template
             }
         }
 
-        /* @var DomElement|false $tr */
+        /* @var Element|false $tr */
         $table = $dom->createElement('table');
         Node::addClass($table, $tableClasses);
 

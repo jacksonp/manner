@@ -21,10 +21,9 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
-use DOMXPath;
+use Dom\Element;
+use Throwable;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 use Manner\Indentation;
@@ -36,12 +35,12 @@ class DIV
     /**
      * @throws Exception
      */
-    public static function removeDIVsWithSingleChild(DOMXPath $xpath): void
+    public static function removeDIVsWithSingleChild(XPath $xpath): void
     {
-        $divs = $xpath->query('//div');
+        $divs = $xpath->query('//h:div');
         foreach ($divs as $div) {
             // TODO add other blocks below? see Dom handling line 106 or so.
-            if (Dom::isTag($div->firstChild, ['pre'])) { // 'dl',
+            if (DOM::isTag($div->firstChild, ['pre'])) { // 'dl',
                 self::removeDIVWithSingleChild($div);
             }
         }
@@ -50,7 +49,7 @@ class DIV
     /**
      * @throws Exception
      */
-    public static function removeDIVWithSingleChild(DOMElement $div): void
+    public static function removeDIVWithSingleChild(Element $div): void
     {
         if ($div->childNodes->length === 1) {
             Indentation::addElIndent($div->firstChild, $div);
@@ -58,7 +57,7 @@ class DIV
         }
     }
 
-    public static function getNextNonBRNode(DOMNode $element, bool $removeBRs = false): ?DOMNode
+    public static function getNextNonBRNode(\Dom\Node $element, bool $removeBRs = false): ?\Dom\Node
     {
         $nextSibling = $element->nextSibling;
         while (DOM::isTag($nextSibling, 'br')) {
@@ -71,7 +70,7 @@ class DIV
         return $nextSibling;
     }
 
-    private static function isPotentialLI(?DOMElement $div): bool
+    private static function isPotentialLI(?Element $div): bool
     {
         return
           DOM::isTag($div, 'div') &&
@@ -80,20 +79,20 @@ class DIV
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function postProcess(DOMElement $div): ?DOMNode
+    public static function postProcess(Element $div): ?\Dom\Node
     {
         $doc = $div->ownerDocument;
 
-        /* @var DOMElement $nextNonBR */
+        /* @var Element $nextNonBR */
 
         if (self::isPotentialLI($div)) {
             $nextNonBR = self::getNextNonBRNode($div);
 
             if (
               (is_null($nextNonBR) || !DOM::isTag($nextNonBR, 'div') || !self::isPotentialLI($nextNonBR)) &&
-              Dom::isTag($div->firstChild, 'p') &&
+              DOM::isTag($div->firstChild, 'p') &&
               HTMLList::checkElementForLIs($div->firstChild)
             ) {
                 $ul = $doc->createElement('ul');
@@ -103,8 +102,8 @@ class DIV
                     $ul->appendChild($div->firstChild);
                 }
 
-                /* @var DOMElement $ul */
-                /* @var DOMElement $li */
+                /* @var Element $ul */
+                /* @var Element $li */
                 $li = $ul->appendChild($doc->createElement('li'));
 
                 DOM::extractContents($li, $div);
@@ -119,10 +118,10 @@ class DIV
                 $ul = $div->parentNode->insertBefore($ul, $div);
 
                 while (self::isPotentialLI($div)) {
-                    /* @var DOMElement $li */
+                    /* @var Element $li */
                     $li = $ul->appendChild($doc->createElement('li'));
 
-                    if ($div->childNodes->length === 1 && $div->firstChild->tagName === 'p') {
+                    if ($div->childNodes->length === 1 && $div->firstChild->localName === 'p') {
                         DOM::extractContents($li, $div->firstChild);
                     } else {
                         DOM::extractContents($li, $div);

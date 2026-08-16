@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMXPath;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 
@@ -29,12 +29,12 @@ class Body
 {
 
     /**
-     * @param DOMXPath $xpath
+     * @param XPath $xpath
      * @throws Exception
      */
-    public static function trimNodesBeforeH1(DOMXPath $xpath): void
+    public static function trimNodesBeforeH1(XPath $xpath): void
     {
-        $bodies = $xpath->query('//body');
+        $bodies = $xpath->document->querySelectorAll('body');
         if ($bodies->length !== 1) {
             throw new Exception('Found more than one body');
         }

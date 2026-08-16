@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMException;
+use Dom\Element;
+use Throwable;
 use Manner\DOM;
 use Manner\Node;
 
@@ -30,9 +30,9 @@ class DT
 {
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function postProcess(DOMElement $dt): void
+    public static function postProcess(Element $dt): void
     {
         $child = $dt->lastChild;
         while ($child) {
@@ -53,7 +53,7 @@ class DT
         }
     }
 
-    public static function tidy(DOMElement $dt): void
+    public static function tidy(Element $dt): void
     {
         while ($dt->lastChild && (Node::isTextAndEmpty($dt->lastChild) || DOM::isTag($dt->lastChild, 'br'))) {
             $dt->removeChild($dt->lastChild);
@@ -63,7 +63,7 @@ class DT
             $dt->parentNode->removeChild($dt);
         }
 
-        if (Dom::isTag($dt->firstChild, 'pre')) {
+        if (DOM::isTag($dt->firstChild, 'pre')) {
             // <pre>s can't go inside <dt>s (tho we put them there for convenience now).
             // TODO: remove this once we handle .nf and .EX by setting flag rather than creating <pre> element.
             Node::remove($dt->firstChild);

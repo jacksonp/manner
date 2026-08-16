@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Manner\Block\Template;
 use Manner\Node;
 
@@ -30,16 +29,17 @@ class LinkEnd implements Template
 {
 
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
         $anchorNode = Node::ancestor($parentNode, 'a');
         if (is_null($anchorNode)) {
             return null;
         }
+        /** @var Element $parentNode */
         $parentNode  = $anchorNode->parentNode;
         $punctuation = mb_trim($request['arg_string']);
 
@@ -59,12 +59,12 @@ class LinkEnd implements Template
             if ($anchorNode->textContent === '') {
                 $urlAsText = $anchorNode->getAttribute('href');
                 $urlAsText = preg_replace('~^mailto:~', '', $urlAsText);
-                $anchorNode->appendChild(new DOMText($urlAsText));
+                $anchorNode->appendChild($anchorNode->ownerDocument->createTextNode($urlAsText));
             }
         }
 
         if ($punctuation !== '') {
-            $parentNode->appendChild(new DOMText($punctuation));
+            $parentNode->appendChild($anchorNode->ownerDocument->createTextNode($punctuation));
         }
 
         return $parentNode;

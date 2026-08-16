@@ -21,18 +21,18 @@ declare(strict_types=1);
 
 namespace Manner\Request;
 
-use DOMElement;
+use Dom\Element;
 use Manner\Block\Template;
 
 class Skippable implements Template
 {
 
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         return null;

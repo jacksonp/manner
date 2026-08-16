@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
+use Dom\Element;
 use Manner\Block\Template;
 use Manner\Man;
 
@@ -29,11 +29,11 @@ class ft implements Template
 {
 
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
         $man = Man::instance();
 

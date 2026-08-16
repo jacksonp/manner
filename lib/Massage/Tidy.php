@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMXPath;
+use Dom\Element;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 use Manner\Indentation;
@@ -32,22 +32,22 @@ class Tidy
 {
 
     /**
-     * @param DOMXPath $xpath
+     * @param XPath $xpath
      * @throws Exception
      */
-    public static function doAll(DOMXPath $xpath): void
+    public static function doAll(XPath $xpath): void
     {
-        /** @var DOMElement $el */
+        /** @var Element $el */
 
         // NB: we do not want <dd>s here:
         $els = $xpath->query(
-          '//div[starts-with(@indent, "-")] | //p[starts-with(@indent, "-")] | //pre[starts-with(@indent, "-")] | //ul[starts-with(@indent, "-")] | //dl[starts-with(@indent, "-")] | //table[starts-with(@indent, "-")]'
+          '//h:div[starts-with(@indent, "-")] | //h:p[starts-with(@indent, "-")] | //h:pre[starts-with(@indent, "-")] | //h:ul[starts-with(@indent, "-")] | //h:dl[starts-with(@indent, "-")] | //table[starts-with(@indent, "-")]'
         );
         foreach ($els as $el) {
             Indentation::popOut($el);
         }
 
-        $divs = $xpath->query('//div');
+        $divs = $xpath->query('//h:div');
         foreach ($divs as $el) {
             $oneChild = $el->childNodes->length === 1;
 
@@ -56,7 +56,7 @@ class Tidy
             if (!$indentation) {
                 if (
                   $oneChild &&
-                  $el->firstChild->tagName === 'p' &&
+                  $el->firstChild->localName === 'p' &&
                   !Indentation::isSet($el->firstChild) &&
                   $el->firstChild->hasAttribute('implicit') &&
                   DOM::isTag($el->previousSibling, 'p')
@@ -77,39 +77,39 @@ class Tidy
 
         DL::mergeAdjacentAndConvertLoneDD($xpath);
 
-        Node::removeAttributeAll($xpath->query('//dd[@indent]'), 'indent');
+        Node::removeAttributeAll($xpath->query('//h:dd[@indent]'), 'indent');
 
-        $ps = $xpath->query('//p');
+        $ps = $xpath->query('//h:p');
         foreach ($ps as $p) {
             P::tidy($p);
         }
 
         // NB: can't really do the same for <dd>s they need the inner <p> to have some sanity in how they are rendered.
-        $els = $xpath->query('//ul | //ol');
+        $els = $xpath->query('//h:ul | //h:ol');
         foreach ($els as $el) {
             HTMLList::removeLonePs($el);
         }
 
-        $els = $xpath->query('//li');
+        $els = $xpath->query('//h:li');
         foreach ($els as $el) {
             LI::tidy($el);
         }
 
-        $els = $xpath->query('//dt');
+        $els = $xpath->query('//h:dt');
         foreach ($els as $el) {
             DT::tidy($el);
         }
 
-        $els = $xpath->query('//pre');
+        $els = $xpath->query('//h:pre');
         foreach ($els as $el) {
             PRE::tidy($el);
         }
     }
 
-    public static function indentAttributeToClass(DOMXPath $xpath): void
+    public static function indentAttributeToClass(XPath $xpath): void
     {
         $els = $xpath->query(
-          '//div[@indent] | //p[@indent] | //dl[@indent] | //dt[@indent] | //pre[@indent] | //ul[@indent] | //ol[@indent] | //table[@indent]'
+          '//h:div[@indent] | //h:p[@indent] | //h:dl[@indent] | //h:dt[@indent] | //h:pre[@indent] | //h:ul[@indent] | //h:ol[@indent] | //table[@indent]'
         );
         foreach ($els as $el) {
             if (DOM::isTag($el, ['ul', 'ol'])) {
@@ -121,12 +121,12 @@ class Tidy
                     $el->setAttribute('class', 'indent-' . $indentVal);
                 }
                 Indentation::remove($el);
-                if (!$indentVal && $el->tagName === 'div') {
+                if (!$indentVal && $el->localName === 'div') {
                     Node::remove($el);
                 }
             }
         }
-        $els = $xpath->query('//p[@implicit]');
+        $els = $xpath->query('//h:p[@implicit]');
         foreach ($els as $el) {
             $el->removeAttribute('implicit');
         }

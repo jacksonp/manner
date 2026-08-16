@@ -22,7 +22,7 @@ declare(strict_types=1);
 namespace Manner;
 
 use Closure;
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Roff\Glyph;
 use Manner\Roff\Register;
@@ -253,7 +253,7 @@ class Man
         $this->postOutputCallbacks[] = $string;
     }
 
-    public function runPostOutputCallbacks(): ?DOMElement
+    public function runPostOutputCallbacks(): ?Element
     {
         $return = null;
         while ($cb = array_pop($this->postOutputCallbacks)) {

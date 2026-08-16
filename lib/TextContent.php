@@ -21,9 +21,8 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
-use DOMException;
-use DOMText;
+use Dom\Element;
+use Throwable;
 use Exception;
 use Manner\Inline\EQ;
 use Manner\Roff\Glyph;
@@ -34,10 +33,10 @@ class TextContent
     public static bool $interruptTextProcessing = false;
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      * @throws Exception
      */
-    public static function interpretAndAppendText(DOMElement $parentNode, string $line): void
+    public static function interpretAndAppendText(Element $parentNode, string $line): void
     {
         $dom = $parentNode->ownerDocument;
         $man = Man::instance();
@@ -113,7 +112,7 @@ class TextContent
                         );
                     }
 
-                    /* @var DomElement $newChildNode */
+                    /* @var Element $newChildNode */
                     if ($letter === 'u' && $nextLetter === 'd') {
                         $newChildNode = $parentNode->appendChild($dom->createElement('sup'));
                     } elseif ($letter === 'd' && $nextLetter === 'u') {
@@ -274,9 +273,9 @@ class TextContent
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    private static function appendTextChild(DOMElement $parentNode, string $textContent): void
+    private static function appendTextChild(Element $parentNode, string $textContent): void
     {
         if (!in_array(mb_trim($textContent), ['', '\\&'])) {
             $man   = Man::instance();
@@ -294,7 +293,7 @@ class TextContent
                 }
             }
         }
-        $parentNode->appendChild(new DOMText(self::interpretString($textContent)));
+        $parentNode->appendChild($parentNode->ownerDocument->createTextNode(self::interpretString($textContent)));
     }
 
     public static function interpretString(?string $string, bool $applyCharTranslations = true): string

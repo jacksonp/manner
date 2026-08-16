@@ -21,23 +21,22 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
-use DOMXPath;
+use Dom\Element;
+use Throwable;
+use Dom\XPath;
 use Manner\DOM;
 use Manner\Node;
 
 class Block
 {
 
-    public static function removeAdjacentEmptyTextNodesAndBRs(?DOMNode $blockElement): void
+    public static function removeAdjacentEmptyTextNodesAndBRs(?\Dom\Node $blockElement): void
     {
         self::removePreviousEmptyTextNodesAndBRs($blockElement);
         self::removeFollowingEmptyTextNodesAndBRs($blockElement);
     }
 
-    public static function removePreviousEmptyTextNodesAndBRs(?DOMNode $blockElement): void
+    public static function removePreviousEmptyTextNodesAndBRs(?\Dom\Node $blockElement): void
     {
         if (is_null($blockElement)) {
             return;
@@ -54,7 +53,7 @@ class Block
         }
     }
 
-    public static function removeFollowingEmptyTextNodesAndBRs(?DOMNode $blockElement): void
+    public static function removeFollowingEmptyTextNodesAndBRs(?\Dom\Node $blockElement): void
     {
         if (is_null($blockElement)) {
             return;
@@ -72,9 +71,9 @@ class Block
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function coalesceAdjacentChildDIVs(DOMElement $divsContainer): void
+    public static function coalesceAdjacentChildDIVs(Element $divsContainer): void
     {
         $child = $divsContainer->firstChild;
 
@@ -126,11 +125,11 @@ class Block
         }
     }
 
-    public static function coalesceAdjacentChildren(DOMXPath $xpath): void
+    public static function coalesceAdjacentChildren(XPath $xpath): void
     {
         $tagsToMerge = ['ul'];
 
-        $ulParents = $xpath->query('//section | //dd | //li | //td | //div');
+        $ulParents = $xpath->query('//h:section | //h:dd | //h:li | //h:td | //h:div');
 
         foreach ($ulParents as $ulParent) {
             $child = $ulParent->firstChild;
@@ -139,10 +138,10 @@ class Block
                 if (
                   DOM::isTag($child, $tagsToMerge) &&
                   $child->nextSibling &&
-                  DOM::isTag($child->nextSibling, $child->tagName) &&
+                  DOM::isTag($child->nextSibling, $child->localName) &&
                   $child->getAttribute('class') === $child->nextSibling->getAttribute('class')
                 ) {
-                    Dom::extractContents($child, $child->nextSibling);
+                    DOM::extractContents($child, $child->nextSibling);
                     Node::remove($child->nextSibling);
                 } else {
                     $child = $child->nextSibling;

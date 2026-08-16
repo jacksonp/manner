@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMXPath;
+use Dom\Element;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 use Manner\Indentation;
@@ -31,9 +31,9 @@ use Manner\Node;
 class P
 {
 
-    public static function removeEmpty(DOMXPath $xpath): void
+    public static function removeEmpty(XPath $xpath): void
     {
-        $ps = $xpath->query('//p');
+        $ps = $xpath->query('//h:p');
         foreach ($ps as $p) {
             if (!$p->firstChild || mb_trim($p->textContent) === '') {
                 $p->parentNode->removeChild($p);
@@ -42,10 +42,10 @@ class P
     }
 
     /**
-     * @param DOMElement $p
+     * @param Element $p
      * @throws Exception
      */
-    public static function tidy(DOMElement $p): void
+    public static function tidy(Element $p): void
     {
         // Change two br tags in a row to a new paragraph.
 

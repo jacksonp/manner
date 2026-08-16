@@ -21,19 +21,17 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
-use DOMText;
+use Dom\Element;
+use Throwable;
 use Exception;
 use Manner\Massage\DL;
 
 class DOM
 {
 
-    public static function extractContents(DOMElement $target, DOMNode $source): void
+    public static function extractContents(Element $target, \Dom\Node $source): void
     {
-        if ($source instanceof DOMText) {
+        if ($source instanceof \Dom\Text) {
             $target->appendChild($source);
         } else {
             while ($child = $source->firstChild) {
@@ -42,37 +40,37 @@ class DOM
         }
     }
 
-    public static function isInlineElement(?DOMNode $node): bool
+    public static function isInlineElement(?\Dom\Node $node): bool
     {
         return self::isTag($node, Blocks::INLINE_ELEMENTS);
     }
 
-    public static function isTextNode(?DOMNode $node): bool
+    public static function isTextNode(?\Dom\Node $node): bool
     {
-        return $node && $node->nodeType === XML_TEXT_NODE;
+        return $node instanceof \Dom\Text;
     }
 
-    public static function isElementNode(?DOMNode $node): bool
+    public static function isElementNode(?\Dom\Node $node): bool
     {
-        return $node && $node->nodeType === XML_ELEMENT_NODE;
+        return $node instanceof Element;
     }
 
-    public static function isTag(?DOMNode $node, $tag): bool
+    public static function isTag(?\Dom\Node $node, $tag): bool
     {
         if (!self::isElementNode($node)) {
             return false;
         }
 
-        /* @var DomElement $node */
-        return in_array($node->tagName, (array)$tag);
+        /* @var Element $node */
+        return in_array($node->localName, (array)$tag);
     }
 
     /*
-    private static function hasImmediateChild(DOMElement $node, string $tag): bool
+    private static function hasImmediateChild(Element $node, string $tag): bool
     {
         $child = $node->firstChild;
         while ($child) {
-            if ($child->nodeType === XML_ELEMENT_NODE && $child->tagName === $tag) {
+            if ($child instanceof Element && $child->localName === $tag) {
                 return true;
             }
             $child = $child->nextSibling;
@@ -82,20 +80,20 @@ class DOM
     */
 
     /**
-     * @param DOMElement $element
-     * @return DOMNode|null The element we should look at next.
-     * @throws DOMException
+     * @param Element $element
+     * @return \Dom\Node|null The element we should look at next.
+     * @throws Throwable
      * @throws Exception
      */
-    private static function massageNode(DOMElement $element): ?DOMNode
+    private static function massageNode(Element $element): ?\Dom\Node
     {
-        $myTag = $element->tagName;
+        $myTag = $element->localName;
         $doc   = $element->ownerDocument;
 
         if ($myTag === 'pre') {
-            if ($element->lastChild && $element->lastChild->nodeType === XML_ELEMENT_NODE) {
+            if ($element->lastChild instanceof Element) {
                 $codeNode = $element->lastChild;
-                if ($codeNode->lastChild && $codeNode->lastChild->nodeType === XML_TEXT_NODE) {
+                if ($codeNode->lastChild instanceof \Dom\Text) {
                     $codeNode->lastChild->textContent = mb_rtrim($codeNode->lastChild->textContent, "\n");
                 }
             }
@@ -121,7 +119,7 @@ class DOM
 //            return $nextSibling;
 //        }
 
-        if ($myTag === 'pre' && $element->parentNode->tagName === 'pre') {
+        if ($myTag === 'pre' && $element->parentNode->localName === 'pre') {
             $nextSibling = $element->nextSibling;
             Node::remove($element);
 
@@ -131,8 +129,8 @@ class DOM
         if ($myTag === 'div') {
             $firstChild = $element->firstChild;
 
-            if ($element->childNodes->length === 1 && $element->firstChild->nodeType === XML_ELEMENT_NODE) {
-                if ($firstChild->tagName === 'div') {
+            if ($element->childNodes->length === 1 && $element->firstChild instanceof Element) {
+                if ($firstChild->localName === 'div') {
                     Indentation::addElIndent($element, $firstChild);
                     Node::remove($firstChild);
                     // NB: we carry on processing rather than returning here.
@@ -157,7 +155,7 @@ class DOM
               self::isTag($firstChild, 'p') &&
               preg_match('~^\t~', $element->textContent)
             ) {
-                /* @var DomElement $pre */
+                /* @var Element $pre */
                 $pre = $element->parentNode->insertBefore($doc->createElement('pre'), $element);
                 self::extractContents($pre, $firstChild);
                 $element->parentNode->removeChild($element);
@@ -165,7 +163,7 @@ class DOM
                 return $pre->nextSibling;
             }
 
-            if ($element->parentNode->tagName === 'pre') {
+            if ($element->parentNode->localName === 'pre') {
                 if ($element->parentNode->childNodes->length === 1) {
                     Indentation::addElIndent($element->parentNode, $element);
                 }
@@ -176,7 +174,7 @@ class DOM
             }
 
             if (!Indentation::isSet($element)) {
-                if ($element->parentNode->tagName === 'dd') {
+                if ($element->parentNode->localName === 'dd') {
                     $nextSibling = Massage\DIV::getNextNonBRNode($element);
                     Node::remove($element);
 
@@ -266,7 +264,7 @@ class DOM
                 return $nextSibling;
             }
 
-            while ($element->lastChild && $element->lastChild->tagName === 'dt') {
+            while ($element->lastChild && $element->lastChild->localName === 'dt') {
                 $p       = $doc->createElement('p');
                 $strayDT = $element->lastChild;
                 while ($strayDT->firstChild) {
@@ -285,16 +283,16 @@ class DOM
     }
 
     /**
-     * @param DOMElement $element
-     * @return DOMNode|null
+     * @param Element $element
+     * @return \Dom\Node|null
      * @throws Exception
      */
-    public static function massage(DOMElement $element): ?DOMNode
+    public static function massage(Element $element): ?\Dom\Node
     {
         $child = $element->firstChild;
         while ($child) {
-            if ($child->nodeType === XML_ELEMENT_NODE) {
-                $myTag = $child->tagName;
+            if ($child instanceof Element) {
+                $myTag = $child->localName;
 
                 if (in_array($myTag, ['section', 'dd', 'div', 'td'])) {
                     Massage\Block::coalesceAdjacentChildDIVs($child);
@@ -319,9 +317,9 @@ class DOM
             // <strong>e</strong><em> </em><strong>f</strong>
             if (self::isInlineElement($child)) {
                 if (
-                  $child->tagName !== 'code' &&
+                  $child->localName !== 'code' &&
                   $child->firstChild &&
-                  $child->firstChild->nodeType == XML_TEXT_NODE &&
+                  $child->firstChild instanceof \Dom\Text &&
                   preg_match('~^(\s+)(.*?)$~u', $child->firstChild->textContent, $matches)
                 ) {
                     $child->replaceChild($child->ownerDocument->createTextNode($matches[2]), $child->firstChild);
@@ -330,7 +328,7 @@ class DOM
 
                 if (
                   $child->lastChild &&
-                  $child->lastChild->nodeType == XML_TEXT_NODE &&
+                  $child->lastChild instanceof \Dom\Text &&
                   preg_match('~^(.*?)(\s+)$~u', $child->lastChild->textContent, $matches)
                 ) {
                     $child->replaceChild($child->ownerDocument->createTextNode($matches[1]), $child->lastChild);
@@ -350,11 +348,11 @@ class DOM
                 // Hack for cases like this: <dt><strong>-</strong><strong>-eps-file</strong>=&lt;<em>file</em>&gt;</dt>
                 if ($child->textContent === '-') {
                     if (
-                      $child->firstChild instanceof DOMText &&
-                      $child->nextSibling instanceof DOMElement &&
+                      $child->firstChild instanceof \Dom\Text &&
+                      $child->nextSibling instanceof Element &&
                       $child->nextSibling->childNodes->length === 1 &&
-                      $child->nextSibling->firstChild instanceof DOMText &&
-                      $child->tagName === $child->nextSibling->tagName
+                      $child->nextSibling->firstChild instanceof \Dom\Text &&
+                      $child->localName === $child->nextSibling->localName
                     ) {
                         $child->nextSibling->firstChild->textContent = '-' . $child->nextSibling->firstChild->textContent;
                         $nextSibling                                 = $child->nextSibling;
@@ -404,7 +402,7 @@ class DOM
                 while (Massage\DL::isPotentialDTFollowedByDD($dl->nextSibling)) {
                     $dt = $element->ownerDocument->createElement('dt');
                     DOM::extractContents($dt, $dl->nextSibling);
-                    /** @var DOMElement $dt */
+                    /** @var Element $dt */
                     $dt = $dl->appendChild($dt);
                     Massage\DT::postProcess($dt);
                     $element->removeChild($dl->nextSibling);
@@ -423,7 +421,7 @@ class DOM
                     $ddIndent = Indentation::get($dl) + Indentation::get($dd);
 
                     while (
-                      Dom::isElementNode($dl->nextSibling) &&
+                      DOM::isElementNode($dl->nextSibling) &&
                       Indentation::get($dl->nextSibling) >= $ddIndent
                     ) {
                         if (Indentation::get($dl->nextSibling) === $ddIndent) {

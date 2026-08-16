@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Manner\Block;
 
-use DOMElement;
+use Dom\Element;
 use Exception;
 use Manner\Blocks;
 use Manner\Indentation;
@@ -53,22 +53,22 @@ class IP implements Template
 {
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
      * @param bool $needOneLineOnly
-     * @return DOMElement|null
+     * @return Element|null
      * @throws Exception
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         $man = Man::instance();
 
-        if ($needOneLineOnly && $parentNode->tagName === 'dt') { // See e.g. links2.1
+        if ($needOneLineOnly && $parentNode->localName === 'dt') { // See e.g. links2.1
             if (count($request['arguments'])) {
                 $lines[0] = $request['arguments'][0];
             } else {
@@ -123,7 +123,7 @@ class IP implements Template
             Indentation::set($dd, $indentVal);
             $dd = $dl->appendChild($dd);
 
-            /* @var DomElement $dd */
+            /* @var Element $dd */
             return $dd;
         } else {
             $man->resetFonts();
@@ -134,10 +134,10 @@ class IP implements Template
             if (!$indentVal) {
                 // Resetting indentation, exit dd
                 $parentNode = Blocks::getBlockContainerParent($parentNode, true);
-            } elseif ($parentNode->tagName !== 'dd' || Indentation::get($parentNode) !== (float)$indentVal) {
+            } elseif ($parentNode->localName !== 'dd' || Indentation::get($parentNode) !== (float)$indentVal) {
                 Indentation::set($div, $indentVal);
             }
-            /* @var DomElement $div */
+            /* @var Element $div */
             $div = $parentNode->appendChild($div);
 
             return $div;

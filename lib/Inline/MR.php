@@ -21,9 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Inline;
 
-use DOMElement;
-use DOMException;
-use DOMText;
+use Dom\Element;
+use Throwable;
 use Manner\Block\Template;
 use Manner\Block\Text;
 use Manner\Blocks;
@@ -36,14 +35,14 @@ class MR implements Template
 {
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
     public static function checkAppend(
-      DOMElement $parentNode,
+      Element $parentNode,
       array &$lines,
       array $request,
       bool $needOneLineOnly = false
-    ): ?DOMElement {
+    ): ?Element {
         array_shift($lines);
 
         $dom = $parentNode->ownerDocument;
@@ -57,7 +56,7 @@ class MR implements Template
         $topic         = TextContent::interpretString($request['arguments'][0]);
         $manualSection = TextContent::interpretString($request['arguments'][1]);
 
-        $anchor->appendChild(new DOMText($topic . '(' . $manualSection . ')'));
+        $anchor->appendChild($parentNode->ownerDocument->createTextNode($topic . '(' . $manualSection . ')'));
         $anchor->setAttribute('href', '/' . $manualSection . '/' . $topic);
 
         // Trailing text (usually punctuation)

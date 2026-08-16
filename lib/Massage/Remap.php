@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMXPath;
+use Dom\Element;
+use Dom\XPath;
 use Exception;
 use Manner\Blocks;
 use Manner\DOM;
@@ -32,14 +32,14 @@ class Remap
 {
 
     /**
-     * @param DOMXPath $xpath
+     * @param XPath $xpath
      * @throws Exception
      */
-    public static function doAll(DOMXPath $xpath): void
+    public static function doAll(XPath $xpath): void
     {
-        $divs = $xpath->query('//div[@remap]');
-        /** @var DOMElement $div */
-        /** @var DOMElement $p */
+        $divs = $xpath->query('//h:div[@remap]');
+        /** @var Element $div */
+        /** @var Element $p */
         foreach ($divs as $div) {
             if ($div->getAttribute('remap') === 'IP') {
                 $indentVal = Indentation::get($div);

@@ -21,10 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
-use DOMText;
+use Dom\Element;
+use Throwable;
 use Manner\DOM;
 use Manner\Node;
 
@@ -43,7 +41,7 @@ class HTMLList
         return (bool)preg_match(self::getBulletRegex(), $text);
     }
 
-    public static function pruneBulletChar(DOMElement $li): void
+    public static function pruneBulletChar(Element $li): void
     {
         $firstTextNode = self::getFirstNonEmptyTextNode($li);
         if ($firstTextNode) {
@@ -51,7 +49,7 @@ class HTMLList
         }
     }
 
-    public static function removeLonePs(DOMElement $list): void
+    public static function removeLonePs(Element $list): void
     {
         $child = $list->firstChild;
         while ($child) {
@@ -65,9 +63,9 @@ class HTMLList
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function checkElementForLIs(DOMElement $li): bool
+    public static function checkElementForLIs(Element $li): bool
     {
         $foundInnerLI = false;
 
@@ -77,7 +75,7 @@ class HTMLList
             if (
               DOM::isTag($child, 'br') &&
               $child->nextSibling &&
-              ($child->nextSibling instanceof DOMText || DOM::isInlineElement($child->nextSibling)) &&
+              ($child->nextSibling instanceof \Dom\Text || DOM::isInlineElement($child->nextSibling)) &&
               self::startsWithBullet($child->nextSibling->textContent)
             ) {
                 $foundInnerLI = true;
@@ -115,9 +113,9 @@ class HTMLList
         return $foundInnerLI;
     }
 
-    private static function getFirstNonEmptyTextNode(?DOMNode $domNode): ?DOMText
+    private static function getFirstNonEmptyTextNode(?\Dom\Node $domNode): ?\Dom\Text
     {
-        if ($domNode instanceof DOMText) {
+        if ($domNode instanceof \Dom\Text) {
             if (mb_trim($domNode->textContent) === '') {
                 $domNode->parentNode->removeChild($domNode);
 

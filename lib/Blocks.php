@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
-use DOMException;
+use Dom\Element;
+use Throwable;
 use Exception;
 
 class Blocks
@@ -50,11 +50,11 @@ class Blocks
     ];
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function getParentForText(DOMElement $parentNode): DOMElement
+    public static function getParentForText(Element $parentNode): Element
     {
-        if (in_array($parentNode->tagName, ['body', 'section', 'div', 'dd'])) {
+        if (in_array($parentNode->localName, ['body', 'section', 'div', 'dd'])) {
             $p = $parentNode->ownerDocument->createElement('p');
             $p->setAttribute('implicit', '1');
             $parentNode = $parentNode->appendChild($p);
@@ -64,17 +64,17 @@ class Blocks
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param bool $superOnly
      * @param bool $ipOK
-     * @return DOMElement
+     * @return Element
      * @throws Exception
      */
     public static function getBlockContainerParent(
-      DOMElement $parentNode,
+      Element $parentNode,
       bool $superOnly = false,
       bool $ipOK = false
-    ): DOMElement {
+    ): Element {
         $blockTags = ['body', 'div', 'section', 'pre'];
         if (!$superOnly) {
             $blockTags[] = 'dt';
@@ -85,7 +85,7 @@ class Blocks
 
         // We use <div>s to "remap" .IP temporarily so it can contain other <div>s, so treat remaps as non-blocks in
         // some cases.
-        while (!in_array($parentNode->tagName, $blockTags) || (!$ipOK && $parentNode->hasAttribute('remap'))) {
+        while (!in_array($parentNode->localName, $blockTags) || (!$ipOK && $parentNode->hasAttribute('remap'))) {
             $parentNode = $parentNode->parentNode;
             if (!$parentNode) {
                 throw new Exception('No more parents.');

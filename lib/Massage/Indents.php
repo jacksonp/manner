@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace Manner\Massage;
 
-use DOMDocument;
-use DOMXPath;
+use Dom\Document;
+use Dom\XPath;
 use Exception;
 use Manner\DOM;
 use Manner\Indentation;
@@ -32,12 +32,12 @@ class Indents
 {
 
     /**
-     * @param DOMXPath $xpath
+     * @param XPath $xpath
      * @throws Exception
      */
-    public static function recalculate(DOMXPath $xpath): void
+    public static function recalculate(XPath $xpath): void
     {
-        $divs = $xpath->query('//div[@left-margin="0"]');
+        $divs = $xpath->query('//h:div[@left-margin="0"]');
         foreach ($divs as $div) {
             // See tests/warnquota.conf.5
             if (DOM::isTag($div->previousSibling, 'p') && DOM::isTag($div->firstChild, 'p')) {
@@ -48,14 +48,14 @@ class Indents
             Node::remove($div);
         }
 
-        $divs = $xpath->query('//div[@left-margin]');
+        $divs = $xpath->query('//h:div[@left-margin]');
         foreach ($divs as $div) {
             $leftMargin = (int)$div->getAttribute('left-margin');
 
             $parentNode = $div->parentNode;
 
             while ($parentNode) {
-                if ($parentNode instanceof DOMDocument || $parentNode->tagName === 'div') {
+                if ($parentNode instanceof Document || $parentNode->localName === 'div') {
                     break;
                 }
                 if (Indentation::isSet($parentNode)) {

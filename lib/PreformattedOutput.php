@@ -21,8 +21,7 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
-use DOMText;
+use Dom\Element;
 use Exception;
 use Manner\Block\TabTable;
 use Manner\Roff\Unit;
@@ -42,13 +41,13 @@ class PreformattedOutput
     }
 
     /**
-     * @param DOMElement $parentNode
+     * @param Element $parentNode
      * @param array $lines
      * @param array $request
-     * @return bool | DomElement
+     * @return bool | Element
      * @throws Exception
      */
-    public static function handle(DOMElement $parentNode, array &$lines, array $request): bool|DOMElement
+    public static function handle(Element $parentNode, array &$lines, array $request): bool|Element
     {
         $pre = Node::ancestor($parentNode, 'pre');
 
@@ -91,7 +90,7 @@ class PreformattedOutput
                 $tr  = $table->appendChild($dom->createElement('tr'));
                 foreach ($tds as $tdLine) {
                     $cell = $dom->createElement('td');
-                    /* @var DomElement $codeNode */
+                    /* @var Element $codeNode */
                     $codeNode = $cell->appendChild($dom->createElement('code'));
                     if (is_null($request['request'])) {
                         TextContent::interpretAndAppendText($codeNode, $tdLine);
@@ -119,14 +118,14 @@ class PreformattedOutput
           )) {
             array_shift($lines);
             if ($parentNode->hasChildNodes()) {
-                $parentNode->appendChild(new DOMText("\n"));
+                $parentNode->appendChild($parentNode->ownerDocument->createTextNode("\n"));
                 self::$addIndent = 0;
             }
             if (in_array($request['class'], ['\Manner\Block\P'])) {
                 $man->resetFonts();
                 if (Indentation::isSet($pre)) {
                     // Return new parent element without indentation for following requests
-                    /* @var DomElement $newPre */
+                    /* @var Element $newPre */
                     $newPre = $pre->parentNode->appendChild($dom->createElement('pre'));
 
                     return $newPre;
@@ -193,7 +192,7 @@ class PreformattedOutput
 
 
         if (self::$addIndent > 0) {
-            $parentNode->appendChild(new DOMText(str_repeat(' ', self::$addIndent)));
+            $parentNode->appendChild($parentNode->ownerDocument->createTextNode(str_repeat(' ', self::$addIndent)));
         }
 
         if (!is_null($request['request'])) {
@@ -214,12 +213,12 @@ class PreformattedOutput
         return true;
     }
 
-    public static function endInputLine(DOMElement $parentNode): void
+    public static function endInputLine(Element $parentNode): void
     {
         if (TextContent::$interruptTextProcessing || $parentNode->getAttribute('class') === 'synopsis') {
-            $parentNode->appendChild(new DOMText(' '));
+            $parentNode->appendChild($parentNode->ownerDocument->createTextNode(' '));
         } else {
-            $parentNode->appendChild(new DOMText("\n"));
+            $parentNode->appendChild($parentNode->ownerDocument->createTextNode("\n"));
         }
     }
 

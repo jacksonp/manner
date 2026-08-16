@@ -21,41 +21,40 @@ declare(strict_types=1);
 
 namespace Manner;
 
-use DOMElement;
-use DOMException;
-use DOMNode;
+use Dom\Element;
+use Throwable;
 
 use Manner\Roff\Glyph;
 
 class Node
 {
 
-    public static function hasContent(DOMElement $el): bool
+    public static function hasContent(Element $el): bool
     {
         return $el->childNodes->length > 1 || ($el->firstChild && $el->firstChild->nodeValue !== '');
     }
 
-    public static function ancestor(DOMElement $el, string $tagName): ?DOMElement
+    public static function ancestor(Element $el, string $tagName): ?Element
     {
-        while ($el->tagName !== $tagName) {
+        while ($el instanceof Element && $el->localName !== $tagName) {
             if (!$el->parentNode) {
                 return null;
             }
             $el = $el->parentNode;
-            if ($el->nodeType === XML_DOCUMENT_NODE) {
+            if ($el instanceof \Dom\Document) {
                 return null;
             }
         }
 
-        return $el;
+        return $el instanceof Element ? $el : null;
     }
 
-    public static function isOrInTag(DOMElement $el, $tagNames): bool
+    public static function isOrInTag(Element $el, $tagNames): bool
     {
         $tagNames = (array)$tagNames;
 
-        while ($el instanceof DOMElement) {
-            if (in_array($el->tagName, $tagNames)) {
+        while ($el instanceof Element) {
+            if (in_array($el->localName, $tagNames)) {
                 return true;
             }
             $el = $el->parentNode;
@@ -64,26 +63,26 @@ class Node
         return false;
     }
 
-    public static function addClass(DOMElement $node, $classes): void
+    public static function addClass(Element $node, $classes): void
     {
         $classes = (array)$classes;
         foreach ($classes as $class) {
             if (!self::hasClass($node, $class)) {
-                $node->setAttribute('class', mb_trim($node->getAttribute('class') . ' ' . $class));
+                $node->setAttribute('class', mb_trim(($node->getAttribute('class') ?? '') . ' ' . $class));
             }
         }
     }
 
-    public static function hasClass(DOMElement $node, string $className): bool
+    public static function hasClass(Element $node, string $className): bool
     {
-        $existingClassString = $node->getAttribute('class');
+        $existingClassString = $node->getAttribute('class') ?? '';
 
         return in_array($className, explode(' ', $existingClassString));
     }
 
-    public static function removeClass(DOMElement $node, string $className): void
+    public static function removeClass(Element $node, string $className): void
     {
-        $existingClassString = $node->getAttribute('class');
+        $existingClassString = $node->getAttribute('class') ?? '';
         $existingClasses     = explode(' ', $existingClassString);
         if (($key = array_search($className, $existingClasses)) !== false) {
             unset($existingClasses[$key]);
@@ -95,7 +94,7 @@ class Node
         }
     }
 
-    public static function remove(DOMNode $from, $preserveChildren = true): void
+    public static function remove(\Dom\Node $from, $preserveChildren = true): void
     {
         if ($preserveChildren) {
             $sibling = $from->firstChild;
@@ -109,17 +108,17 @@ class Node
         $from->parentNode->removeChild($from);
     }
 
-    public static function isTextAndEmpty(DOMNode $node): bool
+    public static function isTextAndEmpty(\Dom\Node $node): bool
     {
         return
-          $node->nodeType === XML_TEXT_NODE &&
+          $node instanceof \Dom\Text &&
           in_array(mb_trim($node->textContent), ['', Text::ZERO_WIDTH_SPACE_UTF8]);
     }
 
     /**
-     * @throws DOMException
+     * @throws Throwable
      */
-    public static function changeTag(DOMElement $node, string $name, bool $preserveAttributes = true): DOMElement
+    public static function changeTag(Element $node, string $name, bool $preserveAttributes = true): Element
     {
         $renamed = $node->ownerDocument->createElement($name);
 
@@ -140,7 +139,7 @@ class Node
 
     public static function removeAttributeAll($nodes, $attributes): void
     {
-        /** @var DOMElement $node */
+        /** @var Element $node */
         $attributes = (array)$attributes;
         foreach ($nodes as $node) {
             foreach ($attributes as $attribute) {
@@ -149,21 +148,21 @@ class Node
         }
     }
 
-    public static function removeIds(DOMNode $domNode): void
+    public static function removeIds(\Dom\Node $domNode): void
     {
         if (!DOM::isElementNode($domNode)) {
             return;
         }
-        /* @var DomElement $domNode */
+        /* @var Element $domNode */
         $domNode->removeAttribute("id");
         foreach ($domNode->childNodes as $node) {
             self::removeIds($node);
         }
     }
 
-    public static function replaceGlyphs(DOMNode $domNode): void
+    public static function replaceGlyphs(\Dom\Node $domNode): void
     {
-        if (Dom::isTextNode($domNode)) {
+        if (DOM::isTextNode($domNode)) {
             $domNode->textContent = Glyph::substitute(htmlspecialchars_decode($domNode->textContent));
         }
         if (DOM::isElementNode($domNode)) {
