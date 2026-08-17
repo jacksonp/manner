@@ -60,7 +60,6 @@ class Unhandled implements Template
       'ecs',
       'fc',
       'fzoom',
-      'gcolor',
       'hcode',
       'hla',
       'hlm',
