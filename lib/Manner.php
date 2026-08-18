@@ -79,20 +79,7 @@ class Manner
         $man = Man::instance();
 
         // Remove \& chars aka zero width space.
-        $html   = str_replace(
-          [
-              Text::ZERO_WIDTH_SPACE_HTML,
-              Text::ZERO_WIDTH_SPACE_UTF8,
-              '→', '‘', '’', 'ð', 'Ð', 'Þ', 'þ', 'ô',
-              '“', '”', '—', '–', '≤', 'π', '©',
-          ],
-          [
-              '', '',
-              '&rarr;', '&lsquo;', '&rsquo;', '&eth;', '&ETH;', '&THORN;', '&thorn;', '&ocirc;',
-              '&ldquo;', '&rdquo;', '&mdash;', '&ndash;', '&le;', '&pi;', '&copy;',
-          ],
-          $html
-        );
+        $html   = str_replace(Text::ZERO_WIDTH_SPACE_HTML, '', $html);
         $title  = Text::trimAndRemoveZWSUTF8($man->title);
         $extra1 = Text::trimAndRemoveZWSUTF8($man->extra1);
         $extra2 = Text::trimAndRemoveZWSUTF8($man->extra2);
