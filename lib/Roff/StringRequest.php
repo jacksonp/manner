@@ -65,53 +65,6 @@ ROFF]      = 'Þ';
         $known[<<<'ROFF'
 Th \o'LP'
 ROFF]      = 'þ';
-        // TODO: could render this the same way wikipedia does: https://en.wikipedia.org/wiki/TeX
-        $known[<<<'ROFF'
-TX \fRT  E  X\fP
-ROFF]                              = 'TeX';
-        $known[<<<'ROFF'
-OX \fIT E X\fP
-ROFF] = 'TeX';
-        // eplain.1
-        $known[<<<'ROFF'
-OX \fIT E X\fP for troff
-ROFF] = 'TeX';
-        // dt2dv.1
-        $known['Te T  E  X'] = 'TeX';
-        // grodvi.1
-        $known['tx T  E  X'] = 'TeX';
-        // makeindex.1
-        $known['TX T  E  X']           = 'TeX';
-        $known[<<<'ROFF'
-BX \fRBIB\fPTeX
-ROFF]    = 'BibTeX';
-        $known[<<<'ROFF'
-LX \fRL  A  \fPTeX
-ROFF] = 'LaTeX';
-        // bibtex.1
-        $known[<<<'ROFF'
-LX \fRL  \s-2A\s0  \fPTeX
-ROFF] = 'LaTeX';
-        // pic.1
-        $known[<<<'ROFF'
-lx L\h'-0.36m'\v'-0.22v'A\h'-0.15m'\v'0.22v'TeX
-ROFF] = 'LaTeX';
-        // makeindex.1
-        $known[<<<'ROFF'
-LX L  \s-2A\s+2  T  E  X
-ROFF] = 'LaTeX';
-        // ttf2tfm.1
-        $known['LX L  A  TeX']                      = 'LaTeX';
-        $known[<<<'ROFF'
-AX \fRA  M  S\fPTeX
-ROFF]             = 'AmSTeX';
-        $known[<<<'ROFF'
-AY \fRA  M  S\fP\fRL  A  \fPTeX
-ROFF] = 'AmSLaTeX';
-        // bg5conv.1
-        $known[<<<'ROFF'
-LE LaTeX 2 \(*e 
-ROFF] = 'LaTeX2e';
 
         //dv2dt.1
         $known['Xe X  E  T'] = 'XeT';
