@@ -164,7 +164,7 @@ class TextContent
         }
 
         $numTextSegments    = count($textSegments);
-        $horizontalPosition = 0; //TODO: could be worth setting this to characters in output so far from $line?
+        $horizontalPosition = 0;
 
         for ($i = 0; $i < $numTextSegments; ++$i) {
             if (mb_substr($textSegments[$i], 0, 2) === '\\k') {
