@@ -45,7 +45,6 @@ class Roff
                 if (in_array($request['raw_line'], ['\\c'])) {
                     array_shift($lines);
 
-//                    Man::instance()->runPostOutputCallbacks();
                     return true;
                 }
 
@@ -75,16 +74,8 @@ class Roff
                 }
             }
 
-            if ($request['class'] === '\Manner\Block\Text' || $parentNode->textContent !== '') {
-                if ($stopOnContent) {
-                    return true;
-                }
-                if ($request['class'] !== '\Manner\Inline\FontOneInputLine') { // TODO: hack? fix?
-                    $newParent = Man::instance()->runPostOutputCallbacks();
-                    if (!is_null($newParent)) {
-                        $parentNode = $newParent;
-                    }
-                }
+            if ($stopOnContent && ($request['class'] === '\Manner\Block\Text' || $parentNode->textContent !== '')) {
+                return true;
             }
         }
 

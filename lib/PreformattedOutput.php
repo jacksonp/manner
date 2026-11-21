@@ -205,7 +205,7 @@ class PreformattedOutput
 
         array_shift($lines);
 
-        if (self::$resetFontsAfterNext) {
+        if (self::$resetFontsAfterNext || $man->isFontOneLine()) {
             $man->resetFonts();
             self::$resetFontsAfterNext = false;
         }

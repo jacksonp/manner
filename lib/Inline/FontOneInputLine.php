@@ -50,13 +50,7 @@ class FontOneInputLine implements Template
         $man->pushFont($request['request']);
 
         if (count($request['arguments']) === 0) {
-            $man->addPostOutputCallback(
-              function () use ($parentNode) {
-                  Man::instance()->resetFonts();
-
-                  return null;
-              }
-            );
+            $man->setFontOneLine(true);
 
             return null;
         } else {

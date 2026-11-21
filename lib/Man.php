@@ -35,8 +35,8 @@ class Man
 {
 
     private array $data;
-    private array $postOutputCallbacks;
     private array $fontStack;
+    private bool  $fontOneLine = false;
     private array $aliases;
     private array $macros;
     private array $entities;
@@ -90,7 +90,6 @@ class Man
           'extra2'         => null,
           'extra3'         => null,
         ];
-        $this->postOutputCallbacks = [];
         $this->resetFonts();
         $this->aliases  = [];
         $this->macros   = [];
@@ -248,26 +247,6 @@ class Man
         return isset($this->data[$name]);
     }
 
-    public function addPostOutputCallback(Closure $string): void
-    {
-        $this->postOutputCallbacks[] = $string;
-    }
-
-    public function runPostOutputCallbacks(): ?Element
-    {
-        $return = null;
-        while ($cb = array_pop($this->postOutputCallbacks)) {
-            $return = $cb();
-        }
-
-        return $return;
-    }
-
-    public function hasPostOutputCallbacks(): bool
-    {
-        return count($this->postOutputCallbacks) > 0;
-    }
-
     public function pushFont(string $name): int
     {
         return array_push($this->fontStack, $name);
@@ -289,7 +268,18 @@ class Man
 
     public function resetFonts(): void
     {
-        $this->fontStack = [];
+        $this->fontStack   = [];
+        $this->fontOneLine = false;
+    }
+
+    public function setFontOneLine(bool $value = true): void
+    {
+        $this->fontOneLine = $value;
+    }
+
+    public function isFontOneLine(): bool
+    {
+        return $this->fontOneLine;
     }
 
     public function isFontSmall(): bool

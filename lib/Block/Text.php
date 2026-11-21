@@ -65,8 +65,9 @@ class Text implements Template
       bool $needOneLineOnly = false
     ): ?Element {
         $parentNode = Blocks::getParentForText($parentNode);
+        $man        = Man::instance();
 
-        if (Man::instance()->hasPostOutputCallbacks()) {
+        if ($man->isFontOneLine()) {
             $needOneLineOnly = true;
         }
 
@@ -102,6 +103,10 @@ class Text implements Template
         }
 
         self::addLine($parentNode, $line, $implicitBreak);
+
+        if ($man->isFontOneLine()) {
+            $man->resetFonts();
+        }
 
         return $parentNode;
     }
