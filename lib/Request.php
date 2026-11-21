@@ -81,8 +81,7 @@ class Request
     private static function parseArguments(string $argString, bool $ignoreQuotes): array
     {
         $argString = mb_ltrim($argString);
-        // TODO: Could also trim on paired backslashes here:
-        $argString = preg_replace('~([^\\\\])\s+$~u', '$1', $argString);
+        $argString = preg_replace('~(?:\A|[^\\\\\s])(?:\\\\\\\\)*\K\s+$~u', '', $argString);
 
         if ($argString === '') {
             return [];
