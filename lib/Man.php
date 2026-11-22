@@ -37,6 +37,7 @@ class Man
     private array $data;
     private array $fontStack;
     private bool  $fontOneLine = false;
+    private int   $underlineLines = 0;
     private array $aliases;
     private array $macros;
     private array $entities;
@@ -160,6 +161,8 @@ class Man
           'tr'     => '\Manner\Roff\Translation',
           'rn'     => '\Manner\Roff\Rename',
           'rm'     => '\Manner\Roff\rm',
+          'ul'     => '\Manner\Roff\ul',
+          'cu'     => '\Manner\Roff\ul',
           'return' => '\Manner\Roff\returnRequest',
         ];
 
@@ -269,8 +272,9 @@ class Man
 
     public function resetFonts(): void
     {
-        $this->fontStack   = [];
-        $this->fontOneLine = false;
+        $this->fontStack      = [];
+        $this->fontOneLine    = false;
+        $this->underlineLines = 0;
     }
 
     public function setFontOneLine(bool $value = true): void
@@ -281,6 +285,36 @@ class Man
     public function isFontOneLine(): bool
     {
         return $this->fontOneLine;
+    }
+
+    public function setUnderlineLines(int $count = 1): void
+    {
+        $this->resetFonts();
+        $this->underlineLines = max(0, $count);
+        if ($this->underlineLines > 0) {
+            $this->pushFont('I');
+        }
+    }
+
+    public function getUnderlineLines(): int
+    {
+        return $this->underlineLines;
+    }
+
+    public function isUnderlineActive(): bool
+    {
+        return $this->underlineLines > 0;
+    }
+
+    public function consumeUnderlineLine(): void
+    {
+        if ($this->underlineLines > 0) {
+            $this->underlineLines--;
+            $this->fontStack = [];
+            if ($this->underlineLines > 0) {
+                $this->fontStack = ['I'];
+            }
+        }
     }
 
     public function isFontSmall(): bool

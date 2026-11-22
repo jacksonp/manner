@@ -205,9 +205,13 @@ class PreformattedOutput
 
         array_shift($lines);
 
-        if (self::$resetFontsAfterNext || $man->isFontOneLine()) {
+        if (self::$resetFontsAfterNext) {
             $man->resetFonts();
             self::$resetFontsAfterNext = false;
+        } elseif ($man->isFontOneLine()) {
+            $man->resetFonts();
+        } elseif ($man->isUnderlineActive()) {
+            $man->consumeUnderlineLine();
         }
 
         return true;

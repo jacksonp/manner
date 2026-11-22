@@ -67,7 +67,7 @@ class Text implements Template
         $parentNode = Blocks::getParentForText($parentNode);
         $man        = Man::instance();
 
-        if ($man->isFontOneLine()) {
+        if ($man->isFontOneLine() || $man->isUnderlineActive()) {
             $needOneLineOnly = true;
         }
 
@@ -106,6 +106,8 @@ class Text implements Template
 
         if ($man->isFontOneLine()) {
             $man->resetFonts();
+        } elseif ($man->isUnderlineActive()) {
+            $man->consumeUnderlineLine();
         }
 
         return $parentNode;

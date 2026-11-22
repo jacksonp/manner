@@ -32,7 +32,6 @@ class Skipped
       'color', // .color N: If N is zero disable colors, otherwise enable them.
       'cp', // Enable or disable compatibility mode.
       'cs', // font N M: Set constant character width mode for font to N/36 ems with em M.
-      'cu', // Continuous underline in nroff, like .ul in troff.
       'defcolor', // Define color, see https://www.gnu.org/software/groff/manual/html_node/Colors.html
       'em', // .em macro: The macro is run after the end of input.
       'ev',  // Switch to previous environment and pop it off the stack.
@@ -80,7 +79,6 @@ class Skipped
       'tm', // Print anything on stdout.
       'tm1', // Print anything on stdout, allowing leading whitespace if anything starts with "
       'tmc', // Similar to .tm1 without emitting a final newline.
-      'ul', // "Underline (italicize in troff) N input lines." TODO: Could revisit this and implement.
       'vs', // Change to previous vertical base line spacing.
       'warn', // Set warnings code to n.
       'wh', // Set/Remove location trap
