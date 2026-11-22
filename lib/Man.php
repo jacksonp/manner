@@ -159,6 +159,7 @@ class Man
           'als'    => '\Manner\Roff\Alias',
           'tr'     => '\Manner\Roff\Translation',
           'rn'     => '\Manner\Roff\Rename',
+          'rm'     => '\Manner\Roff\rm',
           'return' => '\Manner\Roff\returnRequest',
         ];
 
@@ -297,6 +298,11 @@ class Man
         $this->aliases[$original] = $alias;
     }
 
+    public function removeAlias(string $original): void
+    {
+        unset($this->aliases[$original]);
+    }
+
     public function getAliases(): array
     {
         return $this->aliases;
@@ -305,6 +311,11 @@ class Man
     public function addMacro(string $name, array $lines): void
     {
         $this->macros[$name] = $lines;
+    }
+
+    public function removeMacro(string $name): void
+    {
+        unset($this->macros[$name]);
     }
 
     public function getMacros(): array
@@ -342,6 +353,16 @@ class Man
     public function addString(string $string, string $value): void
     {
         $this->strings[$string] = $value;
+    }
+
+    public function removeString(string $string): void
+    {
+        unset($this->strings[$string]);
+    }
+
+    public function remove(string $name): void
+    {
+        unset($this->macros[$name], $this->strings[$name], $this->aliases[$name]);
     }
 
     public function getString(string $name): string

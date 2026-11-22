@@ -71,7 +71,6 @@ class Skipped
       'rchar', // Remove the definitions of entities
       'rfschar', // Remove the definitions of entitie
       'rj', // Right justify the next n input lines.
-      'rm', // Remove request, macro, or string name. // TODO: revisit?
       'rs', // "Restore spacing; turn no-space mode off."
       'rt', // Return (upward only) to marked vertical place (default scaling indicator v).
       'schar', // Define global fallback character (or glyph)
