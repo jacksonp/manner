@@ -45,7 +45,7 @@ class LinkEnd implements Template
 
         $removed = false;
 
-        if ($anchorNode->getAttribute('href') === '') {
+        if (empty($anchorNode->getAttribute('href'))) {
             $href = Link::getValidHREF($anchorNode->textContent);
             if ($href) {
                 $anchorNode->setAttribute('href', $href);
@@ -57,7 +57,7 @@ class LinkEnd implements Template
 
         if (!$removed) {
             if ($anchorNode->textContent === '') {
-                $urlAsText = $anchorNode->getAttribute('href');
+                $urlAsText = $anchorNode->getAttribute('href') ?? '';
                 $urlAsText = preg_replace('~^mailto:~', '', $urlAsText);
                 $anchorNode->appendChild($anchorNode->ownerDocument->createTextNode($urlAsText));
             }
