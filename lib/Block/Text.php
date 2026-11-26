@@ -94,7 +94,7 @@ class Text implements Template
                 break; // Stop on non-text or implicit line break.
             }
             array_shift($lines);
-            $line .= ' ' . self::removeTextProcessingInterrupt($nextRequest['raw_line']);
+            $line = mb_rtrim($line) . ' ' . self::removeTextProcessingInterrupt($nextRequest['raw_line']);
         }
 
         // Re-add interrupt if present to last line for TextContent::interpretAndAppendText:
