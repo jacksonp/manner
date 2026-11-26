@@ -24,6 +24,7 @@ namespace Manner\Inline;
 use Dom\Element;
 use Manner\Block\Template;
 use Manner\Node;
+use Manner\TextContent;
 
 class LinkEnd implements Template
 {
@@ -64,7 +65,7 @@ class LinkEnd implements Template
         }
 
         if ($punctuation !== '') {
-            $parentNode->appendChild($anchorNode->ownerDocument->createTextNode($punctuation));
+            TextContent::interpretAndAppendText($parentNode, $punctuation);
         }
 
         return $parentNode;
