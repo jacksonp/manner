@@ -97,7 +97,7 @@ class EQ implements Template
         $eqnString = '.EQ' . PHP_EOL;
         foreach ($lines as $line) {
             // Hack for mm2gv:
-            $line      = str_replace(['\\fI', '\\fP'], '', $line);
+            $line      = str_replace(['\\fI', '\\fP', '\\-'], ['', '', '-'], $line);
             $eqnString .= $line . PHP_EOL;
         }
         $eqnString   .= '.EN' . PHP_EOL;
@@ -130,8 +130,8 @@ class EQ implements Template
 //        $mathNode->setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
 //        $mathNode->setAttribute('display', 'inline');
         $xpath   = new XPath($mathDoc);
-        $xpath->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
-        $mErrors = $xpath->query('//h:merror');
+        $xpath->registerNamespace('m', 'http://www.w3.org/1998/Math/MathML');
+        $mErrors = $xpath->query('//m:merror');
         foreach ($mErrors as $mError) {
             Node::remove($mError, false);
         }
