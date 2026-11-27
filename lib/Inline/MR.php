@@ -54,13 +54,17 @@ class MR implements Template
         $parentNode->appendChild($anchor);
 
         $topic         = TextContent::interpretString($request['arguments'][0]);
-        $manualSection = TextContent::interpretString($request['arguments'][1]);
 
-        $anchor->appendChild($parentNode->ownerDocument->createTextNode($topic . '(' . $manualSection . ')'));
-        $anchor->setAttribute('href', '/' . $manualSection . '/' . $topic);
+        if (isset($request['arguments'][1])) {
+            $manualSection = TextContent::interpretString($request['arguments'][1]);
+            $anchor->appendChild($parentNode->ownerDocument->createTextNode($topic . '(' . $manualSection . ')'));
+            $anchor->setAttribute('href', '/' . $manualSection . '/' . $topic);
+        } else {
+            $anchor->appendChild($parentNode->ownerDocument->createTextNode($topic));
+        }
 
         // Trailing text (usually punctuation)
-        if (count($request['arguments']) > 2) {
+        if (isset($request['arguments'][2])) {
             TextContent::interpretAndAppendText($parentNode, $request['arguments'][2]);
         }
 
