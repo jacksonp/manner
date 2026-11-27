@@ -69,17 +69,12 @@ class EQ implements Template
 
         $man = Man::instance();
 
-        if (count($eqLines) === 1) {
-            if (preg_match('~^delim (.)(.)$~ui', $eqLines[0], $matches)) {
+        foreach ($eqLines as $k => $eqLine) {
+            if (preg_match('~^\s*delim\s+(.)(.)\s*$~ui', $eqLine, $matches)) {
                 $man->eq_delim_left  = $matches[1];
                 $man->eq_delim_right = $matches[2];
-
-                return null;
-            }
-        }
-
-        foreach ($eqLines as $k => $eqLine) {
-            if ($eqLine === 'delim off') {
+                unset($eqLines[$k]);
+            } elseif (preg_match('~^\s*delim\s+off\s*$~ui', $eqLine)) {
                 $man->eq_delim_left  = null;
                 $man->eq_delim_right = null;
                 unset($eqLines[$k]);
@@ -112,18 +107,26 @@ class EQ implements Template
         if ($returnVar !== 0) {
             throw new Exception('Failed to render .EQ content');
         }
-        // Now get rid of .EQ:
-        array_shift($output);
-        // ... and .EN:
-        array_pop($output);
+        $mathLines = [];
+        foreach ($output as $outLine) {
+            if (!str_starts_with(mb_trim($outLine), '.')) {
+                $mathLines[] = $outLine;
+            }
+        }
 
-        $mathString = implode('', $output);
+        $mathString = implode('', $mathLines);
+        if (mb_trim($mathString) === '') {
+            return;
+        }
 
         # Hacks:
         $mathString = str_replace(['&ThinSpace;', '&equals;', '&plus;'], [' ', '=', '+'], $mathString);
 
-        $mathDoc = HTMLDocument::createFromString($mathString);
+        $mathDoc = HTMLDocument::createFromString('<!DOCTYPE html><html><body>' . $mathString . '</body></html>');
         $mathNode = $mathDoc->getElementsByTagName('math')->item(0);
+        if (is_null($mathNode)) {
+            return;
+        }
 //        $mathNode->setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
 //        $mathNode->setAttribute('display', 'inline');
         $xpath   = new XPath($mathDoc);
