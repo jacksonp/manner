@@ -342,6 +342,8 @@ class TextContent
               '^'  => '',
                 // Default optional hyphenation character. Just remove for now.
               '%'  => '',
+                // \c Interrupt text processing / line continuation.
+              'c'  => '',
                 // Inserts a zero-width break point (similar to \% but without a soft hyphen character). Just remove for now.
               ':'  => '',
                 // Digit-width space.
