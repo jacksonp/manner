@@ -45,6 +45,11 @@ class DOM
         return self::isTag($node, Blocks::INLINE_ELEMENTS);
     }
 
+    public static function isBlockElement(?\Dom\Node $node): bool
+    {
+        return self::isTag($node, Blocks::BLOCK_ELEMENTS);
+    }
+
     public static function isTextNode(?\Dom\Node $node): bool
     {
         return $node instanceof \Dom\Text;
@@ -252,11 +257,15 @@ class DOM
             if ($everyChildIsDT) {
                 for ($j = 0; $j < $element->childNodes->length; ++$j) {
                     $strayDT = $element->childNodes->item($j);
-                    $p       = $doc->createElement('p');
-                    while ($strayDT->firstChild) {
-                        $p->appendChild($strayDT->firstChild);
+                    if ($strayDT->childNodes->length === 1 && self::isBlockElement($strayDT->firstChild)) {
+                        $nodeToInsert = $strayDT->firstChild;
+                    } else {
+                        $nodeToInsert = $doc->createElement('p');
+                        while ($strayDT->firstChild) {
+                            $nodeToInsert->appendChild($strayDT->firstChild);
+                        }
                     }
-                    $element->parentNode->insertBefore($p, $element);
+                    $element->parentNode->insertBefore($nodeToInsert, $element);
                 }
                 $nextSibling = $element->nextSibling;
                 $element->parentNode->removeChild($element);
@@ -265,13 +274,17 @@ class DOM
             }
 
             while ($element->lastChild && $element->lastChild->localName === 'dt') {
-                $p       = $doc->createElement('p');
                 $strayDT = $element->lastChild;
-                while ($strayDT->firstChild) {
-                    $p->appendChild($strayDT->firstChild);
+                if ($strayDT->childNodes->length === 1 && self::isBlockElement($strayDT->firstChild)) {
+                    $nodeToInsert = $strayDT->firstChild;
+                } else {
+                    $nodeToInsert = $doc->createElement('p');
+                    while ($strayDT->firstChild) {
+                        $nodeToInsert->appendChild($strayDT->firstChild);
+                    }
                 }
                 $element->removeChild($strayDT);
-                $element->parentNode->insertBefore($p, $element->nextSibling);
+                $element->parentNode->insertBefore($nodeToInsert, $element->nextSibling);
             }
         }
 
